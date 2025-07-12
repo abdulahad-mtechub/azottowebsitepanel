@@ -1,0 +1,47 @@
+import { Breadcrumb, Flex, Typography } from 'antd'
+import { useNavigate } from 'react-router-dom';
+import { RightOutlined } from '@ant-design/icons';
+import { AboutComponent, CounterSection, OurMission, Whatwedo } from '../components';
+
+const { Text, Title } = Typography;
+const Aboutus = () => {
+    const navigate = useNavigate();
+
+    return (
+        <>
+            <div className='padd-1'>
+                <div className='bg-dark-blue bread-cs'>
+                    <div className='container'>
+                        <Breadcrumb
+                            separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
+                            items={[
+                                {
+                                    title: <Text className='cursor text-gray' onClick={() => navigate('/')}>Home</Text>,
+                                },
+                                {
+                                    title: <Text className='fw-500 text-gray'>
+                                        About Jusoor
+                                    </Text>,
+                                },
+                            ]}
+                        />
+                        <Flex vertical gap={15} className='w-100 search-cs text-center'>
+                            <Title level={2} className='text-white m-0'>About Jusoor</Title>
+                            <Text className='text-white'>
+                                Explore expert advice, seller guides, and tips for buying and selling businesses in Saudi Arabia.
+                            </Text>
+                        </Flex>
+                    </div>
+                </div>
+                <div>
+                    <AboutComponent />
+                    <OurMission />
+                    <CounterSection />
+                    <Whatwedo />
+                </div> 
+            </div>
+        </>
+    )
+}
+
+export { Aboutus }
