@@ -1,0 +1,180 @@
+import { Form, Button, Typography, Row, Col } from "antd";
+import { MyInput } from "../components";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { useState } from "react";
+
+const { Title, Paragraph } = Typography;
+
+const ForgotPassword = () => {
+    const [form] = Form.useForm();
+    const navigate = useNavigate()
+    const [ requestState, setRequestState ] = useState('request')
+
+
+     const forgotpass = () => {
+        if (requestState === "request") {
+            // dispatcher(actionsApi?.forgotPassword(form.getFieldsValue(['email'])));
+            console.log('Request send on email')
+            setRequestState('otp')
+        } 
+        if (requestState === "otp") {
+            // dispatcher(actionsApi?.otpVerify(form.getFieldsValue(['otp'])));
+            console.log('Otp receive by email')
+            setRequestState('reset')
+        }
+        if (requestState === "reset") {
+            // const data = form.getFieldsValue(['password', 'confirmationPassword']);
+            // dispatcher(actionsApi?.resetPassword({data:{token: otpToken, ...data}, navigate}));
+            console.log('Now enter password and confirm password')
+            setRequestState('request')
+        }
+    };
+
+    return (
+        <Row className="signup-page">
+            <Col xs={24} md={12} className="signup-form-container">
+                <div className="form-inner">
+                    <div className="logo">
+                        <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
+                    </div>
+                    <div>
+                        {requestState === 'otp' && 
+                            <Button type='button' onClick={()=>setRequestState('request')} ghost className="text-black fs-18 p-0 border-0"><ArrowLeftOutlined /></Button>
+                        }
+                    </div>
+                    <Title level={3}>
+                        {requestState === 'request' && 'Forgot Password'}
+                        {requestState === 'otp' && 'OTP'}
+                        {requestState === 'reset' && 'Reset Password'}
+                    </Title>
+                    <Paragraph>
+                        {requestState === 'request' && 'Enter the email address to send you the OTP code.'}
+                        {requestState === 'otp' && 'Enter the 5 digit OTP code sent to your email abc****4@gmail.com'}
+                        {requestState === 'reset' && null}
+                    </Paragraph>
+                    <Form 
+                        layout="vertical" 
+                        form={form} 
+                        requiredMark={false}
+                    >
+                      <Row>
+                        {requestState === 'request' && (
+                            <Col span={24}>
+                                <MyInput
+                                    label='Email Address'
+                                    name='email'
+                                    required
+                                    message="Please enter Email Address"
+                                    placeholder='Enter Email Address'
+                                />
+                            </Col>
+                        )}
+                        {requestState === 'otp' && (
+                            <Col span={24}>
+                                <MyInput
+                                    oTp
+                                    label={'OTP'}
+                                    name='otp'
+                                    type='number'
+                                    required
+                                    message="Please enter the OTP sent to your email"
+                                    placeholder="Enter OTP"
+                                    onKeyPress={(e) => {
+                                        if (!/[0-9]/.test(e.key)) {
+                                        e.preventDefault();
+                                        }
+                                    }}
+                                    className='w-100'
+                                    id='otpcs'
+                                />
+                            </Col>
+                        )}
+                        {requestState === 'reset' && (
+                            <>
+                                <Col span={24}>
+                                    <MyInput
+                                        label="New Password"
+                                        type="password"
+                                        name="password"
+                                        size='large'
+                                        required
+                                        message={()=>{}}
+                                        validator={({ getFieldValue }) => ({
+                                            validator: (_, value) => {
+                                                const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
+                                                if (!reg.test(value)) {
+                                                    return Promise.reject(new Error('Password should contain at least 8 characters, one uppercase letter, one number, one special character'));
+                                                } else {
+                                                    return Promise.resolve();
+                                                }
+                                            }
+                                        })}
+                                    />
+                                </Col>
+                                <Col span={24}>
+                                    <MyInput
+                                        label="Confirm Password"
+                                        type="password"
+                                        name="confirmationPassword"
+                                        size='large'
+                                        dependencies={['password']}
+                                        required
+                                        message='Please enter confirm password'
+                                        rules={[
+                                            ({ getFieldValue }) => ({
+                                                validator(_, value) {
+                                                    if (!value || getFieldValue('password') === value) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(new Error('The password that you entered do not match!'));
+                                                },
+                                            }),
+                                        ]}
+                                        validator={({ getFieldValue }) => ({
+                                            validator(_, value) {
+                                                if (!value || getFieldValue('password') === value) {
+                                                    return Promise.resolve();
+                                                }
+                                                return Promise.reject(new Error('The password that you entered do not match!'));
+                                            },
+                                        })}
+                                    />
+                                </Col>
+                            </>
+                            )}
+                        <Col span={24}>
+                            <Button htmlType="submit" className="btn bg-dark-blue fs-16" block onClick={forgotpass}>
+                                {requestState === 'request' && 'Next'}
+                                {requestState === 'otp' && 'Verify OTP'}
+                                {requestState === 'reset' && 'Reset Password'}
+                            </Button>
+                        </Col>
+                        <Col span={24}>
+                            <Paragraph className="text-center mt-3">
+                                {requestState === 'request' && <>Remember Password? <NavLink to={'/login'}>Signin</NavLink></>}
+                                {requestState === 'otp' && <>Didn’t receive code? <NavLink to={''}>Resend</NavLink></>}
+                                {requestState === 'reset' && null}
+                            </Paragraph>
+                        </Col>
+                      </Row>
+                    </Form>
+                </div>
+            </Col>
+
+            <Col
+                xs={0}
+                md={12}
+                className="signup-visual-container"
+                style={{
+                    display: "flex",
+                    alignItems: "start",
+                }}
+            >
+                <img src="/assets/images/1.gif" alt="Signup Visual" style={{ width: "100%" }} />
+            </Col>
+        </Row>
+    );
+};
+
+export { ForgotPassword };

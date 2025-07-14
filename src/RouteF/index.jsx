@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Aboutus, Article, ArticleSingleView, BusinessListingPage, Faqs, Home, SellBusinessCreate, SingleViewlisting } from "../pages";
+import { Aboutus, Article, ArticleSingleView, BusinessListingPage, Faqs, ForgotPassword, Home, LoginPage, SellBusinessCreate, SignupPage, SingleViewlisting } from "../pages";
 import { Footer, Navbar, ScrollTop } from "../components";
 import { Termofuse } from "../pages";
 
@@ -18,6 +18,9 @@ const RouteF = () => {
           <Route path='/article' element={<Article/>} />
           <Route path='/articlesingleview/:id' element={<ArticleSingleView/>} />
           <Route path='/about' element={<Aboutus/>} />
+          <Route path='/login' element={<LoginPage/>} />
+          <Route path='/signup' element={<SignupPage />} />
+          <Route path='/forgotpass' element={<ForgotPassword />} />
         </Routes>
         <Footer />
     </BrowserRouter>

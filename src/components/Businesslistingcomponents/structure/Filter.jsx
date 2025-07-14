@@ -3,10 +3,14 @@ import { MySelect } from '../../Forms';
 import { DoubleLeftOutlined, DoubleRightOutlined, LineOutlined } from '@ant-design/icons';
 import { categoriesData, multipleOp, teamsizeFilter, yearOper } from '../../../data';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import CustomProgressBar from '../../ui/CustomProgress';
 
 const { Text, Title } = Typography
 const Filter = () => {
 
+    const [activeStep, setActiveStep] = useState(0);
+    const steps = ["1x", "2x", "3x", "4x", "5x", "5x+"];
     const onChange = checkedValues => {
         console.log('checked = ', checkedValues);
     };
@@ -50,11 +54,11 @@ const Filter = () => {
         {
             key: '5',
             label: <Text>Multiple</Text>,
-            children: <MySelect 
-                withoutForm
-                className='input-cs w-100'
-                options={multipleOp}
-            />
+            children: <CustomProgressBar
+        steps={steps}
+        activeStep={activeStep}
+        onChange={setActiveStep}
+      />
         },
         {
             key: '6',

@@ -1,4 +1,4 @@
-import { Card, Col, Flex, Row, Typography } from 'antd'
+import { Card, Col, Flex, Image, Row, Typography } from 'antd'
 
 const { Text, Title } = Typography
 const Buyework = () => {
@@ -9,28 +9,28 @@ const Buyework = () => {
             title:'Explore Listings',
             desc:'Browse verified businesses across Saudi Arabia by category, location, or revenue.',
             subtitle: null,
-            image:'/assets/images/buyer-1-cd.png',
+            image:'/assets/images/explore.gif',
         },
         {
             id: 2,
             title:'Sign NDA',
             desc:'Unlock full business details and chat with the seller by signing a quick digital NDA.',
             subtitle: null,
-            image:'/assets/images/buyer-2-cd.png',
+            image:'/assets/images/signnda.gif',
         },
         {
             id: 3,
             title:'Send an Offer',
             desc:'Make offers, ask questions, or negotiate all through our secure in-platform chat.',
             subtitle: null,
-            image:'/assets/images/buyer-3-cd.png',
+            image:'/assets/images/sendoffer.gif',
         },
         {
             id: 4,
             title:'Close the Deal',
             desc:'Jusoor generates a sale agreement. Pay via bank and receive ownership',
             subtitle: 'Congratulation!',
-            image:'/assets/images/deal-cd.png',
+            image:'/assets/images/finaldeal.gif',
         }
     ]
   return (
@@ -48,12 +48,8 @@ const Buyework = () => {
                             </Flex>
                         ]}
                     >
-                        <Flex vertical align='flex-start' gap={10} className='h-100'>
-                            <Text strong className='fs-14'>{items?.title}</Text>
-                            <Flex gap={5} vertical align='center' className='text-center w-100'  justify='center'>
-                                <img src={items?.image} width={200} height={200} className='object-contain' />
-                                {items?.subtitle && <Text strong>{items?.subtitle}</Text>}
-                            </Flex>
+                        <Flex>
+                            <Image preview={false} src={items?.image} />
                         </Flex>
                     </Card>
                 </Col>

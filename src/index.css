@@ -719,12 +719,12 @@
 }
 
 .work-cd .ant-card-body{
-   background-color: var(--secondary-color);
+   /* background-color: var(--secondary-color);
    border-radius: 12px !important;
    box-shadow: 
   0px 6.92px 35.37px 6.15px #D4E4FB33,
   0px 18.45px 29.22px 2.31px #D4E4FB24,
-  0px 8.46px 11.53px -5.38px #5C88F633;
+  0px 8.46px 11.53px -5.38px #5C88F633; */
   height: 300px;
 }
 
@@ -817,11 +817,8 @@
   margin-bottom: 20px;
 }
 
-.nafath-btn {
+.bg-light-green {
   background: #4ec3aa;
-  color: #fff;
-  font-weight: bold;
-  margin-top: 20px;
 }
 
 .divider {
@@ -867,32 +864,8 @@
 
 .signup-visual-container {
   background: #05052D;
-
-}
-
-.visual-boxes {
   display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.visual-box {
-  background: #1a2044;
-  border-radius: 12px;
-  padding: 20px;
-  max-width: 250px;
-}
-
-.visual-box .box-title {
-  display: block;
-  font-weight: bold;
-  font-size: 16px;
-  margin-bottom: 5px;
-}
-
-.visual-box .box-desc {
-  font-size: 13px;
-  color: #a0a0a0;
+  align-items: end;
 }
 
 
@@ -936,6 +909,70 @@
     height: 30px !important;
 }
 
+#otpcs .ant-input{
+    padding: 18px !important;
+}
+
+/* custom progress css */
+.custom-progress-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: 40px;
+}
+
+.custom-progress-track {
+  position: absolute;
+  top: 50%;
+  transform: translateY(145%);
+  left: 5%;
+  right: 5%;
+  height: 4px;
+  background-color: #e6e6e6;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.custom-progress-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.custom-progress-dots {
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+}
+
+.dot-wrapper {
+  position: absolute;
+  transform: translateX(-50%);
+  text-align: center;
+  cursor: pointer;
+}
+
+.dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: var(--bg-body);
+  transition: background-color 0.3s;
+  border: 2px solid var(--white-text);
+}
+
+.label {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--text-gray);
+  white-space: nowrap;
+}
+
+
 /* media queries  */
 @media (max-width: 991px){
     .hero .inner{
@@ -957,6 +994,9 @@
         border-right: 0px solid #898989B2;
         border-left: 0px solid #898989B2;
         padding: 0px;
+    }
+    .signup-visual-container {
+        display: none;
     }
 }
 

@@ -8,11 +8,15 @@ const OfferSellerModal = ({visible,onClose}) => {
 
     const [form] = Form.useForm(); 
 
-    useEffect(()=>{
-        form.setFieldsValue({
-            totalamount: offeramount + (offeramount * 0.6)
-        },[form])
-    })
+    const handleOfferAmountChange = (e) => {
+        const offerAmount = parseFloat(e.target.value) || 0;
+        const totalAmount = offerAmount + (offerAmount * 0.06);
+        form.setFieldsValue({ totalamount: totalAmount.toFixed(2) });
+    };
+
+    useEffect(() => {
+        form.resetFields();
+    }, [visible, form]);
 
     return (
         <Modal
@@ -63,6 +67,7 @@ const OfferSellerModal = ({visible,onClose}) => {
                                 <img src='/assets/icons/reyal-g.png' width={14} />
                             }
                             className='w-100'
+                            onChange={handleOfferAmountChange}
                         />
                     </Col>
                     <Col span={24}>
