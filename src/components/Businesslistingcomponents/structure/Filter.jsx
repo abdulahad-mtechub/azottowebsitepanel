@@ -1,10 +1,9 @@
 import { Card, Checkbox, Col, Collapse, Flex, Input, Radio, Row, Typography } from 'antd';
-import { MySelect } from '../../Forms';
 import { DoubleLeftOutlined, DoubleRightOutlined, LineOutlined } from '@ant-design/icons';
-import { categoriesData, multipleOp, teamsizeFilter, yearOper } from '../../../data';
+import { categoriesData, teamsizeFilter, yearOper } from '../../../data';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import CustomProgressBar from '../../ui/CustomProgress';
+import {CustomProgressBar} from '../../ui';
 
 const { Text, Title } = Typography
 const Filter = () => {

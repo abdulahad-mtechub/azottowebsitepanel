@@ -47,4 +47,4 @@ const CustomProgressBar = ({
   );
 };
 
-export default CustomProgressBar;
+export {CustomProgressBar};
