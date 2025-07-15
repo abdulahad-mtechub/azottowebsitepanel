@@ -24,6 +24,7 @@
     --brown: #7B5D24;
     --brown-light: #FCEAC8;   
     --blue: #3B82F6; 
+    --color-nafth: #36999A;
 }
 
 .bg-light-brand{
@@ -686,6 +687,10 @@
     background-color: var(--green) !important;
 }
 
+.bg-nafth{
+    background-color: var(--color-nafth) !important;
+}
+
 .horizontalline{
     height: auto;
     width: 1px;
@@ -726,6 +731,7 @@
   0px 18.45px 29.22px 2.31px #D4E4FB24,
   0px 8.46px 11.53px -5.38px #5C88F633; */
   height: 300px;
+  padding: 0 !important;
 }
 
 .work-cd .ant-card-actions{
@@ -802,12 +808,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-top: 50px;
+  padding: 20px;
 }
 
 .form-inner {
-  max-width: 400px;
+  max-width: 500px;
   width: 100%;
+  
 }
+
 .logo{
   display: flex;
   justify-content: center;
@@ -818,56 +828,40 @@
 }
 
 .bg-light-green {
-  background: #4ec3aa;
+  background: #4ec3aa !important;
 }
 
-.divider {
-  text-align: center;
-  margin: 20px 0;
-  position: relative;
-}
-
-.divider span {
-  background: #fff;
-  padding: 0 10px;
-  color: #999;
-  font-size: 14px;
-}
-
-.divider::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  height: 1px;
-  width: 100%;
-  background: #e0e0e0;
-  transform: translateY(-50%);
-  z-index: 0;
-}
-
-.signup-btn {
-  background: #0a0f2d;
-  border-color: #0a0f2d;
-  font-weight: bold;
-}
-
-.signup-btn:hover {
-  background: #1a2044;
-  border-color: #1a2044;
-}
-
-.agreement-text {
-  font-size: 13px;
-  color: #555;
-}
 
 .signup-visual-container {
-  background: #05052D;
-  display: flex;
-  align-items: end;
+  background-color: #05052D;
+  background-image: url('../assets/images/login-sh.svg');
+  min-height: 100vh;
+  height: -webkit-fill-available;
+  position: relative;
+  z-index: 1;
 }
 
+.bg-shade{
+    position: relative;
+}
+
+.bg-shade::after{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background-image: url('../assets/images/shade.svg');
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    z-index: -1;
+    background-position-y: bottom;
+    transform: rotate(180deg);
+}
+
+.logo-sp{
+    transform: translateY(200px);
+}
 
 .object-cover{
     object-fit: cover !important; 
@@ -995,9 +989,6 @@
         border-left: 0px solid #898989B2;
         padding: 0px;
     }
-    .signup-visual-container {
-        display: none;
-    }
 }
 
 
@@ -1017,6 +1008,18 @@
     }
     .m-ps-3{
         padding-left: 2rem !important;
+    }
+    .overflow-style{
+        width: 100%;
+        height: 630px;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+
+    .overflow-style::-webkit-scrollbar
+    {
+        width: 0px;
+        background-color: #F5F5F5;
     }
 }
 

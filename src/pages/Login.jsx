@@ -1,4 +1,4 @@
-import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex } from "antd";
+import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image } from "antd";
 import { MyInput } from "../components";
 import { NavLink } from "react-router-dom";
 
@@ -13,8 +13,8 @@ const LoginPage = () => {
 
     return (
         <Row className="signup-page" align={"middle"}>
-            <Col xs={24} md={12} className="signup-form-container">
-                <div className="form-inner">
+            <Col xs={24} sm={24} md={14} lg={16} className="signup-form-container">
+                <div className="form-inner overflow-style">
                     <div className="logo">
                         <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
                     </div>
@@ -22,7 +22,7 @@ const LoginPage = () => {
                     <Title level={3}>Signin to your account</Title>
                     <Paragraph>Enter your credentials to login to your account.</Paragraph>
 
-                    <Button className="btn bg-light-green fs-16" block>
+                    <Button className="btn bg-nafth fs-16" block>
                         Signin via Nafath
                     </Button>
                     <Divider className="text-gray">Or</Divider>
@@ -67,10 +67,19 @@ const LoginPage = () => {
 
             <Col
                 xs={0}
-                md={12}
+                md={10}
+                lg={8}
                 className="signup-visual-container"
             >
-                <img src="/assets/images/1.gif" alt="Signup Visual" style={{ width: "100%" }} />
+                <Flex vertical justify="space-between" className="h-100">
+                  <Flex vertical justify="center" align="center" className="logo-sp">
+                    <Image src="/assets/images/logo.png" width={200} preview={false} />
+                    <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
+                  </Flex>
+                  <div className="bg-shade">
+                    <img src="/assets/images/login.gif" alt="Signup Visual" style={{ width: "100%",opacity:.7 }} />
+                  </div>
+                </Flex>
             </Col>
         </Row>
     );

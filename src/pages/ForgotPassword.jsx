@@ -1,4 +1,4 @@
-import { Form, Button, Typography, Row, Col } from "antd";
+import { Form, Button, Typography, Row, Col, Image, Flex } from "antd";
 import { MyInput } from "../components";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
@@ -33,7 +33,7 @@ const ForgotPassword = () => {
 
     return (
         <Row className="signup-page">
-            <Col xs={24} md={12} className="signup-form-container">
+            <Col xs={24} sm={24} md={14} lg={16} className="signup-form-container">
                 <div className="form-inner">
                     <div className="logo">
                         <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
@@ -164,14 +164,20 @@ const ForgotPassword = () => {
 
             <Col
                 xs={0}
-                md={12}
+                sm={0}
+                md={10}
+                lg={8}
                 className="signup-visual-container"
-                style={{
-                    display: "flex",
-                    alignItems: "start",
-                }}
             >
-                <img src="/assets/images/1.gif" alt="Signup Visual" style={{ width: "100%" }} />
+                <Flex vertical justify="space-between" className="h-100">
+                    <Flex vertical justify="center" align="center" className="logo-sp">
+                        <Image src="/assets/images/logo.png" width={200} preview={false} />
+                        <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
+                    </Flex>
+                    <div className="bg-shade">
+                        <img src="/assets/images/login.gif" alt="Signup Visual" style={{ width: "100%",opacity:.7 }} />
+                    </div>
+                </Flex>
             </Col>
         </Row>
     );
