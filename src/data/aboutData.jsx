@@ -1,7 +1,7 @@
 const introData = {
     title: <span>A <span className='text-brand'>Trusted Marketplace</span> for Buying & Selling Businesses</span>,
     subtitle:'About Jusoor',
-    desc:'Jasoor is a Saudi-born platform built to make buying and selling businesses easier, safer, and more transparent. We connect serious buyers with verified sellers while handling all the sensitive steps in between.',
+    desc:'Jusoor is a Saudi-born platform built to make buying and selling businesses easier, safer, and more transparent. We connect serious buyers with verified sellers while handling all the sensitive steps in between.',
     list:[
         'Verified listings backed by commercial and financial documents',
         'Secure, step-by-step deal flow including E-NDA and payment verification',

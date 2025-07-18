@@ -13,24 +13,21 @@ const Buyework = () => {
         },
         {
             id: 2,
-            title:'Sign NDA',
-            desc:'Unlock full business details and chat with the seller by signing a quick digital NDA.',
-            subtitle: null,
-            image:'/assets/images/signnda.gif',
+            title:'Buy Now or Processed to Pay',
+            desc:'With a single click, move to the payment step or buy the business without further delays.',
+            image:'/assets/images/sendoffer.gif',
         },
         {
             id: 3,
-            title:'Send an Offer',
-            desc:'Make offers, ask questions, or negotiate all through our secure in-platform chat.',
-            subtitle: null,
-            image:'/assets/images/sendoffer.gif',
+            title:'Sign NDA & Virtual Meeting',
+            desc:'Sign the NDA to access more info and book a virtual meeting.',
+            image:'/assets/images/signnda.gif',
         },
         {
             id: 4,
             title:'Close the Deal',
             desc:'Jusoor generates a sale agreement. Pay via bank and receive ownership',
-            subtitle: 'Congratulation!',
-            image:'/assets/images/finaldeal.gif',
+            image:'/assets/images/deal.gif',
         }
     ]
   return (
@@ -48,7 +45,7 @@ const Buyework = () => {
                             </Flex>
                         ]}
                     >
-                        <Flex>
+                        <Flex justify='center'>
                             <Image preview={false} src={items?.image} />
                         </Flex>
                     </Card>

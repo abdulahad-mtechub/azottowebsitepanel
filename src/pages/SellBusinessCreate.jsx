@@ -6,7 +6,7 @@ import { BusinessDetailStep, BusinesslistingReviewModal, BusinessVisionStep, Can
 
 const { Text } = Typography
 
-const SellBusinessCreate = ({ addstep }) => {
+const SellBusinessCreate = () => {
     const [current, setCurrent] = useState(0);
     const [iscancel, setIsCancel] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
@@ -28,32 +28,37 @@ const SellBusinessCreate = ({ addstep }) => {
         },
         {
             title: 'Document Uploads',
-            content: null,
+            content: <UploadSupportDocStep />,
         },
     ];
 
     const onChange = (value) => {
         setCurrent(value);
-        setIsPreview(false);
+        // setIsPreview(false);
     };
 
     const next = () => {
         if (current < steps.length - 1) {
             setCurrent(current + 1);
-            setIsPreview(false);
+            // setIsPreview(false);
         }
     };
 
     const prev = () => {
-        if (current === 0) {
-            setIsCancel(true);
-        } else if (current === steps.length - 1 && isPreview) {
-            setIsPreview(false);
-        } else {
-            setCurrent(current - 1);
-            setIsPreview(false);
-        }
+        setCurrent(current - 1);
+        setIsPreview(false);
     };
+
+    // const prev = () => {
+    //     if (current === 0) {
+    //         setIsCancel(true);
+    //     } else if (current === steps.length - 1 && isPreview) {
+    //         setIsPreview(false);
+    //     } else {
+    //         setCurrent(current - 1);
+    //         setIsPreview(false);
+    //     }
+    // };
 
     const items = steps.map((item, index) => ({
         key: item.title,
@@ -68,11 +73,11 @@ const SellBusinessCreate = ({ addstep }) => {
     const handleCreateListing = () => {
         setReviewModal(false);
         setCurrent(0);
-        setIsPreview(false);
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
+        // setIsPreview(false);
+        // window.scrollTo({
+        //     top: 0,
+        //     behavior: 'smooth'
+        // });
     };
 
     return (
@@ -106,13 +111,14 @@ const SellBusinessCreate = ({ addstep }) => {
                         className='mt-3'
                     />
 
-                    <div className="step-content">
+                    {/* <div className="step-content">
                         {current === steps.length - 1
                             ? isPreview
                                 ? <PreviewStep />
                                 : <UploadSupportDocStep />
                             : steps[current].content}
-                    </div>
+                    </div> */}
+                    <div className="step-content">{steps[current].content}</div>
 
                     <Flex justify={
                         (isPreview) 
@@ -140,13 +146,13 @@ const SellBusinessCreate = ({ addstep }) => {
                                 </Button>
                             )}
 
-                            {current === steps.length - 1 && !isPreview && (
+                            {/* {current === steps.length - 1 && !isPreview && (
                                 <Button type="primary" className='btn bg-brand' onClick={() => setIsPreview(true)}>
                                     Preview
                                 </Button>
-                            )}
+                            )} */}
 
-                            {current === steps.length - 1 && isPreview && (
+                            {current === steps.length - 1 && (
                                 <Button type="primary" className='btn bg-brand' onClick={()=>setReviewModal(true)}>
                                     Publish
                                 </Button>

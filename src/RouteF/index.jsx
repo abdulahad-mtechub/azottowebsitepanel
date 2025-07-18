@@ -1,30 +1,65 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { FloatButton } from 'antd';
+import { UpOutlined } from '@ant-design/icons';
 import { Aboutus, Article, ArticleSingleView, BusinessListingPage, Faqs, ForgotPassword, Home, LoginPage, SellBusinessCreate, SignupPage, SingleViewlisting } from "../pages";
 import { Footer, Navbar, ScrollTop } from "../components";
 import { Termofuse } from "../pages";
+import { useEffect, useState } from "react";
+
+const AppRoutes = () => {
+  const [showButton, setShowButton] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 500) {
+        setShowButton(true);
+      } else {
+        setShowButton(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    <>
+      <ScrollTop />
+      <Navbar />
+      <Routes>
+        <Route path='/' element={<Home />} />
+        <Route path='/sellbusinesscreate' element={<SellBusinessCreate />} />
+        <Route path='/businesslisting' element={<BusinessListingPage />} />
+        <Route path='/singleviewlisting/:id' element={<SingleViewlisting />} />
+        <Route path='/faq' element={<Faqs />} />
+        <Route path='/termofuse' element={<Termofuse />} />
+        <Route path='/article' element={<Article />} />
+        <Route path='/articlesingleview/:id' element={<ArticleSingleView />} />
+        <Route path='/about' element={<Aboutus />} />
+        <Route path='/login' element={<LoginPage />} />
+        <Route path='/signup' element={<SignupPage />} />
+        <Route path='/forgotpass' element={<ForgotPassword />} />
+      </Routes>
+      <Footer />
+      {showButton && (
+        <FloatButton 
+          icon={<UpOutlined className="fs-14" />}
+          type="primary"
+          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          style={{ right: 24 }}
+          
+        />
+      )}
+    </>
+  );
+};
 
 const RouteF = () => {
   return (
     <BrowserRouter>
-        <ScrollTop />
-        <Navbar />
-        <Routes>
-          <Route path='/' element={<Home/>} />
-          <Route path='/sellbusinesscreate' element={<SellBusinessCreate/>} />
-          <Route path='/businesslisting' element={<BusinessListingPage/>} />
-          <Route path='/singleviewlisting/:id' element={<SingleViewlisting/>} />
-          <Route path='/faq' element={<Faqs/>} />
-          <Route path='/termofuse' element={<Termofuse/>} />
-          <Route path='/article' element={<Article/>} />
-          <Route path='/articlesingleview/:id' element={<ArticleSingleView/>} />
-          <Route path='/about' element={<Aboutus/>} />
-          <Route path='/login' element={<LoginPage/>} />
-          <Route path='/signup' element={<SignupPage />} />
-          <Route path='/forgotpass' element={<ForgotPassword />} />
-        </Routes>
-        <Footer />
+      <AppRoutes />
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export {RouteF}
+export { RouteF };

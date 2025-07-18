@@ -67,7 +67,7 @@ const MobileNavbar = ({visible,onClose}) => {
                                                         <Flex vertical gap={10}>
                                                             {
                                                                 menuchild?.innerchildren?.map((innerLink,i)=>
-                                                                    <NavLink to={innerLink?.path} onClick={onClose} className='text-white fs-14'>
+                                                                    <NavLink to={innerLink?.path} onClick={onClose} className='text-white fs-14' key={i}>
                                                                         {innerLink?.title}
                                                                     </NavLink>
                                                                 )

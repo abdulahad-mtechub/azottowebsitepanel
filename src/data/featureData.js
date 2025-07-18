@@ -29,6 +29,7 @@ const exploreData = [
         description:'A popular neighborhood café located in Al-Malaz with a steady flow of daily customers. Fully operational, profitable, and ideal',
         amount: '950,00',
         save: 'no',
+        status: 'Sold',
         child:[
             {
                 id: 1,
@@ -57,6 +58,7 @@ const exploreData = [
         description:'A popular neighborhood café located in Al-Malaz with a steady flow of daily customers. Fully operational, profitable, and ideal',
         amount: '950,00',
         save: 'yes',
+        status: null,
         child:[
             {
                 id: 1,
@@ -85,6 +87,7 @@ const exploreData = [
         description:'A popular neighborhood café located in Al-Malaz with a steady flow of daily customers. Fully operational, profitable, and ideal',
         amount: '950,00',
         save: 'no',
+        status: 'Sold',
         child:[
             {
                 id: 1,
@@ -113,6 +116,7 @@ const exploreData = [
         description:'A popular neighborhood café located in Al-Malaz with a steady flow of daily customers. Fully operational, profitable, and ideal',
         amount: '950,00',
         save: 'no',
+        status: null,
         child:[
             {
                 id: 1,
@@ -141,6 +145,7 @@ const exploreData = [
         description:'A popular neighborhood café located in Al-Malaz with a steady flow of daily customers. Fully operational, profitable, and ideal',
         amount: '950,00',
         save: 'no',
+        status: null,
         child:[
             {
                 id: 1,
@@ -169,6 +174,7 @@ const exploreData = [
         description:'A popular neighborhood café located in Al-Malaz with a steady flow of daily customers. Fully operational, profitable, and ideal',
         amount: '950,00',
         save: 'yes',
+        status: null,
         child:[
             {
                 id: 1,
@@ -214,7 +220,7 @@ const browsetypeData = [
     {
         id: 4,
         icons: '/assets/icons/gym.png',
-        title: 'Health, Beauty & Fitnessc',
+        title: 'Health, Beauty & Fitness',
         description: 'Gym studios, personal training spaces.'
     },
     {
@@ -277,22 +283,22 @@ const footerlinkData = [
             {
                 id: 1,
                 name: 'About Jusoor',
-                path: ''
+                path: '/about'
             },
             {
                 id: 2,
                 name: 'Q&A',
-                path: ''
+                path: '/faq'
             },
             {
                 id: 3,
                 name: 'Term of Use',
-                path: ''
+                path: '/termofuse'
             },
             {
                 id: 4,
                 name: 'Articles',
-                path: ''
+                path: '/article'
             },
         ]
     },
@@ -513,7 +519,7 @@ const othersmenu = [
     {
         id: 1,
         icon: '/assets/icons/ab.png',
-        title: 'About Jasoor',
+        title: 'About Jusoor',
         subtitle: 'Choose from popular business types.',
         path:'/about'
     },
@@ -553,62 +559,62 @@ const mobilemenuData = [
                     {
                         id: 1,
                         title: 'Restaurants & Cafes',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 2,
                         title: 'Retail Stores',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 3,
                         title: 'Salons & Beauty Centers',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 4,
                         title: 'E-commerce Stores',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 5,
                         title: 'Gyms & Fitness Centers',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 6,
                         title: 'Automotive Services',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 7,
                         title: 'Bakeries & Sweet Shops',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 8,
                         title: 'Tech & Software Startups',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 9,
                         title: 'Educational Centers',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 10,
                         title: 'Pharmacies & Clinics',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 11,
                         title: 'Printing & Stationery Shops',
-                        path: '',
+                        path: '/businesslisting',
                     },
                     {
                         id: 12,
                         title: 'Pet Shops & Services',
-                        path: '',
+                        path: '/businesslisting',
                     },
                 ]
             },
@@ -758,7 +764,7 @@ const mobilemenuData = [
         children:[
             {
                 id: 1,
-                name: 'About Jasoor',
+                name: 'About Jusoor',
                 Path: '/about'
             },
             {
@@ -774,7 +780,7 @@ const mobilemenuData = [
             {
                 id: 4,
                 name: 'Articles',
-                Path: '/art'
+                Path: '/article'
             },
         ]
     }

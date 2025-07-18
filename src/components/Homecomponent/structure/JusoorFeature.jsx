@@ -67,7 +67,7 @@ const JusoorFeature = () => {
         key: item.title,
         title: (
             <span
-                className={`custom-step-title ${current >= index ? 'completed' : ''}`}
+                className={`custom-step-titles ${current >= index ? 'completed' : ''}`}
                 ref={(el) => (stepRefs.current[index] = el)}
             >
                 {item.title}
@@ -84,7 +84,7 @@ const JusoorFeature = () => {
                 <Row gutter={[24, 24]} align="middle" justify="space-between">
                     <Col span={24}>
                         <Flex vertical justify="center" align="center" gap={15} className="mx-width">
-                            <div className="tag fw-500">Jasoor's Features</div>
+                            <div className="tag fw-500">Jusoor's Features</div>
                             <Title className="m-0 text-white" level={2}>
                                 Your <span className="text-brand">Trusted Saudi Marketplace</span> for Buying and Selling Businesses
                             </Title>
@@ -119,7 +119,7 @@ const JusoorFeature = () => {
                                     exit={{ opacity: 0, y: -20 }}
                                     transition={{ duration: 0.5 }}
                                 >
-                                    <div className="img-size-1">
+                                    <div className="img-size-1 h-100">
                                         <img
                                             src={steps[current].img}
                                             width="100%"

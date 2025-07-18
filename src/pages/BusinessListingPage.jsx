@@ -3,6 +3,7 @@ import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography } from 'antd
 import { districtOp } from '../data/Lookups'
 import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../components'
 import { useNavigate } from 'react-router-dom';
+import { RightOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
 
@@ -20,7 +21,7 @@ const BusinessListingPage = () => {
             <div className='bg-dark-blue bread-cs mb-3'>
                 <div className='container'>
                     <Breadcrumb
-                        separator=">"
+                        separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                         items={[
                             {
                                 title: <Text className='cursor text-gray' onClick={() => navigate('/')}>Home</Text>,

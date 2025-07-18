@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100..900;1,100..900&display=swap');
+
+@font-face {
+    font-family: Productsans;
+    src: url('../assets/fonts/Product\ Sans\ Regular.ttf');
+}
+
 *{
     padding: 0;
     margin: 0; 
@@ -12,7 +17,7 @@
     --dark-blue: #07072D;
     --light-blue: #0C1342;
     --white-text:#fff;
-    --body-text: "Georama", sans-serif;
+    --body-text: Productsans, sans-serif;
     --light-gray: #D6D8E0;
     --bg-body: #E9EEFC;
     --text-gray: #777E90;
@@ -25,10 +30,19 @@
     --brown-light: #FCEAC8;   
     --blue: #3B82F6; 
     --color-nafth: #36999A;
+    --bg-light-green: #D3E3D0;
 }
 
 .bg-light-brand{
     background-color: var(--bg-body) !important;
+}
+
+.bg-light-green{
+    background-color: var(--bg-light-green) !important;
+}
+
+.text-green{
+    color: var(--green) !important;
 }
 
 .w-100{
@@ -756,7 +770,7 @@
     transition: color 0.3s ease;
 }
 
-.custom-step-title.completed {
+.custom-step-titles.completed {
     color: var(--white-text);
 }
 
@@ -827,11 +841,6 @@
   margin-bottom: 20px;
 }
 
-.bg-light-green {
-  background: #4ec3aa !important;
-}
-
-
 .signup-visual-container {
   background-color: #05052D;
   background-image: url('../assets/images/login-sh.svg');
@@ -877,10 +886,6 @@
 
 .h-400{
     height: 400px;
-}
-
-.overflow-hidden{
-    overflow: hidden;
 }
 
 .ml-20{
@@ -964,6 +969,14 @@
   font-size: 12px;
   color: var(--text-gray);
   white-space: nowrap;
+}
+
+.min-h-screen {
+  min-height: 100vh !important;
+}
+
+.overflow-hidden{
+    overflow: hidden !important;
 }
 
 

@@ -30,13 +30,21 @@ const ExploreLive = () => {
                                             <Button>
                                                 Restaurant
                                             </Button>
-                                            <Button className='border-0 bg-transparent p-0'>
-                                                {
-                                                    pro?.save === 'yes' ?
-                                                    <img src='/assets/icons/bk-bl-d.png' width={22}/> :
-                                                    <img src='/assets/icons/bk-bl.png' width={22}/>
-                                                }
-                                            </Button>
+                                            {
+                                                pro?.status ?
+                                                <Button className='bg-light-green border-0 text-green fs-13'>
+                                                    Sold
+                                                </Button>
+                                                :
+                                                <Button className='border-0 bg-transparent p-0'>
+                                                    {
+                                                        pro?.save === 'yes' ?
+                                                        <img src='/assets/icons/bk-bl-d.png' width={22}/> :
+                                                        <img src='/assets/icons/bk-bl.png' width={22}/>
+                                                    }
+                                                </Button>
+                                            }
+                                            
                                         </Flex>
                                         <div>
                                             <div className='w-full card-img mb-2 rounded-12'>

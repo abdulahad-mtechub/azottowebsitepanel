@@ -8,28 +8,24 @@ const Sellerwork = () => {
             id: 1,
             title:'Create Your Listing',
             desc:'Add your business info, financials, and documents. It only takes a few minutes.',
-            subtitle: null,
             image:'/assets/images/create-listing.gif',
         },
         {
             id: 2,
             title:'Get Verified',
             desc:'We verify your CR, key metrics, and identity to build buyer trust.',
-            subtitle: 'You are verified seller!',
             image:'/assets/images/verify.gif',
         },
         {
             id: 3,
             title:'Receive Offers',
             desc:'Buyers sign an NDA to view details and send offers through our secure chat.',
-            subtitle: null,
             image:'/assets/images/offer.gif',
         },
         {
             id: 4,
             title:'Finalize the Deal',
             desc:'Accept the offer, upload the transfer docs, and get paid directly via bank.',
-            subtitle: 'Congratulation!',
             image:'/assets/images/deal.gif',
         }
     ]
@@ -48,7 +44,7 @@ const Sellerwork = () => {
                             </Flex>
                         ]}
                     >
-                        <Flex>
+                        <Flex justify='center'>
                             <Image preview={false} src={items?.image} />
                         </Flex>
                     </Card>
