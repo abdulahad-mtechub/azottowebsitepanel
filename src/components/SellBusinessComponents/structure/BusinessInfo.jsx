@@ -1,8 +1,52 @@
 import { Card, Col, Flex, Image, Row, Typography } from 'antd'
-import { businessInfoData } from '../../../data';
+import { GET_CATEGORY } from "../../../graphql/query/business";
+import { useQuery } from '@apollo/client';
 
 const { Title, Text } = Typography
-const BusinessInfo = () => {
+const BusinessInfo = ({data}) => {
+    const { loading, error, data: categoryData } = useQuery(GET_CATEGORY, {
+        variables: { getCategoryByIdId: data.categoryId },
+        skip: !data.categoryId, // Skip query if categoryId is null or undefined
+      });
+    
+      if (!data.categoryId) {
+        return <p>No category selected.</p>;
+      }
+
+    const category = categoryData?.getCategoryById;
+
+    const businessInfoData = [
+        {
+            id: 1,
+            icon:'/assets/icons/businessprice.png',
+            title:`SAR ${data.price}`,
+            subtitle:'Business Price'
+        },
+        {
+            id: 2,
+            icon:'/assets/icons/foundationdate.png',
+            title:`${new Date(data.foundedDate).getFullYear()}`,
+            subtitle:'Foundation Date'
+        },
+        {
+            id: 3,
+            icon:'/assets/icons/businesscate.png',
+            title:`${category?.name}`,
+            subtitle:'Business Category'
+        },
+        {
+            id: 4,
+            icon:'/assets/icons/teamsize.png',
+            title:`${data.numberOfEmployees}`,
+            subtitle:'Team Size'
+        },
+        {
+            id: 5,
+            icon:'/assets/icons/businessloc.png',
+            title:`${data.district}`,
+            subtitle:'Business Location'
+        },
+    ]
 
     return (
         <Card className='shadow-d radius-12 border-gray mb-3'>

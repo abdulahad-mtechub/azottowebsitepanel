@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { Col, Flex, Image, Row, Typography } from 'antd'
-import Lenis from 'lenis';
+// import Lenis from 'lenis';
 import ScrollTrigger from 'gsap/dist/ScrollTrigger';
 import gsap from 'gsap';
 

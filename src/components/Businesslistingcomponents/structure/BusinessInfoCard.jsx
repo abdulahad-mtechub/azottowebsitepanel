@@ -4,7 +4,40 @@ import { OfferSellerModal, RequestMeetingModal } from '../modal'
 import { useState } from 'react'
 
 const { Title,Text } = Typography
-const BusinessInfoCard = () => {
+const BusinessInfoCard = ({data}) => {
+
+    const businessInfoData = [
+        {
+            id: 1,
+            icon:'/assets/icons/businessprice.png',
+            title:`SAR ${data?.price?.toLocaleString() || '0'}`,
+            subtitle:'Business Price'
+        },
+        {
+            id: 2,
+            icon:'/assets/icons/foundationdate.png',
+            title:` ${data?.foundedDate || '0'}`,
+            subtitle:'Foundation Date'
+        },
+        {
+            id: 3,
+            icon:'/assets/icons/businesscate.png',
+            title:` ${data?.category?.name || '0'}`,
+            subtitle:'Business Category'
+        },
+        {
+            id: 4,
+            icon:'/assets/icons/teamsize.png',
+            title:` ${data?.numberOfEmployees || '0'}`,
+            subtitle:'Team Size'
+        },
+        {
+            id: 5,
+            icon:'/assets/icons/businessloc.png',
+            title:` ${data?.district || 'Unknown'}`,
+            subtitle:'Business Location'
+        },
+    ]
 
     const [ offerseller, setOfferSeller ] = useState(false)
     const [ meetingmodal, setMeetingModal ] = useState(false)
@@ -50,10 +83,12 @@ const BusinessInfoCard = () => {
                 </Row>
             </Card>
             <OfferSellerModal 
+                businessId={data?.id}
                 visible={offerseller}
                 onClose={()=>setOfferSeller(false)}
             />
             <RequestMeetingModal 
+                businessId={data?.id}
                 visible={meetingmodal}
                 onClose={()=>setMeetingModal(false)}
             />

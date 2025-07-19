@@ -1,18 +1,19 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Card, Space, Dropdown } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown } from 'antd';
 import './index.css';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { businessmenuData, othersmenu } from '../../../data';
-import { useState } from 'react';
+import { useEffect, useState,useContext } from 'react';
 import { MobileNavbar } from './MobileNavbar';
+import { AuthContext } from '../../../context/AuthContext';
+
 
 const { Text, Title } = Typography;
 
 const Navbar = () => { 
-
-  const [ isshow, setIsShow ] = useState(false)
-  const [ visible, setVisible ] = useState(false)
-  const navigate = useNavigate()
+  const { isLoggedIn, logout } = useContext(AuthContext);
+  const [visible, setVisible] = useState(false);
+  const navigate = useNavigate();
 
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
@@ -83,16 +84,33 @@ const Navbar = () => {
     }
   };
 
+  const [isshow, setIsShow] = useState(isLoggedIn);
+
+  useEffect(() => {
+    setIsShow(isLoggedIn);
+  }, [isLoggedIn]);
+
+  const handleLogout = () => {
+    logout();  // This clears localStorage and sets isLoggedIn = false
+    navigate('/login');
+  };
   const items = [
     {
       key: '1',
       label: (
-        <a target="_blank" rel="noopener noreferrer" href="">
+        <a
+          href="#logout"
+          onClick={(e) => {
+            e.preventDefault(); // Prevent default link behavior
+            setIsShow(false);
+            handleLogout();
+          }}
+        >
           Logout
         </a>
       ),
     },
-  ]
+  ];
 
   return (
     <>
@@ -156,7 +174,7 @@ const Navbar = () => {
                       <DownOutlined className='fs-12 text-white' />
                     </Flex>
                   </NavLink>
-                  
+              
                   <ul className='dropdown' >
                   {businessmenuData?.map((list, index) => (
                       <li className='drop-item' key={index}>
@@ -218,7 +236,7 @@ const Navbar = () => {
                   <Button className='btn btn-outline'>
                     Sign up
                   </Button>
-                  <Button className='btn bg-brand' onClick={()=>setIsShow(true)}>
+                  <Button className='btn bg-brand' onClick={()=>navigate('/login')}>
                     Login
                   </Button>
                 </Flex>

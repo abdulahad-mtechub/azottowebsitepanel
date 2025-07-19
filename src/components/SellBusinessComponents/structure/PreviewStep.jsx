@@ -6,12 +6,54 @@ import { inventColumn, inventData, keyassetData, keyassetsColumn, liabColumn, li
 import { PreviewTableContent } from './PreviewTableContent';
 import { DocumentUploadedPrev } from './DocumentUploadedPrev';
 import { BusinessInfo } from './BusinessInfo';
+import { GET_CATEGORY } from "../../../graphql/query/business";
+import { useQuery } from '@apollo/client';
 
 const { Title, Text } = Typography
-const PreviewStep = () => {
+const PreviewStep = ({data}) => {
+    const { loading, error, data: categoryData } = useQuery(GET_CATEGORY, {
+        variables: { getCategoryByIdId: data.categoryId },
+        skip: !data.categoryId, // Skip query if categoryId is null or undefined
+      });
+    
+      if (!data.categoryId) {
+        return <p>No category selected.</p>;
+      }
 
+    const category = categoryData?.getCategoryById;
     const [form] = Form.useForm();    
 
+    const postsaleData = [
+        {
+            key: '1',
+            period: data.supportDuration ? data.supportDuration : '3 Months',
+            session:data.supportSession ? data.supportSession : '2 Sessions'
+        }
+    ]
+    const liabilities = data.liabilities?.map((item, index) => ({
+        key: String(index + 1),
+        name: item.name || 'N/A',
+        items: item.quantity || '0',
+        purchaseyear: item.purchaseYear || 'N/A',
+        price: item.price ? `SAR ${item.price}` : 'SAR 0',
+    })) || [];
+    
+    const keyassetes = data.assets?.map((item, index) => ({
+        key: String(index + 1),
+        name: item.name || 'N/A',
+        items: item.quantity || '0',
+        purchaseyear: item.purchaseYear || 'N/A',
+        price: item.price ? `SAR ${item.price}` : 'SAR 0',
+    })) || [];
+    
+    const inventoryItems = data.inventoryItems?.map((item, index) => ({
+        key: String(index + 1),
+        name: item.name || 'N/A',
+        items: item.quantity || '0',
+        purchaseyear: item.purchaseYear || 'N/A',
+        price: item.price ? `SAR ${item.price}` : 'SAR 0',
+    })) || [];
+      
     return (
         <>
             <ModuleTopHeading level={4} name='Preview' className='mb-3'/>
@@ -20,27 +62,27 @@ const PreviewStep = () => {
                     <Card className='shadow-d radius-12 border-gray mb-3'>
                         <Flex vertical gap={10}>
                             <Title level={5} >
-                                Al Madinah Coffee Shop
+                                {data.businessTitle}
                             </Title>
                             <Text>
-                                Al Madinah Coffee Shop is a well-established café located in the heart of Al-Malaz, Riyadh. Operating for over 3 years, it has built a strong reputation among local residents and office workers for its premium coffee, cozy seating, and consistent service. The business runs from a fully furnished commercial unit with a stylish interior, dedicated staff, and all necessary licenses in place.
+                                {category?.name}
                             </Text>
                             <Text>
-                                This café averages SAR 250,000 in annual revenue with a healthy annual profit of SAR 75,000. Its location offers strong foot traffic, especially during morning and late evening hours. Key assets include high-end espresso machines, seating furniture, POS system, and a fully branded visual identity. The owner is willing to offer 30 days of post-sale support, including supplier contacts, staff training, and marketing handover.
+                                {data?.description}
                             </Text>
                             <Text>
-                                Website: <Link to={''}>http://almadinahcoffeeshop.com</Link>
+                                Website: <Link to={''}>{data.url? data.url:'No URL provided'}</Link>
                             </Text>
                         </Flex>
                     </Card>
-                    <BusinessStats />
+                    <BusinessStats data={data} />
                     <Card className='shadow-d radius-12 border-gray mb-3'>
                         <Flex vertical gap={10}>
                             <Title level={5}>
                                 Growth Opportunity
                             </Title>
                             <Text>
-                                The café has strong potential for growth by introducing an online ordering system, partnering with food delivery apps, and expanding into nearby residential areas. Franchising or launching a second location in a busy district can further increase revenue.
+                            {data?.growthOpportunities ? data.growthOpportunities : 'No Growth Opportunity Provided' }
                             </Text>
                         </Flex>
                     </Card>
@@ -50,18 +92,18 @@ const PreviewStep = () => {
                                 Reason for Selling
                             </Title>
                             <Text>
-                                The owner is relocating abroad for personal reasons and is looking for a serious buyer to take over and continue the café’s success.
+                            {data.reason ? data.reason : 'No Reason Provided'}
                             </Text>
                         </Flex>
                     </Card>
                     <PreviewTableContent title='Post - Sale Support' columns={postsaleColumns} data={postsaleData} />
-                    <PreviewTableContent title='Outstanding Liabilities / Debt' columns={liabColumn} data={liabilityData} />
-                    <PreviewTableContent title='Key Asset' columns={keyassetsColumn} data={keyassetData} />
-                    <PreviewTableContent title='Inventory' columns={inventColumn} data={inventData} />
+                    <PreviewTableContent title='Outstanding Liabilities / Debt' columns={liabColumn} data={liabilities} />
+                    <PreviewTableContent title='Key Asset' columns={keyassetsColumn} data={keyassetes} />
+                    <PreviewTableContent title='Inventory' columns={inventColumn} data={inventoryItems} />
                     <DocumentUploadedPrev />
                 </Col>
                 <Col lg={{span: 6}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
-                    <BusinessInfo />
+                    <BusinessInfo data={data} />
                 </Col>
             </Row>
         </>

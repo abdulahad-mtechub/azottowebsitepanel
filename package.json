@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
+    "@apollo/client": "^3.13.8",
     "@reduxjs/toolkit": "^2.8.2",
     "antd": "^5.26.3",
     "apexcharts": "^4.7.0",

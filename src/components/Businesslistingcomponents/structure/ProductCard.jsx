@@ -1,27 +1,63 @@
 import React from 'react'
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography } from 'antd'
-import { exploreData } from '../../../data'
 import { useNavigate } from 'react-router-dom'
+import { CREATE_SAVE_BUSINESS,CREATE_VIEW_BUSINESS } from "../../../graphql";
+import { useMutation } from '@apollo/client';
+import { message } from "antd";
+
 
 const { Title, Text } = Typography
-const ProductCard = () => {
-
+const ProductCard = ({
+    exploreData,
+    refetchBusinesses,
+    totalCount,
+    currentPage,
+    onPageChange,
+    limit,
+    onLimitChange,
+}) => {
+    const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const navigate = useNavigate()
+    const [messageApi, contextHolder] = message.useMessage();
 
   return (
     <Row gutter={[16,16]}>
         {
             exploreData?.map((pro,i)=>
                 <Col lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
-                    <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={()=>navigate('/singleviewlisting/'+pro?.id)}>
+                    <Card className='h-100 border-gray rounded-12 card-cs cursor' 
+                    
+                    onClick={() => {
+                        if (pro?.id) {
+                          navigate(`/singleviewlisting/${pro.id}`);
+                        } else {
+                          console.warn("Business ID is undefined", pro);
+                        }
+                      }}
+                >
                         <Flex vertical gap={20}>
                             <Flex justify='space-between' align='center'>
                                 <Button>
-                                    Restaurant
+                                    {pro.categoryName}
                                 </Button>
-                                <Button className='border-0 bg-transparent p-0'>
+                                <Button className='border-0 bg-transparent p-0'
+                                onClick={(e) => {
+                                    e.stopPropagation(); // prevent triggering card click
+                                    saveBusiness({
+                                      variables: {
+                                        saveBusinessId: pro?.id,
+                                      },
+                                    }).then(res => {
+                                        messageApi.success("Business saved:", res);
+                                        refetchBusinesses();
+                                      // Optional: update UI (e.g. toggle `pro.save`)
+                                    }).catch(err => {
+                                        messageApi.error("Save failed:", err.message);
+                                    });
+                                  }}
+                                >
                                     {
-                                        pro?.save === 'yes' ?
+                                        pro?.isSaved ?
                                         <img src='/assets/icons/bk-bl-d.png' width={22}/> :
                                         <img src='/assets/icons/bk-bl.png' width={22}/>
                                     }
@@ -74,35 +110,35 @@ const ProductCard = () => {
                 </Col>
             )
         }
-        <Col lg={{span: 12}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}}>
-            <Flex gap={5} align='center'>
-                <Text>Row Per page</Text>
-                <Select 
+        <Col span={24} className='mt-3'>
+            <Row justify="space-between" align="middle">
+                <Col>
+                <Flex gap={5} align='center'>
+                    <Text>Rows Per Page:</Text>
+                    <Select
                     className='select-filter'
-                    defaultValue={10}
+                    value={limit}
+                    onChange={onLimitChange}
                     options={[
-                        {
-                            value: 6,
-                            label: 6
-                        },
-                        {
-                            value: 10,
-                            label: 10
-                        },
-                        {
-                            value: 20,
-                            label: 20
-                        },
-                        {
-                            value: 50,
-                            label: 50
-                        }
+                        { value: 5, label: 5 },
+                        { value: 10, label: 10 },
+                        { value: 20, label: 20 },
+                        { value: 50, label: 50 },
                     ]}
+                    />
+                </Flex>
+                </Col>
+                <Col>
+                <Pagination
+                    className='pagination'
+                    current={currentPage}
+                    total={totalCount}
+                    pageSize={limit}
+                    onChange={onPageChange}
+                    showSizeChanger={false}
                 />
-            </Flex>
-        </Col>
-        <Col lg={{span: 12}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}}>
-            <Pagination className='pagination' align="end" defaultCurrent={1} total={50} />
+                </Col>
+            </Row>
         </Col>
     </Row>
   )

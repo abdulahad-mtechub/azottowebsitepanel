@@ -1,16 +1,23 @@
 import { useState } from "react";
 import { Form, Button, Upload, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex } from "antd";
+import { message } from "antd";
+import { useMutation } from "@apollo/client";
+import { CREATE_USER } from "../graphql/mutation/login";
+import { useNavigate } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
 import { districtOp } from "../data";
 import { NavLink } from "react-router-dom";
 
 const { Title, Paragraph } = Typography;
 const SignupPage = () => {
+    const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
     const [form] = Form.useForm();
     const [idType, setIdType] = useState("national_id");
     const [frontFileName, setFrontFileName] = useState("");
     const [backFileName, setBackFileName] = useState("");
     const [passportFileName, setPassportFileName] = useState("");
+    const [createUser, { loading, error }] = useMutation(CREATE_USER);
 
     const handleFrontChange = (info) => {
         const file = info.fileList[0];
@@ -27,14 +34,34 @@ const SignupPage = () => {
         setPassportFileName(file ? file.name : "");
     };
 
-    const handleFinish = (values) => {
-        console.log("Form submitted:", values);
-        console.log("Front File:", frontFileName);
-        console.log("Back File:", backFileName);
-        console.log("Passport File:", passportFileName);
+    const handleFinish = async (values) => {
+        try {
+            const input = {
+                name: values.fullName,
+                email: values.email,
+                district: values.district,
+                city: values.city,
+                phone: values.phoneNo,
+                password: values.password,
+            };
+    
+            const { data } = await createUser({ variables: { input } });
+    
+            messageApi.success("Account created successfully!");
+            // redirect or reset form
+            form.resetFields();
+            setTimeout(() => {
+                navigate("/");
+              }, 1000); // 1 second delay
+        } catch (err) {
+            messageApi.error("Failed to create user. Please try again.");
+        }
     };
+    
 
     return (
+        <>
+        {contextHolder}
         <Row className="signup-page" >
             <Col xs={24} sm={24} md={14} lg={16} className="overflow-style">
                 <div className="signup-form-container ">
@@ -302,6 +329,8 @@ const SignupPage = () => {
                 </Flex>
             </Col>
         </Row>
+        </>
+        
     );
 };
 

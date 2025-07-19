@@ -1,20 +1,29 @@
-import { CloseOutlined } from '@ant-design/icons'
-import { Button, Card, Checkbox, Col, Flex, Form, Image, Modal, Row, Tooltip, Typography } from 'antd'
-import { MyInput } from '../../Forms'
-import { Link } from 'react-router-dom'
+import { Button,  Flex, Form, Modal, Typography } from 'antd'
 import { ScheduleMeetingStep, SignJusoorEndaStep } from '../structure'
 import { useState } from 'react'
+import { useQuery } from '@apollo/client';
+import { ME } from '../../../graphql/query';
+import { message } from "antd";
+import { useMutation } from '@apollo/client'
+import { ACCEPT_ENDA,BUSINESS_MEETING } from '../../../graphql'
 
-const { Title, Text } = Typography
-const RequestMeetingModal = ({visible,onClose}) => {
-
+const RequestMeetingModal = ({businessId,visible,onClose}) => {
+    const userId = localStorage.getItem('userId');
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
     const [current, setCurrent] = useState(0);
+    const { data, loading:userLoading, error } = useQuery(ME, {
+        variables: { getUserId: userId },
+    });
+    const user = data?.getUser;
+    const [acceptEnda, { loading:acceptEndaLoading }] = useMutation(ACCEPT_ENDA);
+    const [businessMeeting, { loading }] = useMutation(BUSINESS_MEETING);
 
     const steps = [
         {
             title: null,
-            content: <SignJusoorEndaStep form={form} onClose={onClose} />,
+            content: <SignJusoorEndaStep form={form} onClose={onClose} user={user} />,
+
         },
         {
             title: null,
@@ -22,7 +31,38 @@ const RequestMeetingModal = ({visible,onClose}) => {
         },
     ];
 
-    const next = () => setCurrent(current + 1);
+    const next = async () => {
+        if (current === 0) {
+          try {
+            const values = await form.validateFields();
+    
+            if (!values.ndaAgree || !values.termsAgree || !values.commissionAgree) {
+              messageApi.error("You must agree to all terms to continue.");
+              return;
+            }
+    
+            await acceptEnda({
+              variables: {
+                input: {
+                  userId: user.id,
+                  businessId,
+                  acceptNdaTerms: values.ndaAgree,
+                  acceptPlatformTerms: values.termsAgree,
+                  acceptCommission: values.commissionAgree,
+                },
+              },
+            });
+    
+            messageApi.success("Agreement accepted successfully");
+            setCurrent(current + 1);
+          } catch (error) {
+            console.error(error);
+            messageApi.error("Failed to accept agreement.");
+          }
+        } else {
+          setCurrent(current + 1);
+        }
+    };
     const prev = () => setCurrent(current - 1);
 
     return (
@@ -33,7 +73,7 @@ const RequestMeetingModal = ({visible,onClose}) => {
             closeIcon={false}
             footer={null}
             width={600}
-        > 
+        >  {contextHolder}
             <div className="step-content mb-3">{steps[current].content}</div>
             <Flex gap={10} justify='end'>
                 <Button disabled={current > 0 ? false: true} className='btn text-black border-gray' onClick={prev}>
@@ -45,7 +85,42 @@ const RequestMeetingModal = ({visible,onClose}) => {
                     </Button>
                 )}
                 {current === steps.length - 1 && (
-                    <Button type="primary" className='btn bg-brand'>
+                    <Button type="primary" className='btn bg-brand'
+                    onClick={async () => {
+                        try {
+                          const values = await form.validateFields();
+                  
+                          const meetingDate = values.date?.toDate?.(); // convert dayjs -> Date
+                          const meetingTime = values.time?.toDate?.(); // convert dayjs -> Date
+
+                          // ✅ Combine Date + Time into single DateTime
+                          const combinedDateTime = new Date(
+                            meetingDate.getFullYear(),
+                            meetingDate.getMonth(),
+                            meetingDate.getDate(),
+                            meetingTime.getHours(),
+                            meetingTime.getMinutes(),
+                            0
+                          );
+                  
+                          await businessMeeting({
+                            variables: {
+                              input: {
+                                id: businessId,
+                                meetingDate: combinedDateTime.toISOString(), // or use ISO string
+                              },
+                            },
+                          });
+                  
+                          messageApi.success("Meeting request sent successfully!");
+                          onClose(); // close modal
+                        } catch (error) {
+                          console.error(error);
+                          messageApi.error("Failed to schedule meeting.");
+                        }
+                      }}
+                      loading={loading}
+                    >
                         Send Meeting Request
                     </Button>
                 )}

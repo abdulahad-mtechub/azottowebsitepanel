@@ -64,59 +64,21 @@ const yearOp = [
 ]
 
 const districtOp = [
-    {
-        id: 1,
-        name: 'Riyadh',
-    },
-    {
-        id: 2,
-        name: 'Makkah',
-    },
-    {
-        id: 3,
-        name: 'Eastern',
-    },
-    {
-        id: 4,
-        name: 'Al-Madinah',
-    },
-    {
-        id: 5,
-        name: 'Asir',
-    },
-    {
-        id: 6,
-        name: 'Tabuk',
-    },
-    {
-        id: 7,
-        name: 'Hail',
-    },
-    {
-        id: 8,
-        name: 'Al-Jouf',
-    },
-    {
-        id: 9,
-        name: 'Al-Bahah',
-    },
-    {
-        id: 10,
-        name: 'Jazan',
-    },
-    {
-        id: 11,
-        name: 'Najran',
-    },
-    {
-        id: 12,
-        name: 'Northern Borders',
-    },
-    {
-        id: 13,
-        name: 'Al-Qassim',
-    },
-]
+    { id: 1, name: 'Riyadh', value: 'riyadh' },
+    { id: 2, name: 'Makkah', value: 'makkah' },
+    { id: 3, name: 'Eastern', value: 'dammam' },
+    { id: 4, name: 'Al-Madinah', value: 'medina' },
+    { id: 5, name: 'Asir', value: 'abha' },
+    { id: 6, name: 'Tabuk', value: 'tabuk' },
+    { id: 7, name: 'Hail', value: 'hail' },
+    { id: 8, name: 'Al-Jouf', value: 'sakaka' },
+    { id: 9, name: 'Al-Bahah', value: 'al-bahah' },
+    { id: 10, name: 'Jazan', value: 'jazan' },
+    { id: 11, name: 'Najran', value: 'najran' },
+    { id: 12, name: 'Northern Borders', value: 'ar-ar' },
+    { id: 13, name: 'Al-Qassim', value: 'buraidah' },
+  ];
+  
 
 const multipleOp = [
     {

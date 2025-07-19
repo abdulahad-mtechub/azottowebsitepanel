@@ -1,9 +1,50 @@
 import { Card, Col, Flex, Image, Row, Tooltip, Typography } from 'antd'
-import { stats } from '../../../data';
+import React, { useState,useEffect } from 'react'
 
 const { Title, Text } = Typography
-const BusinessStats = ({status}) => {
-
+const BusinessStats = ({data}) => {
+    console.log("Business Stats Data:", data);
+    const [profitTimeValue, setProfitTimeValue] = useState('Last Year');
+    const [revenueTimeValue, setRevenueTimeValue] = useState('Last Year');
+    useEffect(() => {
+        if (data.profittime === 0) {
+            setProfitTimeValue('Last 6 Months');
+        } else {
+            setProfitTimeValue('Last Year');
+        }
+    
+        if (data.revenueTime === 0) {
+            setRevenueTimeValue('Last 6 Months');
+        } else {
+            setRevenueTimeValue('Last Year');
+        }
+    }, [data.profittime, data.revenueTime]); 
+    const stats = [
+        {
+            id: 1,
+            icon:'/assets/icons/rev.png',
+            title:`SAR ${data.revenue ? data.revenue : '0'}`,
+            subtitle:`Revenue ${revenueTimeValue ? '(Last Year)' : ''}`,
+        },
+        {
+            id: 2,
+            icon:'/assets/icons/pro.png',
+            title:`SAR ${data.profit ? data.profit : '0'}`,
+            subtitle:`Profit  ${profitTimeValue ? '(Last Year)' : ''}`,
+        },
+        {
+            id: 3,
+            icon:'/assets/icons/promar.png',
+            title:`SAR ${data.profitMargen ? data.profitMargen : '0'}`,
+            subtitle:'Profit Margin %'
+        },
+        {
+            id: 4,
+            icon:'/assets/icons/cap-re.png',
+            title:'3.8 months',
+            subtitle:'Capital Recovery'
+        },
+    ]
     return (
         <Card className='radius-12 border-gray mb-3'>
             <Row gutter={[24,24]}>

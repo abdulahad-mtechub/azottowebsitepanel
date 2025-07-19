@@ -3,9 +3,41 @@ import { ModuleTopHeading } from '../../Pagecomponents'
 import { SingleFileUpload } from '../../Forms';
 
 const { Title, Text } = Typography
-const UploadSupportDocStep = () => {
-
+const UploadSupportDocStep = ({ data, setData }) => {
     const [form] = Form.useForm();   
+    
+    const handleSingleFileUpload = (fileInfo) => {
+        const updatedDocs = [...data.documents];
+
+        updatedDocs[0] = {
+            title: 'Commercial Registration (CR)',
+            ...fileInfo,
+        };
+
+        setData((prev) => {
+            const updated = { ...prev, documents: updatedDocs };
+            return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
+        });
+    };
+
+    const handleMultipleFileUpload = (fileInfos) => {
+        const otherDocs = fileInfos.map((file) => ({
+            title: 'Supporting Document',
+            ...file,
+        }));
+
+        setData((prev) => {
+            const updated = {
+                ...prev,
+                documents: [
+                    data.documents[0], // keep CR at index 0
+                    ...otherDocs
+                ]
+            };
+            return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
+        });
+    };
+
     return (
         <>
             <Flex vertical gap={1} className='mb-3'>
@@ -26,7 +58,7 @@ const UploadSupportDocStep = () => {
                             </Text>
                         </Flex>
                         <Flex  className='w-100'>
-                            <SingleFileUpload form={form} name={'uploadimge'} title={'Upload'} />
+                            <SingleFileUpload form={form} name={'uploadimge'} title={'Upload'} onUpload={handleSingleFileUpload}/>
                         </Flex>
                     </Flex>  
                 </Card> 
@@ -43,7 +75,7 @@ const UploadSupportDocStep = () => {
                             </Text>
                         </Flex>
                         <Flex  className='w-100'>
-                            <SingleFileUpload form={form} name={'uploadmult'} title={'Upload'} multiple={true} />
+                            <SingleFileUpload form={form} name={'uploadmult'} title={'Upload'} multiple={true} onUpload={handleMultipleFileUpload}/>
                         </Flex>
                     </Flex>  
                 </Card>  
