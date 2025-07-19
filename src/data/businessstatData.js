@@ -23,18 +23,32 @@ const stats = [
         title:'3.8 months',
         subtitle:'Capital Recovery'
     },
+    {
+        id: 5,
+        icon:'/assets/icons/foundationdate.png',
+        title:'2020',
+        subtitle:'Foundation Date'
+    },
+    {
+        id: 6,
+        icon:'/assets/icons/teamsize.png',
+        title:'1-10',
+        subtitle:'Team Size'
+    },
 ]
 
 const postsaleData = [
     {
         key: '1',
         period:'2 Months',
-        session:'2 Sessions'
+        session:'2 Sessions',
+        verified: null
     },
     {
         key: '2',
         period:'3 Months',
-        session:'3 Sessions'
+        session:'3 Sessions',
+        verified: 1
     }
 ]
 
@@ -44,21 +58,24 @@ const liabilityData = [
         name:'Espresso Machine',
         items:'5',
         purchaseyear:'2020',
-        price:'SAR 1000'
+        price:'SAR 1000',
+        verified: 1
     },
     {
         key: '2',
         name:'Air Conditioner Units',
         items:'10',
         purchaseyear:'2021',
-        price:'SAR 10,000'
+        price:'SAR 10,000',
+        verified: null
     },
     {
         key: '3',
         name:'Dining Tables',
         items:'12',
         purchaseyear:'2022',
-        price:'SAR 1000'
+        price:'SAR 1000',
+        verified: 1
     },
 ]
 
@@ -68,21 +85,24 @@ const keyassetData = [
         name:'Espresso Machine',
         items:'5',
         purchaseyear:'2020',
-        price:'SAR 1000'
+        price:'SAR 1000',
+        verified: 1
     },
     {
         key: '2',
         name:'Air Conditioner Units',
         items:'10',
         purchaseyear:'2021',
-        price:'SAR 10,000'
+        price:'SAR 10,000',
+        verified: null
     },
     {
         key: '3',
         name:'Dining Tables',
         items:'12',
         purchaseyear:'2022',
-        price:'SAR 1000'
+        price:'SAR 1000',
+        verified: 1
     },
 ]
 
@@ -92,21 +112,24 @@ const inventData = [
         name:'Espresso Machine',
         items:'5',
         purchaseyear:'2020',
-        price:'SAR 1000'
+        price:'SAR 1000',
+        verified: null
     },
     {
         key: '2',
         name:'Air Conditioner Units',
         items:'10',
         purchaseyear:'2021',
-        price:'SAR 10,000'
+        price:'SAR 10,000',
+        verified: null
     },
     {
         key: '3',
         name:'Dining Tables',
         items:'12',
         purchaseyear:'2022',
-        price:'SAR 1000'
+        price:'SAR 1000',
+        verified: 1
     },
 ]
 
@@ -132,27 +155,21 @@ const documentData = [
 const businessInfoData = [
     {
         id: 1,
-        icon:'/assets/icons/businessprice.png',
-        title:'SAR 25,000',
-        subtitle:'Business Price'
+        icon:'/assets/icons/verification.png',
+        title:'Verified',
+        subtitle:'Identity Verification'
     },
     {
         id: 2,
-        icon:'/assets/icons/foundationdate.png',
-        title:'2020',
-        subtitle:'Foundation Date'
+        icon:'/assets/icons/businessprice.png',
+        title:'SAR 25,000',
+        subtitle:'Business Price'
     },
     {
         id: 3,
         icon:'/assets/icons/businesscate.png',
         title:'Restaurant',
         subtitle:'Business Category'
-    },
-    {
-        id: 4,
-        icon:'/assets/icons/teamsize.png',
-        title:'1-10',
-        subtitle:'Team Size'
     },
     {
         id: 5,

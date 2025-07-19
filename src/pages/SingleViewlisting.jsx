@@ -1,4 +1,4 @@
-import { Breadcrumb, Card, Col, Flex, Form, Row, Typography } from 'antd'
+import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { exploreData, inventColumn, inventData, keyassetData, keyassetsColumn, liabColumn, liabilityData, postsaleColumns, postsaleData } from '../data';
 import { AnnualProfitBarChart, BusinessInfoCard, BusinessStats, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
@@ -48,9 +48,17 @@ const SingleViewlisting = () => {
                             <Flex vertical gap={10}>
                                 <Flex vertical gap={1}>
                                     <Text className='fs-13 text-gray fw-500'>Reference #: {data?.ref ? data?.ref: 'Not Found'}</Text>
-                                    <Title level={5} className='m-0'>
-                                        {data?.title}
-                                    </Title>
+                                    <Flex align='center' gap={5}>
+                                        <Title level={5} className='m-0'>
+                                            {data?.title}
+                                        </Title>
+                                        {
+                                            data?.type &&
+                                            <Button className={`fs-12 border-0 text-white ${data.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                                {data?.type}
+                                            </Button>
+                                        }
+                                    </Flex>
                                 </Flex>
                                 <Text>
                                     Al Madinah Coffee Shop is a well-established café located in the heart of Al-Malaz, Riyadh. Operating for over 3 years, it has built a strong reputation among local residents and office workers for its premium coffee, cozy seating, and consistent service. The business runs from a fully furnished commercial unit with a stylish interior, dedicated staff, and all necessary licenses in place.
@@ -58,9 +66,9 @@ const SingleViewlisting = () => {
                                 <Text>
                                     This café averages SAR 250,000 in annual revenue with a healthy annual profit of SAR 75,000. Its location offers strong foot traffic, especially during morning and late evening hours. Key assets include high-end espresso machines, seating furniture, POS system, and a fully branded visual identity. The owner is willing to offer 30 days of post-sale support, including supplier contacts, staff training, and marketing handover.
                                 </Text>
-                                <Text>
+                                {/* <Text>
                                     Website: <Link to={''}>http://almadinahcoffeeshop.com</Link>
-                                </Text>
+                                </Text> */}
                             </Flex>
                         </Card>
                         <BusinessStats status={'Verified'} />
@@ -86,10 +94,10 @@ const SingleViewlisting = () => {
                                 </Text>
                             </Flex>
                         </Card>
-                        <PreviewTableContent status={''} title='Post - Sale Support' columns={postsaleColumns} data={postsaleData} />
-                        <PreviewTableContent status={'Verified'} title='Outstanding Liabilities / Debt' columns={liabColumn} data={liabilityData} />
-                        <PreviewTableContent status={'Verified'} title='Key Asset' columns={keyassetsColumn} data={keyassetData} />
-                        <PreviewTableContent status={'Verified'} title='Inventory' columns={inventColumn} data={inventData} />
+                        <PreviewTableContent title='Post - Sale Support' columns={postsaleColumns} data={postsaleData} />
+                        <PreviewTableContent title='Outstanding Liabilities / Debt' columns={liabColumn} data={liabilityData} />
+                        <PreviewTableContent title='Key Asset' columns={keyassetsColumn} data={keyassetData} />
+                        <PreviewTableContent title='Inventory' columns={inventColumn} data={inventData} />
                     </Col>
                     <Col lg={{span: 6}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                         <BusinessInfoCard />

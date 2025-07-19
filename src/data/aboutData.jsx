@@ -63,7 +63,7 @@ const whatweData = [
     {
         id: 3,
         icon:'/assets/icons/c-3.png',
-        title:'Local Expertise',
+        title:'Built for Saudi Market',
         description:'Tailored specifically for Saudi entrepreneurs with region-specific filters, documentation, and support.'
     },
 ]

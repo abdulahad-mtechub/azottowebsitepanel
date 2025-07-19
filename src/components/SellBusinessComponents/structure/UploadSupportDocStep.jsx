@@ -20,7 +20,7 @@ const UploadSupportDocStep = () => {
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <Flex vertical gap={5} className='w-100'>
                         <Flex vertical >
-                            <Title level={5} className='m-0'>Commercial Registration (CR)</Title>
+                            <Title level={5} className='m-0 fw-500'>Commercial Registration (CR)</Title>
                             <Text className='text-gray'>
                                 Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file.
                             </Text>
@@ -33,7 +33,7 @@ const UploadSupportDocStep = () => {
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <Flex vertical gap={5} className='w-100'>
                         <Flex vertical >
-                            <Title level={5} className='m-0'>
+                            <Title level={5} className='m-0 fw-500'>
                                 Upload Other Supporting Documents <Tooltip title='Info'>
                                     <img src="/assets/icons/info-outline.png" width={14} alt="" />
                                 </Tooltip>

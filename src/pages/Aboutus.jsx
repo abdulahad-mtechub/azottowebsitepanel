@@ -19,7 +19,7 @@ const Aboutus = () => {
                                     title: <Text className='cursor text-gray' onClick={() => navigate('/')}>Home</Text>,
                                 },
                                 {
-                                    title: <Text className='fw-500 text-gray'>
+                                    title: <Text className='fw-500 text-white'>
                                         About Jusoor
                                     </Text>,
                                 },
@@ -27,7 +27,7 @@ const Aboutus = () => {
                         />
                         <Flex vertical gap={15} className='w-100 search-cs text-center'>
                             <Title level={2} className='text-white m-0'>About Jusoor</Title>
-                            <Text className='text-white'>
+                            <Text className='text-light-gray fs-16'>
                                 Explore expert advice, seller guides, and tips for buying and selling businesses in Saudi Arabia.
                             </Text>
                         </Flex>

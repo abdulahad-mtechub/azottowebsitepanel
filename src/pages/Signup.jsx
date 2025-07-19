@@ -34,6 +34,8 @@ const SignupPage = () => {
         console.log("Passport File:", passportFileName);
     };
 
+    
+
     return (
         <Row className="signup-page" >
             <Col xs={24} sm={24} md={14} lg={16} className="overflow-style">

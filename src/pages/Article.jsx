@@ -22,7 +22,7 @@ const Article = () => {
                                     title: <Text className='cursor text-gray' onClick={() => navigate('/')}>Home</Text>,
                                 },
                                 {
-                                    title: <Text className='fw-500 text-gray'>
+                                    title: <Text className='fw-500 text-white'>
                                         Articles
                                     </Text>,
                                 },
@@ -30,7 +30,7 @@ const Article = () => {
                         />
                         <Flex vertical gap={15} className='w-100 search-cs text-center'>
                             <Title level={2} className='text-white m-0'>Articles</Title>
-                            <Text className='text-white'>
+                            <Text className='text-light-gray fs-16'>
                                 Explore expert advice, seller guides, and tips for buying and selling businesses in Saudi Arabia.
                             </Text>
                         </Flex>
@@ -38,8 +38,8 @@ const Article = () => {
                 </div>
                 <div className='feature'>
                     <div className='container'>
-                        <Row gutter={[24, 24]} justify={'center'}>
-                            <Col span={24}>
+                        <Row gutter={[24, 12]} justify={'center'}>
+                            <Col span={24} className='mb-3'>
                                 <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
                                     <div className='tag bg-secondary fw-500 text-brand'>Articles</div>
                                     <Title className='m-0' level={2}>
@@ -59,7 +59,7 @@ const Article = () => {
                             </Col>
                             <Col lg={{span: 18}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                                 <Flex justify='end' gap={10} align='center'>
-                                    <Text className='text-gray fs-13'>
+                                    <Text className='text-gray fs-14'>
                                         Showing 1-10 of 47 Businesses
                                     </Text>
                                     <MySelect 

@@ -27,9 +27,17 @@ const ExploreSimilarBusiness = () => {
                                 <Card className='h-100 border-gray rounded-12 card-cs' >
                                     <Flex vertical gap={20}>
                                         <Flex justify='space-between' align='center'>
-                                            <Button>
-                                                Restaurant
-                                            </Button>
+                                            <Flex gap={4}>
+                                                <Button className='fs-13'>
+                                                    Restaurant
+                                                </Button>
+                                                {
+                                                    pro?.type &&
+                                                    <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                                        {pro?.type}
+                                                    </Button>
+                                                }
+                                            </Flex>
                                             <Button className='border-0 bg-transparent p-0'>
                                                 {
                                                     pro?.save === 'yes' ?

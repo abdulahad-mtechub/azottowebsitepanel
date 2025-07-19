@@ -1,6 +1,6 @@
 import { Typography, Button, Flex, Image, Row, Col, Badge, Card, Space, Dropdown } from 'antd';
 import './index.css';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { businessmenuData, othersmenu } from '../../../data';
 import { useState } from 'react';
@@ -8,11 +8,14 @@ import { MobileNavbar } from './MobileNavbar';
 
 const { Text, Title } = Typography;
 
-const Navbar = () => { 
+const Navbar = ({setGetCategory}) => { 
 
   const [ isshow, setIsShow ] = useState(false)
   const [ visible, setVisible ] = useState(false)
   const navigate = useNavigate()
+  const otherPaths = ['/about', '/faq', '/termofuse', '/article'];
+  const others = otherPaths.includes(location.pathname);
+
 
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
@@ -23,19 +26,20 @@ const Navbar = () => {
               <NavLink 
                 to={item.path} 
                 key={item.id}
+                onClick={()=>setGetCategory(item?.title)}
               >
                 <Text className='text-black fs-14 nav-link'>
                   {item.title}
                 </Text>
               </NavLink>
             ))}
-            <Flex>
+            {/* <Flex>
               <Button className='bg-transprent border-0 p-0 fs-12 fw-600' >
                 <Flex gap={10} justify='space-between' align='center'>
                   <i>Browse All</i> <ArrowRightOutlined />
                 </Flex>
               </Button>
-            </Flex>
+            </Flex> */}
           </Flex>
         </Col>
       );
@@ -49,6 +53,7 @@ const Navbar = () => {
                 <NavLink 
                   to={item.path} 
                   key={item.id}
+                  onClick={()=>setGetCategory(item?.title)}
                 >
                   <Text className='text-black fs-14 nav-link'>
                     {item.title}
@@ -63,19 +68,20 @@ const Navbar = () => {
                 <NavLink 
                   to={item.path} 
                   key={item.id}
+                  onClick={()=>setGetCategory(item?.title)}
                 >
                   <Text className='text-black fs-14 nav-link'>
                     {item.title}
                   </Text>
                 </NavLink>
               ))}
-              <Flex>
+              {/* <Flex>
                 <Button className='bg-transprent border-0 p-0 fs-12 fw-600' >
                   <Flex gap={10} justify='space-between' align='center'>
                     <i>Browse All</i> <ArrowRightOutlined />
                   </Flex>
                 </Button>
-              </Flex>
+              </Flex> */}
             </Flex>
           </Col>
         </>
@@ -160,14 +166,11 @@ const Navbar = () => {
                   <ul className='dropdown' >
                   {businessmenuData?.map((list, index) => (
                       <li className='drop-item' key={index}>
-                        <NavLink onClick={(e)=>e.preventDefault()} className='drop-link'>
-                          <Flex gap={5}>
-                            <Image src={list?.icon} width={25} className='pt-1s' preview={false} />
+                        <NavLink onClick={(e)=>{e.preventDefault()}} className='drop-link'>
+                          <Flex gap={10} align='center'>
+                            <Image src={list?.icon} width={30} className='pt-1s' preview={false} />
                             <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
-                              <div>
-                                <Title level={5} className='m-0'>{list?.title}</Title>
-                                <Text className='text-gray fs-14'>{list?.subtitle}</Text>
-                              </div>
+                              <Title level={5} className='m-0'>{list?.title}</Title>
                               <ArrowRightOutlined className='arr text-brand pt-1s' />
                             </Flex>
                           </Flex>
@@ -178,15 +181,24 @@ const Navbar = () => {
                           </Row>
                         </div>
                       </li>
-                    
-                  ))}
+                    ))}
                   </ul>
                 </li>
                 <li>
                   <NavLink to={''}>
                     <Flex gap={10}>
-                      <Text className='text-white nav-item'>Others</Text>
-                      <DownOutlined className='fs-12 text-white' />
+                      <Text className={`nav-item
+                          ${
+                            others ? 'text-brand':'text-white'
+                          }
+                        `}>
+                        Others
+                      </Text>
+                      <DownOutlined className={`fs-12
+                          ${
+                            others ? 'text-brand':'text-white'
+                          }
+                        `}/>
                     </Flex>
                   </NavLink>
                   
@@ -194,13 +206,10 @@ const Navbar = () => {
                     {othersmenu?.map((list, index) => (
                       <li className='drop-item' key={index}>
                         <NavLink to={list?.path} className='drop-link'>
-                          <Flex gap={5}>
-                            <Image src={list?.icon} width={25} className='pt-1s' preview={false} />
+                          <Flex gap={10} align='center'>
+                            <Image src={list?.icon} width={30} className='pt-1s' preview={false} />
                             <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
-                              <div>
-                                <Title level={5} className='m-0'>{list?.title}</Title>
-                                <Text className='text-gray fs-14'>{list?.subtitle}</Text>
-                              </div>
+                              <Title level={5} className='m-0'>{list?.title}</Title>
                               <ArrowRightOutlined className='arr text-brand pt-1s' />
                             </Flex>
                           </Flex>

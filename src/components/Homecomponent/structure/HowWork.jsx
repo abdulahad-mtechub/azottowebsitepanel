@@ -23,9 +23,6 @@ const HowWork = () => {
                             <Title className='m-0' level={2}>
                                 A Simple Way to <span className='text-brand'>Buy or Sell a Business</span>
                             </Title>
-                            <Text className='fs-14'>
-                                Whether you're an entrepreneur or an investor exploring new opportunities, we’ve made the process secure, clear, and fast fully built for serious, verified deals.
-                            </Text>
                         </Flex>
                     </Col>
                     <Col span={24}>

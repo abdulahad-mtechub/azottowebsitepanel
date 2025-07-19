@@ -90,7 +90,7 @@ const JusoorFeatureMobile = () => {
                                                 src={list?.img}
                                                 alt={list?.title}
                                                 preview={false}
-                                                width={500}
+                                                width={400}
                                             />
                                             <Flex vertical gap={5} align='center' style={{maxWidth: 400}}>
                                                 <Title level={5} className='m-0 text-white'>{list?.title}</Title>

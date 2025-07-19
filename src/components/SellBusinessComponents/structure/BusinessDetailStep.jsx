@@ -25,6 +25,7 @@ const BusinessDetailStep = () => {
                 <Form
                     layout="vertical"
                     form={form}
+                    requiredMark={false}
                 >
                     <Row gutter={24}>
                         <Col span={24}>

@@ -1,7 +1,7 @@
-import { Card, Col, Flex, Image, Row, Table, Tooltip, Typography } from 'antd'
+import { Card, Col, Flex, Row, Table, Typography } from 'antd'
 
 const { Title } = Typography
-const PreviewTableContent = ({title,columns,data,status}) => {
+const PreviewTableContent = ({title,columns,data}) => {
 
     
     return (
@@ -12,12 +12,6 @@ const PreviewTableContent = ({title,columns,data,status}) => {
                         <Title level={5} className='m-0'>
                             {title}
                         </Title>
-                        {(status && status.includes('Verified')) ?
-                            <Tooltip title={'Verified'}>
-                                <Image src='/assets/icons/check-cur.png' preview={false} width={14} />
-                            </Tooltip>
-                            : null
-                        }
                     </Flex>
                 </Col>
                 <Col span={24}>

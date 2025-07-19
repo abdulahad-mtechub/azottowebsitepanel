@@ -100,7 +100,7 @@ const FinancialInfoStep = () => {
                                 className='w-100'
                             />
                         </Col>
-                        <Col span={24}>
+                        {/* <Col span={24}>
                             <MyInput
                                 label={<Flex>
                                     Multiples of Revenue & Profit <img src="/assets/icons/info-outline.png" width={10} alt="" />
@@ -110,7 +110,7 @@ const FinancialInfoStep = () => {
                                 message="Please enter multiple revenue & profit"
                                 className='w-100'
                             />
-                        </Col>
+                        </Col> */}
                     </Row>   
                 </Card> 
                 <Card className='shadow-d radius-12 border-gray mb-3'>

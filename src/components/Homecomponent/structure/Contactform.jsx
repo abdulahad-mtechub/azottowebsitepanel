@@ -12,9 +12,9 @@ const Contactform = () => {
     return (
         <div className='feature bg-light-brand'>
             <div className='container'>
-                <Row gutter={[24, 64]} align={'middle'}>
+                <Row gutter={[24, 24]} align={'middle'}>
                     <Col span={24}>
-                        <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
+                        <Flex vertical justify='center' align='center' gap={10} className='mx-width'>
                             <div className='tag fw-500 bg-secondary fw-500 text-brand'>Contact With Jusoor</div>
                             <Title className='m-0' level={2}>
                                 Reach Out to <span className='text-brand'>Jusoor Team</span>
@@ -24,21 +24,18 @@ const Contactform = () => {
                             </Text>
                         </Flex>
                     </Col>
-                    <Col lg={{span: 12}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
+                    <Col lg={{span: 11}} md={{span: 0}} sm={{span: 0}} xs={{span: 0}}>
                         <Flex justify='center'>
-                            <Image src='/assets/images/contact.png' />
+                            <Image src='/assets/images/contact.png' preview={false} />
                         </Flex>
                     </Col>
-                    <Col lg={{span: 12}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
+                    <Col lg={{span: 13}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                         <Form
                             form={form}
                             layout='vertical'
                             requiredMark={false}
                         >
                             <Row>
-                                <Col span={24}>
-                                    <Title level={3}>Get in touch</Title>
-                                </Col>
                                 <Col span={24}>
                                     <MyInput
                                         label='Full Name'
@@ -72,7 +69,7 @@ const Contactform = () => {
                                     <Button type='button' className='btn btn-bg w-100'>Submit</Button>
                                 </Col>
                                 <Col span={24}>
-                                    <Divider className='my-3'>Or</Divider>
+                                    <Divider className='my-2'>Or</Divider>
                                 </Col>
                                 <Col span={24}>
                                     <Flex gap={10} align='center' justify='center'>

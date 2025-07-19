@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 
 const AppRoutes = () => {
   const [showButton, setShowButton] = useState(false);
+  const [ getcategory, setGetCategory ] = useState(null)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,11 +26,11 @@ const AppRoutes = () => {
   return (
     <>
       <ScrollTop />
-      <Navbar />
+      <Navbar setGetCategory={setGetCategory} />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/sellbusinesscreate' element={<SellBusinessCreate />} />
-        <Route path='/businesslisting' element={<BusinessListingPage />} />
+        <Route path='/businesslisting' element={<BusinessListingPage getcategory={getcategory} />} />
         <Route path='/singleviewlisting/:id' element={<SingleViewlisting />} />
         <Route path='/faq' element={<Faqs />} />
         <Route path='/termofuse' element={<Termofuse />} />

@@ -1,8 +1,7 @@
-import { Breadcrumb, Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
+import { Button, Card, Col, Flex, Row, Typography } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { articleData } from '../data';
-import { useEffect } from 'react';
 import { SuggestedArticles } from '../components';
 
 const { Text, Title, Paragraph } = Typography;

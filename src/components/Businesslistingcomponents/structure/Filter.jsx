@@ -2,13 +2,14 @@ import { Card, Checkbox, Col, Collapse, Flex, Input, Radio, Row, Typography } fr
 import { DoubleLeftOutlined, DoubleRightOutlined, LineOutlined } from '@ant-design/icons';
 import { categoriesData, teamsizeFilter, yearOper } from '../../../data';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {CustomProgressBar} from '../../ui';
 
 const { Text, Title } = Typography
 const Filter = () => {
 
     const [activeStep, setActiveStep] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
     const steps = ["1x", "2x", "3x", "4x", "5x", "5x+"];
     const onChange = checkedValues => {
         console.log('checked = ', checkedValues);
@@ -124,8 +125,19 @@ const Filter = () => {
         }
     ]
 
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 1199);
+    
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
+    const classoverflow = isMobile ? null : 'custom-overflow-style fix-height'
+
     return (
-        <>
+        <div className={classoverflow}>
             <Card className='mb-3'>
                 <Collapse defaultActiveKey={['1']} ghost items={items} className='collapse-cs' 
                     expandIcon={({ isActive }) => 
@@ -137,7 +149,7 @@ const Filter = () => {
             <Card>
                 <Collapse defaultActiveKey={['1']} ghost items={categoryItems} className='collapse-cs'/>
             </Card>
-        </>
+        </div>
     )
 }
 

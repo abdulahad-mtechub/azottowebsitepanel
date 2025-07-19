@@ -1,12 +1,12 @@
 import { Row, Col, Image, Space, Typography, Divider, Flex, Button } from 'antd'
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { footerlinkData } from '../../../data'
 import { WhatsAppOutlined } from '@ant-design/icons'
 
 const { Title, Text } = Typography
 const Footer = () => {
 
-
+    const navigate = useNavigate()
   return (
     <div className='footer'>
         <div className='container'>
@@ -21,7 +21,7 @@ const Footer = () => {
                         <Text className='fs-13 text-white w-500'>
                             Jusoor is a Saudi marketplace for buying and selling verified businesses — with secure payments, trusted documents, and smooth ownership transfers.
                         </Text>
-                        <Flex gap={10}>
+                        <Flex gap={20}>
                             <Link to="#" target="_blank" rel="noopener noreferrer">
                                 <Image src='/assets/icons/facebook.png' width={'23px'} preview={false} />
                             </Link>
@@ -58,12 +58,12 @@ const Footer = () => {
                 }
                 <Col lg={{span: 5}} md={{span: 24}} xs={{span: 24}} sm={{span: 24}}>
                     <Flex vertical gap={15}>
-                        <Title level={4} className='m-0 text-white'>Need more help</Title>
+                        <Title level={4} className='m-0 text-white'>Need more help?</Title>
                         <Text className='fs-14 text-white'>
-                            Vestibulum ante ipsum primis in faucibus orci luctus et ult
+                            Sign up to access support, tools, and verified listings.
                         </Text>
                         <Flex>
-                            <Button type='primary' className='btn bg-brand'>
+                            <Button type='primary' className='btn bg-brand' onClick={()=>navigate('/signup')}>
                                 Sign Up
                             </Button>
                         </Flex>

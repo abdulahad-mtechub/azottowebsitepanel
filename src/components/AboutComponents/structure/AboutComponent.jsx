@@ -31,7 +31,7 @@ const AboutComponent = () => {
                         </Flex>
                     </Col>
                     <Col lg={{span: 10}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
-                        <Image src='/assets/images/ab-1.png' width={'100%'} height={400} preview={false} className='rounded-12 object-cover' />
+                        <Image src='/assets/images/ab-1.png' width={400} height={400} preview={false} className='rounded-12' />
                     </Col>
                 </Row>
             </div>

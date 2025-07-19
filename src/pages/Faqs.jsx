@@ -24,7 +24,7 @@ const Faqs = () => {
                                     title: <Text className='cursor text-gray' onClick={() => navigate('/')}>Home</Text>,
                                 },
                                 {
-                                    title: <Text className='fw-500 text-gray'>
+                                    title: <Text className='fw-500 text-white'>
                                         FAQs
                                     </Text>,
                                 },
@@ -32,7 +32,7 @@ const Faqs = () => {
                         />
                         <Flex vertical gap={15} className='w-100 search-cs text-center'>
                             <Title level={2} className='text-white m-0'>Frequently Asked Questions</Title>
-                            <Text className='text-white'>Find answers to the most common questions about how Jusoor works, business verification, payments, and more</Text>
+                            <Text className='text-light-gray fs-16'>Find answers to the most common questions about how Jusoor works, business verification, payments, and more</Text>
                         </Flex>
                     </div>
                 </div>

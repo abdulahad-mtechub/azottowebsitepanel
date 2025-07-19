@@ -30,6 +30,7 @@ const exploreData = [
         amount: '950,00',
         save: 'no',
         status: 'Sold',
+        type: 'Taqbeel',
         child:[
             {
                 id: 1,
@@ -59,6 +60,7 @@ const exploreData = [
         amount: '950,00',
         save: 'yes',
         status: null,
+        type: 'Acquiring',
         child:[
             {
                 id: 1,
@@ -88,6 +90,7 @@ const exploreData = [
         amount: '950,00',
         save: 'no',
         status: 'Sold',
+        type: 'Taqbeel',
         child:[
             {
                 id: 1,
@@ -117,6 +120,7 @@ const exploreData = [
         amount: '950,00',
         save: 'no',
         status: null,
+        type: 'Acquiring',
         child:[
             {
                 id: 1,
@@ -146,6 +150,7 @@ const exploreData = [
         amount: '950,00',
         save: 'no',
         status: null,
+        type: 'Taqbeel',
         child:[
             {
                 id: 1,
@@ -175,6 +180,7 @@ const exploreData = [
         amount: '950,00',
         save: 'yes',
         status: null,
+        type: 'Acquiring',
         child:[
             {
                 id: 1,
@@ -226,7 +232,7 @@ const browsetypeData = [
     {
         id: 5,
         icons: '/assets/icons/industrial.png',
-        title: 'Industrial Businesses',
+        title: 'Digital Businesses',
         description: 'E-commerce (Online Store)'
     },
     {
@@ -256,23 +262,28 @@ const footerlinkData = [
         links:[
             {
                 id: 1,
-                name: 'Automotive Services',
-                path: ''
+                name: 'Restaurants & Cafes',
+                path: '/businesslisting'
             },
             {
                 id: 2,
-                name: 'Bakeries & Sweet Shops',
-                path: ''
+                name: 'Real Estate & Construction',
+                path: '/businesslisting'
             },
             {
                 id: 3,
-                name: 'Educational Centers',
-                path: ''
+                name: 'Retail Services',
+                path: '/businesslisting'
             },
             {
                 id: 4,
-                name: 'Pharmacies & Clinics',
-                path: ''
+                name: 'Health, Beauty & Fitness',
+                path: '/businesslisting'
+            },
+            {
+                id: 5,
+                name: 'Browse All Category',
+                path: '/businesslisting'
             },
         ]
     },
@@ -287,7 +298,7 @@ const footerlinkData = [
             },
             {
                 id: 2,
-                name: 'Q&A',
+                name: 'FAQs',
                 path: '/faq'
             },
             {
@@ -328,12 +339,12 @@ const businessmenuData = [
             },
             {
                 id: 4,
-                title: 'Automotive, Transportation & Logistics',
+                title: 'Tech & Software',
                 path: '/businesslisting',
             },
             {
                 id: 5,
-                title: 'Tech & Software',
+                title: 'Automotive, Transportation & Logistics',
                 path: '/businesslisting',
             },
             {
@@ -372,67 +383,67 @@ const businessmenuData = [
             {
                 id: 1,
                 title: 'Riyadh',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 2,
                 title: 'Makkah',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 3,
                 title: 'Eastern',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 4,
                 title: 'Al-Madinah',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 5,
                 title: 'Asir',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 6,
                 title: 'Tabuk',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 7,
                 title: 'Hail',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 8,
                 title: 'Jazan',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 9,
                 title: 'Al-Jouf',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 10,
                 title: 'Al-Bahah',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 11,
                 title: 'Najran',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 12,
                 title: 'Northern Borders',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 13,
                 title: 'Al-Qassim',
-                path: '',
+                path: '/businesslisting',
             },
         ]
     },
@@ -445,32 +456,32 @@ const businessmenuData = [
             {
                 id: 1,
                 title: 'SAR 0 - SAR 10,000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 2,
                 title: 'SAR 10,000 - SAR 30,000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 3,
                 title: 'SAR 30,000 - SAR 60,000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 4,
                 title: 'SAR 60,000 - SAR 100,000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 5,
                 title: 'SAR 100,000 - SAR 150,000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 6,
                 title: 'SAR 150,000+',
-                path: ''
+                path: '/businesslisting',
             }
         ]
     },
@@ -478,38 +489,50 @@ const businessmenuData = [
     {
         id: 4,
         icon: '/assets/icons/m-4.png',
-        title: 'Browse Businesses by Profilt',
+        title: 'Browse Businesses by Profit',
         subtitle: 'Explore based on profit margin.',
         subdropdown:[
             {
                 id: 1,
-                title: 'SAR 0 - SAR 1000',
-                path: '',
+                title: 'Lower than SAR 1000',
+                path: '/businesslisting',
             },
             {
                 id: 2,
                 title: 'SAR 1000 - SAR 5000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 3,
                 title: 'SAR 5000 - SAR 10,000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 4,
                 title: 'SAR 10,000 - SAR 30,000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 5,
                 title: 'SAR 30,000 - SAR 50,000',
-                path: '',
+                path: '/businesslisting',
             },
             {
                 id: 6,
                 title: 'SAR 50,000+',
-                path: '',
+                path: '/businesslisting',
+            },
+        ]
+    },
+    {
+        id: 4,
+        icon: '/assets/icons/browseall.png',
+        title: 'Browse All',
+        subdropdown:[
+            {
+                id: 1,
+                title: 'Browse All',
+                path: '/businesslisting',
             },
         ]
     },
@@ -526,7 +549,7 @@ const othersmenu = [
     {
         id: 2,
         icon: '/assets/icons/fq.png',
-        title: 'Q&A',
+        title: 'FAQs',
         subtitle: 'Find businesses in your city.',
         path:'/faq'
     },

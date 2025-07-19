@@ -9,7 +9,7 @@ const { Text } = Typography
 const SellBusinessCreate = () => {
     const [current, setCurrent] = useState(0);
     const [iscancel, setIsCancel] = useState(false);
-    const [isPreview, setIsPreview] = useState(false);
+    // const [isPreview, setIsPreview] = useState(false);
     const [reviewmodal, setReviewModal] = useState(false);
     const navigate = useNavigate();
 
@@ -46,7 +46,6 @@ const SellBusinessCreate = () => {
 
     const prev = () => {
         setCurrent(current - 1);
-        setIsPreview(false);
     };
 
     // const prev = () => {
@@ -120,7 +119,7 @@ const SellBusinessCreate = () => {
                     </div> */}
                     <div className="step-content">{steps[current].content}</div>
 
-                    <Flex justify={
+                    {/* <Flex justify={
                         (isPreview) 
                             ? 'space-between' 
                             : 'end'
@@ -146,11 +145,37 @@ const SellBusinessCreate = () => {
                                 </Button>
                             )}
 
-                            {/* {current === steps.length - 1 && !isPreview && (
+                            {current === steps.length - 1 && !isPreview && (
                                 <Button type="primary" className='btn bg-brand' onClick={() => setIsPreview(true)}>
                                     Preview
                                 </Button>
-                            )} */}
+                            )}
+
+                            {current === steps.length - 1 && (
+                                <Button type="primary" className='btn bg-brand' onClick={()=>setReviewModal(true)}>
+                                    Publish
+                                </Button>
+                            )}
+                        </Flex>
+                    </Flex> */}
+                    <Flex justify={'space-between'} gap={5} align='center'>
+                        <Button type="button" className='btn border-gray text-black' onClick={()=>setIsCancel(true)}>
+                            Cancel
+                        </Button>
+                        <Flex gap={10} justify='end'>
+                            <Button
+                                className='btn text-black border-gray'
+                                onClick={prev}
+                                disabled={current === 0 ? true: false}
+                            >
+                                Save as Draft
+                            </Button>
+
+                            {current < steps.length - 1 && (
+                                <Button type="primary" className='btn bg-brand' onClick={next}>
+                                    Next
+                                </Button>
+                            )}
 
                             {current === steps.length - 1 && (
                                 <Button type="primary" className='btn bg-brand' onClick={()=>setReviewModal(true)}>
