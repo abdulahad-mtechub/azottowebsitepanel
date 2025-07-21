@@ -55,7 +55,19 @@ const ProductCard = ({
                                         messageApi.error("Save failed:", err.message);
                                     });
                                   }}
-                                >
+                                ></Button>
+                                <Flex gap={4}>
+                                    <Button className='fs-13'>
+                                        Restaurant
+                                    </Button>
+                                    {
+                                        pro?.type &&
+                                        <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                            {pro?.type}
+                                        </Button>
+                                    }
+                                </Flex>
+                                <Button className='border-0 bg-transparent p-0'>
                                     {
                                         pro?.isSaved ?
                                         <img src='/assets/icons/bk-bl-d.png' width={22}/> :

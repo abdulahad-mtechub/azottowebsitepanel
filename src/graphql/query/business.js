@@ -50,6 +50,7 @@ const GET_BUSINESS = gql`
       id
       name
     }
+    isSupportVerified
     reference
     district
     city
@@ -81,6 +82,7 @@ const GET_BUSINESS = gql`
       price
       purchaseYear
       quantity
+      isActive
     }
     documents {
       id
@@ -95,6 +97,7 @@ const GET_BUSINESS = gql`
       price
       purchaseYear
       quantity
+      isActive
     }
     liabilities {
       id
@@ -102,6 +105,7 @@ const GET_BUSINESS = gql`
       price
       purchaseYear
       quantity
+      isActive
     }
   }
 }

@@ -2,6 +2,8 @@ import { CheckOutlined } from '@ant-design/icons';
 import { Col, Steps, Typography, Row, Flex } from 'antd';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import gsap from 'gsap';
+import ScrollTrigger from 'gsap/ScrollTrigger';
 
 const { Text, Title } = Typography;
 
@@ -34,34 +36,29 @@ const JusoorFeature = () => {
     ];
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        const index = stepRefs.current.indexOf(entry.target);
-                        if (index !== -1) {
-                            setCurrent(index);
-                        }
-                    }
-                });
-            },
-            {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.6,
-            }
-        );
+        gsap.registerPlugin(ScrollTrigger);
 
-        stepRefs.current.forEach((ref) => {
-            if (ref) observer.observe(ref);
+        ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+
+        stepRefs.current.forEach((el, index) => {
+            if (!el) return;
+
+            ScrollTrigger.create({
+                trigger: el,
+                start: 'top center+=100',      
+                end: 'bottom center-=100',       
+                onEnter: () => setCurrent(index),
+                onEnterBack: () => setCurrent(index),
+                toggleActions: 'play reverse play reverse',
+                markers: false,
+            });
         });
 
         return () => {
-            stepRefs.current.forEach((ref) => {
-                if (ref) observer.unobserve(ref);
-            });
+            ScrollTrigger.getAll().forEach(trigger => trigger.kill());
         };
     }, []);
+
 
     const items = steps.map((item, index) => ({
         key: item.title,
@@ -73,9 +70,7 @@ const JusoorFeature = () => {
                 {item.title}
             </span>
         ),
-        description: (
-            <Text className="text-white">{item.description}</Text>
-        ),
+        description: <Text className="text-white">{item.description}</Text>,
     }));
 
     return (
@@ -88,9 +83,9 @@ const JusoorFeature = () => {
                             <Title className="m-0 text-white" level={2}>
                                 Your <span className="text-brand">Trusted Saudi Marketplace</span> for Buying and Selling Businesses
                             </Title>
-                            <Text className="fs-14 text-white">
+                            {/* <Text className="fs-14 text-white">
                                 We've built Jusoor to simplify business acquisitions and transfers with verified listings, legal security, and real support at every step.
-                            </Text>
+                            </Text> */}
                         </Flex>
                     </Col>
 

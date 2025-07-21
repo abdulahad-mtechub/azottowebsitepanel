@@ -30,6 +30,7 @@ const exploreData = [
         amount: '950,00',
         save: 'no',
         status: 'Sold',
+        type: 'Taqbeel',
         child:[
             {
                 id: 1,
@@ -59,6 +60,7 @@ const exploreData = [
         amount: '950,00',
         save: 'yes',
         status: null,
+        type: 'Acquiring',
         child:[
             {
                 id: 1,
@@ -88,6 +90,7 @@ const exploreData = [
         amount: '950,00',
         save: 'no',
         status: 'Sold',
+        type: 'Taqbeel',
         child:[
             {
                 id: 1,
@@ -117,6 +120,7 @@ const exploreData = [
         amount: '950,00',
         save: 'no',
         status: null,
+        type: 'Acquiring',
         child:[
             {
                 id: 1,
@@ -146,6 +150,7 @@ const exploreData = [
         amount: '950,00',
         save: 'no',
         status: null,
+        type: 'Taqbeel',
         child:[
             {
                 id: 1,
@@ -175,6 +180,7 @@ const exploreData = [
         amount: '950,00',
         save: 'yes',
         status: null,
+        type: 'Acquiring',
         child:[
             {
                 id: 1,
@@ -226,7 +232,7 @@ const browsetypeData = [
     {
         id: 5,
         icons: '/assets/icons/industrial.png',
-        title: 'Industrial Businesses',
+        title: 'Digital Businesses',
         description: 'E-commerce (Online Store)'
     },
     {
@@ -256,23 +262,28 @@ const footerlinkData = [
         links:[
             {
                 id: 1,
-                name: 'Automotive Services',
-                path: ''
+                name: 'Restaurants & Cafes',
+                path: '/businesslisting'
             },
             {
                 id: 2,
-                name: 'Bakeries & Sweet Shops',
-                path: ''
+                name: 'Real Estate & Construction',
+                path: '/businesslisting'
             },
             {
                 id: 3,
-                name: 'Educational Centers',
-                path: ''
+                name: 'Retail Services',
+                path: '/businesslisting'
             },
             {
                 id: 4,
-                name: 'Pharmacies & Clinics',
-                path: ''
+                name: 'Health, Beauty & Fitness',
+                path: '/businesslisting'
+            },
+            {
+                id: 5,
+                name: 'Browse All Category',
+                path: '/businesslisting'
             },
         ]
     },
@@ -287,7 +298,7 @@ const footerlinkData = [
             },
             {
                 id: 2,
-                name: 'Q&A',
+                name: 'FAQs',
                 path: '/faq'
             },
             {
@@ -369,7 +380,7 @@ const businessmenuData = [
     {
         id: 4,
         icon: '/assets/icons/m-4.png',
-        title: 'Browse Businesses by Profilt',
+        title: 'Browse Businesses by Profit',
         subtitle: 'Explore based on profit margin.',
         subdropdown: [
             { id: 1, title: 'SAR 0 - SAR 1000', path: '/businesslisting?profit=0,1000' },
@@ -378,6 +389,18 @@ const businessmenuData = [
             { id: 4, title: 'SAR 10,000 - SAR 30,000', path: '/businesslisting?profit=10000,30000' },
             { id: 5, title: 'SAR 30,000 - SAR 50,000', path: '/businesslisting?profit=30000,50000' },
             { id: 6, title: 'SAR 50,000+', path: '/businesslisting?profit=50000,9999999' },
+        ]
+    },
+    {
+        id: 4,
+        icon: '/assets/icons/browseall.png',
+        title: 'Browse All',
+        subdropdown:[
+            {
+                id: 1,
+                title: 'Browse All',
+                path: '/businesslisting',
+            },
         ]
     },
 ]
@@ -393,7 +416,7 @@ const othersmenu = [
     {
         id: 2,
         icon: '/assets/icons/fq.png',
-        title: 'Q&A',
+        title: 'FAQs',
         subtitle: 'Find businesses in your city.',
         path:'/faq'
     },

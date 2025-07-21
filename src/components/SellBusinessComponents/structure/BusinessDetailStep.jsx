@@ -122,8 +122,8 @@ const BusinessDetailStep = ({ data, setData }) => {
                   name="district"
                   required
                   message="Choose district"
-                  options={district}
                   placeholder="Choose district"
+                  options={district}
                   onChange={(val) => setSelectedDistrict(val)}
                 />
               </Col>

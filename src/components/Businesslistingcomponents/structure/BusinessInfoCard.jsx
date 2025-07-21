@@ -16,7 +16,7 @@ const BusinessInfoCard = ({data}) => {
         {
             id: 2,
             icon:'/assets/icons/foundationdate.png',
-            title:` ${data?.foundedDate || '0'}`,
+            title: `${data?.foundedDate ? new Date(data.foundedDate).getFullYear() : '0'}`,
             subtitle:'Foundation Date'
         },
         {
@@ -55,11 +55,11 @@ const BusinessInfoCard = ({data}) => {
                         businessInfoData?.map((stat,i)=>
                             <Col span={24} key={i}>
                                 <Flex gap={10}>
-                                    <div className='icon-pre'>
+                                    <div className={`icon-pre ${stat.id === 1 ? 'bg-light-green':null}`}>
                                         <Image src={stat?.icon} preview={false} width={'100%'}  alt="" />
                                     </div>
                                     <Flex vertical gap={2}>
-                                        <Title level={5} className='m-0 text-brand'>
+                                        <Title level={5} className={`m-0 ${stat.id === 1 ? 'text-green':'text-brand'}`}>
                                             {stat?.title}
                                         </Title>
                                         <Text className='text-gray fs-12 fw-500'>

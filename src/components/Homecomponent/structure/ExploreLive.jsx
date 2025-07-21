@@ -22,28 +22,29 @@ const ExploreLive = () => {
                         </Flex>
                     </Col>
                     {
-                        exploreData?.map((pro,i)=>
-                            <Col lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
+                        exploreData?.slice(0,4)?.map((pro,i)=>
+                            <Col lg={{span: 6}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
                                 <Card className='h-100 border-gray rounded-12 card-cs' >
                                     <Flex vertical gap={20}>
                                         <Flex justify='space-between' align='center'>
-                                            <Button>
-                                                Restaurant
+                                            <Flex gap={4}>
+                                                <Button className='fs-13'>
+                                                    Restaurant
+                                                </Button>
+                                                {
+                                                    pro?.type &&
+                                                    <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-black':'bg-brand'}`}>
+                                                        {pro?.type}
+                                                    </Button>
+                                                }
+                                            </Flex>
+                                            <Button className='border-0 bg-transparent p-0'>
+                                                {
+                                                    pro?.save === 'yes' ?
+                                                    <img src='/assets/icons/bk-bl-d.png' width={22}/> :
+                                                    <img src='/assets/icons/bk-bl.png' width={22}/>
+                                                }
                                             </Button>
-                                            {
-                                                pro?.status ?
-                                                <Button className='bg-light-green border-0 text-green fs-13'>
-                                                    Sold
-                                                </Button>
-                                                :
-                                                <Button className='border-0 bg-transparent p-0'>
-                                                    {
-                                                        pro?.save === 'yes' ?
-                                                        <img src='/assets/icons/bk-bl-d.png' width={22}/> :
-                                                        <img src='/assets/icons/bk-bl.png' width={22}/>
-                                                    }
-                                                </Button>
-                                            }
                                             
                                         </Flex>
                                         <div>
@@ -95,7 +96,7 @@ const ExploreLive = () => {
                     } 
                     <Col span={24}>
                         <Flex justify='center'>
-                            <Button className='btn bg-dark-blue'>
+                            <Button className='btn bg-brand'>
                                 Browse Businesses <RightOutlined className='fs-10' />
                             </Button>
                         </Flex>

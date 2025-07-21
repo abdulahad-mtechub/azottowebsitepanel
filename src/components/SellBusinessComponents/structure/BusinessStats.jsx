@@ -3,7 +3,6 @@ import React, { useState,useEffect } from 'react'
 
 const { Title, Text } = Typography
 const BusinessStats = ({data}) => {
-    console.log("Business Stats Data:", data);
     const [profitTimeValue, setProfitTimeValue] = useState('Last Year');
     const [revenueTimeValue, setRevenueTimeValue] = useState('Last Year');
     useEffect(() => {
@@ -49,9 +48,17 @@ const BusinessStats = ({data}) => {
         <Card className='radius-12 border-gray mb-3'>
             <Row gutter={[24,24]}>
                 <Col span={24}>
-                    <Title level={5} className='m-0'>
-                        Business Stats
-                    </Title>
+                    <Flex align='center' gap={3}>
+                        <Title level={5} className='m-0'>
+                            Business Stats
+                        </Title>
+                        {(status && status.includes('Verified')) ?
+                            <Tooltip title={'Verified'}>
+                                <Image src='/assets/icons/verified-user.png' preview={false} width={16} />
+                            </Tooltip>
+                            : null
+                        }
+                    </Flex>
                 </Col>
                 {
                     stats?.map((stat,i)=>
@@ -65,14 +72,8 @@ const BusinessStats = ({data}) => {
                                         <Title level={5} className='m-0'>
                                             {stat?.title}
                                         </Title>
-                                        {(status && status.includes('Verified')) ?
-                                            <Tooltip title={'Verified'}>
-                                                <Image src='/assets/icons/check-cur.png' preview={false} width={14} />
-                                            </Tooltip>
-                                            : null
-                                        }
                                     </Flex>
-                                    <Text className='text-gray fs-12 fw-500'>
+                                    <Text className='text-gray fs-13 fw-500'>
                                         {stat?.subtitle}
                                     </Text>
                                 </Flex>

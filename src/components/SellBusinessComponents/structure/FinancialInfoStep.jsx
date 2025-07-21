@@ -15,6 +15,15 @@ const FinancialInfoStep = ({ data, setData }) => {
     const [revenuePeriod, setRevenuePeriod] = React.useState(data.revenueTime || '');
     const [form] = Form.useForm();    
 
+    const foundedYear = new Date(data?.foundedDate).getFullYear();
+    const currentYear = new Date().getFullYear();
+
+    // Create the year options array from foundedYear to currentYear
+    const yearOp = [];
+    for (let y = foundedYear; y <= currentYear; y++) {
+    yearOp.push({ id: String(y), name: y });
+    }
+
     const handleFormChange = (_, allValues) => {
         const newPrice = allValues.businessPrice ?? price;
         const newProfit = allValues.profit ?? profit;
@@ -89,39 +98,41 @@ const FinancialInfoStep = ({ data, setData }) => {
     }, [data]);
 
     useEffect(() => {
-        let avgMonthlyProfit = 0;
-        let annualProfit = 0;
-        let adjustedRevenue = revenue;
-
-        // Calculate average monthly profit & annual profit
-        if (profitPeriod === 0) {
-            avgMonthlyProfit = profit / 6;
-            annualProfit = profit * 2;
-        } else if (profitPeriod === 1) {
-            avgMonthlyProfit = profit / 12;
-            annualProfit = profit;
+        const adjustedRevenuePeriod = Number(revenuePeriod);
+        const adjustedProfitPeriod = Number(profitPeriod);
+        let adjustedRevenue = Number(revenue) || 0;
+        let adjustedProfit = Number(profit) || 0;
+    
+        // Adjust periods to match
+        if (adjustedProfitPeriod !== adjustedRevenuePeriod) {
+            if (adjustedProfitPeriod === 1 && adjustedRevenuePeriod === 2) {
+                // Profit = 6 months, Revenue = 12 → scale revenue down
+                adjustedRevenue = adjustedRevenue / 2;
+            } else if (adjustedProfitPeriod === 2 && adjustedRevenuePeriod === 1) {
+                // Profit = 12 months, Revenue = 6 → scale profit down
+                adjustedProfit = adjustedProfit / 2;
+            }
         }
     
-        // Adjust revenue to monthly for margin calculation
-        if (revenuePeriod === 0) {
-            adjustedRevenue = adjustedRevenue / 6;
-        } else if (revenuePeriod === 1) {
-            adjustedRevenue = adjustedRevenue / 12;
-        }
-    console.log("price",price)
-    console.log("avgMonthlyProfit",avgMonthlyProfit)
+        // Multiples calculation: avg monthly profit
+        const months = adjustedProfitPeriod === 1 ? 6 : 12;
+        const avgMonthlyProfit = adjustedProfit / months;
+    
         const multiple =
             price && avgMonthlyProfit && Number(avgMonthlyProfit) !== 0
-                ? (Number(price) / Number(avgMonthlyProfit))
+                ? (Number(price) / avgMonthlyProfit)
                 : '';
-        console.log("multiple",multiple)
-        // rount to 1 digit
-        const scaledMultiple = multiple !== null ? Number(String(Math.floor(Math.abs(multiple)))[0]) : null;
-
-        const profitMargen =
-            adjustedRevenue && profit && Number(adjustedRevenue) !== 0
-                ? ((Number(profit) / Number(adjustedRevenue)) * 100).toFixed(2)
+    
+        const scaledMultiple = multiple
+            ? Number(String(Math.floor(Math.abs(multiple)))[0])
+            : null;
+    
+        const profitMargin =
+            adjustedRevenue && adjustedProfit && Number(adjustedRevenue) !== 0
+                ? ((adjustedProfit / adjustedRevenue) * 100).toFixed(2)
                 : '';
+    
+        const annualProfit = adjustedProfitPeriod === 1 ? adjustedProfit * 2 : adjustedProfit;
     
         const recoveryTime =
             price && annualProfit && Number(annualProfit) !== 0
@@ -130,19 +141,19 @@ const FinancialInfoStep = ({ data, setData }) => {
     
         setData(prev => ({
             ...prev,
-            multiple:scaledMultiple,
-            profitMargen,
+            multiple: scaledMultiple,
+            profitMargen: profitMargin,
             recoveryTime,
         }));
     
         form.setFieldsValue({
-            multiple:scaledMultiple,
-            profitMargin: profitMargen,
+            multiple: scaledMultiple,
+            profitMargin,
             recoveryTime,
         });
-    }, [price, profit, revenue, profitPeriod, revenuePeriod]);
     
-console.log("data",data.multiple)
+    }, [price, profit, revenue, profitPeriod, revenuePeriod]);
+
     return (
         <>
             <Flex vertical gap={1} className='mb-3'>
@@ -215,7 +226,13 @@ console.log("data",data.multiple)
                                 </Flex>
                             </Form.Item>
                         </Col>
-
+                        <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }}>
+                        {profitPeriod && revenuePeriod && profitPeriod !== revenuePeriod && (
+                        <Text type="danger">
+                            Revenue is for {revenuePeriod === 1 ? '6 months' : '12 months'}, but Profit is for {profitPeriod === 1 ? '6 months' : '12 months'}. Profit Margin is adjusted accordingly.
+                        </Text>
+                        )}
+                        </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
                                 label="Profit Margin"

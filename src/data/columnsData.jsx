@@ -1,6 +1,19 @@
+import { Image, Tooltip } from "antd";
+
 const postsaleColumns = [
     { title: 'Support Period', dataIndex: 'period' },
     { title: 'Number of Session', dataIndex: 'session' },
+    { title: null, dataIndex: 'verified',
+        render: (verified) => {
+            if (verified === true || verified === 1) {
+                return <Tooltip title={'Verified'}>
+                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
+                 </Tooltip>;
+            } else {
+                return null
+            }
+        },
+    }
 ];
 
 const liabColumn = [
@@ -8,6 +21,17 @@ const liabColumn = [
     { title: 'Number of Items', dataIndex: 'items' },
     { title: 'Purchase Year', dataIndex: 'purchaseyear' },
     { title: 'Price', dataIndex: 'price' },
+    { title: null, dataIndex: 'verified',
+        render: (verified) => {
+            if (verified === true || verified === 1) {
+                return <Tooltip title={'Verified'}>
+                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
+                 </Tooltip>;
+            } else {
+                return null
+            }
+        },
+    },
 ];
 
 const keyassetsColumn = [
@@ -15,6 +39,17 @@ const keyassetsColumn = [
     { title: 'Number of Items', dataIndex: 'items' },
     { title: 'Purchase Year', dataIndex: 'purchaseyear' },
     { title: 'Price', dataIndex: 'price' },
+    { title: null, dataIndex: 'verified',
+        render: (verified) => {
+            if (verified === true || verified === 1) {
+                return <Tooltip title={'Verified'}>
+                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
+                 </Tooltip>;
+            } else {
+                return null
+            }
+        },
+    }
 ];
 
 const inventColumn = [
@@ -22,6 +57,17 @@ const inventColumn = [
     { title: 'Number of Items', dataIndex: 'items' },
     { title: 'Purchase Year', dataIndex: 'purchaseyear' },
     { title: 'Price', dataIndex: 'price' },
+    { title: null, dataIndex: 'verified',
+        render: (verified) => {
+            if (verified === 1) {
+                return <Tooltip title={'Verified'}>
+                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
+                 </Tooltip>;
+            } else {
+                return null
+            }
+        },
+    }
 ];
 
 export { postsaleColumns, liabColumn, keyassetsColumn, inventColumn }

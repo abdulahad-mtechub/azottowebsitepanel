@@ -3,13 +3,12 @@ import { PlusOutlined, DeleteOutlined, MinusCircleFilled } from '@ant-design/ico
 import { message as Mesage, Upload, Form, Typography, Flex, Button } from 'antd';
 const { Dragger } = Upload;
 
-const SingleFileUpload = ({ multiple = false, name, required, message, form, title }) => {
+const SingleFileUpload = ({ multiple = false, name, required, message, form, title,onUpload }) => {
   const [fileList, setFileList] = useState([]);
 
-  const handleChange = (info) => {
+  const handleChange = async (info) => {
     let newFileList = [...info.fileList];
 
-    // Only keep the latest one if not in multiple mode
     if (!multiple) {
       newFileList = newFileList.slice(-1);
     }
@@ -18,6 +17,19 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, tit
 
     const files = multiple ? newFileList.map(file => file.originFileObj) : newFileList[0]?.originFileObj || null;
     form.setFieldsValue({ [name]: files });
+    try {
+      if (multiple) {
+        // upload all files in parallel
+        await Promise.all(files.map(file => onUpload(file)));
+      } else {
+console.log("files",files)
+        await onUpload(files);
+      }
+      // You can show success message or update UI here if needed
+    } catch (error) {
+      console.error("Upload error:", error);
+      message.error("Upload failed");
+    }
   };
 
   const handleRemove = (file) => {
@@ -40,7 +52,6 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, tit
         ]}
         className="m-0 w-100"
       >
-        
         {(multiple || fileList.length === 0) && (
           <Dragger
             name="file"

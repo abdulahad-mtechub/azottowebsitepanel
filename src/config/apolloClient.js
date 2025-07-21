@@ -2,7 +2,7 @@ import { ApolloClient, InMemoryCache, createHttpLink, from } from "@apollo/clien
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 
-const API_URL =  "http://localhost:4006/graphql";
+const API_URL =  "https://220.152.66.148.host.secureserver.net/graphql";
 
 // HTTP Link
 const httpLink = createHttpLink({

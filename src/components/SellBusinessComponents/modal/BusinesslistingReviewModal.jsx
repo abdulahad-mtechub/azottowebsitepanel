@@ -16,7 +16,7 @@ const BusinesslistingReviewModal = ({visible,onClose,onCreate}) => {
                 <Button type='button' className='btn text-black border-gray' onClick={()=>{onClose();navigate('/')}}>
                     Back to Home
                 </Button>
-                <Button type="primary" className='btn bg-brand' onClick={onCreate}>
+                <Button type="primary" className='btn bg-brand' onClick={()=>{onClose();navigate('/sellbusinesscreate')}}>
                     Create new list
                 </Button>
             </Flex>

@@ -25,8 +25,8 @@ const Whatwedo = () => {
                         whatweData?.map((type,i)=>
                             <Col lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
                                 <Card className='h-100 border-brand rounded-12' >
-                                    <Flex vertical gap={20}>
-                                        <Image src={type?.icon} preview={false} width={40} />
+                                    <Flex vertical gap={20} align='center' className='text-center'>
+                                        <Image src={type?.icon} preview={false} width={50} />
                                         <div>
                                             <Title className='mb-1' level={5}>
                                                 {type?.title}

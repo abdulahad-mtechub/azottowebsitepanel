@@ -14,18 +14,16 @@ const Filter = ({
  }) => {
 
     const [activeStep, setActiveStep] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
     // for filter it multiple with type number send just 1,instedc of 1x and 2 insted of 2x and so on
     const steps = ["1x", "2x", "3x", "4x", "5x", "5x+"]; 
     const onStepChange = (step) => {
-        console.log("Step changed to:", step);
         const isSame = activeStep === step;
         const newStep = isSame ? null : step;
       
         setActiveStep(newStep);
         setMultipleStep(newStep); // <-- Send to parent
       };
-      
-      
     const itemsNest = [
         {
             key: '1',
@@ -160,8 +158,19 @@ const Filter = ({
         }
     ]
 
+    useEffect(() => {
+        const handleResize = () => setIsMobile(window.innerWidth <= 1199);
+    
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+    
+    const classoverflow = isMobile ? null : 'custom-overflow-style fix-height'
+
     return (
-        <>
+        <div className={classoverflow}>
             <Card className='mb-3'>
                 <Collapse defaultActiveKey={['1']} ghost items={items} className='collapse-cs' 
                     expandIcon={({ isActive }) => 
@@ -173,7 +182,7 @@ const Filter = ({
             <Card>
                 <Collapse defaultActiveKey={['1']} ghost items={categoryItems} className='collapse-cs'/>
             </Card>
-        </>
+        </div>
     )
 }
 

@@ -1,4 +1,4 @@
-import { Breadcrumb, Card, Col, Flex, Form, Row, Typography } from 'antd'
+import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { exploreData, inventColumn, inventData, keyassetData, keyassetsColumn, liabColumn, liabilityData, postsaleColumns, postsaleData } from '../data';
 import { AnnualProfitBarChart, BusinessInfoCard, BusinessStats, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
@@ -9,7 +9,7 @@ import { GET_BUSINESS } from '../graphql/query/business';
 
 const { Text, Title } = Typography;
 const SingleViewlisting = () => {
-    // const [form] = Form.useForm(); 
+    const [form] = Form.useForm(); 
     const { id } = useParams()
     const navigate = useNavigate();
     // const business = exploreData?.find((item)=>item?.id == id)
@@ -19,29 +19,29 @@ const SingleViewlisting = () => {
       });
     
       const business = data?.getBusinessById;
-      
       const postSaleData = [
         {
           key: '1',
           period: business?.suppportDuration || 'N/A',
           session: business?.supportSession || 'N/A',
+          verified: business?.isSupportVerified, // 1 or 0
         }
       ];
-      
+
       const liabilitiesData = business?.liabilities?.map((item, index) => ({
         key: item.id || index,
         name: item.name,
         items: item.quantity,
         purchaseyear: item.purchaseYear,
-        price: `SAR ${item?.toLocaleString()}`,
+        price: `SAR ${item?.price.toLocaleString()}`,
       }));
       
       const assetsData = business?.assets?.map((item, index) => ({
         key: item.id || index,
         name: item.name,
         items: item.quantity,
-        purchaseyear: item.purchaseYear,
-        price: `SAR ${item.price?.toLocaleString()}`,
+        purchaseyear: item?.purchaseYear,
+        price: `SAR ${item?.price.toLocaleString()}`,
       }));
       
       const inventoryData = business?.inventoryItems?.map((item, index) => ({
@@ -96,13 +96,35 @@ const SingleViewlisting = () => {
                                     <Title level={5} className='m-0'>
                                         {business?.businessTitle}
                                     </Title>
+                                    {/* <Text className='fs-13 text-gray fw-500'>Reference #: {data?.ref ? data?.ref: 'Not Found'}</Text> */}
+                                    <Flex align='center' gap={5}>
+                                        <Title level={5} className='m-0'>
+                                            {data?.title}
+                                        </Title>
+                                        {
+                                            data?.type &&
+                                            <Button className={`fs-12 border-0 text-white ${data.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                                {data?.type}
+                                            </Button>
+                                        }
+                                    </Flex>
                                 </Flex>
                                 <Text>
                                     {business?.description ? business?.description : 'No description available.'}
                                 </Text>
                                 <Text>
-                                    Website: <Link to={''}>{business?.url}</Link>
+                                Website:{" "}
+                                    {business?.url ? (
+                                        <Link to={business.url}>{business.url}</Link>
+                                    ) : (
+                                        "URL not provided"
+                                    )}
                                 </Text>
+                                    {/* This café averages SAR 250,000 in annual revenue with a healthy annual profit of SAR 75,000. Its location offers strong foot traffic, especially during morning and late evening hours. Key assets include high-end espresso machines, seating furniture, POS system, and a fully branded visual identity. The owner is willing to offer 30 days of post-sale support, including supplier contacts, staff training, and marketing handover.
+                                </Text> */}
+                                {/* <Text>
+                                    Website: <Link to={''}>http://almadinahcoffeeshop.com</Link>
+                                </Text> */}
                             </Flex>
                         </Card>
                         {/* uncomment this and send business here as well */}
@@ -129,34 +151,10 @@ const SingleViewlisting = () => {
                                 </Text>
                             </Flex>
                         </Card>
-                        <PreviewTableContent
-                        status={''}
-                        title="Post - Sale Support"
-                        columns={postsaleColumns}
-                        data={postSaleData}
-                        />
-
-                        <PreviewTableContent
-                        status="Verified"
-                        title="Outstanding Liabilities / Debt"
-                        columns={liabColumn}
-                        data={liabilitiesData}
-                        />
-
-                        <PreviewTableContent
-                        status="Verified"
-                        title="Key Asset"
-                        columns={keyassetsColumn}
-                        data={assetsData}
-                        />
-
-                        <PreviewTableContent
-                        status="Verified"
-                        title="Inventory"
-                        columns={inventColumn}
-                        data={inventoryData}
-                        />
-
+                        <PreviewTableContent title='Post - Sale Support' columns={postsaleColumns} data={postSaleData} />
+                        <PreviewTableContent title='Outstanding Liabilities / Debt' columns={liabColumn} data={liabilitiesData} />
+                        <PreviewTableContent title='Key Asset' columns={keyassetsColumn} data={assetsData} />
+                        <PreviewTableContent title='Inventory' columns={inventColumn} data={inventoryData} />
                     </Col>
                     <Col lg={{span: 6}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                         <BusinessInfoCard data={business} />

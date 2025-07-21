@@ -20,12 +20,12 @@ const ArtticleCards = ({data,loadmore=false}) => {
                         >
                             <Flex vertical gap={20}>
                                 <div>
-                                    <div className='w-full card-img mb-2 rounded-12'>
+                                    <div className='w-full card-img-2 mb-2 rounded-12'>
                                         <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top' alt="" />
                                     </div>
                                     <Paragraph 
                                         ellipsis={{
-                                            rows: 2
+                                            rows: 1
                                         }}
                                         className='fs-16 fw-600'
                                     >

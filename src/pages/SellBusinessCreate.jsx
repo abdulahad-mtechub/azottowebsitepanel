@@ -86,20 +86,15 @@ const SellBusinessCreate = ({ addstep }) => {
     };
 
     const prev = () => {
-        setCurrent(current - 1);
-        setIsPreview(false);
+        if (current === 0) {
+            setIsCancel(true);
+        } else if (current === steps.length - 1 && isPreview) {
+            setIsPreview(false);
+        } else {
+            setCurrent(current - 1);
+            setIsPreview(false);
+        }
     };
-
-    // const prev = () => {
-    //     if (current === 0) {
-    //         setIsCancel(true);
-    //     } else if (current === steps.length - 1 && isPreview) {
-    //         setIsPreview(false);
-    //     } else {
-    //         setCurrent(current - 1);
-    //         setIsPreview(false);
-    //     }
-    // };
 
     const items = steps.map((item, index) => ({
         key: item.title,
@@ -146,21 +141,21 @@ const SellBusinessCreate = ({ addstep }) => {
                     assets: businessData.assets.map(asset => ({
                         name: asset.name,
                         price: parseFloat(asset.price),
-                        purchaseYear: asset.purchaseYear,
+                        purchaseYear: parseInt(asset.purchaseYear),
                         quantity: parseInt(asset.quantity),
                     })),
     
                     liabilities: businessData.liabilities.map(liability => ({
                         name: liability.name,
                         price: parseFloat(liability.price),
-                        purchaseYear: liability.purchaseYear,
+                        purchaseYear: parseInt(liability.purchaseYear),
                         quantity: parseInt(liability.quantity),
                     })),
     
                     inventoryItems: businessData.inventoryItems.map(item => ({
                         name: item.name,
                         price: parseFloat(item.price),
-                        purchaseYear: item.purchaseYear,
+                        purchaseYear: parseFloat(item.purchaseYear),
                         quantity: parseInt(item.quantity),
                     })),
     
@@ -171,15 +166,16 @@ const SellBusinessCreate = ({ addstep }) => {
                     reason: businessData.reason,
     
                     // Documents
-                    // documents: businessData.documents.map(doc => ({
-                    //     title: doc.title,
-                    //     fileName: doc.fileName,
-                    //     fileType: doc.fileType,
-                    //     filePath: doc.filePath,
-                    //     description: doc.description,
-                    // }))
+                    documents: businessData.documents.map(doc => ({
+                        title: doc.title,
+                        fileName: doc.fileName,
+                        fileType: doc.fileType,
+                        filePath: doc.filePath,
+                        description: doc.description,
+                    }))
                 }
             };
+            console.log("variable",variables)
             const { data } = await createBusiness({ variables });
             messageApi.success('Business listing created successfully!');
             setReviewModal(true);
@@ -223,13 +219,14 @@ const SellBusinessCreate = ({ addstep }) => {
                         className='mt-3'
                     />
 
-                    {/* <div className="step-content">
-                        {current === steps.length - 1
-                            ? isPreview
-                                ? <PreviewStep data={businessData} />
-                                : <UploadSupportDocStep />
-                            : steps[current].content}
-                    </div> */}
+                    <div className="step-content">
+                        {isPreview &&
+                            // ? isPreview
+                                 <PreviewStep data={businessData} />
+                                // : <UploadSupportDocStep />
+                            // : steps[current].content
+                        }
+                    </div>
                     <div className="step-content">{steps[current].content}</div>
 
                     <Flex justify={
@@ -258,11 +255,37 @@ const SellBusinessCreate = ({ addstep }) => {
                                 </Button>
                             )}
 
-                            {/* {current === steps.length - 1 && !isPreview && (
+                            {current === steps.length - 1 && !isPreview && (
                                 <Button type="primary" className='btn bg-brand' onClick={() => setIsPreview(true)}>
                                     Preview
                                 </Button>
-                            )} */}
+                            )}
+
+                            {current === steps.length - 1 && (
+                                <Button type="primary" className='btn bg-brand' onClick={handleCreateListing}>
+                                    Publish
+                                </Button>
+                            )}
+                        </Flex>
+                    </Flex>
+                    {/* <Flex justify={'space-between'} gap={5} align='center'>
+                        <Button type="button" className='btn border-gray text-black' onClick={()=>setIsCancel(true)}>
+                            Cancel
+                        </Button>
+                        <Flex gap={10} justify='end'>
+                            <Button
+                                className='btn text-black border-gray'
+                                onClick={prev}
+                                disabled={current === 0 ? true: false}
+                            >
+                                Save as Draft
+                            </Button>
+
+                            {current < steps.length - 1 && (
+                                <Button type="primary" className='btn bg-brand' onClick={next}>
+                                    Next
+                                </Button>
+                            )}
 
                             {current === steps.length - 1 && isPreview && (
                                 <Button type="primary" className='btn bg-brand' onClick={handleCreateListing}>
@@ -270,7 +293,7 @@ const SellBusinessCreate = ({ addstep }) => {
                                 </Button>
                             )}
                         </Flex>
-                    </Flex>
+                    </Flex> */}
                 </Flex>
             </div>
 
