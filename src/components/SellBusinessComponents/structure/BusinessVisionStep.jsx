@@ -1,10 +1,36 @@
+import React, { useEffect } from 'react'
 import { Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
 
 const { Text } = Typography
-const BusinessVisionStep = () => {
+const BusinessVisionStep = ({ data, setData }) => {
+    const handleFormChange = (_, allValues) => {
+        const { supportDuration, noSession, growthOpportunities, reasonSelling } = allValues;
 
+        setData((prev) => {
+            const updated = {
+                ...prev,
+                supportDuration,
+                supportSession:noSession,
+                growthOpportunities,
+                reason:reasonSelling
+            };
+
+            // prevent unnecessary re-renders
+            return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
+        });
+    };
+
+    useEffect(() => {
+        form.setFieldsValue({
+            supportDuration: data.supportDuration,
+            noSession: data.supportSession,
+            growthOpportunities: data.growthOpportunities,
+            businessPrice: data.price,
+            reasonSelling: data.reason,
+        });
+    }, [data]);
     const [form] = Form.useForm();    
     return (
         <>
@@ -16,6 +42,7 @@ const BusinessVisionStep = () => {
                 layout="vertical"
                 form={form}
                 requiredMark={false}
+                onValuesChange={handleFormChange}
             >
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <Row gutter={24}>
@@ -43,7 +70,7 @@ const BusinessVisionStep = () => {
                             <MyInput
                                 textArea
                                 label='Growth Opportunities (Optional)'
-                                name='businessPrice'
+                                name='growthOpportunities'
                                 placeholder='Write about future opportunities for the buyer.'
                                 rows={5}
                             />

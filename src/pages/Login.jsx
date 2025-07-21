@@ -1,20 +1,52 @@
 import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image } from "antd";
 import { MyInput } from "../components";
 import { NavLink } from "react-router-dom";
+import { message } from "antd";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../graphql/mutation/login";
+import { useNavigate } from "react-router-dom";
+import { useContext } from 'react';
+import { AuthContext } from '../context/AuthContext';
+
+
 
 const { Title, Paragraph } = Typography;
 
 const LoginPage = () => {
+const { login } = useContext(AuthContext);
+
+    const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
+    const [loginUser, { loading, error }] = useMutation(LOGIN);
     const [form] = Form.useForm();
 
-    const handleFinish = (values) => {
-        console.log("Form values:", values);
+    const handleFinish = async (values) => {
+      try {
+        const { email, password } = values;
+    
+        const { data } = await loginUser({ variables: { email, password } });
+    
+        if (data?.login?.token) {
+          localStorage.setItem("accessToken", data.login.token);
+          localStorage.setItem("userId", data.login.user.id);
+          login(data?.login?.token);
+          messageApi.success("Login successful!");
+          setTimeout(() => navigate("/"), 1000);
+        } else {
+          messageApi.error("Login failed: Invalid credentials");
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        messageApi.error("Login failed: Something went wrong");
+      }
     };
 
     return (
-        <Row className="signup-page" align={"middle"}>
-            <Col xs={24} sm={24} md={14} lg={16} className="signup-form-container">
-                <div className="form-inner overflow-style">
+      <>
+      {contextHolder}
+      <Row className="signup-page" align={"middle"}>
+            <Col xs={24} md={12} className="signup-form-container">
+                <div className="form-inner">
                     <div className="logo">
                         <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
                     </div>
@@ -54,7 +86,13 @@ const LoginPage = () => {
                             Forget Password?
                         </NavLink>
                       </Flex>
-                      <Button type="submit" className="btn bg-dark-blue fs-16" block>
+                      <Button
+                        htmlType="submit"
+                        type="primary"
+                        className="btn bg-dark-blue fs-16"
+                        block
+                        loading={loading}
+                      >
                         Signin
                       </Button>
                     </Form>
@@ -82,6 +120,8 @@ const LoginPage = () => {
                 </Flex>
             </Col>
         </Row>
+      </>
+        
     );
 };
 

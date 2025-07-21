@@ -1,9 +1,15 @@
 import { ConfigProvider } from 'antd'
 import { RouteF } from './RouteF'
+import { client } from './config'; 
+import { ApolloProvider } from '@apollo/client';
+import { AuthProvider } from './context/AuthContext';
+
 
 function App() {
 
   return (
+    <AuthProvider>
+    <ApolloProvider client={client}>
     <ConfigProvider
       theme={{
         token: {
@@ -19,6 +25,8 @@ function App() {
     >
       <RouteF />
     </ConfigProvider>
+    </ApolloProvider>
+    </AuthProvider>
   )
 }
 

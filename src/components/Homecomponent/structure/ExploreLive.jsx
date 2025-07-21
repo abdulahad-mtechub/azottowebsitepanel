@@ -93,7 +93,7 @@ const ExploreLive = () => {
                                 </Card>
                             </Col>
                         )
-                    }
+                    } 
                     <Col span={24}>
                         <Flex justify='center'>
                             <Button className='btn bg-brand'>

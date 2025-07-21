@@ -321,169 +321,60 @@ const businessmenuData = [
         icon: '/assets/icons/m-1.png',
         title: 'Browse Businesses by Categories',
         subtitle: 'Choose from popular business types.',
-        subdropdown:[
-            {
-                id: 1,
-                title: 'Restaurants & Cafes',
-                path: '/businesslisting',
-            },
-            {
-                id: 2,
-                title: 'Retail Services',
-                path: '/businesslisting',
-            },
-            {
-                id: 3,
-                title: 'Health, Beauty & Fitness',
-                path: '/businesslisting',
-            },
-            {
-                id: 4,
-                title: 'Tech & Software',
-                path: '/businesslisting',
-            },
-            {
-                id: 5,
-                title: 'Automotive, Transportation & Logistics',
-                path: '/businesslisting',
-            },
-            {
-                id: 6,
-                title: 'Digital Businesses',
-                path: '/businesslisting',
-            },
-            {
-                id: 7,
-                title: 'Education Services',
-                path: '/businesslisting',
-            },
-            {
-                id: 8,
-                title: 'Consulting & Professional Services',
-                path: '/businesslisting',
-            },
-            {
-                id: 9,
-                title: 'Real Estate & Construction',
-                path: '/businesslisting',
-            },
-            {
-                id: 10,
-                title: 'Industrial Businesses',
-                path: '/businesslisting',
-            },
-        ]
+        subdropdown: [
+            { id: 1, title: 'Restaurants & Cafes', path: '/businesslisting?category=Restaurants & Cafes' },
+            { id: 2, title: 'Retail Services', path: '/businesslisting?category=Retail Services' },
+            { id: 3, title: 'Health, Beauty & Fitness', path: '/businesslisting?category=Health, Beauty & Fitness' },
+            { id: 4, title: 'Automotive, Transportation & Logistics', path: '/businesslisting?category=Automotive, Transportation & Logistics' },
+            { id: 5, title: 'Tech & Software', path: '/businesslisting?category=Tech & Software' },
+            { id: 6, title: 'Digital Businesses', path: '/businesslisting?category=Digital Businesses' },
+            { id: 7, title: 'Education Services', path: '/businesslisting?category=Education Services' },
+            { id: 8, title: 'Consulting & Professional Services', path: '/businesslisting?category=Consulting & Professional Services' },
+            { id: 9, title: 'Real Estate & Construction', path: '/businesslisting?category=Real Estate & Construction' },
+            { id: 10, title: 'Industrial Businesses', path: '/businesslisting?category=Industrial Businesses' },
+        ]  
     },
     {
         id: 2,
         icon: '/assets/icons/m-2.png',
         title: 'Browse Businesses by Location',
         subtitle: 'Find businesses in your city.',
-        subdropdown:[
-            {
-                id: 1,
-                title: 'Riyadh',
-                path: '/businesslisting',
-            },
-            {
-                id: 2,
-                title: 'Makkah',
-                path: '/businesslisting',
-            },
-            {
-                id: 3,
-                title: 'Eastern',
-                path: '/businesslisting',
-            },
-            {
-                id: 4,
-                title: 'Al-Madinah',
-                path: '/businesslisting',
-            },
-            {
-                id: 5,
-                title: 'Asir',
-                path: '/businesslisting',
-            },
-            {
-                id: 6,
-                title: 'Tabuk',
-                path: '/businesslisting',
-            },
-            {
-                id: 7,
-                title: 'Hail',
-                path: '/businesslisting',
-            },
-            {
-                id: 8,
-                title: 'Jazan',
-                path: '/businesslisting',
-            },
-            {
-                id: 9,
-                title: 'Al-Jouf',
-                path: '/businesslisting',
-            },
-            {
-                id: 10,
-                title: 'Al-Bahah',
-                path: '/businesslisting',
-            },
-            {
-                id: 11,
-                title: 'Najran',
-                path: '/businesslisting',
-            },
-            {
-                id: 12,
-                title: 'Northern Borders',
-                path: '/businesslisting',
-            },
-            {
-                id: 13,
-                title: 'Al-Qassim',
-                path: '/businesslisting',
-            },
-        ]
+        subdropdown: [
+            { id: 1, title: 'Riyadh', path: '/businesslisting?city=Riyadh' },
+            { id: 2, title: 'Jeddah', path: '/businesslisting?city=Jeddah' },
+            { id: 3, title: 'Makkah', path: '/businesslisting?city=Makkah' },
+            { id: 4, title: 'Madinah', path: '/businesslisting?city=Madinah' },
+            { id: 5, title: 'Dammam', path: '/businesslisting?city=Dammam' },
+            { id: 6, title: 'Khobar', path: '/businesslisting?city=Khobar' },
+            { id: 7, title: 'Dhahran', path: '/businesslisting?city=Dhahran' },
+            { id: 8, title: 'Abha', path: '/businesslisting?city=Abha' },
+            { id: 9, title: 'Khamis Mushait', path: '/businesslisting?city=Khamis Mushait' },
+            { id: 10, title: 'Tabuk', path: '/businesslisting?city=Tabuk' },
+            { id: 11, title: 'Hail', path: '/businesslisting?city=Hail' },
+            { id: 12, title: 'Jazan', path: '/businesslisting?city=Jazan' },
+            { id: 13, title: 'Sakaka', path: '/businesslisting?city=Sakaka' },
+            { id: 14, title: 'Al Bahah', path: '/businesslisting?city=Al Bahah' },
+            { id: 15, title: 'Najran', path: '/businesslisting?city=Najran' },
+            { id: 16, title: 'Arar', path: '/businesslisting?city=Arar' },
+            { id: 17, title: 'Buraydah', path: '/businesslisting?city=Buraydah' },
+            { id: 18, title: 'Yanbu', path: '/businesslisting?city=Yanbu' },
+            { id: 19, title: 'Al Majmaah', path: '/businesslisting?city=Al Majmaah' },
+            { id: 20, title: 'Al Qatif', path: '/businesslisting?city=Al Qatif' },
+        ]          
     },
     {
         id: 3,
         icon: '/assets/icons/m-3.png',
         title: 'Browse Businesses by Revenue',
         subtitle: 'Filter by business earnings.',
-        subdropdown:[
-            {
-                id: 1,
-                title: 'SAR 0 - SAR 10,000',
-                path: '/businesslisting',
-            },
-            {
-                id: 2,
-                title: 'SAR 10,000 - SAR 30,000',
-                path: '/businesslisting',
-            },
-            {
-                id: 3,
-                title: 'SAR 30,000 - SAR 60,000',
-                path: '/businesslisting',
-            },
-            {
-                id: 4,
-                title: 'SAR 60,000 - SAR 100,000',
-                path: '/businesslisting',
-            },
-            {
-                id: 5,
-                title: 'SAR 100,000 - SAR 150,000',
-                path: '/businesslisting',
-            },
-            {
-                id: 6,
-                title: 'SAR 150,000+',
-                path: '/businesslisting',
-            }
-        ]
+        subdropdown: [
+            { id: 1, title: 'SAR 0 - SAR 10,000', path: '/businesslisting?revenue=0,10000' },
+            { id: 2, title: 'SAR 10,000 - SAR 30,000', path: '/businesslisting?revenue=10000,30000' },
+            { id: 3, title: 'SAR 30,000 - SAR 60,000', path: '/businesslisting?revenue=30000,60000' },
+            { id: 4, title: 'SAR 60,000 - SAR 100,000', path: '/businesslisting?revenue=60000,100000' },
+            { id: 5, title: 'SAR 100,000 - SAR 150,000', path: '/businesslisting?revenue=100000,150000' },
+            { id: 6, title: 'SAR 150,000+', path: '/businesslisting?revenue=150000,9999999' },
+          ]
     },
 
     {
@@ -491,37 +382,13 @@ const businessmenuData = [
         icon: '/assets/icons/m-4.png',
         title: 'Browse Businesses by Profit',
         subtitle: 'Explore based on profit margin.',
-        subdropdown:[
-            {
-                id: 1,
-                title: 'Lower than SAR 1000',
-                path: '/businesslisting',
-            },
-            {
-                id: 2,
-                title: 'SAR 1000 - SAR 5000',
-                path: '/businesslisting',
-            },
-            {
-                id: 3,
-                title: 'SAR 5000 - SAR 10,000',
-                path: '/businesslisting',
-            },
-            {
-                id: 4,
-                title: 'SAR 10,000 - SAR 30,000',
-                path: '/businesslisting',
-            },
-            {
-                id: 5,
-                title: 'SAR 30,000 - SAR 50,000',
-                path: '/businesslisting',
-            },
-            {
-                id: 6,
-                title: 'SAR 50,000+',
-                path: '/businesslisting',
-            },
+        subdropdown: [
+            { id: 1, title: 'SAR 0 - SAR 1000', path: '/businesslisting?profit=0,1000' },
+            { id: 2, title: 'SAR 1000 - SAR 5000', path: '/businesslisting?profit=1000,5000' },
+            { id: 3, title: 'SAR 5000 - SAR 10,000', path: '/businesslisting?profit=5000,10000' },
+            { id: 4, title: 'SAR 10,000 - SAR 30,000', path: '/businesslisting?profit=10000,30000' },
+            { id: 5, title: 'SAR 30,000 - SAR 50,000', path: '/businesslisting?profit=30000,50000' },
+            { id: 6, title: 'SAR 50,000+', path: '/businesslisting?profit=50000,9999999' },
         ]
     },
     {

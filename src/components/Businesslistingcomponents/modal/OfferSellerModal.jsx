@@ -2,9 +2,15 @@ import { CloseOutlined } from '@ant-design/icons'
 import { Button, Col, Flex, Form, Image, Modal, Row, Tooltip, Typography } from 'antd'
 import { MyInput } from '../../Forms'
 import { useEffect } from 'react'
+import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
+import { useMutation } from '@apollo/client'
+import { useState } from 'react'
+import { message } from "antd";
+
 
 const { Title, Text } = Typography
-const OfferSellerModal = ({visible,onClose}) => {
+const OfferSellerModal = ({visible,onClose,businessId}) => {
+    const [messageApi, contextHolder] = message.useMessage();
 
     const [form] = Form.useForm(); 
 
@@ -13,6 +19,15 @@ const OfferSellerModal = ({visible,onClose}) => {
         const totalAmount = offerAmount + (offerAmount * 0.06);
         form.setFieldsValue({ totalamount: totalAmount.toFixed(2) });
     };
+
+    const [createOffer] = useMutation(CREATE_OFFER, {
+        onCompleted: (data) => {
+            messageApi.success("Offer created successfully:");
+            // Optionally, you can reset the form or perform other actions here
+            form.resetFields();
+            onClose();
+        }
+    });
 
     useEffect(() => {
         form.resetFields();
@@ -29,8 +44,23 @@ const OfferSellerModal = ({visible,onClose}) => {
                     <Button type='button' className='btn text-black border-gray' onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button type="primary" className='btn bg-brand' onClick={onClose}>
-                        Send an Offer
+                    <Button type="primary" className='btn bg-brand' onClick={async () => {
+                        try {
+                            const values = await form.validateFields();
+                            await createOffer({
+                                variables: {
+                                    input: {
+                                        businessId,
+                                        price: parseFloat(values.offeramount),
+                                        // totalAmount: parseFloat(values.totalamount),
+                                    },
+                                },
+                            });
+                        } catch (error) {
+                            console.error("Validation or mutation error:", error);
+                        }
+                    }}>
+                    Send an Offer
                     </Button>
                 </Flex>
             }

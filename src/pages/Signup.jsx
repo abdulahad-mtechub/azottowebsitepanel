@@ -1,42 +1,108 @@
 import { useState } from "react";
 import { Form, Button, Upload, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex } from "antd";
+import { message } from "antd";
+import { useMutation } from "@apollo/client";
+import { CREATE_USER } from "../graphql/mutation/login";
+import { useNavigate } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
 import { districtOp } from "../data";
 import { NavLink } from "react-router-dom";
+import { district, cities  } from '../data';
+import imageCompression from 'browser-image-compression';
 
 const { Title, Paragraph } = Typography;
 const SignupPage = () => {
+    const [messageApi, contextHolder] = message.useMessage();
+    const navigate = useNavigate();
     const [form] = Form.useForm();
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [idType, setIdType] = useState("national_id");
     const [frontFileName, setFrontFileName] = useState("");
     const [backFileName, setBackFileName] = useState("");
     const [passportFileName, setPassportFileName] = useState("");
+    const [documents, setDocuments] = useState([]);
+    const [loading, setLoading] = useState(false);
 
-    const handleFrontChange = (info) => {
-        const file = info.fileList[0];
-        setFrontFileName(file ? file.name : "");
-    };
+    const [createUser, { loading:userLoading, error }] = useMutation(CREATE_USER);
 
-    const handleBackChange = (info) => {
-        const file = info.fileList[0];
-        setBackFileName(file ? file.name : "");
-    };
-
-    const handlePassportChange = (info) => {
-        const file = info.fileList[0];
-        setPassportFileName(file ? file.name : "");
-    };
-
-    const handleFinish = (values) => {
-        console.log("Form submitted:", values);
-        console.log("Front File:", frontFileName);
-        console.log("Back File:", backFileName);
-        console.log("Passport File:", passportFileName);
-    };
-
+    const handleFinish = async (values) => {
+        try {
+            const input = {
+                name: values.fullName,
+                email: values.email,
+                district: values.district,
+                city: values.city,
+                phone: values.phoneNo,
+                password: values.password,
+                documents: documents.length > 0 ? documents : undefined,
+            };
+            console.log("input",input)
     
+            const { data } = await createUser({ variables: { input } });
+    
+            messageApi.success("Account created successfully!");
+            // redirect or reset form
+            form.resetFields();
+            setTimeout(() => {
+                navigate("/");
+              }, 1000); // 1 second delay
+        } catch (err) {
+            messageApi.error("Failed to create user. Please try again.");
+        }
+    };
+
+    const handleUpload = async ({ file,title }) => {
+        try {
+            setLoading(true); 
+            let compressedFile = file;
+            if (file.type.startsWith('image/')) {
+                compressedFile = await imageCompression(file, {
+                  maxSizeMB: 1,
+                  maxWidthOrHeight: 1024,
+                  useWebWorker: true,
+                });
+            }
+            const formData = new FormData();
+            formData.append('file', file);
+        
+            // Call your upload API
+            const res = await fetch('https://220.152.66.148.host.secureserver.net/upload', {
+                method: 'POST',
+                body: formData,
+            });
+        
+            if (!res.ok) throw new Error('Upload failed');
+            const data = await res.json();
+        
+            // Update documents state for front side
+            setDocuments(prevDocs => {
+                // Remove existing 'front' doc if any
+                // Add new
+                const filtered = prevDocs.filter(doc => doc.title !== title);
+                return [...filtered, {
+                title: 'front',
+                fileName: data.fileName,
+                filePath: data.fileUrl,
+                fileType: data.fileType,
+                }];
+            });
+
+            if (title === 'front') setFrontFileName(data.fileName);
+            else if (title === 'back') setBackFileName(data.fileName);
+            else if (title === 'passport') setPassportFileName(data.fileName);
+      
+        } catch (err) {
+          console.error(err);
+          messageApi.error('Failed to upload front file');
+        }finally {
+            setLoading(false); // Stop loading
+        }
+    };
+      
 
     return (
+        <>
+        {contextHolder}
         <Row className="signup-page" >
             <Col xs={24} sm={24} md={14} lg={16} className="overflow-style">
                 <div className="signup-form-container ">
@@ -84,7 +150,8 @@ const SignupPage = () => {
                                         required
                                         message="Please enter district"
                                         placeholder='select district'
-                                        options={districtOp}
+                                        options={district}
+                                        onChange={(val) => setSelectedDistrict(val)}
                                     />
                                 </Col>
                                 <Col lg={{span: 12}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
@@ -94,7 +161,7 @@ const SignupPage = () => {
                                         required
                                         message="Please enter city"
                                         placeholder='select city'
-                                        options={districtOp}
+                                        options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
                                     />
                                 </Col>
                                 <Col span={24}>
@@ -201,7 +268,7 @@ const SignupPage = () => {
                                                         beforeUpload={() => false} 
                                                         showUploadList={false} 
                                                         maxCount={1} 
-                                                        onChange={handleFrontChange}
+                                                        onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
                                                     >
                                                         <Button className='btn text-black bg-gray border-gray'>Upload</Button>
                                                     </Upload>
@@ -225,7 +292,7 @@ const SignupPage = () => {
                                                         beforeUpload={() => false} 
                                                         showUploadList={false} 
                                                         maxCount={1} 
-                                                        onChange={handleBackChange}
+                                                        onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
                                                     >
                                                         <Button className='btn text-black bg-gray border-gray'>Upload</Button>
                                                     </Upload>
@@ -251,7 +318,7 @@ const SignupPage = () => {
                                                     beforeUpload={() => false} 
                                                     showUploadList={false} 
                                                     maxCount={1} 
-                                                    onChange={handlePassportChange}
+                                                    onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
                                                 >
                                                     <Button className='btn text-black bg-gray border-gray'>Upload</Button>
                                                 </Upload>
@@ -304,6 +371,8 @@ const SignupPage = () => {
                 </Flex>
             </Col>
         </Row>
+        </>
+        
     );
 };
 
