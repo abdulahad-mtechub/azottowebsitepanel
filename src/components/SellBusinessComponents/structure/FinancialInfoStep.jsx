@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Card, Col, Flex, Form, Row, Select, Typography,Input } from 'antd'
+import { Card, Col, Flex, Form, Row, Select, Typography,Input, Image } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { revenueLookups, yearOp } from '../../../data'
@@ -156,9 +156,15 @@ const FinancialInfoStep = ({ data, setData }) => {
 
     return (
         <>
-            <Flex vertical gap={1} className='mb-3'>
-                <ModuleTopHeading level={4} name='Share your business numbers & potential' />
-                <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
+            <Flex justify='space-between' gap={5} wrap align='flex-start'>
+                 <Flex vertical gap={1} className='mb-3'>
+                    <ModuleTopHeading level={4} name='Share your business numbers & potential' />
+                    <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
+                </Flex>
+                <Flex className='pill-round' gap={8} align='center'>
+                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="" />
+                    <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+                </Flex>
             </Flex>
             <Form layout="vertical" form={form} requiredMark={false} onValuesChange={handleFormChange}
             >

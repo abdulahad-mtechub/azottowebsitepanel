@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.jsx'
 import { ApolloProvider } from '@apollo/client';
-import { client } from './config/apolloClient'; // Correct named import
+import { client } from './config/apolloClient'; 
 import { AuthProvider } from './context/AuthContext';
 
 createRoot(document.getElementById('root')).render(
@@ -11,7 +11,7 @@ createRoot(document.getElementById('root')).render(
     <AuthProvider>
   <StrictMode>
     <App />
-  </StrictMode>,
+  </StrictMode>
   </AuthProvider>
   </ApolloProvider>
 )
