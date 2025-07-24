@@ -1,6 +1,6 @@
 import { Form, Button, Typography, Row, Col, Image, Flex } from "antd";
 import { MyInput } from "../components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useState } from "react";
 
@@ -9,7 +9,7 @@ const { Title, Paragraph } = Typography;
 const ForgotPassword = () => {
     const [form] = Form.useForm();
     const [ requestState, setRequestState ] = useState('request')
-
+    const navigate = useNavigate()
 
      const forgotpass = () => {
         if (requestState === "request") {
@@ -34,9 +34,14 @@ const ForgotPassword = () => {
         <Row className="signup-page">
             <Col xs={24} sm={24} md={14} lg={16} className="signup-form-container">
                 <div className="form-inner">
-                    <div className="logo">
+                    <Button shape="circle" onClick={()=>navigate('/')}>
+                      <ArrowLeftOutlined />
+                    </Button>
+                    <NavLink to={'/'}>
+                      <div className="logo">
                         <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
-                    </div>
+                      </div>
+                    </NavLink>
                     <div>
                         {requestState === 'otp' && 
                             <Button type='button' onClick={()=>setRequestState('request')} ghost className="text-black fs-18 p-0 border-0"><ArrowLeftOutlined /></Button>

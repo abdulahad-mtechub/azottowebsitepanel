@@ -180,7 +180,7 @@ a{
 
 .nav-link{
     color: #000;
-    transition: .5s all;
+    /* transition: .5s all; */
 }
 
 .nav-link:hover{

@@ -24,7 +24,7 @@ const OurMission = () => {
                                     missionData?.list?.map((items,i)=>
                                         <Col lg={{span: 8}} md={{span: 12}} sm={{span:24}} xs={{span: 24}} key={i}>
                                             <Card className='bg-brand border-0 text-center'>
-                                                <Title level={5} className='text-white'>{items?.title}</Title>
+                                                <Title level={5} className='text-white fw-600'>{items?.title}</Title>
                                                 <Text className='fs-14 text-white'>
                                                     {
                                                         items?.desc

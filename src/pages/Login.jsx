@@ -7,6 +7,7 @@ import { LOGIN } from "../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
 import { useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
+import { ArrowLeftOutlined } from "@ant-design/icons";
 
 
 
@@ -47,9 +48,14 @@ const { login } = useContext(AuthContext);
       <Row className="signup-page" align={"middle"}>
             <Col  xs={24} sm={24} md={14} lg={16} className="signup-form-container">
                 <div className="form-inner">
-                    <div className="logo">
+                    <Button shape="circle" onClick={()=>navigate('/')}>
+                      <ArrowLeftOutlined />
+                    </Button>
+                    <NavLink to={'/'}>
+                      <div className="logo">
                         <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
-                    </div>
+                      </div>
+                    </NavLink>
 
                     <Title level={3}>Signin to your account</Title>
                     <Paragraph>Enter your credentials to login to your account.</Paragraph>
