@@ -106,8 +106,8 @@ const RequestMeetingModal = ({businessId,visible,onClose}) => {
                           await businessMeeting({
                             variables: {
                               input: {
-                                id: businessId,
-                                meetingDate: combinedDateTime.toISOString(), // or use ISO string
+                                businessId,
+                                requestedDate: combinedDateTime.toISOString(), // or use ISO string
                               },
                             },
                           });

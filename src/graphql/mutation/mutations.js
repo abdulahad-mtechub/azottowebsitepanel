@@ -39,8 +39,8 @@ const ACCEPT_ENDA = gql `
 }
 `
 const BUSINESS_MEETING = gql `
-  mutation UpdateBusiness($input: UpdateBusinessInput!) {
-  updateBusiness(input: $input) {
+  mutation RequestMeeting($input: CreateMeetingInput!) {
+  requestMeeting(input: $input) {
     id
   }
 }
