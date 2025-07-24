@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Col, Flex, Row, Typography } from 'antd'
 import { Segmented } from 'antd'
 import { Sellerwork } from './Sellerwork'
 import { Buyework } from './Buyework'
 
-const { Text, Title } = Typography
+const { Title } = Typography
 
 const HowWork = () => {
     const [activeTab, setActiveTab] = useState('Seller')

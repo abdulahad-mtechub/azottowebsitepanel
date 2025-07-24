@@ -1,9 +1,9 @@
+import React, { useEffect } from 'react'
 import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { exploreData, inventColumn, inventData, keyassetData, keyassetsColumn, liabColumn, liabilityData, postsaleColumns, postsaleData } from '../data';
-import { AnnualProfitBarChart, BusinessInfoCard, BusinessStats, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
+import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../data';
+import { AnnualProfitBarChart, BusinessInfoCard, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
 import { RightOutlined } from '@ant-design/icons';
-import React, { useEffect } from 'react'
 import { useQuery } from '@apollo/client';
 import { GET_BUSINESS } from '../graphql/query/business';
 
@@ -96,7 +96,6 @@ const SingleViewlisting = () => {
                                     <Title level={5} className='m-0'>
                                         {business?.businessTitle}
                                     </Title>
-                                    {/* <Text className='fs-13 text-gray fw-500'>Reference #: {data?.ref ? data?.ref: 'Not Found'}</Text> */}
                                     <Flex align='center' gap={5}>
                                         <Title level={5} className='m-0'>
                                             {data?.title}

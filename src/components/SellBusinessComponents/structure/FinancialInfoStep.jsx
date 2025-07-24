@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Card, Col, Flex, Form, Row, Select, Typography,Input } from 'antd'
+import { Card, Col, Flex, Form, Row, Select, Typography,Input, Image } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { revenueLookups, yearOp } from '../../../data'
@@ -156,9 +156,15 @@ const FinancialInfoStep = ({ data, setData }) => {
 
     return (
         <>
-            <Flex vertical gap={1} className='mb-3'>
-                <ModuleTopHeading level={4} name='Share your business numbers & potential' />
-                <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
+            <Flex justify='space-between' gap={5} wrap align='flex-start'>
+                 <Flex vertical gap={1} className='mb-3'>
+                    <ModuleTopHeading level={4} name='Share your business numbers & potential' />
+                    <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
+                </Flex>
+                <Flex className='pill-round' gap={8} align='center'>
+                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="" />
+                    <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+                </Flex>
             </Flex>
             <Form layout="vertical" form={form} requiredMark={false} onValuesChange={handleFormChange}
             >
@@ -187,6 +193,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 noStyle
                             >
                                 <Input
+                                type='number'
                                 placeholder="Enter revenue"
                                 className="w-100 "
                                 prefix={<img src="/assets/icons/reyal-g.png" width={15} />}
@@ -196,7 +203,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                         </Form.Item>
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                            <Form.Item label="Profit" className="w-100" style={{ marginBottom: 0 }}>
+                            <Form.Item label="Profit" className="w-100">
                                 <Flex gap={2} className="w-100">
                                 <Form.Item name="profittime" noStyle>
                                     <Select
@@ -218,6 +225,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                     noStyle
                                 >
                                     <Input
+                                    type='number'
                                     placeholder="Enter profit"
                                     className="w-100"
                                     prefix={<img src="/assets/icons/reyal-g.png" width={14} />}
@@ -243,6 +251,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 suffix = '%'
                             />
                         </Col>
+                        
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
                                 label='Business Price'
@@ -258,8 +267,8 @@ const FinancialInfoStep = ({ data, setData }) => {
                         </Col>
                         <Col span={24}>
                             <MyInput
-                                label={<Flex>
-                                    Multiples of Revenue & Profit <img src="/assets/icons/info-outline.png" width={20} alt="" />
+                                label={<Flex align='center' gap={5}>
+                                    Multiples of Revenue & Profit <Image preview={false} src="/assets/icons/info-outline.png" width={15} alt="" />
                                 </Flex>}
                                 name='multiple'
                                 required

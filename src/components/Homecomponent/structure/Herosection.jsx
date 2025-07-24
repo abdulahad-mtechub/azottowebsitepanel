@@ -9,7 +9,7 @@ const Herosection = () => {
       <Row gutter={[16, 16]} justify={'space-between'}>
         <Col sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 12 }} xl={{ span: 10 }}>
           <div className="container">
-            <Flex vertical gap={10} className='div'>
+            <Flex vertical gap={10} className='div center-mbl'>
               <div className='tag'>Trusted Marketplace for Saudi Businesses</div>
               <Title className='m-0 text-white' level={1}>
                 Buy or Sell a Verified <br /> Business with <span className='text-brand'>Confidence</span>
@@ -17,7 +17,7 @@ const Herosection = () => {
               <Text className='text-light-gray my-2'>
                 Explore real, revenue-generating businesses across Saudi Arabia. Whether you're an investor or an owner, Jusoor makes the process safe, simple, and secure.
               </Text>
-              <Flex gap={10} className='mt-2'>
+              <Flex gap={10} className='mt-2 center-mbl'>
                 <Button className='btn bg-brand'>
                   Explore Businesses
                 </Button>

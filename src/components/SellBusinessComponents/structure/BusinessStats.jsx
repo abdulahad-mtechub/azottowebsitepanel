@@ -18,6 +18,7 @@ const BusinessStats = ({data}) => {
             setRevenueTimeValue('Last Year');
         }
     }, [data.profittime, data.revenueTime]); 
+    
     const stats = [
         {
             id: 1,
@@ -42,6 +43,18 @@ const BusinessStats = ({data}) => {
             icon:'/assets/icons/cap-re.png',
             title:'3.8 months',
             subtitle:'Capital Recovery'
+        },
+        {
+            id: 5,
+            icon:'/assets/icons/foundationdate.png',
+            title:'2020',
+            subtitle:'Foundation Date'
+        },
+        {
+            id: 6,
+            icon:'/assets/icons/teamsize.png',
+            title:'1-10',
+            subtitle:'Team Size'
         },
     ]
     return (

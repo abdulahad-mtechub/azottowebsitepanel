@@ -17,7 +17,7 @@
 }
 
 .gen-navbar>.gen-navbar-inner{
-    width:100%;
+    width:92%;
     flex-wrap: wrap;
     display: flex;
     align-items: center;

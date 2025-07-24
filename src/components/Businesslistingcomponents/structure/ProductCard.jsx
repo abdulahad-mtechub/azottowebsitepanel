@@ -37,9 +37,17 @@ const ProductCard = ({
                 >
                         <Flex vertical gap={20}>
                             <Flex justify='space-between' align='center'>
-                                <Button>
-                                    {pro.categoryName}
-                                </Button>
+                                <Flex gap={4}>
+                                    <Button>
+                                        {pro.categoryName}
+                                    </Button>
+                                    {
+                                        pro?.type &&
+                                        <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                            {pro?.type}
+                                        </Button>
+                                    }
+                                </Flex>
                                 <Button className='border-0 bg-transparent p-0'
                                 onClick={(e) => {
                                     e.stopPropagation(); // prevent triggering card click
@@ -56,17 +64,7 @@ const ProductCard = ({
                                     });
                                   }}
                                 ></Button>
-                                <Flex gap={4}>
-                                    <Button className='fs-13'>
-                                        Restaurant
-                                    </Button>
-                                    {
-                                        pro?.type &&
-                                        <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
-                                            {pro?.type}
-                                        </Button>
-                                    }
-                                </Flex>
+                                
                                 <Button className='border-0 bg-transparent p-0'>
                                     {
                                         pro?.isSaved ?
@@ -122,36 +120,41 @@ const ProductCard = ({
                 </Col>
             )
         }
-        <Col span={24} className='mt-3'>
-            <Row justify="space-between" align="middle">
-                <Col>
-                <Flex gap={5} align='center'>
-                    <Text>Rows Per Page:</Text>
-                    <Select
-                    className='select-filter'
-                    value={limit}
-                    onChange={onLimitChange}
-                    options={[
-                        { value: 5, label: 5 },
-                        { value: 10, label: 10 },
-                        { value: 20, label: 20 },
-                        { value: 50, label: 50 },
-                    ]}
-                    />
-                </Flex>
-                </Col>
-                <Col>
-                <Pagination
-                    className='pagination'
-                    current={currentPage}
-                    total={totalCount}
-                    pageSize={limit}
-                    onChange={onPageChange}
-                    showSizeChanger={false}
-                />
-                </Col>
-            </Row>
-        </Col>
+        {
+            exploreData?.length > 5 &&
+            <Col span={24} className='mt-3'>
+                <Row justify="space-between" align="middle">
+                    <Col span={6}>
+                        <Flex gap={5} align='center'>
+                            <Text>Rows Per Page:</Text>
+                            <Select
+                                className='select-filter'
+                                value={limit}
+                                onChange={onLimitChange}
+                                options={[
+                                    { value: 5, label: 5 },
+                                    { value: 10, label: 10 },
+                                    { value: 20, label: 20 },
+                                    { value: 50, label: 50 },
+                                ]}
+                            />
+                        </Flex>
+                    </Col>
+                    <Col span={6}>
+                        <Flex justify='end'>
+                            <Pagination
+                                className='pagination'
+                                current={currentPage}
+                                total={totalCount}
+                                pageSize={limit}
+                                onChange={onPageChange}
+                                showSizeChanger={false}
+                            />
+                        </Flex>
+                    </Col>
+                </Row>
+            </Col>
+        }
     </Row>
   )
 }

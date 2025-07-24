@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react'
-import { Card, Col, Flex, Form, Radio, Row, Typography } from 'antd'
+import { Card, Col, Flex, Form, Image, Radio, Row, Tooltip, Typography } from 'antd'
 import { MyDatepicker, MyInput, MySelect } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { teamsizeOp,district, cities  } from '../../../data'
@@ -65,9 +65,15 @@ const BusinessDetailStep = ({ data, setData }) => {
 
     return (
       <>
-        <Flex vertical gap={1} className="mb-3">
-          <ModuleTopHeading level={4} name="Tell us about your business" />
-          <Text className="text-gray">Let’s start with the basic business information</Text>
+        <Flex justify='space-between' gap={5} wrap align='flex-start'>
+          <Flex vertical gap={1} className='mb-3'>
+              <ModuleTopHeading level={4} name='Tell us about your business' />
+              <Text className='text-gray'>Let’s start with the basic business information</Text>
+          </Flex>
+          <Flex className='pill-round' gap={8} align='center'>
+              <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="" />
+              <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+          </Flex>
         </Flex>
   
         <Card className="shadow-d radius-12 border-gray">
@@ -82,12 +88,18 @@ const BusinessDetailStep = ({ data, setData }) => {
                   >
                     <Radio value={1} className="fs-14">
                       <Flex gap={3} align="center">
-                        Sell business by Acquiring <img src="/assets/icons/info.png" width={20} alt="" />
+                        Sell business by Acquiring 
+                        <Tooltip title='Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities'>
+                          <img src="/assets/icons/info.png" width={20} alt="" />
+                        </Tooltip>
                       </Flex>
                     </Radio>
                     <Radio value={2} className="fs-14">
                       <Flex gap={3} align="center">
-                        Sell business by Takbeel <img src="/assets/icons/info.png" width={20} alt="" />
+                        Sell business by Takbeel
+                        <Tooltip title='Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.'>
+                          <img src="/assets/icons/info.png" width={20} alt="" />
+                        </Tooltip>
                       </Flex>
                     </Radio>
                   </Radio.Group>

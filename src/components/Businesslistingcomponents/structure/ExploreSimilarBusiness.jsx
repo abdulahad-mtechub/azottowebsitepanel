@@ -1,6 +1,4 @@
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
-import { RightOutlined } from '@ant-design/icons'
-import { exploreData } from '../../../data'
 import React from 'react'
 import { useQuery } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';
@@ -52,13 +50,10 @@ const ExploreSimilarBusiness = ({id}) => {
                     </Col>
                     {
                         mappedBusinesses?.slice(0,4)?.map((pro,i)=>
-                            <Col lg={{span: 6}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
+                            <Col lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
                                 <Card className='h-100 border-gray rounded-12 card-cs' >
                                     <Flex vertical gap={20}>
                                         <Flex justify='space-between' align='center'>
-                                            <Button>
-                                                {pro?.category?.name}
-                                            </Button>
                                             <Flex gap={4}>
                                                 <Button className='fs-13'>
                                                     Restaurant

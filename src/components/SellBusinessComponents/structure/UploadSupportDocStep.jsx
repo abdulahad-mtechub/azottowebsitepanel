@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Card, Flex, Form, Tooltip, Typography } from 'antd'
+import { Card, Flex, Form, Image, Tooltip, Typography } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { SingleFileUpload } from '../../Forms';
 import imageCompression from 'browser-image-compression';
@@ -96,9 +96,15 @@ const UploadSupportDocStep = ({ data, setData }) => {
 
   return (
     <>
-      <Flex vertical gap={1} className="mb-3">
-        <ModuleTopHeading level={4} name="Upload supporting documents" />
-        <Text className="text-gray">Verified data builds buyer confidence.</Text>
+      <Flex justify='space-between' gap={5} wrap align='flex-start'>
+        <Flex vertical gap={1} className='mb-3'>
+          <ModuleTopHeading level={4} name='Upload supporting documents' />
+          <Text className='text-gray'>Verified data builds buyer confidence.</Text>
+        </Flex>
+        <Flex className='pill-round' gap={8} align='center'>
+          <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="" />
+          <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+        </Flex>
       </Flex>
 
       <Form layout="vertical" form={form} requiredMark={false}>

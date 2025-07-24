@@ -45,7 +45,7 @@ const { login } = useContext(AuthContext);
       <>
       {contextHolder}
       <Row className="signup-page" align={"middle"}>
-            <Col xs={24} md={12} className="signup-form-container">
+            <Col  xs={24} sm={24} md={14} lg={16} className="signup-form-container">
                 <div className="form-inner">
                     <div className="logo">
                         <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
@@ -102,7 +102,6 @@ const { login } = useContext(AuthContext);
                     </Paragraph>
                 </div>
             </Col>
-
             <Col
                 xs={0}
                 md={10}

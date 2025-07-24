@@ -1,7 +1,6 @@
 import { CloseOutlined } from '@ant-design/icons'
-import { Button, Card, Checkbox, Col, Flex, Form, Row, Typography } from 'antd'
-import { MyDatepicker, MyInput } from '../../Forms'
-import { Link } from 'react-router-dom'
+import { Button, Col, Flex, Form, Row, Typography } from 'antd'
+import { MyDatepicker } from '../../Forms'
 
 const { Title, Text } = Typography
 const ScheduleMeetingStep = ({form,onClose}) => {
