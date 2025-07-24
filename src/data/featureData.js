@@ -391,18 +391,6 @@ const businessmenuData = [
             { id: 6, title: 'SAR 50,000+', path: '/businesslisting?profit=50000,9999999' },
         ]
     },
-    {
-        id: 4,
-        icon: '/assets/icons/browseall.png',
-        title: 'Browse All',
-        subdropdown:[
-            {
-                id: 1,
-                title: 'Browse All',
-                path: '/businesslisting',
-            },
-        ]
-    },
 ]
 
 const othersmenu = [

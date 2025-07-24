@@ -31,18 +31,11 @@ const Navbar = ({setGetCategory}) => {
                 key={item.id}
                 onClick={()=>setGetCategory(item?.title)}
               >
-                <Text className='text-black fs-14 nav-link'>
+                <Text className='fs-14 nav-link'>
                   {item.title}
                 </Text>
               </NavLink>
             ))}
-            {/* <Flex>
-              <Button className='bg-transprent border-0 p-0 fs-12 fw-600' >
-                <Flex gap={10} justify='space-between' align='center'>
-                  <i>Browse All</i> <ArrowRightOutlined />
-                </Flex>
-              </Button>
-            </Flex> */}
           </Flex>
         </Col>
       );
@@ -58,7 +51,7 @@ const Navbar = ({setGetCategory}) => {
                   key={item.id}
                   onClick={()=>setGetCategory(item?.title)}
                 >
-                  <Text className='text-black fs-14 nav-link'>
+                  <Text className='fs-14 nav-link'>
                     {item.title}
                   </Text>
                 </NavLink>
@@ -73,18 +66,11 @@ const Navbar = ({setGetCategory}) => {
                   key={item.id}
                   onClick={()=>setGetCategory(item?.title)}
                 >
-                  <Text className='text-black fs-14 nav-link'>
+                  <Text className='fs-14 nav-link'>
                     {item.title}
                   </Text>
                 </NavLink>
               ))}
-              {/* <Flex>
-                <Button className='bg-transprent border-0 p-0 fs-12 fw-600' >
-                  <Flex gap={10} justify='space-between' align='center'>
-                    <i>Browse All</i> <ArrowRightOutlined />
-                  </Flex>
-                </Button>
-              </Flex> */}
             </Flex>
           </Col>
         </>
@@ -200,6 +186,17 @@ const Navbar = ({setGetCategory}) => {
                         </div>
                       </li>
                     ))}
+                    <li className='drop-item'>
+                      <NavLink to={'/browseall'} className='drop-link'>
+                        <Flex gap={10} align='center'>
+                          <Image src={'/assets/icons/browseall.png'} width={30} className='pt-1s' preview={false} />
+                          <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
+                            <Title level={5} className='m-0'>Browse All</Title>
+                            <ArrowRightOutlined className='arr text-brand pt-1s' />
+                          </Flex>
+                        </Flex>
+                      </NavLink>
+                    </li>
                   </ul>
                 </li>
                 <li>

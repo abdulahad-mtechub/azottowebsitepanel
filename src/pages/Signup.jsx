@@ -8,7 +8,7 @@ import { MyInput, MySelect } from "../components";
 import { NavLink } from "react-router-dom";
 import { district, cities  } from '../data';
 import imageCompression from 'browser-image-compression';
-import { CheckOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CheckOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph } = Typography;
 const SignupPage = () => {
@@ -351,12 +351,17 @@ const SignupPage = () => {
         <>
         {contextHolder}
         <Row className="signup-page" >
-            <Col xs={24} sm={24} md={14} lg={16} className="overflow-style">
+            <Col xs={24} sm={24} md={14} lg={16}>
                 <div className="signup-form-container ">
                     <div className="form-inner">
-                        <div className="logo" style={{ textAlign: "center", marginBottom: 24 }}>
-                            <img src="/assets/images/logo-1.png" style={{ height: "70px" }} alt="Logo" />
-                        </div>
+                        <Button shape="circle" onClick={()=>navigate('/')}>
+                            <ArrowLeftOutlined />
+                        </Button>
+                        <NavLink to={'/'}>
+                            <div className="logo">
+                                <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
+                            </div>
+                        </NavLink>
                         <Title level={3}>Verify Your Identity</Title>
                         <Paragraph>To ensure the safety of all users, we require identity verification before creating a seller account.</Paragraph>
 
