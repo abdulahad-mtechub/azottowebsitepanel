@@ -81,7 +81,7 @@ const ProductCard = ({
                                     {pro?.title}
                                 </Title>
                                 <Text className='fs-14 text-gray'>
-                                    {pro?.description}
+                                    {pro?.description?.split(" ").slice(0, 50).join(" ") + (pro?.description?.split(" ").length > 50 ? "..." : "")}
                                 </Text>
                                 <Divider className='my-1' />
                                 <Row justify={'space-between'}>

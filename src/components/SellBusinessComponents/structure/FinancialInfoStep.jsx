@@ -8,63 +8,43 @@ import { FormReplicate } from '../../Header'
 const { Text } = Typography
 const FinancialInfoStep = ({ data, setData }) => {
 
-    const [price , setPrice] = React.useState(data.price || '');
-    const [profit, setProfit] = React.useState(data.profit || '');
-    const [profitPeriod, setProfitPeriod] = React.useState(data.profittime || '');
-    const [revenue, setRevenue] = React.useState(data.revenue || '');
-    const [revenuePeriod, setRevenuePeriod] = React.useState(data.revenueTime || '');
-    const [form] = Form.useForm();    
+    const [form] = Form.useForm();
 
     const foundedYear = new Date(data?.foundedDate).getFullYear();
     const currentYear = new Date().getFullYear();
 
-    // Create the year options array from foundedYear to currentYear
     const yearOp = [];
     for (let y = foundedYear; y <= currentYear; y++) {
-    yearOp.push({ id: String(y), name: y });
+        yearOp.push({ id: String(y), name: y });
     }
 
     const handleFormChange = (_, allValues) => {
-        const newPrice = allValues.businessPrice ?? price;
-        const newProfit = allValues.profit ?? profit;
-        const newProfitPeriod = allValues.profittime ?? profitPeriod;
-        const newRevenue = allValues.revenue ?? revenue;
-        const newRevenuePeriod = allValues.revenueTime ?? revenuePeriod;
-
-        setPrice(newPrice);
-        setProfit(newProfit);
-        setProfitPeriod(newProfitPeriod);
-        setRevenue(newRevenue);
-        setRevenuePeriod(newRevenuePeriod);
-
         setData(prev => ({
             ...prev,
-            revenueTime: allValues.revenueTime || prev.revenueTime,
-            revenue: allValues.revenue || prev.revenue,
-            profittime: allValues.profittime || prev.profittime,
-            profit: allValues.profit || prev.profit,
-            price: allValues.businessPrice || prev.price,
-            profitMargen: allValues.profitMargin || prev.profitMargen,
+            revenueTime: allValues.revenueTime,
+            revenue: allValues.revenue,
+            profittime: allValues.profittime,
+            profit: allValues.profit,
+            price: allValues.businessPrice,
+            profitMargen: allValues.profitMargin,
             assets: allValues.keyassets?.map(item => ({
-            name: item?.assetName || '',
-            quantity: item?.noItems || '',
-            purchaseYear: item?.purchaseYear || '',
-            price: item?.price || '',
-            })) || prev.assets,
-
+                name: item?.assetName || '',
+                quantity: item?.noItems || '',
+                purchaseYear: item?.purchaseYear || '',
+                price: item?.price || '',
+            })) || [],
             liabilities: allValues.liability?.map(item => ({
-            name: item?.liabilityName || '',
-            quantity: item?.quantity || '',
-            purchaseYear: item?.liabilitypurchaseYear || '',
-            price: item?.liabilityPrice || '',
-            })) || prev.liabilities,
-
+                name: item?.liabilityName || '',
+                quantity: item?.quantity || '',
+                purchaseYear: item?.liabilitypurchaseYear || '',
+                price: item?.liabilityPrice || '',
+            })) || [],
             inventoryItems: allValues.inventory?.map(item => ({
-            name: item?.inventoryName || '',
-            quantity: item?.inventoryquantity || '',
-            purchaseYear: item?.inventoryypurchaseYear || '',
-            price: item?.inventoryPrice || '',
-            })) || prev.inventoryItems,
+                name: item?.inventoryName || '',
+                quantity: item?.inventoryquantity || '',
+                purchaseYear: item?.inventoryypurchaseYear || '',
+                price: item?.inventoryPrice || '',
+            })) || [],
         }));
     };
 
@@ -72,7 +52,7 @@ const FinancialInfoStep = ({ data, setData }) => {
         form.setFieldsValue({
             revenueTime: data.revenueTime,
             revenue: data.revenue,
-            profitTime: data.profittime,
+            profittime: data.profittime,
             profit: data.profit,
             businessPrice: data.price,
             profitMargin: data.profitMargen,
@@ -80,79 +60,75 @@ const FinancialInfoStep = ({ data, setData }) => {
                 assetName: item.name,
                 noItems: item.quantity,
                 purchaseYear: item.purchaseYear,
-                price: item.price
+                price: item.price,
             })),
             liability: data.liabilities?.map(item => ({
                 liabilityName: item.name,
                 quantity: item.quantity,
                 liabilitypurchaseYear: item.purchaseYear,
-                liabilityPrice: item.price
+                liabilityPrice: item.price,
             })),
             inventory: data.inventoryItems?.map(item => ({
                 inventoryName: item.name,
                 inventoryquantity: item.quantity,
                 inventoryypurchaseYear: item.purchaseYear,
-                inventoryPrice: item.price
-            }))
+                inventoryPrice: item.price,
+            })),
         });
     }, [data]);
 
     useEffect(() => {
-        const adjustedRevenuePeriod = Number(revenuePeriod);
-        const adjustedProfitPeriod = Number(profitPeriod);
-        let adjustedRevenue = Number(revenue) || 0;
-        let adjustedProfit = Number(profit) || 0;
-    
-        // Adjust periods to match
-        if (adjustedProfitPeriod !== adjustedRevenuePeriod) {
-            if (adjustedProfitPeriod === 1 && adjustedRevenuePeriod === 2) {
-                // Profit = 6 months, Revenue = 12 → scale revenue down
-                adjustedRevenue = adjustedRevenue / 2;
-            } else if (adjustedProfitPeriod === 2 && adjustedRevenuePeriod === 1) {
-                // Profit = 12 months, Revenue = 6 → scale profit down
-                adjustedProfit = adjustedProfit / 2;
+        const allValues = form.getFieldsValue();
+
+        const revenue = Number(allValues.revenue || 0);
+        const profit = Number(allValues.profit || 0);
+        const price = Number(allValues.businessPrice || 0);
+        const profitPeriod = Number(allValues.profittime);
+        const revenuePeriod = Number(allValues.revenueTime);
+
+        let adjustedRevenue = revenue;
+        let adjustedProfit = profit;
+
+        if (profitPeriod !== revenuePeriod) {
+            if (profitPeriod === 1 && revenuePeriod === 2) {
+                adjustedRevenue = revenue / 2;
+            } else if (profitPeriod === 2 && revenuePeriod === 1) {
+                adjustedProfit = profit / 2;
             }
         }
-    
-        // Multiples calculation: avg monthly profit
-        const months = adjustedProfitPeriod === 1 ? 6 : 12;
+
+        const months = profitPeriod === 1 ? 6 : 12;
         const avgMonthlyProfit = adjustedProfit / months;
-    
-        const multiple =
-            price && avgMonthlyProfit && Number(avgMonthlyProfit) !== 0
-                ? (Number(price) / avgMonthlyProfit)
-                : '';
-    
+
+        const multiple = price && avgMonthlyProfit
+            ? (price / avgMonthlyProfit)
+            : '';
         const scaledMultiple = multiple
             ? Number(String(Math.floor(Math.abs(multiple)))[0])
             : null;
-    
-        const profitMargin =
-            adjustedRevenue && adjustedProfit && Number(adjustedRevenue) !== 0
-                ? ((adjustedProfit / adjustedRevenue) * 100).toFixed(2)
-                : '';
-    
-        const annualProfit = adjustedProfitPeriod === 1 ? adjustedProfit * 2 : adjustedProfit;
-    
-        const recoveryTime =
-            price && annualProfit && Number(annualProfit) !== 0
-                ? (Number(price) / Number(annualProfit)).toFixed(2)
-                : '';
-    
+
+        const profitMargin = adjustedRevenue
+            ? ((adjustedProfit / adjustedRevenue) * 100).toFixed(2)
+            : '';
+
+        const annualProfit = profitPeriod === 1 ? adjustedProfit * 2 : adjustedProfit;
+        const recoveryTime = annualProfit
+            ? (price / annualProfit).toFixed(2)
+            : '';
+
         setData(prev => ({
             ...prev,
             multiple: scaledMultiple,
             profitMargen: profitMargin,
             recoveryTime,
         }));
-    
+
         form.setFieldsValue({
             multiple: scaledMultiple,
             profitMargin,
             recoveryTime,
         });
-    
-    }, [price, profit, revenue, profitPeriod, revenuePeriod]);
+    }, [form]);
 
     return (
         <>
@@ -235,18 +211,26 @@ const FinancialInfoStep = ({ data, setData }) => {
                             </Form.Item>
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 24 }}>
-                        {profitPeriod && revenuePeriod && profitPeriod !== revenuePeriod && (
-                        <Text type="danger">
-                            Revenue is for {revenuePeriod === 1 ? '6 months' : '12 months'}, but Profit is for {profitPeriod === 1 ? '6 months' : '12 months'}. Profit Margin is adjusted accordingly.
-                        </Text>
-                        )}
+                        {(() => {
+                            const profitPeriod = form.getFieldValue('profittime');
+                            const revenuePeriod = form.getFieldValue('revenueTime');
+
+                            if (profitPeriod && revenuePeriod && profitPeriod !== revenuePeriod) {
+                            return (
+                                <Text type="danger">
+                                Revenue is for {revenuePeriod === 1 ? '6 months' : '12 months'}, but Profit is for {profitPeriod === 1 ? '6 months' : '12 months'}. Profit Margin is adjusted accordingly.
+                                </Text>
+                            );
+                            }
+                            return null;
+                        })()}
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
                                 label="Profit Margin"
                                 name="profitMargin"
                                 required
-                                message='Please enter profit margin'
+                                readOnly
                                 placeholder='Enter profit margin'
                                 suffix = '%'
                             />
@@ -272,7 +256,6 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 </Flex>}
                                 name='multiple'
                                 required
-                                message="Please enter multiple revenue & profit"
                                 className='w-100'
                                 readOnly
                                 value={data.multiple}

@@ -10,6 +10,16 @@ const ME = gql`
   }
 }
 `
+
+const NOTIFICATION = gql`
+  query GetNotifications($userId: ID!) {
+    getNotifications(userId: $userId) {
+      id
+      isRead
+    }
+  }
+`
 export {
     ME,
+    NOTIFICATION
 }

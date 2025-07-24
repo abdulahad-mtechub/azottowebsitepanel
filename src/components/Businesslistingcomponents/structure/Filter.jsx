@@ -13,6 +13,7 @@ const Filter = ({
     setOperationalYearRange, setHasAssets,setSelectedCategory
     }) => {
 
+        
     const [activeStep, setActiveStep] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
     // for filter it multiple with type number send just 1,instedc of 1x and 2 insted of 2x and so on
@@ -72,7 +73,7 @@ const Filter = ({
         },
         {
             key: '6',
-            label: <Text>Time Size</Text>,
+            label: <Text>Team Size</Text>,
             children: <Checkbox.Group className='w-100' 
             onChange={(checkedValues) => {
                 if (checkedValues?.length > 0) {
