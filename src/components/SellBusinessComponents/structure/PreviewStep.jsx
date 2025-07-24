@@ -2,7 +2,7 @@ import { Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { Link } from 'react-router-dom';
 import { BusinessStats } from './BusinessStats';
-import { inventColumn, inventData, keyassetData, keyassetsColumn, liabColumn, liabilityData, postsaleColumns, postsaleData } from '../../../data';
+import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../../../data';
 import { PreviewTableContent } from './PreviewTableContent';
 import { DocumentUploadedPrev } from './DocumentUploadedPrev';
 import { BusinessInfo } from './BusinessInfo';

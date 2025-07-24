@@ -193,6 +193,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 noStyle
                             >
                                 <Input
+                                type='number'
                                 placeholder="Enter revenue"
                                 className="w-100 "
                                 prefix={<img src="/assets/icons/reyal-g.png" width={15} />}
@@ -202,7 +203,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                         </Form.Item>
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                            <Form.Item label="Profit" className="w-100" >
+                            <Form.Item label="Profit" className="w-100">
                                 <Flex gap={2} className="w-100">
                                 <Form.Item name="profittime" noStyle>
                                     <Select
@@ -224,6 +225,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                     noStyle
                                 >
                                     <Input
+                                    type='number'
                                     placeholder="Enter profit"
                                     className="w-100"
                                     prefix={<img src="/assets/icons/reyal-g.png" width={14} />}
@@ -249,6 +251,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                                 suffix = '%'
                             />
                         </Col>
+                        
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
                                 label='Business Price'
@@ -260,6 +263,19 @@ const FinancialInfoStep = ({ data, setData }) => {
                                     <img src='/assets/icons/reyal-g.png' width={14} />
                                 }
                                 className='w-100'
+                            />
+                        </Col>
+                        <Col span={24}>
+                            <MyInput
+                                label={<Flex align='center' gap={5}>
+                                    Multiples of Revenue & Profit <Image preview={false} src="/assets/icons/info-outline.png" width={15} alt="" />
+                                </Flex>}
+                                name='multiple'
+                                required
+                                message="Please enter multiple revenue & profit"
+                                className='w-100'
+                                readOnly
+                                value={data.multiple}
                             />
                         </Col>
                     </Row>   

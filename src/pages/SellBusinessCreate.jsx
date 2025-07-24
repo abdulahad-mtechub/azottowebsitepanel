@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Breadcrumb, Flex, Typography, Steps, Button } from 'antd'
 import { CheckOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { BusinessDetailStep, BusinesslistingReviewModal, BusinessVisionStep, CancelModal, FinancialInfoStep, PreviewStep, UploadSupportDocStep } from '../components';
+import { BusinessDetailStep, BusinesslistingReviewModal, BusinessVisionStep, CancelModal, FinancialInfoStep, UploadSupportDocStep } from '../components';
 import { CREATE_BUSINESS } from "../graphql/mutation/mutations";
 import { useMutation } from '@apollo/client';
 import { message } from "antd";

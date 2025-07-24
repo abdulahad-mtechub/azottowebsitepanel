@@ -1,4 +1,4 @@
-import { Card, Col, Divider, Flex, Row, Typography} from 'antd';
+import { Card, Col, Flex, Row, Typography} from 'antd';
 import { ModuleTopHeading } from '../../Pagecomponents';
 import { Chart } from "react-google-charts";
 

@@ -5,7 +5,6 @@ import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
-import { districtOp } from "../data";
 import { NavLink } from "react-router-dom";
 import { district, cities  } from '../data';
 import imageCompression from 'browser-image-compression';

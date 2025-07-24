@@ -1,5 +1,4 @@
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
-import { businessInfoData } from '../../../data'
 import { OfferSellerModal, RequestMeetingModal } from '../modal'
 import { useState } from 'react'
 

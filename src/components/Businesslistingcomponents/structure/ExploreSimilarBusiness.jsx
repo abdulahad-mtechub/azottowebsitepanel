@@ -1,6 +1,4 @@
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
-import { RightOutlined } from '@ant-design/icons'
-import { exploreData } from '../../../data'
 import React from 'react'
 import { useQuery } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';

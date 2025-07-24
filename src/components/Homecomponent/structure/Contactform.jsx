@@ -1,7 +1,6 @@
 import React from 'react'
-import { Button, Card, Col, Divider, Flex, Form, Image, Row, Typography } from 'antd'
-import { exploreData } from '../../../data/featureData'
-import { RightOutlined, WhatsAppOutlined } from '@ant-design/icons'
+import { Button, Col, Divider, Flex, Form, Image, Row, Typography } from 'antd'
+import { WhatsAppOutlined } from '@ant-design/icons'
 import { MyInput } from '../../Forms'
 
 const { Text, Title } = Typography

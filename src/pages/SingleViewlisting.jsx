@@ -1,9 +1,9 @@
+import React, { useEffect } from 'react'
 import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { exploreData, inventColumn, inventData, keyassetData, keyassetsColumn, liabColumn, liabilityData, postsaleColumns, postsaleData } from '../data';
-import { AnnualProfitBarChart, BusinessInfoCard, BusinessStats, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
+import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../data';
+import { AnnualProfitBarChart, BusinessInfoCard, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
 import { RightOutlined } from '@ant-design/icons';
-import React, { useEffect } from 'react'
 import { useQuery } from '@apollo/client';
 import { GET_BUSINESS } from '../graphql/query/business';
 
