@@ -20,7 +20,6 @@ const BusinessListingPage = ({getcategory}) => {
     const [ isShow, setIsShow ] = useState(false)
 
     const [fetchBusinesses, { data: businesses, loading: isLoading, refetch }] = useLazyQuery(GET_ALL_BUSINESSES);
-console.log("businesses",businesses)
     const [selectedDistrict, setSelectedDistrict] = useState('Select District');
     const [selectedCity, setSelectedCity] = useState(null);
     const [searchSelectedCity, setsearchSelectedCity] = useState([]);
@@ -102,6 +101,14 @@ console.log("businesses",businesses)
         } else if (profit) {
           query = GET_BUSINESS_BY_PROFIT;
           variables = { profit, limit, offSet: 0 };
+        }else if(employeesRange) {
+            console.log("employeesRange",employeesRange)
+            query = GET_ALL_BUSINESSES;
+            variables = { filter: { employeesRange }, limit, offSet: 0 };
+        }else if(operationalYearRange){
+            console.log("operationalYearRange",operationalYearRange)
+            query = GET_ALL_BUSINESSES;
+            variables = { filter:{operationalYearRange}, limit, offSet: 0 };
         }
         
     
@@ -151,6 +158,7 @@ console.log("businesses",businesses)
       };
       
       const handleSearch = () => {
+        console.log("call")
         let variables;
         let query ;
         if (searchSelectedCity) {

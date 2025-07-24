@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route,useLocation } from "react-router-dom";
 import { FloatButton } from 'antd';
 import { UpOutlined } from '@ant-design/icons';
 import { Aboutus, Article, ArticleSingleView, BusinessListingPage, Faqs, ForgotPassword, Home, LoginPage, SellBusinessCreate, SignupPage, SingleViewlisting } from "../pages";
@@ -7,8 +7,13 @@ import { Termofuse } from "../pages";
 import { useEffect, useState } from "react";
 
 const AppRoutes = () => {
+  const location = useLocation();
   const [showButton, setShowButton] = useState(false);
   const [ getcategory, setGetCategory ] = useState(null)
+
+  const hideNavbarFooterOn = ['/login', '/signup']; // Add more paths here if needed
+  const shouldHideNavbarFooter = hideNavbarFooterOn.includes(location.pathname);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,7 +31,7 @@ const AppRoutes = () => {
   return (
     <>
       <ScrollTop />
-      <Navbar setGetCategory={setGetCategory} />
+      {!shouldHideNavbarFooter && <Navbar setGetCategory={setGetCategory} />}
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/sellbusinesscreate' element={<SellBusinessCreate />} />
@@ -41,8 +46,8 @@ const AppRoutes = () => {
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/forgotpass' element={<ForgotPassword />} />
       </Routes>
-      <Footer />
-      {showButton && (
+      {!shouldHideNavbarFooter && <Footer />}
+      {showButton && !shouldHideNavbarFooter && (
         <FloatButton 
           icon={<UpOutlined className="fs-14" />}
           type="primary"

@@ -98,7 +98,6 @@ import { MinusCircleFilled } from "@ant-design/icons";
 import { ModuleTopHeading } from "../../Pagecomponents";
 
 const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
-  console.log("datakey",dayKey)
   useEffect(() => {
     const fields = form.getFieldValue(dayKey) || [];
     if (fields.length === 0) {
@@ -108,8 +107,6 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
       });
       form.setFieldsValue({ [dayKey]: [defaultItem] });
     }
-  console.log("fields",fields)
-
   }, [dayKey, form, fieldsConfig]);
 
   return (
