@@ -33,7 +33,7 @@ const ExploreLive = () => {
                                                 </Button>
                                                 {
                                                     pro?.type &&
-                                                    <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-black':'bg-brand'}`}>
+                                                    <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
                                                         {pro?.type}
                                                     </Button>
                                                 }

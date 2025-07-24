@@ -9,32 +9,26 @@ const BusinessInfoCard = ({data}) => {
     const businessInfoData = [
         {
             id: 1,
+            icon:'/assets/icons/verification.png',
+            title:'Verified',
+            subtitle:'Identity Verification'
+        },
+        {
+            id: 2,
             icon:'/assets/icons/businessprice.png',
             title:`SAR ${data?.price?.toLocaleString() || '0'}`,
             subtitle:'Business Price'
         },
         {
-            id: 2,
-            icon:'/assets/icons/foundationdate.png',
-            title: `${data?.foundedDate ? new Date(data.foundedDate).getFullYear() : '0'}`,
-            subtitle:'Foundation Date'
-        },
-        {
             id: 3,
             icon:'/assets/icons/businesscate.png',
-            title:` ${data?.category?.name || '0'}`,
+            title:'Restaurant',
             subtitle:'Business Category'
-        },
-        {
-            id: 4,
-            icon:'/assets/icons/teamsize.png',
-            title:` ${data?.numberOfEmployees || '0'}`,
-            subtitle:'Team Size'
         },
         {
             id: 5,
             icon:'/assets/icons/businessloc.png',
-            title:` ${data?.district || 'Unknown'}`,
+            title:`${data?.district || 'Unknown'}`,
             subtitle:'Business Location'
         },
     ]

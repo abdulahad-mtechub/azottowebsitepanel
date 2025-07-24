@@ -202,7 +202,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                         </Form.Item>
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                            <Form.Item label="Profit" className="w-100" style={{ marginBottom: 0 }}>
+                            <Form.Item label="Profit" className="w-100" >
                                 <Flex gap={2} className="w-100">
                                 <Form.Item name="profittime" noStyle>
                                     <Select
@@ -260,19 +260,6 @@ const FinancialInfoStep = ({ data, setData }) => {
                                     <img src='/assets/icons/reyal-g.png' width={14} />
                                 }
                                 className='w-100'
-                            />
-                        </Col>
-                        <Col span={24}>
-                            <MyInput
-                                label={<Flex>
-                                    Multiples of Revenue & Profit <img src="/assets/icons/info-outline.png" width={20} alt="" />
-                                </Flex>}
-                                name='multiple'
-                                required
-                                message="Please enter multiple revenue & profit"
-                                className='w-100'
-                                readOnly
-                                value={data.multiple}
                             />
                         </Col>
                     </Row>   

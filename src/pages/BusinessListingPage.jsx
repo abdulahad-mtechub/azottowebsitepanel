@@ -1,5 +1,5 @@
 import React, { useState,useEffect,useMemo } from 'react'
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Form, Image, } from 'antd'
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image, } from 'antd'
 import { cities,district } from '../data/'
 import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../components'
 import { useNavigate } from 'react-router-dom';
@@ -186,6 +186,7 @@ console.log("businesses",businesses)
             console.log("No city or district selected.");
           }
       };
+      
 
     return (
   
@@ -274,8 +275,10 @@ console.log("businesses",businesses)
                         <Text className='text-gray fs-13'>
                         {`Showing ${((currentPage - 1) * limit) + 1}–${Math.min(currentPage * limit, totalCount || 0)} of ${totalCount || 0} Businesses`}
                         </Text>
-                        <Button type='button' onClick={()=>setIsShow(!isShow)} icon={<img src='/assets/icons/filter-bar.png' width={14}/>} className='btn rounded-8 border-gray text-black sm-hide'>
-                            Filter
+                        <Button type='button' onClick={()=>setIsShow(!isShow)} className='btn rounded-8 border-gray text-black sm-hide'>
+                            <Flex align='center' gap={3}>
+                                <img src='/assets/icons/filter-bar.png' width={14}/> Filter
+                            </Flex>
                         </Button>
                         <MySelect 
                             withoutForm
@@ -300,23 +303,43 @@ console.log("businesses",businesses)
                             }}
                         />
                     </Flex>
-                </Flex>   
-                <Row gutter={[24,24]}>
-                    <Col lg={{span: 6}} md={{span:0}} sm={{span:0}} xs={{span: 0}}>
-                        <Filter 
-                        multipleStep={multipleStep}
-                        setMultipleStep={setMultipleStep}
-                        setPriceRange={setPriceRange}
-                        setRevenueRange={setRevenueRange}
-                        setProfitRange={setProfitRange}
-                        setProfitMargenRange={setProfitMargenRange}
-                        setEmployeesRange={setEmployeesRange}
-                        setOperationalYearRange={setOperationalYearRange}
-                        setHasAssets={setHasAssets} 
-                        setSelectedCategory={setSelectedCategory}
-                        />
-                    </Col>
-                    <Col lg={{span: 18}} md={{span:24}} sm={{span:24}} xs={{span: 24}}>
+                </Flex>     
+                <Flex gap={isShow ?24:0} align="stretch" className="mb-4">
+                    <div className='sm-hide'>
+                        <AnimatePresence>
+                            {isShow && (
+                            <motion.div
+                                key="filter"
+                                initial={{ width: 0, opacity: 0 }}
+                                animate={{ width: 250, opacity: 1 }}
+                                exit={{ width: 0, opacity: 0 }}
+                                transition={{ duration: 0.4 }}
+                                style={{ overflow: 'hidden', flexShrink: 0 }}
+                            >
+                                <Filter 
+                                    multipleStep={multipleStep}
+                                    setMultipleStep={setMultipleStep}
+                                    setPriceRange={setPriceRange}
+                                    setRevenueRange={setRevenueRange}
+                                    setProfitRange={setProfitRange}
+                                    setProfitMargenRange={setProfitMargenRange}
+                                    setEmployeesRange={setEmployeesRange}
+                                    setOperationalYearRange={setOperationalYearRange}
+                                    setHasAssets={setHasAssets} 
+                                    setSelectedCategory={setSelectedCategory}
+                                />
+                            </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </div>
+
+                    <motion.div
+                        key="product"
+                        animate={{ width: isShow ? 'calc(100% - 250px)' : '100%' }}
+                        transition={{ duration: 0.4 }}
+                        style={{ minWidth: 0 }}
+                        className='mobile-100'
+                    >
                         <ProductCard
                         exploreData={
                             businessList?.map((biz) => ({
@@ -353,33 +376,6 @@ console.log("businesses",businesses)
                             setCurrentPage(1); // reset page on limit change
                         }}
                         />
-                    </Col>
-                </Row>   
-                <Flex gap={24} align="stretch" className="mb-4">
-                    {/* FILTER SECTION */}
-                    <AnimatePresence>
-                        {isShow && (
-                        <motion.div
-                            key="filter"
-                            initial={{ width: 0, opacity: 0 }}
-                            animate={{ width: 250, opacity: 1 }}
-                            exit={{ width: 0, opacity: 0 }}
-                            transition={{ duration: 0.4 }}
-                            style={{ overflow: 'hidden', flexShrink: 0 }}
-                        >
-                            <Filter />
-                        </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    {/* PRODUCT SECTION */}
-                    <motion.div
-                        key="product"
-                        animate={{ width: isShow ? 'calc(100% - 250px)' : '100%' }}
-                        transition={{ duration: 0.4 }}
-                        style={{ minWidth: 0 }}
-                    >
-                        <ProductCard />
                     </motion.div>
                 </Flex>
             </div>

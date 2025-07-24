@@ -219,17 +219,17 @@ const SellBusinessCreate = ({ addstep }) => {
                         className='mt-3'
                     />
 
-                    <div className="step-content">
+                    {/* <div className="step-content">
                         {isPreview &&
                             // ? isPreview
                                  <PreviewStep data={businessData} />
                                 // : <UploadSupportDocStep />
                             // : steps[current].content
                         }
-                    </div>
+                    </div> */}
                     <div className="step-content">{steps[current].content}</div>
 
-                    <Flex justify={
+                    {/* <Flex justify={
                         (isPreview) 
                             ? 'space-between' 
                             : 'end'
@@ -267,8 +267,8 @@ const SellBusinessCreate = ({ addstep }) => {
                                 </Button>
                             )}
                         </Flex>
-                    </Flex>
-                    {/* <Flex justify={'space-between'} gap={5} align='center'>
+                    </Flex> */}
+                    <Flex justify={'space-between'} gap={5} align='center'>
                         <Button type="button" className='btn border-gray text-black' onClick={()=>setIsCancel(true)}>
                             Cancel
                         </Button>
@@ -287,13 +287,13 @@ const SellBusinessCreate = ({ addstep }) => {
                                 </Button>
                             )}
 
-                            {current === steps.length - 1 && isPreview && (
+                            {current === steps.length - 1 && (
                                 <Button type="primary" className='btn bg-brand' onClick={handleCreateListing}>
                                     Publish
                                 </Button>
                             )}
                         </Flex>
-                    </Flex> */}
+                    </Flex>
                 </Flex>
             </div>
 

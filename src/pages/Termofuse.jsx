@@ -1,15 +1,10 @@
-import { useState } from 'react'
-import { Breadcrumb, Card, Col, Collapse, Flex, Row, Typography } from 'antd'
+import { Breadcrumb, Card, Col, Flex, Row, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom';
-import { faqsData } from '../data';
-import { MinusOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
-import { Contactform } from '../components';
+import { RightOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
-const { Panel } = Collapse;
 const Termofuse = () => {
     const navigate = useNavigate();
-    const [currentPanel,setCurrentPanel]=useState(['0'])
 
 
     return (

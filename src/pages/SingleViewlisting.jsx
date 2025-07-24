@@ -96,7 +96,6 @@ const SingleViewlisting = () => {
                                     <Title level={5} className='m-0'>
                                         {business?.businessTitle}
                                     </Title>
-                                    {/* <Text className='fs-13 text-gray fw-500'>Reference #: {data?.ref ? data?.ref: 'Not Found'}</Text> */}
                                     <Flex align='center' gap={5}>
                                         <Title level={5} className='m-0'>
                                             {data?.title}

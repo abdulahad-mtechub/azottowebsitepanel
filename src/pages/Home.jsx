@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd'
-import { BrowseType, Contactform, ExploreLive, Herosection, HowWork, JusoorFeature, JusoorFeatureMobile, JusoorFuturembl } from '../components'
+import { BrowseType, Contactform, ExploreLive, Herosection, HowWork, JusoorFeature, JusoorFuturembl } from '../components'
 
 const Home = () => {
   return (

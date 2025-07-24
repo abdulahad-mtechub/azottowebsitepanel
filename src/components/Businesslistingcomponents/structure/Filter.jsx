@@ -8,10 +8,10 @@ import {CustomProgressBar} from '../../ui';
 const { Text, Title } = Typography
 const Filter = ({ 
     multipleStep, setMultipleStep,
-  setPriceRange, setRevenueRange, setProfitRange,
-  setProfitMargenRange, setEmployeesRange,
-  setOperationalYearRange, setHasAssets,setSelectedCategory
- }) => {
+    setPriceRange, setRevenueRange, setProfitRange,
+    setProfitMargenRange, setEmployeesRange,
+    setOperationalYearRange, setHasAssets,setSelectedCategory
+    }) => {
 
     const [activeStep, setActiveStep] = useState(null);
     const [isMobile, setIsMobile] = useState(false);

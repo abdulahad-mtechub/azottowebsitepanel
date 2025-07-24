@@ -1,17 +1,30 @@
 import { CloseOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
 import { Button, Collapse, Drawer, Flex, Image, Typography } from 'antd'
 import { NavLink, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { mobilemenuData } from '../../../data';
 
 const { Title } = Typography
 const { Panel } = Collapse;
 
-const MobileNavbar = ({visible,onClose}) => {
+const MobileNavbar = ({ visible, onClose }) => {
 
-    const [currentPanel,setCurrentPanel]=useState([])
-    const [currentPanels,setCurrentPanels]=useState([])
+    const [currentPanel, setCurrentPanel] = useState([])
+    const [currentPanels, setCurrentPanels] = useState([])
     const navigate = useNavigate()
+
+    const [isDesktop, setIsDesktop] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth > 1199);
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (isDesktop) return null;
 
     return (
         <Drawer
@@ -19,7 +32,7 @@ const MobileNavbar = ({visible,onClose}) => {
             open={visible}
             title={null}
             closeIcon={false}
-            className='bg-dark-blue'
+            className={`bg-dark-blue`}
             placement='left'
         >
             <Flex justify='space-between' align='center'>
@@ -31,42 +44,47 @@ const MobileNavbar = ({visible,onClose}) => {
             <div className='mt-3'>
                 <Collapse
                     activeKey={currentPanel}
-                    onChange={(keys)=>{setCurrentPanel(keys)}}
+                    onChange={(keys) => { setCurrentPanel(keys) }}
                     ghost
                 >
                     {
-                        mobilemenuData?.map((menu,f)=>
-                            <Panel className={currentPanel.includes(String(f)) ? 'panel-active panel' : 'panel'}  showArrow={false} header={<Title level={5} className='text-white m-0'>{menu?.name}</Title>} key={f} 
-                                extra={((currentPanel?.findIndex(x=>x==f))>-1) ?
-                                <MinusOutlined className='text-white' 
-                                    style={{transition: 'transform 0.2s ease-in-out', fontSize: 14}} />
-                                :
-                                <PlusOutlined className='text-white' 
-                                    style={{transition: 'transform 0.2s ease-in-out', fontSize: 14}}/>}
-                                    
+                        mobilemenuData?.map((menu, f) =>
+                            <Panel
+                                className={currentPanel.includes(String(f)) ? 'panel-active panel' : 'panel'}
+                                showArrow={false}
+                                header={<Title level={5} className='text-white m-0'>{menu?.name}</Title>}
+                                key={f}
+                                extra={
+                                    ((currentPanel?.findIndex(x => x == f)) > -1) ?
+                                        <MinusOutlined className='text-white' style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14 }} />
+                                        :
+                                        <PlusOutlined className='text-white' style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14 }} />
+                                }
                             >
                                 <div>
                                     <Collapse
                                         activeKey={currentPanels}
-                                        onChange={(keys)=>{setCurrentPanels(keys)}}
+                                        onChange={(keys) => { setCurrentPanels(keys) }}
                                         ghost
                                     >
                                         {
-                                            menu?.children?.map((menuchild,f)=>
+                                            menu?.children?.map((menuchild, f) =>
                                                 menuchild?.innerchildren ? (
-                                                    <Panel className={currentPanels.includes(String(f)) ? 'panel-active panel' : 'panel'}  showArrow={false} header={
-                                                        <Title level={5} className='text-white m-0'>{menuchild?.name}</Title>} key={f} 
-                                                        extra={((currentPanels?.findIndex(x=>x==f))>-1) ?
-                                                        <MinusOutlined className='text-white' 
-                                                            style={{transition: 'transform 0.2s ease-in-out', fontSize: 14}} />
-                                                        :
-                                                        <PlusOutlined className='text-white' 
-                                                            style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14}}/>}
-                                                            
+                                                    <Panel
+                                                        className={currentPanels.includes(String(f)) ? 'panel-active panel' : 'panel'}
+                                                        showArrow={false}
+                                                        header={<Title level={5} className='text-white m-0'>{menuchild?.name}</Title>}
+                                                        key={f}
+                                                        extra={
+                                                            ((currentPanels?.findIndex(x => x == f)) > -1) ?
+                                                                <MinusOutlined className='text-white' style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14 }} />
+                                                                :
+                                                                <PlusOutlined className='text-white' style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14 }} />
+                                                        }
                                                     >
                                                         <Flex vertical gap={10}>
                                                             {
-                                                                menuchild?.innerchildren?.map((innerLink,i)=>
+                                                                menuchild?.innerchildren?.map((innerLink, i) =>
                                                                     <NavLink to={innerLink?.path} onClick={onClose} className='text-white fs-14' key={i}>
                                                                         {innerLink?.title}
                                                                     </NavLink>
@@ -87,9 +105,9 @@ const MobileNavbar = ({visible,onClose}) => {
                         )
                     }
                 </Collapse>
-                
+
                 <Flex justify='center'>
-                    <Button className='btn bg-brand mt-3' onClick={()=>{navigate('/sellbusinesscreate');onClose()}}>
+                    <Button className='btn bg-brand mt-3' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
                         <PlusOutlined /> Sell a Business
                     </Button>
                 </Flex>
@@ -98,4 +116,4 @@ const MobileNavbar = ({visible,onClose}) => {
     )
 }
 
-export {MobileNavbar}
+export { MobileNavbar }

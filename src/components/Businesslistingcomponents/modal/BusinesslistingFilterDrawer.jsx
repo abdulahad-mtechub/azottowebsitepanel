@@ -1,8 +1,22 @@
 import { CloseOutlined } from '@ant-design/icons'
 import { Button, Drawer, Flex } from 'antd'
 import { Filter } from '../structure';
+import { useEffect, useState } from 'react';
 
 const BusinesslistingFilterDrawer = ({visible,onClose}) => {
+
+    const [isDesktop, setIsDesktop] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => setIsDesktop(window.innerWidth > 1199);
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (isDesktop) return null;
 
     return (
         <Drawer
@@ -11,7 +25,7 @@ const BusinesslistingFilterDrawer = ({visible,onClose}) => {
             title={null}
             closeIcon={false}
             placement='left'
-            className='drawer-no-p'
+            className={`drawer-no-p`}
         >
             <Flex justify='end'>
                 <Button onClick={onClose} className='p-0 border-0 bg-transparent'>

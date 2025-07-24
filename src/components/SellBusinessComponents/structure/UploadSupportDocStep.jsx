@@ -96,7 +96,7 @@ const UploadSupportDocStep = ({ data, setData }) => {
 
   return (
     <>
-      <Flex vertical gap={1} className="mb-3">
+      <Flex justify='space-between' gap={5} wrap align='flex-start'>
         <Flex vertical gap={1} className='mb-3'>
           <ModuleTopHeading level={4} name='Upload supporting documents' />
           <Text className='text-gray'>Verified data builds buyer confidence.</Text>

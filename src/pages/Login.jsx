@@ -102,7 +102,6 @@ const { login } = useContext(AuthContext);
                     </Paragraph>
                 </div>
             </Col>
-
             <Col
                 xs={0}
                 md={10}

@@ -1,6 +1,6 @@
 import { Form, Button, Typography, Row, Col, Image, Flex } from "antd";
 import { MyInput } from "../components";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useState } from "react";
 
@@ -8,7 +8,6 @@ const { Title, Paragraph } = Typography;
 
 const ForgotPassword = () => {
     const [form] = Form.useForm();
-    const navigate = useNavigate()
     const [ requestState, setRequestState ] = useState('request')
 
 
