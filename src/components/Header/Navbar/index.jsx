@@ -122,6 +122,20 @@ const Navbar = ({setGetCategory}) => {
         </a>
       ),
     },
+    {
+      key: '2',
+      label: (
+        <a
+          href=""
+          onClick={(e) => {
+            e.preventDefault();
+            navigate('/profiledashboard')
+          }}
+        >
+          My Profile
+        </a>
+      ),
+    },
   ];
 
   return (
