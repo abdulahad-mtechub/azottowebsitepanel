@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd'
-import { BrowseType, Contactform, ExploreLive, Herosection, HowWork, JusoorFeature, JusoorFuturembl } from '../components'
+import { BrowseType, Contactform, ExploreLive, FaqsComponent, Herosection, HowWork, JusoorFeature, JusoorFuturembl } from '../components'
 
 const Home = () => {
   return (
@@ -16,7 +16,8 @@ const Home = () => {
         </Row>
         <ExploreLive />
         <BrowseType />
-        <Contactform />
+        {/* <Contactform /> */}
+        <FaqsComponent/>
     </div>
   )
 }

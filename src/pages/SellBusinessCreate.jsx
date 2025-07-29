@@ -216,7 +216,7 @@ const SellBusinessCreate = ({ addstep }) => {
                                 )}
                             </span>
                         )}
-                        className='mt-3'
+                        className='mt-3 steps-create'
                     />
 
                     {/* <div className="step-content">
@@ -269,9 +269,18 @@ const SellBusinessCreate = ({ addstep }) => {
                         </Flex>
                     </Flex> */}
                     <Flex justify={'space-between'} gap={5} align='center'>
-                        <Button type="button" className='btn border-gray text-black' onClick={()=>setIsCancel(true)}>
-                            Cancel
-                        </Button>
+                        {current === 0 ? (
+                                <Button type="button" className='btn border-gray text-black' onClick={()=>setIsCancel(true)}>
+                                    Cancel
+                                </Button>
+                            )
+                            :
+                            (
+                                <Button type="button" className='btn border-gray text-black' onClick={prev}>
+                                    Previous
+                                </Button>
+                            )  
+                        }
                         <Flex gap={10} justify='end'>
                             <Button
                                 className='btn text-black border-gray'

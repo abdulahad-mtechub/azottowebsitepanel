@@ -25,7 +25,7 @@ const BusinesslistingFilterDrawer = ({visible,onClose}) => {
             title={null}
             closeIcon={false}
             placement='left'
-            className={`drawer-no-p`}
+            className={`drawer-no-p p-2`}
         >
             <Flex justify='end'>
                 <Button onClick={onClose} className='p-0 border-0 bg-transparent'>

@@ -34,8 +34,8 @@ const BusinessVisionStep = ({ data, setData }) => {
     const [form] = Form.useForm();    
     return (
         <>
-            <Flex justify='space-between' gap={5} wrap align='flex-start'>
-                <Flex vertical gap={1} className='mb-3'>
+            <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
+                <Flex vertical gap={1} >
                     <ModuleTopHeading level={4} name='Business Vision & Exit Plans' />
                     <Text className='text-gray'>Help buyers understand the future potential and your exit strategy</Text>
                 </Flex>

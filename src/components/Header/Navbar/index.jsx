@@ -1,6 +1,6 @@
 import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown } from 'antd';
 import './index.css';
-import { Link, NavLink, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { businessmenuData, othersmenu } from '../../../data';
 import { useEffect, useState,useContext } from 'react';
@@ -15,10 +15,11 @@ const Navbar = ({setGetCategory}) => {
   const { isLoggedIn, logout } = useContext(AuthContext);
   const [isshow, setIsShow] = useState(isLoggedIn);
   const [ visible, setVisible ] = useState(false)
+  const location = useLocation();
   const navigate = useNavigate()
-  const otherPaths = ['/about', '/faq', '/termofuse', '/article'];
+  const otherPaths = ['/about', '/termofuse'];
   const others = otherPaths.includes(location.pathname);
-
+ 
 
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
@@ -188,7 +189,7 @@ const Navbar = ({setGetCategory}) => {
                           <Flex gap={10} align='center'>
                             <Image src={list?.icon} width={30} className='pt-1s' preview={false} />
                             <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
-                              <Title level={5} className='m-0'>{list?.title}</Title>
+                              <Title level={5} className='m-0 fw-500'>{list?.title}</Title>
                               <ArrowRightOutlined className='arr text-brand pt-1s' />
                             </Flex>
                           </Flex>
@@ -205,7 +206,7 @@ const Navbar = ({setGetCategory}) => {
                         <Flex gap={10} align='center'>
                           <Image src={'/assets/icons/browseall.png'} width={30} className='pt-1s' preview={false} />
                           <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
-                            <Title level={5} className='m-0'>Browse All</Title>
+                            <Title level={5} className='m-0 fw-500'>Browse All</Title>
                             <ArrowRightOutlined className='arr text-brand pt-1s' />
                           </Flex>
                         </Flex>
@@ -238,7 +239,7 @@ const Navbar = ({setGetCategory}) => {
                           <Flex gap={10} align='center'>
                             <Image src={list?.icon} width={30} className='pt-1s' preview={false} />
                             <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
-                              <Title level={5} className='m-0'>{list?.title}</Title>
+                              <Title level={5} className='m-0 fw-500'>{list?.title}</Title>
                               <ArrowRightOutlined className='arr text-brand pt-1s' />
                             </Flex>
                           </Flex>
@@ -246,6 +247,20 @@ const Navbar = ({setGetCategory}) => {
                       </li>
                     ))}
                   </ul>
+                </li>
+                <li>
+                  <NavLink to="/article">
+                    <Text className={`nav-item ${location.pathname === '/article' || location.pathname.startsWith('/articlesingleview/') ? 'text-brand' : 'text-white'}`}>
+                      Articles
+                    </Text>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/faq">
+                    <Text className={`nav-item ${location.pathname === '/faq' ? 'text-brand' : 'text-white'}`}>
+                      FAQs
+                    </Text>
+                  </NavLink>
                 </li>
               </ul>
             </Flex>

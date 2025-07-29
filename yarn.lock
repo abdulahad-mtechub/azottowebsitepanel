@@ -614,6 +614,18 @@
     redux-thunk "^3.1.0"
     reselect "^5.1.0"
 
+"@rive-app/canvas@2.30.4":
+  version "2.30.4"
+  resolved "https://registry.yarnpkg.com/@rive-app/canvas/-/canvas-2.30.4.tgz#8b9ba9086c8599d8cc77425eb2f451023721f4ae"
+  integrity sha512-kq8pUw6aexyEqnDG2hpw8NJiHfhaTycN6d+6Q1ogKG492NKWbcWHcVzXlcl77x0uWSEAKyKrOxzwOb+ebwUvZw==
+
+"@rive-app/react-canvas@^4.22.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@rive-app/react-canvas/-/react-canvas-4.22.1.tgz#c19de460437f4997aad382ced0fe4d6e4d153bc0"
+  integrity sha512-RJVoP60mi152u7Joh/x/DutKC4aSaMrxwR5LRrvOUZiJbJO9ZKWofyttZmHEYRw+sAhDGnvQ0eIdc2e/udkvSg==
+  dependencies:
+    "@rive-app/canvas" "2.30.4"
+
 "@rolldown/pluginutils@1.0.0-beta.27":
   version "1.0.0-beta.27"
   resolved "https://registry.yarnpkg.com/@rolldown/pluginutils/-/pluginutils-1.0.0-beta.27.tgz#47d2bf4cef6d470b22f5831b420f8964e0bf755f"

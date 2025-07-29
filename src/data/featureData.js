@@ -35,13 +35,13 @@ const exploreData = [
             {
                 id: 1,
                 icon:'/assets/icons/year-p.png',
-                subtitle:'SAR 50,000',
+                subtitle:'50,000',
                 subdesc:'Revenue/month',
             },
             {
                 id: 2,
                 icon:'/assets/icons/revenue.png',
-                subtitle:'SAR 25,000',
+                subtitle:'25,000',
                 subdesc:'Profit/month',
             },
             {
@@ -65,13 +65,13 @@ const exploreData = [
             {
                 id: 1,
                 icon:'/assets/icons/year-p.png',
-                subtitle:'SAR 50,000',
+                subtitle:'50,000',
                 subdesc:'Revenue/month',
             },
             {
                 id: 2,
                 icon:'/assets/icons/revenue.png',
-                subtitle:'SAR 25,000',
+                subtitle:'25,000',
                 subdesc:'Profit/month',
             },
             {
@@ -95,13 +95,13 @@ const exploreData = [
             {
                 id: 1,
                 icon:'/assets/icons/year-p.png',
-                subtitle:'SAR 50,000',
+                subtitle:'50,000',
                 subdesc:'Revenue/month',
             },
             {
                 id: 2,
                 icon:'/assets/icons/revenue.png',
-                subtitle:'SAR 25,000',
+                subtitle:'25,000',
                 subdesc:'Profit/month',
             },
             {
@@ -125,13 +125,13 @@ const exploreData = [
             {
                 id: 1,
                 icon:'/assets/icons/year-p.png',
-                subtitle:'SAR 50,000',
+                subtitle:'50,000',
                 subdesc:'Revenue/month',
             },
             {
                 id: 2,
                 icon:'/assets/icons/revenue.png',
-                subtitle:'SAR 25,000',
+                subtitle:'25,000',
                 subdesc:'Profit/month',
             },
             {
@@ -155,13 +155,13 @@ const exploreData = [
             {
                 id: 1,
                 icon:'/assets/icons/year-p.png',
-                subtitle:'SAR 50,000',
+                subtitle:'50,000',
                 subdesc:'Revenue/month',
             },
             {
                 id: 2,
                 icon:'/assets/icons/revenue.png',
-                subtitle:'SAR 25,000',
+                subtitle:'25,000',
                 subdesc:'Profit/month',
             },
             {
@@ -185,13 +185,13 @@ const exploreData = [
             {
                 id: 1,
                 icon:'/assets/icons/year-p.png',
-                subtitle:'SAR 50,000',
+                subtitle:'50,000',
                 subdesc:'Revenue/month',
             },
             {
                 id: 2,
                 icon:'/assets/icons/revenue.png',
-                subtitle:'SAR 25,000',
+                subtitle:'25,000',
                 subdesc:'Profit/month',
             },
             {
@@ -401,27 +401,27 @@ const othersmenu = [
         subtitle: 'Choose from popular business types.',
         path:'/about'
     },
+    // {
+    //     id: 2,
+    //     icon: '/assets/icons/fq.png',
+    //     title: 'FAQs',
+    //     subtitle: 'Find businesses in your city.',
+    //     path:'/faq'
+    // },
     {
         id: 2,
-        icon: '/assets/icons/fq.png',
-        title: 'FAQs',
-        subtitle: 'Find businesses in your city.',
-        path:'/faq'
-    },
-    {
-        id: 3,
         icon: '/assets/icons/tu.png',
         title: 'Term of Use',
         subtitle: 'Explore based on profit margin.',
         path:'/termofuse'
     },
-    {
-        id: 4,
-        icon: '/assets/icons/art.png',
-        title: 'Articles',
-        subtitle: 'Filter by business earnings.',
-        path:'/article'
-    },
+    // {
+    //     id: 4,
+    //     icon: '/assets/icons/art.png',
+    //     title: 'Articles',
+    //     subtitle: 'Filter by business earnings.',
+    //     path:'/article'
+    // },
 ]
 
 
@@ -647,18 +647,8 @@ const mobilemenuData = [
             },
             {
                 id: 2,
-                name: 'Q&A',
-                Path: '/faq'
-            },
-            {
-                id: 3,
                 name: 'Term of Use',
                 Path: '/termofuse'
-            },
-            {
-                id: 4,
-                name: 'Articles',
-                Path: '/article'
             },
         ]
     }
