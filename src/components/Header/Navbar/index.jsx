@@ -6,21 +6,39 @@ import { businessmenuData, othersmenu } from '../../../data';
 import { useEffect, useState,useContext } from 'react';
 import { MobileNavbar } from './MobileNavbar';
 import { AuthContext } from '../../../context/AuthContext';
-
+import { useLazyQuery } from '@apollo/client';
+import { ME,NOTIFICATION } from '../../../graphql/query';
 
 const { Text, Title } = Typography;
 
 const Navbar = ({setGetCategory}) => { 
-
   const { isLoggedIn, logout } = useContext(AuthContext);
   const [isshow, setIsShow] = useState(isLoggedIn);
+  const userId = localStorage.getItem('userId');
+  const [user, setUser] = useState(null);
+  const [notificationCount, setNotificationCount] = useState();
   const [ visible, setVisible ] = useState(false)
   const location = useLocation();
   const navigate = useNavigate()
   const otherPaths = ['/about', '/termofuse'];
   const others = otherPaths.includes(location.pathname);
- 
+    // ✅ Setup the lazy query
+    const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
+    const [getNotification, { data:notifications, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
 
+    useEffect(() => {
+      if (userId) {
+        getUser({ variables: { getUserId: userId } });
+        getNotification({ variables: { userId } });
+      }
+    }, [userId]);
+  
+    useEffect(() => {
+      if (me?.getUser) {
+        setUser(me.getUser);
+        setNotificationCount(notifications?.length)
+      }
+    }, [me]);
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
       return (
@@ -202,7 +220,7 @@ const Navbar = ({setGetCategory}) => {
                       </li>
                     ))}
                     <li className='drop-item'>
-                      <NavLink to={'/browseall'} className='drop-link'>
+                      <NavLink to={'/businesslisting'} className='drop-link'>
                         <Flex gap={10} align='center'>
                           <Image src={'/assets/icons/browseall.png'} width={30} className='pt-1s' preview={false} />
                           <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
@@ -277,30 +295,47 @@ const Navbar = ({setGetCategory}) => {
                 </Flex>
               :
               <Flex gap={10} align='center'>
-                <Button className='btn bg-brand' onClick={()=>navigate('/sellbusinesscreate')}>
-                  <PlusOutlined /> Sell a Business
+              <Button className='btn bg-brand' onClick={() => navigate('/sellbusinesscreate')}>
+                <PlusOutlined /> Sell a Business
+              </Button>
+              
+              <Badge size="small" count={notificationCount} overflowCount={1}>
+                <Button className='bg-transparent border-0 p-0'>
+                  <Image 
+                    src='/assets/icons/notification.png' 
+                    width={'28px'} 
+                    preview={false}
+                    alt="tci" 
+                    className="up"
+                  />
                 </Button>
-                <Badge size="small" count={1} overflowCount={1} >
-                  <Button className='bg-transparent border-0 p-0'>
-                    <Image 
-                      src='/assets/icons/notification.png' 
-                      width={'28px'} 
-                      preview={false}
-                      alt="tci" 
-                      className="up"
-                    />
-                  </Button>
-                </Badge>
-                <Dropdown
-                  menu={{items}}
-                  trigger={['click']}
-                >
-                  <Flex align='center' gap={10}>
-                    <Image src='/assets/images/av-1.png' preview={false} width={40} style={{borderRadius:50}}/>
-                    <DownOutlined className='text-white fs-13' />
-                  </Flex>
-                </Dropdown>
-              </Flex>
+              </Badge>
+
+              <Dropdown menu={{ items }} trigger={['click']}>
+                <Flex align='center' gap={10}>
+                  {/* Profile Initial Avatar */}
+                  <div
+                    style={{
+                      width: 40,
+                      height: 40,
+                      borderRadius: '50%',
+                      backgroundColor: '#4F46E5',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      color: '#fff',
+                      fontWeight: 'bold',
+                      fontSize: '16px',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {user?.name?.charAt(0)}
+                  </div>
+
+                  <DownOutlined className='text-white fs-13' />
+                </Flex>
+              </Dropdown>
+            </Flex>
               }
             </div>
           </div>
