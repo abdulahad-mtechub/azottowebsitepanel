@@ -11,7 +11,7 @@ const PayBusinessAmountstep = ({form,completedeal}) => {
             {
                 paybusinessData?.map((list,index)=>
                     <Col xs={24} sm={12} md={6} lg={6} key={index}>
-                        <Flex vertical gap={0}>
+                        <Flex vertical gap={4}>
                             <Text className='fw-500 fs-14'>{list?.title}</Text>
                             <Text className='fs-14 text-gray'>{list?.desc}</Text>
                         </Flex>
