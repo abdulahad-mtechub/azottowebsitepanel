@@ -70,7 +70,7 @@ const BusinessInfoCard = ({data}) => {
                         <Flex vertical gap={5}>
                             <Button className='btn bg-brand' onClick={()=>setOfferSeller(true)}>Make an Offer</Button>
                             <Button className='btn bg-dark-blue' onClick={()=>setMeetingModal(true)}>Request Meeting</Button>
-                            <Button className='btn bg-green text-white'>Proceed to Purchase</Button>
+                            <Button className='btn bg-green text-white' onClick={()=>setMeetingModal(true)}>Proceed to Purchase</Button>
                         </Flex>
                     </Col>
                 </Row>

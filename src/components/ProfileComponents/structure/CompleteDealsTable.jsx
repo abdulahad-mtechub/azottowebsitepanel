@@ -1,10 +1,14 @@
 import { Col, Form, Row, Table } from 'antd'
-import { offerData } from '../../../data';
 import { SearchInput } from '../../Forms';
+import React,{ useMemo,useEffect, } from 'react'
+import { useLazyQuery } from '@apollo/client';
+import {OFFERBYSELLER } from '../../../graphql/query';
 
 const CompleteDealsTable = ({setCompleteDeal}) => {
-
     const [form] = Form.useForm()
+    const search = Form.useWatch('search', form);
+    const [fetchDeals, { data: offerDeals, loading }] = useLazyQuery(OFFERBYSELLER);
+
 
     const columns = [
         { title: 'Business Title', dataIndex: 'title' },
@@ -13,6 +17,19 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
         { title: 'Finalized Date', dataIndex: 'date' },
     ];
 
+    const offerData = useMemo(() => {
+        return offerDeals?.getOffersBySeller?.map((offer) => ({
+            key: offer.id,
+            title: offer.business.businessTitle,
+            sellername: offer.business.seller.name,
+            offerprice: offer.price,
+            date: new Date(offer.createdAt).toLocaleString(),
+        })) || [];
+    }, [offerDeals]);
+
+    useEffect(() => {
+        fetchDeals({ variables: { status: 'ACCEPTED', search: search || '' } });
+    }, [search]);
 
     return (
         <>    
@@ -22,6 +39,7 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
                         placeholder="Search"
                         value={form.getFieldValue('name') || ''}
                         prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                        onChange={(e) => form.setFieldValue("search", e.target.value)}
                     />
                 </Col>
                 <Col span={24}>

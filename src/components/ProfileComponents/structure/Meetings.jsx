@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState } from 'react';
+import React,{useState,useEffect} from 'react'
 import { Card, Col, Row, Typography, Tabs } from 'antd'
 import { SellerSendRequestTable } from './SellerSenRequestTable';
 import { SellerRecieveRequestTable } from './SellerRecieveRequestTable';

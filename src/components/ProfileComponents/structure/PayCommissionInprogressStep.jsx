@@ -1,11 +1,31 @@
-import React from 'react'
 import { paycommissionData } from '../../../data'
 import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
+import { useQuery } from '@apollo/client';
+import React from 'react'
+import {GETADMINACTIVEBANK } from '../../../graphql/query';
+
 
 const { Text } = Typography
-const PayCommissionInprogressStep = ({form,completedeal}) => {
+const PayCommissionInprogressStep = ({form,inprogressdeal}) => {
+const { loading, error, data } = useQuery(GETADMINACTIVEBANK);
 
+const commission = inprogressdeal?.offerprice * 0.16 
+
+const paycommissionData = [
+    {
+      title:'Jusoor Bank Name',
+      desc:data?.getActiveAdminBank?.accountTitle
+    },
+    {
+      title:'IBAN Number',
+      desc:data?.getActiveAdminBank?.iban
+    },
+    {
+      title:'Commission Amount to Pay',
+      desc:commission
+    },
+  ]
     return (
         <Row gutter={[16, 24]}>
             {
@@ -20,7 +40,7 @@ const PayCommissionInprogressStep = ({form,completedeal}) => {
             }
             <Col span={24}>
                 {
-                    completedeal ? (
+                    inprogressdeal ? (
                         <Card className='card-cs border-gray rounded-12' >
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={15}>
@@ -52,7 +72,7 @@ const PayCommissionInprogressStep = ({form,completedeal}) => {
                 }
             </Col>
             {
-                !completedeal && (
+                !inprogressdeal && (
                     <Col span={24}>
                         <Flex>
                             <Button type="primary" className='btn bg-brand'>

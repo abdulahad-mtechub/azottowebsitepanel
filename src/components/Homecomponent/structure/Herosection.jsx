@@ -1,8 +1,10 @@
 import { Row, Col, Typography, Flex, Button, Image } from 'antd'
 import { RightOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 
 const { Title, Text } = Typography;
 const Herosection = () => {
+  const navigate = useNavigate();
 
   return (
     <section className='hero'>
@@ -18,10 +20,10 @@ const Herosection = () => {
                 Explore real, revenue-generating businesses across Saudi Arabia. Whether you're an investor or an owner, Jusoor makes the process safe, simple, and secure.
               </Text>
               <Flex gap={10} className='mt-2 center-mbl'>
-                <Button className='btn bg-brand'>
+                <Button className='btn bg-brand' onClick={() => navigate('/businesslisting')}>
                   Explore Businesses
                 </Button>
-                <Button className='btn bg-white text-dark'>
+                <Button className='btn bg-white text-dark' onClick={() => navigate('/sellbusinesscreate')}>
                   Sell Your Business <RightOutlined className='fs-10' />
                 </Button>
               </Flex>
