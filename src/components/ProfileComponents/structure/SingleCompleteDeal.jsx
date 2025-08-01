@@ -26,7 +26,7 @@ const SingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
                         title: <Text className='fs-13 text-gray cursor' onClick={() => setCompleteDeal(null)}>Deals</Text>,
                     },
                     {
-                        title: <Text className='fw-500 fs-13 text-black'>{offer?.business?.businessTitle}</Text>,
+                        title: <Text className='fw-500 fs-13 text-black'>{offerData?.business?.businessTitle}</Text>,
                     },
                 ]}
             />
@@ -43,10 +43,10 @@ const SingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
             <div className='deals-status'>
                 <Row gutter={[16, 16]}>
                     {[
-                         { title: 'Price', desc: offer?.price },
-                         { title: 'Status', desc: offer?.status },
-                         { title: 'Buyer', desc: offer?.buyer?.name },
-                         { title: 'Created At', desc: new Date(offer?.createdAt).toLocaleString() },
+                         { title: 'Price', desc: offerData?.price },
+                         { title: 'Status', desc: offerData?.status },
+                         { title: 'Buyer', desc: offerData?.buyer?.name },
+                         { title: 'Created At', desc: new Date(offerData?.createdAt).toLocaleString() },
                     ]?.map((list,index)=>
                             <Col xs={24} sm={12} md={6} lg={6} key={index}>
                                 <Flex vertical gap={0}>
