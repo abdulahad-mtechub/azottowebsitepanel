@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
-import { Breadcrumb, Flex, Typography, Steps, Card, Collapse, Form } from 'antd';
-import { CheckOutlined, DownOutlined, RightOutlined, UpOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import React, { useState,useEffect } from 'react';
+import { Breadcrumb, Flex, Typography, Steps, Collapse, Form } from 'antd';
+import { CheckOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { PayCommissionInprogressStep } from './PayCommissionInprogressStep';
 import { DigitalSaleAgreementStep } from './DigitalSaleAgreementStep';
 import { PayBusinessAmountstep } from './PayBusinessAmountstep';
@@ -9,34 +8,41 @@ import { FinalDealsStep } from './FinalDealsStep';
 
 const { Text } = Typography;
 
-const SingleInprogressSteps = ({completedeal}) => {
+const SingleInprogressSteps = ({inprogressdeal,offer}) => {
     const [form] = Form.useForm();
-    const [activeStep, setActiveStep] = useState(completedeal ? 3:0);
-    const [openPanels, setOpenPanels] = useState( completedeal ? ['1','2','3','4'] : ['1']);
+    const [activeStep, setActiveStep] = useState(inprogressdeal ? 3:0);
+    const [openPanels, setOpenPanels] = useState( inprogressdeal ? ['1','2','3','4'] : ['1']);
+    const [bank, setBank] = useState();
+
+    useEffect(() => {
+            if (offer) {
+                setBank(offer?.business?.seller?.banks[0]);
+            }
+    }, [offer]);
 
     const steps = [
         {
             key: '1',
             label: 'Pay Commission',
-            content: <PayCommissionInprogressStep form={form} completedeal={completedeal} />,
+            content: <PayCommissionInprogressStep form={form} inprogressdeal={inprogressdeal} />,
             status: 'Verified'
         },
         {
             key: '2',
             label: 'Digital Sale Agreement',
-            content: <DigitalSaleAgreementStep form={form} completedeal={completedeal} />,
+            content: <DigitalSaleAgreementStep form={form} inprogressdeal={inprogressdeal} />,
             status: 'Signed'
         },
         {
             key: '3',
             label: 'Pay Business Amount',
-            content: <PayBusinessAmountstep  completedeal={completedeal} />,
+            content: <PayBusinessAmountstep  inprogressdeal={inprogressdeal} bank={bank} />,
             status: 'Verified'
         },
         {
             key: '4',
             label: 'Finalize Deal',
-            content: <FinalDealsStep  completedeal={completedeal} />,
+            content: <FinalDealsStep  inprogressdeal={inprogressdeal} />,
             status: 'Deal Closed'
         },
     ];
