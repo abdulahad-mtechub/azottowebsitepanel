@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../data';
-import { AnnualProfitBarChart, BusinessInfoCard, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
+import { AnnualProfitBarChart, BusinessInfoCard, BusinessInfoCardMobile, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
 import { RightOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import { GET_BUSINESS } from '../graphql/query/business';
@@ -57,7 +57,7 @@ const SingleViewlisting = () => {
         // You can use it in a query to fetch full business
       }, [id]);
     return (
-        <div className='padd-1'>
+        <div className='padd-1 relative'>
             <div className='container'>
                 <Breadcrumb
                     separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
@@ -155,10 +155,11 @@ const SingleViewlisting = () => {
                         <PreviewTableContent title='Key Asset' columns={keyassetsColumn} data={assetsData} />
                         <PreviewTableContent title='Inventory' columns={inventColumn} data={inventoryData} />
                     </Col>
-                    <Col lg={{span: 6}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
+                    <Col lg={{span: 6}} md={{span: 0}} sm={{span: 0}} xs={{span: 0}}>
                         <BusinessInfoCard data={business} />
                     </Col>
                 </Row>
+                <BusinessInfoCardMobile/>
             </div>
             <ExploreSimilarBusiness id={business?.id} />
         </div>

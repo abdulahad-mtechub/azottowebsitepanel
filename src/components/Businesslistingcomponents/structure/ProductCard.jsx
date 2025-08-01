@@ -6,7 +6,7 @@ import { useMutation } from '@apollo/client';
 import { message } from "antd";
 
 
-const { Title, Text } = Typography
+const { Title, Text, Paragraph } = Typography
 const ProductCard = ({
     exploreData,
     refetchBusinesses,
@@ -80,9 +80,12 @@ const ProductCard = ({
                                 <Title className='' level={5}>
                                     {pro?.title}
                                 </Title>
-                                <Text className='fs-14 text-gray'>
-                                    {pro?.description?.split(" ").slice(0, 50).join(" ") + (pro?.description?.split(" ").length > 50 ? "..." : "")}
-                                </Text>
+                                <Paragraph
+                                    ellipsis={{ rows: 3, expandable: false, symbol: 'more' }}
+                                    className='fs-14 text-gray'
+                                >
+                                    {pro?.description}
+                                </Paragraph>
                                 <Divider className='my-1' />
                                 <Row justify={'space-between'}>
                                     {
@@ -90,8 +93,8 @@ const ProductCard = ({
                                             <React.Fragment key={c}>
                                                 <Col span={7}>
                                                     <Flex vertical>
-                                                    <Title level={5} className='text-brand m-0 fs-13'>
-                                                        {item?.subtitle}
+                                                    <Title level={5} className='text-brand m-0 fs-13 fw-500'>
+                                                        <img src="/assets/icons/reyal-b.png" width={10} alt="" /> {item?.subtitle}
                                                     </Title>
                                                     <Text className='text-gray fs-12'>
                                                         {item?.subdesc}

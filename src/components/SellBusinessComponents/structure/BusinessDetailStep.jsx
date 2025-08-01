@@ -65,8 +65,8 @@ const BusinessDetailStep = ({ data, setData }) => {
 
     return (
       <>
-        <Flex justify='space-between' gap={5} wrap align='flex-start'>
-          <Flex vertical gap={1} className='mb-3'>
+        <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
+          <Flex vertical gap={1} >
               <ModuleTopHeading level={4} name='Tell us about your business' />
               <Text className='text-gray'>Let’s start with the basic business information</Text>
           </Flex>
@@ -154,6 +154,7 @@ const BusinessDetailStep = ({ data, setData }) => {
               <Col xs={24} sm={24} md={12}>
                 <MyDatepicker
                   datePicker
+                  picker="year"
                   label="Foundation Date"
                   name="dob"
                   required

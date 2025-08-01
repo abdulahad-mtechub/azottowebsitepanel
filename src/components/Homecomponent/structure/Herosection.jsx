@@ -11,7 +11,7 @@ const Herosection = () => {
           <div className="container">
             <Flex vertical gap={10} className='div center-mbl'>
               <div className='tag'>Trusted Marketplace for Saudi Businesses</div>
-              <Title className='m-0 text-white' level={1}>
+              <Title className='m-0 text-white mbl-font' level={1}>
                 Buy or Sell a Verified <br /> Business with <span className='text-brand'>Confidence</span>
               </Title>
               <Text className='text-light-gray my-2'>

@@ -132,8 +132,8 @@ const FinancialInfoStep = ({ data, setData }) => {
 
     return (
         <>
-            <Flex justify='space-between' gap={5} wrap align='flex-start'>
-                 <Flex vertical gap={1} className='mb-3'>
+            <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
+                 <Flex vertical gap={1}>
                     <ModuleTopHeading level={4} name='Share your business numbers & potential' />
                     <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
                 </Flex>
@@ -147,7 +147,7 @@ const FinancialInfoStep = ({ data, setData }) => {
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <Row gutter={24}>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                        <Form.Item label="Revenue" className="w-100" style={{ marginBottom: 0 }}>
+                        <Form.Item label="Revenue" className="w-100">
                             <Flex gap={2} className="w-100">
                             <Form.Item name="revenueTime" noStyle>
                                 <Select

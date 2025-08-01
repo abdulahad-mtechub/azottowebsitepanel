@@ -134,7 +134,7 @@
 }
 
 .container{
-    width: 90%;
+    width: 94%;
     margin-right: auto;
     margin-left: auto;
 }
@@ -494,6 +494,17 @@
     background-color: transparent !important;
 }
 
+.steps-create.ant-steps-dot .ant-steps-item-tail::after{
+    height: 1px !important;
+}
+
+.steps-create .ant-steps-item-process>.ant-steps-item-container>.ant-steps-item-tail::after {
+    background-color: rgb(128 128 128) !important;
+}
+
+.steps-create .ant-steps-item-wait>.ant-steps-item-container>.ant-steps-item-tail::after{
+    background-color: rgb(128 128 128) !important
+}
 .text-black{
     color: var(--black-color) !important;
 }
@@ -1048,6 +1059,27 @@
 	background-color: #555;
 }
 
+
+
+
+.no-display-scroll::-webkit-scrollbar-track
+{
+	border-radius: 0px;
+}
+
+.no-display-scroll::-webkit-scrollbar
+{
+	width: 0px;
+	background-color: transparent;
+}
+
+.no-display-scroll::-webkit-scrollbar-thumb
+{
+	border-radius: 0px;
+	background-color: transparent;
+}
+
+
 .sm-hide{display: inline-block;}
 
 .pill-round{
@@ -1181,9 +1213,60 @@
     color: #FF9800;
 }
 
+.pl-2{
+    padding-left: 16px !important;
+}
+
+.fs-17{
+    font-size: 17px !important;
+}
+
+.relative{
+    position: relative;
+}
+
+.mobile-view-info {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 9999;
+  display: none; 
+  border-top: 2px solid var(--blue);
+}
+
+.mobile-view-info .flex-card {
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: auto;
+  display: flex;
+  gap: 16px;
+  scroll-behavior: smooth;
+  justify-content: space-between;
+}
+
+.mobile-view-info .flex-card > * {
+  flex: 0 0 auto;
+}
+
+
 
 /* media queries  */
+
+@media (max-width: 575px){
+    .steps-create.ant-steps-dot .ant-steps-item-tail::after{
+        height:    100% !important;
+    }
+    .mbl-pad{
+        padding: 10px 12px !important;
+    }
+}
+
 @media (max-width: 991px){
+    .hero {
+        padding-top: 50px;
+    }
     .hero .inner{
         justify-content: center;
         flex-direction: column-reverse;
@@ -1207,10 +1290,24 @@
     }
     .heroimginner .mbl-vw{
         display: block;
-        padding: 40px;
+        padding: 0px 40px;
         width: 400px;
         min-width: 500px;
     }
+    .center-mbl{
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+    }
+    .mbl-font{
+        font-size: 1.5rem !important;
+    }
+    .center-mbl .tag{
+        margin-bottom: .5rem !important;
+    }
+    .mobile-view-info{
+        display: block;
+    }  
 }
 
 
@@ -1234,6 +1331,10 @@
     .mobile-100{
         width: 100% !important;
     }
+    .hero{
+        background-image: url('../assets/images/mobile-shade.svg') !important;
+    }
+    
 }
 
 @media (min-width: 1200px) {

@@ -17,7 +17,7 @@
 }
 
 .gen-navbar>.gen-navbar-inner{
-    width:92%;
+    width:94%;
     flex-wrap: wrap;
     display: flex;
     align-items: center;
@@ -42,6 +42,7 @@
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .gen-navbar-small .sp-cover{display: flex;flex-direction: column;cursor: pointer;}
@@ -73,7 +74,7 @@ a{
 
 @media (max-width: 991px){
     .gen-navbar-left img{
-        max-width: 90px !important;
+        max-width: 110px !important;
     }
     .gen-navbar-small .sp {
         width: 30px;

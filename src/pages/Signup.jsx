@@ -395,7 +395,7 @@ const SignupPage = () => {
                             <Flex gap={10} justify='end'>
                                 <Button type="button" className="btn bg-transparent border-gray text-black fs-14 my-2" 
                                     onClick={prev}
-                                    disabled={current === 0 ? true: false}
+                                    disabled={current <= 0 ? true: false}
                                     block
                                 >
                                     Back

@@ -3,13 +3,13 @@ import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
 import { exploreData } from '../../../data/featureData'
 import { RightOutlined } from '@ant-design/icons'
 
-const { Text, Title } = Typography
+const { Text, Title, Paragraph } = Typography
 const ExploreLive = () => {
 
     return (
         <div className='feature bg-light-brand'>
             <div className='container'>
-                <Row gutter={[24, 24]}>
+                <Row gutter={[12, 24]}>
                     <Col span={24}>
                         <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
                             <div className='tag fw-500 bg-secondary fw-500 text-brand'>Explore Live Listings</div>
@@ -23,7 +23,7 @@ const ExploreLive = () => {
                     </Col>
                     {
                         exploreData?.slice(0,4)?.map((pro,i)=>
-                            <Col lg={{span: 6}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
+                            <Col xl={{span: 6}} lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
                                 <Card className='h-100 border-gray rounded-12 card-cs' >
                                     <Flex vertical gap={20}>
                                         <Flex justify='space-between' align='center'>
@@ -54,9 +54,12 @@ const ExploreLive = () => {
                                             <Title className='' level={5}>
                                                 {pro?.title}
                                             </Title>
-                                            <Text className='fs-14 text-gray'>
+                                            <Paragraph
+                                                ellipsis={{ rows: 3, expandable: false, symbol: 'more' }}
+                                                className='fs-14 text-gray'
+                                            >
                                                 {pro?.description}
-                                            </Text>
+                                            </Paragraph>
                                             <Divider className='my-1' />
                                             <Row justify={'space-between'}>
                                                 {
@@ -64,12 +67,12 @@ const ExploreLive = () => {
                                                         <React.Fragment key={c}>
                                                             <Col span={7}>
                                                                 <Flex vertical>
-                                                                <Title level={5} className='text-brand m-0 fs-13'>
-                                                                    {item?.subtitle}
-                                                                </Title>
-                                                                <Text className='text-gray fs-12'>
-                                                                    {item?.subdesc}
-                                                                </Text>
+                                                                    <Text className='text-brand fw-500 m-0 fs-13'>
+                                                                        <img src="/assets/icons/reyal-b.png" width={8} alt="" /> {item?.subtitle}
+                                                                    </Text>
+                                                                    <Text className='text-gray fs-12'>
+                                                                        {item?.subdesc}
+                                                                    </Text>
                                                                 </Flex>
                                                             </Col>
                                                             {

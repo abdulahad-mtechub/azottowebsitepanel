@@ -36,7 +36,9 @@ const MobileNavbar = ({ visible, onClose }) => {
             placement='left'
         >
             <Flex justify='space-between' align='center'>
-                <Image src='/assets/images/logo.png' width={120} />
+                <NavLink to={'/'} onClick={onClose}>
+                    <Image src='/assets/images/logo.png' width={120} preview={false} />
+                </NavLink>
                 <Button className='bg-transparent border-0 p-0' onClick={onClose}>
                     <CloseOutlined className='text-white fs-18' />
                 </Button>
@@ -100,15 +102,31 @@ const MobileNavbar = ({ visible, onClose }) => {
                                             )
                                         }
                                     </Collapse>
+                                    <NavLink to={'/'}  className='text-white fs-14 block mb-2 p-2 pl-2'>
+                                        <Title level={5} className='text-white m-0'>Browse All</Title>
+                                    </NavLink>
                                 </div>
                             </Panel>
                         )
                     }
                 </Collapse>
-
-                <Flex justify='center'>
-                    <Button className='btn bg-brand mt-3' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
+                <Flex vertical>
+                    <NavLink to={'/article'} onClick={onClose}  className='text-white fs-14 mb-1 block p-2 pl-2'>
+                        <Title level={5} className='text-white m-0'>Articles</Title>
+                    </NavLink>
+                    <NavLink to={'/faq'} onClick={onClose} className='text-white fs-14 block mb-2 p-2 pl-2'>
+                        <Title level={5} className='text-white m-0'>FAQs</Title>
+                    </NavLink>
+                </Flex>
+                <Flex vertical gap={10} align='center' justify='center'>
+                    <Button className='btn bg-brand mt-3 w-100' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
                         <PlusOutlined /> Sell a Business
+                    </Button>
+                    <Button className='btn btn-outline w-100' onClick={()=>navigate('/signup')}>
+                        Sign up
+                    </Button>
+                    <Button className='btn bg-brand w-100' onClick={()=>navigate('/login')}>
+                        Login
                     </Button>
                 </Flex>
             </div>

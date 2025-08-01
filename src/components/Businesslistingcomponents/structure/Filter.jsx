@@ -133,7 +133,7 @@ const Filter = ({
     const items = [
         {
             key: '1',
-            label: <Title level={5} className='m-0 py-2'>Filter By</Title>,
+            label: <Title level={5} className='m-0 py-2 fw-500'>Filter By</Title>,
             children: <Collapse ghost defaultActiveKey={["1",'2','3','4','5','6','7','8']} items={itemsNest} />,
         },
     ];
@@ -141,7 +141,7 @@ const Filter = ({
     const categoryItems = [
         {
             key: '1',
-            label:  <Title level={5} className='m-0 py-2'>Categories</Title>,
+            label:  <Title level={5} className='m-0 py-2 fw-500'>Categories</Title>,
             children: <Flex vertical>
                 {
                     categoriesData?.map((list,i)=>
@@ -172,15 +172,15 @@ const Filter = ({
 
     return (
         <div className={classoverflow}>
-            <Card className='mb-3'>
+            <Card className='mb-1 border-gray card-cs' >
                 <Collapse defaultActiveKey={['1']} ghost items={items} className='collapse-cs' 
-                    expandIcon={({ isActive }) => 
-                        isActive ? <DoubleRightOutlined /> : <DoubleLeftOutlined />
-                    }
-                    showArrow={false}
+                    // expandIcon={({ isActive }) => 
+                    //     isActive ? <DoubleRightOutlined /> : <DoubleLeftOutlined />
+                    // }
+                    // showArrow={false}
                 />
             </Card>
-            <Card>
+            <Card className='border-gray card-cs' >
                 <Collapse defaultActiveKey={['1']} ghost items={categoryItems} className='collapse-cs'/>
             </Card>
         </div>
