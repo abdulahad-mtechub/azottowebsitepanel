@@ -193,4 +193,77 @@ const selleralertsData = [
     }
 ]
 
-export { sendrequestData, selleradminsechedulingData, sellerrecievedrequestData, sellerscheduledData ,selleralertsData}
+const sellerofferData = [
+  {
+    key: '1',
+    title:'Al Madinah Coffee Shop',
+    buyername: 'Aayid********',
+    businessprice: '20,000',
+    status: 'Received',
+    date: '21-04-2025',
+  },
+  {
+    key: '2',
+    title:'Al Madinah Coffee Shop',
+    buyername: 'Aayid********',
+    businessprice: '20,000',
+    status: 'Inactive',
+    date: '21-04-2025',
+  },
+  {
+    key: '3',
+    title:'Al Madinah Coffee Shop',
+    buyername: 'Aayid********',
+    businessprice: '20,000',
+    status: 'Send',
+    date: '21-04-2025',
+  }
+]
+
+const sellercompletedealData = [
+  {
+    key: '1',
+    title:'Al Madinah Coffee Shop',
+    sellername: 'Aayid********',
+    finalizedprice: '20,000',
+    status: 'Received',
+    date: '21-04-2025',
+  },
+  {
+    key: '2',
+    title:'Al Madinah Coffee Shop',
+    sellername: 'Aayid********',
+    finalizedprice: '20,000',
+    status: 'Inactive',
+    date: '21-04-2025',
+  },
+  {
+    key: '3',
+    title:'Al Madinah Coffee Shop',
+    sellername: 'Aayid********',
+    finalizedprice: '20,000',
+    status: 'Send',
+    date: '21-04-2025',
+  }
+]
+
+const sellerdealsData = [
+  {
+    title:'Seller Name',
+    desc:'Furqaan Azeem'
+  },
+  {
+    title:'Buyer Name',
+    desc:'Ali Haider'
+  },
+  {
+    title:'Finalized Offer',
+    desc:'SAR 23,000'
+  },
+  {
+    title:'Status',
+    desc:'In-progress'
+  },
+]
+
+export { sendrequestData, selleradminsechedulingData, sellerrecievedrequestData, sellerscheduledData ,selleralertsData,sellerofferData,sellercompletedealData,sellerdealsData}

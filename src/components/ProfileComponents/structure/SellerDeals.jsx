@@ -1,22 +1,18 @@
 import { Card, Flex, Spin, Tabs } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
-import React,{useState, useMemo, useCallback,useEffect,lazy, Suspense } from 'react'
+import { useState, useMemo, useCallback } from 'react'
+import { lazy, Suspense } from 'react'
 import { LoadingOutlined } from '@ant-design/icons';
-import { SingleCompleteDeal } from './SingleCompleteDeal';
+import { SellerSingleCompleteDeal } from './SellerSingleCompleteDeal';
 
-const InprogressDealsTable = lazy(() => import('./InprogressDealsTable').then(module => ({ default: module.InprogressDealsTable })))
-const SingleInProgressDeals = lazy(() => import('./SingleInProgressDeals').then(module => ({ default: module.SingleInProgressDeals })))
-const CompleteDealsTable = lazy(() => import('./CompleteDealsTable').then(module => ({ default: module.CompleteDealsTable })))
+const SellerInProgressDeals = lazy(() => import('./SellerInProgressDeals').then(module => ({ default: module.SellerInProgressDeals })))
+const SellerSingleInProgressDeals = lazy(() => import('./SellerSingleInProgressDeal').then(module => ({ default: module.SellerSingleInProgressDeals })))
+const SellerCompleteDeal = lazy(() => import('./SellerCompleteDeal').then(module => ({ default: module.SellerCompleteDeal })))
 
 const SellerDeals = () => {
+
     const [ inprogressdeal, setInprogressDeal ] = useState()
     const [ completedeal, setCompleteDeal ] = useState()
-    const handleSetInprogressDeal = useCallback((deal) => {
-        setInprogressDeal(deal)
-    }, [])
-    const handleSetCompleteDeal = useCallback((deal) => {
-        setCompleteDeal(deal)
-    }, [])
 
     const singleTab = useMemo(() => [
         {
@@ -24,7 +20,7 @@ const SellerDeals = () => {
             label: 'In-Progress Deals',
             children: (
                 <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                    <InprogressDealsTable setInprogressDeal={handleSetInprogressDeal} />
+                    <SellerInProgressDeals setInprogressDeal={setInprogressDeal} />
                 </Suspense>
             )
         },
@@ -33,16 +29,16 @@ const SellerDeals = () => {
             label: 'Completed Deals',
             children: (
                 <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                    <CompleteDealsTable setCompleteDeal={handleSetCompleteDeal} />
+                    <SellerCompleteDeal setCompleteDeal={setCompleteDeal} />
                 </Suspense>
             )
         },
-    ], [handleSetInprogressDeal, handleSetCompleteDeal])
+    ], [setCompleteDeal,setInprogressDeal])
 
     if (inprogressdeal && !completedeal) {
         return (
             <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                <SingleInProgressDeals 
+                <SellerSingleInProgressDeals 
                     inprogressdeal={inprogressdeal} 
                     setInprogressDeal={setInprogressDeal} 
                 />
@@ -53,7 +49,7 @@ const SellerDeals = () => {
     if (completedeal && !inprogressdeal) {
         return (
             <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                <SingleCompleteDeal 
+                <SellerSingleCompleteDeal 
                     completedeal={completedeal} 
                     setCompleteDeal={setCompleteDeal} 
                 />
