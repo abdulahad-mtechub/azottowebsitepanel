@@ -20,6 +20,7 @@ export * from './PayBusinessAmountstep'
 export * from './FinalDealsStep'
 export * from './CompleteDealsTable'
 export * from './SingleInProgressDeals'
+export * from './Favoritbussines'
 
 // Seller 
 export * from './SellerSenRequestTable'
@@ -28,3 +29,5 @@ export * from './SellerAdminSchedulingTable'
 export * from './SellerScheduledTable'
 export * from './SellerAlerts'
 export * from './SellerOfferTable'
+export * from './SellerDeals'
+export * from './SellerWallet'

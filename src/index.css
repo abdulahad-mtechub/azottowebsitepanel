@@ -1260,6 +1260,10 @@
 }
 
 
+.walletCard{
+    background: linear-gradient(135deg, #1D4ED8, #0F2972);
+ }
+ 
 /* media queries  */
 
 @media (max-width: 575px){
@@ -1373,6 +1377,4 @@
         margin: auto !important;
     }
 }
-
-
 

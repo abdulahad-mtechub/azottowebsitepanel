@@ -10,15 +10,23 @@ import {
 } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { Allbussines, Basicinformation, BuyerDeals, BuyerMeetingContent, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines } from '../components';
-import { useState } from 'react';
-import { buyerdashboard, buyerdashstatistic, profilestatisticsData, profiletabData, selleralertsData } from '../data';
+import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet } from '../components';
+import { useEffect, useState,useMemo } from 'react';
+import { profiletabData, selleralertsData } from '../data';
+import { ME,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
+import { useLazyQuery,useQuery } from '@apollo/client';
 
 const { Text, Title } = Typography;
 
 const ProfileDashboard = () => {
+    const userId = localStorage.getItem('userId');
     const navigate = useNavigate();
     const [parentTab, setParentTab] = useState('Seller');
+    const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
+    const { data: userStatsData, loading: userStatsLoading, error: userStatsError } = useQuery(PROFESSIONALSTATISTICS);
+    const [getBuyerUser,{ data: buyerStatsData, loading: buyerStatsLoading, error: buyerStatsError } ]= useLazyQuery(GETBUYERSTATISTICS);
+
+    const [user, setUser] = useState(null);
     const [visible, setVisible] = useState(false)
     const [isedit, setIsEdit] = useState(false)
     const defaultChildTab = profiletabData[parentTab]?.[0]?.key || '';
@@ -27,7 +35,20 @@ const ProfileDashboard = () => {
         Buyer: profiletabData['Buyer']?.[0]?.key || '',
     });
 
+     useEffect(() => {
+        if (userId) {
+        getUser({ variables: { getUserId: userId } });
+        }
+    }, [userId]);
+      
+    useEffect(() => {
+        if (me?.getUser) {
+        setUser(me.getUser);
+        }
+    }, [me]);
+
     const handleParentChange = (value) => {
+        getBuyerUser()
         setParentTab(value);
         const firstTabKey = profiletabData[value]?.[0]?.key;
         if (firstTabKey) {
@@ -37,8 +58,52 @@ const ProfileDashboard = () => {
             }));
         }
     }
+    const buyerDashboardData = user ? [
+        { title: 'Email',   desc: user?.email || 'N/A' },
+        { title: 'Phone Number', desc: user?.phone || 'N/A' },
+        { title: 'City', desc: user?.city || 'N/A' },
+        { title: 'District', desc: user?.district || 'N/A' },
+        { title: 'National ID / Passport', desc: (user?.documents || []).map((doc) => doc.filePath) },
+        ] : [];
 
-    const tabContent = {
+    const defaultStats = [
+        { id: 1, img: '/assets/icons/total-view.png', title: 'Total Views', key: 'viewedBusinessesCount' },
+        { id: 2, img: '/assets/icons/list-business.png', title: 'Number of Listed Businesses', key: 'listedBusinessesCount' },
+        { id: 3, img: '/assets/icons/offer-recieved.png', title: 'Offers Received', key: 'receivedOffersCount' },
+        { id: 4, img: '/assets/icons/offer-recieved.png', title: 'Pending Meeting Requests', key: 'pendingMeetingsCount' },
+        { id: 5, img: '/assets/icons/schedule-meeting.png', title: 'Schedule Meetings', key: 'scheduledMeetingsCount' },
+        { id: 6, img: '/assets/icons/c-2.png', title: 'Finalized Deals', key: 'finalizedDealsCount' },
+        ];
+    
+    const buyerStats = [
+        { id: 1, img:'/assets/icons/favorite.png', title: 'Favorite Listing', key: 'favouriteBusinessesCount' },
+        { id: 2, img: '/assets/icons/schedule-meeting.png', title: 'Schedule Meetings', key: 'scheduledMeetingsCount' },
+        { id: 3, img: '/assets/icons/c-2.png', title: 'Finalized Deals', key: 'finalizedDealsCount' },
+        ];
+        
+    const profileStatisticsData = useMemo(() => {
+        if (!userStatsData?.getProfileStatistics) return defaultStats.map(item => ({ ...item, numbers: '0' }));
+        
+        const stats = userStatsData.getProfileStatistics;
+        
+        return defaultStats.map(item => ({
+            ...item,
+            numbers: stats[item.key]?.toLocaleString() || '0',
+        }));
+        }, [userStatsData]);
+    
+    const buyerStatisticsData = useMemo(() => {
+        if (!buyerStatsData?.getProfileStatistics) return buyerStats.map(item => ({ ...item, numbers: '0' }));
+        
+        const stats = buyerStatsData.getProfileStatistics;
+        
+        return buyerStats.map(item => ({
+            ...item,
+            numbers: stats[item.key]?.toLocaleString() || '0',
+        }));
+        }, [buyerStatsData]);
+          
+      const tabContent = {
         Seller: {
             sellerdashboard: (
                 <Flex vertical gap={20}>
@@ -53,8 +118,8 @@ const ProfileDashboard = () => {
                             </Button>
                         </Flex>
                     </Flex>
-                    <Basicinformation data={buyerdashboard} title={'Basic Information'} />
-                    <Profilestatistics data={profilestatisticsData} title={'Profile Statistics'} />
+                    <Basicinformation buyerDashboardData={buyerDashboardData} title={'Basic Information'} />
+                    <Profilestatistics data={profileStatisticsData} title={'Profile Statistics'} />
                 </Flex>
             ),
             sellerBusiness: (
@@ -87,7 +152,7 @@ const ProfileDashboard = () => {
                 </Flex>
             ),
             sellerdeals: (
-                3
+                <SellerDeals />
             ),
             selleralert: (
                 <Flex vertical gap={20}>
@@ -96,7 +161,7 @@ const ProfileDashboard = () => {
                 </Flex>
             ),
             sellerwallet: (
-                3
+                <SellerWallet />
             ),
         },
         Buyer: {
@@ -113,8 +178,8 @@ const ProfileDashboard = () => {
                             </Button>
                         </Flex>
                     </Flex>
-                    <Basicinformation data={buyerdashboard} title={'Basic Information'} />
-                    <Profilestatistics data={buyerdashstatistic} title={'Profile Statistics'} />
+                    <Basicinformation buyerDashboardData={buyerDashboardData} title={'Basic Information'} />
+                    <Profilestatistics data={buyerStatisticsData} title={'Profile Statistics'} />
                 </Flex>
             ),
             buyeroffers: (
@@ -124,7 +189,7 @@ const ProfileDashboard = () => {
             ),
             buyermeeting: (
                 <>
-                    <BuyerMeetingContent />
+                    <Meetings />
                 </>
             ),
             buyerdeals: (
@@ -138,7 +203,7 @@ const ProfileDashboard = () => {
                         <Flex align='center'>
                             <ModuleTopHeading level={4} name='Favorite Listing' />
                         </Flex>
-                        <Soldbussines />
+                        <Favoritbussines />
                     </Flex>
                 </>
             ),
@@ -176,8 +241,24 @@ const ProfileDashboard = () => {
                         <Card className='radius-12 border-gray'>
                             <Flex vertical gap={30}>
                                 <Flex vertical align='center' justify='center' gap={20}>
-                                    <div className='profile-ic'>DJ</div>
-                                    <Title level={5} className='fw-500'>Dean John</Title>
+                                <div
+                                    style={{
+                                    width: 40,
+                                    height: 40,
+                                    borderRadius: '50%',
+                                    backgroundColor: '#4F46E5',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: '#fff',
+                                    fontWeight: 'bold',
+                                    fontSize: '16px',
+                                    textTransform: 'uppercase',
+                                    }}
+                                >
+                                    {user?.name?.charAt(0)}
+                                </div>
+                                <Title level={5} className='fw-500'>{user?.name}</Title>
                                     <Flex vertical gap={10}>
                                         <Flex justify="center">
                                             <Segmented
@@ -185,6 +266,7 @@ const ProfileDashboard = () => {
                                                 options={['Seller', 'Buyer']}
                                                 value={parentTab}
                                                 onChange={handleParentChange}
+                                                
                                             />
                                         </Flex>
                                         <div className="text-center mt-4">

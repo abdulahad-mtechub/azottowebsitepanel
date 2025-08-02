@@ -3,13 +3,13 @@ import { ModuleTopHeading } from '../../Pagecomponents';
 
 const { Text } = Typography;
 
-const Basicinformation = ({data,title}) => {
+const Basicinformation = ({buyerDashboardData,title}) => {
     return (
         <Card className='rounded-12 border-gray'>
             <ModuleTopHeading level={4} name={title} />
             <Row gutter={[16, 16]} className='mt-2'>
                 {
-                    data?.map((list,index)=>
+                    buyerDashboardData?.map((list,index)=>
                         <Col xs={24} sm={12} md={6} lg={6} key={index}>
                             <Flex vertical gap={0}>
                                 <Text className='fw-600 fs-14'>{list?.title}</Text>

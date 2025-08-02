@@ -2,38 +2,31 @@ import React,{useState,useEffect} from 'react'
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 const { Title, Text } = Typography
-import {GETSELLERBUSINESS } from '../../../graphql/query';
+import {GETFAVORITBUSINESS } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 
-
-const Allbussines = () => {
+const Favoritbussines = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10); // default limit
     const offset = (currentPage - 1) * limit;
 
-    const { data: sellerBusinesses, loading, error, refetch } = useQuery(GETSELLERBUSINESS, {
-        variables: {
-          limit,
-          offset,
-        },
-        fetchPolicy: 'network-only', // optional but ensures fresh data
-      });
+    const { data: sellerSoldBusinesses, loading, error, refetch } = useQuery(GETFAVORITBUSINESS);
     
     useEffect(() => {
         refetch({ limit, offset });
     }, [limit, offset]);
-      
+
     return (
         <Card className='border-gray'>
             <Row gutter={[16, 16]}>
                 {
-                    sellerBusinesses?.getAllSellerBusinesses?.businesses?.map((pro, i) =>
+                    sellerSoldBusinesses?.getFavoritBusiness?.businesses?.map((pro, i) =>
                         <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }} key={i}>
                             <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={() => navigate('/singleviewlisting/' + pro?.id)}>
                                 <Flex vertical gap={20}>
                                     <Flex justify='space-between' align='center'>
-                                        <Flex gap={4}>
+                                         <Flex gap={4}>
                                             <Button className='fs-13'>
                                                 {pro?.category?.name}
                                             </Button>
@@ -52,7 +45,6 @@ const Allbussines = () => {
                                         ) : pro?.status === 'UNDER_REVIEW' ? (
                                             <span className='badge-review rounded-8'>Under Review</span>
                                         ) : null}
-
 
 
                                         {/* <span className='badge-review rounded-8'>Under-review</span> */}
@@ -92,16 +84,11 @@ const Allbussines = () => {
                                             }
                                         </Row>
                                         <Divider className='my-1' />
-                                        <Flex align='center' justify='space-between'>
-                                            <Flex gap={3} align='center'>
-                                                <Image src='/assets/icons/reyal.png' preview={false} width={20} />
-                                                <Title level={4} className='m-0'>
-                                                    {pro?.price}
-                                                </Title>
-                                            </Flex>
-                                            <Text className='text-brand fs-14'>
-                                                {pro.offerCount}
-                                            </Text>
+                                        <Flex gap={3} align='center'>
+                                            <Image src='/assets/icons/reyal.png' preview={false} width={20} />
+                                            <Title level={4} className='m-0'>
+                                                {pro?.price}
+                                            </Title>
                                         </Flex>
                                     </div>
                                 </Flex>
@@ -109,7 +96,8 @@ const Allbussines = () => {
                         </Col>
                     )
                 }
-                {sellerBusinesses?.getAllSellerBusinesses?.totalCount > 0 ? (
+                {sellerSoldBusinesses?.getAllSellerBusinesses?.totalCount > 0 ? (
+                <Row gutter={[16, 16]}>
                 <Col span={24} className='mt-3'>
                     <Row justify="space-between" align="middle">
                         <Col span={6}>
@@ -133,24 +121,25 @@ const Allbussines = () => {
                         </Col>
                         <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }}>
                             <Pagination className='pagination' align="end" pageSize={limit}
-                                total={sellerBusinesses?.getAllSellerBusinesses?.totalCount || 0}
+                                total={sellerSoldBusinesses?.getAllSellerBusinesses?.totalCount || 0}
                                 onChange={(page) => {
                                     setCurrentPage(page);
                             }} />
                         </Col>
-                     </Row>
-                 </Col>  
-                 ) : (
+                        </Row>
+                    </Col>    
+                </Row>
+                ) : (
                     <Row>
-                    <Col span={24} className='text-center mt-4'>
+                      <Col span={24} className='text-center mt-4'>
                         <Text>No Business Found</Text>
-                    </Col>
+                      </Col>
                     </Row>
-                )
-                }  
+                  )
+                }
             </Row>
         </Card>
     )
 }
 
-export { Allbussines } 
+export { Favoritbussines } 

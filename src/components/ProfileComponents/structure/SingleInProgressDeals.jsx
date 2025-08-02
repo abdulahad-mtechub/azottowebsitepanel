@@ -1,11 +1,36 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
-import { buyerdealsData } from '../../../data'
 import { SingleInprogressSteps } from './SingleInprogressSteps'
+import { OFFERBYID } from '../../../graphql/query';
+import { useQuery } from '@apollo/client';
+import React from 'react'
 
 const { Title, Text } = Typography
 const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
-  return (
+const { data, loading, error } = useQuery(OFFERBYID, {
+    variables: { getOffersByIdId: inprogressdeal?.key },
+})
+const offer = data?.getOffersById;
+const buyerdealsData = offer ? [
+    {
+        title: 'Seller Name',
+        desc: offer?.business?.seller?.name || '-',
+    },
+    {
+        title: 'Buyer Name',
+        desc: offer?.buyer?.name || '-',
+    },
+    {
+        title: 'Finalized Offer',
+        desc: offer?.price ? `SAR ${offer.price.toLocaleString()}` : '-',
+    },
+    {
+        title: 'Status',
+        desc: offer?.status || '-',
+    },
+] : [];
+
+return (
     <Flex vertical gap={20}>
         <Flex vertical gap={25}>
             <Breadcrumb
@@ -50,10 +75,10 @@ const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
                     }
                 </Row>
             </div>
-            <SingleInprogressSteps />
+            <SingleInprogressSteps inprogressdeal={inprogressdeal} offer={offer} />
         </Card>
     </Flex>
-  )
+)
 }
 
 export {SingleInProgressDeals}

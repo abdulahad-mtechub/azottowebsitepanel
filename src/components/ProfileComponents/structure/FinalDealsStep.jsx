@@ -2,7 +2,7 @@ import React from 'react'
 import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography } from 'antd'
 
 const { Text } = Typography
-const FinalDealsStep = ({form,completedeal}) => {
+const FinalDealsStep = ({form,inprogressdeal}) => {
 
     return (
         <Row gutter={[16, 24]}>
@@ -34,7 +34,7 @@ const FinalDealsStep = ({form,completedeal}) => {
             </Col>
             <>
                 {
-                    !completedeal && (
+                    !inprogressdeal && (
                         <>
                             <Col span={24}>
                                 <Checkbox>

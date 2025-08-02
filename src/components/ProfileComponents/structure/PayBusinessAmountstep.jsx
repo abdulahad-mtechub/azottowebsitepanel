@@ -4,8 +4,26 @@ import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 
 const { Text } = Typography
-const PayBusinessAmountstep = ({form,completedeal}) => {
-
+const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
+    console.log*("inprogressdeal",inprogressdeal)
+    const paybusinessData = [
+        {
+          title:'Seller’s Bank Name',
+          desc:bank?.bankName
+        },
+        {
+          title:'Seller’s IBAN',
+          desc:bank?.accountNumber
+        },
+        {
+          title:'Account Holder Name',
+          desc:bank?.accountTitle
+        },
+        {
+          title:'Amount to Pay',
+          desc:inprogressdeal?.offerprice
+        },
+      ]
     return (
         <Row gutter={[16, 24]}>
             {
@@ -21,7 +39,7 @@ const PayBusinessAmountstep = ({form,completedeal}) => {
 
             <Col span={24}>
                 {
-                    completedeal ? (
+                    inprogressdeal ? (
                         <Card className='card-cs border-gray rounded-12' >
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={15}>
@@ -53,7 +71,7 @@ const PayBusinessAmountstep = ({form,completedeal}) => {
                 }
             </Col>
             {
-                !completedeal && (
+                !inprogressdeal && (
                     <Col span={24}>
                         <Flex>
                             <Button type="primary" className='btn bg-brand'>
