@@ -1,15 +1,15 @@
 import { Col, Form, Row, Table } from 'antd'
-import { sellerofferData } from '../../../data';
+import { sellercompletedealData } from '../../../data';
 import { SearchInput } from '../../Forms';
 
-const SellerInProgressDeals = ({setInprogressDeal}) => {
+const SellerCompleteDeal = ({setCompleteDeal}) => {
 
     const [form] = Form.useForm()
 
     const columns = [
         { title: 'Business Title', dataIndex: 'title' },
-        { title: 'Buyer Name', dataIndex: 'buyername' },
-        { title: 'Business Price', dataIndex: 'businessprice' },
+        { title: 'Seller Name', dataIndex: 'sellername' },
+        { title: 'Finalized Price', dataIndex: 'finalizedprice' },
         { title: 'Finalized Date', dataIndex: 'date' },
     ];
 
@@ -28,14 +28,14 @@ const SellerInProgressDeals = ({setInprogressDeal}) => {
                     <Table
                         size="large"
                         columns={columns}
-                        dataSource={sellerofferData}
+                        dataSource={sellercompletedealData}
                         className="pagination table table-cs"
                         showSorterTooltip={false}
                         scroll={{ x: 800 }}
                         onRow={record => ({
                             onClick: () => {
                                 if (record.key) {
-                                    setInprogressDeal(record)
+                                    setCompleteDeal(record)
                                 }
                             },
                         })}
@@ -58,4 +58,4 @@ const SellerInProgressDeals = ({setInprogressDeal}) => {
     )
 }
 
-export {SellerInProgressDeals}
+export {SellerCompleteDeal}
