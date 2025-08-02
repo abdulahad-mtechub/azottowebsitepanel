@@ -37,6 +37,7 @@
     --light-red: #FF3B3033;
     --light-orange: #FFF0D9;
     --orange:#FF9800;
+    --gray: #E6E8EC
 }
 
 .bg-light-brand{
@@ -1250,6 +1251,13 @@
   flex: 0 0 auto;
 }
 
+.step-disabled .ant-collapse-collapsible-disabled{
+    background-color: var(--gray) !important;
+}
+
+.collapse-cs1 .ant-collapse-header .ant-collapse-header-text{
+    width: 100% !important;
+}
 
 
 .walletCard{
