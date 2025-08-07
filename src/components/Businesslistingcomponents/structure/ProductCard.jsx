@@ -80,12 +80,14 @@ const ProductCard = ({
                                 <Title className='' level={5}>
                                     {pro?.title}
                                 </Title>
-                                <Paragraph
-                                    ellipsis={{ rows: 3, expandable: false, symbol: 'more' }}
-                                    className='fs-14 text-gray'
-                                >
-                                    {pro?.description}
-                                </Paragraph>
+                                <div style={{height: 80}}>
+                                    <Paragraph
+                                        ellipsis={{ rows: 3, expandable: false, symbol: 'more' }}
+                                        className='fs-14 text-gray'
+                                    >
+                                        {pro?.description}
+                                    </Paragraph>
+                                </div>
                                 <Divider className='my-1' />
                                 <Row justify={'space-between'}>
                                     {
