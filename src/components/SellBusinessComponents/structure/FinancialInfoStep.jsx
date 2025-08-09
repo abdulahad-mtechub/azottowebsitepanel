@@ -238,11 +238,11 @@ const FinancialInfoStep = ({ data, setData }) => {
                         
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label='Business Price'
+                                label='Capital Recovery'
                                 name='businessPrice'
                                 required
-                                message="Please enter business price"
-                                placeholder='Enter business price'
+                                message="Please enter capital recovery"
+                                placeholder='Enter capital recovery'
                                 addonBefore={
                                     <img src='/assets/icons/reyal-g.png' width={14} />
                                 }

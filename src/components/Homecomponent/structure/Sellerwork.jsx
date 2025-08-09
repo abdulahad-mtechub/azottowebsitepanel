@@ -15,7 +15,7 @@ const Sellerwork = () => {
   });
 
   const rive3 = useRive({
-    src: '/assets/images/riv/sign-meet.riv',
+    src: '/assets/images/riv/receive_offers.riv',
     autoplay: true,
   });
 

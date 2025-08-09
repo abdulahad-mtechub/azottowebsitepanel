@@ -102,9 +102,12 @@ const MobileNavbar = ({ visible, onClose }) => {
                                             )
                                         }
                                     </Collapse>
-                                    <NavLink to={'/'}  className='text-white fs-14 block mb-2 p-2 pl-2'>
-                                        <Title level={5} className='text-white m-0'>Browse All</Title>
-                                    </NavLink>
+                                    {
+                                        f === 0 &&    
+                                        <NavLink to={'/'}  className='text-white fs-14 block mb-2 p-2 pl-2'>
+                                            <Title level={5} className='text-white m-0'>Browse All</Title>
+                                        </NavLink>
+                                    }
                                 </div>
                             </Panel>
                         )

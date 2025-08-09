@@ -40,6 +40,10 @@
     --gray: #E6E8EC
 }
 
+body{
+    overflow-x: hidden;
+}
+
 .bg-light-brand{
     background-color: var(--bg-body) !important;
 }
@@ -1262,6 +1266,14 @@
 
 .walletCard{
     background: linear-gradient(135deg, #1D4ED8, #0F2972);
+ }
+
+ .fs-15{
+    font-size: 15px !important;
+ }
+
+ .card-d-brand{
+    background-color: #27274a !important;
  }
  
 /* media queries  */

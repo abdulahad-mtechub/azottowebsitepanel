@@ -111,14 +111,14 @@ const SingleViewlisting = () => {
                                 <Text>
                                     {business?.description ? business?.description : 'No description available.'}
                                 </Text>
-                                <Text>
+                                {/* <Text>
                                 Website:{" "}
                                     {business?.url ? (
                                         <Link to={business.url}>{business.url}</Link>
                                     ) : (
                                         "URL not provided"
                                     )}
-                                </Text>
+                                </Text> */}
                                     {/* This café averages SAR 250,000 in annual revenue with a healthy annual profit of SAR 75,000. Its location offers strong foot traffic, especially during morning and late evening hours. Key assets include high-end espresso machines, seating furniture, POS system, and a fully branded visual identity. The owner is willing to offer 30 days of post-sale support, including supplier contacts, staff training, and marketing handover.
                                 </Text> */}
                                 {/* <Text>
