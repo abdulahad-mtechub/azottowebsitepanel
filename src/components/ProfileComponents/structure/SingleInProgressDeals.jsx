@@ -1,61 +1,59 @@
-import { Col, Form, Row, Table } from 'antd'
-import { sellerofferData } from '../../../data';
-import { SearchInput } from '../../Forms';
+import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
+import { buyerdealsData } from '../../../data'
+import { SingleInprogressSteps } from './SingleInprogressSteps'
 
-const SellerInProgressDeals = ({setInprogressDeal}) => {
-
-    const [form] = Form.useForm()
-
-    const columns = [
-        { title: 'Business Title', dataIndex: 'title' },
-        { title: 'Buyer Name', dataIndex: 'buyername' },
-        { title: 'Business Price', dataIndex: 'businessprice' },
-        { title: 'Finalized Date', dataIndex: 'date' },
-    ];
-
-
-    return (
-        <>    
-            <Row gutter={[24,12]} className='mt-2'>
-                <Col xs={{span: 24}} sm={{span: 24}} md={{span: 12}} lg={{span: 8}}>
-                    <SearchInput
-                        placeholder="Search"
-                        value={form.getFieldValue('name') || ''}
-                        prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
-                    />
-                </Col>
-                <Col span={24}>
-                    <Table
-                        size="large"
-                        columns={columns}
-                        dataSource={sellerofferData}
-                        className="pagination table table-cs"
-                        showSorterTooltip={false}
-                        scroll={{ x: 800 }}
-                        onRow={record => ({
-                            onClick: () => {
-                                if (record.key) {
-                                    setInprogressDeal(record)
-                                }
-                            },
-                        })}
-                        pagination={false}
-                        // pagination={{
-                        //     hideOnSinglePage: true,
-                        //     total: 12,
-                        //     // pageSize: pagination?.pageSize,
-                        //     // defaultPageSize: pagination?.pageSize,
-                        //     // current: pagination?.pageNo,
-                        //     // size: "default",
-                        //     // pageSizeOptions: ['10', '20', '50', '100'],
-                        //     // onChange: (pageNo, pageSize) => call(pageNo, pageSize),
-                        //     showTotal: (total) => <Button className='brand-bg'>Total: {total}</Button>,
-                        // }}
-                    />
-                </Col>
-            </Row>
-        </>
-    )
+const { Title, Text } = Typography
+const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
+  return (
+    <Flex vertical gap={20}>
+        <Flex vertical gap={25}>
+            <Breadcrumb
+                separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
+                items={[
+                    {
+                        title: <Text className='fs-13 text-gray cursor' onClick={() => setInprogressDeal(null)}>Deals</Text>,
+                    },
+                    {
+                        title: <Text className='fw-500 fs-13 text-black'>{inprogressdeal?.title}</Text>,
+                    },
+                ]}
+            />
+        </Flex>
+        <Flex gap={15} align='center'>
+            <Button className='border-0 p-0 bg-transparent' onClick={() => setInprogressDeal(null)}>
+                <ArrowLeftOutlined />
+            </Button>
+            <Title level={4} className='m-0'>
+                {inprogressdeal?.title}
+            </Title>
+        </Flex>
+        <Card className='radius-12 border-gray'>
+            <div className='deals-status'>
+                <Row gutter={[16, 16]}>
+                    {
+                        buyerdealsData?.map((list,index)=>
+                            <Col xs={24} sm={12} md={6} lg={6} key={index}>
+                                <Flex vertical gap={0}>
+                                    <Text className='fw-600 fs-14'>{list?.title}</Text>
+                                    {
+                                    (list?.title === 'Status') ? (
+                                        list.desc === 'In-progress' ?
+                                        <Text className='bg-brand text-white fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>:
+                                        <Text className='sendstatus fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                    ) : (
+                                        <Text className='fs-14 fw-normal'>{list?.desc}</Text>
+                                    )}
+                                </Flex>
+                            </Col>
+                        )
+                    }
+                </Row>
+            </div>
+            <SingleInprogressSteps />
+        </Card>
+    </Flex>
+  )
 }
 
-export {SellerInProgressDeals}
+export {SingleInProgressDeals}

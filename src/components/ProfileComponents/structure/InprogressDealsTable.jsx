@@ -3,11 +3,12 @@ import { SearchInput } from '../../Forms';
 import {OFFERBYSELLER } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import React,{ useMemo,useEffect } from 'react'
+import { offerData } from '../../../data';
 
 const InprogressDealsTable = ({setInprogressDeal}) => {
     const [form] = Form.useForm()
-     const search = Form.useWatch('search', form);
-    const [fetchDeals, { data: offerDeals, loading, error, refetch }] = useLazyQuery(OFFERBYSELLER);
+    //  const search = Form.useWatch('search', form);
+    // const [fetchDeals, { data: offerDeals, loading, error, refetch }] = useLazyQuery(OFFERBYSELLER);
 
     const columns = [
         { title: 'Business Title', dataIndex: 'title' },
@@ -16,19 +17,19 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
         { title: 'Requested Date', dataIndex: 'date' },
     ];
 
-    const offerData = useMemo(() => {
-            return offerDeals?.getOffersBySeller?.map((offer) => ({
-                key: offer.id,
-                title: offer.business.businessTitle,
-                sellername: offer.business.seller.name,
-                offerprice: offer.price,
-                date: new Date(offer.createdAt).toLocaleString(),
-            })) || [];
-        }, [offerDeals]);
+    // const offerData = useMemo(() => {
+    //         return offerDeals?.getOffersBySeller?.map((offer) => ({
+    //             key: offer.id,
+    //             title: offer.business.businessTitle,
+    //             sellername: offer.business.seller.name,
+    //             offerprice: offer.price,
+    //             date: new Date(offer.createdAt).toLocaleString(),
+    //         })) || [];
+    //     }, [offerDeals]);
     
-        useEffect(() => {
-            fetchDeals({ variables: { status: 'PENDING', search: search || '' } });
-        }, [search]);
+    //     useEffect(() => {
+    //         fetchDeals({ variables: { status: 'PENDING', search: search || '' } });
+    //     }, [search]);
 
     return (
         <Form form={form}>    
