@@ -2,9 +2,43 @@ import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
 import { sellerdealsData } from '../../../data'
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps'
+import { GETDEAL, ME } from '../../../graphql/query';
+import { useQuery } from '@apollo/client'
+import React from 'react'
 
 const { Title, Text } = Typography
 const SellerSingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
+    const dealId = completedeal.key;
+    const userId = localStorage.getItem('userId');
+    const { data, loading, error } = useQuery(GETDEAL, {
+        variables: { getDealId: dealId },
+        fetchPolicy: 'network-only', // always fetch fresh data
+      });
+    const { data:userData, loading:userLoading, error:userError } = useQuery(ME, {
+        variables: { getUserId: userId },
+    });
+    const user = userData?.getUser;
+    const deal = data?.getDeal;
+  
+    if (!deal) return <Text>No deal found</Text>;
+    const sellerdealsData = [
+        {
+          title:'Seller Name',
+          desc:deal?.business?.seller?.name
+        },
+        {
+          title:'Buyer Name',
+          desc:deal?.buyer?.name
+        },
+        {
+          title:'Finalized Offer',
+          desc:deal.price
+        },
+        {
+          title:'Status',
+          desc:deal.status
+        },
+      ]
   return (
     <Flex vertical gap={20}>
         <Flex vertical gap={25}>
@@ -15,7 +49,7 @@ const SellerSingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
                         title: <Text className='fs-13 text-gray cursor' onClick={() => setCompleteDeal(null)}>Deals</Text>,
                     },
                     {
-                        title: <Text className='fw-500 fs-13 text-black'>{completedeal?.title}</Text>,
+                        title: <Text className='fw-500 fs-13 text-black'>{deal?.business?.businessTitle}</Text>,
                     },
                 ]}
             />
@@ -25,7 +59,7 @@ const SellerSingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
                 <ArrowLeftOutlined />
             </Button>
             <Title level={4} className='m-0'>
-                {completedeal?.title}
+                {deal?.business?.businessTitle}
             </Title>
         </Flex>
         <Card className='radius-12 border-gray'>

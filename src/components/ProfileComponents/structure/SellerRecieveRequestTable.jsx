@@ -1,5 +1,4 @@
 import { Button, Col, Dropdown, Form, Row, Table } from 'antd'
-import { sellerrecievedrequestData } from '../../../data';
 import { SearchInput } from '../../Forms';
 import { NavLink } from 'react-router-dom';
 import { ScheduleMeeting } from '../modal';
@@ -13,6 +12,8 @@ const SellerRecieveRequestTable = () => {
     const [form] = Form.useForm()
     const [ isaccept, setIsAccept ] = useState(false)
     const [ deletemodal, setDeleteModal ] = useState(false)
+    const [selectedMeetingId, setSelectedMeetingId] = useState(null);
+    const [selectedOfferId, setSelectedOfferId] = useState(null);
 
     const [fetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS);
     const search = Form.useWatch("search", form);
@@ -26,11 +27,12 @@ const SellerRecieveRequestTable = () => {
 
         return {
             key: meeting.id,
-        title: meeting.business?.businessTitle,
-        buyername:maskedName,
-        businessprice: meeting.business?.price,
-        offerprice: meeting.offer?.price,
-        date: new Date(meeting.requestedDate).toLocaleString(),
+            title: meeting.business?.businessTitle,
+            buyername:maskedName,
+            businessprice: meeting.business?.price,
+            offerprice: meeting.offer?.price,
+            date: new Date(meeting.requestedDate).toLocaleString(),
+            offerId: meeting.offer?.id,
         };
     }) || [];
 
@@ -39,7 +41,7 @@ const SellerRecieveRequestTable = () => {
         { title: 'Buyer Name', dataIndex: 'buyername' },
         { title: 'Business Price', dataIndex: 'businessprice' },
         { title: 'Offer Price', dataIndex: 'offerprice' },
-        { title: 'Requested Date', dataIndex: 'date' },
+        { title: 'Requested Date', dataIndex: 'createdAt' },
         {
             title: 'Action',
             key: 'action',
@@ -48,7 +50,13 @@ const SellerRecieveRequestTable = () => {
             align: 'center',
             render: (record) => {
                 const items = [
-                    { label: <NavLink onClick={()=>setIsAccept(true)}>Accept Offer</NavLink>, key: 0 },
+                    { label: <NavLink 
+                        onClick={() => {
+                            setSelectedMeetingId(record.key); // 🔹 store businessId
+                            setSelectedOfferId(record.offerId); // 🔹 store offerId
+                            setIsAccept(true);
+                        }}
+                        >Accept Offer</NavLink>, key: 0 },
                     { label: <NavLink onClick={()=>setDeleteModal(true)}>Reject Offer</NavLink>, key: 1 },
                 ].filter(Boolean);
     
@@ -106,6 +114,9 @@ const SellerRecieveRequestTable = () => {
             <ScheduleMeeting 
                 visible={isaccept}
                 onClose={()=>setIsAccept(false)}
+                meetingId={selectedMeetingId}
+                offerId={selectedOfferId}
+                refetchMeetings={() => fetchMeetings({ variables: { search: search || "" } })}
             />
             <DeleteModal 
                 visible={deletemodal}

@@ -1,11 +1,44 @@
 import { Button, Col, Flex, Form, Modal, Row, Typography } from 'antd'
 import { CloseOutlined } from '@ant-design/icons';
 import { MyDatepicker } from '../../Forms';
+import { useMutation } from '@apollo/client'
+import { APPROVE_MEETING } from '../../../graphql'
+import { message } from "antd";
 
 const { Title, Text } = Typography
-const ScheduleMeeting = ({visible,onClose}) => {
-     
+const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings}) => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
+    const handleSubmit = async (values) => {
+        try {
+          const { date, time } = values;
+    
+          if (!date || !time) {
+            message.error("Please select both date and time");
+            return;
+          }
+    
+          // Combine date & time into a single Date object
+          const combinedDateTime = new Date(date);
+          combinedDateTime.setHours(time.hour());
+          combinedDateTime.setMinutes(time.minute());
+    
+          await meeting({
+            variables: {
+                meetingId,
+                offerId,
+            },
+          });
+    
+          messageApi.success("Meeting request sent successfully!");
+          refetchMeetings();
+          onClose();
+        } catch (error) {
+          console.error(error);
+          messageApi.error("Failed to send meeting request");
+        }
+      };
+    const [meeting, { loading }] = useMutation(APPROVE_MEETING);
     return (
         <Modal
             title={null}
@@ -43,6 +76,7 @@ const ScheduleMeeting = ({visible,onClose}) => {
                 layout='vertical'
                 form={form}
                 requiredMark={false}
+                onFinish={handleSubmit}
             >
                 <Row>
                     <Col span={24}>

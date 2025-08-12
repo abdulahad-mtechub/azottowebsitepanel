@@ -45,6 +45,32 @@ const BUSINESS_MEETING = gql `
   }
 }
 `
+const UPDATE_MEETING = gql `
+mutation UpdateMeeting($input: UpdateMeetingInput!) {
+  updateMeeting(input: $input) {
+    id
+  }
+}
+`
+const APPROVE_MEETING = gql `
+mutation ApproveMeeting($meetingId: ID!, $offerId: ID) {
+  approveMeeting(meetingId: $meetingId, offerId: $offerId)
+}
+`
+const UPLOAD_DOC = gql `
+mutation CreateDocument($input: CreateDocumentInput!) {
+  createDocument(input: $input) {
+    id
+  }
+}
+`
+const FINALIZE_DEAL = gql `
+mutation UpdateDeal($input: UpdateDealInput!) {
+  updateDeal(input: $input) {
+    id
+  }
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -52,5 +78,9 @@ export {
   CREATE_SAVE_BUSINESS,
   CREATE_VIEW_BUSINESS,
   ACCEPT_ENDA,
-  BUSINESS_MEETING
+  BUSINESS_MEETING,
+  UPDATE_MEETING,
+  APPROVE_MEETING,
+  UPLOAD_DOC,
+  FINALIZE_DEAL
 }

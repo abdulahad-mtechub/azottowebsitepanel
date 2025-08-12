@@ -1,9 +1,43 @@
 import { CloseOutlined } from '@ant-design/icons'
 import { Button, Col, Flex, Form, Row, Typography } from 'antd'
 import { MyDatepicker } from '../../Forms'
+import { useMutation } from '@apollo/client'
+import { BUSINESS_MEETING } from '../../../graphql'
 
 const { Title, Text } = Typography
 const ScheduleMeetingStep = ({form,onClose}) => {
+    const handleSubmit = async (values) => {
+        try {
+          const { date, time } = values;
+    
+          if (!date || !time) {
+            message.error("Please select both date and time");
+            return;
+          }
+    
+          // Combine date & time into a single Date object
+          const combinedDateTime = new Date(date);
+          combinedDateTime.setHours(time.hour());
+          combinedDateTime.setMinutes(time.minute());
+    
+          await businessMeeting({
+            variables: {
+              input: {
+                businessId,
+                requestedDate: combinedDateTime.toISOString(),
+              },
+            },
+          });
+    
+          message.success("Meeting request sent successfully!");
+          onClose();
+        } catch (error) {
+          console.error(error);
+          message.error("Failed to send meeting request");
+        }
+      };
+    const [businessMeeting, { loading }] = useMutation(BUSINESS_MEETING);
+
   return (
     <div>
         <Flex vertical className='mb-3' gap={0}>
@@ -23,6 +57,7 @@ const ScheduleMeetingStep = ({form,onClose}) => {
             layout='vertical'
             form={form}
             requiredMark={false}
+            onFinish={handleSubmit}
         >
             <Row>
                 <Col span={24}>

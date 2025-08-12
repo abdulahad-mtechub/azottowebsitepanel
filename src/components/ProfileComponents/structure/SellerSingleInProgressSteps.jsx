@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Breadcrumb, Flex, Typography, Steps, Card, Collapse, Form } from 'antd';
-import { CheckOutlined, DownOutlined, RightOutlined, UpOutlined } from '@ant-design/icons';
+import { Flex, Typography, Steps, Collapse, Form } from 'antd';
+import { CheckOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { DigitalSaleAgreementStep } from './DigitalSaleAgreementStep';
 import { BankAccountDetailsStep } from './BankAccountDetailsStep';
 import { ConfirmationDocsStep } from './ConfirmationDocsStep';
@@ -8,7 +8,7 @@ import { SellerFinalDealsStep } from './SellerFinalDealStep';
 
 const { Text } = Typography;
 
-const SellerSingleInprogressSteps = ({completedeal}) => {
+const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
     const [form] = Form.useForm();
     const [activeStep, setActiveStep] = useState(completedeal ? 3:0);
     const [openPanels, setOpenPanels] = useState( completedeal ? ['1','2','3','4'] : ['1']);
@@ -23,20 +23,20 @@ const SellerSingleInprogressSteps = ({completedeal}) => {
         {
             key: '2',
             label: 'Bank Account Detials',
-            content: <BankAccountDetailsStep form={form} completedeal={completedeal} />,
+            content: <BankAccountDetailsStep form={form} completedeal={completedeal} user={user} />,
             status: 'Verified'
         },
         
         {
             key: '3',
             label: 'Confirmation & Docs',
-            content: <ConfirmationDocsStep  completedeal={completedeal} />,
+            content: <ConfirmationDocsStep  completedeal={completedeal} deal={deal} />,
             status: 'Verified'
         },
         {
             key: '4',
             label: 'Finalize Deal',
-            content: <SellerFinalDealsStep  completedeal={completedeal} />,
+            content: <SellerFinalDealsStep  completedeal={completedeal} deal={deal} />,
             status: 'Deal Closed'
         },
     ];

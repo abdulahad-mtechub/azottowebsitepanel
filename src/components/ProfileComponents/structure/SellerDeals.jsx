@@ -1,9 +1,9 @@
 import { Card, Flex, Spin, Tabs } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
-import { useState, useMemo, useCallback } from 'react'
 import { lazy, Suspense } from 'react'
 import { LoadingOutlined } from '@ant-design/icons';
 import { SellerSingleCompleteDeal } from './SellerSingleCompleteDeal';
+import React,{ useMemo,useState } from 'react'
 
 const SellerInProgressDeals = lazy(() => import('./SellerInProgressDeals').then(module => ({ default: module.SellerInProgressDeals })))
 const SellerSingleInProgressDeals = lazy(() => import('./SellerSingleInProgressDeal').then(module => ({ default: module.SellerSingleInProgressDeals })))
@@ -13,7 +13,7 @@ const SellerDeals = () => {
 
     const [ inprogressdeal, setInprogressDeal ] = useState()
     const [ completedeal, setCompleteDeal ] = useState()
-
+console.log("completedeal",completedeal)
     const singleTab = useMemo(() => [
         {
             key: '1',
@@ -29,7 +29,7 @@ const SellerDeals = () => {
             label: 'Completed Deals',
             children: (
                 <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                    <SellerCompleteDeal setCompleteDeal={setCompleteDeal} />
+                    <SellerCompleteDeal setCompleteDeal={setCompleteDeal} completedeal={completedeal} />
                 </Suspense>
             )
         },

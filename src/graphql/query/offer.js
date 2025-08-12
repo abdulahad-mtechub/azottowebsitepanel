@@ -33,7 +33,6 @@ query GetOffersBySeller($status: OfferStatus, $search: String) {
   }
 }
 `
-
 const OFFERBYID = gql`
 query GetOffersById($getOffersByIdId: String) {
   getOffersById(id: $getOffersByIdId) {
@@ -61,8 +60,110 @@ query GetOffersById($getOffersByIdId: String) {
   }
 }
 `
+const BUYERINPROGRESSDEALS = gql`
+query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
+  getBuyerInprogressDeals(limit: $limit, offset: $offset, search: $search) {
+    id
+    buyer {
+      id
+      name
+    }
+    business {
+      id
+      businessTitle
+    seller {
+      id
+      name
+    }
+    }
+    price
+    createdAt
+  }
+}
+`
+const SELLERINPROGRESSDEALS = gql`
+query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
+  getSellerInprogressDeals(limit: $limit, offset: $offset, search: $search) {
+    id
+    buyer {
+      id
+      name
+    }
+    business {
+      id
+      businessTitle
+    }
+    price
+    createdAt
+  }
+}
+`
+const BUYERDEALS = gql`
+query GetBuyerCompletedDeals($limit: Int, $offset: Int, $search: String) {
+  getBuyerCompletedDeals(limit: $limit, offset: $offset, search: $search) {
+    id
+    buyer {
+      id
+      name
+    }
+    business {
+      id
+      businessTitle
+    seller {
+      id
+      name
+    }
+    }
+    price
+    createdAt
+  }
+}
+`
+const SELLERDEALS = gql`
+query GetSellerCompletedDeals($limit: Int, $offset: Int, $search: String) {
+  getSellerCompletedDeals(limit: $limit, offset: $offset, search: $search) {
+    id
+    buyer {
+      id
+      name
+    }
+    business {
+      id
+      businessTitle
+    
+    }
+    price
+    createdAt
+  }
+}
+`
+const GETDEAL = gql `
+query GetDeal($getDealId: ID!) {
+  getDeal(id: $getDealId) {
+    id
+    business {
+      id
+      businessTitle
+      seller {
+        name
+      }
+    }
+    buyer {
+      name
+    }
+    price
+    status
+    createdAt
+  }
+}
+`
 export {
     OFFERBYBUYER,
     OFFERBYSELLER,
-    OFFERBYID
+    OFFERBYID,
+    BUYERDEALS,
+    SELLERDEALS,
+    BUYERINPROGRESSDEALS,
+    SELLERINPROGRESSDEALS,
+    GETDEAL
 }

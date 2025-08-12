@@ -3,10 +3,8 @@ import { useState } from 'react'
 import { Button, Card, Checkbox, Col, Flex, Image, Radio, Row, Typography } from 'antd'
 
 const { Text } = Typography
-const BankAccountDetailsStep = ({form,completedeal}) => {
+const BankAccountDetailsStep = ({form,completedeal,user}) => {
   const [selectedCard, setSelectedCard] = useState('Master Card');
-
-  const cards = ['Master Card', 'Visa Card', 'Debit Card'];
     return (
         <Row gutter={[16, 24]}>
             <Col span={24}>
@@ -19,13 +17,13 @@ const BankAccountDetailsStep = ({form,completedeal}) => {
       onChange={(e) => setSelectedCard(e.target.value)}
       style={{ width: '100%' }}
     >
-      {cards.map((card, i) => (
+      {user?.banks.map((card, i) => (
         <Card className='card-cs border-gray rounded-12 mb-2' key={i}>
           <Flex justify='space-between' align='center'>
             <Flex vertical>
-              <Text className='fs-13 text-gray'>{card}</Text>
+              <Text className='fs-13 text-gray'>{card?.cardType}</Text>
               <Text className='fs-13 text-gray'>
-                DE89 **** **** **** **** 00
+              {maskCardNumber(card?.cardNumber)}
               </Text>
             </Flex>
             <Radio value={card} />
@@ -54,3 +52,13 @@ const BankAccountDetailsStep = ({form,completedeal}) => {
 }
 
 export {BankAccountDetailsStep}
+
+function maskCardNumber(cardNumber = '') {
+  if (cardNumber.length < 6) return cardNumber; // too short to mask properly
+
+  const first4 = cardNumber.slice(0, 4);
+  const last2 = cardNumber.slice(-2);
+
+  // replace middle digits with groups of stars and spaces for better readability
+  return `${first4} **** **** **${last2}`;
+}

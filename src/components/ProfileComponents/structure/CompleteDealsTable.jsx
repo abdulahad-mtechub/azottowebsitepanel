@@ -1,14 +1,29 @@
 import { Col, Form, Row, Table } from 'antd'
 import { SearchInput } from '../../Forms';
-import React,{ useMemo,useEffect, } from 'react'
-import { useLazyQuery } from '@apollo/client';
-import {OFFERBYSELLER } from '../../../graphql/query';
+import React,{ useMemo,useEffect,useState } from 'react'
+import {BUYERDEALS } from '../../../graphql/query';
+import { useQuery } from '@apollo/client';
 
 const CompleteDealsTable = ({setCompleteDeal}) => {
     const [form] = Form.useForm()
     const search = Form.useWatch('search', form);
-    const [fetchDeals, { data: offerDeals, loading }] = useLazyQuery(OFFERBYSELLER);
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 10,
+      });
 
+    const { data: offerDeals, loading, error, refetch } = useQuery(BUYERDEALS, {
+    variables: {
+      limit: pagination.pageSize,
+      offset: (pagination.current - 1) * pagination.pageSize,
+      search: search || '',
+    },
+    fetchPolicy: 'network-only',
+  });
+
+  useEffect(() => {
+    refetch({ limit: 10, offset: 0, search: search || '' });
+  }, [search, refetch]);
 
     const columns = [
         { title: 'Business Title', dataIndex: 'title' },
@@ -18,7 +33,7 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
     ];
 
     const offerData = useMemo(() => {
-        return offerDeals?.getOffersBySeller?.map((offer) => ({
+        return offerDeals?.getBuyerCompletedDeals?.map((offer) => ({
             key: offer.id,
             title: offer.business.businessTitle,
             sellername: offer.business.seller.name,
@@ -26,10 +41,6 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
             date: new Date(offer.createdAt).toLocaleString(),
         })) || [];
     }, [offerDeals]);
-
-    useEffect(() => {
-        fetchDeals({ variables: { status: 'ACCEPTED', search: search || '' } });
-    }, [search]);
 
     return (
         <>    
@@ -57,18 +68,18 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
                                 }
                             },
                         })}
-                        pagination={false}
-                        // pagination={{
-                        //     hideOnSinglePage: true,
-                        //     total: 12,
-                        //     // pageSize: pagination?.pageSize,
-                        //     // defaultPageSize: pagination?.pageSize,
-                        //     // current: pagination?.pageNo,
-                        //     // size: "default",
-                        //     // pageSizeOptions: ['10', '20', '50', '100'],
-                        //     // onChange: (pageNo, pageSize) => call(pageNo, pageSize),
-                        //     showTotal: (total) => <Button className='brand-bg'>Total: {total}</Button>,
-                        // }}
+                        // pagination={false}
+                        pagination={{
+                            current: pagination.current,
+                            pageSize: pagination.pageSize,
+                            total: offerDeals?.getBuyerCompletedDeals?.length || 0, // Replace with totalCount if available
+                            showTotal: (total) => (
+                            <Button className="brand-bg">Total: {total}</Button>
+                            ),
+                            onChange: (page, pageSize) => {
+                            setPagination({ current: page, pageSize });
+                            },
+                        }}
                     />
                 </Col>
             </Row>

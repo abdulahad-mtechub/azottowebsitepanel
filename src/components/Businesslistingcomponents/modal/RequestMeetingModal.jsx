@@ -1,4 +1,4 @@
-import { Button,  Flex, Form, Modal, Typography } from 'antd'
+import { Button,  Flex, Form, Modal } from 'antd'
 import { ScheduleMeetingStep, SignJusoorEndaStep } from '../structure'
 import { useState } from 'react'
 import { useQuery } from '@apollo/client';
