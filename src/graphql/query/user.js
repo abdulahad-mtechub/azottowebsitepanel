@@ -13,6 +13,13 @@ const ME = gql`
       fileName
       filePath
     }
+    banks {
+      accountTitle
+      bankName
+      iban
+    cardNumber
+    cardType
+    }
   }
 }
 `

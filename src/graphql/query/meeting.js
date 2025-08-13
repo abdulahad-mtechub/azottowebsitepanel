@@ -28,6 +28,7 @@ query GetReceivedMeetingRequests($search: String) {
       name
     }
     business {
+      id
       businessTitle
       price
     }

@@ -1,14 +1,32 @@
 import { Col, Form, Row, Table } from 'antd'
 import { SearchInput } from '../../Forms';
-import {OFFERBYSELLER } from '../../../graphql/query';
-import { useLazyQuery } from '@apollo/client';
-import React,{ useMemo,useEffect } from 'react'
+import {BUYERINPROGRESSDEALS } from '../../../graphql/query';
+import { useQuery } from '@apollo/client';
+import React,{ useMemo,useEffect,useState } from 'react'
 
 const InprogressDealsTable = ({setInprogressDeal}) => {
     const [form] = Form.useForm()
-     const search = Form.useWatch('search', form);
-    const [fetchDeals, { data: offerDeals, loading, error, refetch }] = useLazyQuery(OFFERBYSELLER);
+    const search = Form.useWatch('search', form);
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 10,
+      });
+    const { data: offerDeals, loading, error, refetch } = useQuery(
+        BUYERINPROGRESSDEALS,
+        {
+          variables: {
+            limit: pagination.pageSize,
+            offset: (pagination.current - 1) * pagination.pageSize,
+            search: search || '',
+          },
+          fetchPolicy: 'network-only',
+        }
+    );
 
+    useEffect(() => {
+        refetch({ limit: 10, offset: 0, search: search || '' });
+      }, [search, refetch]);
+    
     const columns = [
         { title: 'Business Title', dataIndex: 'title' },
         { title: 'Seller Name', dataIndex: 'sellername' },
@@ -17,18 +35,14 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
     ];
 
     const offerData = useMemo(() => {
-            return offerDeals?.getOffersBySeller?.map((offer) => ({
-                key: offer.id,
-                title: offer.business.businessTitle,
-                sellername: offer.business.seller.name,
+            return offerDeals?.getBuyerInprogressDeals?.map((deal) => ({
+                key: deal.id,
+                title: deal.business.businessTitle,
+                sellername: deal.business.seller.name,
                 offerprice: offer.price,
                 date: new Date(offer.createdAt).toLocaleString(),
             })) || [];
         }, [offerDeals]);
-    
-        useEffect(() => {
-            fetchDeals({ variables: { status: 'PENDING', search: search || '' } });
-        }, [search]);
 
     return (
         <Form form={form}>    
@@ -57,22 +71,22 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
                                 }
                             },
                         })}
-                        pagination={false}
-                        // pagination={{
-                        //     hideOnSinglePage: true,
-                        //     total: 12,
-                        //     // pageSize: pagination?.pageSize,
-                        //     // defaultPageSize: pagination?.pageSize,
-                        //     // current: pagination?.pageNo,
-                        //     // size: "default",
-                        //     // pageSizeOptions: ['10', '20', '50', '100'],
-                        //     // onChange: (pageNo, pageSize) => call(pageNo, pageSize),
-                        //     showTotal: (total) => <Button className='brand-bg'>Total: {total}</Button>,
-                        // }}
+                        // pagination={false}
+                        pagination={{
+                            current: pagination.current,
+                            pageSize: pagination.pageSize,
+                            total: offerDeals?.getBuyerInprogressDeals?.length || 0, // ideally you should return totalCount from backend
+                            showTotal: (total) => (
+                              <Button className="brand-bg">Total: {total}</Button>
+                            ),
+                            onChange: (page, pageSize) => {
+                              setPagination({ current: page, pageSize });
+                            },
+                        }}              
                     />
                 </Col>
             </Row>
-         </Form>    
+        </Form>    
     )
 }
 

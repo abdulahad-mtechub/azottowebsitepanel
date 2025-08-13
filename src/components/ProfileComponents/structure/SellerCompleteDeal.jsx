@@ -1,18 +1,17 @@
-import { Col, Form, Row, Table } from 'antd'
+import { Col, Form, Row, Table,Button } from 'antd'
 import { SearchInput } from '../../Forms';
-import React,{ useMemo,useEffect,useState } from 'react'
-import {BUYERDEALS } from '../../../graphql/query';
+import {SELLERDEALS, GETDEAL, ME } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
+import React,{ useMemo,useEffect,useState } from 'react'
 
-const CompleteDealsTable = ({setCompleteDeal}) => {
+const SellerCompleteDeal = ({setCompleteDeal, completedeal}) => {
     const [form] = Form.useForm()
     const search = Form.useWatch('search', form);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
       });
-
-    const { data: offerDeals, loading, error, refetch } = useQuery(BUYERDEALS, {
+    const { data: offerDeals, loading, error, refetch } = useQuery(SELLERDEALS, {
     variables: {
       limit: pagination.pageSize,
       offset: (pagination.current - 1) * pagination.pageSize,
@@ -21,43 +20,44 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
     fetchPolicy: 'network-only',
   });
 
-  useEffect(() => {
-    refetch({ limit: 10, offset: 0, search: search || '' });
-  }, [search, refetch]);
+    useEffect(() => {
+          refetch({ limit: 10, offset: 0, search: search || '' });
+    }, [search, refetch]);
 
     const columns = [
         { title: 'Business Title', dataIndex: 'title' },
         { title: 'Seller Name', dataIndex: 'sellername' },
-        { title: 'Offer Price', dataIndex: 'offerprice' },
+        { title: 'Finalized Price', dataIndex: 'finalizedprice' },
         { title: 'Finalized Date', dataIndex: 'date' },
     ];
 
-    const offerData = useMemo(() => {
-        return offerDeals?.getBuyerCompletedDeals?.map((offer) => ({
-            key: offer.id,
-            title: offer.business.businessTitle,
-            sellername: offer.business.seller.name,
-            offerprice: offer.price,
-            date: new Date(offer.createdAt).toLocaleString(),
+    const sellercompletedealData = useMemo(() => {
+        return offerDeals?.getSellerCompletedDeals?.map((offer) => ({
+            key: offer?.id,
+            title: offer?.business?.businessTitle,
+            sellername: offer?.buyer?.name,
+            finalizedprice: offer?.price,
+            date: new Date(offer?.createdAt).toLocaleString(),
         })) || [];
     }, [offerDeals]);
 
     return (
-        <>    
+         <Form form={form}>        
             <Row gutter={[24,12]} className='mt-2'>
                 <Col xs={{span: 24}} sm={{span: 24}} md={{span: 12}} lg={{span: 8}}>
+                <Form.Item name="search" noStyle>
                     <SearchInput
                         placeholder="Search"
                         value={form.getFieldValue('name') || ''}
                         prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
-                        onChange={(e) => form.setFieldValue("search", e.target.value)}
                     />
+                </Form.Item>
                 </Col>
                 <Col span={24}>
                     <Table
                         size="large"
                         columns={columns}
-                        dataSource={offerData}
+                        dataSource={sellercompletedealData}
                         className="pagination table table-cs"
                         showSorterTooltip={false}
                         scroll={{ x: 800 }}
@@ -72,19 +72,19 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
                         pagination={{
                             current: pagination.current,
                             pageSize: pagination.pageSize,
-                            total: offerDeals?.getBuyerCompletedDeals?.length || 0, // Replace with totalCount if available
+                            total: offerDeals?.getSellerCompletedDeals?.length || 0,
                             showTotal: (total) => (
-                            <Button className="brand-bg">Total: {total}</Button>
-                            ),
-                            onChange: (page, pageSize) => {
-                            setPagination({ current: page, pageSize });
+                                <Button className="brand-bg">Total: {total}</Button>
+                                ),
+                                onChange: (page, pageSize) => {
+                                setPagination({ current: page, pageSize });
                             },
                         }}
                     />
                 </Col>
             </Row>
-        </>
+        </Form> 
     )
 }
 
-export {CompleteDealsTable}
+export {SellerCompleteDeal}
