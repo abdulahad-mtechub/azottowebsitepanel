@@ -883,6 +883,7 @@ body{
   justify-content: center;
   /* margin-top: 50px; */
   padding: 20px;
+  position: relative;
 }
 
 .form-inner {
@@ -1275,7 +1276,26 @@ body{
  .card-d-brand{
     background-color: #27274a !important;
  }
+
+ .d-inline{
+    display: inline-block !important;
+ }
  
+ .d-none{
+    display: none !important;
+ }
+
+ .border-white{
+    border-color: var(--white-text) !important;
+ }
+.lang-dropdown{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+
+
 /* media queries  */
 
 @media (max-width: 575px){
@@ -1331,7 +1351,13 @@ body{
     }
     .mobile-view-info{
         display: block;
-    }  
+    } 
+    .d-inline{
+        display: none !important;
+    } 
+    .d-none{
+        display: inline-block !important;
+    }
 }
 
 

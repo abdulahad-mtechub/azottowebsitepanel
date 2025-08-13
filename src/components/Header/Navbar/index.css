@@ -70,6 +70,7 @@ a{
 
 .gen-navbar-left img{
     max-width: 100px;
+    margin-top: 5px;
 }
 
 @media (max-width: 991px){
@@ -96,6 +97,8 @@ a{
     align-items: center;
     gap: 20px;
     position: relative;
+    list-style-type: none;
+    margin: 0;
 }
 
 .nav-list li{

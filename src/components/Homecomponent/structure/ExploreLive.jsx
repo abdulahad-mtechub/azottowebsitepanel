@@ -16,7 +16,7 @@ const ExploreLive = () => {
                             <Title className='m-0' level={2}>
                                 Businesses Currently <span className='text-brand'>Available for Sale</span>
                             </Title>
-                            <Text className='fs-14'>
+                            <Text className='fs-14 d-inline'>
                                 Discover a curated selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more
                             </Text>
                         </Flex>

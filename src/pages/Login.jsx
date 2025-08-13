@@ -1,17 +1,17 @@
-import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image } from "antd";
+import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image, Dropdown, Space } from "antd";
 import { MyInput } from "../components";
 import { NavLink } from "react-router-dom";
 import { message } from "antd";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { ArrowLeftOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
 
 
 
-const { Title, Paragraph } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const LoginPage = () => {
 const { login } = useContext(AuthContext);
@@ -20,6 +20,11 @@ const { login } = useContext(AuthContext);
     const navigate = useNavigate();
     const [loginUser, { loading, error }] = useMutation(LOGIN);
     const [form] = Form.useForm();
+    const [selectedLang, setSelectedLang] = useState({
+        key: "1",
+        label: "EN",
+        icon: "assets/icons/en.png",
+      });
 
     const handleFinish = async (values) => {
       try {
@@ -41,6 +46,31 @@ const { login } = useContext(AuthContext);
         messageApi.error("Login failed: Something went wrong");
       }
     };
+
+    const lang = [
+      {
+        key: "1",
+        label: (
+          <Space>
+            <Image src="assets/icons/en.png" width={20} alt="English" preview={false} />
+            <Text className='fs-13'>EN</Text>
+          </Space>
+        ),
+        onClick: () =>
+          setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+      },
+      {
+        key: "2",
+        label: (
+          <Space>
+            <Image src="assets/icons/ar.png" width={20} alt="Arabic" preview={false} />
+            <Text className='fs-13'>AR</Text>
+          </Space>
+        ),
+        onClick: () =>
+          setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+      },
+    ];
 
     return (
       <>
@@ -114,6 +144,23 @@ const { login } = useContext(AuthContext);
                 lg={8}
                 className="signup-visual-container"
             >
+                <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
+                  <Button
+                    onClick={(e) => e.preventDefault()}
+                    className="bg-transparent btn-outline btn p-2 border-white"
+                  >
+                    <Space align="center">
+                      <Image
+                        src={selectedLang.icon}
+                        width={20}
+                        alt={selectedLang.label}
+                        preview={false}
+                      />
+                      <Text className="text-white fs-13">{selectedLang.label}</Text>
+                      <DownOutlined className="text-white" />
+                    </Space>
+                  </Button>
+                </Dropdown> 
                 <Flex vertical justify="space-between" className="h-100">
                   <Flex vertical justify="center" align="center" className="logo-sp">
                     <Image src="/assets/images/logo.png" width={200} preview={false} />

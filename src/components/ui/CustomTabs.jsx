@@ -54,7 +54,6 @@ const CustomTabs = ({ items, activeKey, onChange }) => {
                 borderRadius: 8,
                 cursor: 'pointer',
                 color: isActive ? '#1a1a1a' : '#595959',
-                marginLeft: '-4px',
                 transition: 'all 0.3s',
               }}
             >

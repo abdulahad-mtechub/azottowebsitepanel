@@ -6,11 +6,13 @@ import {
     Row,
     Col,
     Card,
-    Segmented
+    Segmented,
+    Avatar,
+    Tooltip
 } from 'antd';
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
-import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet } from '../components';
+import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
 import { useEffect, useState,useMemo } from 'react';
 import { profiletabData, selleralertsData } from '../data';
 import { ME,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
@@ -22,6 +24,7 @@ const ProfileDashboard = () => {
     const userId = localStorage.getItem('userId');
     const navigate = useNavigate();
     const [parentTab, setParentTab] = useState('Seller');
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
     const { data: userStatsData, loading: userStatsLoading, error: userStatsError } = useQuery(PROFESSIONALSTATISTICS);
     const [getBuyerUser,{ data: buyerStatsData, loading: buyerStatsLoading, error: buyerStatsError } ]= useLazyQuery(GETBUYERSTATISTICS);
@@ -70,16 +73,16 @@ const ProfileDashboard = () => {
         { id: 1, img: '/assets/icons/total-view.png', title: 'Total Views', key: 'viewedBusinessesCount' },
         { id: 2, img: '/assets/icons/list-business.png', title: 'Number of Listed Businesses', key: 'listedBusinessesCount' },
         { id: 3, img: '/assets/icons/offer-recieved.png', title: 'Offers Received', key: 'receivedOffersCount' },
-        { id: 4, img: '/assets/icons/offer-recieved.png', title: 'Pending Meeting Requests', key: 'pendingMeetingsCount' },
+        { id: 4, img: '/assets/icons/pending-meeting-ic.png', title: 'Pending Meeting Requests', key: 'pendingMeetingsCount' },
         { id: 5, img: '/assets/icons/schedule-meeting.png', title: 'Schedule Meetings', key: 'scheduledMeetingsCount' },
-        { id: 6, img: '/assets/icons/c-2.png', title: 'Finalized Deals', key: 'finalizedDealsCount' },
-        ];
+        { id: 6, img: '/assets/icons/finalize-deal-ic.png', title: 'Finalized Deals', key: 'finalizedDealsCount' },
+    ];
     
     const buyerStats = [
-        { id: 1, img:'/assets/icons/favorite.png', title: 'Favorite Listing', key: 'favouriteBusinessesCount' },
+        { id: 1, img:'/assets/icons/favorite-ic.png', title: 'Favorite Listing', key: 'favouriteBusinessesCount' },
         { id: 2, img: '/assets/icons/schedule-meeting.png', title: 'Schedule Meetings', key: 'scheduledMeetingsCount' },
-        { id: 3, img: '/assets/icons/c-2.png', title: 'Finalized Deals', key: 'finalizedDealsCount' },
-        ];
+        { id: 3, img: '/assets/icons/finalize-deal-ic.png', title: 'Finalized Deals', key: 'finalizedDealsCount' },
+    ];
         
     const profileStatisticsData = useMemo(() => {
         if (!userStatsData?.getProfileStatistics) return defaultStats.map(item => ({ ...item, numbers: '0' }));
@@ -221,7 +224,7 @@ const ProfileDashboard = () => {
     return (
         <div className='padd mb-2'>
             <div className='container'>
-                <Flex vertical gap={25} className='mt-3'>
+                <Flex className='mt-3' align='center' justify='space-between'>
                     <Breadcrumb
                         separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                         items={[
@@ -233,6 +236,13 @@ const ProfileDashboard = () => {
                             },
                         ]}
                     />
+                    <Button className='bg-transparent border0 p-0 d-none' type='button' onClick={() => setIsSidebarVisible(true)}>
+                        <Tooltip
+                            title='Profile Sidebar'
+                        >
+                            <img src='/assets/icons/sidebar.png' alt='sidebar' width={25} />
+                        </Tooltip>
+                    </Button>
                 </Flex>
 
                 <Row gutter={[24, 24]} className='mt-3'>
@@ -240,48 +250,33 @@ const ProfileDashboard = () => {
                     <Col xs={0} sm={0} md={0} lg={8} xl={6}>
                         <Card className='radius-12 border-gray'>
                             <Flex vertical gap={30}>
-                                <Flex vertical align='center' justify='center' gap={20}>
-                                <div
-                                    style={{
-                                    width: 40,
-                                    height: 40,
-                                    borderRadius: '50%',
-                                    backgroundColor: '#4F46E5',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: '#fff',
-                                    fontWeight: 'bold',
-                                    fontSize: '16px',
-                                    textTransform: 'uppercase',
-                                    }}
-                                >
-                                    {user?.name?.charAt(0)}
-                                </div>
-                                <Title level={5} className='fw-500'>{user?.name}</Title>
-                                    <Flex vertical gap={10}>
-                                        <Flex justify="center">
-                                            <Segmented
-                                                className='custom-segment'
-                                                options={['Seller', 'Buyer']}
-                                                value={parentTab}
-                                                onChange={handleParentChange}
-                                                
-                                            />
-                                        </Flex>
-                                        <div className="text-center mt-4">
-                                            <CustomTabs
-                                                items={profiletabData[parentTab]}
-                                                activeKey={activeChildTab[parentTab]}
-                                                onChange={(key) => {
-                                                    setActiveChildTab((prev) => ({
-                                                        ...prev,
-                                                        [parentTab]: key,
-                                                    }));
-                                                }}
-                                            />
-                                        </div>
+                                <Flex vertical align='center' justify='center' gap={5}>
+                                    <Avatar size={40} className='fs-16 text-brand' style={{backgroundColor:'#E9EEFC',textTransform:'uppercase',fontWeight:'bold'}}>
+                                        {user?.name?.charAt(0)}
+                                    </Avatar>
+                                    <Title level={5} className='fw-500'>{user?.name?.charAt(0)?.toUpperCase() + user?.name?.slice(1)}</Title>
+                                </Flex>
+                                <Flex vertical gap={10}>
+                                    <Flex justify="center">
+                                        <Segmented
+                                            className='custom-segment'
+                                            options={['Seller', 'Buyer']}
+                                            value={parentTab}
+                                            onChange={handleParentChange}
+                                        />
                                     </Flex>
+                                    <div className="text-center mt-4">
+                                        <CustomTabs
+                                            items={profiletabData[parentTab]}
+                                            activeKey={activeChildTab[parentTab]}
+                                            onChange={(key) => {
+                                                setActiveChildTab((prev) => ({
+                                                    ...prev,
+                                                    [parentTab]: key,
+                                                }));
+                                            }}
+                                        />
+                                    </div>
                                 </Flex>
                             </Flex>
                         </Card>
@@ -295,6 +290,17 @@ const ProfileDashboard = () => {
                     </Col>
                 </Row>
             </div>
+
+            <ProfileSidebar 
+                visible={isSidebarVisible}
+                parentTab={parentTab}
+                user={user}
+                activeChildTab={activeChildTab}
+                profiletabData={profiletabData}
+                handleParentChange={handleParentChange}
+                setActiveChildTab={setActiveChildTab}
+                onClose={() => setIsSidebarVisible(false)}
+            />
 
             <Changepassword
                 visible={visible}
