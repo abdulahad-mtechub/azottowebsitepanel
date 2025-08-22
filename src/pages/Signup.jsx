@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Form, Button, Upload, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex, Steps } from "antd";
+import { Form, Button, Upload, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex, Steps, Dropdown } from "antd";
 import { message } from "antd";
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutation/login";
@@ -8,9 +8,9 @@ import { MyInput, MySelect } from "../components";
 import { NavLink } from "react-router-dom";
 import { district, cities  } from '../data';
 import imageCompression from 'browser-image-compression';
-import { ArrowLeftOutlined, CheckOutlined } from "@ant-design/icons";
+import { ArrowLeftOutlined, CheckOutlined, DownOutlined } from "@ant-design/icons";
 
-const { Title, Paragraph } = Typography;
+const { Title, Text, Paragraph } = Typography;
 const SignupPage = () => {
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
@@ -22,6 +22,11 @@ const SignupPage = () => {
     const [passportFileName, setPassportFileName] = useState("");
     const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [selectedLang, setSelectedLang] = useState({
+        key: "1",
+        label: "EN",
+        icon: "assets/icons/en.png",
+    });
 
     const [createUser, { loading:userLoading, error }] = useMutation(CREATE_USER);
 
@@ -347,6 +352,31 @@ const SignupPage = () => {
         ),
     }));
 
+    const lang = [
+      {
+        key: "1",
+        label: (
+          <Space>
+            <Image src="assets/icons/en.png" width={20} alt="English" preview={false} />
+            <Text className='fs-13'>EN</Text>
+          </Space>
+        ),
+        onClick: () =>
+          setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+      },
+      {
+        key: "2",
+        label: (
+          <Space>
+            <Image src="assets/icons/ar.png" width={20} alt="Arabic" preview={false} />
+            <Text className='fs-13'>AR</Text>
+          </Space>
+        ),
+        onClick: () =>
+          setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+      },
+    ];
+
     return (
         <>
         {contextHolder}
@@ -431,6 +461,23 @@ const SignupPage = () => {
                 lg={8}
                 className="signup-visual-container"
             >
+                <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
+                  <Button
+                    onClick={(e) => e.preventDefault()}
+                    className="bg-transparent btn-outline btn p-2 border-white"
+                  >
+                    <Space align="center">
+                      <Image
+                        src={selectedLang.icon}
+                        width={20}
+                        alt={selectedLang.label}
+                        preview={false}
+                      />
+                      <Text className="text-white fs-13">{selectedLang.label}</Text>
+                      <DownOutlined className="text-white" />
+                    </Space>
+                  </Button>
+                </Dropdown> 
                 <Flex vertical justify="space-between" className="h-100">
                     <Flex vertical justify="center" align="center" className="logo-sp">
                         <Image src="/assets/images/logo.png" width={200} preview={false} />

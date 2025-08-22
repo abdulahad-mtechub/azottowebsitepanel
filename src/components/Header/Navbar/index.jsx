@@ -1,4 +1,4 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space } from 'antd';
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
@@ -20,6 +20,11 @@ const Navbar = ({setGetCategory}) => {
   const [ visible, setVisible ] = useState(false)
   const location = useLocation();
   const navigate = useNavigate()
+  const [selectedLang, setSelectedLang] = useState({
+    key: "1",
+    label: "EN",
+    icon: "assets/icons/en.png",
+  });
   const otherPaths = ['/about', '/termofuse'];
   const others = otherPaths.includes(location.pathname);
     // ✅ Setup the lazy query
@@ -137,6 +142,31 @@ const Navbar = ({setGetCategory}) => {
     },
   ];
 
+  const lang = [
+    {
+      key: "1",
+      label: (
+        <Space>
+          <Image src="assets/icons/en.png" width={20} alt="English" preview={false} />
+          <Text className='fs-13'>EN</Text>
+        </Space>
+      ),
+      onClick: () =>
+        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+    },
+    {
+      key: "2",
+      label: (
+        <Space>
+          <Image src="assets/icons/ar.png" width={20} alt="Arabic" preview={false} />
+          <Text className='fs-13'>AR</Text>
+        </Space>
+      ),
+      onClick: () =>
+        setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+    },
+  ];
+
   return (
     <>
       <div className='gen-navbar-container' style={{ position: 'relative' }}>
@@ -150,6 +180,23 @@ const Navbar = ({setGetCategory}) => {
               </div>
               <div className="gen-navbar-right">
                 <Flex align='center' gap={10}>
+                  <Dropdown menu={{ items: lang }} trigger={["click"]}>
+                    <Button
+                      onClick={(e) => e.preventDefault()}
+                      className="bg-transparent btn-outline btn p-2 border-white"
+                    >
+                      <Space align="center">
+                        <Image
+                          src={selectedLang.icon}
+                          width={20}
+                          alt={selectedLang.label}
+                          preview={false}
+                        />
+                        <Text className="text-white fs-13">{selectedLang.label}</Text>
+                        <DownOutlined className="text-white" />
+                      </Space>
+                    </Button>
+                  </Dropdown>
                   <div className="sp-cover"  onClick={()=> setVisible(true)}>
                     <span className="sp sp-1 sp-1-click"></span>
                     <span className="sp sp-2 sp-2-click"></span>
@@ -232,7 +279,7 @@ const Navbar = ({setGetCategory}) => {
                     </li>
                   </ul>
                 </li>
-                <li>
+                {/* <li>
                   <NavLink to={''}>
                     <Flex gap={10}>
                       <Text className={`nav-item
@@ -265,11 +312,18 @@ const Navbar = ({setGetCategory}) => {
                       </li>
                     ))}
                   </ul>
-                </li>
+                </li> */}
                 <li>
                   <NavLink to="/article">
                     <Text className={`nav-item ${location.pathname === '/article' || location.pathname.startsWith('/articlesingleview/') ? 'text-brand' : 'text-white'}`}>
                       Articles
+                    </Text>
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink to="/about">
+                    <Text className={`nav-item ${location.pathname === '/about' ? 'text-brand' : 'text-white'}`}>
+                      About Jusoor
                     </Text>
                   </NavLink>
                 </li>
@@ -282,7 +336,24 @@ const Navbar = ({setGetCategory}) => {
                 </li>
               </ul>
             </Flex>
-            <div>
+            <Flex gap={10} align='center'>
+              <Dropdown menu={{ items: lang }} trigger={["click"]}>
+                <Button
+                  onClick={(e) => e.preventDefault()}
+                  className="bg-transparent btn-outline btn p-2 border-white"
+                >
+                  <Space align="center">
+                    <Image
+                      src={selectedLang.icon}
+                      width={20}
+                      alt={selectedLang.label}
+                      preview={false}
+                    />
+                    <Text className="text-white fs-13">{selectedLang.label}</Text>
+                    <DownOutlined className="text-white" />
+                  </Space>
+                </Button>
+              </Dropdown>
               {
                 !isshow ? 
                 <Flex gap={5} justify='end'>
@@ -295,26 +366,26 @@ const Navbar = ({setGetCategory}) => {
                 </Flex>
               :
               <Flex gap={10} align='center'>
-              <Button className='btn bg-brand' onClick={() => navigate('/sellbusinesscreate')}>
-                <PlusOutlined /> Sell a Business
-              </Button>
-              
-              <Badge size="small" count={notificationCount} overflowCount={1}>
-                <Button className='bg-transparent border-0 p-0'>
-                  <Image 
-                    src='/assets/icons/notification.png' 
-                    width={'28px'} 
-                    preview={false}
-                    alt="tci" 
-                    className="up"
-                  />
+                <Button className='btn bg-brand' onClick={() => navigate('/sellbusinesscreate')}>
+                  <PlusOutlined /> Sell a Business
                 </Button>
-              </Badge>
+              
+                <Badge size="small" count={notificationCount} overflowCount={1}>
+                  <Button className='bg-transparent border-0 p-0'>
+                    <Image 
+                      src='/assets/icons/notification.png' 
+                      width={'28px'} 
+                      preview={false}
+                      alt="tci" 
+                      className="up"
+                    />
+                  </Button>
+                </Badge>
 
               <Dropdown menu={{ items }} trigger={['click']}>
                 <Flex align='center' gap={10}>
                   {/* Profile Initial Avatar */}
-                  <div
+                  {/* <div
                     style={{
                       width: 40,
                       height: 40,
@@ -330,14 +401,16 @@ const Navbar = ({setGetCategory}) => {
                     }}
                   >
                     {user?.name?.charAt(0)}
-                  </div>
-
+                  </div> */}
+                  <Avatar size={40} className='fs-16 text-brand' style={{backgroundColor:'#E9EEFC',textTransform:'uppercase',fontWeight:'bold'}}>
+                    {user?.name?.charAt(0)}
+                  </Avatar>
                   <DownOutlined className='text-white fs-13' />
                 </Flex>
               </Dropdown>
             </Flex>
               }
-            </div>
+            </Flex>
           </div>
         </div>
       </div>

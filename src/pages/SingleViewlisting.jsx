@@ -156,7 +156,9 @@ const SingleViewlisting = () => {
                         <PreviewTableContent title='Inventory' columns={inventColumn} data={inventoryData} />
                     </Col>
                     <Col lg={{span: 6}} md={{span: 0}} sm={{span: 0}} xs={{span: 0}}>
-                        <BusinessInfoCard data={business} />
+                        <div  style={{position:'sticky', top: 100,marginBottom:25}}>
+                            <BusinessInfoCard data={business} />
+                        </div>
                     </Col>
                 </Row>
                 <BusinessInfoCardMobile/>

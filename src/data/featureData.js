@@ -319,7 +319,7 @@ const businessmenuData = [
     {
         id: 1,
         icon: '/assets/icons/m-1.png',
-        title: 'Browse Businesses by Categories',
+        title: 'Browse by Categories',
         subtitle: 'Choose from popular business types.',
         subdropdown: [
             { id: 1, title: 'Restaurants & Cafes', path: '/businesslisting?category=Restaurants & Cafes' },
@@ -337,7 +337,7 @@ const businessmenuData = [
     {
         id: 2,
         icon: '/assets/icons/m-2.png',
-        title: 'Browse Businesses by Location',
+        title: 'Browse by Location',
         subtitle: 'Find businesses in your city.',
         subdropdown: [
             { id: 1, title: 'Riyadh', path: '/businesslisting?city=Riyadh' },
@@ -365,7 +365,7 @@ const businessmenuData = [
     {
         id: 3,
         icon: '/assets/icons/m-3.png',
-        title: 'Browse Businesses by Revenue',
+        title: 'Browse by Revenue',
         subtitle: 'Filter by business earnings.',
         subdropdown: [
             { id: 1, title: 'SAR 0 - SAR 10,000', path: '/businesslisting?revenue=0,10000' },
@@ -380,7 +380,7 @@ const businessmenuData = [
     {
         id: 4,
         icon: '/assets/icons/m-4.png',
-        title: 'Browse Businesses by Profit',
+        title: 'Browse by Profit',
         subtitle: 'Explore based on profit margin.',
         subdropdown: [
             { id: 1, title: 'SAR 0 - SAR 1000', path: '/businesslisting?profit=0,1000' },
