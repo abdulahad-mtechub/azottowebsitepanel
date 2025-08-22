@@ -25,9 +25,12 @@ const ME = gql`
 `
 
 const NOTIFICATION = gql`
-  query GetNotifications($userId: ID!) {
-    getNotifications(userId: $userId) {
+query GetNotifications($userId: ID!) {
+  getNotifications(userId: $userId) {
+    count
+    notifications {
       id
+      createdAt
       isRead
       name
       message
@@ -37,6 +40,7 @@ const NOTIFICATION = gql`
       }
     }
   }
+}
 `
 const PROFESSIONALSTATISTICS = gql`
   query GetProfileStatistics {

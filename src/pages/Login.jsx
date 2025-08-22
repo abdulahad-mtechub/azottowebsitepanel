@@ -9,13 +9,9 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
 
-
-
 const { Title, Text, Paragraph } = Typography;
-
 const LoginPage = () => {
 const { login } = useContext(AuthContext);
-
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
     const [loginUser, { loading, error }] = useMutation(LOGIN);
@@ -30,7 +26,7 @@ const { login } = useContext(AuthContext);
       try {
         const { email, password } = values;
     
-        const { data } = await loginUser({ variables: { email, password } });
+        const { data,error } = await loginUser({ variables: { email, password } });
     
         if (data?.login?.token) {
           localStorage.setItem("accessToken", data.login.token);
@@ -39,11 +35,11 @@ const { login } = useContext(AuthContext);
           messageApi.success("Login successful!");
           setTimeout(() => navigate("/"), 1000);
         } else {
-          messageApi.error("Login failed: Invalid credentials");
+          messageApi.error("Login failed: Somthing went Wrong");
         }
       } catch (error) {
         console.error("Login error:", error);
-        messageApi.error("Login failed: Something went wrong");
+        messageApi.error(`Login failed: ${error}`);
       }
     };
 
