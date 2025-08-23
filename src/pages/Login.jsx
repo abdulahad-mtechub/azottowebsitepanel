@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
 
 const { Title, Text, Paragraph } = Typography;
 const LoginPage = () => {
@@ -29,8 +30,8 @@ const { login } = useContext(AuthContext);
         const { data,error } = await loginUser({ variables: { email, password } });
     
         if (data?.login?.token) {
-          localStorage.setItem("accessToken", data.login.token);
-          localStorage.setItem("userId", data.login.user.id);
+          Cookies.set("userId", data.login.user.id, { expires: 7 }); // expires in 7 days
+          Cookies.set("authToken", data.login.token, { expires: 7, secure: true }); 
           login(data?.login?.token);
           messageApi.success("Login successful!");
           setTimeout(() => navigate("/"), 1000);

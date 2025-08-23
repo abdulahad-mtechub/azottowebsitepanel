@@ -69,6 +69,7 @@ query GetScheduledMeetings($search: String) {
     createdAt
     requestedDate
     ownerAvailabilityDate
+    status
     requestedBy {
       name
     }

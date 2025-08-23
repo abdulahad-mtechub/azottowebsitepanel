@@ -5,16 +5,16 @@ import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icon
 import { businessmenuData, othersmenu } from '../../../data';
 import { useEffect, useState,useContext } from 'react';
 import { MobileNavbar } from './MobileNavbar';
-import { AuthContext } from '../../../context/AuthContext';
+import Cookies from "js-cookie";
 import { useLazyQuery } from '@apollo/client';
 import { ME,NOTIFICATION } from '../../../graphql/query';
 
 const { Text, Title } = Typography;
 
 const Navbar = ({setGetCategory}) => { 
-  const { isLoggedIn, logout } = useContext(AuthContext);
-  const [isshow, setIsShow] = useState(isLoggedIn);
-  const userId = localStorage.getItem('userId');
+  const userId = Cookies.get("userId"); // read userId from cookie
+  const [isLoggedIn, setisLoggedIn] = useState(!!userId);
+  const [isshow, setIsShow] = useState(!!userId); // true if userId exists
   const [user, setUser] = useState(null);
   const [notificationCount, setNotificationCount] = useState();
   const [ visible, setVisible ] = useState(false)
@@ -26,24 +26,23 @@ const Navbar = ({setGetCategory}) => {
     icon: "assets/icons/en.png",
   });
   const otherPaths = ['/about', '/termofuse'];
-  const others = otherPaths.includes(location.pathname);
-    // ✅ Setup the lazy query
-    const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
-    const [getNotification, { data:notifications, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
+  // ✅ Setup the lazy query
+  const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
+  const [getNotification, { data:notifications, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
 
-    useEffect(() => {
-      if (userId) {
-        getUser({ variables: { getUserId: userId } });
-        getNotification({ variables: { userId } });
-      }
-    }, [userId]);
-  
-    useEffect(() => {
-      if (me?.getUser) {
-        setUser(me.getUser);
-        setNotificationCount(notifications?.length)
-      }
-    }, [me]);
+  useEffect(() => {
+    if (userId) {
+      getUser({ variables: { getUserId: userId } });
+      getNotification({ variables: { userId } });
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (me?.getUser) {
+      setUser(me.getUser);
+      setNotificationCount(notifications?.length)
+    }
+  }, [me]);
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
       return (

@@ -8,9 +8,9 @@ const CREATE_OFFER = gql`
 }
 `
 const UPDATE_OFFER = gql `
-  mutation UpdateOffer($input: UpdateOfferInput) {
-  updateOffer(input: $input) {
-    status
+mutation UpdateOfferStatus($input: UpdateOfferStatusInput!) {
+  updateOfferStatus(input: $input) {
+    id
   }
 }
 `
@@ -71,6 +71,13 @@ mutation UpdateDeal($input: UpdateDealInput!) {
   }
 }
 `
+const COUNTER_OFFER = gql `
+mutation CounterOffer($input: CounterOfferInput!) {
+  counterOffer(input: $input) {
+    id
+  }
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -82,5 +89,6 @@ export {
   UPDATE_MEETING,
   APPROVE_MEETING,
   UPLOAD_DOC,
-  FINALIZE_DEAL
+  FINALIZE_DEAL,
+  COUNTER_OFFER
 }

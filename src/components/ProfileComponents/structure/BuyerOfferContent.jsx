@@ -1,22 +1,45 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Typography } from 'antd'
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Typography,message,Spin } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
-import { offerData } from '../../../data';
 import { NavLink } from 'react-router-dom';
 import { OfferSellerModal, RequestMeetingModal } from '../../Businesslistingcomponents';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { DeleteModal } from '../../ui';
-import { MySelect, SearchInput } from '../../Forms';
+import { SearchInput } from '../../Forms';
 import { DownOutlined } from '@ant-design/icons';
+import { GET_BUYER_OFFER } from '../../../graphql/query'
+import { useQuery } from '@apollo/client';
 
 const { Text } = Typography
 const BuyerOfferContent = () => {
-
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
     const [ offermodal, setOfferModal ] = useState(false)
     const [ requestPop, setRequestPop ] = useState(false)
     const [ deletemodal, setDeleteModal ] = useState(false)
     const [ filterstatus, setFilterStatus] = useState()
+    const [selectedBusinessId, setSelectedBusinessId] = useState(null);
+    const [selectedOfferId, setSelectedOfferId] = useState(null);
+    const search = Form.useWatch('search', form);
 
+    const { data, loading, error, refetch } = useQuery(GET_BUYER_OFFER, {
+        variables: {
+          status: filterstatus ? filterstatus : null, // send null to fetch all
+          search: search,
+        },
+    });
+
+    const tableData = data?.getOffersByUser?.map((offer, idx) => ({
+        key: offer.id,
+        title: offer.business.businessTitle,
+        sellername: offer.business.seller?.name
+        ? `${offer.business.seller.name.slice(0, 3)}*****`
+        : null,
+        businessprice: offer.business.price,
+        offerprice: offer.price,
+        status: offer.status, // adjust mapping if needed (Received/Send/Inactive)
+        date: new Date(offer.createdAt).toLocaleString(),
+        business: offer.business, 
+    })) || [];
 
     const columns = [
         { title: 'Business Title', dataIndex: 'title' },
@@ -27,12 +50,12 @@ const BuyerOfferContent = () => {
             title: 'Status',
             dataIndex: 'status',
             render: (status) => {
-                if (status === 'Received') {
-                    return <Text className='received fs-12 badge-cs fw-500'>{status}</Text>;
-                } else if (status === 'Inactive') {
+                if (status === 'PENDING') {
+                    return <Text className='sendstatus fs-12 badge-cs fw-500'>{status}</Text>;
+                } else if (status === 'REJECTED') {
                     return <Text className='inactive fs-12 badge-cs fw-500'>{status}</Text>;
                 } else {
-                    return <Text className='sendstatus fs-12 badge-cs fw-500'>{status}</Text>
+                    return <Text className='received fs-12 badge-cs fw-500'>{status}</Text>
                 }
             },
         },
@@ -45,10 +68,20 @@ const BuyerOfferContent = () => {
             align: 'center',
             render: (record) => {
                 const items = [
-                    { label: <NavLink onClick={()=>setRequestPop(true)}>Accept Offer</NavLink>, key: 0 },
-                    { label: <NavLink onClick={()=>setDeleteModal(true)}>Reject Offer</NavLink>, key: 1 },
-                    { label: <NavLink onClick={()=>setOfferModal(true)}>Counter Offer</NavLink>, key: 2 },
-                    { label: <NavLink onClick={()=>setRequestPop(true)}>Request For Virtual Meeting</NavLink>, key: 3 },
+                    { label: <NavLink onClick={async()=>{
+                        setRequestPop(true)}}>Accept Offer</NavLink>, key: 0 },
+                    { label: <NavLink onClick={async()=>{
+                        setSelectedOfferId(record.key)
+                        setDeleteModal(true)}}>Reject Offer</NavLink>, key: 1 },
+                    { label: <NavLink onClick={()=>{
+                        setSelectedBusinessId(record.business.id);
+                        setSelectedOfferId(record.key)
+                        setOfferModal(true);
+                        setOfferModal(true)}}>Counter Offer</NavLink>, key: 2 },
+                    { label: <NavLink onClick={()=> {
+                        setSelectedBusinessId(record.business.id);
+                        setRequestPop(true);
+                      }}>Request For Virtual Meeting</NavLink>, key: 3 },
                 ].filter(Boolean);
     
                 return (
@@ -72,19 +105,33 @@ const BuyerOfferContent = () => {
         setFilterStatus(key)
     }
 
+    useEffect(() => {
+        refetch({ limit: 10, offset: 0, search: search || '' });
+    }, [search, refetch]);
+    if (loading) {
+        return (
+          <Flex justify="center" align="center" style={{ height: '200px' }}>
+            <Spin size="large" />
+          </Flex>
+        );
+    }
     return (
         <>
+        {contextHolder}
             <Flex vertical gap={20}>
                 <ModuleTopHeading level={4} name={'Offer'} />
                 <Card className='radius-12 border-gray'>
+                    <Form form={form}>    
                     <Row gutter={[24,24]}>
                         <Col span={24}>
                             <Flex gap={5} align='center'>
+                                <Form.Item name="search" noStyle>
                                 <SearchInput
                                     placeholder="Search"
                                     value={form.getFieldValue('name') || ''}
                                     prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
                                 />
+                                </Form.Item>
                                 <Dropdown
                                     menu={{
                                         items,
@@ -109,7 +156,7 @@ const BuyerOfferContent = () => {
                             <Table
                                 size="large"
                                 columns={columns}
-                                dataSource={offerData}
+                                dataSource={tableData}
                                 className="pagination table table-cs"
                                 showSorterTooltip={false}
                                 scroll={{ x: 1300 }}
@@ -128,17 +175,25 @@ const BuyerOfferContent = () => {
                             />
                         </Col>
                     </Row>
+                    </Form>
                 </Card>
             </Flex>
             <OfferSellerModal 
+                refetch={refetch}
+                businessId={selectedBusinessId}
+                offerId={selectedOfferId}
                 visible={offermodal}
                 onClose={()=>setOfferModal(false)}
             />
             <RequestMeetingModal 
+                refetch={refetch}
+                offerId={selectedOfferId}
+                businessId={selectedBusinessId}
                 visible={requestPop}
                 onClose={()=>setRequestPop(false)}
             />
             <DeleteModal 
+                offerId={selectedOfferId}
                 visible={deletemodal}
                 onClose={()=>setDeleteModal(false)}
                 type='danger'

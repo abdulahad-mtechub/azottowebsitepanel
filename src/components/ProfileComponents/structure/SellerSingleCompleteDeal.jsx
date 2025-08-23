@@ -1,15 +1,15 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
-import { sellerdealsData } from '../../../data'
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps'
 import { GETDEAL, ME } from '../../../graphql/query';
 import { useQuery } from '@apollo/client'
 import React from 'react'
+import Cookies from "js-cookie";
 
 const { Title, Text } = Typography
 const SellerSingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
+    const userId = Cookies.get("userId"); // read userId from cookie
     const dealId = completedeal.key;
-    const userId = localStorage.getItem('userId');
     const { data, loading, error } = useQuery(GETDEAL, {
         variables: { getDealId: dealId },
         fetchPolicy: 'network-only', // always fetch fresh data

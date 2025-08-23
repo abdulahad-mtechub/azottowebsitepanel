@@ -1,5 +1,5 @@
 import React, { useState,useEffect,useMemo } from 'react'
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image, } from 'antd'
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image } from 'antd'
 import { cities,district } from '../data/'
 import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../components'
 import { useNavigate } from 'react-router-dom';
@@ -194,8 +194,6 @@ const BusinessListingPage = ({getcategory}) => {
             console.log("No city or district selected.");
           }
       };
-      
-
     return (
   
         <div className='padd-1 mb-3'>
@@ -383,6 +381,7 @@ const BusinessListingPage = ({getcategory}) => {
                             setLimit(value);
                             setCurrentPage(1); // reset page on limit change
                         }}
+                        isLoading={isLoading}
                         />
                     </motion.div>
                 </Flex>

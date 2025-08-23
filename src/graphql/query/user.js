@@ -17,8 +17,12 @@ const ME = gql`
       accountTitle
       bankName
       iban
-    cardNumber
-    cardType
+      cardNumber
+      cardType
+    }
+    role{
+      id
+      name
     }
   }
 }

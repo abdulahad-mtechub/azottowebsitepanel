@@ -1,9 +1,14 @@
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
 import { OfferSellerModal, RequestMeetingModal } from '../modal'
 import { useState } from 'react'
+import Cookies from "js-cookie";
+import { useNavigate } from 'react-router-dom';
 
 const { Title,Text } = Typography
 const BusinessInfoCard = ({data}) => {
+    const userId = Cookies.get("userId"); // read userId from cookie
+  const [isLoggedIn, setisLoggedIn] = useState(!!userId);
+    const navigate = useNavigate();
 
     const businessInfoData = [
         {
@@ -34,6 +39,14 @@ const BusinessInfoCard = ({data}) => {
 
     const [ offerseller, setOfferSeller ] = useState(false)
     const [ meetingmodal, setMeetingModal ] = useState(false)
+
+    const handleAction = (callback) => {
+        if (isLoggedIn) {
+          callback();
+        } else {
+          navigate('/login');
+        }
+      };
 
     return (
         <>
@@ -68,9 +81,9 @@ const BusinessInfoCard = ({data}) => {
                     </Col>
                     <Col span={24}>
                         <Flex vertical gap={5}>
-                            <Button className='btn bg-brand' onClick={()=>setOfferSeller(true)}>Make an Offer</Button>
-                            <Button className='btn bg-dark-blue' onClick={()=>setMeetingModal(true)}>Request Meeting</Button>
-                            <Button className='btn bg-green text-white' onClick={()=>setMeetingModal(true)}>Proceed to Purchase</Button>
+                            <Button className='btn bg-brand' onClick={()=> handleAction(() => setOfferSeller(true))}>Make an Offer</Button>
+                            <Button className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>Request Meeting</Button>
+                            <Button className='btn bg-green text-white' onClick={()=> handleAction(() => setMeetingModal(true))}>Proceed to Purchase</Button>
                         </Flex>
                     </Col>
                 </Row>

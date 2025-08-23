@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react'
-import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography } from 'antd'
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import React from 'react'
+import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography,Spin } from 'antd'
+import { useNavigate, useParams } from 'react-router-dom';
 import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../data';
 import { AnnualProfitBarChart, BusinessInfoCard, BusinessInfoCardMobile, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
 import { RightOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
-import { GET_BUSINESS } from '../graphql/query/business';
+import { GET_BUSINESS,SIMILER_BUSINESS_CATEGORY_GRAPH } from '../graphql/query/business';
 
 const { Text, Title } = Typography;
 const SingleViewlisting = () => {
@@ -13,49 +13,57 @@ const SingleViewlisting = () => {
     const { id } = useParams()
     const navigate = useNavigate();
     // const business = exploreData?.find((item)=>item?.id == id)
-    const { data, loading, error } = useQuery(GET_BUSINESS, {
+    const { data:businessData, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
         variables: { getBusinessByIdId: id },
         skip: !id, // in case id is undefined
-      });
+    });
     
-      const business = data?.getBusinessById;
-      const postSaleData = [
+    const business = businessData?.getBusinessById;
+    const postSaleData = [
         {
           key: '1',
           period: business?.suppportDuration || 'N/A',
           session: business?.supportSession || 'N/A',
           verified: business?.isSupportVerified, // 1 or 0
         }
-      ];
+    ];
 
-      const liabilitiesData = business?.liabilities?.map((item, index) => ({
+    const liabilitiesData = business?.liabilities?.map((item, index) => ({
         key: item.id || index,
         name: item.name,
         items: item.quantity,
         purchaseyear: item.purchaseYear,
         price: `SAR ${item?.price.toLocaleString()}`,
-      }));
+    }));
       
-      const assetsData = business?.assets?.map((item, index) => ({
+    const assetsData = business?.assets?.map((item, index) => ({
         key: item.id || index,
         name: item.name,
         items: item.quantity,
         purchaseyear: item?.purchaseYear,
         price: `SAR ${item?.price.toLocaleString()}`,
-      }));
+    }));
       
-      const inventoryData = business?.inventoryItems?.map((item, index) => ({
+    const inventoryData = business?.inventoryItems?.map((item, index) => ({
         key: item.id || index,
         name: item.name,
         items: item.quantity,
         purchaseyear: item.purchaseYear,
         price: `SAR ${item.price?.toLocaleString()}`,
-      }));
-    
-    useEffect(() => {
-        // Fetch business detail using id
-        // You can use it in a query to fetch full business
-      }, [id]);
+    }));
+
+    const { data:graphData, loading:graphLoading, error:graphError } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
+        variables: { getBusinessByIdId: id },
+        skip: !id, // in case id is undefined
+      });
+
+    if (businessLoading || graphLoading) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
     return (
         <div className='padd-1 relative'>
             <div className='container'>
@@ -98,12 +106,12 @@ const SingleViewlisting = () => {
                                     </Title>
                                     <Flex align='center' gap={5}>
                                         <Title level={5} className='m-0'>
-                                            {data?.title}
+                                            {businessData?.title}
                                         </Title>
                                         {
-                                            data?.type &&
-                                            <Button className={`fs-12 border-0 text-white ${data.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
-                                                {data?.type}
+                                            businessData?.type &&
+                                            <Button className={`fs-12 border-0 text-white ${businessData.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                                {businessData?.type}
                                             </Button>
                                         }
                                     </Flex>
@@ -129,7 +137,7 @@ const SingleViewlisting = () => {
                         {/* uncomment this and send business here as well */}
                         {/* <BusinessStats status={'Verified'} /> */}
                         <MarketAreaChart />
-                        <AnnualProfitBarChart />
+                        <AnnualProfitBarChart graphData={graphData} />
                         <Card className='shadow-d radius-12 border-gray mb-3'>
                             <Flex vertical gap={10}>
                                 <Title level={5}>

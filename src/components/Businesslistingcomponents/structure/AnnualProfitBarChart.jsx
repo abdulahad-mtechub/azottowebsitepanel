@@ -3,21 +3,20 @@ import { ModuleTopHeading } from '../../Pagecomponents';
 import ReactApexChart from 'react-apexcharts';
 
 const { Text, Title } = Typography
-const AnnualProfitBarChart = () => {
+const AnnualProfitBarChart = ({graphData}) => {
 
-    const chartData = {
+  const graph = graphData?.similerBusinessAvgAnualProfit?.graph
+  const chartData = {
     series: [
       {
         name: 'Avg. Annual Profit',
-        data: [390, 365, 200, 260, 200, 290, 350, 170, 200, 370, 350],
+        data: graph.map(item => item.profit), // profit values
       },
     ],
     options: {
       chart: {
         type: 'bar',
-        toolbar: {
-          show: false,
-        },
+        toolbar: { show: false },
       },
       plotOptions: {
         bar: {
@@ -26,69 +25,39 @@ const AnnualProfitBarChart = () => {
           columnWidth: '20%',
         }
       },
-      dataLabels: {
-        enabled: false,
-      },
-      stroke: {
-        curve: 'smooth',
-        width: 2,
-      },
+      dataLabels: { enabled: false },
+      stroke: { curve: 'smooth', width: 2 },
       xaxis: {
-        categories: [
-          '2012',
-          '2013',
-          '2014',
-          '2015',
-          '2016',
-          '2017',
-          '2018',
-          '2019',
-          '2020',
-          '2021',
-          '2022',
-        ],
+        categories: graph.map(item => item.year), // year labels
         labels: {
-          style: {
-            colors: '#000',
-            fontSize: '10px',
-            whiteSpace: 'pre-wrap',
-          },
+          style: { colors: '#000', fontSize: '10px', whiteSpace: 'pre-wrap' },
           rotate: 0,
-          formatter: function (value) {
+          formatter: function(value) {
             const maxCharsPerLine = 7;
-            if (value.length > maxCharsPerLine) {
-              return value.match(new RegExp(`.{1,${maxCharsPerLine}}`, 'g'));
+            if (value.toString().length > maxCharsPerLine) {
+              return value.toString().match(new RegExp(`.{1,${maxCharsPerLine}}`, 'g'));
             }
             return value;
-          },
-        },
+          }
+        }
       },
       yaxis: {
         min: 0,
-        max: 400,
+        // Optionally, you can calculate max dynamically
+        max: Math.max(...graph.map(item => item.profit)) * 1.1,
         tickAmount: 5,
-        labels: {
-          style: {
-            colors: '#000',
-          },
-        },
+        labels: { style: { colors: '#000' } }
       },
-      fill: {
-        opacity: 1,
-      },
-      grid: {
-        show: false,
-      },
+      fill: { opacity: 1 },
+      grid: { show: false },
       colors: ['#0086FF'],
       legend: {
         show: true,
         showForSingleSeries: true,
         horizontalAlign: 'center',
-        labels: {
-            colors: '#000',
-        }
+        labels: { colors: '#000' }
+      }
     }
-    },
   };
 
     return (
