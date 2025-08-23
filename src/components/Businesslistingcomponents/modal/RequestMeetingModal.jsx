@@ -1,6 +1,6 @@
 import { Button,  Flex, Form, Modal } from 'antd'
 import { ScheduleMeetingStep, SignJusoorEndaStep } from '../structure'
-import { useState,useContext } from 'react'
+import { useState } from 'react'
 import { useQuery } from '@apollo/client';
 import { ME } from '../../../graphql/query';
 import { message } from "antd";
@@ -8,7 +8,7 @@ import { useMutation } from '@apollo/client'
 import { ACCEPT_ENDA,BUSINESS_MEETING } from '../../../graphql'
 import Cookies from "js-cookie";
 
-const RequestMeetingModal = ({businessId,visible,onClose,offerId}) => {
+const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
   const userId = Cookies.get("userId"); // read userId from cookie
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
@@ -31,7 +31,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId}) => {
             content: <ScheduleMeetingStep form={form} onClose={onClose} />,
         },
     ];
-                        // try {
+                      // try {
                         //     await updateOffer({
                         //         variables: { input: { id: record.key, status: 'ACCEPTED' } }
                         //     });
@@ -123,6 +123,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId}) => {
                   
                           messageApi.success("Meeting request sent successfully!");
                           onClose(); // close modal
+                          refetch && refetch();
                         } catch (error) {
                           console.error(error);
                           messageApi.error("Failed to schedule meeting.");

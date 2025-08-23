@@ -1,17 +1,21 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,message } from 'antd';
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { businessmenuData, othersmenu } from '../../../data';
-import { useEffect, useState,useContext } from 'react';
+import { businessmenuData } from '../../../data';
+import { useEffect, useState } from 'react';
 import { MobileNavbar } from './MobileNavbar';
 import Cookies from "js-cookie";
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery,useMutation } from '@apollo/client';
 import { ME,NOTIFICATION } from '../../../graphql/query';
+import { LOGOUT } from '../../../graphql/mutation/login';
+import { client } from '../../../config/apolloClient';
 
 const { Text, Title } = Typography;
 
 const Navbar = ({setGetCategory}) => { 
+  const [messageApi, contextHolder] = message.useMessage();
+  
   const userId = Cookies.get("userId"); // read userId from cookie
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const [isshow, setIsShow] = useState(!!userId); // true if userId exists
@@ -29,6 +33,18 @@ const Navbar = ({setGetCategory}) => {
   // ✅ Setup the lazy query
   const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
   const [getNotification, { data:notifications, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
+
+  const [logout, { loading }] = useMutation(LOGOUT, {
+    onCompleted: () => {
+      localStorage.removeItem("accessToken"); 
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("userId");
+      client.resetStore(); 
+      window.location.reload();
+      },
+    onError: (err) => messageApi.error("Logout error:", err)
+  });
+  
 
   useEffect(() => {
     if (userId) {
@@ -168,6 +184,7 @@ const Navbar = ({setGetCategory}) => {
 
   return (
     <>
+    {contextHolder}
       <div className='gen-navbar-container' style={{ position: 'relative' }}>
         <div className='w-100'>
           <div className="gen-navbar-small">

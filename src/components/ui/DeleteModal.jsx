@@ -21,7 +21,7 @@ const DeleteModal = ({visible,onClose,title,subtitle,type,offerId,refetch,meetin
             }
            
             messageApi.success('Offer rejected!');
-            refetch?.(); // refetch the list if function provided
+            refetch && refetch();
             onClose();
         } catch (err) {
             messageApi.error('Failed to reject offer');

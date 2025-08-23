@@ -69,6 +69,8 @@ const BuyerOfferContent = () => {
             render: (record) => {
                 const items = [
                     { label: <NavLink onClick={async()=>{
+                        setSelectedOfferId(record.key)
+                        setSelectedBusinessId(record.business.id);
                         setRequestPop(true)}}>Accept Offer</NavLink>, key: 0 },
                     { label: <NavLink onClick={async()=>{
                         setSelectedOfferId(record.key)
@@ -115,6 +117,7 @@ const BuyerOfferContent = () => {
           </Flex>
         );
     }
+    console.log("selectedBusinessId",selectedBusinessId)
     return (
         <>
         {contextHolder}
@@ -193,6 +196,7 @@ const BuyerOfferContent = () => {
                 onClose={()=>setRequestPop(false)}
             />
             <DeleteModal 
+                refetch={refetch} 
                 offerId={selectedOfferId}
                 visible={deletemodal}
                 onClose={()=>setDeleteModal(false)}
