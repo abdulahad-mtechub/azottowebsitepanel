@@ -22,7 +22,7 @@ import Cookies from "js-cookie";
 const { Text, Title } = Typography;
 
 const ProfileDashboard = () => {
-    const userId = Cookies.get("userId"); // read userId from cookie
+    const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
     const [parentTab, setParentTab] = useState('Seller');
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);

@@ -42,7 +42,6 @@ const SignupPage = () => {
                 password: formData.password,
                 documents: documents.length > 0 ? documents : undefined,
             };
-            console.log("input",input)
     
             const { data } = await createUser({ variables: { input } });
     

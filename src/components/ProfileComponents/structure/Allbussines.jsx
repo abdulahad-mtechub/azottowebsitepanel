@@ -1,5 +1,5 @@
 import React,{useState,useEffect} from 'react'
-import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography } from 'antd'
+import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography,Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
 const { Title, Text } = Typography
 import {GETSELLERBUSINESS } from '../../../graphql/query';
@@ -23,6 +23,14 @@ const Allbussines = () => {
     useEffect(() => {
         refetch({ limit, offset });
     }, [limit, offset]);
+
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
       
     return (
         <Card className='border-gray'>

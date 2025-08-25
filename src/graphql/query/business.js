@@ -22,21 +22,22 @@ const GET_ALL_BUSINESSES = gql`
     query GetAllBusinesses($limit: Int, $offSet: Int, $filter: BusinessFilterInput, $sort: BusinessSortInput) {
     getAllBusinesses(limit: $limit, offSet: $offSet, filter: $filter, sort: $sort) {
     businesses {
-    isByTakbeer
-    isSaved
-    id
-      category {
-      name
-    }
-    businessTitle
-    description
-    revenue
-    profit
-    price
-    recoveryTime
-    savedBy {
+      isByTakbeer
+      isSaved
       id
-    }
+        category {
+        name
+      }
+      businessStatus
+      businessTitle
+      description
+      revenue
+      profit
+      price
+      recoveryTime
+      savedBy {
+        id
+      }
     }
     totalCount
   }
@@ -288,6 +289,9 @@ query GetOffersByUser($search: String, $status: String) {
         id
         name
       }
+    }
+    buyer {
+      id
     }
   }
 }

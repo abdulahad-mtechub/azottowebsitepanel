@@ -5,7 +5,6 @@ import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 
 const { Text } = Typography
 const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
-    console.log*("inprogressdeal",inprogressdeal)
     const paybusinessData = [
         {
           title:'Seller’s Bank Name',

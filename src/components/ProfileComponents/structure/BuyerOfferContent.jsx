@@ -8,9 +8,11 @@ import { SearchInput } from '../../Forms';
 import { DownOutlined } from '@ant-design/icons';
 import { GET_BUYER_OFFER } from '../../../graphql/query'
 import { useQuery } from '@apollo/client';
+import Cookies from "js-cookie";
 
 const { Text } = Typography
 const BuyerOfferContent = () => {
+    const userId = Cookies.get("userId"); 
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm()
     const [ offermodal, setOfferModal ] = useState(false)
@@ -39,6 +41,7 @@ const BuyerOfferContent = () => {
         status: offer.status, // adjust mapping if needed (Received/Send/Inactive)
         date: new Date(offer.createdAt).toLocaleString(),
         business: offer.business, 
+        buyer: offer.buyer, 
     })) || [];
 
     const columns = [
@@ -47,66 +50,123 @@ const BuyerOfferContent = () => {
         { title: 'Business Price', dataIndex: 'businessprice' },
         { title: 'Offer Price', dataIndex: 'offerprice' },
         {
-            title: 'Status',
-            dataIndex: 'status',
-            render: (status) => {
+            title: 'Status', dataIndex: 'status',
+            render: (status, record) => {
                 if (status === 'PENDING') {
-                    return <Text className='sendstatus fs-12 badge-cs fw-500'>{status}</Text>;
+                  // check if logged in user is the buyer
+                  if (record.buyer?.id === userId) {
+                    return (
+                      <Text className="sendstatus fs-12 badge-cs fw-500">Send</Text>
+                    );
+                  } else {
+                    return (
+                      <Text className="sendstatus fs-12 badge-cs fw-500">Received</Text>
+                    );
+                  }
                 } else if (status === 'REJECTED') {
-                    return <Text className='inactive fs-12 badge-cs fw-500'>{status}</Text>;
+                  return (
+                    <Text className="inactive fs-12 badge-cs fw-500">Rejected</Text>
+                  );
+                } else if (status === 'APPROVED') {
+                  return (
+                    <Text className="received fs-12 badge-cs fw-500">Approved</Text>
+                  );
                 } else {
-                    return <Text className='received fs-12 badge-cs fw-500'>{status}</Text>
+                  return (
+                    <Text className="fs-12 badge-cs fw-500">{status}</Text>
+                  ); // fallback in case of new status values
                 }
             },
         },
         { title: 'Date', dataIndex: 'date' },
         {
-            title: 'Action',
-            key: 'action',
-            fixed: 'right',
-            width: 100,
-            align: 'center',
+            title: 'Action',key: 'action',fixed: 'right', width: 100, align: 'center',
             render: (record) => {
-                const items = [
-                    { label: <NavLink onClick={async()=>{
-                        setSelectedOfferId(record.key)
-                        setSelectedBusinessId(record.business.id);
-                        setRequestPop(true)}}>Accept Offer</NavLink>, key: 0 },
-                    { label: <NavLink onClick={async()=>{
-                        setSelectedOfferId(record.key)
-                        setDeleteModal(true)}}>Reject Offer</NavLink>, key: 1 },
-                    { label: <NavLink onClick={()=>{
-                        setSelectedBusinessId(record.business.id);
-                        setSelectedOfferId(record.key)
-                        setOfferModal(true);
-                        setOfferModal(true)}}>Counter Offer</NavLink>, key: 2 },
-                    { label: <NavLink onClick={()=> {
-                        setSelectedBusinessId(record.business.id);
-                        setRequestPop(true);
-                      }}>Request For Virtual Meeting</NavLink>, key: 3 },
-                ].filter(Boolean);
-    
+              // Only show dropdown if buyer is the current user
+              if (record.buyer?.id !== userId) {
+                let items = [];
+                if (record.status === 'PENDING') {
+                  items = [
+                    {
+                      label: (
+                        <NavLink
+                          onClick={async () => {
+                            setSelectedOfferId(record.key);
+                            setSelectedBusinessId(record.business.id);
+                            setRequestPop(true);
+                          }}
+                        >
+                          Accept Offer
+                        </NavLink>
+                      ),
+                      key: 0,
+                    },
+                    {
+                      label: (
+                        <NavLink
+                          onClick={async () => {
+                            setSelectedOfferId(record.key);
+                            setDeleteModal(true);
+                          }}
+                        >
+                          Reject Offer
+                        </NavLink>
+                      ),
+                      key: 1,
+                    },
+                    {
+                      label: (
+                        <NavLink
+                          onClick={() => {
+                            setSelectedBusinessId(record.business.id);
+                            setSelectedOfferId(record.key);
+                            setOfferModal(true);
+                          }}
+                        >
+                          Counter Offer
+                        </NavLink>
+                      ),
+                      key: 2,
+                    },
+                    {
+                      label: (
+                        <NavLink
+                          onClick={() => {
+                            setSelectedBusinessId(record.business.id);
+                            setRequestPop(true);
+                          }}
+                        >
+                          Request For Virtual Meeting
+                        </NavLink>
+                      ),
+                      key: 3,
+                    },
+                  ];
+                }
+          
                 return (
-                    <Dropdown menu={{ items }} trigger={["click"]}>
-                        <Button className="bg-transparent border-0 p-0">
-                            <img src="/assets/icons/dots.png" alt="" width={16} />
-                        </Button>
-                    </Dropdown>
+                  <Dropdown menu={{ items }} trigger={['click']}>
+                    <Button className="bg-transparent border-0 p-0">
+                      <img src="/assets/icons/dots.png" alt="" width={16} />
+                    </Button>
+                  </Dropdown>
                 );
+              }
+          
+              // If not the buyer, show nothing
+              return null;
             },
-        },
+          }
+          
     ];
-
     const items = [
         { key: '1', label: 'Received' },
         { key: '2', label: 'Send' },
         { key: '3', label: 'Inactive' }
     ]
-
     const onClick = ({ key }) => {
         setFilterStatus(key)
     }
-
     useEffect(() => {
         refetch({ limit: 10, offset: 0, search: search || '' });
     }, [search, refetch]);
@@ -117,7 +177,7 @@ const BuyerOfferContent = () => {
           </Flex>
         );
     }
-    console.log("selectedBusinessId",selectedBusinessId)
+
     return (
         <>
         {contextHolder}

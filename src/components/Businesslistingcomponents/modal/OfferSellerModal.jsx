@@ -16,14 +16,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch}) => {
         form.setFieldsValue({ totalamount: totalAmount.toFixed(2) });
     };
 
-    const [createOffer] = useMutation(CREATE_OFFER, {
-        onCompleted: (data) => {
-            messageApi.success("Offer created successfully:");
-            // Optionally, you can reset the form or perform other actions here
-            form.resetFields();
-            onClose();
-        }
-    });
+    const [createOffer] = useMutation(CREATE_OFFER);
 
     useEffect(() => {
         form.resetFields();
