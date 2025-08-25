@@ -5,6 +5,7 @@ import { Aboutus, Article, ArticleSingleView, BusinessListingPage, Faqs, ForgotP
 import { Footer, Navbar, ScrollTop } from "../components";
 import { Termofuse } from "../pages";
 import { useEffect, useState } from "react";
+import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -32,9 +33,9 @@ const AppRoutes = () => {
     <>
       <ScrollTop />
       {!shouldHideNavbarFooter && <Navbar setGetCategory={setGetCategory} />}
+
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/sellbusinesscreate' element={<SellBusinessCreate />} />
         <Route path='/businesslisting' element={<BusinessListingPage getcategory={getcategory} />} />
         <Route path='/singleviewlisting/:id' element={<SingleViewlisting />} />
         <Route path='/faq' element={<Faqs />} />
@@ -45,8 +46,25 @@ const AppRoutes = () => {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/forgotpass' element={<ForgotPassword />} />
-        <Route path='/profiledashboard' element={<ProfileDashboard />} />
+
+        <Route
+          path='/profiledashboard'
+          element={
+            <ProtectedRoute>
+              <ProfileDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/sellbusinesscreate'
+          element={
+            <ProtectedRoute>
+              <SellBusinessCreate />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+
       {!shouldHideNavbarFooter && <Footer />}
       {showButton && !shouldHideNavbarFooter && (
         <FloatButton 

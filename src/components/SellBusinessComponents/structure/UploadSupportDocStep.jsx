@@ -5,12 +5,14 @@ import { SingleFileUpload } from '../../Forms';
 import imageCompression from 'browser-image-compression';
 
 const { Title, Text } = Typography
-const UploadSupportDocStep = ({ data, setData }) => {
+const UploadSupportDocStep = ({ data, setData },ref) => {
+  React.useImperativeHandle(ref, () => ({
+    validate: () => form.validateFields(),
+  }));
   const [form] = Form.useForm();
   const [uploading, setUploading] = useState(false);
 
   const uploadFileToServer = async (file) => {
-    console.log("get file file",file)
     setUploading(true);
     try {
       let compressedFile = file;

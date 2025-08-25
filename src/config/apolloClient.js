@@ -1,6 +1,7 @@
 import { ApolloClient, InMemoryCache, createHttpLink, from } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
+import Cookies from 'js-cookie';
 
 const API_URL =  "https://220.152.66.148.host.secureserver.net/graphql";
 
@@ -12,8 +13,10 @@ const httpLink = createHttpLink({
 
 // Auth Link (Attaches token)
 const authLink = setContext((_, { headers }) => {
+  const token = Cookies.get('authToken');
+
   // const token = typeof window !== "undefined" ? localStorage.getItem("auth-token") : null;
-  const token= localStorage.getItem("accessToken")
+  // const token= localStorage.getItem("accessToken")
   return {
     headers: {
       ...headers,

@@ -122,8 +122,22 @@ const Navbar = ({setGetCategory}) => {
   }, [isLoggedIn]);
 
   const handleLogout = () => {
-    logout();  // This clears localStorage and sets isLoggedIn = false
-    navigate('/login');
+    // Clear cookies
+    Cookies.remove("userId");
+    Cookies.remove("authToken");
+  
+    // Clear localStorage (in case you still store something there)
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
+  
+    client.resetStore(); 
+  
+    setisLoggedIn(false);
+    setIsShow(false);
+  
+    navigate('/');
+    window.location.reload(); // optional hard reset
   };
   const items = [
     {

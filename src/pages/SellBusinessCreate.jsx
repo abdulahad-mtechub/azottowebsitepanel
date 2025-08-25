@@ -18,6 +18,7 @@ const SellBusinessCreate = ({ addstep }) => {
     const [reviewmodal, setReviewModal] = useState(false);
     const navigate = useNavigate();
     const [createBusiness, { loading, error }] = useMutation(CREATE_BUSINESS);
+    const businessDetailFormRef = useRef();
 
     const [businessData, setBusinessData] = useState(() => {
         const draft = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -80,10 +81,10 @@ const SellBusinessCreate = ({ addstep }) => {
       });
 
     const steps = [
-        { title: 'Business Details', content: <BusinessDetailStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Financial & Growth Information', content: <FinancialInfoStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Business Vision', content: <BusinessVisionStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Document Uploads', content: <UploadSupportDocStep data={businessData} setData={setBusinessData} /> },
+        { title: 'Business Details', content: <BusinessDetailStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
+        { title: 'Financial & Growth Information', content: <FinancialInfoStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
+        { title: 'Business Vision', content: <BusinessVisionStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
+        { title: 'Document Uploads', content: <UploadSupportDocStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
     ];
 
     const onChange = (value) => {

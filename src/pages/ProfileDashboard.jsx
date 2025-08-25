@@ -131,7 +131,7 @@ const ProfileDashboard = () => {
                     <Flex justify='space-between' align='center'>
                         <ModuleTopHeading level={4} name='All Businesses' />
                         <Flex gap={5}>
-                            <Button className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
+                            <Button className='btn bg-brand rounded-8' type='button'  onClick={() => navigate('/sellbusinesscreate')}>
                                 <PlusOutlined /> Sell a Business
                             </Button>
                         </Flex>

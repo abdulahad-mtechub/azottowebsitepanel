@@ -6,9 +6,13 @@ import { revenueLookups, yearOp } from '../../../data'
 import { FormReplicate } from '../../Header'
 
 const { Text } = Typography
-const FinancialInfoStep = ({ data, setData }) => {
+const FinancialInfoStep = ({ data, setData },ref) => {
 
     const [form] = Form.useForm();
+
+    React.useImperativeHandle(ref, () => ({
+        validate: () => form.validateFields(),
+    }));
 
     const foundedYear = new Date(data?.foundedDate).getFullYear();
     const currentYear = new Date().getFullYear();

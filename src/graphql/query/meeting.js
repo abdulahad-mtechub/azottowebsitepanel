@@ -85,9 +85,30 @@ query GetScheduledMeetings($search: String) {
 }
 `
 
+const GETMEETINGS = gql`
+query GetMeetings($getMeetingsId: ID!, $filter: MeetingFilterType, $search: String, $limit: Int, $offset: Int) {
+  getMeetings(id: $getMeetingsId, filter: $filter, search: $search, limit: $limit, offset: $offset) {
+    totalCount
+  }
+}`
+
+const GETBUYERMEETINGCOUNT = gql`
+query Query {
+  getBuyerCount
+}
+  `
+
+const GETSELLERMEETINGCOUNT = gql`
+query Query {
+  getSellerCount
+}
+  `
 export {
     SENTMEETINGS,
     RECEIVEDMEETINGS,
     READYSCHEDULEDMEETINGS,
-    SCHEDULEDMEETINGS
+    SCHEDULEDMEETINGS,
+    GETMEETINGS,
+    GETBUYERMEETINGCOUNT,
+    GETSELLERMEETINGCOUNT
 }
