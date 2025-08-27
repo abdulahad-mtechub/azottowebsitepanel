@@ -1,17 +1,13 @@
 import { CloseOutlined } from '@ant-design/icons'
-import { Button, Col, Flex, Form, Image, Modal, Row, Tooltip, Typography } from 'antd'
+import { Button, Col, Flex, Form, Image, Modal, Row, Tooltip, Typography,message } from 'antd'
 import { MyInput } from '../../Forms'
 import { useEffect } from 'react'
 import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
 import { useMutation } from '@apollo/client'
-import { useState } from 'react'
-import { message } from "antd";
-
 
 const { Title, Text } = Typography
-const OfferSellerModal = ({visible,onClose,businessId}) => {
+const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch}) => {
     const [messageApi, contextHolder] = message.useMessage();
-
     const [form] = Form.useForm(); 
 
     const handleOfferAmountChange = (e) => {
@@ -20,20 +16,15 @@ const OfferSellerModal = ({visible,onClose,businessId}) => {
         form.setFieldsValue({ totalamount: totalAmount.toFixed(2) });
     };
 
-    const [createOffer] = useMutation(CREATE_OFFER, {
-        onCompleted: (data) => {
-            messageApi.success("Offer created successfully:");
-            // Optionally, you can reset the form or perform other actions here
-            form.resetFields();
-            onClose();
-        }
-    });
+    const [createOffer] = useMutation(CREATE_OFFER);
 
     useEffect(() => {
         form.resetFields();
     }, [visible, form]);
 
     return (
+        <>
+        {contextHolder}
         <Modal
             title={null}
             open={visible}
@@ -52,10 +43,13 @@ const OfferSellerModal = ({visible,onClose,businessId}) => {
                                     input: {
                                         businessId,
                                         price: parseFloat(values.offeramount),
-                                        // totalAmount: parseFloat(values.totalamount),
+                                        ...(offerId ? { parentOfferId: offerId } : {}),
                                     },
                                 },
                             });
+                            messageApi.success("Offer sent successfully!");
+                            refetch({ limit: 10, offset: 0, search: search || '' });
+                            setOfferModal(false);
                         } catch (error) {
                             console.error("Validation or mutation error:", error);
                         }
@@ -123,6 +117,7 @@ const OfferSellerModal = ({visible,onClose,businessId}) => {
                 </Row>
             </Form>
         </Modal>
+        </>
     )
 }
 

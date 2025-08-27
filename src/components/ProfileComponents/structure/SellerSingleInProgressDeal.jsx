@@ -3,11 +3,13 @@ import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps'
 import { GETDEAL, ME } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
+import React from 'react'
+import Cookies from "js-cookie";
 
 const { Title, Text } = Typography
 const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
+    const userId = Cookies.get("userId"); // read userId from cookie
     const dealId = inprogressdeal.key;
-    const userId = localStorage.getItem('userId');
     const { data, loading, error } = useQuery(GETDEAL, {
       variables: { getDealId: dealId },
       fetchPolicy: 'network-only', // always fetch fresh data

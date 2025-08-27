@@ -1,13 +1,14 @@
-import React, { useState } from 'react'
-import { Breadcrumb, Flex, Typography, Steps, Button } from 'antd'
+import React, { useState,useRef } from 'react'
+import { Breadcrumb, Flex, Typography, Steps, Button,Spin,message } from 'antd'
 import { CheckOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { BusinessDetailStep, BusinesslistingReviewModal, BusinessVisionStep, CancelModal, FinancialInfoStep, UploadSupportDocStep } from '../components';
 import { CREATE_BUSINESS } from "../graphql/mutation/mutations";
 import { useMutation } from '@apollo/client';
-import { message } from "antd";
+import dayjs from 'dayjs';
 
 const { Text } = Typography
+const LOCAL_STORAGE_KEY = 'sellBusinessDraft';
 
 const SellBusinessCreate = ({ addstep }) => {
     const [messageApi, contextHolder] = message.useMessage();
@@ -17,8 +18,20 @@ const SellBusinessCreate = ({ addstep }) => {
     const [reviewmodal, setReviewModal] = useState(false);
     const navigate = useNavigate();
     const [createBusiness, { loading, error }] = useMutation(CREATE_BUSINESS);
+    const businessDetailFormRef = useRef();
 
-    const [businessData, setBusinessData] = useState({
+    const [businessData, setBusinessData] = useState(() => {
+        const draft = localStorage.getItem(LOCAL_STORAGE_KEY);
+        if (draft) {
+            const parsed = JSON.parse(draft);
+            // Convert date strings to Day.js
+            return {
+                ...parsed,
+                foundedDate: parsed.foundedDate ? dayjs(parsed.foundedDate) : null,
+                // repeat for other date fields if any
+            };
+        }
+        return draft ? JSON.parse(draft) : {
         isByTakbeer: null,
         businessTitle: null,
         categoryId: null,
@@ -64,13 +77,14 @@ const SellBusinessCreate = ({ addstep }) => {
             description: null,
           },
         ],
-    });
+        };
+      });
 
     const steps = [
-        { title: 'Business Details', content: <BusinessDetailStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Financial & Growth Information', content: <FinancialInfoStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Business Vision', content: <BusinessVisionStep data={businessData} setData={setBusinessData} /> },
-        { title: 'Document Uploads', content: <UploadSupportDocStep data={businessData} setData={setBusinessData} /> },
+        { title: 'Business Details', content: <BusinessDetailStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
+        { title: 'Financial & Growth Information', content: <FinancialInfoStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
+        { title: 'Business Vision', content: <BusinessVisionStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
+        { title: 'Document Uploads', content: <UploadSupportDocStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
     ];
 
     const onChange = (value) => {
@@ -105,7 +119,6 @@ const SellBusinessCreate = ({ addstep }) => {
         ),
     }));
     const handleCreateListing = async () => {
-
         try {
             const variables = {
                 input: {
@@ -175,16 +188,38 @@ const SellBusinessCreate = ({ addstep }) => {
                     }))
                 }
             };
-            console.log("variable",variables)
             const { data } = await createBusiness({ variables });
-            messageApi.success('Business listing created successfully!');
-            setReviewModal(true);
+            if (data?.createBusiness?.id) {
+                messageApi.success('Business listing created successfully!');
+                setReviewModal(true);
+          
+                // Clear draft from local storage
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+            } else {
+                // Handle unexpected empty response
+                messageApi.error('Failed to create business listing: No ID returned');
+                console.error('Unexpected response:', data);
+            }
     
         } catch (err) {
             console.error(err);
             messageApi.error('Failed to create business listing');
         }
     };
+
+    const handleSaveDraft = () => {
+        const draft = JSON.stringify(businessData);
+        localStorage.setItem(LOCAL_STORAGE_KEY, draft);
+        messageApi.success('Draft saved locally!');
+    };
+
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
 
     return (
         <>
@@ -284,8 +319,7 @@ const SellBusinessCreate = ({ addstep }) => {
                         <Flex gap={10} justify='end'>
                             <Button
                                 className='btn text-black border-gray'
-                                onClick={prev}
-                                disabled={current === 0 ? true: false}
+                                onClick={handleSaveDraft}
                             >
                                 Save as Draft
                             </Button>

@@ -1,9 +1,11 @@
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
 import { OfferSellerModal, RequestMeetingModal } from '../modal'
 import { useState } from 'react'
+import Cookies from "js-cookie";
 
 const { Title,Text } = Typography
 const BusinessInfoCardMobile = ({data}) => {
+    const userId = Cookies.get("userId"); // read userId from cookie
 
     const businessInfoData = [
         {

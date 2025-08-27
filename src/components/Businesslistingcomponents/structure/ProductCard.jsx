@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography } from 'antd'
+import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography,Tag,Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
 import { CREATE_SAVE_BUSINESS,CREATE_VIEW_BUSINESS } from "../../../graphql";
 import { useMutation } from '@apollo/client';
@@ -15,12 +15,36 @@ const ProductCard = ({
     onPageChange,
     limit,
     onLimitChange,
+    isLoading
 }) => {
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const navigate = useNavigate()
     const [messageApi, contextHolder] = message.useMessage();
 
+    const saveBusinessHandler = async (businessId) => {
+        try {
+          const res = await saveBusiness({
+            variables: {
+              saveBusinessId: businessId,
+            },
+          });
+          messageApi.success("Business saved successfully!");
+          refetchBusinesses(); // refresh the list
+        } catch (err) {
+          console.error("Save mutation error:", err);
+          messageApi.error("Save failed: " + err.message);
+        }
+      };
+      if (isLoading) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
   return (
+    <>
+    {contextHolder}
     <Row gutter={[16,16]}>
         {
             exploreData?.map((pro,i)=>
@@ -38,38 +62,29 @@ const ProductCard = ({
                         <Flex vertical gap={20}>
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={4}>
-                                    <Button>
-                                        {pro.categoryName}
-                                    </Button>
-                                    {
-                                        pro?.type &&
-                                        <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
-                                            {pro?.type}
-                                        </Button>
-                                    }
+                                <Tag color="default" className="fs-12">
+                                    {pro.categoryName}
+                                </Tag>
+
+                                {/* Type Tag */}
+                                <Tag 
+                                    className="fs-12 bg-brand"
+                                    color={pro.isByTakbeer ? "bg-black" : "bg-blue"} // blue if Taqbeel, cyan for Acquiring
+                                >
+                                    {pro.isByTakbeer ? "Taqbeel" : "Acquiring"}
+                                </Tag>
                                 </Flex>
-                                <Button className='border-0 bg-transparent p-0'
-                                onClick={(e) => {
-                                    e.stopPropagation(); // prevent triggering card click
-                                    saveBusiness({
-                                      variables: {
-                                        saveBusinessId: pro?.id,
-                                      },
-                                    }).then(res => {
-                                        messageApi.success("Business saved:", res);
-                                        refetchBusinesses();
-                                      // Optional: update UI (e.g. toggle `pro.save`)
-                                    }).catch(err => {
-                                        messageApi.error("Save failed:", err.message);
-                                    });
-                                  }}
-                                ></Button>
-                                
-                                <Button className='border-0 bg-transparent p-0'>
+                                <Button 
+                                    className='border-0 bg-transparent p-0'
+                                    onClick={(e) => {
+                                        e.stopPropagation(); // stop card navigation
+                                        saveBusinessHandler(pro?.id);
+                                    }}
+                                    >
                                     {
-                                        pro?.isSaved ?
-                                        <img src='/assets/icons/bk-bl-d.png' width={22}/> :
-                                        <img src='/assets/icons/bk-bl.png' width={22}/>
+                                        pro?.isSaved
+                                        ? <img src='/assets/icons/bk-bl-d.png' width={22} />
+                                        : <img src='/assets/icons/bk-bl.png' width={22} />
                                     }
                                 </Button>
                             </Flex>
@@ -161,6 +176,7 @@ const ProductCard = ({
             </Col>
         }
     </Row>
+    </>
   )
 }
 

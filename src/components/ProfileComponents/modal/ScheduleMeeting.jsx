@@ -2,11 +2,11 @@ import { Button, Col, Flex, Form, Modal, Row, Typography } from 'antd'
 import { CloseOutlined } from '@ant-design/icons';
 import { MyDatepicker } from '../../Forms';
 import { useMutation } from '@apollo/client'
-import { APPROVE_MEETING } from '../../../graphql'
+import { BUSINESS_MEETING } from '../../../graphql'
 import { message } from "antd";
 
 const { Title, Text } = Typography
-const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings}) => {
+const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings,businessId}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
     const handleSubmit = async (values) => {
@@ -25,8 +25,10 @@ const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings}) =>
     
           await meeting({
             variables: {
-                meetingId,
-                offerId,
+                input: {
+                businessId,
+                requestedDate: combinedDateTime.toISOString(),
+                }
             },
           });
     
@@ -38,7 +40,7 @@ const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings}) =>
           messageApi.error("Failed to send meeting request");
         }
       };
-    const [meeting, { loading }] = useMutation(APPROVE_MEETING);
+    const [meeting, { loading }] = useMutation(BUSINESS_MEETING);
     return (
         <Modal
             title={null}

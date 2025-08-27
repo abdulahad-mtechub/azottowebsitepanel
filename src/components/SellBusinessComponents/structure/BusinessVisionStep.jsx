@@ -4,7 +4,11 @@ import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
 
 const { Text } = Typography
-const BusinessVisionStep = ({ data, setData }) => {
+const BusinessVisionStep = ({ data, setData },ref) => {
+    React.useImperativeHandle(ref, () => ({
+            validate: () => form.validateFields(),
+        }));
+    
     const handleFormChange = (_, allValues) => {
         const { supportDuration, noSession, growthOpportunities, reasonSelling } = allValues;
 

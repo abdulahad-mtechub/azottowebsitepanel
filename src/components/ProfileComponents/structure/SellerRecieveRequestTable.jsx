@@ -14,6 +14,7 @@ const SellerRecieveRequestTable = () => {
     const [ deletemodal, setDeleteModal ] = useState(false)
     const [selectedMeetingId, setSelectedMeetingId] = useState(null);
     const [selectedOfferId, setSelectedOfferId] = useState(null);
+    const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
     const [fetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS);
     const search = Form.useWatch("search", form);
@@ -33,6 +34,7 @@ const SellerRecieveRequestTable = () => {
             offerprice: meeting.offer?.price,
             date: new Date(meeting.requestedDate).toLocaleString(),
             offerId: meeting.offer?.id,
+            business:meeting.business
         };
     }) || [];
 
@@ -52,7 +54,8 @@ const SellerRecieveRequestTable = () => {
                 const items = [
                     { label: <NavLink 
                         onClick={() => {
-                            setSelectedMeetingId(record.key); // 🔹 store businessId
+                            setSelectedMeetingId(record.key); // 🔹 store meeeting
+                            setSelectedBusinessId(record.business.id)
                             setSelectedOfferId(record.offerId); // 🔹 store offerId
                             setIsAccept(true);
                         }}
@@ -117,8 +120,10 @@ const SellerRecieveRequestTable = () => {
                 meetingId={selectedMeetingId}
                 offerId={selectedOfferId}
                 refetchMeetings={() => fetchMeetings({ variables: { search: search || "" } })}
+                businessId={selectedBusinessId}
             />
             <DeleteModal 
+                meetingId={selectedMeetingId}
                 visible={deletemodal}
                 onClose={()=>setDeleteModal(false)}
                 type='danger'

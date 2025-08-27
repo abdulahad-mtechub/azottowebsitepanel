@@ -7,12 +7,16 @@ import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from '@apollo/client';
 
 const { Title, Text } = Typography
-const BusinessDetailStep = ({ data, setData }) => {
+const BusinessDetailStep = ({ data, setData },ref) => {
     const { data: categoryData } = useQuery(GET_CATEGORIES);
     const [form] = Form.useForm();
     const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
+
+    React.useImperativeHandle(ref, () => ({
+      validate: () => form.validateFields(),
+    }));
 
     const categories = categoryData?.getAllCategories?.map(cat => ({
       id: cat.id,
@@ -200,5 +204,4 @@ const BusinessDetailStep = ({ data, setData }) => {
     );
   };
   
-
 export {BusinessDetailStep}

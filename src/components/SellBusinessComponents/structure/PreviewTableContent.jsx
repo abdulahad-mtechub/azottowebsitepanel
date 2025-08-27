@@ -2,9 +2,6 @@ import { Card, Col, Flex, Row, Table, Typography } from 'antd'
 
 const { Title } = Typography
 const PreviewTableContent = ({title,columns,data}) => {
-    console.log("title",title)
-    console.log("columns",columns)
-    console.log("data",data)
     return (
         <Card className='shadow-d radius-12 border-gray mb-3'>
             <Row gutter={[24,24]}>

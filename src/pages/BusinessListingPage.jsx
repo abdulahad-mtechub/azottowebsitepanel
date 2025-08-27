@@ -1,5 +1,5 @@
 import React, { useState,useEffect,useMemo } from 'react'
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image, } from 'antd'
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image } from 'antd'
 import { cities,district } from '../data/'
 import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../components'
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,34 @@ const BusinessListingPage = ({getcategory}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [ isShow, setIsShow ] = useState(false)
 
-    const [fetchBusinesses, { data: businesses, loading: isLoading, refetch }] = useLazyQuery(GET_ALL_BUSINESSES);
+    const [fetchBusinesses, { data: businesses, loading: isLoading, refetch }] = useLazyQuery(GET_ALL_BUSINESSES,
+        {
+            variables:{
+                    limit: null,
+                    offSet: null,
+                    search: null,
+                    sort: {
+                      price: null
+                    },
+                    filter: {
+                      categoryId: null,
+                      city: null,
+                      district: null,
+                      employeesRange: null,
+                      endDate: null,
+                      hasAssets: null,
+                      multiple: null,
+                      operationalYearRange: null,
+                      priceRange: null,
+                      profitMargenRange: null,
+                      profitRange: null,
+                      revenueRange: null,
+                      startDate: null,
+                      status: null
+                }
+            }
+        }
+    );
     const [selectedDistrict, setSelectedDistrict] = useState('Select District');
     const [selectedCity, setSelectedCity] = useState(null);
     const [searchSelectedCity, setsearchSelectedCity] = useState([]);
@@ -102,11 +129,9 @@ const BusinessListingPage = ({getcategory}) => {
           query = GET_BUSINESS_BY_PROFIT;
           variables = { profit, limit, offSet: 0 };
         }else if(employeesRange) {
-            console.log("employeesRange",employeesRange)
             query = GET_ALL_BUSINESSES;
             variables = { filter: { employeesRange }, limit, offSet: 0 };
         }else if(operationalYearRange){
-            console.log("operationalYearRange",operationalYearRange)
             query = GET_ALL_BUSINESSES;
             variables = { filter:{operationalYearRange}, limit, offSet: 0 };
         }
@@ -158,7 +183,6 @@ const BusinessListingPage = ({getcategory}) => {
       };
       
       const handleSearch = () => {
-        console.log("call")
         let variables;
         let query ;
         if (searchSelectedCity) {
@@ -166,13 +190,11 @@ const BusinessListingPage = ({getcategory}) => {
             const allCities = Object.values(cities).flat();
             const selectedCityObj = allCities.find(city => city.id === Number(searchSelectedCity));
             if (selectedCityObj) {
-            console.log("selectedCityObj",selectedCityObj)
               query = GET_BUSINESS_BY_CITY;
               variables = { city: selectedCityObj.name, limit, offSet: 0 };
               fetchBusinesses({ query, variables });
             } else {
                 if(selectedDistrict){
-                    console.log("selectedDistrict",selectedDistrict)
                     // Case 2: Only District selected
                     query = GET_BUSINESS_BY_DISTRICT;
                     variables = { district: selectedDistrict, limit, offSet: 0 };
@@ -184,18 +206,12 @@ const BusinessListingPage = ({getcategory}) => {
                 }
             }
           } else if (selectedDistrict && selectedDistrict !== "Select District") {
-            console.log("selectedDistrict",selectedDistrict)
             // Case 2: Only District selected
             query = GET_BUSINESS_BY_DISTRICT;
             variables = { district: selectedDistrict, limit, offSet: 0 };
             fetchBusinesses({ query, variables });
-          } else {
-            // Nothing selected, optionally do nothing or reset
-            console.log("No city or district selected.");
           }
       };
-      
-
     return (
   
         <div className='padd-1 mb-3'>
@@ -383,6 +399,7 @@ const BusinessListingPage = ({getcategory}) => {
                             setLimit(value);
                             setCurrentPage(1); // reset page on limit change
                         }}
+                        isLoading={isLoading}
                         />
                     </motion.div>
                 </Flex>
