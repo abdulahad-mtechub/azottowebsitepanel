@@ -10,7 +10,7 @@ import { ModuleTopHeading } from '../../Pagecomponents';
 import { PlusOutlined } from '@ant-design/icons';
 
 
-const Allbussines = ({setIsEdit}) => {
+const Allbussines = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [ singledetail,setSingleDetail ] = useState(null)
@@ -40,7 +40,7 @@ const Allbussines = ({setIsEdit}) => {
              <Flex justify='space-between' align='center'>
                 <ModuleTopHeading level={4} name='All Businesses' />
                 <Flex gap={5}>
-                    <Button className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
+                    <Button className='btn bg-brand rounded-8' type='button'  onClick={() => navigate('/sellbusinesscreate')}>
                         <PlusOutlined /> Sell a Business
                     </Button>
                 </Flex>

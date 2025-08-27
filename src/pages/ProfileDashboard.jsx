@@ -126,7 +126,7 @@ const ProfileDashboard = () => {
                 </Flex>
             ),
             sellerBusiness: (
-                <Allbussines  setIsEdit={setIsEdit}/>
+                <Allbussines/>
             ),
             sellerSoldBusiness: (
                 <Flex vertical gap={20}>
