@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route,useLocation } from "react-router-dom";
 import { FloatButton } from 'antd';
 import { UpOutlined } from '@ant-design/icons';
 import { Aboutus, Article, ArticleSingleView, BusinessListingPage, Faqs, ForgotPassword, Home, LoginPage, ProfileDashboard, SellBusinessCreate, SignupPage, SingleViewlisting } from "../pages";
-import { Footer, Navbar, ScrollTop } from "../components";
+import { Footer, Navbar, ScrollTop,Singlebusinessview } from "../components";
 import { Termofuse } from "../pages";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
@@ -38,6 +38,7 @@ const AppRoutes = () => {
         <Route path='/' element={<Home />} />
         <Route path='/businesslisting' element={<BusinessListingPage getcategory={getcategory} />} />
         <Route path='/singleviewlisting/:id' element={<SingleViewlisting />} />
+        <Route path='/singlebusinessview/:id' element={<Singlebusinessview />} />
         <Route path='/faq' element={<Faqs />} />
         <Route path='/termofuse' element={<Termofuse />} />
         <Route path='/article' element={<Article />} />
