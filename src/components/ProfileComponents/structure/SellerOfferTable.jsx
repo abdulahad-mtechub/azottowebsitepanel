@@ -1,4 +1,4 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Typography } from 'antd'
+import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography } from 'antd'
 import { allbussinesData } from '../../../data';
 import { NavLink } from 'react-router-dom';
 import { OfferSellerModal, RequestMeetingModal } from '../../Businesslistingcomponents';
@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { DeleteModal } from '../../ui';
 import { DownOutlined } from '@ant-design/icons';
 import { SearchInput } from '../../Forms';
-import { ScheduleMeeting } from '../modal';
+import { CounterOffer, ScheduleMeeting } from '../modal';
 
 const { Text } = Typography
 const SellerOfferTable = () => {
@@ -16,6 +16,7 @@ const SellerOfferTable = () => {
     const [deletemodal, setDeleteModal] = useState(false)
     const [meeting, setMeeting] = useState(false)
     const [filterstatus, setFilterStatus] = useState()
+    const [filtertype, setFilterType] = useState(null)
 
     const offerdata = allbussinesData[0]?.offerData;
 
@@ -26,24 +27,20 @@ const SellerOfferTable = () => {
             title: 'Offer Price',
             dataIndex: 'offerprice',
             render: (offer) => {
-                const badgeColor = offer.type === 'CO' ? '#2f54eb' : '#faad14'; // blue for CO, gold for PP
-                const badgeText = offer.type;
-
                 return (
-                    <div>
+                    <Flex gap={10} align="center">
                         SAR {parseInt(offer.amount).toLocaleString()}
-                        <span style={{
-                            marginLeft: 8,
-                            backgroundColor: badgeColor,
-                            color: '#fff',
-                            padding: '2px 6px',
-                            borderRadius: '4px',
-                            fontSize: '12px',
-                            fontWeight: 500
-                        }}>
-                            {badgeText}
-                        </span>
-                    </div>
+                        {
+                            offer?.type === 'CO' ?
+                                <Tooltip title="CO - Counteroffer">
+                                    <Text className='bg-brand radius-4 p-1 fs-11 text-white'>CO</Text>
+                                </Tooltip>
+                            :
+                                <Tooltip title="PP - Proceed to Purchase">
+                                    <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>PP</Text>
+                                </Tooltip>
+                        } 
+                    </Flex>
                 );
             }
         },
@@ -53,7 +50,7 @@ const SellerOfferTable = () => {
             render: (status) => {
                 if (status === 'Received') {
                     return <Text className='received fs-12 badge-cs fw-500'>{status}</Text>;
-                } else if (status === 'Inactive') {
+                } else if (status === 'Rejected') {
                     return <Text className='inactive fs-12 badge-cs fw-500'>{status}</Text>;
                 } else {
                     return <Text className='sendstatus fs-12 badge-cs fw-500'>{status}</Text>
@@ -67,34 +64,51 @@ const SellerOfferTable = () => {
             fixed: 'right',
             width: 100,
             align: 'center',
-            render: (record) => {
+            render: (_, row) => {
+                const offerType = row?.offerprice?.type;
                 const items = [
-                    { label: <NavLink>Accept Offer</NavLink>, key: 0 },
-                    { label: <NavLink onClick={() => setDeleteModal(true)}>Reject Offer</NavLink>, key: 1 },
-                    { label: <NavLink onClick={() => setOfferModal(true)}>Counter Offer</NavLink>, key: 2 },
-                    { label: <NavLink onClick={() => setMeeting(false)}>Request For Virtual Meeting</NavLink>, key: 3 },
+                    // Counter Offer case
+                    offerType === 'CO' && { label: <NavLink onClick={() => {}}>Accept Offer</NavLink>, key: 0 },
+                    offerType === 'CO' && { label: <NavLink onClick={() => setDeleteModal(true)}>Reject Offer</NavLink>, key: 1 },
+                    offerType === 'CO' && { label: <NavLink onClick={() => setOfferModal(true)}>Counter Offer</NavLink>, key: 2 },
+                    offerType === 'CO' && { label: <NavLink onClick={() => setMeeting(true)}>Request For Virtual Meeting</NavLink>, key: 3 },
+
+                    // Proceed to Purchase case
+                    offerType === 'PP' && { label: <NavLink onClick={() => {}}>Accept Offer</NavLink>, key: 4 },
+                    offerType === 'PP' && { label: <NavLink onClick={() => setDeleteModal(true)}>Reject Offer</NavLink>, key: 5 },
                 ].filter(Boolean);
 
                 return (
-                    <Dropdown menu={{ items }} trigger={["click"]}>
+                    <Dropdown menu={{ items }} trigger={['click']}>
                         <Button className="bg-transparent border-0 p-0">
                             <img src="/assets/icons/dots.png" alt="" width={16} />
                         </Button>
                     </Dropdown>
                 );
             },
-        },
+        }
+
     ];
 
     const items = [
         { key: '1', label: 'Received' },
         { key: '2', label: 'Send' },
-        { key: '3', label: 'Inactive' }
+        { key: '3', label: 'Rejected' }
     ]
 
-    const onClick = ({ key }) => {
+    const offertype = [
+        { key: '1', label: 'Counter Offer' },
+        { key: '2', label: 'Proceed to Purchase' },
+    ]
+
+    const handleStatusClick = ({ key }) => {
         setFilterStatus(key)
     }
+
+    const handleTypeClick = ({ key }) => {
+        setFilterType(key)
+    }
+
 
     return (
         <>
@@ -109,7 +123,7 @@ const SellerOfferTable = () => {
                         <Dropdown
                             menu={{
                                 items,
-                                onClick
+                                handleStatusClick
                             }}
                             trigger={['click']}
                         >
@@ -117,8 +131,24 @@ const SellerOfferTable = () => {
                                 <Flex justify='space-between' className='w-100' gap={10}>
                                     {
                                         filterstatus === '1' ? 'Received' :
-                                            filterstatus === '2' ? 'Send' :
-                                                filterstatus === '3' ? 'Inactive' : 'Status'
+                                        filterstatus === '2' ? 'Send' :
+                                        filterstatus === '3' ? 'Rejected' : 'Status'
+                                    }
+                                    <DownOutlined />
+                                </Flex>
+                            </Button>
+                        </Dropdown>
+                        <Dropdown
+                            menu={{
+                                items: offertype, onClick: handleTypeClick 
+                            }}
+                            trigger={['click']}
+                        >
+                            <Button className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
+                                <Flex justify='space-between' className='w-100' gap={10}>
+                                    {
+                                        filtertype === '1' ? 'Counter Offer' :
+                                        filtertype === '2' ? 'Proceed to Purchase' : 'Offer Type'
                                     }
                                     <DownOutlined />
                                 </Flex>
@@ -149,7 +179,7 @@ const SellerOfferTable = () => {
                     />
                 </Col>
             </Row>
-            <OfferSellerModal
+            <CounterOffer
                 visible={offermodal}
                 onClose={() => setOfferModal(false)}
             />

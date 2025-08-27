@@ -32,13 +32,13 @@ const allbussinesData = [
         detailinfo: [
             {
                 id: 1,
-                img: '/assets/icons/total-view.png',
+                img: '/assets/icons/totalview.svg',
                 title: 'Total Views',
                 numbers: '10,240'
             },
             {
                 id: 2,
-                img: '/assets/icons/list-business.png',
+                img: '/assets/icons/list-business.svg',
                 title: 'Number of Offers',
                 numbers: '240'
             },
@@ -69,7 +69,7 @@ const allbussinesData = [
                     amount: '20000',
                     type: 'CO'
                 },
-                status: 'Inactive',
+                status: 'Rejected',
                 date: '21-04-2025 8:00 PM',
             },
             {

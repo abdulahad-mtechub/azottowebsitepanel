@@ -12,7 +12,7 @@ const SellerDealDetails = ({ data }) => {
             <Col span={24}>
                 <Card className='radius-12 border-gray mb-3'>
                     <Flex vertical gap={10}>
-                        <Flex vertical gap={1}>
+                        <Flex vertical gap={3}>
                             <Text className='fs-13 text-gray fw-500'>Reference #: {data?.ref}</Text>
                             <Title level={5} className='m-0'>
                                 Al Madinah Coffee Shop
@@ -26,8 +26,8 @@ const SellerDealDetails = ({ data }) => {
                         </Text>
                     </Flex>
                 </Card>
-                <BusinessVuewInfoCard data={businessinfo} />
-                <BusinessStats status={'Verified'} />
+                <BusinessVuewInfoCard />
+                <BusinessStats data={businessinfo} />
                 <MarketAreaChart />
                 <AnnualProfitBarChart />
                 <Card className='radius-12 border-gray mb-3'>

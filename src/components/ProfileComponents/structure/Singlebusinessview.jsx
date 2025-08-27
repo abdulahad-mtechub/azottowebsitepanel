@@ -3,14 +3,15 @@ import { Card, Row, Col, Flex, Typography, Breadcrumb, Space, Button, Image, Tab
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { allbussinesData } from '../../../data';
 import { SellerOfferTable } from './SellerOfferTable';
+import { SellerDealDetails } from './SellerDealDetails';
 const { Text, Title } = Typography;
-const Singlebusinessview = () => {
+const Singlebusinessview = ({setSingleDetail}) => {
 
     const items = [
         {
             key:'1',
             label:'Deals',
-            children:'Deals'
+            children: <SellerDealDetails />
         },
         {
             key:'2',
@@ -20,9 +21,8 @@ const Singlebusinessview = () => {
     ]
 
     return (
-        <div className='padd mb-2'>
-            <div className='container'>
-                <Flex vertical gap={20}>
+        <div className='mb-2'>
+            <Flex vertical gap={20}>
                     <Breadcrumb
                         separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                         items={[
@@ -36,7 +36,9 @@ const Singlebusinessview = () => {
                     />
                     <Flex justify='space-between'>
                         <Space>
-                            <ArrowLeftOutlined />
+                            <Button type='button' className='p-0 border-0 bg-transparent' onClick={()=>setSingleDetail(null)}>
+                                <ArrowLeftOutlined />
+                            </Button>
                             <Title level={5} className='m-0'>Al Madinah Coffee Shop</Title>
                         </Space>
                         <Space>
@@ -48,8 +50,8 @@ const Singlebusinessview = () => {
                             </Button>
                         </Space>
                     </Flex>
-                    <Card className='radius-12 border-gray'>
-                        <Row gutter={[16, 16]} className='mt-2'>
+                    <Card className='radius-12 border-gray card-cs'>
+                        <Row gutter={[16, 16]}>
                             {
                                 allbussinesData[0]?.detailinfo.map((data, i) => (
                                     <Col lg={{ span: 8 }} md={{ span: 12 }} sm={{ span: 12 }} xs={{ span: 12 }} key={i}>
@@ -73,16 +75,15 @@ const Singlebusinessview = () => {
 
                             <Col span={24}>
                                 <Tabs 
-                                className='tabs-fill'
-                                defaultActiveKey="1"
-                                items={items}
+                                    className='tabs-fill'
+                                    defaultActiveKey="1"
+                                    items={items}
                                 />
                             </Col>
 
                         </Row>
                     </Card>
                 </Flex>
-            </div>
         </div>
     )
 }

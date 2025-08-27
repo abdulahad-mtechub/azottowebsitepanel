@@ -52,6 +52,10 @@ body{
     background-color: var(--bg-light-green) !important;
 }
 
+.bg-orange{
+    background-color: var(--orange) !important;
+}
+
 .text-green{
     color: var(--green) !important;
 }
@@ -117,6 +121,10 @@ body{
 
 .text-gray{
     color: var(--text-gray) !important;
+}
+
+.fs-11{
+    font-size: 11px !important;
 }
 
 .fs-13{
@@ -215,6 +223,8 @@ body{
 .m-0{
     margin: 0px !important;
 }
+
+.p-1{padding: 4px !important;}
 
 .pt-1{
     padding-top: .5rem !important;
@@ -1292,6 +1302,10 @@ body{
     position: absolute;
     top: 10px;
     right: 10px;
+}
+
+.radius-4{
+    border-radius: 4px !important;
 }
 
 
