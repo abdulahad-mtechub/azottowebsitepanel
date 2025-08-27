@@ -6,7 +6,7 @@ const postsaleColumns = [
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === true || verified === 1) {
-                return <Tooltip title={'Verified'}>
+                return <Tooltip title={'Verified by Jusoor'}>
                     <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
                  </Tooltip>;
             } else {
@@ -24,7 +24,7 @@ const liabColumn = [
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === true || verified === 1) {
-                return <Tooltip title={'Verified'}>
+                return <Tooltip title={'Verified by Jusoor'}>
                     <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
                  </Tooltip>;
             } else {
@@ -42,7 +42,7 @@ const keyassetsColumn = [
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === true || verified === 1) {
-                return <Tooltip title={'Verified'}>
+                return <Tooltip title={'Verified by Jusoor'}>
                     <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
                  </Tooltip>;
             } else {
@@ -60,7 +60,7 @@ const inventColumn = [
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === 1) {
-                return <Tooltip title={'Verified'}>
+                return <Tooltip title={'Verified by Jusoor'}>
                     <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
                  </Tooltip>;
             } else {

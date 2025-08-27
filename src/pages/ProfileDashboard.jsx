@@ -127,17 +127,7 @@ const ProfileDashboard = () => {
                 </Flex>
             ),
             sellerBusiness: (
-                <Flex vertical gap={20}>
-                    <Flex justify='space-between' align='center'>
-                        <ModuleTopHeading level={4} name='All Businesses' />
-                        <Flex gap={5}>
-                            <Button className='btn bg-brand rounded-8' type='button'  onClick={() => navigate('/sellbusinesscreate')}>
-                                <PlusOutlined /> Sell a Business
-                            </Button>
-                        </Flex>
-                    </Flex>
-                    <Allbussines />
-                </Flex>
+                <Allbussines/>
             ),
             sellerSoldBusiness: (
                 <Flex vertical gap={20}>

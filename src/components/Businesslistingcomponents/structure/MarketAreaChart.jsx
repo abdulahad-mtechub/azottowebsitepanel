@@ -57,7 +57,7 @@ const MarketAreaChart = () => {
                             </Title>
                             <Row gutter={[24,24]} className='mt-3' justify={'space-between'}>
                                 <Col span={11}>
-                                    <Flex vertical gap={5}>
+                                    <Flex vertical gap={10}>
                                         <Text>Local Business Growth</Text>
                                         <Text>Population Density</Text>
                                         <Text>Industry Demand</Text>
@@ -65,7 +65,7 @@ const MarketAreaChart = () => {
                                 </Col>
                                 <div className='horizontalline' />
                                 <Col span={11}>
-                                    <Flex vertical gap={5}>
+                                    <Flex vertical gap={10}>
                                         <Text>+4.3% (YoY)</Text>
                                         <Text>High</Text>
                                         <Text>High</Text>
