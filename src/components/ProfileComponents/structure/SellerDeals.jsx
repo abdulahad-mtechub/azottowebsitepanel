@@ -13,7 +13,7 @@ const SellerDeals = () => {
 
     const [ inprogressdeal, setInprogressDeal ] = useState()
     const [ completedeal, setCompleteDeal ] = useState()
-console.log("completedeal",completedeal)
+
     const singleTab = useMemo(() => [
         {
             key: '1',

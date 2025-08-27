@@ -17,8 +17,12 @@ const ME = gql`
       accountTitle
       bankName
       iban
-    cardNumber
-    cardType
+      cardNumber
+      cardType
+    }
+    role{
+      id
+      name
     }
   }
 }
@@ -66,13 +70,13 @@ const GETBUYERSTATISTICS = gql`
 const GETSELLERBUSINESS = gql`
 query GetAllSellerBusinesses($limit: Int, $offSet: Int) {
   getAllSellerBusinesses(limit: $limit, offSet: $offSet) {
+    totalActiveCount
+    totalCount
+    totalPendingCount
     businesses {
     id
-      category {
-      name
-    }
     offerCount
-    status
+    businessStatus
     isByTakbeer
     businessTitle
     description
@@ -83,8 +87,11 @@ query GetAllSellerBusinesses($limit: Int, $offSet: Int) {
     savedBy {
       id
     }
+    category {
+      id
+      name
     }
-    totalCount
+    }
   }
 }
 `
@@ -118,7 +125,7 @@ query GetAllSellerSoldBusinesses($limit: Int, $offSet: Int) {
       category {
       name
     }
-    status
+    businessStatus
     isByTakbeer
     businessTitle
     description

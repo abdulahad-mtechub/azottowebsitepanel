@@ -13,15 +13,16 @@ import {
 import { PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
-import { useEffect, useState,useMemo } from 'react';
+import { useEffect, useState,useMemo,useContext } from 'react';
 import { profiletabData, selleralertsData } from '../data';
 import { ME,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
 import { useLazyQuery,useQuery } from '@apollo/client';
+import Cookies from "js-cookie";
 
 const { Text, Title } = Typography;
 
 const ProfileDashboard = () => {
-    const userId = localStorage.getItem('userId');
+    const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
     const [parentTab, setParentTab] = useState('Seller');
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);

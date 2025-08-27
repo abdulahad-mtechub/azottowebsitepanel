@@ -1,28 +1,35 @@
 import { Card, Col, Flex, Row, Typography} from 'antd';
 import { ModuleTopHeading } from '../../Pagecomponents';
-import { Chart } from "react-google-charts";
+// import { Chart } from "react-google-charts";
 
 const { Text, Title } = Typography
 const MarketAreaChart = () => {
 
     const data = [
-        ["Country", "Popularity"],
-        ["Saudi Arabia", 1000], // ✅ FIXED
-        ["United States", 1],
-        ["Brazil", 1],
-        ["Germany", 1],
-        ["France", 1],
-        ["Russia", 1],
-        ["Canada", 1],
-    ];
-
-
-    const options = {
-        colorAxis: { colors: ["#4285F4", "#FF0000"] },
-        backgroundColor: "#fff",
-        datalessRegionColor: "#f0f0f0",
-        legend: "none",
-    };
+        ['Province', 'Market Potential'],
+        ['Riyadh', 1000],
+        ['Makkah', 900],
+        ['Madinah', 800],
+        ['Eastern Province', 750],
+        ['Qassim', 700],
+        ['Asir', 600],
+        ['Tabuk', 500],
+        ['Hail', 450],
+        ['Northern Borders', 300],
+        ['Jizan', 350],
+        ['Najran', 400],
+        ['Al Bahah', 320],
+        ['Al Jawf', 280],
+      ];
+      
+      const options = {
+        region: 'SA',
+        displayMode: 'regions',  // fills provinces (may not color perfectly)
+        colorAxis: { colors: ['#E3F2FD', '#0D47A1'] },
+        backgroundColor: '#fff',
+        datalessRegionColor: '#f0f0f0',
+        legend: { position: 'bottom' },
+      };
 
     return (
         <div>
@@ -35,13 +42,13 @@ const MarketAreaChart = () => {
                 </Flex>
                 <Row gutter={[24,12]} align={'middle'}>
                     <Col lg={{span: 14}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
-                        <Chart
+                        {/* <Chart
                             chartType="GeoChart"
                             width="100%"
                             height="500px"
                             data={data}
                             options={options}
-                        />
+                        /> */}
                     </Col>
                     <Col lg={{span: 10}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                         <Card className='rounded-12 border-gray'>

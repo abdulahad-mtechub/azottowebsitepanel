@@ -20,22 +20,24 @@ const GET_CATEGORY = gql`
 `
 const GET_ALL_BUSINESSES = gql`
     query GetAllBusinesses($limit: Int, $offSet: Int, $filter: BusinessFilterInput, $sort: BusinessSortInput) {
-  getAllBusinesses(limit: $limit, offSet: $offSet, filter: $filter, sort: $sort) {
-  
+    getAllBusinesses(limit: $limit, offSet: $offSet, filter: $filter, sort: $sort) {
     businesses {
-    id
-      category {
-      name
-    }
-    businessTitle
-    description
-    revenue
-    profit
-    price
-    recoveryTime
-    savedBy {
+      isByTakbeer
+      isSaved
       id
-    }
+        category {
+        name
+      }
+      businessStatus
+      businessTitle
+      description
+      revenue
+      profit
+      price
+      recoveryTime
+      savedBy {
+        id
+      }
     }
     totalCount
   }
@@ -69,6 +71,7 @@ const GET_BUSINESS = gql`
     revenue
     revenueTime
     seller {
+    id
       name
       email
     }
@@ -261,6 +264,39 @@ query GetAllBusinessesByRevenue($revenue: [Float]!, $limit: Int, $offSet: Int) {
   }
 }
 `
+const SIMILER_BUSINESS_CATEGORY_GRAPH = gql`
+query SimilerBusinessAvgAnualProfit($similerBusinessAvgAnualProfitId: ID) {
+  similerBusinessAvgAnualProfit(id: $similerBusinessAvgAnualProfitId) {
+    totalProfit
+    graph {
+      profit
+      year
+    }
+  }
+}
+`
+const GET_BUYER_OFFER = gql`
+query GetOffersByUser($search: String, $status: String) {
+  getOffersByUser(search: $search, status: $status) {
+    id
+    price
+    status
+    createdAt
+    business {
+      id
+      businessTitle
+      price
+      seller {
+        id
+        name
+      }
+    }
+    buyer {
+      id
+    }
+  }
+}
+`
 export {
     GET_CATEGORIES,
     GET_CATEGORY,
@@ -271,5 +307,7 @@ export {
     GET_BUSINESS_BY_CITY,
     GET_BUSINESS_BY_PROFIT,
     GET_BUSINESS_BY_REVENUE,
-    GET_BUSINESS_BY_DISTRICT
+    GET_BUSINESS_BY_DISTRICT,
+    SIMILER_BUSINESS_CATEGORY_GRAPH,
+    GET_BUYER_OFFER
 }

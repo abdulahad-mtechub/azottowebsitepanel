@@ -1,20 +1,24 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,message } from 'antd';
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { businessmenuData, othersmenu } from '../../../data';
-import { useEffect, useState,useContext } from 'react';
+import { businessmenuData } from '../../../data';
+import { useEffect, useState } from 'react';
 import { MobileNavbar } from './MobileNavbar';
-import { AuthContext } from '../../../context/AuthContext';
-import { useLazyQuery } from '@apollo/client';
+import Cookies from "js-cookie";
+import { useLazyQuery,useMutation } from '@apollo/client';
 import { ME,NOTIFICATION } from '../../../graphql/query';
+import { LOGOUT } from '../../../graphql/mutation/login';
+import { client } from '../../../config/apolloClient';
 
 const { Text, Title } = Typography;
 
 const Navbar = ({setGetCategory}) => { 
-  const { isLoggedIn, logout } = useContext(AuthContext);
-  const [isshow, setIsShow] = useState(isLoggedIn);
-  const userId = localStorage.getItem('userId');
+  const [messageApi, contextHolder] = message.useMessage();
+  
+  const userId = Cookies.get("userId"); // read userId from cookie
+  const [isLoggedIn, setisLoggedIn] = useState(!!userId);
+  const [isshow, setIsShow] = useState(!!userId); // true if userId exists
   const [user, setUser] = useState(null);
   const [notificationCount, setNotificationCount] = useState();
   const [ visible, setVisible ] = useState(false)
@@ -26,24 +30,35 @@ const Navbar = ({setGetCategory}) => {
     icon: "assets/icons/en.png",
   });
   const otherPaths = ['/about', '/termofuse'];
-  const others = otherPaths.includes(location.pathname);
-    // ✅ Setup the lazy query
-    const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
-    const [getNotification, { data:notifications, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
+  // ✅ Setup the lazy query
+  const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
+  const [getNotification, { data:notifications, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
 
-    useEffect(() => {
-      if (userId) {
-        getUser({ variables: { getUserId: userId } });
-        getNotification({ variables: { userId } });
-      }
-    }, [userId]);
+  const [logout, { loading }] = useMutation(LOGOUT, {
+    onCompleted: () => {
+      localStorage.removeItem("accessToken"); 
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("userId");
+      client.resetStore(); 
+      window.location.reload();
+      },
+    onError: (err) => messageApi.error("Logout error:", err)
+  });
   
-    useEffect(() => {
-      if (me?.getUser) {
-        setUser(me.getUser);
-        setNotificationCount(notifications?.length)
-      }
-    }, [me]);
+
+  useEffect(() => {
+    if (userId) {
+      getUser({ variables: { getUserId: userId } });
+      getNotification({ variables: { userId } });
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (me?.getUser) {
+      setUser(me.getUser);
+      setNotificationCount(notifications?.length)
+    }
+  }, [me]);
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
       return (
@@ -107,8 +122,22 @@ const Navbar = ({setGetCategory}) => {
   }, [isLoggedIn]);
 
   const handleLogout = () => {
-    logout();  // This clears localStorage and sets isLoggedIn = false
-    navigate('/login');
+    // Clear cookies
+    Cookies.remove("userId");
+    Cookies.remove("authToken");
+  
+    // Clear localStorage (in case you still store something there)
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
+  
+    client.resetStore(); 
+  
+    setisLoggedIn(false);
+    setIsShow(false);
+  
+    navigate('/');
+    window.location.reload(); // optional hard reset
   };
   const items = [
     {
@@ -169,6 +198,7 @@ const Navbar = ({setGetCategory}) => {
 
   return (
     <>
+    {contextHolder}
       <div className='gen-navbar-container' style={{ position: 'relative' }}>
         <div className='w-100'>
           <div className="gen-navbar-small">

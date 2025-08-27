@@ -1,38 +1,37 @@
-import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image, Dropdown, Space } from "antd";
+import { Form, Button, Typography, Row, Col, Divider, Checkbox, Flex, Image, Dropdown, Space,Spin,message } from "antd";
 import { MyInput } from "../components";
 import { NavLink } from "react-router-dom";
-import { message } from "antd";
 import { useMutation } from "@apollo/client";
 import { LOGIN } from "../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
-import { useContext, useState } from 'react';
-import { AuthContext } from '../context/AuthContext';
+import { useState } from 'react';
 import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
+import Cookies from "js-cookie";
 
 const { Title, Text, Paragraph } = Typography;
 const LoginPage = () => {
-const { login } = useContext(AuthContext);
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
-    const [loginUser, { loading, error }] = useMutation(LOGIN);
+    const [loginUser, { loading:userLoading, error }] = useMutation(LOGIN);
     const [form] = Form.useForm();
     const [selectedLang, setSelectedLang] = useState({
         key: "1",
         label: "EN",
         icon: "assets/icons/en.png",
       });
+    const [redirecting, setRedirecting] = useState(false);
 
     const handleFinish = async (values) => {
       try {
         const { email, password } = values;
     
-        const { data,error } = await loginUser({ variables: { email, password } });
+        const { data } = await loginUser({ variables: { email, password } });
     
         if (data?.login?.token) {
-          localStorage.setItem("accessToken", data.login.token);
-          localStorage.setItem("userId", data.login.user.id);
-          login(data?.login?.token);
+          Cookies.set("userId", data.login.user.id, { expires: 7 }); // expires in 7 days
+          Cookies.set("authToken", data.login.token, { expires: 7, secure: true }); 
           messageApi.success("Login successful!");
+          setRedirecting(true); 
           setTimeout(() => navigate("/"), 1000);
         } else {
           messageApi.error("Login failed: Somthing went Wrong");
@@ -67,7 +66,13 @@ const { login } = useContext(AuthContext);
           setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
       },
     ];
-
+    if (userLoading || redirecting) {
+      return (
+          <Flex justify="center" align="center" style={{ height: "200px" }}>
+              <Spin size="large" />
+          </Flex>
+      );
+    }
     return (
       <>
       {contextHolder}
@@ -123,7 +128,7 @@ const { login } = useContext(AuthContext);
                         type="primary"
                         className="btn bg-dark-blue fs-16"
                         block
-                        loading={loading}
+                        userLoading={userLoading}
                       >
                         Signin
                       </Button>

@@ -1,17 +1,18 @@
-import React,{useState,useEffect} from 'react'
+import React,{useState,useEffect,useContext} from 'react'
 import { Row, Col, Card, Flex, Typography, Divider } from 'antd'
 const { Text, Title } = Typography;
 import {NOTIFICATION } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
+import Cookies from "js-cookie";
 
 const SellerAlerts = ({data}) => {
     const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user"); // adjust key as per your app
-    if (storedUser) {
+    const userId = Cookies.get("userId");
+    if (userId) {
       try {
-        const parsedUser = JSON.parse(storedUser);
+        const parsedUser = JSON.parse(userId);
         setUserId(parsedUser?.id || parsedUser?.userId);
       } catch (err) {
         console.error("Invalid user JSON in localStorage");

@@ -42,7 +42,6 @@ const SignupPage = () => {
                 password: formData.password,
                 documents: documents.length > 0 ? documents : undefined,
             };
-            console.log("input",input)
     
             const { data } = await createUser({ variables: { input } });
     
@@ -290,47 +289,47 @@ const SignupPage = () => {
                     </Col>
                 )}
                 <Col span={24}>
-                    <MyInput
-                        label="New Password"
-                        type="password"
-                        name="password"
-                        size='large'
-                        required
-                        message={()=>{}}
-                        placeholder={'Enter Password'}
-                        validator={({ getFieldValue }) => ({
-                            validator: (_, value) => {
-                                const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
-                                if (!reg.test(value)) {
-                                    return Promise.reject(new Error('Password should contain at least 8 characters, one uppercase letter, one number, one special character'));
-                                } else {
-                                    return Promise.resolve();
-                                }
-                            }
-                        })}
-                    />
+                <MyInput
+                    label="New Password"
+                    type="password"
+                    name="password"
+                    size="large"
+                    required
+                    placeholder="Enter Password"
+                    rules={[
+                    { required: true, message: 'Please enter password' },
+                    {
+                        pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/,
+                        message:
+                        'Password should contain at least 8 characters, one uppercase letter, one number, one special character',
+                    },
+                    ]}
+                    // validateTrigger can be changed to ['onBlur'] if you prefer less noisy validation
+                    validateTrigger={['onChange', 'onBlur']}
+                />
                 </Col>
                 <Col span={24}>
-                    <MyInput
-                        label="Confirm Password"
-                        type="password"
-                        name="confirmationPassword"
-                        size='large'
-                        dependencies={['password']}
-                        required
-                        message='Please enter confirm password'
-                        placeholder={'Enter Confirm Password'}
-                        rules={[
-                            ({ getFieldValue }) => ({
-                                validator(_, value) {
-                                    if (!value || getFieldValue('password') === value) {
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('The password that you entered do not match!'));
-                                },
-                            }),
-                        ]}
-                    />
+                <MyInput
+                    label="Confirm Password"
+                    type="password"
+                    name="confirmationPassword"
+                    size="large"
+                    required
+                    placeholder="Enter Confirm Password"
+                    dependencies={['password']}               // revalidate when password changes
+                    validateTrigger={['onChange', 'onBlur']}
+                    rules={[
+                    { required: true, message: 'Please confirm your password' },
+                    ({ getFieldValue }) => ({
+                        validator(_, value) {
+                        if (!value || getFieldValue('password') === value) {
+                            return Promise.resolve();
+                        }
+                        return Promise.reject(new Error('The password that you entered do not match!'));
+                        },
+                    }),
+                    ]}
+                />
                 </Col>
                 <Col span={24}>
                     <Checkbox>

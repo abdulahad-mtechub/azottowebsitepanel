@@ -12,6 +12,7 @@ const profiletabData = {
     {
       key: 'sellermeeting',
       label: 'Meetings (10)',
+      //Meeting(10)
     },
     { key: 'sellerdeals', label: 'Deals' },
     { key: 'selleralert', label: 'Alerts' },

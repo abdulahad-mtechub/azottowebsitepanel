@@ -6,9 +6,10 @@ import { ME } from '../../../graphql/query';
 import { message } from "antd";
 import { useMutation } from '@apollo/client'
 import { ACCEPT_ENDA,BUSINESS_MEETING } from '../../../graphql'
+import Cookies from "js-cookie";
 
-const RequestMeetingModal = ({businessId,visible,onClose}) => {
-    const userId = localStorage.getItem('userId');
+const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
+  const userId = Cookies.get("userId"); // read userId from cookie
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
     const [current, setCurrent] = useState(0);
@@ -30,7 +31,15 @@ const RequestMeetingModal = ({businessId,visible,onClose}) => {
             content: <ScheduleMeetingStep form={form} onClose={onClose} />,
         },
     ];
-
+                      // try {
+                        //     await updateOffer({
+                        //         variables: { input: { id: record.key, status: 'ACCEPTED' } }
+                        //     });
+                        //     messageApi.success('Offer accepted!');
+                        //     refetch();
+                        // } catch (err) {
+                        //     messageApi.error('Failed to accept offer');
+                        // }
     const next = async () => {
         if (current === 0) {
           try {
@@ -114,6 +123,7 @@ const RequestMeetingModal = ({businessId,visible,onClose}) => {
                   
                           messageApi.success("Meeting request sent successfully!");
                           onClose(); // close modal
+                          refetch && refetch();
                         } catch (error) {
                           console.error(error);
                           messageApi.error("Failed to schedule meeting.");
