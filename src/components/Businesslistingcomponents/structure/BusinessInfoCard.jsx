@@ -46,7 +46,7 @@ const BusinessInfoCard = ({data}) => {
         } else {
           navigate('/login');
         }
-      };
+    };
 
     return (
         <>
@@ -79,13 +79,15 @@ const BusinessInfoCard = ({data}) => {
                     <Col span={24}>
                         <Divider className='m-0' />
                     </Col>
+                    {data?.seller?.id !== userId && (
                     <Col span={24}>
-                        <Flex vertical gap={5}>
-                            <Button className='btn bg-brand' onClick={()=> handleAction(() => setOfferSeller(true))}>Make an Offer</Button>
-                            <Button className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>Request Meeting</Button>
-                            <Button className='btn bg-green text-white' onClick={()=> handleAction(() => setMeetingModal(true))}>Proceed to Purchase</Button>
-                        </Flex>
+                    <Flex vertical gap={5}>
+                        <Button className='btn bg-brand' onClick={()=> handleAction(() => setOfferSeller(true))}>Make an Offer</Button>
+                        <Button className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>Request Meeting</Button>
+                        <Button className='btn bg-green text-white' onClick={()=> handleAction(() => setMeetingModal(true))}>Proceed to Purchase</Button>
+                    </Flex>
                     </Col>
+                    )}
                 </Row>
             </Card>
             <OfferSellerModal 

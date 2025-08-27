@@ -71,6 +71,7 @@ const GET_BUSINESS = gql`
     revenue
     revenueTime
     seller {
+    id
       name
       email
     }

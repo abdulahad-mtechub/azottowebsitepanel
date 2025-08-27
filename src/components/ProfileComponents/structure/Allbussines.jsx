@@ -38,7 +38,7 @@ const Allbussines = () => {
                 {
                     sellerBusinesses?.getAllSellerBusinesses?.businesses?.map((pro, i) =>
                         <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }} key={i}>
-                            <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={() => navigate('/singleviewlisting/' + pro?.id)}>
+                            <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={() => navigate('/singlebusinessview/' + pro?.id)}>
                                 <Flex vertical gap={20}>
                                     <Flex justify='space-between' align='center'>
                                         <Flex gap={4}>
