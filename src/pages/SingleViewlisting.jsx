@@ -18,7 +18,7 @@ const SingleViewlisting = () => {
         skip: !id, // in case id is undefined
     });
     
-    const business = businessData?.getBusinessById;
+    const business = businessData?.getBusinessById?.business;
     const postSaleData = [
         {
           key: '1',

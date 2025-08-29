@@ -39,7 +39,7 @@ const Allbussines = () => {
       
     if(singledetail){
         return (
-            <Singlebusinessview setSingleDetail={setSingleDetail} />
+            <Singlebusinessview singledetail={singledetail} setSingleDetail={setSingleDetail}/>
         )
     }
 
@@ -86,7 +86,7 @@ const Allbussines = () => {
                                                 <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="" />
                                             </div>
                                             <Title className='' level={5}>
-                                                {pro?.title}
+                                                {pro?.businessTitle}
                                             </Title>
                                             <Text className='fs-14 text-gray'>
                                                 {pro?.description}
