@@ -1,4 +1,4 @@
-import { Col, Form, Row, Table } from 'antd'
+import { Col, Form, Row, Table,Button } from 'antd'
 import { SearchInput } from '../../Forms';
 import {BUYERINPROGRESSDEALS } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
