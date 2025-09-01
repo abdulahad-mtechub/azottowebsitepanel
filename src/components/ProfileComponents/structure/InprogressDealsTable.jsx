@@ -36,11 +36,11 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
 
     const offerData = useMemo(() => {
             return offerDeals?.getBuyerInprogressDeals?.map((deal) => ({
-                key: deal.id,
-                title: deal.business.businessTitle,
-                sellername: deal.business.seller.name,
-                offerprice: offer.price,
-                date: new Date(offer.createdAt).toLocaleString(),
+                key: deal?.id,
+                title: deal?.business?.businessTitle,
+                sellername: deal?.business.seller.name,
+                offerprice: deal?.price,
+                date: new Date(deal?.createdAt).toLocaleString(),
             })) || [];
         }, [offerDeals]);
 
