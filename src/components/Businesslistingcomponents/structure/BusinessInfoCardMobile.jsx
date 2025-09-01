@@ -17,7 +17,7 @@ const BusinessInfoCardMobile = ({data}) => {
             title:`SAR ${data?.price?.toLocaleString() || '0'}`,
             subtitle:'Business Price'
         },
-        {
+        { 
             id: 3, 
             icon:'/assets/icons/businesscate.png', 
             title:'Restaurant',
