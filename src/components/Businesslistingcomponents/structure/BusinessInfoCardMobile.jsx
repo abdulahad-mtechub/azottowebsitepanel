@@ -19,7 +19,7 @@ const BusinessInfoCardMobile = ({data}) => {
         },
         {
             id: 3, 
-            icon:'/assets/icons/businesscate.png',
+            icon:'/assets/icons/businesscate.png', 
             title:'Restaurant',
             subtitle:'Business Category'
         },
