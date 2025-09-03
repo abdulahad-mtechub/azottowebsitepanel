@@ -5,6 +5,25 @@ import { SingleInprogressSteps } from './SingleInprogressSteps'
 
 const { Title, Text } = Typography
 const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
+
+const buyerdealsData = [
+    {
+      title:'Seller Name',
+      desc:inprogressdeal?.sellername
+    },
+    {
+      title:'Buyer Name',
+      desc:inprogressdeal?.buyername
+    },
+    {
+      title:'Finalized Offer',
+      desc:`SAR ${inprogressdeal.offerprice}`
+    },
+    {
+      title:'Status',
+      desc:inprogressdeal?.status
+    },
+  ]
   return (
     <Flex vertical gap={20}>
         <Flex vertical gap={25}>
@@ -50,7 +69,7 @@ const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
                     }
                 </Row>
             </div>
-            <SingleInprogressSteps />
+            <SingleInprogressSteps inprogressdeal={inprogressdeal} />
         </Card>
     </Flex>
   )

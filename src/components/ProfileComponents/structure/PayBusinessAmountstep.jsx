@@ -1,10 +1,25 @@
 import React from 'react'
-import { paybusinessData } from '../../../data'
 import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
+import {GET_BUSINESS } from '../../../graphql/query';
+import { useQuery } from '@apollo/client';
 
 const { Text } = Typography
 const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
+    const { data:business, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
+        variables: { 
+            getBusinessByIdId: inprogressdeal?.businessId,
+            limit: null,
+            offset: null,
+            search: null,
+            status: null
+        },
+    });
+    const dealBusiness = business?.getBusinessById?.business
+    const bankRecipt = dealBusiness?.documents?.find(
+    (doc) => doc.title === "Buyer Payment Receipt"
+    );
+
     const paybusinessData = [
         {
           title:'Seller’s Bank Name',
@@ -23,6 +38,7 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
           desc:inprogressdeal?.offerprice
         },
       ]
+    
     return (
         <Row gutter={[16, 24]}>
             {
@@ -38,21 +54,23 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
 
             <Col span={24}>
                 {
-                    inprogressdeal ? (
+                    bankRecipt ? (
                         <Card className='card-cs border-gray rounded-12' >
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={15}>
                                     <Image src={'/assets/icons/file.png'} preview={false} width={20} />
                                     <Flex vertical>
-                                        <Text className='fs-13 text-gray'>
-                                            Bank-Statement.png
-                                        </Text>
-                                        <Text className='fs-13 text-gray'>
-                                            5.3 MB
-                                        </Text>
+                                    <Text className="fs-13 text-gray">{bankRecipt.title}</Text>
                                     </Flex>
                                 </Flex>
-                                <Image src={'/assets/icons/download.png'} preview={false} width={20} />
+                                <a href={bankRecipt.filePath} target="_blank" rel="noreferrer" className="fs-13 text-blue-500 underline" >
+                                    <Image
+                                        src={"/assets/icons/download.png"}
+                                        preview={false}
+                                        width={16}
+                                        style={{ cursor: "pointer" }}
+                                    />
+                                </a>
                             </Flex>
                         </Card>
                     ) : 

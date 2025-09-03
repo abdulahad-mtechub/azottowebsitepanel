@@ -1,191 +1,159 @@
 import React,{useState} from 'react'
-import { Button, Card, Col, Divider, Flex, Image, Radio, Row, Typography,Upload } from 'antd'
-import { message } from "antd";
-import {UPLOAD_DOC} from '../../../graphql/mutation';
+import { Button, Card, Col, Flex, Image, Row, Typography, message,Spin  } from 'antd'
+import { CheckCircleOutlined } from '@ant-design/icons'
+import { UPDATE_DEAL,UPLOAD_DOCUMENT} from '../../../graphql/mutation';
 import { useMutation } from '@apollo/client';
-import imageCompression from "browser-image-compression";
 
 const { Text } = Typography
-const ConfirmationDocsStep = ({ form, completedeal,deal }) => {
-    const [messageApi, contextHolder] = message.useMessage();
-    const [uploadingDoc, setUploadingDoc] = useState(null); // track which doc is loading
-    const [documents, setDocuments] = useState([
-      { title: "Commercial Registration (CR)", fileName: "", fileType: "", filePath: "" },
-      { title: "Notarized Ownership Transfer Letter", fileName: "", fileType: "", filePath: "" },
-    ]);
-  
-    const [uploadDoc] = useMutation(UPLOAD_DOC);
-  
-    const handleUpload = async ({ file, title }) => {
-      try {
-        setUploadingDoc(title);
-  
-        let processedFile = file;
-        if (file.type.startsWith("image/")) {
-          processedFile = await imageCompression(file, {
-            maxSizeMB: 1,
-            maxWidthOrHeight: 1024,
-            useWebWorker: true,
-          });
-        }
-  
-        // Step 1: Upload to server
-        const formData = new FormData();
-        formData.append("file", processedFile);
-  
-        const res = await fetch("https://220.152.66.148.host.secureserver.net/upload", {
-          method: "POST",
-          body: formData,
-        });
-  
-        if (!res.ok) throw new Error("Upload failed");
-        const data = await res.json();
-  
-       // Update state to show file
-        setDocuments(prev =>
-          prev.map(doc =>
-            doc.title === title
-              ? { ...doc, fileName: data.fileName, filePath: data.fileUrl, fileType: data.fileType }
-              : doc
-          )
-        );
-  
-        messageApi.success("File uploaded successfully");
-      } catch (err) {
-        console.error(err);
-        messageApi.error(`Error uploading ${title}`);
-      } finally {
-        setUploadingDoc(null);
+const ConfirmationDocsStep = ({ form, completedeal,deal,details }) => {
+  const [messageApi, contextHolder] = message.useMessage();
+  const [documents, setDocuments] = useState({});
+  const uploadDocs = [
+      {
+          title: "Updated Commercial Registration (CR)",
+          ...details?.busines?.documents?.find(doc => doc.title === "Updated Commercial Registration (CR)")
+      },
+      {
+          title: "Notarized Ownership Transfer Letter",
+          ...details?.busines?.documents?.find(doc => doc.title === "Notarized Ownership Transfer Letter")
       }
-    };
+  ];
+  const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
+      onCompleted: () => {
+          messageApi.success("Status changed successfully!");
+      },
+      onError: (err) => {
+          messageApi.error(err.message || "Something went wrong!");
+      },
+  });
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-          for (const doc of documents) {
-            if (!doc.fileName) continue; // skip empty docs
-      
-            await uploadDoc({
-              variables: {
-                input: {
-                  businessId: deal?.business?.id, // replace with real ID if needed
-                  fileName: doc.fileName,
-                  filePath: doc.filePath,
-                  fileType: doc.fileType,
-                  title: doc.title,
-                },
-              },
-            });
+  const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
+      onCompleted: () => {
+          messageApi.success("Document uploaded successfully!");
+      },
+      onError: (err) => {
+          messageApi.error(err.message || "Something went wrong!");
+      },
+  });
+
+  const handleSingleFileUpload = async (file) => {
+          try {
+              const formData = new FormData();
+              formData.append("file", file);
+  
+              const response = await fetch("https://220.152.66.148.host.secureserver.net/upload", {
+                  method: "POST",
+                  body: formData,
+              });
+  
+              if (!response.ok) throw new Error("Upload failed");
+  
+              const result = await response.json();
+  
+              // Set the uploaded file info to state
+              setDocuments({
+                  fileName: file.name,
+                  fileType: file.type,
+                  filePath: result.fileUrl || result.url,
+                  fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
+              });
+  
+              // Call GraphQL mutation to save file info in backend
+              await uploadDocument({
+                  variables: {
+                      input: {
+                          title:'Buyer Payment Receipt',
+                          businessId: details?.businessId,
+                          filePath: result.fileUrl || result.url,
+                          fileName: file.name,
+                          fileType: file.type,
+                          // businessId:details?.busines?.id
+                      },
+                  },
+              });
+  
+              return false; // Prevent default upload behavior
+          } catch (error) {
+              console.error("Error uploading file:", error);
+              messageApi.error(error.message || "Upload failed!");
+              return false;
           }
-      
-          messageApi.success("All documents saved successfully");
-        } catch (err) {
-          console.error(err);
-          messageApi.error("Failed to save documents");
-        }
-      };
+  };
+
+  const handleMarkVerified = async () => {
+      if (!details?.key) return;
+      await updateDeals({
+          variables: {
+              input: {
+                  id: details.key,
+                  status: "WAITING", 
+                  isDocVedifiedAdmin: true, 
+              },
+          },
+      });
+  };
+  if (updating || uploading) {
+      return (
+          <Flex justify="center" align="center" style={{ height: "200px" }}>
+              <Spin size="large" />
+          </Flex>
+      );
+  }
   
     return (
+      <>
+      {contextHolder}
       <Row gutter={[16, 24]}>
-        {contextHolder}
-  
-        {/* Example Receipt */}
-        <Col span={24}>
-          <Flex vertical gap={10}>
-            <Card className="card-cs border-gray rounded-12">
-              <Flex justify="space-between" align="center">
-                <Flex gap={15}>
-                  <Image src="/assets/icons/file.png" preview={false} width={20} />
-                  <Flex vertical>
-                    <Text className="fs-13 text-gray">Business Transaction Receipt.pdf</Text>
-                    <Text className="fs-13 text-gray">5.3 MB</Text>
-                  </Flex>
-                </Flex>
-                <Image src="/assets/icons/download.png" preview={false} width={20} />
-              </Flex>
-            </Card>
-            <Divider />
-            <Text className="fs-13 text-gray">
-              Have you received the payment in your bank account?
-            </Text>
-            <Radio.Group>
-              <Radio value={1} className="fs-13 text-gray">Yes</Radio>
-              <Radio value={2} className="fs-13 text-gray">No</Radio>
-            </Radio.Group>
-          </Flex>
-        </Col>
-  
-        {/* Document Upload / View */}
-        <Col span={24}>
-          {completedeal ? (
-            <Card className="card-cs border-gray rounded-12">
-              <Flex justify="space-between" align="center">
-                <Flex gap={15}>
-                  <Image src="/assets/icons/file.png" preview={false} width={20} />
-                  <Flex vertical>
-                    <Text className="fs-13 text-gray">Bank-Statement.png</Text>
-                    <Text className="fs-13 text-gray">5.3 MB</Text>
-                  </Flex>
-                </Flex>
-                <Image src="/assets/icons/download.png" preview={false} width={20} />
-              </Flex>
-            </Card>
-          ) : (
-            documents.map(doc => (
-              <Flex vertical gap={5} className="w-100 mt-2" key={doc.title}>
-                <Flex vertical>
-                  <Text className="fw-500 fs-14">{doc.title}</Text>
-                  <Text className="text-gray">
-                    Accepted formats: JPG, PNG, PDF — Max size: 5MB per file.
-                  </Text>
-                </Flex>
-                <Flex className="w-100">
-                  {doc.fileName ? (
-                    <Card className="card-cs border-gray rounded-12 w-100">
+          {uploadDocs.map((item, index) => (
+              <Col span={24} key={index}>
+                  <Text className="fw-600 text-medium-gray fs-13">{item.title}</Text>
+                  <Card className="card-cs border-gray rounded-12 mt-2">
                       <Flex justify="space-between" align="center">
-                        <Flex gap={15}>
-                          <Image src="/assets/icons/file.png" preview={false} width={20} />
-                          <Flex vertical>
-                            <Text className="fs-13 text-gray">{doc.fileName}</Text>
-                            <Text className="fs-13 text-gray">{doc.fileType}</Text>
+                          <Flex gap={15}>
+                              <Image src={"/assets/icons/file.png"} preview={false} width={20} />
+                              <Flex vertical>
+                                  <Text className="fs-13 text-gray">{item?.title}</Text>
+                                  <Text className="fs-13 text-gray">5.3 MB</Text>
+                              </Flex>
                           </Flex>
-                        </Flex>
-                        <a href={doc.filePath} target="_blank" rel="noopener noreferrer">
-                          <Image src="/assets/icons/download.png" preview={false} width={20} />
-                        </a>
+                          <a href={''} target="_blank" rel="noopener noreferrer">
+                              <Image src={"/assets/icons/download.png"} preview={false} width={20} />
+                          </a>
                       </Flex>
-                    </Card>
-                  ) : (
-                    <Upload
-                      beforeUpload={() => false}
-                      showUploadList={false}
-                      maxCount={1}
-                      onChange={info => handleUpload({ file: info.file, title: doc.title })}
-                    >
-                      <Button
-                        className="btn text-black bg-gray border-gray"
-                        loading={uploadingDoc === doc.title}
-                      >
-                        Upload
-                      </Button>
-                    </Upload>
-                  )}
-                </Flex>
-              </Flex>
-            ))
-          )}
-        </Col>
-  
-        {!completedeal && (
+                  </Card>
+              </Col>
+          ))}
+
+          {/* Seller final confirmation */}
           <Col span={24}>
-            <Flex>
-              <Button type="primary" className="btn bg-brand" onClick={handleSubmit}>
-                Submit Documents
-              </Button>
-            </Flex>
+              <Flex vertical gap={10}>
+                  {/* Dynamic Badge */}
+                  <Flex
+                      gap={5}
+                      className={details?.isPaymentVerifiedSeller ? "badge-cs success fs-12 fit-content" : "badge-cs pending fs-12 fit-content"}
+                      align="center"
+                  >
+                  <CheckCircleOutlined className="fs-14" />
+                      {details?.isPaymentVerifiedSeller
+                          ? 'Seller marked "Payment Received"'
+                          : '"Payment Received" Seller Confirmation pending'}
+                  </Flex>
+
+                  {/* Single Button */}
+                  <Flex>
+                      <Button
+                          type="primary"
+                          className="btnsave bg-brand"
+                          onClick={handleMarkVerified}
+                          disabled={!details?.isPaymentVerifiedSeller} // disable if already verified
+                      >
+                          Mark as Verified
+                      </Button>
+                  </Flex>
+              </Flex>
           </Col>
-        )}
       </Row>
+  </>
     );
   };
 

@@ -28,7 +28,7 @@ const SingleInprogressSteps = ({inprogressdeal,offer}) => {
         {
             key: '2',
             label: 'Digital Sale Agreement',
-            content: <DigitalSaleAgreementStep form={form} inprogressdeal={inprogressdeal} />,
+            content: <DigitalSaleAgreementStep form={form} details={inprogressdeal} />,
             status: 'Signed'
         },
         {

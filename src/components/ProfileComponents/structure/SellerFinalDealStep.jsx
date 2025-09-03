@@ -5,7 +5,7 @@ import { useMutation } from '@apollo/client'
 import { message } from "antd";
 
 const { Text } = Typography
-const SellerFinalDealsStep = ({form,completedeal,deal}) => {
+const SellerFinalDealsStep = ({form,completedeal,deal,details}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [finalizDeal] = useMutation(FINALIZE_DEAL);
     const [isConfirmed, setIsConfirmed] = useState(false);

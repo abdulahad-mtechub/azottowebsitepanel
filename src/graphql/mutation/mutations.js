@@ -71,9 +71,30 @@ mutation UpdateDeal($input: UpdateDealInput!) {
   }
 }
 `
+const UPDATE_DEAL = gql`
+mutation UpdateDeal($input: UpdateDealInput!) {
+  updateDeal(input: $input) {
+    id
+  }
+}
+`
 const COUNTER_OFFER = gql `
 mutation CounterOffer($input: CounterOfferInput!) {
   counterOffer(input: $input) {
+    id
+  }
+}
+`
+const SEND_BANK = gql`
+mutation SendBankToBuyer($sendBankToBuyerId: ID) {
+  sendBankToBuyer(id: $sendBankToBuyerId) {
+    iban
+  }
+}
+`
+const UPLOAD_DOCUMENT = gql`
+mutation UploadDocument($input: UpdateDocumentInput!) {
+  uploadDocument(input: $input) {
     id
   }
 }
@@ -90,5 +111,8 @@ export {
   APPROVE_MEETING,
   UPLOAD_DOC,
   FINALIZE_DEAL,
-  COUNTER_OFFER
+  UPDATE_DEAL,
+  COUNTER_OFFER,
+  SEND_BANK,
+  UPLOAD_DOCUMENT
 }
