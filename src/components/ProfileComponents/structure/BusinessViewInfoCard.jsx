@@ -1,9 +1,9 @@
 import { Card, Col, Flex, Image, Row, Typography } from 'antd'
 
 const { Title, Text } = Typography
-const BusinessViewInfoCard = ({data}) => {
+const BusinessViewInfoCard = () => {
 
-    const businessInfoData = [
+    const data = [
         {
             id: 1,
             icon:'/assets/icons/verification.png',
@@ -13,7 +13,7 @@ const BusinessViewInfoCard = ({data}) => {
         {
             id: 2,
             icon:'/assets/icons/businessprice.png',
-            title: <> <img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data?.price?.toLocaleString() || '0'}</>,
+            title:`25,000`,
             subtitle:'Business Price'
         },
         {
@@ -25,11 +25,10 @@ const BusinessViewInfoCard = ({data}) => {
         {
             id: 5,
             icon:'/assets/icons/businessloc.png',
-            title:`${data?.district || 'Unknown'}`,
+            title:`Riyadh District, Riyadh`,
             subtitle:'Business Location'
         },
     ]
-
 
     return (
         <>
@@ -41,7 +40,7 @@ const BusinessViewInfoCard = ({data}) => {
                         </Title>
                     </Col>
                     {
-                        businessInfoData?.map((info, i) =>(
+                        data?.map((info, i) =>(
                              <Col xs={24} sm={24} md={12} lg={6} key={i}>
                             <Flex gap={10}>
                                 
