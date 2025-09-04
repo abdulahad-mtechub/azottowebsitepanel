@@ -4,21 +4,100 @@ import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { allbussinesData } from '../../../data';
 import { SellerOfferTable } from './SellerOfferTable';
 import { SellerDealDetails } from './SellerDealDetails';
-const { Text, Title } = Typography;
-const Singlebusinessview = ({setSingleDetail}) => {
+import { useQuery } from '@apollo/client';
+import { GET_BUSINESS } from '../../../graphql/query/business';
 
+const { Text, Title } = Typography;
+const Singlebusinessview = ({setSingleDetail, singledetail}) => {
+    const { data, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
+        variables: { getBusinessByIdId: singledetail },
+        skip: !singledetail, // in case id is undefined
+    });
+
+    const business = data?.getBusinessById?.business
     const items = [
         {
             key:'1',
             label:'Deals',
-            children: <SellerDealDetails />
+            children: <SellerDealDetails data={business} />
         },
         {
             key:'2',
             label:'Offer',
-            children:<SellerOfferTable/>
+            children:<SellerOfferTable data={business}/>
         },
     ]
+   
+
+function mapBusinessPayloadToUI(payload) {
+    return {
+      id: payload?.id,
+      ref: payload?.reference, // from backend
+      title: payload?.businessTitle,
+      description: payload?.description,
+      amount: `SAR ${payload?.price?.toLocaleString()}`, // format nicely
+      status: payload?.isSupportVerified ? "Active" : "Under-review", // adjust logic
+      type: payload?.isByTakbeer ? "Taqbeel" : "Acquiring",
+  
+      // Revenue / Profit / Capital Recovery
+      child: [
+        {
+          id: 1,
+          icon: '/assets/icons/year-p.png',
+          subtitle: `SAR ${payload?.revenue.toLocaleString()}`,
+          subdesc: `${payload?.revenueTime}`,
+        },
+        {
+          id: 2,
+          icon: '/assets/icons/revenue.png',
+          subtitle: `SAR ${payload?.profit.toLocaleString()}`,
+          subdesc: `${payload?.profittime}`,
+        },
+        {
+          id: 3,
+          icon: '/assets/icons/team.png',
+          subtitle: `${payload?.recoveryTime} months`,
+          subdesc: 'Capital Recovery',
+        },
+      ],
+  
+      // Aggregates (dummy since backend does not send yet)
+      detailinfo: [
+        {
+          id: 1,
+          img: '/assets/icons/totalview.svg',
+          title: 'Total Views',
+          numbers: data?.getBusinessById?.totalViews ?? '0'
+        },
+        {
+          id: 2,
+          img: '/assets/icons/list-business.svg',
+          title: 'Number of Offers',
+          numbers: data?.getBusinessById?.numberOfOffers ?? '0'
+        },
+        {
+          id: 3,
+          img: '/assets/icons/favorite.png',
+          title: 'Number of Favorites',
+          numbers: data?.getBusinessById?.numberOfFavorites ?? '0'
+        },
+      ],
+  
+      // Offers if returned
+      offerData: payload?.offers?.map((offer, i) => ({
+        key: String(i + 1),
+        buyername: offer?.buyer?.name ?? "N/A",
+        businessprice: `SAR ${payload?.price?.toLocaleString()}`,
+        offerprice: {
+          amount: offer?.price,
+          type: offer?.type ?? "PP"
+        },
+        status: offer?.status,
+        date: new Date(offer?.createdAt).toLocaleString(),
+      })) ?? []
+    };
+  }
+  const uiBusiness = mapBusinessPayloadToUI(business);
 
     return (
         <div className='mb-2'>
@@ -30,7 +109,7 @@ const Singlebusinessview = ({setSingleDetail}) => {
                                 title: <Text className='fs-13 text-gray' italic>Business Listing</Text>,
                             },
                             {
-                                title: <Text className='fw-500 fs-13 text-black' italic>Al Madinah Coffee Shop</Text>,
+                                title: <Text className='fw-500 fs-13 text-black' italic>{business?.businessTitle}</Text>,
                             },
                         ]}
                     />
@@ -39,7 +118,7 @@ const Singlebusinessview = ({setSingleDetail}) => {
                             <Button type='button' className='p-0 border-0 bg-transparent' onClick={()=>setSingleDetail(null)}>
                                 <ArrowLeftOutlined />
                             </Button>
-                            <Title level={5} className='m-0'>Al Madinah Coffee Shop</Title>
+                            <Title level={5} className='m-0'>{business?.businessTitle}</Title>
                         </Space>
                         <Space>
                             <Button className='btn bg-brand rounded-8' type='button'>
@@ -53,7 +132,7 @@ const Singlebusinessview = ({setSingleDetail}) => {
                     <Card className='radius-12 border-gray card-cs'>
                         <Row gutter={[16, 16]}>
                             {
-                                allbussinesData[0]?.detailinfo.map((data, i) => (
+                                uiBusiness.detailinfo.map((data, i) => (
                                     <Col lg={{ span: 8 }} md={{ span: 12 }} sm={{ span: 12 }} xs={{ span: 12 }} key={i}>
                                         <Card className='h-100 border-gray rounded-12' >
                                             <Flex vertical gap={15}>

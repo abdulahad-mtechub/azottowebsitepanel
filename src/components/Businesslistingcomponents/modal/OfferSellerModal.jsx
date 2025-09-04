@@ -6,7 +6,7 @@ import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
 import { useMutation } from '@apollo/client'
 
 const { Title, Text } = Typography
-const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch}) => {
+const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
 
@@ -44,12 +44,15 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch}) => {
                                         businessId,
                                         price: parseFloat(values.offeramount),
                                         ...(offerId ? { parentOfferId: offerId } : {}),
+                                        ...(mode === "proceed" ? { isProceedToPay: true } : {}),
                                     },
                                 },
                             });
                             messageApi.success("Offer sent successfully!");
-                            refetch({ limit: 10, offset: 0, search: search || '' });
-                            setOfferModal(false);
+                            if (refetch) {
+                                refetch({ limit: 10, offset: 0, search: '' });
+                            }
+                            onClose();
                         } catch (error) {
                             console.error("Validation or mutation error:", error);
                         }
@@ -64,14 +67,16 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch}) => {
             <Flex vertical className='mb-3' gap={0}>
                 <Flex justify='space-between' gap={6}>
                     <Title level={4} className='m-0'>
-                        Counter Offer to Seller
+                    {mode === "proceed" ? "Proceed to Purchase" : "Counter Offer to Seller"}
                     </Title>
                     <Button type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
                     </Button>
                 </Flex>                
                 <Text>
-                    Enter your offer amount and terms to send a counter-proposal to the seller.
+                {mode === "proceed" 
+                ? "Confirm your purchase by entering the agreed amount."
+                : "Enter your offer amount and terms to send a counter-proposal to the seller."}
                 </Text>
             </Flex>
             <Form

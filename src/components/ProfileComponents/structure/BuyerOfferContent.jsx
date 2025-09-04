@@ -42,6 +42,7 @@ const BuyerOfferContent = () => {
         date: new Date(offer.createdAt).toLocaleString(),
         business: offer.business, 
         buyer: offer.buyer, 
+        createdBy:offer.createdBy
     })) || [];
 
     const columns = [
@@ -53,8 +54,7 @@ const BuyerOfferContent = () => {
             title: 'Status', dataIndex: 'status',
             render: (status, record) => {
                 if (status === 'PENDING') {
-                  // check if logged in user is the buyer
-                  if (record.buyer?.id === userId) {
+                  if (record.createdBy === userId) {
                     return (
                       <Text className="sendstatus fs-12 badge-cs fw-500">Send</Text>
                     );
@@ -83,7 +83,7 @@ const BuyerOfferContent = () => {
             title: 'Action',key: 'action',fixed: 'right', width: 100, align: 'center',
             render: (record) => {
               // Only show dropdown if buyer is the current user
-              if (record.buyer?.id !== userId) {
+              if (record.createdBy !== userId) {
                 let items = [];
                 if (record.status === 'PENDING') {
                   items = [

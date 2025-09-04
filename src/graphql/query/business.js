@@ -44,71 +44,78 @@ const GET_ALL_BUSINESSES = gql`
 }
 `
 const GET_BUSINESS = gql`
-    query GetBusinessById($getBusinessByIdId: ID!) {
+   query GetBusinessById($getBusinessByIdId: ID!) {
   getBusinessById(id: $getBusinessByIdId) {
-    id
-    businessTitle
-    category {
+    numberOfFavorites
+    numberOfOffers
+    totalViews
+    business {
       id
-      name
-    }
-    isSupportVerified
-    reference
-    district
-    city
-    description
-    foundedDate
-    growthOpportunities
-    isByTakbeer
-    multiple
-    numberOfEmployees
-    price
-    profit
-    profitMargen
-    profittime
-    reason
-    recoveryTime
-    revenue
-    revenueTime
-    seller {
-    id
-      name
-      email
-    }
-    supportSession
-    suppportDuration
-    url
-    
-    assets {
-      id
-      name
+      businessTitle
+      isSupportVerified
+      reference
+      district
+      city
+      description
+      foundedDate
+      growthOpportunities
+      isByTakbeer
+      multiple
+      numberOfEmployees
       price
-      purchaseYear
-      quantity
-      isActive
-    }
-    documents {
-      id
-      title
-      fileName
-      fileType
-      filePath
-    }
-    inventoryItems {
-      id
-      name
-      price
-      purchaseYear
-      quantity
-      isActive
-    }
-    liabilities {
-      id
-      name
-      price
-      purchaseYear
-      quantity
-      isActive
+      profit
+      profitMargen
+      profittime
+      reason
+      recoveryTime
+      revenue
+      revenueTime
+      supportSession
+      suppportDuration
+      url
+      seller {
+        id
+        name
+        email
+      }
+      category {
+        id
+        name
+      }
+      seller {
+        id
+      }
+      assets {
+        id
+        name
+        price
+        purchaseYear
+        quantity
+        isActive
+      }
+      documents {
+        id
+        title
+        fileName
+        fileType
+        filePath
+      }
+      inventoryItems {
+        id
+        name
+        price
+        purchaseYear
+        quantity
+        isActive
+      }
+      liabilities {
+        id
+        name
+        price
+        purchaseYear
+        quantity
+        isActive
+      }
     }
   }
 }
@@ -282,6 +289,7 @@ query GetOffersByUser($search: String, $status: String) {
     price
     status
     createdAt
+    createdBy
     business {
       id
       businessTitle

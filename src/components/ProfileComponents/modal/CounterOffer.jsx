@@ -1,18 +1,16 @@
 import { CloseOutlined } from '@ant-design/icons'
-import { Button, Col, Flex, Form, Image, Modal, Row, Tooltip, Typography } from 'antd'
+import { Button, Col, Flex, Form, Modal, Row, Typography,message } from 'antd'
 import { MyInput } from '../../Forms'
 import { useEffect } from 'react'
 import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
 import { useMutation } from '@apollo/client'
-import { useState } from 'react'
-import { message } from "antd";
-
+import { COUNTER_OFFER } from '../../../graphql/mutation';
 
 const { Title, Text } = Typography
-const CounterOffer = ({visible,onClose}) => {
+const CounterOffer = ({visible,onClose,selectedOfferId}) => {
     const [messageApi, contextHolder] = message.useMessage();
-
-    const [form] = Form.useForm(); 
+    const [form] = Form.useForm();
+    const [counterOffer, { loading }] = useMutation(COUNTER_OFFER);
 
     const handleOfferAmountChange = (e) => {
         const offerAmount = parseFloat(e.target.value) || 0;
@@ -20,10 +18,33 @@ const CounterOffer = ({visible,onClose}) => {
         form.setFieldsValue({ totalamount: totalAmount.toFixed(2) });
     };
 
-
     useEffect(() => {
         form.resetFields();
     }, [visible, form]);
+
+    // Handle form submission
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+      const offerAmount = parseFloat(values.offeramount);
+      const totalAmount = offerAmount + offerAmount * 0.06;
+
+      await counterOffer({
+        variables: {
+          input: {
+            parentOfferId: selectedOfferId,
+            price: totalAmount, // send calculated total amount
+          },
+        },
+      });
+
+      messageApi.success('Counter offer sent successfully!');
+      onClose();
+    } catch (err) {
+      console.error(err);
+      messageApi.error('Failed to send counter offer.');
+    }
+  };
 
     return (
         <Modal
@@ -37,7 +58,7 @@ const CounterOffer = ({visible,onClose}) => {
                     <Button type='button' className='btn text-black border-gray' onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button type="primary" className='btn bg-brand' >
+                    <Button type="primary" className='btn bg-brand' onClick={handleSubmit}>
                         Send Counter Offer
                     </Button>
                 </Flex>

@@ -6,18 +6,18 @@ const BusinessStats = ({data}) => {
     const [profitTimeValue, setProfitTimeValue] = useState('Last Year');
     const [revenueTimeValue, setRevenueTimeValue] = useState('Last Year');
     useEffect(() => {
-        if (data.profittime === 0) {
+        if (data?.profittime === 0) {
             setProfitTimeValue('Last 6 Months');
         } else {
             setProfitTimeValue('Last Year');
         }
     
-        if (data.revenueTime === 0) {
+        if (data?.revenueTime === 0) {
             setRevenueTimeValue('Last 6 Months');
         } else {
             setRevenueTimeValue('Last Year');
         }
-    }, [data.profittime, data.revenueTime]); 
+    }, [data?.profittime, data?.revenueTime]); 
     
     const stats = [
         {
