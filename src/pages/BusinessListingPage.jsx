@@ -372,15 +372,15 @@ const BusinessListingPage = ({getcategory}) => {
                               categoryName: biz.category.name,
                               description: biz.description,
                               isSaved: biz.isSaved,
-                              amount: `SAR ${biz.price?.toLocaleString()}`,
+                              amount: `${biz.price?.toLocaleString()}`,
                               save: 'no', // or logic to check if saved
                               child: [
                                 {
-                                  subtitle: `SAR ${biz.revenue?.toLocaleString()}`,
+                                  subtitle: `${biz.revenue?.toLocaleString()}`,
                                   subdesc: 'Revenue/month'
                                 },
                                 {
-                                  subtitle: `SAR ${biz.profit?.toLocaleString()}`,
+                                  subtitle: `${biz.profit?.toLocaleString()}`,
                                   subdesc: 'Profit/month'
                                 },
                                 {

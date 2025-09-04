@@ -29,7 +29,7 @@ const SellerOfferTable = () => {
             render: (offer) => {
                 return (
                     <Flex gap={10} align="center">
-                        SAR {parseInt(offer.amount).toLocaleString()}
+                        <img src="/assets/icons/reyal.png" width={10} alt="currency-symbol" /> {parseInt(offer.amount).toLocaleString()}
                         {
                             offer?.type === 'CO' ?
                                 <Tooltip title="CO - Counteroffer">

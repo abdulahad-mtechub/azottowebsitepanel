@@ -23,19 +23,19 @@ const BusinessStats = ({data}) => {
         {
             id: 1,
             icon:'/assets/icons/rev.png',
-            title:`SAR ${data.revenue ? data.revenue : '0'}`,
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data.revenue ? data.revenue : '0'}</>,
             subtitle:`Revenue ${revenueTimeValue ? '(Last Year)' : ''}`,
         },
         {
             id: 2,
             icon:'/assets/icons/pro.png',
-            title:`SAR ${data.profit ? data.profit : '0'}`,
+            title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data.profit ? data.profit : '0'}</>,
             subtitle:`Profit  ${profitTimeValue ? '(Last Year)' : ''}`,
         },
         {
             id: 3,
             icon:'/assets/icons/promar.png',
-            title:`SAR ${data.profitMargen ? data.profitMargen : '0'}`,
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data.profitMargen ? data.profitMargen : '0'}</>,
             subtitle:'Profit Margin %'
         },
         {

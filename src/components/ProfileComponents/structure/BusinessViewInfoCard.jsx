@@ -13,7 +13,7 @@ const BusinessVuewInfoCard = () => {
         {
             id: 2,
             icon:'/assets/icons/businessprice.png',
-            title:`SAR 25,000`,
+            title:`25,000`,
             subtitle:'Business Price'
         },
         {
@@ -49,7 +49,7 @@ const BusinessVuewInfoCard = () => {
                                 </div>
                                 <Flex vertical gap={2}>
                                     <Title level={5} className={`m-0 'text-brand'${info.id === 1 ? 'text-green':null}`}>
-                                        {info?.title}
+                                        {info?.id === 2 && <img src="/assets/icons/reyal.png" width={14} alt="currency-symbol" />} {info?.title}
                                     </Title>
                                     <Text className='text-gray fs-12 fw-500'>
                                         {info?.subtitle}

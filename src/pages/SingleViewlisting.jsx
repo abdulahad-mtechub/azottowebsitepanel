@@ -33,7 +33,7 @@ const SingleViewlisting = () => {
         name: item.name,
         items: item.quantity,
         purchaseyear: item.purchaseYear,
-        price: `SAR ${item?.price.toLocaleString()}`,
+        price: item?.price.toLocaleString(),
     }));
       
     const assetsData = business?.assets?.map((item, index) => ({
@@ -41,7 +41,7 @@ const SingleViewlisting = () => {
         name: item.name,
         items: item.quantity,
         purchaseyear: item?.purchaseYear,
-        price: `SAR ${item?.price.toLocaleString()}`,
+        price: item?.price.toLocaleString(),
     }));
       
     const inventoryData = business?.inventoryItems?.map((item, index) => ({
@@ -49,7 +49,7 @@ const SingleViewlisting = () => {
         name: item.name,
         items: item.quantity,
         purchaseyear: item.purchaseYear,
-        price: `SAR ${item.price?.toLocaleString()}`,
+        price: item.price?.toLocaleString(),
     }));
 
     const { data:graphData, loading:graphLoading, error:graphError } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {

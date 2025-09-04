@@ -20,7 +20,7 @@ const liabColumn = [
     { title: 'Liability name', dataIndex: 'name' },
     { title: 'Number of Items', dataIndex: 'items' },
     { title: 'Purchase Year', dataIndex: 'purchaseyear' },
-    { title: 'Price', dataIndex: 'price' },
+    { title: 'Price', dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.png" width={12} alt="currency-symbol" /> {price}</>},
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === true || verified === 1) {
@@ -38,7 +38,7 @@ const keyassetsColumn = [
     { title: 'Asset name', dataIndex: 'name' },
     { title: 'Number of Items', dataIndex: 'items' },
     { title: 'Purchase Year', dataIndex: 'purchaseyear' },
-    { title: 'Price', dataIndex: 'price' },
+    { title: 'Price', dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.png" width={12} alt="currency-symbol" /> {price}</>},
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === true || verified === 1) {
@@ -56,7 +56,7 @@ const inventColumn = [
     { title: 'Inventory name', dataIndex: 'name' },
     { title: 'Number of Items', dataIndex: 'items' },
     { title: 'Purchase Year', dataIndex: 'purchaseyear' },
-    { title: 'Price', dataIndex: 'price' },
+    { title: 'Price', dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.png" width={12} alt="currency-symbol" /> {price}</>},
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === 1) {
