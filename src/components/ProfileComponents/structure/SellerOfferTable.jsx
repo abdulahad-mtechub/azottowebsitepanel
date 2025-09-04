@@ -1,37 +1,71 @@
-import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography } from 'antd'
-import { allbussinesData } from '../../../data';
+import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography,message } from 'antd'
 import { NavLink } from 'react-router-dom';
-import { OfferSellerModal, RequestMeetingModal } from '../../Businesslistingcomponents';
 import { useState } from 'react';
 import { DeleteModal } from '../../ui';
 import { DownOutlined } from '@ant-design/icons';
 import { SearchInput } from '../../Forms';
 import { CounterOffer, ScheduleMeeting } from '../modal';
+import { useQuery,useMutation } from '@apollo/client';
+import { GET_BUSINESS_OFFERS } from '../../../graphql/query/offer';
+import { UPDATE_OFFER } from '../../../graphql/mutation/mutations';
+import Cookies from "js-cookie";
 
 const { Text } = Typography
-const SellerOfferTable = () => {
-
+const SellerOfferTable = ({data}) => {
+    const [messageApi, contextHolder] = message.useMessage();
+    const userId = Cookies.get("userId"); 
+    const [currentPage, setCurrentPage] = useState(1);
+    const [limit, setLimit] = useState(10); // default limit
+    const offset = (currentPage - 1) * limit;
     const [form] = Form.useForm()
     const [offermodal, setOfferModal] = useState(false)
     const [deletemodal, setDeleteModal] = useState(false)
     const [meeting, setMeeting] = useState(false)
     const [filterstatus, setFilterStatus] = useState()
     const [filtertype, setFilterType] = useState(null)
+    const [selectedOfferId, setSelectedOfferId] = useState(null);
+    const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
-    const offerdata = allbussinesData[0]?.offerData;
+    const { data:offers, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS_OFFERS, {
+        variables: { 
+            getOfferByBusinessIdId: data?.id,
+            limit: null,
+            offset: null,
+            search: null,
+            status: null
+        },
+    });
 
+    const [updateOfferStatus] = useMutation(UPDATE_OFFER);
+    const handleAcceptOffer = async () => {
+        try {
+          await updateOfferStatus({
+            variables: { input:{
+                id:selectedOfferId,
+                status: "ACCEPTED" 
+            }},
+          });
+          messageApi.info(`offer accepted`)
+          setMeeting(true)
+        } catch (err) {
+          console.error("Error accepting offer:", err);
+        }
+    };
+
+    const offerdata = offers?.getOfferByBusinessId?.offers
+    const total = offers?.getOfferByBusinessId?.count
     const columns = [
-        { title: 'Buyer Name', dataIndex: 'buyername' },
-        { title: 'Business Price', dataIndex: 'businessprice' },
+        { title: "Buyer Name", dataIndex: ["buyer", "name"] },
+        { title: "Business Price", dataIndex: ["business", "price"] },
         {
             title: 'Offer Price',
-            dataIndex: 'offerprice',
-            render: (offer) => {
+            dataIndex: 'price',
+            render: (row,record) => {
                 return (
                     <Flex gap={10} align="center">
-                        <img src="/assets/icons/reyal.png" width={10} alt="currency-symbol" /> {parseInt(offer.amount).toLocaleString()}
-                        {
-                            offer?.type === 'CO' ?
+                        <img src="/assets/icons/reyal-b.png" width={12} alt="currency-symbol" /> {row}
+                        {// here if offerdata?.parentOffer?.id then it will be child offer else parent offer
+                            record?.isProceedToPay ?
                                 <Tooltip title="CO - Counteroffer">
                                     <Text className='bg-brand radius-4 p-1 fs-11 text-white'>CO</Text>
                                 </Tooltip>
@@ -47,17 +81,33 @@ const SellerOfferTable = () => {
         {
             title: 'Status',
             dataIndex: 'status',
-            render: (status) => {
-                if (status === 'Received') {
-                    return <Text className='received fs-12 badge-cs fw-500'>{status}</Text>;
-                } else if (status === 'Rejected') {
-                    return <Text className='inactive fs-12 badge-cs fw-500'>{status}</Text>;
+            render: (status, record) => {
+                if (status === 'PENDING') {
+                  if (record?.createdBy === userId) {
+                    return (
+                      <Text className="sendstatus fs-12 badge-cs fw-500">Send</Text>
+                    );
+                  } else {
+                    return (
+                      <Text className="sendstatus fs-12 badge-cs fw-500">Received</Text>
+                    );
+                  }
+                } else if (status === 'REJECTED') {
+                  return (
+                    <Text className="inactive fs-12 badge-cs fw-500">Rejected</Text>
+                  );
+                } else if (status === 'APPROVED') {
+                  return (
+                    <Text className="received fs-12 badge-cs fw-500">Approved</Text>
+                  );
                 } else {
-                    return <Text className='sendstatus fs-12 badge-cs fw-500'>{status}</Text>
+                  return (
+                    <Text className="fs-12 badge-cs fw-500">{status}</Text>
+                  ); // fallback in case of new status values
                 }
             },
         },
-        { title: 'Date', dataIndex: 'date' },
+        { title: 'Date', dataIndex: 'createdAt' },
         {
             title: 'Action',
             key: 'action',
@@ -65,17 +115,40 @@ const SellerOfferTable = () => {
             width: 100,
             align: 'center',
             render: (_, row) => {
-                const offerType = row?.offerprice?.type;
+                if (row?.createdBy === userId) {
+                    return null;
+                }
+                const isChild = row?.isProceedToPay ? true : false;
                 const items = [
-                    // Counter Offer case
-                    offerType === 'CO' && { label: <NavLink onClick={() => {}}>Accept Offer</NavLink>, key: 0 },
-                    offerType === 'CO' && { label: <NavLink onClick={() => setDeleteModal(true)}>Reject Offer</NavLink>, key: 1 },
-                    offerType === 'CO' && { label: <NavLink onClick={() => setOfferModal(true)}>Counter Offer</NavLink>, key: 2 },
-                    offerType === 'CO' && { label: <NavLink onClick={() => setMeeting(true)}>Request For Virtual Meeting</NavLink>, key: 3 },
+                    // Counter Offer case if isChild ture
+                    isChild && { label: <NavLink onClick={() => {
+                        setSelectedOfferId(row.id)
+                        handleAcceptOffer()
+                        setSelectedBusinessId(row.business.id)
+                    }}>Accept Offer</NavLink>, key: 0 },
+                    isChild && { label: <NavLink onClick={() =>{ 
+                        setDeleteModal(true)
+                        setSelectedOfferId(row.id)
+                    }}>Reject Offer</NavLink>, key: 1 },
+                    isChild && { label: <NavLink onClick={() => {
+                        setOfferModal(true)
+                        setSelectedOfferId(row.id)
+                    }}>Counter Offer</NavLink>, key: 2 },
+                    isChild && { label: <NavLink onClick={() => {
+                        setMeeting(true)
+                        setSelectedOfferId(row.id)
+                    }}>Request For Virtual Meeting</NavLink>, key: 3 },
 
-                    // Proceed to Purchase case
-                    offerType === 'PP' && { label: <NavLink onClick={() => {}}>Accept Offer</NavLink>, key: 4 },
-                    offerType === 'PP' && { label: <NavLink onClick={() => setDeleteModal(true)}>Reject Offer</NavLink>, key: 5 },
+                    // Proceed to Purchase case if isChild false
+                    !isChild && { label: <NavLink onClick={() => {
+                        setSelectedOfferId(row.id)
+                        handleAcceptOffer()
+                        setSelectedBusinessId(row.business.id)
+                    }}>Accept Offer</NavLink>, key: 4 },
+                    !isChild && { label: <NavLink onClick={() =>{
+                         setDeleteModal(true)
+                         setSelectedOfferId(row.id)
+                        } }> Reject Offer </NavLink>, key: 5 },
                 ].filter(Boolean);
 
                 return (
@@ -87,7 +160,6 @@ const SellerOfferTable = () => {
                 );
             },
         }
-
     ];
 
     const items = [
@@ -109,9 +181,9 @@ const SellerOfferTable = () => {
         setFilterType(key)
     }
 
-
     return (
         <>
+        {contextHolder}
             <Row gutter={[24, 24]}>
                 <Col span={24}>
                     <Flex gap={5} align='center'>
@@ -181,9 +253,15 @@ const SellerOfferTable = () => {
             </Row>
             <CounterOffer
                 visible={offermodal}
+                selectedOfferId={selectedOfferId}
                 onClose={() => setOfferModal(false)}
             />
-            <ScheduleMeeting visible={meeting} onClose={() => setMeeting(false)} />
+            <ScheduleMeeting 
+                visible={meeting} 
+                onClose={() => setMeeting(false)} 
+                offerId={selectedOfferId}
+                businessId={selectedBusinessId}
+            />
             <DeleteModal
                 visible={deletemodal}
                 onClose={() => setDeleteModal(false)}

@@ -27,13 +27,13 @@ const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings,busi
             variables: {
                 input: {
                 businessId,
+                offerId,
                 requestedDate: combinedDateTime.toISOString(),
                 }
             },
           });
     
           messageApi.success("Meeting request sent successfully!");
-          refetchMeetings();
           onClose();
         } catch (error) {
           console.error(error);

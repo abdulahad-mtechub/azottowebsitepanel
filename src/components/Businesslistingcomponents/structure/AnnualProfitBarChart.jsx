@@ -10,7 +10,7 @@ const AnnualProfitBarChart = ({graphData}) => {
     series: [
       {
         name: 'Avg. Annual Profit',
-        data: graph.map(item => item.profit), // profit values
+        data: graph?.map(item => item?.profit), // profit values
       },
     ],
     options: {
@@ -28,7 +28,7 @@ const AnnualProfitBarChart = ({graphData}) => {
       dataLabels: { enabled: false },
       stroke: { curve: 'smooth', width: 2 },
       xaxis: {
-        categories: graph.map(item => item.year), // year labels
+        categories: graph?.map(item => item?.year), // year labels
         labels: {
           style: { colors: '#000', fontSize: '10px', whiteSpace: 'pre-wrap' },
           rotate: 0,
@@ -44,7 +44,7 @@ const AnnualProfitBarChart = ({graphData}) => {
       yaxis: {
         min: 0,
         // Optionally, you can calculate max dynamically
-        max: Math.max(...graph.map(item => item.profit)) * 1.1,
+        max: Math.max(...(graph?.map(item => item?.profit) || [0])) * 1.1,
         tickAmount: 5,
         labels: { style: { colors: '#000' } }
       },
