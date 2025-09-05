@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography,Spin } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom';
 import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../data';
@@ -12,6 +12,30 @@ const SingleViewlisting = () => {
     const [form] = Form.useForm(); 
     const { id } = useParams()
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const footer = document.getElementById("footer");
+
+        const handleResize = () => {
+            if (footer) {
+            if (window.innerWidth <= 768) {
+                footer.classList.add("footer-add-150");
+            } else {
+                footer.classList.remove("footer-add-150");
+            }
+            }
+        };
+
+        handleResize(); // run on mount
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            if (footer) footer.classList.remove("footer-add-150");
+        };
+    }, []);
+
+
     // const business = exploreData?.find((item)=>item?.id == id)
     const { data:businessData, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
         variables: { getBusinessByIdId: id },
@@ -64,6 +88,10 @@ const SingleViewlisting = () => {
             </Flex>
         );
     }
+
+
+    
+
     return (
         <div className='padd-1 relative'>
             <div className='container'>

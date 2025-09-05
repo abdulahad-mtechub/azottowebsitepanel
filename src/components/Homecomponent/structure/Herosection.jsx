@@ -1,4 +1,4 @@
-import { Row, Col, Typography, Flex, Button, Image } from 'antd'
+import { Row, Col, Typography, Flex, Button } from 'antd'
 import { RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
@@ -33,8 +33,8 @@ const Herosection = () => {
         
         <Col sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 10 }} xl={{ span: 10 }}>
           <div className='heroimginner'>
-            <img src='assets/images/banner-web.png' alt='' className='web-vw'/>
-            <img src='assets/images/homebanner.png' width={'100%'} className='mbl-vw'  alt='' />
+            <img src='assets/images/banner-web.png' alt='hero-banner-web' className='web-vw'/>
+            <img src='assets/images/homebanner.png' width={'100%'} className='mbl-vw'  alt='hero-banner-mobile' />
           </div>
         </Col>
       </Row>

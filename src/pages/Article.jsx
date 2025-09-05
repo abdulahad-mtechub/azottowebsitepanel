@@ -54,7 +54,7 @@ const Article = () => {
                                 <MyInput 
                                     withoutForm
                                     placeholder='Search'
-                                    prefix={<img src='/assets/icons/search.png' width={14} />}
+                                    prefix={<img src='/assets/icons/search.png' alt='search-icon' width={14} />}
                                 />
                             </Col>
                             <Col lg={{span: 18}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>

@@ -1247,7 +1247,7 @@ body{
   left: 0;
   width: 100%;
   height: auto;
-  z-index: 9999;
+  z-index: 111;
   display: none; 
   border-top: 2px solid var(--blue);
 }
@@ -1308,6 +1308,9 @@ body{
     border-radius: 4px !important;
 }
 
+.footer-add-150{
+    margin-bottom: 150px;
+}
 
 
 /* media queries  */
@@ -1383,7 +1386,7 @@ body{
         padding: 30px 10px;
     }
     .hero .div{
-        padding: 80px 0 30px 20px;
+        padding: 80px 20px 30px 20px;
     }
      .filter-btn{
         display: block;

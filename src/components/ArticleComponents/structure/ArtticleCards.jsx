@@ -21,7 +21,7 @@ const ArtticleCards = ({data,loadmore=false}) => {
                             <Flex vertical gap={20}>
                                 <div>
                                     <div className='w-full card-img-2 mb-2 rounded-12'>
-                                        <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top' alt="" />
+                                        <img src={art?.img} width={'100%'} height={'100%'} className='object-cover object-top' alt="article-image" />
                                     </div>
                                     <Paragraph 
                                         ellipsis={{
@@ -51,7 +51,7 @@ const ArtticleCards = ({data,loadmore=false}) => {
                 loadmore && 
                 <Col span={24}>
                     <Flex justify='center' className='mt-3'>
-                        <Button className='btn btn-bg'>
+                        <Button aria-label='Load More Articles' className='btn btn-bg'>
                             Load More Articles
                         </Button>
                     </Flex>

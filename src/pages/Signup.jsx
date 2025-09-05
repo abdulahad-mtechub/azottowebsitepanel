@@ -388,7 +388,7 @@ const SignupPage = () => {
                         </Button>
                         <NavLink to={'/'}>
                             <div className="logo">
-                                <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
+                                <img src="/assets/images/logo-1.png" alt="jusoor-logo" style={{ height: "70px" }} />
                             </div>
                         </NavLink>
                         <Title level={3}>Verify Your Identity</Title>
@@ -483,7 +483,7 @@ const SignupPage = () => {
                         <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
                     </Flex>
                     <div className="bg-shade">
-                        <img src="/assets/images/login.gif" alt="Signup Visual" style={{ width: "100%",opacity:.7 }} />
+                        <img src="/assets/images/login.gif" alt="jusoor-gif-image" style={{ width: "100%",opacity:.7 }} />
                     </div>
                 </Flex>
             </Col>

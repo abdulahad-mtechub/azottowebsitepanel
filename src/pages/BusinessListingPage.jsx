@@ -292,7 +292,7 @@ const BusinessListingPage = ({getcategory}) => {
                             {getcategory ? getcategory : 'Category Name'}
                         </Title>
                         <Button type='button' onClick={()=>setIsFilter(true)} className='border-0 bg-transparent p-0 filter-btn'>
-                            <img src='/assets/icons/filter.png' width={20} />
+                            <img src='/assets/icons/filter.png' alt='filter-icon' width={20} />
                         </Button>
                     </Flex>
                     <Flex gap={5} align='center'>
@@ -301,7 +301,7 @@ const BusinessListingPage = ({getcategory}) => {
                         </Text>
                         <Button type='button' onClick={()=>setIsShow(!isShow)} className='btn rounded-8 border-gray text-black sm-hide'>
                             <Flex align='center' gap={3}>
-                                <img src='/assets/icons/filter-bar.png' width={14}/> Filter
+                                <img src='/assets/icons/filter-bar.png' alt='filter-icon' width={14}/> Filter
                             </Flex>
                         </Button>
                         <MySelect 

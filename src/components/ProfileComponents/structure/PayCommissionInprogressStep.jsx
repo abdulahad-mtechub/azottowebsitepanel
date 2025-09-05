@@ -1,8 +1,6 @@
-import { paycommissionData } from '../../../data'
 import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 import { useQuery } from '@apollo/client';
-import React from 'react'
 import {GETADMINACTIVEBANK } from '../../../graphql/query';
 
 

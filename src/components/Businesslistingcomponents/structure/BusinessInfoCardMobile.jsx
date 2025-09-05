@@ -1,9 +1,17 @@
-import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
+import { Button, Card, Flex, Image, Typography } from 'antd'
 import { OfferSellerModal, RequestMeetingModal } from '../modal'
 import { useState } from 'react'
+import Cookies from "js-cookie";
 
 const { Title,Text } = Typography
 const BusinessInfoCardMobile = ({data}) => {
+    const userId = Cookies.get("userId"); // read userId from cookie
+    const [isLoggedIn, setisLoggedIn] = useState(!!userId);
+    const [ offerseller, setOfferSeller ] = useState(false)
+    const [ meetingmodal, setMeetingModal ] = useState(false)
+    const [offerMode, setOfferMode] = useState("offer");
+
+
     const businessInfoData = [
         {
             id: 1,
@@ -31,8 +39,13 @@ const BusinessInfoCardMobile = ({data}) => {
         },
     ]
 
-    const [ offerseller, setOfferSeller ] = useState(false)
-    const [ meetingmodal, setMeetingModal ] = useState(false)
+    const handleAction = (callback) => {
+        if (isLoggedIn) {
+          callback();
+        } else {
+          navigate('/login');
+        }
+    };
 
     return (
         <>
@@ -57,15 +70,17 @@ const BusinessInfoCardMobile = ({data}) => {
                         }
                 </div>                
                 <Flex justify='center' gap={5}>
-                    <Button className='btn bg-brand fs-10 mbl-pad' onClick={()=>setOfferSeller(true)}>Make an Offer</Button>
-                    <Button className='btn bg-dark-blue fs-10 mbl-pad' onClick={()=>setMeetingModal(true)}>Request Meeting</Button>
-                    <Button className='btn bg-green text-white fs-10 mbl-pad'>Proceed to Purchase</Button>
+                    <Button aria-label='Make an Offer' className='btn bg-brand fs-10 mbl-pad' onClick={()=>{setOfferMode("offer");setOfferSeller(true)}}>Make an Offer</Button>
+                    <Button aria-label='Request Meeting' className='btn bg-dark-blue fs-10 mbl-pad' onClick={()=>setMeetingModal(true)}>Request Meeting</Button>
+                    <Button aria-label='Proceed to Purchase' className='btn bg-green text-white fs-10 mbl-pad '
+                    onClick={()=> handleAction(() => { setOfferMode("proceed"); setOfferSeller(true); })}>Proceed to Purchase</Button>
                 </Flex>
             </Card>
             <OfferSellerModal 
                 businessId={data?.id}
                 visible={offerseller}
                 onClose={()=>setOfferSeller(false)}
+                mode={offerMode}
             />
             <RequestMeetingModal 
                 businessId={data?.id}

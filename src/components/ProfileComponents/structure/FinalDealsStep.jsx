@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography } from 'antd'
 
 const { Text } = Typography

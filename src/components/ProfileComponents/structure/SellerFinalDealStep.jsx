@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography } from 'antd'
+import { Button, Checkbox, Col, Flex, Row, Typography } from 'antd'
 import {FINALIZE_DEAL} from '../../../graphql/mutation'
 import { useMutation } from '@apollo/client'
 import { message } from "antd";

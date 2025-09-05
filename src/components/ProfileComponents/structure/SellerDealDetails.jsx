@@ -1,9 +1,8 @@
-import React from 'react'
 import { Row, Col, Card, Flex, Typography } from 'antd'
 import { AnnualProfitBarChart, MarketAreaChart } from '../../Businesslistingcomponents'
-import { BusinessVuewInfoCard } from './BusinessViewInfoCard';
+import { BusinessViewInfoCard } from './BusinessViewInfoCard';
 import { BusinessStats ,PreviewTableContent} from '../../SellBusinessComponents';
-import { inventColumn, inventData, keyassetData, keyassetsColumn, liabColumn, liabilityData, postsaleColumns, postsaleData } from '../../../data';
+import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../../../data';
 import { useQuery } from '@apollo/client';
 import { SIMILER_BUSINESS_CATEGORY_GRAPH } from '../../../graphql/query/business';
 
@@ -62,7 +61,7 @@ const SellerDealDetails = ({ data }) => {
                         </Text>
                     </Flex>
                 </Card>
-                <BusinessVuewInfoCard  data={businessinfo} />
+                <BusinessViewInfoCard  data={businessinfo} />
                 <BusinessStats data={businessinfo} />
                 <MarketAreaChart  data={businessinfo} />
                 <AnnualProfitBarChart graphData={graphData} />

@@ -1,6 +1,6 @@
+import React,{ useMemo,useEffect,useState } from 'react'
 import { Col, Form, Row, Table } from 'antd'
 import { SearchInput } from '../../Forms';
-import React,{ useMemo,useEffect,useState } from 'react'
 import {BUYERDEALS } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 
@@ -49,7 +49,7 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
                     <SearchInput
                         placeholder="Search"
                         value={form.getFieldValue('name') || ''}
-                        prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                        prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} />}
                         onChange={(e) => form.setFieldValue("search", e.target.value)}
                     />
                 </Col>

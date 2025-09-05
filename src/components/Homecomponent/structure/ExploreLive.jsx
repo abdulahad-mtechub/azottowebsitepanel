@@ -41,15 +41,15 @@ const ExploreLive = () => {
                                             <Button className='border-0 bg-transparent p-0'>
                                                 {
                                                     pro?.save === 'yes' ?
-                                                    <img src='/assets/icons/bk-bl-d.png' width={22}/> :
-                                                    <img src='/assets/icons/bk-bl.png' width={22}/>
+                                                    <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} />: 
+                                                    <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} />
                                                 }
                                             </Button>
                                             
                                         </Flex>
                                         <div>
                                             <div className='w-full card-img mb-2 rounded-12'>
-                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="" />
+                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" />
                                             </div>
                                             <Title className='' level={5}>
                                                 {pro?.title}
@@ -68,7 +68,7 @@ const ExploreLive = () => {
                                                             <Col span={7}>
                                                                 <Flex vertical>
                                                                     <Text className='text-brand fw-500 m-0 fs-13'>
-                                                                        <img src="/assets/icons/reyal-b.png" width={8} alt="" /> {item?.subtitle}
+                                                                        <img src="/assets/icons/reyal-b.png" width={8} alt="currency-symbol" /> {item?.subtitle}
                                                                     </Text>
                                                                     <Text className='text-gray fs-12'>
                                                                         {item?.subdesc}

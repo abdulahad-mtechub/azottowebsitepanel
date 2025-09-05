@@ -1,5 +1,3 @@
-import React from 'react'
-import { paybusinessData } from '../../../data'
 import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 

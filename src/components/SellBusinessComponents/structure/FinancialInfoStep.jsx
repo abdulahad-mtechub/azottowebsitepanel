@@ -182,7 +182,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 type='number'
                                 placeholder="Enter revenue"
                                 className="w-100 "
-                                prefix={<img src="/assets/icons/reyal-g.png" width={15} />}
+                                prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={15} />}
                                 />
                             </Form.Item>
                             </Flex>
@@ -214,7 +214,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                     type='number'
                                     placeholder="Enter profit"
                                     className="w-100"
-                                    prefix={<img src="/assets/icons/reyal-g.png" width={14} />}
+                                    prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} />}
                                     />
                                 </Form.Item>
                                 </Flex>
@@ -243,7 +243,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 message="Please enter business price"
                                 placeholder='Enter Business Price'
                                 addonBefore={
-                                    <img src='/assets/icons/reyal-g.png' width={14} />
+                                    <img src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} />
                                 }
                                 className='w-100'
                             />
@@ -255,7 +255,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 name='capitalRecovery'
                                 readOnly
                                 addonBefore={
-                                    <img src='/assets/icons/reyal-g.png' width={14} />
+                                    <img src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} />
                                 }
                                 className='w-100'
                             />
@@ -263,7 +263,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                         <Col  xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
                                 label={<Flex align='center' gap={5}>
-                                    Multiples of Revenue & Profit <Image preview={false} src="/assets/icons/info-outline.png" width={15} alt="" />
+                                    Multiples of Revenue & Profit <Image preview={false} src="/assets/icons/info-outline.png"  width={15} alt="info-icon" />
                                 </Flex>}
                                 name='multiple'
                                 className='w-100'
@@ -311,7 +311,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 label: "Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} />,
                                 className: "w-100 bg-white",
                             },
                         ]}
@@ -347,7 +347,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 label: "Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} />,
                                 className: "w-100 bg-white",
                             },
                         ]}
@@ -383,7 +383,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 label: "Price",
                                 placeholder: "Enter price",
                                 type: "input",
-                                addonBefore: <img src="/assets/icons/reyal-g.png" width={14} />,
+                                addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} />,
                                 className: "w-100 bg-white",
                             },
                         ]}

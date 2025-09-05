@@ -1,7 +1,5 @@
-import React from 'react'
 import { Card, Row, Col, Flex, Typography, Breadcrumb, Space, Button, Image, Tabs } from 'antd'
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
-import { allbussinesData } from '../../../data';
 import { SellerOfferTable } from './SellerOfferTable';
 import { SellerDealDetails } from './SellerDealDetails';
 import { useQuery } from '@apollo/client';

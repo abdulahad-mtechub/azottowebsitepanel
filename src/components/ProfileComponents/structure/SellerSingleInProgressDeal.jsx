@@ -3,7 +3,6 @@ import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps'
 import { GETDEAL, ME } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import React from 'react'
 import Cookies from "js-cookie";
 
 const { Title, Text } = Typography

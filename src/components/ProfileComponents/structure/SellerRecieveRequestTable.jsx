@@ -66,7 +66,7 @@ const SellerRecieveRequestTable = () => {
                 return (
                     <Dropdown menu={{ items }} trigger={["click"]}>
                         <Button className="bg-transparent border-0 p-0">
-                            <img src="/assets/icons/dots.png" alt="" width={16} />
+                            <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} />
                         </Button>
                     </Dropdown>
                 );
@@ -86,7 +86,7 @@ const SellerRecieveRequestTable = () => {
                     <SearchInput
                         placeholder="Search"
                         value={form.getFieldValue('name') || ''}
-                        prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                        prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} />}
                         onChange={(e) => form.setFieldValue("search", e.target.value)}
                     />
                     </Form.Item>
