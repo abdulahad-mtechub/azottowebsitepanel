@@ -1,10 +1,8 @@
-import React,{useState,useEffect} from 'react'
-import { Card, Col, Row, Typography, Tabs } from 'antd'
+import { Card, Col, Row, Tabs } from 'antd'
 import { SellerSendRequestTable } from './SellerSenRequestTable';
 import { SellerRecieveRequestTable } from './SellerRecieveRequestTable';
 import { SellerAdminSchedulingTable } from './SellerAdminSchedulingTable';
 import { SellerScheduledTable } from './SellerScheduledTable';
-const { Title, Text } = Typography;
 
 const Meetings = () => {
     // const [activeKey, setActiveKey] = useState('1');

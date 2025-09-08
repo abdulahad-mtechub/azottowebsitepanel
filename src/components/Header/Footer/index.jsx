@@ -8,14 +8,14 @@ const Footer = () => {
 
     const navigate = useNavigate()
   return (
-    <div className='footer'>
+    <div className='footer' id='footer'>
         <div className='container'>
             <Row gutter={[24,24]} justify={'space-between'}>
                 <Col lg={{span: 9}} md={{span: 24}} xs={{span: 24}} sm={{span: 24}}>
                     <Space direction='vertical' size={20} className='w-100'>
                         <div className='mb-1'>
                             <Link to={'/'}>
-                                <img src='/assets/images/logo.png' width={130}/>
+                                <img src='/assets/images/logo.png' alt='jusoor-logo' width={130}/>
                             </Link>
                         </div>
                         <Text className='fs-13 text-white w-500'>
@@ -23,10 +23,10 @@ const Footer = () => {
                         </Text>
                         <Flex gap={20}>
                             <Link to="#" target="_blank" rel="noopener noreferrer">
-                                <Image src='/assets/icons/facebook.png' width={'23px'} preview={false} />
+                                <Image src='/assets/icons/facebook.png' width={'23px'} alt='facebook-icon' preview={false} />
                             </Link>
                             <Link to="#" target="_blank" rel="noopener noreferrer">
-                                <Image src='/assets/icons/instagram.png' width={'23px'} preview={false} />
+                                <Image src='/assets/icons/instagram.png' width={'23px'} alt='facebook-icon' preview={false} />
                             </Link>
                             <Link to="#" target="_blank" className='text-white'>
                                 <WhatsAppOutlined className='fs-23' />
@@ -63,7 +63,7 @@ const Footer = () => {
                             Sign up to access support, tools, and verified listings.
                         </Text>
                         <Flex>
-                            <Button type='primary' className='btn bg-brand' onClick={()=>navigate('/signup')}>
+                            <Button type='primary' aria-label='Sign Up' className='btn bg-brand' onClick={()=>navigate('/signup')}>
                                 Sign Up
                             </Button>
                         </Flex>

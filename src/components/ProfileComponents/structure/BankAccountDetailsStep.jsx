@@ -1,6 +1,5 @@
-import React from 'react'
 import { useState } from 'react'
-import { Button, Card, Checkbox, Col, Flex, Image, Radio, Row, Typography } from 'antd'
+import { Button, Card, Col, Flex, Radio, Row, Typography } from 'antd'
 
 const { Text } = Typography
 const BankAccountDetailsStep = ({form,completedeal,user}) => {

@@ -1,15 +1,13 @@
 import React,{useState,useEffect} from 'react'
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography,Spin } from 'antd'
 import { useNavigate } from 'react-router-dom'
-const { Title, Text } = Typography
 import {GETSELLERBUSINESS } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import { allbussinesData } from '../../../data/sellerbussinesData';
 import { Singlebusinessview } from './Singlebusinessview';
 import { ModuleTopHeading } from '../../Pagecomponents';
 import { PlusOutlined } from '@ant-design/icons';
 
-
+const { Title, Text } = Typography
 const Allbussines = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
@@ -83,7 +81,7 @@ const Allbussines = () => {
                                         </Flex>
                                         <div>
                                             <div className='w-full card-img mb-2 rounded-12'>
-                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="" />
+                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" />
                                             </div>
                                             <Title className='' level={5}>
                                                 {pro?.businessTitle}
@@ -118,7 +116,7 @@ const Allbussines = () => {
                                             <Divider className='my-1' />
                                             <Flex align='center' justify='space-between'>
                                                 <Flex gap={3} align='center'>
-                                                    <Image src='/assets/icons/reyal.png' preview={false} width={20} />
+                                                    <Image src='/assets/icons/reyal.png' alt='currency-symbol' preview={false} width={20} />
                                                     <Title level={4} className='m-0'>
                                                         {pro?.price}
                                                     </Title>

@@ -1,5 +1,5 @@
 import { Card, Checkbox, Col, Collapse, Flex, Input, Radio, Row, Typography } from 'antd';
-import { DoubleLeftOutlined, DoubleRightOutlined, LineOutlined } from '@ant-design/icons';
+import { LineOutlined } from '@ant-design/icons';
 import { categoriesData, teamsizeFilter, yearOper } from '../../../data';
 import { Link } from 'react-router-dom';
 import { useState,useEffect } from 'react';

@@ -63,7 +63,7 @@ const SellerOfferTable = ({data}) => {
             render: (row,record) => {
                 return (
                     <Flex gap={10} align="center">
-                        SAR {row}
+                        <img src="/assets/icons/reyal-b.png" width={12} alt="currency-symbol" /> {row}
                         {// here if offerdata?.parentOffer?.id then it will be child offer else parent offer
                             record?.isProceedToPay ?
                                 <Tooltip title="CO - Counteroffer">
@@ -154,7 +154,7 @@ const SellerOfferTable = ({data}) => {
                 return (
                     <Dropdown menu={{ items }} trigger={['click']}>
                         <Button className="bg-transparent border-0 p-0">
-                            <img src="/assets/icons/dots.png" alt="" width={16} />
+                            <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} />
                         </Button>
                     </Dropdown>
                 );
@@ -190,7 +190,7 @@ const SellerOfferTable = ({data}) => {
                         <SearchInput
                             placeholder="Search"
                             value={form.getFieldValue('name') || ''}
-                            prefix={<img src="/assets/icons/search.png" style={{ marginInline: 3 }} width={12} />}
+                            prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{ marginInline: 3 }} width={12} />}
                         />
                         <Dropdown
                             menu={{

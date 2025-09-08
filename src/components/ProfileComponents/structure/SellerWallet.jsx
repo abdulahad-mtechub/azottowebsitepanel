@@ -5,7 +5,6 @@ import { NavLink } from 'react-router-dom';
 import { DeleteModal } from '../../ui';
 import {GETADMINBANK } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import React,{ useMemo,useEffect } from 'react'
 
 const { Title, Text } = Typography;
 const SellerWallet = () => {
@@ -37,14 +36,14 @@ const items = [
                             <Flex justify='space-between'>
                                 <Flex align='center' gap={5}>
                                     <span className='bg-circle'>
-                                        <img src="/assets/icons/home.png" alt="" />
+                                        <img src="/assets/icons/home.png"  alt="bank-icon" />
                                     </span>
                                     <Title level={5} className='m-0 text-white fw-normal'>{wallet?.bankname}</Title>
                                 </Flex>
                                 <Flex>
                                     <Dropdown menu={{ items }} trigger={["click"]}>
                                         <Button className="bg-transparent border-0 p-0">
-                                            <img src="/assets/icons/line-dot.png" alt="" height={25} />
+                                            <img src="/assets/icons/line-dot.png"  alt="dropdown-icon" height={25} />
                                         </Button>
                                     </Dropdown>
                                 </Flex>

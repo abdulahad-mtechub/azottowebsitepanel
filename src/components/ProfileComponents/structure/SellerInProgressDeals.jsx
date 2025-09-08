@@ -1,9 +1,8 @@
+import React,{ useMemo,useEffect,useState } from 'react'
 import { Col, Form, Row, Table, Button } from 'antd'
-import { sellerofferData } from '../../../data';
 import { SearchInput } from '../../Forms';
 import {SELLERINPROGRESSDEALS } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import React,{ useMemo,useEffect,useState } from 'react'
 
 const SellerInProgressDeals = ({setInprogressDeal}) => {
     const [form] = Form.useForm()
@@ -54,7 +53,7 @@ const SellerInProgressDeals = ({setInprogressDeal}) => {
                     <SearchInput
                         placeholder="Search"
                         value={form.getFieldValue('name') || ''}
-                        prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                        prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} />}
                     />
                 </Form.Item>
                 </Col>

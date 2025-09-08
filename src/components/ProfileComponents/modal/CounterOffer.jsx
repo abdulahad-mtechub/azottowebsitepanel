@@ -87,13 +87,14 @@ const CounterOffer = ({visible,onClose,selectedOfferId}) => {
                 <Row>
                     <Col span={24}>
                         <MyInput
+                            type='number'
                             label='Offer Amount'
                             name='offeramount'
                             required
                             message="Please enter offer amount"
                             placeholder='e.g. 75000'
                             addonBefore={
-                                <img src='/assets/icons/reyal-g.png' width={14} />
+                                <img src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} />
                             }
                             className='w-100'
                             onChange={handleOfferAmountChange}
