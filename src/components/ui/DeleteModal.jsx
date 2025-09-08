@@ -47,10 +47,10 @@ const DeleteModal = ({visible,onClose,title,subtitle,type,offerId,refetch,meetin
         centered
         footer={
             <Flex justify='center' gap={5}>
-                <Button type='button' onClick={onClose} className='btn text-black border-gray'>
+                <Button aria-labelledby='Cancel' type='button' onClick={onClose} className='btn text-black border-gray'>
                     Cancel
                 </Button>
-                <Button className={`btn ${type==='danger'? 'bg-red':'bg-brand'}`} onClick={handleConfirm} loading={updateOfferLoading}>
+                <Button aria-labelledby='Confirm' className={`btn ${type==='danger'? 'bg-red':'bg-brand'}`} onClick={handleConfirm} loading={updateOfferLoading}>
                     Confirm
                 </Button>
             </Flex>

@@ -32,7 +32,7 @@ const ReceiveRequestTable = () => {
     
                 return (
                     <Dropdown menu={{ items }} trigger={["click"]}>
-                        <Button className="bg-transparent border-0 p-0">
+                        <Button aria-labelledby='dropdown icon' className="bg-transparent border-0 p-0">
                             <img src="/assets/icons/dots.png"  alt="dropdown-icon" width={16} />
                         </Button>
                     </Dropdown>

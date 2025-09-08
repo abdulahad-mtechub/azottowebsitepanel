@@ -77,7 +77,7 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
                             pageSize: pagination.pageSize,
                             total: offerDeals?.getBuyerInprogressDeals?.length || 0, // ideally you should return totalCount from backend
                             showTotal: (total) => (
-                              <Button className="brand-bg">Total: {total}</Button>
+                              <Button aria-labelledby='Total' className="brand-bg">Total: {total}</Button>
                             ),
                             onChange: (page, pageSize) => {
                               setPagination({ current: page, pageSize });

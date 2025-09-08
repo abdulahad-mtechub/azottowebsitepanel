@@ -58,7 +58,7 @@ const SellerFinalDealsStep = ({form,completedeal,deal}) => {
                             </Col>
                             <Col span={24}>
                                 <Flex>
-                                    <Button type="primary" className='btn bg-brand' onClick={handleSubmit}>
+                                    <Button aria-labelledby='Notify Jusoor to Finalize' type="primary" className='btn bg-brand' onClick={handleSubmit}>
                                         Notify Jusoor to Finalize
                                     </Button>
                                 </Flex>

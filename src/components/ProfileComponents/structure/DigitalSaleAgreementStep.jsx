@@ -43,7 +43,7 @@ const DigitalSaleAgreementStep = ({form,completedeal}) => {
                             </Col>
                             <Col span={24}>
                                 <Flex>
-                                    <Button type="primary" className='btn bg-brand'>
+                                    <Button aria-labelledby='Mark as Accepted' type="primary" className='btn bg-brand'>
                                         Mark as Accepted
                                     </Button>
                                 </Flex>

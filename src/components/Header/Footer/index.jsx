@@ -63,7 +63,7 @@ const Footer = () => {
                             Sign up to access support, tools, and verified listings.
                         </Text>
                         <Flex>
-                            <Button type='primary' aria-label='Sign Up' className='btn bg-brand' onClick={()=>navigate('/signup')}>
+                            <Button type='primary' aria-labelledby='Sign Up' className='btn bg-brand' onClick={()=>navigate('/signup')}>
                                 Sign Up
                             </Button>
                         </Flex>

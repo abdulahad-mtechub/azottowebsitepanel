@@ -114,10 +114,10 @@ const ProfileDashboard = () => {
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Profile' />
                         <Flex gap={5}>
-                            <Button className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
+                            <Button aria-labelledby='Password Manager' className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
                                 Password Manager
                             </Button>
-                            <Button className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
+                            <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
                                 Edit Profile
                             </Button>
                         </Flex>
@@ -164,10 +164,10 @@ const ProfileDashboard = () => {
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Profile' />
                         <Flex gap={5}>
-                            <Button className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
+                            <Button aria-labelledby='Password Manager' className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
                                 Password Manager
                             </Button>
-                            <Button className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
+                            <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
                                 Edit Profile
                             </Button>
                         </Flex>
@@ -216,7 +216,7 @@ const ProfileDashboard = () => {
         <div className='padd mb-2'>
             <div className='container'>
                 <Flex className='mt-3' gap={5} align='flex-start' vertical>
-                    <Button className='btn border-gray text-black p-2 d-none' type='button' onClick={() => setIsSidebarVisible(true)}>
+                    <Button aria-labelledby='Profile Sidebar' className='btn border-gray text-black p-2 d-none' type='button' onClick={() => setIsSidebarVisible(true)}>
                         <Tooltip
                             title='Profile Sidebar'
                         >

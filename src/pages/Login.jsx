@@ -79,7 +79,7 @@ const LoginPage = () => {
       <Row className="signup-page" align={"middle"}>
             <Col  xs={24} sm={24} md={14} lg={16} className="signup-form-container">
                 <div className="form-inner">
-                    <Button shape="circle" onClick={()=>navigate('/')}>
+                    <Button aria-labelledby='Arrow left' shape="circle" onClick={()=>navigate('/')}>
                       <ArrowLeftOutlined />
                     </Button>
                     <NavLink to={'/'}>
@@ -91,7 +91,7 @@ const LoginPage = () => {
                     <Title level={3}>Signin to your account</Title>
                     <Paragraph>Enter your credentials to login to your account.</Paragraph>
 
-                    <Button className="btn bg-nafth fs-16" block>
+                    <Button aria-labelledby='Sign In' className="btn bg-nafth fs-16" block>
                         Signin via Nafath
                     </Button>
                     <Divider className="text-gray">Or</Divider>
@@ -129,6 +129,7 @@ const LoginPage = () => {
                         className="btn bg-dark-blue fs-16"
                         block
                         userLoading={userLoading}
+                        aria-labelledby='Signin'
                       >
                         Signin
                       </Button>

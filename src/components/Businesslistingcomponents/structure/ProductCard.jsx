@@ -75,7 +75,7 @@ const ProductCard = ({
                                 </Tag>
                                 </Flex>
                                 <Button 
-                                    aria-label='bookmarked-btn'
+                                    aria-labelledby='bookmarked-btn'
                                     className='border-0 bg-transparent p-0'
                                     onClick={(e) => {
                                         e.stopPropagation(); // stop card navigation

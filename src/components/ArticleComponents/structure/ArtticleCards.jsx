@@ -51,7 +51,7 @@ const ArtticleCards = ({data,loadmore=false}) => {
                 loadmore && 
                 <Col span={24}>
                     <Flex justify='center' className='mt-3'>
-                        <Button aria-label='Load More Articles' className='btn btn-bg'>
+                        <Button aria-labelledby='Load More Articles' className='btn btn-bg'>
                             Load More Articles
                         </Button>
                     </Flex>

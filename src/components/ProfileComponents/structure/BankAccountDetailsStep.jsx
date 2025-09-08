@@ -37,7 +37,7 @@ const BankAccountDetailsStep = ({form,completedeal,user}) => {
                         <>
                             <Col span={24}>
                                 <Flex>
-                                    <Button type="primary" className='btn bg-brand'>
+                                    <Button aria-labelledby='Send Bank Details' type="primary" className='btn bg-brand'>
                                        Send Bank Details
                                     </Button>
                                 </Flex>
