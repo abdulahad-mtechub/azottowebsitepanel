@@ -74,7 +74,7 @@ const CompleteDealsTable = ({setCompleteDeal}) => {
                             pageSize: pagination.pageSize,
                             total: offerDeals?.getBuyerCompletedDeals?.length || 0, // Replace with totalCount if available
                             showTotal: (total) => (
-                            <Button className="brand-bg">Total: {total}</Button>
+                            <Button aria-labelledby='Total' className="brand-bg">Total: {total}</Button>
                             ),
                             onChange: (page, pageSize) => {
                             setPagination({ current: page, pageSize });

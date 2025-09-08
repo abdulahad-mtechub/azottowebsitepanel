@@ -32,10 +32,10 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
             closeIcon={false}
             footer={
                 <Flex justify='end' gap={5}>
-                    <Button aria-label='Cancel' className='btn text-black border-gray' onClick={onClose}>
+                    <Button aria-labelledby='Cancel' className='btn text-black border-gray' onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button aria-label='Send an Offer' className='btn bg-brand' onClick={async () => {
+                    <Button aria-labelledby='Send an Offer' className='btn bg-brand' onClick={async () => {
                         try {
                             const values = await form.validateFields();
                             await createOffer({
@@ -69,7 +69,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                     <Title level={4} className='m-0'>
                     {mode === "proceed" ? "Proceed to Purchase" : "Counter Offer to Seller"}
                     </Title>
-                    <Button aria-label='Close' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                    <Button aria-labelledby='Close' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
                     </Button>
                 </Flex>                

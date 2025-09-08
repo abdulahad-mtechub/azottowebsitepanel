@@ -305,13 +305,13 @@ const SellBusinessCreate = ({ addstep }) => {
                     </Flex> */}
                     <Flex justify={'space-between'} gap={5} align='center'>
                         {current === 0 ? (
-                                <Button type="button" className='btn border-gray text-black' onClick={()=>setIsCancel(true)}>
+                                <Button aria-labelledby='Cancel' type="button" className='btn border-gray text-black' onClick={()=>setIsCancel(true)}>
                                     Cancel
                                 </Button>
                             )
                             :
                             (
-                                <Button type="button" className='btn border-gray text-black' onClick={prev}>
+                                <Button aria-labelledby='Previous' type="button" className='btn border-gray text-black' onClick={prev}>
                                     Previous
                                 </Button>
                             )  
@@ -320,18 +320,19 @@ const SellBusinessCreate = ({ addstep }) => {
                             <Button
                                 className='btn text-black border-gray'
                                 onClick={handleSaveDraft}
+                                aria-labelledby='Save as Draft'
                             >
                                 Save as Draft
                             </Button>
 
                             {current < steps.length - 1 && (
-                                <Button type="primary" className='btn bg-brand' onClick={next}>
+                                <Button aria-labelledby='Next' type="primary" className='btn bg-brand' onClick={next}>
                                     Next
                                 </Button>
                             )}
 
                             {current === steps.length - 1 && (
-                                <Button type="primary" className='btn bg-brand' onClick={handleCreateListing}>
+                                <Button aria-labelledby='Publish' type="primary" className='btn bg-brand' onClick={handleCreateListing}>
                                     Publish
                                 </Button>
                             )}

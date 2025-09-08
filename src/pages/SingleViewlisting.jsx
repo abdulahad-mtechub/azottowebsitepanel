@@ -138,7 +138,7 @@ const SingleViewlisting = () => {
                                         </Title>
                                         {
                                             businessData?.type &&
-                                            <Button className={`fs-12 border-0 text-white ${businessData.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                            <Button aria-labelledby='Business Type' className={`fs-12 border-0 text-white ${businessData.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
                                                 {businessData?.type}
                                             </Button>
                                         }

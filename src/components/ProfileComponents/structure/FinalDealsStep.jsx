@@ -42,7 +42,7 @@ const FinalDealsStep = ({form,inprogressdeal}) => {
                             </Col>
                             <Col span={24}>
                                 <Flex>
-                                    <Button type="primary" className='btn bg-brand'>
+                                    <Button aria-labelledby='Notify Jusoor a Finalize' type="primary" className='btn bg-brand'>
                                         Notify Jusoor to Finalize
                                     </Button>
                                 </Flex>

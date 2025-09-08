@@ -214,7 +214,7 @@ const Navbar = ({setGetCategory}) => {
                     <Button
                       onClick={(e) => e.preventDefault()}
                       className="bg-transparent btn-outline btn p-2 border-white"
-                      aria-label='Arrow down icon'
+                      aria-labelledby='Arrow down icon'
                     >
                       <Space align="center">
                         <Image
@@ -237,7 +237,7 @@ const Navbar = ({setGetCategory}) => {
                     isshow &&
                     <>
                       <Badge size="small" count={1} overflowCount={1} >
-                        <Button className='bg-transparent border-0 p-0' aria-label='Notification'>
+                        <Button className='bg-transparent border-0 p-0' aria-labelledby='Notification'>
                           <Image 
                             src='/assets/icons/notification.png' 
                             width={'28px'} 
@@ -372,7 +372,7 @@ const Navbar = ({setGetCategory}) => {
                 <Button
                   onClick={(e) => e.preventDefault()}
                   className="bg-transparent btn-outline btn p-2 border-white"
-                  aria-label='language btn'
+                  aria-labelledby='language btn'
                 >
                   <Space align="center">
                     <Image
@@ -389,21 +389,21 @@ const Navbar = ({setGetCategory}) => {
               {
                 !isshow ? 
                 <Flex gap={5} justify='end'>
-                  <Button aria-label='Sign Up' className='btn btn-outline' onClick={()=>navigate('/signup')}>
+                  <Button aria-labelledby='Sign Up' className='btn btn-outline' onClick={()=>navigate('/signup')}>
                     Sign up
                   </Button>
-                  <Button aria-label='Login' className='btn bg-brand' onClick={()=>navigate('/login')}>
+                  <Button aria-labelledby='Login' className='btn bg-brand' onClick={()=>navigate('/login')}>
                     Login
                   </Button>
                 </Flex>
               :
               <Flex gap={10} align='center'>
-                <Button aria-label='Sell a Business' className='btn bg-brand' onClick={() => navigate('/sellbusinesscreate')}>
+                <Button aria-labelledby='Sell a Business' className='btn bg-brand' onClick={() => navigate('/sellbusinesscreate')}>
                   <PlusOutlined /> Sell a Business
                 </Button>
               
                 <Badge size="small" count={notificationCount} overflowCount={1}>
-                  <Button aria-label='Notification' className='bg-transparent border-0 p-0'>
+                  <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
                     <Image 
                       src='/assets/icons/notification.png' 
                       width={'28px'} 

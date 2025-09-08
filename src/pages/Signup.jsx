@@ -232,7 +232,7 @@ const SignupPage = () => {
                                         maxCount={1} 
                                         onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
                                     >
-                                        <Button className='btn text-black bg-gray border-gray'>Upload</Button>
+                                        <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>Upload</Button>
                                     </Upload>
                                 </Col>
                             </Row>
@@ -256,7 +256,7 @@ const SignupPage = () => {
                                         maxCount={1} 
                                         onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
                                     >
-                                        <Button className='btn text-black bg-gray border-gray'>Upload</Button>
+                                        <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>Upload</Button>
                                     </Upload>
                                 </Col>
                             </Row>
@@ -282,7 +282,7 @@ const SignupPage = () => {
                                     maxCount={1} 
                                     onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
                                 >
-                                    <Button className='btn text-black bg-gray border-gray'>Upload</Button>
+                                    <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>Upload</Button>
                                 </Upload>
                             </Col>
                         </Row>
@@ -383,7 +383,7 @@ const SignupPage = () => {
             <Col xs={24} sm={24} md={14} lg={16}>
                 <div className="signup-form-container ">
                     <div className="form-inner">
-                        <Button shape="circle" onClick={()=>navigate('/')}>
+                        <Button aria-labelledby='Arrow left' shape="circle" onClick={()=>navigate('/')}>
                             <ArrowLeftOutlined />
                         </Button>
                         <NavLink to={'/'}>
@@ -394,7 +394,7 @@ const SignupPage = () => {
                         <Title level={3}>Verify Your Identity</Title>
                         <Paragraph>To ensure the safety of all users, we require identity verification before creating a seller account.</Paragraph>
 
-                        <Button className="btn bg-nafth fs-16" block>
+                        <Button aria-labelledby='Sign Up via Nafath' className="btn bg-nafth fs-16" block>
                             Signup via Nafath
                         </Button>
                         <Divider className="text-gray">Or</Divider>
@@ -422,7 +422,7 @@ const SignupPage = () => {
                             />
                             <div className="step-content">{steps[current].content}</div>
                             <Flex gap={10} justify='end'>
-                                <Button type="button" className="btn bg-transparent border-gray text-black fs-14 my-2" 
+                                <Button aria-labelledby='Back' type="button" className="btn bg-transparent border-gray text-black fs-14 my-2" 
                                     onClick={prev}
                                     disabled={current <= 0 ? true: false}
                                     block
@@ -430,14 +430,14 @@ const SignupPage = () => {
                                     Back
                                 </Button>    
                                 {current < steps.length - 1 && (
-                                    <Button className="btn bg-dark-blue fs-14 my-2" 
+                                    <Button aria-labelledby='Next' className="btn bg-dark-blue fs-14 my-2" 
                                         block onClick={next}>
                                         Next
                                     </Button>
                                 )}
     
                                 {current === steps.length - 1 && (
-                                    <Button type="primary" 
+                                    <Button aria-labelledby='Signup' type="primary" 
                                         htmlType="submit" 
                                         className="btn bg-dark-blue fs-14 my-2" 
                                         block>

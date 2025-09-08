@@ -70,9 +70,9 @@ const BusinessInfoCardMobile = ({data}) => {
                         }
                 </div>                
                 <Flex justify='center' gap={5}>
-                    <Button aria-label='Make an Offer' className='btn bg-brand fs-10 mbl-pad' onClick={()=>{setOfferMode("offer");setOfferSeller(true)}}>Make an Offer</Button>
-                    <Button aria-label='Request Meeting' className='btn bg-dark-blue fs-10 mbl-pad' onClick={()=>setMeetingModal(true)}>Request Meeting</Button>
-                    <Button aria-label='Proceed to Purchase' className='btn bg-green text-white fs-10 mbl-pad '
+                    <Button aria-labelledby='Make an Offer' className='btn bg-brand fs-10 mbl-pad' onClick={()=>{setOfferMode("offer");setOfferSeller(true)}}>Make an Offer</Button>
+                    <Button aria-labelledby='Request Meeting' className='btn bg-dark-blue fs-10 mbl-pad' onClick={()=>setMeetingModal(true)}>Request Meeting</Button>
+                    <Button aria-labelledby='Proceed to Purchase' className='btn bg-green text-white fs-10 mbl-pad '
                     onClick={()=> handleAction(() => { setOfferMode("proceed"); setOfferSeller(true); })}>Proceed to Purchase</Button>
                 </Flex>
             </Card>

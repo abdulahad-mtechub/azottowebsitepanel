@@ -165,6 +165,7 @@ const ConfirmationDocsStep = ({ form, completedeal,deal }) => {
                       <Button
                         className="btn text-black bg-gray border-gray"
                         loading={uploadingDoc === doc.title}
+                        aria-labelledby='Upload'
                       >
                         Upload
                       </Button>
@@ -179,7 +180,7 @@ const ConfirmationDocsStep = ({ form, completedeal,deal }) => {
         {!completedeal && (
           <Col span={24}>
             <Flex>
-              <Button type="primary" className="btn bg-brand" onClick={handleSubmit}>
+              <Button aria-labelledby='Submit Documents' type="primary" className="btn bg-brand" onClick={handleSubmit}>
                 Submit Documents
               </Button>
             </Flex>

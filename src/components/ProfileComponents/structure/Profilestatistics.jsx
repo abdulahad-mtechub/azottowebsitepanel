@@ -8,7 +8,7 @@ const Profilestatistics = ({data, title}) => {
         <Card className='rounded-12  border-gray'>
             <Flex justify='space-between'>
                 <ModuleTopHeading level={4} name={title}/>
-                <Button type='button' className='bg-transparent border-gray'>
+                <Button aria-labelledby='Calendar icon' type='button' className='bg-transparent border-gray'>
                     <img src='/assets/icons/calendar.png' alt='calendar-icon' width={20} /> 01/02/2025 - 30/02/2025
                 </Button>
             </Flex>

@@ -61,7 +61,7 @@ const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
             />
         </Flex>
         <Flex gap={15} align='center'>
-            <Button className='border-0 p-0 bg-transparent' onClick={() => setInprogressDeal(null)}>
+            <Button aria-labelledby='Arrow left' className='border-0 p-0 bg-transparent' onClick={() => setInprogressDeal(null)}>
                 <ArrowLeftOutlined />
             </Button>
             <Title level={4} className='m-0'>

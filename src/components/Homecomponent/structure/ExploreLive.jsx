@@ -28,17 +28,17 @@ const ExploreLive = () => {
                                     <Flex vertical gap={20}>
                                         <Flex justify='space-between' align='center'>
                                             <Flex gap={4}>
-                                                <Button className='fs-13'>
+                                                <Button className='fs-13' aria-labelledby='Restaurant'>
                                                     Restaurant
                                                 </Button>
                                                 {
                                                     pro?.type &&
-                                                    <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                                    <Button aria-labelledby='type' className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
                                                         {pro?.type}
                                                     </Button>
                                                 }
                                             </Flex>
-                                            <Button className='border-0 bg-transparent p-0'>
+                                            <Button className='border-0 bg-transparent p-0' aria-labelledby='bookmarked button'>
                                                 {
                                                     pro?.save === 'yes' ?
                                                     <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} />: 
@@ -99,7 +99,7 @@ const ExploreLive = () => {
                     } 
                     <Col span={24}>
                         <Flex justify='center'>
-                            <Button className='btn bg-brand'>
+                            <Button className='btn bg-brand' aria-labelledby='Browse Businesses'>
                                 Browse Businesses <RightOutlined className='fs-10' />
                             </Button>
                         </Flex>

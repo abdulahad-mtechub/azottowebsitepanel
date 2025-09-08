@@ -73,6 +73,7 @@ const Editprofile = ({ visible, onClose }) => {
                 type="button"
                 className="btn text-black border-gray"
                 onClick={onClose}
+                aria-labelledby='Cancel'
               >
                 Cancel
               </Button>
@@ -80,7 +81,8 @@ const Editprofile = ({ visible, onClose }) => {
                 type="primary"
                 className="btn bg-brand"
                 loading={updateLoading}
-                onClick={() => form.submit()} // ✅ trigger submit
+                onClick={() => form.submit()}
+                aria-labelledby='Update'
               >
                 Update
               </Button>
@@ -97,6 +99,7 @@ const Editprofile = ({ visible, onClose }) => {
                 type="button"
                 onClick={onClose}
                 className="p-0 border-0 bg-transparent"
+                aria-labelledby='Close'
               >
                 <CloseOutlined className="fs-14" />
               </Button>

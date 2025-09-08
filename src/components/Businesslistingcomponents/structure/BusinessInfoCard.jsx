@@ -83,11 +83,11 @@ const BusinessInfoCard = ({data}) => {
                     {data?.seller?.id !== userId && (
                     <Col span={24}>
                     <Flex vertical gap={5}>
-                        <Button className='btn bg-brand' aria-label='Make an Offer'
+                        <Button className='btn bg-brand' aria-labelledby='Make an Offer'
                         onClick={()=> handleAction(() => { setOfferMode("offer"); setOfferSeller(true); })}>
                             Make an Offer</Button>
-                        <Button aria-label='Request Meeting' className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>Request Meeting</Button>
-                        <Button aria-label='Proceed to Purchase' className='btn bg-green text-white' 
+                        <Button aria-labelledby='Request Meeting' className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>Request Meeting</Button>
+                        <Button aria-labelledby='Proceed to Purchase' className='btn bg-green text-white' 
                         onClick={()=> handleAction(() => { setOfferMode("proceed"); setOfferSeller(true); })}>Proceed to Purchase</Button>
                     </Flex>
                     </Col>

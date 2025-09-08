@@ -64,7 +64,7 @@ const Contactform = () => {
                                     />
                                 </Col>
                                 <Col span={24}>
-                                    <Button aria-label='Submit' type='button' className='btn btn-bg w-100'>Submit</Button>
+                                    <Button aria-labelledby='Submit' type='button' className='btn btn-bg w-100'>Submit</Button>
                                 </Col>
                                 <Col span={24}>
                                     <Divider className='my-2'>Or</Divider>
@@ -72,7 +72,7 @@ const Contactform = () => {
                                 <Col span={24}>
                                     <Flex gap={10} align='center' justify='center'>
                                         <Text className='text-gray fs-13'>Message Us on WhatsApp</Text>
-                                        <Button aria-label='Whatsapp' className='bg-green text-white rounded-20 fs-13'>WhatsApp <WhatsAppOutlined/> </Button>
+                                        <Button aria-labelledby='Whatsapp' className='bg-green text-white rounded-20 fs-13'>WhatsApp <WhatsAppOutlined/> </Button>
                                     </Flex>
                                 </Col>
                             </Row>

@@ -18,7 +18,7 @@ const ArticleSingleView = () => {
                             <Col span={24}>
                                 <Flex vertical gap={15}>
                                     <Flex vertical align='flex-start' gap={5}>
-                                        <Button className='border-0 p-0 bg-transparent' onClick={()=>navigate(-1)}>
+                                        <Button aria-labelledby='Arrow left' className='border-0 p-0 bg-transparent' onClick={()=>navigate(-1)}>
                                             <ArrowLeftOutlined />
                                         </Button>
                                         <Title className='m-0' level={2}>

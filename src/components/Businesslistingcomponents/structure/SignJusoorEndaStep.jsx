@@ -26,7 +26,7 @@ const SignJusoorEndaStep = ({form, onClose, user, }) => {
                 <Title level={5} className='m-0'>
                     Submit Jusoor E-NDA
                 </Title>
-                <Button type='button' aria-label='Close' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                <Button type='button' aria-labelledby='Close' onClick={onClose} className='p-0 border-0 bg-transparent'>
                     <CloseOutlined className='fs-18' />
                 </Button>
             </Flex>                
