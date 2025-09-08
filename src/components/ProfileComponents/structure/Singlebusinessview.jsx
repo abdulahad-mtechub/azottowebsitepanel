@@ -1,7 +1,5 @@
-import React from 'react'
 import { Card, Row, Col, Flex, Typography, Breadcrumb, Space, Button, Image, Tabs } from 'antd'
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
-import { allbussinesData } from '../../../data';
 import { SellerOfferTable } from './SellerOfferTable';
 import { SellerDealDetails } from './SellerDealDetails';
 import { useQuery } from '@apollo/client';
@@ -115,16 +113,16 @@ function mapBusinessPayloadToUI(payload) {
                     />
                     <Flex justify='space-between'>
                         <Space>
-                            <Button type='button' className='p-0 border-0 bg-transparent' onClick={()=>setSingleDetail(null)}>
+                            <Button aria-labelledby='Arrow left' type='button' className='p-0 border-0 bg-transparent' onClick={()=>setSingleDetail(null)}>
                                 <ArrowLeftOutlined />
                             </Button>
                             <Title level={5} className='m-0'>{business?.businessTitle}</Title>
                         </Space>
                         <Space>
-                            <Button className='btn bg-brand rounded-8' type='button'>
+                            <Button aria-labelledby='Edit' className='btn bg-brand rounded-8' type='button'>
                                 Edit
                             </Button>
-                            <Button className='btn bg-red rounded-8' type='button'>
+                            <Button aria-labelledby='Inactivate Business' className='btn bg-red rounded-8' type='button'>
                                 Inactivate Business
                             </Button>
                         </Space>

@@ -1,10 +1,8 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
-import { comdealsData } from '../../../data'
 import { SingleInprogressSteps } from './SingleInprogressSteps'
 import {GETADMINACTIVEBANK,OFFERBYID } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import React,{ useMemo,useEffect } from 'react'
 
 const { Title, Text } = Typography
 const SingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
@@ -32,7 +30,7 @@ const SingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
             />
         </Flex>
         <Flex gap={15} align='center'>
-            <Button className='border-0 p-0 bg-transparent' onClick={() => setCompleteDeal(null)}>
+            <Button aria-labelledby='Arrow left' className='border-0 p-0 bg-transparent' onClick={() => setCompleteDeal(null)}>
                 <ArrowLeftOutlined />
             </Button>
             <Title level={4} className='m-0'>

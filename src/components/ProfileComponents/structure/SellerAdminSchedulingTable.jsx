@@ -1,9 +1,8 @@
 import {  Col, Form, Row, Table, Typography } from 'antd'
-import { selleradminsechedulingData } from '../../../data';
 import { SearchInput } from '../../Forms';
 import {READYSCHEDULEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
-import React,{useState,useEffect} from 'react'
+import React,{useEffect} from 'react'
 
 const { Text } = Typography
 const SellerAdminSchedulingTable = () => {
@@ -50,7 +49,7 @@ const SellerAdminSchedulingTable = () => {
                 <SearchInput
                     placeholder="Search"
                     value={form.getFieldValue('name') || ''}
-                    prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                    prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} />}
                     onChange={(e) => form.setFieldValue("search", e.target.value)}
                 />
                 </Form.Item>

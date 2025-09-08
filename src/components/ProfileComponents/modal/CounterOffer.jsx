@@ -55,10 +55,10 @@ const CounterOffer = ({visible,onClose,selectedOfferId}) => {
             centered
             footer={
                 <Flex justify='end' gap={5}>
-                    <Button type='button' className='btn text-black border-gray' onClick={onClose}>
+                    <Button aria-labelledby='Cancel' type='button' className='btn text-black border-gray' onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button type="primary" className='btn bg-brand' onClick={handleSubmit}>
+                    <Button aria-labelledby='Send Counter Offer' type="primary" className='btn bg-brand' onClick={handleSubmit}>
                         Send Counter Offer
                     </Button>
                 </Flex>
@@ -71,7 +71,7 @@ const CounterOffer = ({visible,onClose,selectedOfferId}) => {
                     <Title level={4} className='m-0'>
                         Counter Offer to Seller
                     </Title>
-                    <Button type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                    <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
                     </Button>
                 </Flex>                
@@ -87,13 +87,14 @@ const CounterOffer = ({visible,onClose,selectedOfferId}) => {
                 <Row>
                     <Col span={24}>
                         <MyInput
+                            type='number'
                             label='Offer Amount'
                             name='offeramount'
                             required
                             message="Please enter offer amount"
                             placeholder='e.g. 75000'
                             addonBefore={
-                                <img src='/assets/icons/reyal-g.png' width={14} />
+                                <img src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} />
                             }
                             className='w-100'
                             onChange={handleOfferAmountChange}

@@ -432,7 +432,7 @@ const mobilemenuData = [
         children:[
             {
                 id: 1,
-                name: 'Browse Businesses by Categories',
+                name: 'Browse by Categories',
                 innerchildren:[
                     {
                         id: 1,
@@ -498,7 +498,7 @@ const mobilemenuData = [
             },
             {
                 id: 2,
-                name: 'Browse Businesses by Location',
+                name: 'Browse by Location',
                 innerchildren:[
                     {
                         id: 1,
@@ -569,7 +569,7 @@ const mobilemenuData = [
             },
             {
                 id: 3,
-                name: 'Browse Businesses by Revenue',
+                name: 'Browse by Revenue',
                 innerchildren:[
                     {
                         id: 1,
@@ -605,7 +605,7 @@ const mobilemenuData = [
             },
             {
                 id: 4,
-                name: 'Browse Businesses by Profilt',
+                name: 'Browse by Profilt',
                 innerchildren:[
                     {
                         id: 1,

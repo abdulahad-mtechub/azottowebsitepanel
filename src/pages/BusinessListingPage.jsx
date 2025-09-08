@@ -276,7 +276,7 @@ const BusinessListingPage = ({getcategory}) => {
                                     />
                                 </Col>
                                 <Col xl={{span: 3}} lg={{span: 4}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
-                                    <Button className='btn bg-brand fs-14 fw-400 w-100'>
+                                    <Button aria-labelledby='Search' className='btn bg-brand fs-14 fw-400 w-100'>
                                         <Image src="/assets/icons/search-w.png" preview={false} width={16} alt=""  onClick={handleSearch}/> Search
                                     </Button>
                                 </Col>
@@ -291,17 +291,17 @@ const BusinessListingPage = ({getcategory}) => {
                         <Title level={4} className='m-0'>
                             {getcategory ? getcategory : 'Category Name'}
                         </Title>
-                        <Button type='button' onClick={()=>setIsFilter(true)} className='border-0 bg-transparent p-0 filter-btn'>
-                            <img src='/assets/icons/filter.png' width={20} />
+                        <Button aria-labelledby='Filter icon' type='button' onClick={()=>setIsFilter(true)} className='border-0 bg-transparent p-0 filter-btn'>
+                            <img src='/assets/icons/filter.png' alt='filter-icon' width={20} />
                         </Button>
                     </Flex>
                     <Flex gap={5} align='center'>
                         <Text className='text-gray fs-13'>
                         {`Showing ${((currentPage - 1) * limit) + 1}–${Math.min(currentPage * limit, totalCount || 0)} of ${totalCount || 0} Businesses`}
                         </Text>
-                        <Button type='button' onClick={()=>setIsShow(!isShow)} className='btn rounded-8 border-gray text-black sm-hide'>
+                        <Button aria-labelledby='Filter' type='button' onClick={()=>setIsShow(!isShow)} className='btn rounded-8 border-gray text-black sm-hide'>
                             <Flex align='center' gap={3}>
-                                <img src='/assets/icons/filter-bar.png' width={14}/> Filter
+                                <img src='/assets/icons/filter-bar.png' alt='filter-icon' width={14}/> Filter
                             </Flex>
                         </Button>
                         <MySelect 
@@ -372,15 +372,15 @@ const BusinessListingPage = ({getcategory}) => {
                               categoryName: biz.category.name,
                               description: biz.description,
                               isSaved: biz.isSaved,
-                              amount: `SAR ${biz.price?.toLocaleString()}`,
+                              amount: `${biz.price?.toLocaleString()}`,
                               save: 'no', // or logic to check if saved
                               child: [
                                 {
-                                  subtitle: `SAR ${biz.revenue?.toLocaleString()}`,
+                                  subtitle: `${biz.revenue?.toLocaleString()}`,
                                   subdesc: 'Revenue/month'
                                 },
                                 {
-                                  subtitle: `SAR ${biz.profit?.toLocaleString()}`,
+                                  subtitle: `${biz.profit?.toLocaleString()}`,
                                   subdesc: 'Profit/month'
                                 },
                                 {

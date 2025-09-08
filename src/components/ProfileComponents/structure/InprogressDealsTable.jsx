@@ -55,7 +55,7 @@ console.log("offerDeals?.getBuyerInprogressDeals",offerDeals?.getBuyerInprogress
                         <SearchInput
                             placeholder="Search"
                             value={form.getFieldValue('name') || ''}
-                            prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                            prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} />}
                         />
                     </Form.Item>
                 </Col>
@@ -80,7 +80,7 @@ console.log("offerDeals?.getBuyerInprogressDeals",offerDeals?.getBuyerInprogress
                             pageSize: pagination.pageSize,
                             total: offerDeals?.getBuyerInprogressDeals?.length || 0, // ideally you should return totalCount from backend
                             showTotal: (total) => (
-                              <Button className="brand-bg">Total: {total}</Button>
+                              <Button aria-labelledby='Total' className="brand-bg">Total: {total}</Button>
                             ),
                             onChange: (page, pageSize) => {
                               setPagination({ current: page, pageSize });

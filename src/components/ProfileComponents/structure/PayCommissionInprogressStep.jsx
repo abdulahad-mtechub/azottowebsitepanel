@@ -5,6 +5,7 @@ import React,{useState} from 'react'
 import {GETADMINACTIVEBANK,GET_BUSINESS } from '../../../graphql/query';
 import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 
+
 const { Text } = Typography
 const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOfferId, setMeeting }) => {
     const [messageApi, contextHolder] = message.useMessage();

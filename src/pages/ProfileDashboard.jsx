@@ -10,7 +10,7 @@ import {
     Avatar,
     Tooltip
 } from 'antd';
-import { PlusOutlined, RightOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
 import { useEffect, useState,useMemo,useContext } from 'react';
@@ -114,10 +114,10 @@ const ProfileDashboard = () => {
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Profile' />
                         <Flex gap={5}>
-                            <Button className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
+                            <Button aria-labelledby='Password Manager' className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
                                 Password Manager
                             </Button>
-                            <Button className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
+                            <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
                                 Edit Profile
                             </Button>
                         </Flex>
@@ -164,10 +164,10 @@ const ProfileDashboard = () => {
                     <Flex justify='space-between'>
                         <ModuleTopHeading level={4} name='Profile' />
                         <Flex gap={5}>
-                            <Button className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
+                            <Button aria-labelledby='Password Manager' className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
                                 Password Manager
                             </Button>
-                            <Button className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
+                            <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
                                 Edit Profile
                             </Button>
                         </Flex>
@@ -215,7 +215,14 @@ const ProfileDashboard = () => {
     return (
         <div className='padd mb-2'>
             <div className='container'>
-                <Flex className='mt-3' align='center' justify='space-between'>
+                <Flex className='mt-3' gap={5} align='flex-start' vertical>
+                    <Button aria-labelledby='Profile Sidebar' className='btn border-gray text-black p-2 d-none' type='button' onClick={() => setIsSidebarVisible(true)}>
+                        <Tooltip
+                            title='Profile Sidebar'
+                        >
+                            <ArrowLeftOutlined className='fs-16' />
+                        </Tooltip>
+                    </Button>
                     <Breadcrumb
                         separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                         items={[
@@ -227,13 +234,6 @@ const ProfileDashboard = () => {
                             },
                         ]}
                     />
-                    <Button className='bg-transparent border0 p-0 d-none' type='button' onClick={() => setIsSidebarVisible(true)}>
-                        <Tooltip
-                            title='Profile Sidebar'
-                        >
-                            <img src='/assets/icons/sidebar.png' alt='sidebar' width={25} />
-                        </Tooltip>
-                    </Button>
                 </Flex>
 
                 <Row gutter={[24, 24]} className='mt-3'>

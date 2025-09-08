@@ -39,7 +39,7 @@ const MobileNavbar = ({ visible, onClose }) => {
                 <NavLink to={'/'} onClick={onClose}>
                     <Image src='/assets/images/logo.png' width={120} preview={false} />
                 </NavLink>
-                <Button className='bg-transparent border-0 p-0' onClick={onClose}>
+                <Button aria-labelledby='Close' className='bg-transparent border-0 p-0' onClick={onClose}>
                     <CloseOutlined className='text-white fs-18' />
                 </Button>
             </Flex>
@@ -122,13 +122,13 @@ const MobileNavbar = ({ visible, onClose }) => {
                     </NavLink>
                 </Flex>
                 <Flex vertical gap={10} align='center' justify='center'>
-                    <Button className='btn bg-brand mt-3 w-100' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
+                    <Button aria-labelledby='Sell a Business' className='btn bg-brand mt-3 w-100' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
                         <PlusOutlined /> Sell a Business
                     </Button>
-                    <Button className='btn btn-outline w-100' onClick={()=>navigate('/signup')}>
+                    <Button aria-labelledby='Sign Up' className='btn btn-outline w-100' onClick={()=>navigate('/signup')}>
                         Sign up
                     </Button>
-                    <Button className='btn bg-brand w-100' onClick={()=>navigate('/login')}>
+                    <Button aria-labelledby='Login' className='btn bg-brand w-100' onClick={()=>navigate('/login')}>
                         Login
                     </Button>
                 </Flex>

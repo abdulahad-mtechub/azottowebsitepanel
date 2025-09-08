@@ -16,13 +16,13 @@ const ExploreSimilarBusiness = ({id}) => {
             {
                 id: 1,
                 icon: '/assets/icons/year-p.png',
-                subtitle: `SAR ${b?.revenue?.toLocaleString?.() || '0'}`,
+                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" /> {b?.revenue?.toLocaleString?.() || '0'}</>,
                 subdesc: 'Revenue/month',
             },
             {
                 id: 2,
                 icon: '/assets/icons/revenue.png',
-                subtitle: `SAR ${b?.profit?.toLocaleString?.() || '0'}`,
+                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" /> {b?.profit?.toLocaleString?.() || '0'}</>,
                 subdesc: 'Profit/month',
             },
             {
@@ -55,27 +55,27 @@ const ExploreSimilarBusiness = ({id}) => {
                                     <Flex vertical gap={20}>
                                         <Flex justify='space-between' align='center'>
                                             <Flex gap={4}>
-                                                <Button className='fs-13'>
+                                                <Button className='fs-13' aria-labelledby='Restaurant'>
                                                     Restaurant
                                                 </Button>
                                                 {
                                                     pro?.type &&
-                                                    <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                                    <Button aria-labelledby={pro?.type} className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
                                                         {pro?.type}
                                                     </Button>
                                                 }
                                             </Flex>
-                                            <Button className='border-0 bg-transparent p-0'>
+                                            <Button aria-labelledby={'Bookmark-btn'} className='border-0 bg-transparent p-0'>
                                                 {
                                                     pro?.isSaved ?
-                                                    <img src='/assets/icons/bk-bl-d.png' width={22}/> :
-                                                    <img src='/assets/icons/bk-bl.png' width={22}/>
+                                                    <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} />: 
+                                                    <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} />
                                                 }
                                             </Button>
                                         </Flex>
                                         <div>
                                             <div className='w-full card-img mb-2 rounded-12'>
-                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="" />
+                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" />
                                             </div>
                                             <Title className='' level={5}>
                                                 {pro?.businessTitle}
@@ -109,7 +109,7 @@ const ExploreSimilarBusiness = ({id}) => {
                                             </Row>
                                             <Divider className='my-1' />
                                             <Flex gap={3} align='center'>
-                                                <Image src='/assets/icons/reyal.png' preview={false} width={20} />
+                                                <Image src='/assets/icons/reyal.png' alt='currency-symbol' preview={false} width={20} />
                                                 <Title level={4} className='m-0'>
                                                     {pro?.price}
                                                 </Title>

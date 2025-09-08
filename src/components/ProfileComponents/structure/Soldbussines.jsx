@@ -33,12 +33,12 @@ const Soldbussines = () => {
                                 <Flex vertical gap={20}>
                                     <Flex justify='space-between' align='center'>
                                          <Flex gap={4}>
-                                            <Button className='fs-13'>
+                                            <Button aria-labelledby='Category name' className='fs-13'>
                                                 {pro?.category?.name}
                                             </Button>
                                             {
                                                 pro?.isByTakbeer !== undefined && (
-                                                    <Button className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}>
+                                                    <Button aria-labelledby='type' className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}>
                                                     {pro.isByTakbeer ? 'Taqbeel' : 'Direct'}
                                                     </Button>
                                                 )
@@ -57,7 +57,7 @@ const Soldbussines = () => {
                                     </Flex>
                                     <div>
                                         <div className='w-full card-img mb-2 rounded-12'>
-                                            <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="" />
+                                            <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" />
                                         </div>
                                         <Title className='' level={5}>
                                             {pro?.title}
@@ -91,7 +91,7 @@ const Soldbussines = () => {
                                         </Row>
                                         <Divider className='my-1' />
                                         <Flex gap={3} align='center'>
-                                            <Image src='/assets/icons/reyal.png' preview={false} width={20} />
+                                            <Image src='/assets/icons/reyal.png' alt='currency-symbol' preview={false} width={20} />
                                             <Title level={4} className='m-0'>
                                                 {pro?.price}
                                             </Title>

@@ -55,7 +55,7 @@ const BrowseType = () => {
                     }
                     <Col span={24}>
                         <Flex justify='center'>
-                            <Button className='btn bg-brand'>
+                            <Button aria-labelledby='Explore More Categories' className='btn bg-brand'>
                                 Explore More Categories <RightOutlined className='fs-10' />
                             </Button>
                         </Flex>

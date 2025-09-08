@@ -63,7 +63,7 @@ const SellerOfferTable = ({data}) => {
             render: (row,record) => {
                 return (
                     <Flex gap={10} align="center">
-                        SAR {row}
+                        <img src="/assets/icons/reyal-b.png" width={12} alt="currency-symbol" /> {row}
                         {// here if offerdata?.parentOffer?.id then it will be child offer else parent offer
                             record?.isProceedToPay ?
                                 <Tooltip title="CO - Counteroffer">
@@ -153,8 +153,8 @@ const SellerOfferTable = ({data}) => {
 
                 return (
                     <Dropdown menu={{ items }} trigger={['click']}>
-                        <Button className="bg-transparent border-0 p-0">
-                            <img src="/assets/icons/dots.png" alt="" width={16} />
+                        <Button aria-labelledby='dropdown icon' className="bg-transparent border-0 p-0">
+                            <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} />
                         </Button>
                     </Dropdown>
                 );
@@ -190,7 +190,7 @@ const SellerOfferTable = ({data}) => {
                         <SearchInput
                             placeholder="Search"
                             value={form.getFieldValue('name') || ''}
-                            prefix={<img src="/assets/icons/search.png" style={{ marginInline: 3 }} width={12} />}
+                            prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{ marginInline: 3 }} width={12} />}
                         />
                         <Dropdown
                             menu={{
@@ -199,7 +199,7 @@ const SellerOfferTable = ({data}) => {
                             }}
                             trigger={['click']}
                         >
-                            <Button className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
+                            <Button aria-labelledby='Status filter' className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
                                 <Flex justify='space-between' className='w-100' gap={10}>
                                     {
                                         filterstatus === '1' ? 'Received' :
@@ -216,7 +216,7 @@ const SellerOfferTable = ({data}) => {
                             }}
                             trigger={['click']}
                         >
-                            <Button className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
+                            <Button aria-labelledby='Offer type' className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
                                 <Flex justify='space-between' className='w-100' gap={10}>
                                     {
                                         filtertype === '1' ? 'Counter Offer' :

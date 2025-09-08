@@ -50,10 +50,10 @@ const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings,busi
             centered
             footer={
                 <Flex justify='end' gap={5}>
-                    <Button type='button' className='btn text-black border-gray' onClick={onClose}>
+                    <Button aria-labelledby='Cancel' type='button' className='btn text-black border-gray' onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button type="primary" className='btn bg-brand' onClick={()=>form.submit()}>
+                    <Button aria-labelledby='Send Meeting Request' type="primary" className='btn bg-brand' onClick={()=>form.submit()}>
                         Send Meeting Request
                     </Button>
                 </Flex>
@@ -66,7 +66,7 @@ const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings,busi
                     <Title level={5} className='m-0'>
                         Schedule Virtual Meeting
                     </Title>
-                    <Button type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
+                    <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
                     </Button>
                 </Flex>                

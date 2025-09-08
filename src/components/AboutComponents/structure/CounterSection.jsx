@@ -4,7 +4,7 @@ import { countData } from "../../../data";
 import CountUp from "react-countup";
 import { useRef } from "react";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 const CounterSection = () => {
 
     const targetRef = useRef(null);

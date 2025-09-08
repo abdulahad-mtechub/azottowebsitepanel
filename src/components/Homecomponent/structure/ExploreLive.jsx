@@ -28,28 +28,28 @@ const ExploreLive = () => {
                                     <Flex vertical gap={20}>
                                         <Flex justify='space-between' align='center'>
                                             <Flex gap={4}>
-                                                <Button className='fs-13'>
+                                                <Button className='fs-13' aria-labelledby='Restaurant'>
                                                     Restaurant
                                                 </Button>
                                                 {
                                                     pro?.type &&
-                                                    <Button className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                                    <Button aria-labelledby='type' className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
                                                         {pro?.type}
                                                     </Button>
                                                 }
                                             </Flex>
-                                            <Button className='border-0 bg-transparent p-0'>
+                                            <Button className='border-0 bg-transparent p-0' aria-labelledby='bookmarked button'>
                                                 {
                                                     pro?.save === 'yes' ?
-                                                    <img src='/assets/icons/bk-bl-d.png' width={22}/> :
-                                                    <img src='/assets/icons/bk-bl.png' width={22}/>
+                                                    <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} />: 
+                                                    <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} />
                                                 }
                                             </Button>
                                             
                                         </Flex>
                                         <div>
                                             <div className='w-full card-img mb-2 rounded-12'>
-                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="" />
+                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" />
                                             </div>
                                             <Title className='' level={5}>
                                                 {pro?.title}
@@ -68,7 +68,7 @@ const ExploreLive = () => {
                                                             <Col span={7}>
                                                                 <Flex vertical>
                                                                     <Text className='text-brand fw-500 m-0 fs-13'>
-                                                                        <img src="/assets/icons/reyal-b.png" width={8} alt="" /> {item?.subtitle}
+                                                                        <img src="/assets/icons/reyal-b.png" width={8} alt="currency-symbol" /> {item?.subtitle}
                                                                     </Text>
                                                                     <Text className='text-gray fs-12'>
                                                                         {item?.subdesc}
@@ -99,7 +99,7 @@ const ExploreLive = () => {
                     } 
                     <Col span={24}>
                         <Flex justify='center'>
-                            <Button className='btn bg-brand'>
+                            <Button className='btn bg-brand' aria-labelledby='Browse Businesses'>
                                 Browse Businesses <RightOutlined className='fs-10' />
                             </Button>
                         </Flex>

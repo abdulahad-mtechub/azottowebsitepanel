@@ -18,7 +18,7 @@ const ArticleSingleView = () => {
                             <Col span={24}>
                                 <Flex vertical gap={15}>
                                     <Flex vertical align='flex-start' gap={5}>
-                                        <Button className='border-0 p-0 bg-transparent' onClick={()=>navigate(-1)}>
+                                        <Button aria-labelledby='Arrow left' className='border-0 p-0 bg-transparent' onClick={()=>navigate(-1)}>
                                             <ArrowLeftOutlined />
                                         </Button>
                                         <Title className='m-0' level={2}>
@@ -32,7 +32,7 @@ const ArticleSingleView = () => {
                                 <Card className='h-100 border-gray rounded-12 card-cs'>
                                     <Flex vertical gap={15}>
                                         <div className='w-full h-400 mb-2 rounded-12 overflow-hidden'>
-                                            <img src={data?.img} width={'100%'} height={'100%'} className='object-cover object-top' alt="" />
+                                            <img src={data?.img} width={'100%'} height={'100%'} className='object-cover object-top' alt="article-banner" />
                                         </div>
                                         <Paragraph className='fs-14 text-gray'>
                                             When selling a business, confidentiality is paramount. Non-disclosure agreements (NDAs) are essential legal documents that protect sensitive information during the sale process. This comprehensive guide explains everything you need to know about NDAs in business sales.

@@ -1,10 +1,10 @@
 import React,{useState,useEffect} from 'react'
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
-const { Title, Text } = Typography
 import {GETFAVORITBUSINESS } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 
+const { Title, Text } = Typography
 const Favoritbussines = () => {
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
@@ -27,12 +27,12 @@ const Favoritbussines = () => {
                                 <Flex vertical gap={20}>
                                     <Flex justify='space-between' align='center'>
                                          <Flex gap={4}>
-                                            <Button className='fs-13'>
+                                            <Button aria-labelledby='Category name' className='fs-13'>
                                                 {pro?.category?.name}
                                             </Button>
                                             {
                                                 pro?.isByTakbeer !== undefined && (
-                                                    <Button className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}>
+                                                    <Button aria-labelledby='type' className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}>
                                                     {pro.isByTakbeer ? 'Taqbeel' : 'Direct'}
                                                     </Button>
                                                 )
@@ -51,7 +51,7 @@ const Favoritbussines = () => {
                                     </Flex>
                                     <div>
                                         <div className='w-full card-img mb-2 rounded-12'>
-                                            <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="" />
+                                            <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" />
                                         </div>
                                         <Title className='' level={5}>
                                             {pro?.title}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography,Spin } from 'antd'
 import { useNavigate, useParams } from 'react-router-dom';
 import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../data';
@@ -12,6 +12,30 @@ const SingleViewlisting = () => {
     const [form] = Form.useForm(); 
     const { id } = useParams()
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const footer = document.getElementById("footer");
+
+        const handleResize = () => {
+            if (footer) {
+            if (window.innerWidth <= 768) {
+                footer.classList.add("footer-add-150");
+            } else {
+                footer.classList.remove("footer-add-150");
+            }
+            }
+        };
+
+        handleResize(); // run on mount
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            if (footer) footer.classList.remove("footer-add-150");
+        };
+    }, []);
+
+
     // const business = exploreData?.find((item)=>item?.id == id)
     const { data:businessData, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
         variables: { getBusinessByIdId: id },
@@ -33,7 +57,7 @@ const SingleViewlisting = () => {
         name: item.name,
         items: item.quantity,
         purchaseyear: item.purchaseYear,
-        price: `SAR ${item?.price.toLocaleString()}`,
+        price: item?.price.toLocaleString(),
     }));
       
     const assetsData = business?.assets?.map((item, index) => ({
@@ -41,7 +65,7 @@ const SingleViewlisting = () => {
         name: item.name,
         items: item.quantity,
         purchaseyear: item?.purchaseYear,
-        price: `SAR ${item?.price.toLocaleString()}`,
+        price: item?.price.toLocaleString(),
     }));
       
     const inventoryData = business?.inventoryItems?.map((item, index) => ({
@@ -49,7 +73,7 @@ const SingleViewlisting = () => {
         name: item.name,
         items: item.quantity,
         purchaseyear: item.purchaseYear,
-        price: `SAR ${item.price?.toLocaleString()}`,
+        price: item.price?.toLocaleString(),
     }));
 
     const { data:graphData, loading:graphLoading, error:graphError } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
@@ -64,6 +88,10 @@ const SingleViewlisting = () => {
             </Flex>
         );
     }
+
+
+    
+
     return (
         <div className='padd-1 relative'>
             <div className='container'>
@@ -110,7 +138,7 @@ const SingleViewlisting = () => {
                                         </Title>
                                         {
                                             businessData?.type &&
-                                            <Button className={`fs-12 border-0 text-white ${businessData.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                            <Button aria-labelledby='Business Type' className={`fs-12 border-0 text-white ${businessData.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
                                                 {businessData?.type}
                                             </Button>
                                         }

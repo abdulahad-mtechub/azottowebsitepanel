@@ -1,4 +1,3 @@
-import React from 'react'
 import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography } from 'antd'
 import {GET_BUSINESS } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
@@ -65,7 +64,7 @@ const { data:business, loading:businessLoading, error:businessError } = useQuery
                             </Col>
                             <Col span={24}>
                                 <Flex>
-                                    <Button type="primary" className='btn bg-brand'>
+                                    <Button aria-labelledby='Notify Jusoor a Finalize' type="primary" className='btn bg-brand'>
                                         Notify Jusoor to Finalize
                                     </Button>
                                 </Flex>

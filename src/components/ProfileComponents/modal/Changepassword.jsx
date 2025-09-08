@@ -43,7 +43,7 @@ const Changepassword = ({ visible, onClose }) => {
         closeIcon={false}
         footer={
           <Flex justify="end" gap={5}>
-            <Button type="button" className="btn text-black border-gray" onClick={onClose}>
+            <Button aria-labelledby='Cancel' type="button" className="btn text-black border-gray" onClick={onClose}>
               Cancel
             </Button>
             <Button
@@ -51,6 +51,7 @@ const Changepassword = ({ visible, onClose }) => {
               className="btn bg-brand"
               loading={loading}
               onClick={() => form.submit()}
+              aria-labelledby='Confirm'
             >
               Confirm
             </Button>
@@ -63,7 +64,7 @@ const Changepassword = ({ visible, onClose }) => {
             <Title level={5} className="m-0">
               Change Password
             </Title>
-            <Button type="button" onClick={onClose} className="p-0 border-0 bg-transparent">
+            <Button aria-labelledby='Close' type="button" onClick={onClose} className="p-0 border-0 bg-transparent">
               <CloseOutlined className="fs-14" />
             </Button>
           </Flex>

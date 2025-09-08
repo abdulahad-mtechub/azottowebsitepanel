@@ -174,7 +174,8 @@ a{
     opacity: 0;
     visibility: hidden;
     list-style: none;
-    transform: translateX(376px);
+    /* transform: translateX(376px); */
+    transform: translateX(297px);
 }
 
 .dropdown .drop-item:hover .sub-dropdown {

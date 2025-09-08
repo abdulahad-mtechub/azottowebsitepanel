@@ -146,8 +146,8 @@ const BuyerOfferContent = () => {
           
                 return (
                   <Dropdown menu={{ items }} trigger={['click']}>
-                    <Button className="bg-transparent border-0 p-0">
-                      <img src="/assets/icons/dots.png" alt="" width={16} />
+                    <Button aria-labelledby='dropdown icon' className="bg-transparent border-0 p-0">
+                      <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} />
                     </Button>
                   </Dropdown>
                 );
@@ -192,7 +192,7 @@ const BuyerOfferContent = () => {
                                 <SearchInput
                                     placeholder="Search"
                                     value={form.getFieldValue('name') || ''}
-                                    prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                                    prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} />}
                                 />
                                 </Form.Item>
                                 <Dropdown
@@ -202,7 +202,7 @@ const BuyerOfferContent = () => {
                                     }}
                                     trigger={['click']}
                                 >
-                                    <Button className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
+                                    <Button aria-labelledby='status filter' className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
                                         <Flex justify='space-between' className='w-100' gap={10}>
                                             {
                                                 filterstatus === '1' ? 'Received' :

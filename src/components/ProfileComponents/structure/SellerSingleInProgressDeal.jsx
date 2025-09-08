@@ -3,7 +3,6 @@ import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps'
 import { GETDEAL, ME } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import React from 'react'
 import Cookies from "js-cookie";
 
 const { Title, Text } = Typography
@@ -74,7 +73,7 @@ const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
             />
         </Flex>
         <Flex gap={15} align='center'>
-            <Button className='border-0 p-0 bg-transparent' onClick={() => setInprogressDeal(null)}>
+            <Button aria-labelledby='Arrow left' className='border-0 p-0 bg-transparent' onClick={() => setInprogressDeal(null)}>
                 <ArrowLeftOutlined />
             </Button>
             <Title level={4} className='m-0'>

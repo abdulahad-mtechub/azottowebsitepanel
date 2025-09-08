@@ -49,7 +49,7 @@ const SellerCompleteDeal = ({setCompleteDeal, completedeal}) => {
                     <SearchInput
                         placeholder="Search"
                         value={form.getFieldValue('name') || ''}
-                        prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                        prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} />}
                     />
                 </Form.Item>
                 </Col>
@@ -74,7 +74,7 @@ const SellerCompleteDeal = ({setCompleteDeal, completedeal}) => {
                             pageSize: pagination.pageSize,
                             total: offerDeals?.getSellerCompletedDeals?.length || 0,
                             showTotal: (total) => (
-                                <Button className="brand-bg">Total: {total}</Button>
+                                <Button aria-labelledby='Total' className="brand-bg">Total: {total}</Button>
                                 ),
                                 onChange: (page, pageSize) => {
                                 setPagination({ current: page, pageSize });

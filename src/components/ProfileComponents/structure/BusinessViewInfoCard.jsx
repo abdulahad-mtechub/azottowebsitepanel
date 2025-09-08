@@ -1,7 +1,7 @@
 import { Card, Col, Flex, Image, Row, Typography } from 'antd'
 
 const { Title, Text } = Typography
-const BusinessVuewInfoCard = ({data}) => {
+const BusinessViewInfoCard = ({data}) => {
 
     const businessInfoData = [
         {
@@ -13,7 +13,7 @@ const BusinessVuewInfoCard = ({data}) => {
         {
             id: 2,
             icon:'/assets/icons/businessprice.png',
-            title:`SAR ${data?.price?.toLocaleString() || '0'}`,
+            title: <> <img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data?.price?.toLocaleString() || '0'}</>,
             subtitle:'Business Price'
         },
         {
@@ -50,7 +50,7 @@ const BusinessVuewInfoCard = ({data}) => {
                                 </div>
                                 <Flex vertical gap={2}>
                                     <Title level={5} className={`m-0 'text-brand'${info.id === 1 ? 'text-green':null}`}>
-                                        {info?.title}
+                                        {info?.id === 2 && <img src="/assets/icons/reyal.png" width={14} alt="currency-symbol" />} {info?.title}
                                     </Title>
                                     <Text className='text-gray fs-12 fw-500'>
                                         {info?.subtitle}
@@ -67,4 +67,4 @@ const BusinessVuewInfoCard = ({data}) => {
     )
 }
 
-export { BusinessVuewInfoCard }
+export { BusinessViewInfoCard }

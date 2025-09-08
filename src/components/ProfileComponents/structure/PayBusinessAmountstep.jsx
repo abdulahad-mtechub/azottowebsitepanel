@@ -91,7 +91,7 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
                 !inprogressdeal && (
                     <Col span={24}>
                         <Flex>
-                            <Button type="primary" className='btn bg-brand'>
+                            <Button aria-labelledby='Submit Payment' type="primary" className='btn bg-brand'>
                                 Submit Payment
                             </Button>
                         </Flex>

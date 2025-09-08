@@ -1,8 +1,7 @@
-import { Card, Col, Flex, Form, Row, Table, Typography } from 'antd'
+import { Col, Form, Row, Table } from 'antd'
 import { adminsechedulingData } from '../../../data';
 import { SearchInput } from '../../Forms';
 
-const { Text } = Typography
 const AdminSchedulingTable = () => {
 
     const [form] = Form.useForm()
@@ -22,7 +21,7 @@ const AdminSchedulingTable = () => {
                 <SearchInput
                     placeholder="Search"
                     value={form.getFieldValue('name') || ''}
-                    prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} />}
+                    prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} alt='search-icon' />}
                 />
             </Col>
             <Col span={24}>

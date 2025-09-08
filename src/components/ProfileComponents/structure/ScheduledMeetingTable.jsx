@@ -1,8 +1,8 @@
-import { Card, Col, Flex, Form, Row, Table, Typography } from 'antd'
+import { Col, Form, Row, Table } from 'antd'
 import { scheduledData } from '../../../data';
 import { SearchInput } from '../../Forms';
 import { NavLink } from 'react-router-dom';
-const { Text } = Typography
+
 const ScheduledMeetingTable = () => {
     const [form] = Form.useForm()
 
@@ -29,7 +29,7 @@ const ScheduledMeetingTable = () => {
                 <SearchInput
                     placeholder="Search"
                     value={form.getFieldValue('name') || ''}
-                    prefix={<img src="/assets/icons/search.png" style={{ marginInline: 3 }} width={12} />}
+                    prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{ marginInline: 3 }} width={12} />}
                 />
             </Col>
             <Col span={24}>

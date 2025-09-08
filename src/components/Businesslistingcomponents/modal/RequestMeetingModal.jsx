@@ -85,16 +85,16 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
         >  {contextHolder}
             <div className="step-content mb-3">{steps[current].content}</div>
             <Flex gap={10} justify='end'>
-                <Button disabled={current > 0 ? false: true} className='btn text-black border-gray' onClick={prev}>
+                <Button aria-labelledby='Previous' disabled={current > 0 ? false: true} className='btn text-black border-gray' onClick={prev}>
                     Previous
                 </Button>
                 {current < steps.length - 1 && (
-                    <Button type="primary" className='btn bg-brand' onClick={next}>
+                    <Button type="primary" aria-labelledby='Next' className='btn bg-brand' onClick={next}>
                         Next
                     </Button>
                 )}
                 {current === steps.length - 1 && (
-                    <Button type="primary" className='btn bg-brand'
+                    <Button type="primary" aria-labelledby='Send meeting request' className='btn bg-brand'
                     onClick={async () => {
                         try {
                           const values = await form.validateFields();

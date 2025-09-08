@@ -13,10 +13,10 @@ const BusinesslistingReviewModal = ({visible,onClose,onCreate}) => {
         closeIcon={false}
         footer={
             <Flex justify='center' gap={5}>
-                <Button type='button' className='btn text-black border-gray' onClick={()=>{onClose();navigate('/')}}>
+                <Button aria-labelledby='Back to Home' type='button' className='btn text-black border-gray' onClick={()=>{onClose();navigate('/')}}>
                     Back to Home
                 </Button>
-                <Button type="primary" className='btn bg-brand' onClick={()=>{onClose();navigate('/sellbusinesscreate')}}>
+                <Button aria-labelledby='Create new list' type="primary" className='btn bg-brand' onClick={()=>{onClose();navigate('/sellbusinesscreate')}}>
                     Create new list
                 </Button>
             </Flex>
@@ -24,7 +24,7 @@ const BusinesslistingReviewModal = ({visible,onClose,onCreate}) => {
       > 
 
         <Flex vertical align='center' className='text-center' gap={6}>
-            <img src='/assets/icons/complete.png' width={50} />
+            <img src='/assets/icons/complete.png' alt='complete-status-icon' width={50} />
             <Title level={4} className='m-0'>
                 Business Listing Under Review
             </Title>

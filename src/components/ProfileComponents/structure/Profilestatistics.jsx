@@ -8,8 +8,8 @@ const Profilestatistics = ({data, title}) => {
         <Card className='rounded-12  border-gray'>
             <Flex justify='space-between'>
                 <ModuleTopHeading level={4} name={title}/>
-                <Button type='button' className='bg-transparent border-gray'>
-                    <img src='/assets/icons/calendar.png' width={20} /> 01/02/2025 - 30/02/2025
+                <Button aria-labelledby='Calendar icon' type='button' className='bg-transparent border-gray'>
+                    <img src='/assets/icons/calendar.png' alt='calendar-icon' width={20} /> 01/02/2025 - 30/02/2025
                 </Button>
             </Flex>
             <Row gutter={[16, 16]} className='mt-2'>
@@ -18,7 +18,7 @@ const Profilestatistics = ({data, title}) => {
                         <Col lg={{span: 8}} md={{span: 12}} sm={{span: 12}} xs={{span: 12}} key={i}>
                                 <Card className='h-100 border-gray rounded-12' >
                                     <Flex vertical gap={15}>
-                                        <Image src={data?.img} preview={false} width={40} />
+                                        <Image src={data?.img} alt='icon' preview={false} width={40} />
                                         <div>
                                             <Text className='fs-14 text-gray'>
                                                 {data?.title}

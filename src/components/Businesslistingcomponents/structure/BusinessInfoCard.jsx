@@ -20,7 +20,7 @@ const BusinessInfoCard = ({data}) => {
         {
             id: 2,
             icon:'/assets/icons/businessprice.png',
-            title:`SAR ${data?.price?.toLocaleString() || '0'}`,
+            title:`${data?.price?.toLocaleString() || '0'}`,
             subtitle:'Business Price'
         },
         {
@@ -67,7 +67,7 @@ const BusinessInfoCard = ({data}) => {
                                     </div>
                                     <Flex vertical gap={2}>
                                         <Title level={5} className={`m-0 ${stat.id === 1 ? 'text-green':'text-brand'}`}>
-                                            {stat?.title}
+                                            {stat.id === 2 &&<img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" />} {stat?.title}
                                         </Title>
                                         <Text className='text-gray fs-12 fw-500'>
                                             {stat?.subtitle}
@@ -83,11 +83,11 @@ const BusinessInfoCard = ({data}) => {
                     {data?.seller?.id !== userId && (
                     <Col span={24}>
                     <Flex vertical gap={5}>
-                        <Button className='btn bg-brand' 
+                        <Button className='btn bg-brand' aria-labelledby='Make an Offer'
                         onClick={()=> handleAction(() => { setOfferMode("offer"); setOfferSeller(true); })}>
                             Make an Offer</Button>
-                        <Button className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>Request Meeting</Button>
-                        <Button className='btn bg-green text-white' 
+                        <Button aria-labelledby='Request Meeting' className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>Request Meeting</Button>
+                        <Button aria-labelledby='Proceed to Purchase' className='btn bg-green text-white' 
                         onClick={()=> handleAction(() => { setOfferMode("proceed"); setOfferSeller(true); })}>Proceed to Purchase</Button>
                     </Flex>
                     </Col>

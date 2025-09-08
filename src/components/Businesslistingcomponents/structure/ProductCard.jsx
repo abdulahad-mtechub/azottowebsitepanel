@@ -75,6 +75,7 @@ const ProductCard = ({
                                 </Tag>
                                 </Flex>
                                 <Button 
+                                    aria-labelledby='bookmarked-btn'
                                     className='border-0 bg-transparent p-0'
                                     onClick={(e) => {
                                         e.stopPropagation(); // stop card navigation
@@ -83,14 +84,14 @@ const ProductCard = ({
                                     >
                                     {
                                         pro?.isSaved
-                                        ? <img src='/assets/icons/bk-bl-d.png' width={22} />
-                                        : <img src='/assets/icons/bk-bl.png' width={22} />
+                                        ? <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} />
+                                        : <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} />
                                     }
                                 </Button>
                             </Flex>
                             <div>
                                 <div className='w-full card-img mb-2 rounded-12'>
-                                    <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="" />
+                                    <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" />
                                 </div>
                                 <Title className='' level={5}>
                                     {pro?.title}
@@ -111,7 +112,7 @@ const ProductCard = ({
                                                 <Col span={7}>
                                                     <Flex vertical>
                                                     <Title level={5} className='text-brand m-0 fs-13 fw-500'>
-                                                        <img src="/assets/icons/reyal-b.png" width={10} alt="" /> {item?.subtitle}
+                                                        <img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" /> {item?.subtitle}
                                                     </Title>
                                                     <Text className='text-gray fs-12'>
                                                         {item?.subdesc}
@@ -129,7 +130,7 @@ const ProductCard = ({
                                 </Row>
                                 <Divider className='my-1' />
                                 <Flex gap={3} align='center'>
-                                    <Image src='/assets/icons/reyal.png' preview={false} width={20} />
+                                    <Image src='/assets/icons/reyal.png' alt='currency-symbol' preview={false} width={20} />
                                     <Title level={4} className='m-0'>
                                         {pro?.amount}
                                     </Title>

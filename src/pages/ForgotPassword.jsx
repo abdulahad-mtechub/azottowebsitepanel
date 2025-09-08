@@ -64,17 +64,17 @@ const ForgotPassword = () => {
         <Row className="signup-page">
             <Col xs={24} sm={24} md={14} lg={16} className="signup-form-container">
                 <div className="form-inner">
-                    <Button shape="circle" onClick={()=>navigate('/')}>
+                    <Button aria-labelledby='Arrow left' shape="circle" onClick={()=>navigate('/')}>
                       <ArrowLeftOutlined />
                     </Button>
                     <NavLink to={'/'}>
                       <div className="logo">
-                        <img src="/assets/images/logo-1.png" style={{ height: "70px" }} />
+                        <img src="/assets/images/logo-1.png" alt="jusoor-logo" style={{ height: "70px" }} />
                       </div>
                     </NavLink>
                     <div>
                         {requestState === 'otp' && 
-                            <Button type='button' onClick={()=>setRequestState('request')} ghost className="text-black fs-18 p-0 border-0"><ArrowLeftOutlined /></Button>
+                            <Button aria-labelledby='Arrow left' type='button' onClick={()=>setRequestState('request')} ghost className="text-black fs-18 p-0 border-0"><ArrowLeftOutlined /></Button>
                         }
                     </div>
                     <Title level={3}>
@@ -178,7 +178,7 @@ const ForgotPassword = () => {
                             </>
                             )}
                         <Col span={24}>
-                            <Button htmlType="submit" className="btn bg-dark-blue fs-16" block onClick={forgotpass}>
+                            <Button aria-labelledby='Forgot state button' htmlType="submit" className="btn bg-dark-blue fs-16" block onClick={forgotpass}>
                                 {requestState === 'request' && 'Next'}
                                 {requestState === 'otp' && 'Verify OTP'}
                                 {requestState === 'reset' && 'Reset Password'}
@@ -207,6 +207,7 @@ const ForgotPassword = () => {
                   <Button
                     onClick={(e) => e.preventDefault()}
                     className="bg-transparent btn-outline btn p-2 border-white"
+                    aria-labelledby='Language button'
                   >
                     <Space align="center">
                       <Image
@@ -226,7 +227,7 @@ const ForgotPassword = () => {
                         <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
                     </Flex>
                     <div className="bg-shade">
-                        <img src="/assets/images/login.gif" alt="Signup Visual" style={{ width: "100%",opacity:.7 }} />
+                        <img src="/assets/images/login.gif" alt="jusoor-gif-image" style={{ width: "100%",opacity:.7 }} />
                     </div>
                 </Flex>
             </Col>

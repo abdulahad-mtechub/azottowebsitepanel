@@ -1,5 +1,5 @@
 import { useRive } from '@rive-app/react-canvas';
-import { Card, Col, Flex, Image, Row, Typography } from 'antd'
+import { Card, Col, Flex, Row, Typography } from 'antd'
 
 const { Text, Title } = Typography
 const Buyework = () => {
