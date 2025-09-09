@@ -103,11 +103,11 @@ const Footer = () => {
                 </Col>
                 <Col lg={{span: 12}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
                     <Flex  align='items-center' className='w-100 lastlink' gap={20}>
-                        <NavLink to={''} className='fs-12 text-white'>
+                        <NavLink to={'/termofuse'} className='fs-12 text-white'>
                             Term of use
                         </NavLink>
                         <span className='text-brand'> | </span>
-                        <NavLink to={''} className='fs-12 text-white'>
+                        <NavLink to={'/privacypolicy'} className='fs-12 text-white'>
                             Privacy Policy
                         </NavLink>
                     </Flex>

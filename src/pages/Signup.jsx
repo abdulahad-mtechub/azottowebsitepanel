@@ -380,7 +380,7 @@ const SignupPage = () => {
         <>
         {contextHolder}
         <Row className="signup-page" >
-            <Col xs={24} sm={24} md={14} lg={16}>
+            <Col xs={24} sm={24} md={12} lg={16}>
                 <div className="signup-form-container ">
                     <div className="form-inner">
                         <Button aria-labelledby='Arrow left' shape="circle" onClick={()=>navigate('/')}>

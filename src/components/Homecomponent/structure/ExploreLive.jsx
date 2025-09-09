@@ -20,7 +20,7 @@ const ExploreLive = () => {
                                 Businesses Currently <span className='text-brand'>Available for Sale</span>
                             </Title>
                             <Text className='fs-14 d-inline'>
-                                Discover a curated selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more
+                                Discover a created selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more
                             </Text>
                         </Flex>
                     </Col>
@@ -71,7 +71,7 @@ const ExploreLive = () => {
                                                             <Col span={7}>
                                                                 <Flex vertical>
                                                                     <Text className='text-brand fw-500 m-0 fs-13'>
-                                                                        <img src="/assets/icons/reyal-b.png" width={8} alt="currency-symbol" /> {item?.subtitle}
+                                                                        {item?.id !== 3 && <img src="/assets/icons/reyal-b.png" width={8} alt="currency-symbol" />} {item?.subtitle}
                                                                     </Text>
                                                                     <Text className='text-gray fs-12'>
                                                                         {item?.subdesc}

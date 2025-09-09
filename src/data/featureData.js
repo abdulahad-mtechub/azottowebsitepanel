@@ -310,11 +310,11 @@ const footerlinkData = [
             //     name: 'Industrial Businesses',
             //     path: '/businesslisting'
             // },
-            {
-                id: 11,
-                name: 'All',
-                path: '/businesslisting'
-            },
+            // {
+            //     id: 11,
+            //     name: 'All',
+            //     path: '/businesslisting'
+            // },
         ]
     },
     {

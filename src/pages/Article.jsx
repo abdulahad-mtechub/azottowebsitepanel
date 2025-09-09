@@ -40,7 +40,7 @@ const Article = () => {
                     <div className='container'>
                         <Row gutter={[24, 12]} justify={'center'}>
                             <Col span={24} className='mb-3'>
-                                <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
+                                <Flex vertical justify='center' align='center' gap={15}>
                                     <div className='tag bg-secondary fw-500 text-brand'>Articles</div>
                                     <Title className='m-0' level={2}>
                                         Insights & Ideas to Help You Make <span className='text-brand'>Better Business Decisions</span>
