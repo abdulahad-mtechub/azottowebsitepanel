@@ -380,7 +380,7 @@ const SignupPage = () => {
         <>
         {contextHolder}
         <Row className="signup-page" >
-            <Col xs={24} sm={24} md={14} lg={16}>
+            <Col xs={24} sm={24} md={12} lg={16}>
                 <div className="signup-form-container ">
                     <div className="form-inner">
                         <Button aria-labelledby='Arrow left' shape="circle" onClick={()=>navigate('/')}>
@@ -395,7 +395,7 @@ const SignupPage = () => {
                         <Paragraph>To ensure the safety of all users, we require identity verification before creating a seller account.</Paragraph>
 
                         <Button aria-labelledby='Sign Up via Nafath' className="btn bg-nafth fs-16" block>
-                            Signup via Nafath
+                            Sign Up via Nafath
                         </Button>
                         <Divider className="text-gray">Or</Divider>
 
@@ -441,12 +441,12 @@ const SignupPage = () => {
                                         htmlType="submit" 
                                         className="btn bg-dark-blue fs-14 my-2" 
                                         block>
-                                        Signup
+                                        Sign Up
                                     </Button>
                                 )}
                             </Flex>
                             <Paragraph className="text-center">
-                                Don't have an account? <NavLink to={'/login'}>Signin</NavLink>
+                                Don't have an account? <NavLink to={'/login'}>Sign In</NavLink>
                             </Paragraph>
                         </Form>
                     </div>
@@ -456,7 +456,7 @@ const SignupPage = () => {
             <Col
                 xs={0}
                 sm={0}
-                md={10}
+                md={12}
                 lg={8}
                 className="signup-visual-container"
             >

@@ -2,11 +2,13 @@ import { Row, Col, Image, Space, Typography, Divider, Flex, Button } from 'antd'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { footerlinkData } from '../../../data'
 import { WhatsAppOutlined } from '@ant-design/icons'
+import Cookies from "js-cookie";
 
 const { Title, Text } = Typography
 const Footer = () => {
 
     const navigate = useNavigate()
+    const userId = Cookies.get("userId");
   return (
     <div className='footer' id='footer'>
         <div className='container'>
@@ -58,14 +60,30 @@ const Footer = () => {
                 }
                 <Col lg={{span: 5}} md={{span: 24}} xs={{span: 24}} sm={{span: 24}}>
                     <Flex vertical gap={15}>
-                        <Title level={4} className='m-0 text-white'>Need more help?</Title>
+                        <Title level={4} className='m-0 text-white'>
+                            {
+                                userId ? 'Contact Us' : 'Need more help?'
+                            }
+                        </Title>
                         <Text className='fs-14 text-white'>
-                            Sign up to access support, tools, and verified listings.
+                            {
+                                userId ? 'Contact us to access support, tools, and verified listings.' : 'Sign up to access support, tools, and verified listings.'
+                            }
                         </Text>
                         <Flex>
-                            <Button type='primary' aria-labelledby='Sign Up' className='btn bg-brand' onClick={()=>navigate('/signup')}>
-                                Sign Up
-                            </Button>
+                            {
+                                userId ?
+                                <NavLink to={'tel:1233242442'} className='text-white'>
+                                    <Flex gap={5} align='center'>
+                                        <WhatsAppOutlined className='fs-18' />
+                                        12345667775
+                                    </Flex>
+                                </NavLink>
+                                :
+                                <Button type='primary' aria-labelledby='Sign Up' className='btn bg-brand' onClick={()=>navigate('/signup')}>
+                                    Sign Up
+                                </Button>
+                            }
                         </Flex>
                     </Flex>
                 </Col>
@@ -85,11 +103,11 @@ const Footer = () => {
                 </Col>
                 <Col lg={{span: 12}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
                     <Flex  align='items-center' className='w-100 lastlink' gap={20}>
-                        <NavLink to={''} className='fs-12 text-white'>
+                        <NavLink to={'/termofuse'} className='fs-12 text-white'>
                             Term of use
                         </NavLink>
                         <span className='text-brand'> | </span>
-                        <NavLink to={''} className='fs-12 text-white'>
+                        <NavLink to={'/privacypolicy'} className='fs-12 text-white'>
                             Privacy Policy
                         </NavLink>
                     </Flex>

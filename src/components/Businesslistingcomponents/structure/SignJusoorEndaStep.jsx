@@ -92,10 +92,10 @@ const SignJusoorEndaStep = ({form, onClose, user, }) => {
                 <Col span={24}>
                     <Flex vertical gap={5}>
                     <Form.Item name='ndaAgree' valuePropName='checked' className='m-0'>
-                        <Checkbox>I agree to the <Link to=''>Jusoor E-NDA Terms</Link></Checkbox>
+                        <Checkbox>I agree to the <Link to='/endapage'>Jusoor E-NDA Terms</Link></Checkbox>
                     </Form.Item>
                     <Form.Item name='termsAgree' valuePropName='checked' className='m-0'>
-                        <Checkbox>I accept Jusoor’s platform <Link to=''>Terms and Conditions</Link></Checkbox>
+                        <Checkbox>I accept Jusoor’s platform <Link to='/termofuse'>Terms and Conditions</Link></Checkbox>
                     </Form.Item>
                     <Form.Item name='commissionAgree' valuePropName='checked' className='m-0'>
                         <Checkbox>I agree to pay the platform commission if a deal is finalized</Checkbox>

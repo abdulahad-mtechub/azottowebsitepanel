@@ -2,9 +2,12 @@ import React from 'react'
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
 import { exploreData } from '../../../data/featureData'
 import { RightOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 
 const { Text, Title, Paragraph } = Typography
 const ExploreLive = () => {
+
+    const navigate = useNavigate()
 
     return (
         <div className='feature bg-light-brand'>
@@ -17,7 +20,7 @@ const ExploreLive = () => {
                                 Businesses Currently <span className='text-brand'>Available for Sale</span>
                             </Title>
                             <Text className='fs-14 d-inline'>
-                                Discover a curated selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more
+                                Discover a created selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more
                             </Text>
                         </Flex>
                     </Col>
@@ -68,7 +71,7 @@ const ExploreLive = () => {
                                                             <Col span={7}>
                                                                 <Flex vertical>
                                                                     <Text className='text-brand fw-500 m-0 fs-13'>
-                                                                        <img src="/assets/icons/reyal-b.png" width={8} alt="currency-symbol" /> {item?.subtitle}
+                                                                        {item?.id !== 3 && <img src="/assets/icons/reyal-b.png" width={8} alt="currency-symbol" />} {item?.subtitle}
                                                                     </Text>
                                                                     <Text className='text-gray fs-12'>
                                                                         {item?.subdesc}
@@ -99,7 +102,7 @@ const ExploreLive = () => {
                     } 
                     <Col span={24}>
                         <Flex justify='center'>
-                            <Button className='btn bg-brand' aria-labelledby='Browse Businesses'>
+                            <Button onClick={()=>navigate('/businesslisting')} className='btn bg-brand' aria-labelledby='Browse Businesses'>
                                 Browse Businesses <RightOutlined className='fs-10' />
                             </Button>
                         </Flex>

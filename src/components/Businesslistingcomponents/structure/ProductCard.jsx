@@ -62,17 +62,19 @@ const ProductCard = ({
                         <Flex vertical gap={20}>
                             <Flex justify='space-between' align='center'>
                                 <Flex gap={4}>
-                                <Tag color="default" className="fs-12">
-                                    {pro.categoryName}
-                                </Tag>
+                                    <Tag color="default" className="fs-12">
+                                        {
+                                            pro.categoryName.split(/\s+/).slice(0, 2).join(' ') + '...'
+                                        }
+                                    </Tag>
 
-                                {/* Type Tag */}
-                                <Tag 
-                                    className="fs-12 bg-brand"
-                                    color={pro.isByTakbeer ? "bg-black" : "bg-blue"} // blue if Taqbeel, cyan for Acquiring
-                                >
-                                    {pro.isByTakbeer ? "Taqbeel" : "Acquiring"}
-                                </Tag>
+                                    {/* Type Tag */}
+                                    <Tag 
+                                        className="fs-12 bg-brand"
+                                        color={pro.isByTakbeer ? "bg-black" : "bg-blue"} // blue if Taqbeel, cyan for Acquiring
+                                    >
+                                        {pro.isByTakbeer ? "Taqbeel" : "Acquiring"}
+                                    </Tag>
                                 </Flex>
                                 <Button 
                                     aria-labelledby='bookmarked-btn'
@@ -111,12 +113,12 @@ const ProductCard = ({
                                             <React.Fragment key={c}>
                                                 <Col span={7}>
                                                     <Flex vertical>
-                                                    <Title level={5} className='text-brand m-0 fs-13 fw-500'>
-                                                        <img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" /> {item?.subtitle}
-                                                    </Title>
-                                                    <Text className='text-gray fs-12'>
-                                                        {item?.subdesc}
-                                                    </Text>
+                                                        <Title level={5} className='text-brand m-0 fs-13 fw-500'>
+                                                            {c !== 2 && <img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" />} {item?.subtitle}
+                                                        </Title>
+                                                        <Text className='text-gray fs-12'>
+                                                            {item?.subdesc}
+                                                        </Text>
                                                     </Flex>
                                                 </Col>
                                                 {

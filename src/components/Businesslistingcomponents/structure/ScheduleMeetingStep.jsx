@@ -70,6 +70,7 @@ const ScheduleMeetingStep = ({form,onClose}) => {
                 </Col>
                 <Col span={24}>
                     <MyDatepicker
+                        timerangePicker
                         label='Meeting Time'
                         name='time'
                         className='w-100'

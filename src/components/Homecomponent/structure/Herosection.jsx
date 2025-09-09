@@ -1,10 +1,13 @@
 import { Row, Col, Typography, Flex, Button } from 'antd'
 import { RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
 
 const { Title, Text } = Typography;
 const Herosection = () => {
   const navigate = useNavigate();
+
+  const userId = Cookies.get("userId")
 
   return (
     <section className='hero'>
@@ -23,7 +26,7 @@ const Herosection = () => {
                 <Button aria-labelledby='Explore Businesses' className='btn bg-brand' onClick={() => navigate('/businesslisting')}>
                   Explore Businesses
                 </Button>
-                <Button aria-labelledby='Sell Your Business' className='btn bg-white text-dark' onClick={() => navigate('/sellbusinesscreate')}>
+                <Button aria-labelledby='Sell Your Business' className='btn bg-white text-dark' onClick={() => navigate(userId ? '/sellbusinesscreate': '/login')}>
                   Sell Your Business <RightOutlined className='fs-10' />
                 </Button>
               </Flex>
