@@ -267,22 +267,52 @@ const footerlinkData = [
             },
             {
                 id: 2,
-                name: 'Real Estate & Construction',
-                path: '/businesslisting'
-            },
-            {
-                id: 3,
                 name: 'Retail Services',
                 path: '/businesslisting'
             },
             {
-                id: 4,
+                id: 3,
                 name: 'Health, Beauty & Fitness',
                 path: '/businesslisting'
             },
             {
+                id: 4,
+                name: 'Automotive, Transportation & Logistics',
+                path: '/businesslisting'
+            },
+            {
                 id: 5,
-                name: 'Browse All Category',
+                name: 'Tech & Software',
+                path: '/businesslisting'
+            },
+            // {
+            //     id: 6,
+            //     name: 'Digital Businesses',
+            //     path: '/businesslisting'
+            // },
+            // {
+            //     id: 7,
+            //     name: 'Education Services',
+            //     path: '/businesslisting'
+            // },
+            // {
+            //     id: 8,
+            //     name: 'Consulting & Professional Services',
+            //     path: '/businesslisting'
+            // },
+            // {
+            //     id: 9,
+            //     name: 'Real Estate & Construction',
+            //     path: '/businesslisting'
+            // },
+            // {
+            //     id: 10,
+            //     name: 'Industrial Businesses',
+            //     path: '/businesslisting'
+            // },
+            {
+                id: 11,
+                name: 'All',
                 path: '/businesslisting'
             },
         ]

@@ -2,9 +2,12 @@ import React from 'react'
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
 import { exploreData } from '../../../data/featureData'
 import { RightOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
 
 const { Text, Title, Paragraph } = Typography
 const ExploreLive = () => {
+
+    const navigate = useNavigate()
 
     return (
         <div className='feature bg-light-brand'>
@@ -99,7 +102,7 @@ const ExploreLive = () => {
                     } 
                     <Col span={24}>
                         <Flex justify='center'>
-                            <Button className='btn bg-brand' aria-labelledby='Browse Businesses'>
+                            <Button onClick={()=>navigate('/businesslisting')} className='btn bg-brand' aria-labelledby='Browse Businesses'>
                                 Browse Businesses <RightOutlined className='fs-10' />
                             </Button>
                         </Flex>
