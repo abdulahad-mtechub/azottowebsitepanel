@@ -305,6 +305,26 @@ query GetOffersByUser($search: String, $status: String) {
   }
 }
 `
+
+const GETRANDOMBUSINESS = gql`
+query GetRandomBusinesses {
+  getRandomBusinesses {
+    id
+    category {
+      name
+    }
+    reference
+    businessTitle
+    description
+    price
+    isSaved
+    isSold
+    isByTakbeer
+    revenue
+    profit
+    recoveryTime
+  }
+}`
 export {
     GET_CATEGORIES,
     GET_CATEGORY,
@@ -317,5 +337,6 @@ export {
     GET_BUSINESS_BY_REVENUE,
     GET_BUSINESS_BY_DISTRICT,
     SIMILER_BUSINESS_CATEGORY_GRAPH,
-    GET_BUYER_OFFER
+    GET_BUYER_OFFER,
+    GETRANDOMBUSINESS
 }

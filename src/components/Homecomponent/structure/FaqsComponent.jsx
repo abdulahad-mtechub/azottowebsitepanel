@@ -1,14 +1,28 @@
 import { useState } from 'react'
-import { Col, Collapse, Flex, Row, Typography } from 'antd'
+import { Col, Collapse, Flex, Row, Typography ,Spin} from 'antd'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { faqsData } from '../../../data';
+import {GETFAQ} from '../../../graphql/query/queries'
+import { useQuery } from "@apollo/client";
 
 const { Text, Title } = Typography;
 const { Panel } = Collapse;
 const FaqsComponent = () => {
     const [currentPanel,setCurrentPanel]=useState(['0'])
-
-
+    const  {data, loading , error,refetch} = useQuery(GETFAQ,{
+        variables: { search: "" },
+    });
+    const faqsData = data?.getFAQs?.faqs?.map(item => ({
+        id: item.id,
+        title:item.question,
+        description: item.answer,
+    })) || [];
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
     return (
         <div className='feature '>
             <div className='container'>
