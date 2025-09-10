@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route,useLocation } from "react-router-dom";
 import { FloatButton } from 'antd';
 import { UpOutlined } from '@ant-design/icons';
-import { Aboutus, Article, ArticleSingleView, BusinessListingPage, Faqs, ForgotPassword, Home, LoginPage, ProfileDashboard, SellBusinessCreate, SignupPage, SingleViewlisting } from "../pages";
+import { Aboutus, Article, ArticleSingleView, BusinessListingPage, EndaPage, Faqs, ForgotPassword, Home, LoginPage, PrivacyPolicy, ProfileDashboard, SellBusinessCreate, SignupPage, SingleViewlisting } from "../pages";
 import { Footer, Navbar, ScrollTop,Singlebusinessview } from "../components";
 import { Termofuse } from "../pages";
 import { useEffect, useState } from "react";
@@ -47,6 +47,8 @@ const AppRoutes = () => {
         <Route path='/login' element={<LoginPage />} />
         <Route path='/signup' element={<SignupPage />} />
         <Route path='/forgotpass' element={<ForgotPassword />} />
+        <Route path='/privacypolicy' element={<PrivacyPolicy />} />
+        <Route path='/endapage' element={<EndaPage />} />
 
         <Route
           path='/profiledashboard'

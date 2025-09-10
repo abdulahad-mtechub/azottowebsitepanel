@@ -126,10 +126,10 @@ const MobileNavbar = ({ visible, onClose }) => {
                         <PlusOutlined /> Sell a Business
                     </Button>
                     <Button aria-labelledby='Sign Up' className='btn btn-outline w-100' onClick={()=>navigate('/signup')}>
-                        Sign up
+                        Sign Up
                     </Button>
                     <Button aria-labelledby='Login' className='btn bg-brand w-100' onClick={()=>navigate('/login')}>
-                        Login
+                        Sign In
                     </Button>
                 </Flex>
             </div>

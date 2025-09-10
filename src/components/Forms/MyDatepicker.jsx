@@ -1,6 +1,6 @@
 import { Form, TimePicker, DatePicker, Typography } from 'antd';
 import moment from 'moment';
-export const MyDatepicker = ({withoutForm, name, label, disabled, required, message, value, rangePicker, placeholder, datePicker, ...props }) => {
+export const MyDatepicker = ({withoutForm, name, label, disabled, required, message, value, rangePicker, placeholder, datePicker, timerangePicker, ...props }) => {
     return (
         <>
         {
@@ -24,7 +24,18 @@ export const MyDatepicker = ({withoutForm, name, label, disabled, required, mess
                         {...props}
                     /> 
                 :
-                <TimePicker
+                timerangePicker? 
+                <TimePicker.RangePicker 
+                    disabled={disabled || false}
+                    // value={moment(value || '00:00')}
+                    placeholder={placeholder}
+                    format='HH:mm A'
+                    style={{ width: '100%' }}
+                    {...props}
+                    className='fs-14 without-timeinput'
+                />
+                :
+                <TimePicker 
                     disabled={disabled || false}
                     // value={moment(value || '00:00')}
                     placeholder={placeholder}
@@ -63,6 +74,16 @@ export const MyDatepicker = ({withoutForm, name, label, disabled, required, mess
                     style={{ width: '100%' }}
                     {...props}
                 /> :
+                timerangePicker?
+                <TimePicker.RangePicker
+                    disabled={disabled || false}
+                    value={moment(value || '00:00')}
+                    format='HH:mm A'
+                    style={{ width: '100%' }}
+                    placeholder={placeholder}
+                    {...props}
+                />
+                :
                 <TimePicker
                     disabled={disabled || false}
                     value={moment(value || '00:00')}

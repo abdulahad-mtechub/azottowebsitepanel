@@ -289,7 +289,7 @@ const BusinessListingPage = ({getcategory}) => {
                 <Flex gap={10} justify='space-between' wrap align='center' className='mb-3'>
                     <Flex gap={5} align='center'>
                         <Title level={4} className='m-0'>
-                            {getcategory ? getcategory : 'Category Name'}
+                            {getcategory ? getcategory : 'All Businesses'}
                         </Title>
                         <Button aria-labelledby='Filter icon' type='button' onClick={()=>setIsFilter(true)} className='border-0 bg-transparent p-0 filter-btn'>
                             <img src='/assets/icons/filter.png' alt='filter-icon' width={20} />

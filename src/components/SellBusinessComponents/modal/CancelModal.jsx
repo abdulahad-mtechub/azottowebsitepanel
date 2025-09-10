@@ -8,6 +8,7 @@ const CancelModal = ({visible,onClose}) => {
         open={visible}
         onCancel={onClose}
         closeIcon={false}
+        centered
         footer={
             <Flex justify='center' gap={5}>
                 <Button aria-labelledby='Cancel' type='button' className='btn text-black border-gray'>

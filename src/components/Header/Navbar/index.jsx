@@ -242,7 +242,7 @@ const Navbar = ({setGetCategory}) => {
                             src='/assets/icons/notification.png' 
                             width={'28px'} 
                             preview={false}
-                            alt="tci" 
+                            alt="notification icon" 
                             className="up"
                           />
                         </Button>
@@ -393,7 +393,7 @@ const Navbar = ({setGetCategory}) => {
                     Sign up
                   </Button>
                   <Button aria-labelledby='Login' className='btn bg-brand' onClick={()=>navigate('/login')}>
-                    Login
+                    Sign In
                   </Button>
                 </Flex>
               :
@@ -408,7 +408,7 @@ const Navbar = ({setGetCategory}) => {
                       src='/assets/icons/notification.png' 
                       width={'28px'} 
                       preview={false}
-                      alt="tci" 
+                      alt="notification icon" 
                       className="up"
                     />
                   </Button>
