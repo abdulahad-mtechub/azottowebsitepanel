@@ -85,7 +85,7 @@ const Favoritbussines = () => {
                                         </Row>
                                         <Divider className='my-1' />
                                         <Flex gap={3} align='center'>
-                                            <Image src='/assets/icons/reyal.png' preview={false} width={20} />
+                                            <Image src='/assets/icons/reyal.png' alt='currency-symbol' preview={false} width={20} />
                                             <Title level={4} className='m-0'>
                                                 {pro?.price}
                                             </Title>
@@ -132,7 +132,7 @@ const Favoritbussines = () => {
                 ) : (
                     <Row>
                       <Col span={24} className='text-center mt-4'>
-                        <Text>No Business Found</Text>
+                        <Text>No Favorite Listing</Text>
                       </Col>
                     </Row>
                   )

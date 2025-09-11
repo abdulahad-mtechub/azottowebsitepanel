@@ -33,7 +33,7 @@ const Buyework = () => {
         },
         {
             id: 2,
-            title:'Buy Now or Processed to Pay',
+            title:'Negotiate or Buy Instantly',
             desc:'With a single click, move to the payment step or buy the business without further delays.',
             image:<rive2.RiveComponent />,
         },

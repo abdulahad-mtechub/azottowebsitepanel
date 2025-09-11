@@ -16,7 +16,7 @@ const DocumentUploadedPrev = () => {
                     documentData?.map((stat,i)=>
                         <Col span={24} key={i}>
                             <Flex gap={10} className='p-3 border-gray rounded-12'>
-                                <Image src={'/assets/icons/file.png'} preview={false} width={24}  alt="" />
+                                <Image src={'/assets/icons/file.png'} preview={false} width={24}  alt="file icon" />
                                 <Flex vertical gap={2}>
                                     <Title level={5} className='m-0'>
                                         {stat?.name}

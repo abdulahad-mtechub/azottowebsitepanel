@@ -107,7 +107,7 @@ const SellerOfferTable = ({data}) => {
                 }
             },
         },
-        { title: 'Date', dataIndex: 'createdAt' },
+        { title: 'Offer Date', dataIndex: 'createdAt' },
         {
             title: 'Action',
             key: 'action',
@@ -255,6 +255,7 @@ const SellerOfferTable = ({data}) => {
                 visible={offermodal}
                 selectedOfferId={selectedOfferId}
                 onClose={() => setOfferModal(false)}
+                title='Counter Offer to Buyer'
             />
             <ScheduleMeeting 
                 visible={meeting} 

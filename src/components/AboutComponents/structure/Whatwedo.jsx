@@ -26,7 +26,7 @@ const Whatwedo = () => {
                             <Col lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
                                 <Card className='h-100 border-brand rounded-12' >
                                     <Flex vertical gap={20} align='center' className='text-center'>
-                                        <Image src={type?.icon} preview={false} width={50} />
+                                        <Image src={type?.icon} preview={false} width={50} alt='type icon' />
                                         <div>
                                             <Title className='mb-1' level={5}>
                                                 {type?.title}

@@ -67,7 +67,7 @@ const BusinessStats = ({data}) => {
                         </Title>
                         {(status && status.includes('Verified')) ?
                             <Tooltip title={'Verified'}>
-                                <Image src='/assets/icons/verified-user.png' preview={false} width={16} />
+                                <Image src='/assets/icons/verified-user.png' alt='verified icon' preview={false} width={16} />
                             </Tooltip>
                             : null
                         }
@@ -78,7 +78,7 @@ const BusinessStats = ({data}) => {
                         <Col lg={{span: 12}} md={{span: 12}} sm={{span: 12}} xs={{span: 24}} key={i}>
                             <Flex gap={10}>
                                 <div className='icon-pre'>
-                                    <Image src={stat?.icon} preview={false} width={'100%'}  alt="" />
+                                    <Image src={stat?.icon} preview={false} width={'100%'}  alt="stats icon" />
                                 </div>
                                 <Flex vertical gap={2}>
                                     <Flex gap={4}>

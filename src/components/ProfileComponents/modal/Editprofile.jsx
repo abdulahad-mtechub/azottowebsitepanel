@@ -150,14 +150,14 @@ const Editprofile = ({ visible, onClose }) => {
               </Col>
               <Col span={24}>
               <MySelect
-                    label='Select District'
-                    name='district'
-                    required
-                    message="Please enter district"
-                    placeholder='select district'
-                    options={district}
-                    onChange={(val) => setSelectedDistrict(val)}
-                />
+                label='Select District'
+                name='district'
+                required
+                message="Please enter district"
+                placeholder='select district'
+                options={district}
+                onChange={(val) => setSelectedDistrict(val)}
+              />
               
               </Col>
               <Col span={24}>

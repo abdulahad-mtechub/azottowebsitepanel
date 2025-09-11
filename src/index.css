@@ -37,7 +37,8 @@
     --light-red: #FF3B3033;
     --light-orange: #FFF0D9;
     --orange:#FF9800;
-    --gray: #E6E8EC
+    --gray: #E6E8EC;
+    --pill-brand: #BED5FA;
 }
 
 body{
@@ -50,6 +51,10 @@ body{
 
 .bg-light-green{
     background-color: var(--bg-light-green) !important;
+}
+
+.pill-brand{
+    background-color: var(--pill-brand) !important;
 }
 
 .bg-orange{
@@ -1311,7 +1316,9 @@ body{
 .footer-add-150{
     margin-bottom: 150px;
 }
-
+.pad-12{
+    padding: 12px !important;
+}
 
 /* media queries  */
 

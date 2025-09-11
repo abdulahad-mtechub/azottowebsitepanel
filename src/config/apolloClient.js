@@ -3,7 +3,8 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import Cookies from 'js-cookie';
 
-const API_URL =  "https://220.152.66.148.host.secureserver.net/graphql";
+// const API_URL =  "https://220.152.66.148.host.secureserver.net/graphql";
+const API_URL = "https://verify.jusoor-sa.co/graphql"
 
 // HTTP Link
 const httpLink = createHttpLink({

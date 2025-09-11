@@ -105,7 +105,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                             label={
                                 <Flex gap={2}>
                                     Total Amount <Tooltip title='Includes Jusoor’s 6% commission fee'>
-                                        <Image preview={false} src="/assets/icons/info-outline.png" width={14} alt="" />
+                                        <Image preview={false} src="/assets/icons/info-outline.png" width={14} alt="info icon" />
                                     </Tooltip>
                                 </Flex>
                             }
@@ -114,7 +114,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                             message="Please enter total amount"
                             placeholder='e.g. 80,000'
                             addonBefore={
-                                <Image src='/assets/icons/reyal-g.png' width={14} />
+                                <Image src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} />
                             }
                             className='w-100'
                             disabled

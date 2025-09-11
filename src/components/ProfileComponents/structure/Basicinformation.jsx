@@ -17,7 +17,7 @@ const Basicinformation = ({buyerDashboardData,title}) => {
                                     <Flex gap={10} className="mt-2">
                                         {list.desc.map((imageUrl, imgIndex) => (
                                             <div className='border-gray p-2' key={imgIndex}>
-                                                <Image src={imageUrl} width={150} height={100} preview={false} />
+                                                <Image src={imageUrl} width={150} height={100} preview={false} alt='basic info image' />
                                             </div>
                                         ))}
                                     </Flex>

@@ -3,7 +3,7 @@ import { UPDATE_OFFER,UPDATE_MEETING } from '../../graphql/mutation'
 import { useMutation } from '@apollo/client';
 
 const { Title, Text } = Typography
-const DeleteModal = ({visible,onClose,title,subtitle,type,offerId,refetch,meetingId}) => {
+const DeleteModal = ({visible,onClose,title,subtitle,type,offerId,refetch,meetingId, buttontext='Confirm'}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [updateOffer, { loading: updateOfferLoading }] = useMutation(UPDATE_OFFER);
     const [updateMeeting, { loading: updateMeetingLoading }] = useMutation(UPDATE_MEETING);
@@ -51,7 +51,7 @@ const DeleteModal = ({visible,onClose,title,subtitle,type,offerId,refetch,meetin
                     Cancel
                 </Button>
                 <Button aria-labelledby='Confirm' className={`btn ${type==='danger'? 'bg-red':'bg-brand'}`} onClick={handleConfirm} loading={updateOfferLoading}>
-                    Confirm
+                    {buttontext}
                 </Button>
             </Flex>
         }

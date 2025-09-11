@@ -25,6 +25,7 @@ const ProfileDashboard = () => {
     const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
     const [parentTab, setParentTab] = useState('Seller');
+    const [ addwalletvisible, setAddWalletVisible ] = useState(false)
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
     const { data: userStatsData, loading: userStatsLoading, error: userStatsError } = useQuery(PROFESSIONALSTATISTICS);
@@ -155,7 +156,15 @@ const ProfileDashboard = () => {
                 </Flex>
             ),
             sellerwallet: (
-                <SellerWallet />
+                <Flex vertical gap={20}>
+                    <Flex justify='space-between' gap={5}>
+                        <ModuleTopHeading level={4} name='Wallet' />
+                        <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => {setAddWalletVisible(true)}}>
+                           <PlusOutlined /> Add Account
+                        </Button>
+                    </Flex>
+                    <SellerWallet {...{addwalletvisible, setAddWalletVisible}} />
+                </Flex>
             ),
         },
         Buyer: {

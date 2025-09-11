@@ -72,7 +72,8 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
           setCurrent(current + 1);
         }
     };
-    const prev = () => setCurrent(current - 1);
+    // const prev = () => setCurrent(current - 1);
+    const prev = () => onClose()
 
     return (
         <Modal
@@ -85,8 +86,8 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
         >  {contextHolder}
             <div className="step-content mb-3">{steps[current].content}</div>
             <Flex gap={10} justify='end'>
-                <Button aria-labelledby='Previous' disabled={current > 0 ? false: true} className='btn text-black border-gray' onClick={prev}>
-                    Previous
+                <Button aria-labelledby='Cancel' disabled={current > 0 ? false: true} className='btn text-black border-gray' onClick={prev}>
+                    Cancel
                 </Button>
                 {current < steps.length - 1 && (
                     <Button type="primary" aria-labelledby='Next' className='btn bg-brand' onClick={next}>

@@ -228,11 +228,9 @@ const Navbar = ({setGetCategory}) => {
                       </Space>
                     </Button>
                   </Dropdown>
-                  <div className="sp-cover"  onClick={()=> setVisible(true)}>
-                    <span className="sp sp-1 sp-1-click"></span>
-                    <span className="sp sp-2 sp-2-click"></span>
-                    <span className="sp sp-3 sp-3-click"></span>
-                  </div>
+                  <Button className='bg-transparent border-0 p-0' onClick={()=> setVisible(true)}>
+                    <img src='/assets/icons/menu-icon.png' alt='hamburger icon' width={30} />
+                  </Button>
                   {
                     isshow &&
                     <>
@@ -252,7 +250,7 @@ const Navbar = ({setGetCategory}) => {
                         trigger={['click']}
                       >
                         
-                        <Image src='/assets/images/av-1.png' preview={false} width={30} style={{borderRadius:50}}/>
+                        <Image src='/assets/images/av-1.png' alt='user image' preview={false} width={30} style={{borderRadius:50}}/>
                       </Dropdown>
                     </>
                   }
@@ -283,7 +281,7 @@ const Navbar = ({setGetCategory}) => {
                       <li className='drop-item' key={index}>
                         <NavLink onClick={(e)=>{e.preventDefault()}} className='drop-link'>
                           <Flex gap={10} align='center'>
-                            <Image src={list?.icon} width={30} className='pt-1s' preview={false} />
+                            <Image src={list?.icon} alt='icon menu item' width={30} className='pt-1s' preview={false} />
                             <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
                               <Title level={5} className='m-0 fw-500'>{list?.title}</Title>
                               <ArrowRightOutlined className='arr text-brand pt-1s' />
@@ -300,7 +298,7 @@ const Navbar = ({setGetCategory}) => {
                     <li className='drop-item'>
                       <NavLink to={'/businesslisting'} className='drop-link'>
                         <Flex gap={10} align='center'>
-                          <Image src={'/assets/icons/browseall.png'} width={30} className='pt-1s' preview={false} />
+                          <Image src={'/assets/icons/browseall.png'} alt='browse all icon' width={30} className='pt-1s' preview={false} />
                           <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
                             <Title level={5} className='m-0 fw-500'>Browse All</Title>
                             <ArrowRightOutlined className='arr text-brand pt-1s' />

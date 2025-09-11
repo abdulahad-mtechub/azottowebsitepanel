@@ -9,12 +9,12 @@ const Meetings = () => {
     const items = [
         {
             key:'1',
-            label:'Send Request',
+            label:'Send Requests',
             children:<SellerSendRequestTable/>
         },
         {
             key:'2',
-            label:'Recieve Request',
+            label:'Recieve Requests',
             children:<SellerRecieveRequestTable />,
         },
         {

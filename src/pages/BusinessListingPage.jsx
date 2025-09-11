@@ -277,7 +277,7 @@ const BusinessListingPage = ({getcategory}) => {
                                 </Col>
                                 <Col xl={{span: 3}} lg={{span: 4}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
                                     <Button aria-labelledby='Search' className='btn bg-brand fs-14 fw-400 w-100'>
-                                        <Image src="/assets/icons/search-w.png" preview={false} width={16} alt=""  onClick={handleSearch}/> Search
+                                        <Image src="/assets/icons/search-w.png" preview={false} width={16} alt="search icon"  onClick={handleSearch}/> Search
                                     </Button>
                                 </Col>
                             </Row>

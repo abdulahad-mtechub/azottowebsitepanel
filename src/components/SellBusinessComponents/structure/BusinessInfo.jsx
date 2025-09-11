@@ -61,7 +61,7 @@ const BusinessInfo = ({data}) => {
                         <Col span={24} key={i}>
                             <Flex gap={10}>
                                 <div className='icon-pre'>
-                                    <Image src={stat?.icon} preview={false} width={'100%'}  alt="" />
+                                    <Image src={stat?.icon} preview={false} width={'100%'}  alt="stats icon" />
                                 </div>
                                 <Flex vertical gap={2}>
                                     <Title level={5} className='m-0 text-brand'>

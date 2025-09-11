@@ -39,7 +39,7 @@ const BrowseType = () => {
                             <Col lg={{span: 6}} md={{span: 12}} sm={{span: 12}} xs={{span: 12}} key={i}>
                                 <Card className='h-100 border-brand rounded-12' >
                                     <Flex vertical gap={20} align='center' justify='center' className='text-center'>
-                                        <Image src={type?.icons} preview={false} width={50} />
+                                        <Image src={type?.icons} preview={false} alt='type icon' width={50} />
                                         <div>
                                             <Title className='m-0' level={5}>
                                                 {type?.title}

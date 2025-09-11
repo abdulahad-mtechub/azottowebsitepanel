@@ -21,7 +21,7 @@ const AboutComponent = () => {
                                     introData?.list?.map((items,i)=>
                                         <li key={i}>
                                             <Flex gap={5} align='center'>
-                                                <Image src='/assets/icons/timeline.png' width={16} preview={false} />
+                                                <Image src='/assets/icons/timeline.png' alt='list icon' width={16} preview={false} />
                                                 <Text className='fs-14'>{items}</Text>
                                             </Flex>
                                         </li>
@@ -32,7 +32,7 @@ const AboutComponent = () => {
                     </Col>
                     <Col lg={{span: 10}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                         <Flex justify='center'>
-                            <Image src='/assets/images/ab-1.png' width={300} height={300} preview={false} className='rounded-12' />
+                            <Image src='/assets/images/ab-1.png' alt='image' width={300} height={300} preview={false} className='rounded-12' />
                         </Flex>
                     </Col>
                 </Row>

@@ -8,7 +8,7 @@ const OurMission = () => {
             <div className='container'>
                 <Row gutter={[64,24]} justify={'space-between'} align={'middle'}>
                     <Col lg={{span: 12}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
-                        <Image src='/assets/images/ab-2.png' width={'100%'} height={400} preview={false} className='rounded-12 object-cover' />
+                        <Image src='/assets/images/ab-2.png' alt='our mission image' width={'100%'} height={400} preview={false} className='rounded-12 object-cover' />
                     </Col>
                     <Col lg={{span: 12}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                         <Flex vertical justify='center' gap={15}>

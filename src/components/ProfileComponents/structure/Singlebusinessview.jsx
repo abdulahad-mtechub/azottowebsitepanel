@@ -16,7 +16,7 @@ const Singlebusinessview = ({setSingleDetail, singledetail}) => {
     const items = [
         {
             key:'1',
-            label:'Deals',
+            label:'Details',
             children: <SellerDealDetails data={business} />
         },
         {
@@ -63,19 +63,19 @@ function mapBusinessPayloadToUI(payload) {
       detailinfo: [
         {
           id: 1,
-          img: '/assets/icons/totalview.svg',
+          img: '/assets/icons/total-view.png',
           title: 'Total Views',
           numbers: data?.getBusinessById?.totalViews ?? '0'
         },
         {
           id: 2,
-          img: '/assets/icons/list-business.svg',
+          img: '/assets/icons/noofoffer.png',
           title: 'Number of Offers',
           numbers: data?.getBusinessById?.numberOfOffers ?? '0'
         },
         {
           id: 3,
-          img: '/assets/icons/favorite.png',
+          img: '/assets/icons/favorite-ic.png',
           title: 'Number of Favorites',
           numbers: data?.getBusinessById?.numberOfFavorites ?? '0'
         },
@@ -134,7 +134,7 @@ function mapBusinessPayloadToUI(payload) {
                                     <Col lg={{ span: 8 }} md={{ span: 12 }} sm={{ span: 12 }} xs={{ span: 12 }} key={i}>
                                         <Card className='h-100 border-gray rounded-12' >
                                             <Flex vertical gap={15}>
-                                                <Image src={data?.img} preview={false} width={40} />
+                                                <Image src={data?.img} alt='image' preview={false} width={40} />
                                                 <div>
                                                     <Text className='fs-14 text-gray'>
                                                         {data?.title}

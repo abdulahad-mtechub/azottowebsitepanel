@@ -31,7 +31,7 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
         { title: 'Business Title', dataIndex: 'title' },
         { title: 'Seller Name', dataIndex: 'sellername' },
         { title: 'Offer Price', dataIndex: 'offerprice' },
-        { title: 'Requested Date', dataIndex: 'date' },
+        { title: 'Date', dataIndex: 'date' },
     ];
 
     const offerData = useMemo(() => {

@@ -55,7 +55,7 @@ const BusinessInfoCardMobile = ({data}) => {
                             businessInfoData?.map((stat,i)=>
                                 <Flex gap={10} key={i}>
                                     <div className={`icon-pre ${stat.id === 1 ? 'bg-light-green':null}`}>
-                                        <Image src={stat?.icon} preview={false} width={'100%'}  alt="" />
+                                        <Image src={stat?.icon} preview={false} width={'100%'}  alt="stats icon" />
                                     </div>
                                     <Flex vertical gap={2}>
                                         <Title level={5} className={`m-0 ${stat.id === 1 ? 'text-green':'text-brand'}`}>

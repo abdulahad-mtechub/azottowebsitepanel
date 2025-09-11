@@ -7,7 +7,7 @@ import { useMutation } from '@apollo/client'
 import { COUNTER_OFFER } from '../../../graphql/mutation';
 
 const { Title, Text } = Typography
-const CounterOffer = ({visible,onClose,selectedOfferId}) => {
+const CounterOffer = ({visible,onClose,selectedOfferId,title='Counter Offer to Seller'}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const [counterOffer, { loading }] = useMutation(COUNTER_OFFER);
@@ -69,7 +69,7 @@ const CounterOffer = ({visible,onClose,selectedOfferId}) => {
             <Flex vertical className='mb-3' gap={0}>
                 <Flex justify='space-between' gap={6}>
                     <Title level={4} className='m-0'>
-                        Counter Offer to Seller
+                        {title}
                     </Title>
                     <Button aria-labelledby='Close' type='button' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />

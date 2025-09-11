@@ -7,7 +7,7 @@ const postsaleColumns = [
         render: (verified) => {
             if (verified === true || verified === 1) {
                 return <Tooltip title={'Verified by Jusoor'}>
-                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
+                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} alt="verified icon" />
                  </Tooltip>;
             } else {
                 return null
@@ -25,7 +25,7 @@ const liabColumn = [
         render: (verified) => {
             if (verified === true || verified === 1) {
                 return <Tooltip title={'Verified by Jusoor'}>
-                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
+                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} alt="verified icon" />
                  </Tooltip>;
             } else {
                 return null
@@ -43,7 +43,7 @@ const keyassetsColumn = [
         render: (verified) => {
             if (verified === true || verified === 1) {
                 return <Tooltip title={'Verified by Jusoor'}>
-                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
+                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} alt="verified icon" />
                  </Tooltip>;
             } else {
                 return null
@@ -61,7 +61,7 @@ const inventColumn = [
         render: (verified) => {
             if (verified === 1) {
                 return <Tooltip title={'Verified by Jusoor'}>
-                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} />
+                    <Image src='/assets/icons/verified-user.png' preview={false} width={14} alt="verified icon" />
                  </Tooltip>;
             } else {
                 return null

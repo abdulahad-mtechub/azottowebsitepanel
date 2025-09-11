@@ -46,7 +46,7 @@ const BusinessViewInfoCard = ({data}) => {
                             <Flex gap={10}>
                                 
                                 <div className={`icon-pre ${info.id === 1 ? 'bg-light-green':null}`}>
-                                    <Image src={info?.icon} preview={false} width={'100%'} alt="" />
+                                    <Image src={info?.icon} preview={false} width={'100%'} alt="icon" />
                                 </div>
                                 <Flex vertical gap={2}>
                                     <Title level={5} className={`m-0 'text-brand'${info.id === 1 ? 'text-green':null}`}>

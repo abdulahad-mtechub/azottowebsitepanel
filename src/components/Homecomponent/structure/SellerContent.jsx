@@ -112,6 +112,7 @@ const SellerContent = () => {
                 maxHeight: '100%',
                 maxWidth: '100%'
               }}
+              alt='image'
               preview={false}
             />
           </div>

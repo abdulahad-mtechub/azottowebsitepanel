@@ -3,6 +3,7 @@ import { Button, Collapse, Drawer, Flex, Image, Typography } from 'antd'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { mobilemenuData } from '../../../data';
+import Cookies from "js-cookie";
 
 const { Title } = Typography
 const { Panel } = Collapse;
@@ -11,6 +12,7 @@ const MobileNavbar = ({ visible, onClose }) => {
 
     const [currentPanel, setCurrentPanel] = useState([])
     const [currentPanels, setCurrentPanels] = useState([])
+    const userId = Cookies.get("userId");
     const navigate = useNavigate()
 
     const [isDesktop, setIsDesktop] = useState(false);
@@ -37,7 +39,7 @@ const MobileNavbar = ({ visible, onClose }) => {
         >
             <Flex justify='space-between' align='center'>
                 <NavLink to={'/'} onClick={onClose}>
-                    <Image src='/assets/images/logo.png' width={120} preview={false} />
+                    <Image src='/assets/images/logo.png' alt='jusoor logo' width={120} preview={false} />
                 </NavLink>
                 <Button aria-labelledby='Close' className='bg-transparent border-0 p-0' onClick={onClose}>
                     <CloseOutlined className='text-white fs-18' />
@@ -122,15 +124,22 @@ const MobileNavbar = ({ visible, onClose }) => {
                     </NavLink>
                 </Flex>
                 <Flex vertical gap={10} align='center' justify='center'>
-                    <Button aria-labelledby='Sell a Business' className='btn bg-brand mt-3 w-100' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
-                        <PlusOutlined /> Sell a Business
-                    </Button>
-                    <Button aria-labelledby='Sign Up' className='btn btn-outline w-100' onClick={()=>navigate('/signup')}>
-                        Sign Up
-                    </Button>
-                    <Button aria-labelledby='Login' className='btn bg-brand w-100' onClick={()=>navigate('/login')}>
-                        Sign In
-                    </Button>
+                    {
+                        userId ? 
+                        <Button aria-labelledby='Sell a Business' className='btn bg-brand mt-3 w-100' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
+                            <PlusOutlined /> Sell a Business
+                        </Button>
+                        :
+                        <>
+                            <Button aria-labelledby='Sign Up' className='btn btn-outline w-100' onClick={()=>navigate('/signup')}>
+                                Sign Up
+                            </Button>
+                            <Button aria-labelledby='Login' className='btn bg-brand w-100' onClick={()=>navigate('/login')}>
+                                Sign In
+                            </Button>
+                        </>
+                    }
+                    
                 </Flex>
             </div>
         </Drawer>

@@ -95,13 +95,13 @@ const ConfirmationDocsStep = ({ form, completedeal,deal }) => {
             <Card className="card-cs border-gray rounded-12">
               <Flex justify="space-between" align="center">
                 <Flex gap={15}>
-                  <Image src="/assets/icons/file.png" preview={false} width={20} />
+                  <Image src="/assets/icons/file.png" alt='file icon' preview={false} width={20} />
                   <Flex vertical>
                     <Text className="fs-13 text-gray">Business Transaction Receipt.pdf</Text>
                     <Text className="fs-13 text-gray">5.3 MB</Text>
                   </Flex>
                 </Flex>
-                <Image src="/assets/icons/download.png" preview={false} width={20} />
+                <Image src="/assets/icons/download.png" alt='download icon' preview={false} width={20} />
               </Flex>
             </Card>
             <Divider />
@@ -121,13 +121,13 @@ const ConfirmationDocsStep = ({ form, completedeal,deal }) => {
             <Card className="card-cs border-gray rounded-12">
               <Flex justify="space-between" align="center">
                 <Flex gap={15}>
-                  <Image src="/assets/icons/file.png" preview={false} width={20} />
+                  <Image src="/assets/icons/file.png" alt='file icon' preview={false} width={20} />
                   <Flex vertical>
                     <Text className="fs-13 text-gray">Bank-Statement.png</Text>
                     <Text className="fs-13 text-gray">5.3 MB</Text>
                   </Flex>
                 </Flex>
-                <Image src="/assets/icons/download.png" preview={false} width={20} />
+                <Image src="/assets/icons/download.png" alt='download icon' preview={false} width={20} />
               </Flex>
             </Card>
           ) : (
@@ -144,14 +144,14 @@ const ConfirmationDocsStep = ({ form, completedeal,deal }) => {
                     <Card className="card-cs border-gray rounded-12 w-100">
                       <Flex justify="space-between" align="center">
                         <Flex gap={15}>
-                          <Image src="/assets/icons/file.png" preview={false} width={20} />
+                          <Image src="/assets/icons/file.png" alt='file icon' preview={false} width={20} />
                           <Flex vertical>
                             <Text className="fs-13 text-gray">{doc.fileName}</Text>
                             <Text className="fs-13 text-gray">{doc.fileType}</Text>
                           </Flex>
                         </Flex>
                         <a href={doc.filePath} target="_blank" rel="noopener noreferrer">
-                          <Image src="/assets/icons/download.png" preview={false} width={20} />
+                          <Image src="/assets/icons/download.png" alt='download icon' preview={false} width={20} />
                         </a>
                       </Flex>
                     </Card>

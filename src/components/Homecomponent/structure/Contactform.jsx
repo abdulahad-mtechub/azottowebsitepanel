@@ -24,7 +24,7 @@ const Contactform = () => {
                     </Col>
                     <Col lg={{span: 11}} md={{span: 0}} sm={{span: 0}} xs={{span: 0}}>
                         <Flex justify='center'>
-                            <Image src='/assets/images/contact.png' preview={false} />
+                            <Image src='/assets/images/contact.png' alt='contact image' preview={false} />
                         </Flex>
                     </Col>
                     <Col lg={{span: 13}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
