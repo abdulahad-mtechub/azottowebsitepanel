@@ -110,7 +110,7 @@ const ConfirmationDocsStep = ({ form, completedeal,deal,details }) => {
                   <Card className="card-cs border-gray rounded-12 mt-2">
                       <Flex justify="space-between" align="center">
                           <Flex gap={15}>
-                              <Image src={"/assets/icons/file.png"} alt='fiie icon' preview={false} width={20} />
+                              <Image src={"/assets/icons/file.png"} alt='file icon' preview={false} width={20} />
                               <Flex vertical>
                                   <Text className="fs-13 text-gray">{item?.title}</Text>
                                   <Text className="fs-13 text-gray">5.3 MB</Text>
