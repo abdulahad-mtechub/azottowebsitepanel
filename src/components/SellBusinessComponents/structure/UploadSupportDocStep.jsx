@@ -28,7 +28,7 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
       const formData = new FormData();
       formData.append('file', compressedFile);
 
-      const res = await fetch('https://220.152.66.148.host.secureserver.net/upload', {
+      const res = await fetch('https://verify.jusoor-sa.co/upload', {
         method: 'POST',
         body: formData,
       });

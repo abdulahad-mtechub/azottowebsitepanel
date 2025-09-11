@@ -1,6 +1,5 @@
 import React from 'react'
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography,Spin } from 'antd'
-import { exploreData } from '../../../data/featureData'
 import { RightOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { GETRANDOMBUSINESS } from '../../../graphql/query/business'
