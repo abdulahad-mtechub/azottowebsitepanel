@@ -5,6 +5,7 @@ const { Title, Text } = Typography
 const BusinessStats = ({data}) => {
     const [profitTimeValue, setProfitTimeValue] = useState('Last Year');
     const [revenueTimeValue, setRevenueTimeValue] = useState('Last Year');
+    console.log("data",data)
     useEffect(() => {
         if (data?.profittime === 0) {
             setProfitTimeValue('Last 6 Months');
@@ -23,19 +24,19 @@ const BusinessStats = ({data}) => {
         {
             id: 1,
             icon:'/assets/icons/rev.png',
-            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data.revenue ? data.revenue : '0'}</>,
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data?.revenue ? data?.revenue : '0'}</>,
             subtitle:`Revenue ${revenueTimeValue ? '(Last Year)' : ''}`,
         },
         {
             id: 2,
             icon:'/assets/icons/pro.png',
-            title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data.profit ? data.profit : '0'}</>,
+            title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data?.profit ? data?.profit : '0'}</>,
             subtitle:`Profit  ${profitTimeValue ? '(Last Year)' : ''}`,
         },
         {
             id: 3,
             icon:'/assets/icons/promar.png',
-            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data.profitMargen ? data.profitMargen : '0'}</>,
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data?.profitMargen ? data?.profitMargen : '0'}</>,
             subtitle:'Profit Margin %'
         },
         {

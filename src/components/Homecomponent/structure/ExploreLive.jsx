@@ -1,14 +1,60 @@
 import React from 'react'
-import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd'
-import { exploreData } from '../../../data/featureData'
+import { Button, Card, Col, Divider, Flex, Image, Row, Typography,Spin } from 'antd'
 import { RightOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
+import { GETRANDOMBUSINESS } from '../../../graphql/query/business'
+import { useQuery } from "@apollo/client";
 
 const { Text, Title, Paragraph } = Typography
 const ExploreLive = () => {
-
     const navigate = useNavigate()
+    const  {data, loading , error,refetch} = useQuery(GETRANDOMBUSINESS);
 
+    const exploreData = data?.getRandomBusinesses?.map(item => ({
+        id: item.id,
+        categoryName: item?.category?.name,
+        ref:item.reference,
+        title:item.businessTitle,
+        description:item.description,
+        amount: item.price,
+        save: item.isSaved,
+        status: item.isSold,
+        type: item.isByTakbeer,
+        child:[
+            {
+                id: 1,
+                icon:'/assets/icons/year-p.png',
+                subtitle:item.revenue,
+                subdesc:'Revenue/month',
+            },
+            {
+                id: 2,
+                icon:'/assets/icons/revenue.png',
+                subtitle:item.profit,
+                subdesc:'Profit/month',
+            },
+            {
+                id: 3,
+                icon:'/assets/icons/team.png',
+                subtitle:`${item?.recoveryTime} months`,
+                subdesc:'Capital Recovery',
+            },
+        ]
+    })) || [];
+
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
+    const truncateChars = (text, max = 25) => {
+        if (!text) return "";
+        // handle unicode safely
+        const chars = Array.from(text);
+        return chars.length > max ? chars.slice(0, max).join("") + "..." : text;
+      };
     return (
         <div className='feature bg-light-brand'>
             <div className='container'>
@@ -32,18 +78,20 @@ const ExploreLive = () => {
                                         <Flex justify='space-between' align='center'>
                                             <Flex gap={4}>
                                                 <Button className='fs-13' aria-labelledby='Restaurant'>
-                                                    Restaurant
+                                                {truncateChars(pro?.categoryName, 20)}
                                                 </Button>
-                                                {
-                                                    pro?.type &&
-                                                    <Button aria-labelledby='type' className={`fs-12 text-white ${pro.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
-                                                        {pro?.type}
-                                                    </Button>
-                                                }
+                                                {typeof pro?.type === "boolean" && (
+                                                <Button
+                                                    aria-labelledby="type"
+                                                    className={`fs-12 text-white ${pro.type ? 'bg-brand' : 'bg-black'}`}
+                                                >
+                                                    {pro.type ? "Taqbeel" : "Acquiring"}
+                                                </Button>
+                                                )}
                                             </Flex>
                                             <Button className='border-0 bg-transparent p-0' aria-labelledby='bookmarked button'>
                                                 {
-                                                    pro?.save === 'yes' ?
+                                                    pro?.save === true ?
                                                     <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} />: 
                                                     <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} />
                                                 }
@@ -55,7 +103,7 @@ const ExploreLive = () => {
                                                 <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" />
                                             </div>
                                             <Title className='' level={5}>
-                                                {pro?.title}
+                                                {truncateChars(pro?.title, 42)}
                                             </Title>
                                             <Paragraph
                                                 ellipsis={{ rows: 3, expandable: false, symbol: 'more' }}

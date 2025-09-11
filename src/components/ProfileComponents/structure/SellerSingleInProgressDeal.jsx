@@ -22,22 +22,34 @@ const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
     // if (loading) return <Spin tip="Loading deal..." />;
     if (error) return <Text type="danger">Error loading deal: {error.message}</Text>;
   
-    const deal = data?.getDeal;
+    // const deal = data?.getDeal;
+    const deal = data?.getDeal
+    ? {
+        key: data.getDeal.id, // use actual id from API
+        businessTitle: data.getDeal.business?.businessTitle || '-',
+        buyerName: data.getDeal.buyer?.name || '-',
+        sellerName: data.getDeal.business?.seller?.name || '-',
+        finalizedOffer: data.getDeal.offer?.price ? `SAR ${data.getDeal.offer.price.toLocaleString()}` : '-',
+        status: data.getDeal.status || 0,
+        date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',
+        busines: data.getDeal.business || '-',
+        banks: data.getDeal.buyer?.banks || '-',
+    }: null;
   
     if (!deal) return <Text>No deal found</Text>;
  
     const sellerdealsData = [
         {
           title:'Seller Name',
-          desc:deal?.business?.seller?.name
+          desc:deal?.sellerName
         },
         {
           title:'Buyer Name',
-          desc:deal?.buyer?.name
+          desc:deal?.buyerName
         },
         {
           title:'Finalized Offer',
-          desc:deal.price
+          desc:deal.finalizedOffer
         },
         {
           title:'Status',

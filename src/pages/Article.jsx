@@ -1,14 +1,53 @@
-import { Breadcrumb, Col, Flex, Row, Typography } from 'antd'
+import { Breadcrumb, Col, Flex, Row, Typography,Spin } from 'antd'
 import { useNavigate } from 'react-router-dom';
 import { ArtticleCards, MyInput, MySelect } from '../components';
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { RightOutlined } from '@ant-design/icons';
-import { articleData } from '../data';
+import {GETARTICLES} from '../graphql/query/queries';
+import { useQuery } from "@apollo/client";
 
 const { Text, Title } = Typography;
 const Article = () => {
     const navigate = useNavigate();
     const [selectfilter, setSelectFilter] = useState('Sorting');
+    const handlePageChange = (page, size) => {
+        setCurrent(page);
+        setPageSize(size);
+    };
+    const  {data, loading , error,refetch} = useQuery(GETARTICLES,{
+        variables: { search: "" },
+    });
+
+    const total = data?.getArticles?.totalCount || 0;
+    const articleData = data?.getArticles?.articles.map(item => ({
+        id: item.id,
+        img: item.image,
+        title: item.title,
+        desc: item.body,
+        date: item.createdAt,
+      })) || [];
+    const searchTimeout = useRef(null);
+
+    const handleSearchChange = (e) => {
+        const value = e.target.value;
+
+        if (searchTimeout.current) {
+            clearTimeout(searchTimeout.current);
+        }
+
+        searchTimeout.current = setTimeout(() => {
+            refetch({ search: value });
+            setCurrent(1); // reset pagination
+        }, 500); // 500ms delay
+    };
+
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" style={{ height: "200px" }}>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
 
     return (
         <>
@@ -55,6 +94,7 @@ const Article = () => {
                                     withoutForm
                                     placeholder='Search'
                                     prefix={<img src='/assets/icons/search.png' alt='search-icon' width={14} />}
+                                    onChange={handleSearchChange} 
                                 />
                             </Col>
                             <Col lg={{span: 18}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>

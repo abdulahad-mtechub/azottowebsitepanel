@@ -64,6 +64,7 @@ const BUYERINPROGRESSDEALS = gql`
 query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
   getBuyerInprogressDeals(limit: $limit, offset: $offset, search: $search) {
     id
+    status
     buyer {
       id
       name
@@ -71,10 +72,10 @@ query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
     business {
       id
       businessTitle
-    seller {
-      id
-      name
-    }
+      seller {
+        id
+        name
+      }
     }
     price
     createdAt
@@ -141,23 +142,58 @@ const GETDEAL = gql `
 query GetDeal($getDealId: ID!) {
   getDeal(id: $getDealId) {
     id
+    price
+    status
+    isDsaSeller
+    isDsaBuyer
+    isPaymentVedifiedSeller
+    isDocVedifiedSeller
+    isDocVedifiedAdmin
+    createdAt
     business {
       id
       businessTitle
       seller {
+        id
         name
+      }
+      documents {
+        title
+        filePath
       }
     }
     buyer {
+      id
       name
+      banks {
+        id
+        bankName
+        iban
+        accountTitle
+      }
     }
-    price
-    status
-    createdAt
+    offer {
+      id
+      price
+      status
+    }
   }
 }
 `
-
+const GETBANKSFORDEAL = gql `
+query GetBankDetailsByDealId($dealId: ID!) {
+  getBankDetailsByDealId(dealId: $dealId) {
+    id
+    isSend
+    bank {
+      id
+      bankName
+      iban
+      accountTitle
+    }
+  }
+}
+`
 const GET_BUSINESS_OFFERS = gql `
 query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: Int, $search: String, $status: String) {
   getOfferByBusinessId(id: $getOfferByBusinessIdId, limit: $limit, offSet: $offSet, search: $search, status: $status) {
@@ -192,5 +228,6 @@ export {
     BUYERINPROGRESSDEALS,
     SELLERINPROGRESSDEALS,
     GETDEAL,
-    GET_BUSINESS_OFFERS
+    GET_BUSINESS_OFFERS,
+    GETBANKSFORDEAL,
 }

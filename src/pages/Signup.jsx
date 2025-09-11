@@ -71,7 +71,7 @@ const SignupPage = () => {
             formData.append('file', file);
         
             // Call your upload API
-            const res = await fetch('https://220.152.66.148.host.secureserver.net/upload', {
+            const res = await fetch('https://verify.jusoor-sa.co/upload', {
                 method: 'POST',
                 body: formData,
             });

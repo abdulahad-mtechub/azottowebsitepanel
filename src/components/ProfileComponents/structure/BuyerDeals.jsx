@@ -9,16 +9,11 @@ const InprogressDealsTable = lazy(() => import('./InprogressDealsTable').then(mo
 const SingleInProgressDeals = lazy(() => import('./SingleInProgressDeals').then(module => ({ default: module.SingleInProgressDeals })))
 const CompleteDealsTable = lazy(() => import('./CompleteDealsTable').then(module => ({ default: module.CompleteDealsTable })))
 
+
 const BuyerDeals = () => {
 
     const [ inprogressdeal, setInprogressDeal ] = useState()
     const [ completedeal, setCompleteDeal ] = useState()
-    const handleSetInprogressDeal = useCallback((deal) => {
-        setInprogressDeal(deal)
-    }, [])
-    const handleSetCompleteDeal = useCallback((deal) => {
-        setCompleteDeal(deal)
-    }, [])
 
     const singleTab = useMemo(() => [
         {
@@ -26,7 +21,7 @@ const BuyerDeals = () => {
             label: 'In-Progress Deals',
             children: (
                 <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                    <InprogressDealsTable setInprogressDeal={handleSetInprogressDeal} />
+                    <InprogressDealsTable setInprogressDeal={setInprogressDeal} />
                 </Suspense>
             )
         },
@@ -35,11 +30,11 @@ const BuyerDeals = () => {
             label: 'Completed Deals',
             children: (
                 <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                    <CompleteDealsTable setCompleteDeal={handleSetCompleteDeal} />
+                    <CompleteDealsTable setCompleteDeal={setCompleteDeal} />
                 </Suspense>
             )
         },
-    ], [handleSetInprogressDeal, handleSetCompleteDeal])
+    ], [setCompleteDeal,setInprogressDeal])
 
     if (inprogressdeal && !completedeal) {
         return (

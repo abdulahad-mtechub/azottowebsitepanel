@@ -3,9 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 const { Text, Paragraph } = Typography;
 const ArtticleCards = ({data,loadmore=false}) => {
-
     const navigate = useNavigate();
-
     return (
         <Row gutter={[24,24]}>
             {
@@ -40,7 +38,7 @@ const ArtticleCards = ({data,loadmore=false}) => {
                                         }}
                                         className='fs-14 text-gray'
                                     >
-                                        {art?.desc}
+                                         <span dangerouslySetInnerHTML={{ __html: art?.desc }} />
                                     </Paragraph>
                                 </div>
                             </Flex>
