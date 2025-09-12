@@ -1,6 +1,5 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
-import { buyerdealsData } from '../../../data'
 import { SingleInprogressSteps } from './SingleInprogressSteps'
 
 const { Title, Text } = Typography

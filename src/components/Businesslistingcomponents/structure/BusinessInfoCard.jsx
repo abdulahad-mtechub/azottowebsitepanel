@@ -103,7 +103,7 @@ const BusinessInfoCard = ({data}) => {
             <RequestMeetingModal 
                 businessId={data?.id}
                 visible={meetingmodal}
-                onClose={()=>{setMeetingModal(false);businessId=null}}
+                onClose={()=>{setMeetingModal(false)}}
             />
         </>
     )

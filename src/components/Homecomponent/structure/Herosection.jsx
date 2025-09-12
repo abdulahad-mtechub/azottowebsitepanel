@@ -36,7 +36,7 @@ const Herosection = () => {
         
         <Col sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 10 }} xl={{ span: 10 }}>
           <div className='heroimginner'>
-            <img src='assets/images/banner-web.png' alt='hero-banner-web' className='web-vw'/>
+            <img src='assets/images/banner-web.webp' decoding="async" fetchPriority="high" alt='hero-banner-web' className='web-vw'/>
             <img src='assets/images/homebanner.png' width={'100%'} className='mbl-vw'  alt='hero-banner-mobile' />
           </div>
         </Col>

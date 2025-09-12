@@ -36,73 +36,7 @@ const revenueLookups = [
     },
 ]
 
-const yearOp = [
-    {
-        id: 1,
-        name: '2020'
-    },
-    {
-        id: 2,
-        name: '2021'
-    },
-    {
-        id: 3,
-        name: '2022'
-    },
-    {
-        id: 4,
-        name: '2023'
-    },
-    {
-        id: 5,
-        name: '2024'
-    },
-    {
-        id: 6,
-        name: '2025'
-    },
-]
-
-const districtOp = [
-    { id: 1, name: 'Riyadh', value: 'riyadh' },
-    { id: 2, name: 'Makkah', value: 'makkah' },
-    { id: 3, name: 'Eastern', value: 'dammam' },
-    { id: 4, name: 'Al-Madinah', value: 'medina' },
-    { id: 5, name: 'Asir', value: 'abha' },
-    { id: 6, name: 'Tabuk', value: 'tabuk' },
-    { id: 7, name: 'Hail', value: 'hail' },
-    { id: 8, name: 'Al-Jouf', value: 'sakaka' },
-    { id: 9, name: 'Al-Bahah', value: 'al-bahah' },
-    { id: 10, name: 'Jazan', value: 'jazan' },
-    { id: 11, name: 'Najran', value: 'najran' },
-    { id: 12, name: 'Northern Borders', value: 'ar-ar' },
-    { id: 13, name: 'Al-Qassim', value: 'buraidah' },
-  ];
   
-
-const multipleOp = [
-    {
-        id: 1,
-        name: '1x'
-    },
-    {
-        id: 2,
-        name: '2x'
-    },
-    {
-        id: 3,
-        name: '3x'
-    },
-    {
-        id: 4,
-        name: '4x'
-    },
-    {
-        id: 5,
-        name: '5x+'
-    },
-] 
-
 const teamsizeFilter = [
   { label: '1-10', value: '1-10',},
   { label: '10-50', value: '10-50',},
@@ -118,4 +52,4 @@ const yearOper = [
   { label: '5-10', value: '5-10'},
   { label: '10+', value: '10+'},
 ];
-export { teamsizeOp, revenueLookups, yearOp, districtOp, multipleOp, teamsizeFilter,yearOper }
+export { teamsizeOp, revenueLookups, teamsizeFilter,yearOper }

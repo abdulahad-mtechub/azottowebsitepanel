@@ -114,7 +114,7 @@ const SingleViewlisting = () => {
                     ]}
                 />
             </div>
-            <div className='bg-img' style={{backgroundImage:'url(/assets/images/card-1.png)'}}>
+            <div className='bg-img' style={{backgroundImage:'url(/assets/images/card-1.webp)'}}>
                 <div className='container'>
                     <Flex vertical gap={5} className='text-center'>
                         <Text className='text-white'>Reference #: {business?.reference ? business?.reference: 'Not Found'}</Text>

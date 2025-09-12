@@ -1,5 +1,5 @@
 import { Card, Col, Flex, Image, Row, Typography } from 'antd'
-import { documentData, stats } from '../../../data';
+import { documentData } from '../../../data';
 
 const { Title, Text } = Typography
 const DocumentUploadedPrev = () => {

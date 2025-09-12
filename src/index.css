@@ -308,7 +308,7 @@ body{
     overflow: hidden;
     /* display: flex;
     align-items: center; */
-    background-image: url(../assets/images/banner-shap.png);
+    background-image: url(../assets/images/banner-shap.webp);
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
@@ -683,7 +683,7 @@ body{
 
 .bread-cs{
     padding: 20px 0;
-    background-image: url(../assets/images/banner-shap.png);
+    background-image: url(../assets/images/banner-shap.webp);
     background-size: cover;
     background-repeat: no-repeat;
 }
