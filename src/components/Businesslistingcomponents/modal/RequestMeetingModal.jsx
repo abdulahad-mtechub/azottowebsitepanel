@@ -31,15 +31,15 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
             content: <ScheduleMeetingStep form={form} onClose={onClose} />,
         },
     ];
-                      // try {
-                        //     await updateOffer({
-                        //         variables: { input: { id: record.key, status: 'ACCEPTED' } }
-                        //     });
-                        //     messageApi.success('Offer accepted!');
-                        //     refetch();
-                        // } catch (err) {
-                        //     messageApi.error('Failed to accept offer');
-                        // }
+    // try {
+      //     await updateOffer({
+      //         variables: { input: { id: record.key, status: 'ACCEPTED' } }
+      //     });
+      //     messageApi.success('Offer accepted!');
+      //     refetch();
+      // } catch (err) {
+      //     messageApi.error('Failed to accept offer');
+      // }
     const next = async () => {
         if (current === 0) {
           try {

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Card, Col, Flex, Form, Row, Select, Typography,Input, Image } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
-import { revenueLookups, yearOp } from '../../../data'
+import { revenueLookups } from '../../../data'
 import { FormReplicate } from '../../Header'
 
 const { Text } = Typography
