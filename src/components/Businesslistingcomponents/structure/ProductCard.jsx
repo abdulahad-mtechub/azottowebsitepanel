@@ -86,14 +86,14 @@ const ProductCard = ({
                                     >
                                     {
                                         pro?.isSaved
-                                        ? <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} fetchpriority="high" />
-                                        : <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} fetchpriority="high" />
+                                        ? <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} fetchPriority="high" />
+                                        : <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} fetchPriority="high" />
                                     }
                                 </Button>
                             </Flex>
                             <div>
                                 <div className='w-full card-img mb-2 rounded-12'>
-                                    <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" fetchpriority="high" />
+                                    <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" fetchPriority="high" />
                                 </div>
                                 <Title className='' level={5}>
                                     {pro?.title}
@@ -114,7 +114,7 @@ const ProductCard = ({
                                                 <Col span={7}>
                                                     <Flex vertical>
                                                         <Title level={5} className='text-brand m-0 fs-13 fw-500'>
-                                                            {c !== 2 && <img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" fetchpriority="high" />} {item?.subtitle}
+                                                            {c !== 2 && <img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" fetchPriority="high" />} {item?.subtitle}
                                                         </Title>
                                                         <Text className='text-gray fs-12'>
                                                             {item?.subdesc}

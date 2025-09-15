@@ -137,7 +137,7 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
               <Title level={5} className="m-0 fw-500">
                 Upload Other Supporting Documents{' '}
                 <Tooltip title="Info">
-                  <img src="/assets/icons/info-outline.png"  width={14} alt="info-icon" fetchpriority="high" />
+                  <img src="/assets/icons/info-outline.png"  width={14} alt="info-icon" fetchPriority="high" />
                 </Tooltip>
               </Title>
               <Text className="text-gray">

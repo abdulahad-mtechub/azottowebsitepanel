@@ -93,7 +93,7 @@ const Article = () => {
                                 <MyInput 
                                     withoutForm
                                     placeholder='Search'
-                                    prefix={<img src='/assets/icons/search.png' alt='search-icon' width={14} fetchpriority="high" />}
+                                    prefix={<img src='/assets/icons/search.png' alt='search-icon' width={14} fetchPriority="high" />}
                                     onChange={handleSearchChange} 
                                 />
                             </Col>

@@ -21,7 +21,7 @@ const SendRequestTable = () => {
                 <SearchInput
                     placeholder="Search"
                     value={form.getFieldValue('name') || ''}
-                    prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12}  fetchpriority="high"/>}
+                    prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12}  fetchPriority="high"/>}
                 />
             </Col>
             <Col span={24}>

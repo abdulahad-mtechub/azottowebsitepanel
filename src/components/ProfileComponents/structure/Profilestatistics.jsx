@@ -9,7 +9,7 @@ const Profilestatistics = ({data, title}) => {
             <Flex justify='space-between'>
                 <ModuleTopHeading level={4} name={title}/>
                 <Button aria-labelledby='Calendar icon' type='button' className='bg-transparent border-gray'>
-                    <img src='/assets/icons/calendar.png' alt='calendar-icon' width={20} fetchpriority="high" /> 01/02/2025 - 30/02/2025
+                    <img src='/assets/icons/calendar.png' alt='calendar-icon' width={20} fetchPriority="high" /> 01/02/2025 - 30/02/2025
                 </Button>
             </Flex>
             <Row gutter={[16, 16]} className='mt-2'>

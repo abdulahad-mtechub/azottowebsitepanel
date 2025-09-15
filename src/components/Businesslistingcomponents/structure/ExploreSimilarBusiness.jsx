@@ -16,13 +16,13 @@ const ExploreSimilarBusiness = ({id}) => {
             {
                 id: 1,
                 icon: '/assets/icons/year-p.png',
-                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" fetchpriority="high"/> {b?.revenue?.toLocaleString?.() || '0'}</>,
+                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" fetchPriority="high"/> {b?.revenue?.toLocaleString?.() || '0'}</>,
                 subdesc: 'Revenue/month',
             },
             {
                 id: 2,
                 icon: '/assets/icons/revenue.png',
-                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" fetchpriority="high" /> {b?.profit?.toLocaleString?.() || '0'}</>,
+                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" fetchPriority="high" /> {b?.profit?.toLocaleString?.() || '0'}</>,
                 subdesc: 'Profit/month',
             },
             {
@@ -68,14 +68,14 @@ const ExploreSimilarBusiness = ({id}) => {
                                             <Button aria-labelledby={'Bookmark-btn'} className='border-0 bg-transparent p-0'>
                                                 {
                                                     pro?.isSaved ?
-                                                    <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} fetchpriority="high" />: 
-                                                    <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} fetchpriority="high" />
+                                                    <img src='/assets/icons/bk-bl-d.png' alt='bookmarked-image' width={22} fetchPriority="high" />: 
+                                                    <img src='/assets/icons/bk-bl.png' alt='un-bookmarked-image' width={22} fetchPriority="high" />
                                                 }
                                             </Button>
                                         </Flex>
                                         <div>
                                             <div className='w-full card-img mb-2 rounded-12'>
-                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" fetchpriority="high" />
+                                                <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" fetchPriority="high" />
                                             </div>
                                             <Title className='' level={5}>
                                                 {pro?.businessTitle}

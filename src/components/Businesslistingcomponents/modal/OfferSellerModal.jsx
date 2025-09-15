@@ -94,7 +94,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                             message="Please enter offer amount"
                             placeholder='e.g. 75000'
                             addonBefore={
-                                <img src='/assets/icons/reyal-g.png' width={14} alt='currency-symbol' fetchpriority="high"/>
+                                <img src='/assets/icons/reyal-g.png' width={14} alt='currency-symbol' fetchPriority="high"/>
                             }
                             className='w-100'
                             onChange={handleOfferAmountChange}

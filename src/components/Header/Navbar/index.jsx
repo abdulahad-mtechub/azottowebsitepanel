@@ -205,7 +205,7 @@ const Navbar = ({setGetCategory}) => {
             <div className="gen-navbar-inner">
               <div className='gen-navbar-left'>
                 <Link to={'/'}>
-                  <img src={'/assets/images/logo.png'}  width={'100%'} alt="jusoor-logo" fetchpriority="high" />
+                  <img src={'/assets/images/logo.png'}  width={'100%'} alt="jusoor-logo" fetchPriority="high" />
                 </Link>
               </div>
               <div className="gen-navbar-right">
@@ -229,7 +229,7 @@ const Navbar = ({setGetCategory}) => {
                     </Button>
                   </Dropdown>
                   <Button className='bg-transparent border-0 p-0' onClick={()=> setVisible(true)}>
-                    <img src='/assets/icons/menu-icon.png' alt='hamburger icon' width={30} fetchpriority="high" />
+                    <img src='/assets/icons/menu-icon.png' alt='hamburger icon' width={30} fetchPriority="high" />
                   </Button>
                   {
                     isshow &&
@@ -264,7 +264,7 @@ const Navbar = ({setGetCategory}) => {
             <Flex gap={20} align='center'>
               <div className='gen-navbar-left'>
                 <Link to={'/'}>
-                  <img src='/assets/images/logo.png' width={'100%'} className='one' alt="jusoor-logo" fetchpriority="high" />
+                  <img src='/assets/images/logo.png' width={'100%'} className='one' alt="jusoor-logo" fetchPriority="high" />
                 </Link>
               </div>
               <ul className='nav-list'>
