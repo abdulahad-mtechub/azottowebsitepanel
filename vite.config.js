@@ -9,7 +9,7 @@ export default defineConfig({
     critical({
       criticalBase: 'dist/',       // folder where your build output is
       criticalPages: [
-        { uri: '', template: 'index.html' } // main page
+        { uri: 'index.html', template: 'index.html' } // ✅ correct
       ],
       inline: true,                // inline critical CSS into index.html
       minify: true,                // minify critical CSS
