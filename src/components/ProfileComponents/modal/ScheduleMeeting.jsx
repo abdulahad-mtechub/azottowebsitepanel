@@ -9,6 +9,7 @@ const { Title, Text } = Typography
 const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings,businessId}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
+    //TODO update exisiting meeting as seller availibilty
     const handleSubmit = async (values) => {
         try {
           const { date, time } = values;

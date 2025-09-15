@@ -69,7 +69,7 @@ const AnnualProfitBarChart = ({graphData}) => {
                         Similar businesses in this category typically earn this amount in yearly profit.
                     </Text>
                     <Title level={3} className='text-brand' >
-                        <img src="/assets/icons/reyal-b.png" width={20} alt="currency-symbol" /> 48,000
+                        <img src="/assets/icons/reyal-b.png" width={20} alt="currency-symbol" fetchpriority="high"/> 48,000
                     </Title>
                 </Flex>
                 <ReactApexChart

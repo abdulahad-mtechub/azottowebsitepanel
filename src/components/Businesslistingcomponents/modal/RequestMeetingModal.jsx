@@ -112,12 +112,23 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
                             meetingTime.getMinutes(),
                             0
                           );
+
+                          // ✅ Combine Date + End Time
+                          const combinedEndDateTime = new Date(
+                            meetingDate.getFullYear(),
+                            meetingDate.getMonth(),
+                            meetingDate.getDate(),
+                            endTime.getHours(),
+                            endTime.getMinutes(),
+                            0
+                          );
                   
                           await businessMeeting({
                             variables: {
                               input: {
                                 businessId,
                                 requestedDate: combinedDateTime.toISOString(), // or use ISO string
+                                requestedEndDate: combinedEndDateTime.toISOString(),
                               },
                             },
                           });

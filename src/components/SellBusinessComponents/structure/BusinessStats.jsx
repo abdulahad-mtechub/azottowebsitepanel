@@ -24,19 +24,31 @@ const BusinessStats = ({data}) => {
         {
             id: 1,
             icon:'/assets/icons/rev.png',
+<<<<<<< Updated upstream
             title: <><img src="/assets/icons/reyal.png" width={14} alt="currency-symbol" /> {data?.revenue ? data?.revenue : '0'}</>,
+=======
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchpriority="high" /> {data?.revenue ? data?.revenue : '0'}</>,
+>>>>>>> Stashed changes
             subtitle:`Revenue ${revenueTimeValue ? '(Last Year)' : ''}`,
         },
         {
             id: 2,
             icon:'/assets/icons/pro.png',
+<<<<<<< Updated upstream
             title:<><img src="/assets/icons/reyal.png" width={14} alt="currency-symbol" /> {data?.profit ? data?.profit : '0'}</>,
+=======
+            title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchpriority="high" /> {data?.profit ? data?.profit : '0'}</>,
+>>>>>>> Stashed changes
             subtitle:`Profit  ${profitTimeValue ? '(Last Year)' : ''}`,
         },
         {
             id: 3,
             icon:'/assets/icons/promar.png',
+<<<<<<< Updated upstream
             title: <><img src="/assets/icons/reyal.png" width={14} alt="currency-symbol" /> {data?.profitMargen ? data?.profitMargen : '0'}</>,
+=======
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchpriority="high" /> {data?.profitMargen ? data?.profitMargen : '0'}</>,
+>>>>>>> Stashed changes
             subtitle:'Profit Margin %'
         },
         {

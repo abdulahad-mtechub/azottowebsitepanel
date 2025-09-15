@@ -19,7 +19,7 @@ const BusinessInfo = ({data}) => {
         {
             id: 1,
             icon:'/assets/icons/businessprice.png',
-            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" /> {data.price}</>,
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchpriority="high" /> {data.price}</>,
             subtitle:'Business Price'
         },
         {

@@ -13,7 +13,11 @@ const BusinessViewInfoCard = ({data}) => {
         {
             id: 2,
             icon:'/assets/icons/businessprice.png',
+<<<<<<< Updated upstream
             title: <> <img src="/assets/icons/reyal.png" width={14} alt="currency-symbol" /> {data?.price?.toLocaleString() || '0'}</>,
+=======
+            title: <> <img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchpriority="high" /> {data?.price?.toLocaleString() || '0'}</>,
+>>>>>>> Stashed changes
             subtitle:'Business Price'
         },
         {
@@ -50,7 +54,11 @@ const BusinessViewInfoCard = ({data}) => {
                                 </div>
                                 <Flex vertical gap={2}>
                                     <Title level={5} className={`m-0 'text-brand'${info.id === 1 ? 'text-green':null}`}>
+<<<<<<< Updated upstream
                                         {info?.title}
+=======
+                                        {info?.id === 2 && <img src="/assets/icons/reyal.png" width={14} alt="currency-symbol"  fetchpriority="high"/>} {info?.title}
+>>>>>>> Stashed changes
                                     </Title>
                                     <Text className='text-gray fs-12 fw-500'>
                                         {info?.subtitle}
