@@ -67,11 +67,11 @@ const SellerOfferTable = ({data}) => {
                         {// here if offerdata?.parentOffer?.id then it will be child offer else parent offer
                             record?.isProceedToPay ?
                                 <Tooltip title="CO - Counteroffer">
-                                    <Text className='bg-brand radius-4 p-1 fs-11 text-white'>CO</Text>
+                                    <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
                                 </Tooltip>
                             :
                                 <Tooltip title="PP - Proceed to Purchase">
-                                    <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>PP</Text>
+                                    <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>CO</Text>
                                 </Tooltip>
                         } 
                     </Flex>
@@ -121,31 +121,32 @@ const SellerOfferTable = ({data}) => {
                 const isChild = row?.isProceedToPay ? true : false;
                 const items = [
                     // Counter Offer case if isChild ture
-                    isChild && { label: <NavLink onClick={() => {
-                        setSelectedOfferId(row.id)
-                        handleAcceptOffer()
-                        setSelectedBusinessId(row.business.id)
-                    }}>Accept Offer</NavLink>, key: 0 },
-                    isChild && { label: <NavLink onClick={() =>{ 
-                        setDeleteModal(true)
-                        setSelectedOfferId(row.id)
-                    }}>Reject Offer</NavLink>, key: 1 },
-                    isChild && { label: <NavLink onClick={() => {
-                        setOfferModal(true)
-                        setSelectedOfferId(row.id)
-                    }}>Counter Offer</NavLink>, key: 2 },
-                    isChild && { label: <NavLink onClick={() => {
-                        setMeeting(true)
-                        setSelectedOfferId(row.id)
-                    }}>Request For Virtual Meeting</NavLink>, key: 3 },
-
-                    // Proceed to Purchase case if isChild false
                     !isChild && { label: <NavLink onClick={() => {
                         setSelectedOfferId(row.id)
                         handleAcceptOffer()
                         setSelectedBusinessId(row.business.id)
+                    }}>Accept Offer</NavLink>, key: 0 },
+                    !isChild && { label: <NavLink onClick={() =>{ 
+                        setDeleteModal(true)
+                        setSelectedOfferId(row.id)
+                    }}>Reject Offer</NavLink>, key: 1 },
+                    !isChild && { label: <NavLink onClick={() => {
+                        setOfferModal(true)
+                        setSelectedOfferId(row.id)
+                    }}>Counter Offer</NavLink>, key: 2 },
+                    !isChild && { label: <NavLink onClick={() => {
+                        setMeeting(true)
+                        setSelectedOfferId(row.id)
+                        setSelectedBusinessId(row.business.id)
+                    }}>Request For Virtual Meeting</NavLink>, key: 3 },
+
+                    // Proceed to Purchase case if isChild false
+                    isChild && { label: <NavLink onClick={() => {
+                        setSelectedOfferId(row.id)
+                        handleAcceptOffer()
+                        setSelectedBusinessId(row.business.id)
                     }}>Accept Offer</NavLink>, key: 4 },
-                    !isChild && { label: <NavLink onClick={() =>{
+                    isChild && { label: <NavLink onClick={() =>{
                          setDeleteModal(true)
                          setSelectedOfferId(row.id)
                         } }> Reject Offer </NavLink>, key: 5 },

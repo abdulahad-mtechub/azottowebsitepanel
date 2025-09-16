@@ -3,6 +3,7 @@ import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
+import Cookies from "js-cookie";
 
 const API_URL = "https://verify.jusoor-sa.co/graphql";
 
@@ -14,7 +15,10 @@ const httpLink = createHttpLink({
 
 // Auth Link (Attaches token)
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("accessToken");
+  // const token = localStorage.getItem("accessToken");
+    const token = Cookies.get("authToken"); // read userId from cookie
+  
+  
   return {
     headers: {
       ...headers,

@@ -4,7 +4,6 @@ import { client } from './config';
 import { ApolloProvider } from '@apollo/client';
 import { AuthProvider } from './context/AuthContext';
 
-
 function App() {
 
   return (

@@ -44,6 +44,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                                         businessId,
                                         price: parseFloat(values.offeramount),
                                         ...(offerId ? { parentOfferId: offerId } : {}),
+                                        ...(mode === "offer" ? { isProceedToPay: false } : {}),
                                         ...(mode === "proceed" ? { isProceedToPay: true } : {}),
                                     },
                                 },

@@ -19,7 +19,7 @@ const SellerSendRequestTable = () => {
     ];
 
     const sendrequestData = data?.getMySentMeetingRequests?.map((meeting) => {
-        const buyerName = meeting.requestedBy?.name || '';
+        const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3
                 ? buyerName.substring(0, 3) + '*'.repeat(10)

@@ -51,7 +51,7 @@ const Favoritbussines = () => {
                                     </Flex>
                                     <div>
                                         <div className='w-full card-img mb-2 rounded-12'>
-                                            <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" fetchPriority="high" />
+                                            <img src="/assets/images/card-1.webp" width={'100%'} height={'100%'} alt="product-image" fetchPriority="high" />
                                         </div>
                                         <Title className='' level={5}>
                                             {pro?.title}

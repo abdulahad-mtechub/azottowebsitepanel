@@ -16,11 +16,11 @@ const SellerRecieveRequestTable = () => {
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
-    const [fetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS);
+    const [refetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS);
     const search = Form.useWatch("search", form);
 
     const sellerrecievedrequestData =data?.getReceivedMeetingRequests?.map((meeting) => {
-        const buyerName = meeting.requestedBy?.name || '';
+        const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3
                 ? buyerName.substring(0, 3) + '*'.repeat(10)
@@ -75,7 +75,7 @@ const SellerRecieveRequestTable = () => {
     ];
 
     useEffect(() => {
-        fetchMeetings({ variables: { search: search || "" } });
+        refetchMeetings({ variables: { search: search || "" } });
     }, [search]);
 
     return (
@@ -119,7 +119,7 @@ const SellerRecieveRequestTable = () => {
                 onClose={()=>setIsAccept(false)}
                 meetingId={selectedMeetingId}
                 offerId={selectedOfferId}
-                refetchMeetings={() => fetchMeetings({ variables: { search: search || "" } })}
+                refetchMeetings={() => refetchMeetings({ variables: { search: search || "" } })}
                 businessId={selectedBusinessId}
             />
             <DeleteModal 

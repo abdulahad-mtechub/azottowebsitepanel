@@ -8,12 +8,11 @@ const { Text } = Typography
 const SellerAdminSchedulingTable = () => {
 
     const [form] = Form.useForm()
-
     const [fetchMeetings,{ data, loading }] = useLazyQuery(READYSCHEDULEDMEETINGS);
     const search = Form.useWatch("search", form);
 
     const selleradminsechedulingData = data?.getMeetingsReadyForScheduling?.map((meeting) => {
-        const buyerName = meeting.requestedBy?.name || '';
+        const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3
                 ? buyerName.substring(0, 3) + '*'.repeat(10)
@@ -25,7 +24,7 @@ const SellerAdminSchedulingTable = () => {
         buyername: maskedName,
         businessprice: meeting.business?.price,
         offerprice: meeting.offer?.price,
-        prefereddatetime: new Date(meeting.ownerAvailabilityDate).toLocaleString(),
+        prefereddatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
         };
     }) || [];
 

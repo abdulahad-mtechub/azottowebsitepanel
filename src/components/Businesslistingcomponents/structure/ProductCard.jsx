@@ -48,7 +48,7 @@ const ProductCard = ({
     <Row gutter={[16,16]}>
         {
             exploreData?.map((pro,i)=>
-                <Col lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
+                <Col lg={{span: 6}} md={{span: 8}} sm={{span: 24}} xs={{span: 24}} key={i}>
                     <Card className='h-100 border-gray rounded-12 card-cs cursor' 
                     
                     onClick={() => {
@@ -93,7 +93,7 @@ const ProductCard = ({
                             </Flex>
                             <div>
                                 <div className='w-full card-img mb-2 rounded-12'>
-                                    <img src="/assets/images/card-1.png" width={'100%'} height={'100%'} alt="product-image" fetchPriority="high" />
+                                    <img src="/assets/images/card-1.webp" width={'100%'} height={'100%'} alt="product-image" fetchPriority="high" />
                                 </div>
                                 <Title className='' level={5}>
                                     {pro?.title}

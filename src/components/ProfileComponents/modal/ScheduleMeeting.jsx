@@ -2,13 +2,16 @@ import { Button, Col, Flex, Form, Modal, Row, Typography } from 'antd'
 import { CloseOutlined } from '@ant-design/icons';
 import { MyDatepicker } from '../../Forms';
 import { useMutation } from '@apollo/client'
-import { BUSINESS_MEETING } from '../../../graphql'
+import { BUSINESS_MEETING,UPDATE_MEETING } from '../../../graphql'
 import { message } from "antd";
 
 const { Title, Text } = Typography
 const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings,businessId}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
+    const [meeting, { loading }] = useMutation(BUSINESS_MEETING);
+    const [updateMeeting, { loading:uploading }] = useMutation(UPDATE_MEETING);
+
     //TODO update exisiting meeting as seller availibilty
     const handleSubmit = async (values) => {
         try {
@@ -23,25 +26,37 @@ const ScheduleMeeting = ({visible,onClose,meetingId,offerId,refetchMeetings,busi
           const combinedDateTime = new Date(date);
           combinedDateTime.setHours(time.hour());
           combinedDateTime.setMinutes(time.minute());
-    
-          await meeting({
-            variables: {
-                input: {
-                businessId,
-                offerId,
-                requestedDate: combinedDateTime.toISOString(),
-                }
-            },
-          });
-    
+
+          if(meetingId){
+            await updateMeeting({
+                variables: {
+                    input: {
+                    id:meetingId,
+                    receiverAvailabilityDate: combinedDateTime.toISOString(),
+                    status:"ACCEPTED"
+                    },
+                },
+              });
+          }else{
+            await meeting({
+                variables: {
+                    input: {
+                    businessId,
+                    offerId,
+                    requestedDate: combinedDateTime.toISOString(),
+                    },
+                },
+            });
+          }
           messageApi.success("Meeting request sent successfully!");
           onClose();
+          await refetchMeetings({ variables: { search: "" } });
         } catch (error) {
           console.error(error);
           messageApi.error("Failed to send meeting request");
         }
       };
-    const [meeting, { loading }] = useMutation(BUSINESS_MEETING);
+
     return (
         <Modal
             title={null}

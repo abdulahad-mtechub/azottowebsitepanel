@@ -5,7 +5,8 @@ query GetMySentMeetingRequests($search: String) {
   getMySentMeetingRequests(search: $search) {
     id
     createdAt
-    requestedBy {
+    createdBy
+    requestedTo {
       name
     }
     business {
@@ -24,7 +25,7 @@ query GetReceivedMeetingRequests($search: String) {
   getReceivedMeetingRequests(search: $search) {
     id
     createdAt
-    requestedBy {
+    requestedTo {
       name
     }
     business {
@@ -47,8 +48,8 @@ query GetMeetingsReadyForScheduling($search: String) {
     id
     createdAt
     requestedDate
-    ownerAvailabilityDate
-    requestedBy {
+    receiverAvailabilityDate
+    requestedTo {
       name
     }
     business {
@@ -68,9 +69,9 @@ query GetScheduledMeetings($search: String) {
     id
     createdAt
     requestedDate
-    ownerAvailabilityDate
+    receiverAvailabilityDate
     status
-    requestedBy {
+    requestedTo {
       name
     }
     business {
