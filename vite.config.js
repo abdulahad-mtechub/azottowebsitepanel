@@ -5,9 +5,10 @@ export default defineConfig(({ mode }) => {
   const isDev = mode === "development";
 
   return {
+    base: "/", // 👈 ensure assets resolve correctly
     plugins: [
       react({
-        jsxRuntime: "automatic", // ✅ so you don’t need `import React` everywhere
+        jsxRuntime: "automatic",
       }),
       {
         name: "html-transform",
@@ -20,5 +21,10 @@ export default defineConfig(({ mode }) => {
         },
       },
     ],
+    build: {
+      target: "esnext",
+      outDir: "dist",
+      assetsDir: "assets",
+    },
   };
 });
