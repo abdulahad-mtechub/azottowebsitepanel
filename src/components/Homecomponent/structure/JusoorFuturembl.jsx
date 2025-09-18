@@ -53,7 +53,7 @@ const JusoorFuturembl = () => {
                                         preview={false}
                                         width={200}
                                     />
-                                    <Flex vertical gap={5} align='center' style={{maxWidth: 400}}>
+                                    <Flex vertical gap={5} align='center' className='maxwidth-400'>
                                         <Title level={5} className='m-0 text-white'>{list?.title}</Title>
                                         <Text className="fs-13 text-white">
                                             {

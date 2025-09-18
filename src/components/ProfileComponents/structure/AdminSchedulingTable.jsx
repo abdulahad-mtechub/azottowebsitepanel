@@ -21,7 +21,7 @@ const AdminSchedulingTable = () => {
                 <SearchInput
                     placeholder="Search"
                     value={form.getFieldValue('name') || ''}
-                    prefix={<img src="/assets/icons/search.png" style={{marginInline: 3}} width={12} alt='search-icon' />}
+                    prefix={<img src="/assets/icons/search.png" width={12} alt='search-icon' />}
                 />
             </Col>
             <Col span={24}>

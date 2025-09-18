@@ -3,14 +3,12 @@ import { Card, Col, Flex, Row, Table, Typography } from 'antd'
 const { Title } = Typography
 const PreviewTableContent = ({title,columns,data}) => {
     return (
-        <Card className='shadow-d radius-12 border-gray mb-3'>
-            <Row gutter={[24,24]}>
+        // <Card className='shadow-d radius-12 border-gray mb-3'>
+            <Row gutter={[24,12]}>
                 <Col span={24}>
-                    <Flex gap={4}>
-                        <Title level={5} className='m-0'>
-                            {title}
-                        </Title>
-                    </Flex>
+                    <Title level={5} className='m-0'>
+                        {title}
+                    </Title>
                 </Col>
                 <Col span={24}>
                     <Table
@@ -35,7 +33,7 @@ const PreviewTableContent = ({title,columns,data}) => {
                     />
                 </Col>
             </Row>
-        </Card>
+        // </Card>
     )
 }
 

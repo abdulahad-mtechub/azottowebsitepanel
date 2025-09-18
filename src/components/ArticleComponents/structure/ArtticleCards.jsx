@@ -25,8 +25,7 @@ const ArtticleCards = ({data,loadmore=false}) => {
                                         ellipsis={{
                                             rows: 2
                                         }}
-                                        className='fs-16 fw-600'
-                                        style={{height: 50}}
+                                        className='fs-16 fw-600 h-50'
                                     >
                                         {art?.title}
                                     </Paragraph>

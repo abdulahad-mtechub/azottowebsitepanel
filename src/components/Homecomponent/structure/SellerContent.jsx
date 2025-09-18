@@ -94,37 +94,29 @@ const SellerContent = () => {
   return (
     <div ref={containerRef}>
       <Row gutter={[24, 24]} className="mt-2">
-        <Col lg={12} md={24} sm={24} xs={24} className="sticky-top" style={{ top: '20px', height: 'fit-content' }}>
-          <div style={{
-            width: '100%',
-            height: 500,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}>
+        <Col lg={12} md={24} sm={24} xs={24} className="sticky-top">
+          <Flex align='center' justify='center' className='w-100 h-500'>
             <Image
               src={steps[activeStep].image}
               width="100%"
               height="100%"
               style={{
-                objectFit: 'contain',
                 transition: 'opacity 0.5s ease',
-                maxHeight: '100%',
-                maxWidth: '100%'
               }}
+              className='object-contain maxwidth-100 maxheight-100'
               alt='image'
               preview={false}
             />
-          </div>
+          </Flex>
         </Col>
         <Col lg={12} md={24} sm={24} xs={24}>
-          <Flex vertical gap={20} className="m-ps-3" style={{ padding: '40px 0' }}>
-            <Title level={4} style={{ fontWeight: 600 }}>
+          <Flex vertical gap={20} className="m-ps-3 p-40-0">
+            <Title level={4} >
               Selling Your Business Is <span className="text-brand">Straightforward</span>
             </Title>
 
             <Timeline
-              style={{ width: '100%', maxWidth: 450 }}
+              className='w-100 maxwidth-450'
               items={steps.map((step, index) => ({
                 dot: (
                   <img
@@ -150,10 +142,10 @@ const SellerContent = () => {
                       willChange: 'opacity'
                     }}
                   >
-                    <Title level={5} style={{ marginBottom: 8, fontWeight: 500 }}>
+                    <Title level={5} className='fw-500 mb-2'>
                       {step.title}
                     </Title>
-                    <Text style={{ fontSize: 14, lineHeight: 1.5 }}>{step.description}</Text>
+                    <Text className='fs-14 lh-1-5'>{step.description}</Text>
                   </div>
                 ),
               }))}

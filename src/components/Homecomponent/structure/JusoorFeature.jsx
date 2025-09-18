@@ -108,7 +108,7 @@ const JusoorFeature = () => {
           </Col>
 
           <Col lg={{ span: 9 }} md={24} sm={24} xs={24}>
-            <div className="step-content" style={{ minHeight: '60vh' }}>
+            <div className="step-content minheight-60vh" >
               <AnimatePresence mode="wait">
                 <motion.div
                   key={steps[current].title}
@@ -126,7 +126,7 @@ const JusoorFeature = () => {
                       width="100%"
                       height="100%"
                       alt={steps[current].title}
-                      style={{ objectFit: 'contain' }}
+                      className='object-contain'
                     />
                   </div>
                 </motion.div>

@@ -37,7 +37,7 @@ const ProductCard = ({
       };
       if (isLoading) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );
@@ -98,7 +98,7 @@ const ProductCard = ({
                                 <Title className='' level={5}>
                                     {pro?.title}
                                 </Title>
-                                <div style={{height: 80}}>
+                                <div className='h-80'>
                                     <Paragraph
                                         ellipsis={{ rows: 3, expandable: false, symbol: 'more' }}
                                         className='fs-14 text-gray'
@@ -123,7 +123,7 @@ const ProductCard = ({
                                                 </Col>
                                                 {
                                                     c < pro.child.length - 1 && (
-                                                    <Divider type='vertical' style={{ height: 'auto' }} className='m-0' />
+                                                    <Divider type='vertical' className='m-0 h-auto' />
                                                     )
                                                 }
                                             </React.Fragment>

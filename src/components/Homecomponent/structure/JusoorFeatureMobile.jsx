@@ -83,7 +83,7 @@ const JusoorFeatureMobile = () => {
                             <Flex align='center' gap={30} className='min-h-screen text-center overflow-hidden' style={{ width: `calc(100vw * ${steps.length})` }}>
                                 {
                                     steps?.map((list,i)=>
-                                        <Flex vertical align='center' justify='center' key={i} className='overflow-hidden min-h-screen' style={{width: '100vw'}}
+                                        <Flex vertical align='center' justify='center' key={i} className='overflow-hidden min-h-screen w-100vw'
                                             ref={(ref)=>imgRef.current[i] = ref}
                                         >
                                             <Image
@@ -92,7 +92,7 @@ const JusoorFeatureMobile = () => {
                                                 preview={false}
                                                 width={400}
                                             />
-                                            <Flex vertical gap={5} align='center' style={{maxWidth: 400}}>
+                                            <Flex vertical gap={5} align='center' className='maxwidth-400'>
                                                 <Title level={5} className='m-0 text-white'>{list?.title}</Title>
                                                 <Text className="fs-13 text-white">
                                                     {

@@ -76,7 +76,7 @@ const Favoritbussines = () => {
                                                         </Col>
                                                         {
                                                             c < pro.child.length - 1 && (
-                                                                <Divider type='vertical' style={{ height: 'auto' }} className='m-0' />
+                                                                <Divider type='vertical' className='m-0 h-auto' />
                                                             )
                                                         }
                                                     </React.Fragment>

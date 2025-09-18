@@ -55,20 +55,17 @@ const Buyework = () => {
         {
             data?.map((items,index)=>
                 <Col lg={{span: 6}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={index}>
-                    <Card className='border-0 h-100 work-cd bg-transparent'
-                        actions={[
-                            <Flex vertical  className='text-center' align='center'>
-                                <Title level={4} className='m-0'>{items?.title}</Title>
-                                <Text >
-                                    {items?.desc}
-                                </Text>
-                            </Flex>
-                        ]}
-                    >
+                    <Card className='border-0 h-100 work-cd bg-transparent'>
                         <Flex justify='center'>
-                            <div style={{ width: '100%', height: 300 }}>
+                            <div  className='riv-cs'>
                                 {items?.image}
                             </div>
+                        </Flex>
+                        <Flex vertical  className='text-center' align='center'>
+                            <Title level={4} className='m-0'>{items?.title}</Title>
+                            <Text >
+                                {items?.desc}
+                            </Text>
                         </Flex>
                     </Card>
                 </Col>

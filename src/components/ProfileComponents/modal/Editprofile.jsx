@@ -135,7 +135,7 @@ const Editprofile = ({ visible, onClose }) => {
                   addonBefore={
                     <Select
                       defaultValue="SA"
-                      style={{ width: 80 }}
+                      className='w-80px'
                       onChange={(value) =>
                         form.setFieldsValue({ countryCode: value })
                       }
