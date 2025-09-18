@@ -16,13 +16,13 @@ const ExploreSimilarBusiness = ({id}) => {
             {
                 id: 1,
                 icon: '/assets/icons/year-p.png',
-                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" /> {b?.revenue?.toLocaleString?.() || '0'}</>,
+                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" fetchPriority="high"/> {b?.revenue?.toLocaleString?.() || '0'}</>,
                 subdesc: 'Revenue/month',
             },
             {
                 id: 2,
                 icon: '/assets/icons/revenue.png',
-                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" /> {b?.profit?.toLocaleString?.() || '0'}</>,
+                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt="currency-symbol" fetchPriority="high" /> {b?.profit?.toLocaleString?.() || '0'}</>,
                 subdesc: 'Profit/month',
             },
             {

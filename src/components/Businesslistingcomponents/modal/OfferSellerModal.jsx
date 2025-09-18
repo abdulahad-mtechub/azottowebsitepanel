@@ -44,6 +44,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                                         businessId,
                                         price: parseFloat(values.offeramount),
                                         ...(offerId ? { parentOfferId: offerId } : {}),
+                                        ...(mode === "offer" ? { isProceedToPay: false } : {}),
                                         ...(mode === "proceed" ? { isProceedToPay: true } : {}),
                                     },
                                 },
@@ -94,7 +95,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                             message="Please enter offer amount"
                             placeholder='e.g. 75000'
                             addonBefore={
-                                <img src='/assets/icons/reyal-g.png' width={14} alt='currency-symbol' />
+                                <img src='/assets/icons/reyal-g.png' width={14} alt='currency-symbol' fetchPriority="high"/>
                             }
                             className='w-100'
                             onChange={handleOfferAmountChange}

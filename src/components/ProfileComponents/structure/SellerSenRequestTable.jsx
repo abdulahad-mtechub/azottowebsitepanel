@@ -19,7 +19,7 @@ const SellerSendRequestTable = () => {
     ];
 
     const sendrequestData = data?.getMySentMeetingRequests?.map((meeting) => {
-        const buyerName = meeting.requestedBy?.name || '';
+        const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3
                 ? buyerName.substring(0, 3) + '*'.repeat(10)
@@ -47,7 +47,7 @@ const SellerSendRequestTable = () => {
                     <SearchInput
                     placeholder="Search"
                     value={form.getFieldValue('search') || ''}
-                    prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} />}
+                    prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
                     onChange={(e) => form.setFieldValue("search", e.target.value)}
                     />
                 </Form.Item>

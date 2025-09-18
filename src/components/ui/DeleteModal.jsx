@@ -58,7 +58,7 @@ const DeleteModal = ({visible,onClose,title,subtitle,type,offerId,refetch,meetin
       > 
 
         <Flex vertical align='center' className='text-center' gap={6}>
-            <img src='/assets/icons/cancel-ic.png' alt='close-status-icon' width={50} />
+            <img src='/assets/icons/cancel-ic.png' alt='close-status-icon' width={50} fetchPriority="high" />
             <Title level={4} className='m-0'>
                 {title}
             </Title>

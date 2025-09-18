@@ -6,37 +6,42 @@ import { BUSINESS_MEETING } from '../../../graphql'
 
 const { Title, Text } = Typography
 const ScheduleMeetingStep = ({form,onClose}) => {
-    const handleSubmit = async (values) => {
-        try {
-          const { date, time } = values;
+    // const handleSubmit = async (values) => {
+    //     try {
+    //       const { date, time } = values;
     
-          if (!date || !time) {
-            message.error("Please select both date and time");
-            return;
-          }
+    //       if (!date || !time) {
+    //         message.error("Please select both date and time");
+    //         return;
+    //       }
+    //       const [startTime, endTime] = time; // both are dayjs objects
+
+    //       // Combine date & time into a single Date object
+    //       const combinedDateTime = new Date(date);
+    //       combinedDateTime.setHours(startTime.hour());
+    //       combinedDateTime.setMinutes(startTime.minute());
+
+    //       const combinedendDateTime = new Date(date);
+    //       combinedendDateTime.setHours(endTime.hour());
+    //       combinedendDateTime.setMinutes(endTime.minute());
     
-          // Combine date & time into a single Date object
-          const combinedDateTime = new Date(date);
-          combinedDateTime.setHours(time.hour());
-          combinedDateTime.setMinutes(time.minute());
-    
-          await businessMeeting({
-            variables: {
-              input: {
-                businessId,
-                requestedDate: combinedDateTime.toISOString(),
-              },
-            },
-          });
-    
-          message.success("Meeting request sent successfully!");
-          onClose();
-        } catch (error) {
-          console.error(error);
-          message.error("Failed to send meeting request");
-        }
-      };
-    const [businessMeeting, { loading }] = useMutation(BUSINESS_MEETING);
+    //       await businessMeeting({
+    //         variables: {
+    //           input: {
+    //             businessId,
+    //             requestedDate: combinedDateTime.toISOString(),
+    //             requestedEndDate: combinedendDateTime.toISOString(),
+    //           },
+    //         },
+    //       });
+    //       message.success("Meeting request sent successfully!");
+    //       onClose();
+    //     } catch (error) {
+    //       console.error(error);
+    //       message.error("Failed to send meeting request");
+    //     }
+    // };
+    // const [businessMeeting, { loading }] = useMutation(BUSINESS_MEETING);
 
   return (
     <div>
@@ -57,7 +62,7 @@ const ScheduleMeetingStep = ({form,onClose}) => {
             layout='vertical'
             form={form}
             requiredMark={false}
-            onFinish={handleSubmit}
+            // onFinish={handleSubmit}
         >
             <Row>
                 <Col span={24}>

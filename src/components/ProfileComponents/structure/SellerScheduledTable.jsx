@@ -12,7 +12,7 @@ const SellerScheduledTable = () => {
 
 
     const sellerscheduledData = data?.getScheduledMeetings?.map((meeting) => {
-        const buyerName = meeting.requestedBy?.name || '';
+        const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3
                 ? buyerName.substring(0, 3) + '*'.repeat(10)
@@ -24,7 +24,7 @@ const SellerScheduledTable = () => {
         buyername: maskedName,
         businessprice: meeting.business?.price,
         offerprice: meeting.offer?.price,
-        scheduledatetime: new Date(meeting.ownerAvailabilityDate).toLocaleString(),
+        scheduledatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
         meetinglink: 'https://yourapp.com/meet/' + meeting.id 
         };
     }) || [];
@@ -63,7 +63,7 @@ const SellerScheduledTable = () => {
                         <SearchInput
                         placeholder="Search"
                         value={form.getFieldValue('search') || ''}
-                        prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} />}
+                        prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
                         onChange={(e) => form.setFieldValue("search", e.target.value)}
                         />
                     </Form.Item>

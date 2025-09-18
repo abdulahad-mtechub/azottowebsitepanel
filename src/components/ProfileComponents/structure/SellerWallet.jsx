@@ -42,7 +42,7 @@ const SellerWallet = ({addwalletvisible, setAddWalletVisible}) => {
                                     <Flex>
                                         <Dropdown menu={{ items }} trigger={["click"]}>
                                             <Button aria-labelledby='dropdown icon' className="bg-transparent border-0 p-0">
-                                                <img src="/assets/icons/line-dot.png"  alt="dropdown-icon" width={25} />
+                                                <img src="/assets/icons/line-dot.png"  alt="dropdown-icon" width={25} fetchPriority="high" />
                                             </Button>
                                         </Dropdown>
                                     </Flex>

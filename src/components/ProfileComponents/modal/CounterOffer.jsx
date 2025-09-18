@@ -94,7 +94,7 @@ const CounterOffer = ({visible,onClose,selectedOfferId,title='Counter Offer to S
                             message="Please enter offer amount"
                             placeholder='e.g. 75000'
                             addonBefore={
-                                <img src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} />
+                                <img src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} fetchPriority="high" />
                             }
                             className='w-100'
                             onChange={handleOfferAmountChange}

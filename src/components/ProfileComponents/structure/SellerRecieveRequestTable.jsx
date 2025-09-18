@@ -16,11 +16,11 @@ const SellerRecieveRequestTable = () => {
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
-    const [fetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS);
+    const [refetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS);
     const search = Form.useWatch("search", form);
 
     const sellerrecievedrequestData =data?.getReceivedMeetingRequests?.map((meeting) => {
-        const buyerName = meeting.requestedBy?.name || '';
+        const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3
                 ? buyerName.substring(0, 3) + '*'.repeat(10)
@@ -66,7 +66,7 @@ const SellerRecieveRequestTable = () => {
                 return (
                     <Dropdown menu={{ items }} trigger={["click"]}>
                         <Button aria-labelledby='dropdown icon' className="bg-transparent border-0 p-0">
-                            <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} />
+                            <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} fetchPriority="high" />
                         </Button>
                     </Dropdown>
                 );
@@ -75,7 +75,7 @@ const SellerRecieveRequestTable = () => {
     ];
 
     useEffect(() => {
-        fetchMeetings({ variables: { search: search || "" } });
+        refetchMeetings({ variables: { search: search || "" } });
     }, [search]);
 
     return (
@@ -86,7 +86,7 @@ const SellerRecieveRequestTable = () => {
                     <SearchInput
                         placeholder="Search"
                         value={form.getFieldValue('name') || ''}
-                        prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} />}
+                        prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
                         onChange={(e) => form.setFieldValue("search", e.target.value)}
                     />
                     </Form.Item>
@@ -119,7 +119,7 @@ const SellerRecieveRequestTable = () => {
                 onClose={()=>setIsAccept(false)}
                 meetingId={selectedMeetingId}
                 offerId={selectedOfferId}
-                refetchMeetings={() => fetchMeetings({ variables: { search: search || "" } })}
+                refetchMeetings={() => refetchMeetings({ variables: { search: search || "" } })}
                 businessId={selectedBusinessId}
             />
             <DeleteModal 

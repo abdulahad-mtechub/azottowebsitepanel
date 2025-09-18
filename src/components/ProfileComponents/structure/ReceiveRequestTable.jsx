@@ -33,7 +33,7 @@ const ReceiveRequestTable = () => {
                 return (
                     <Dropdown menu={{ items }} trigger={["click"]}>
                         <Button aria-labelledby='dropdown icon' className="bg-transparent border-0 p-0">
-                            <img src="/assets/icons/dots.png"  alt="dropdown-icon" width={16} />
+                            <img src="/assets/icons/dots.png"  alt="dropdown-icon" width={16} fetchPriority="high" />
                         </Button>
                     </Dropdown>
                 );
@@ -49,7 +49,7 @@ const ReceiveRequestTable = () => {
                     <SearchInput
                         placeholder="Search"
                         value={form.getFieldValue('name') || ''}
-                        prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} />}
+                        prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
                     />
                 </Col>
                 <Col span={24}>

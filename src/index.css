@@ -1,8 +1,9 @@
-
 @font-face {
-    font-family: Productsans;
-    src: url('../assets/fonts/Product\ Sans\ Regular.ttf');
-}
+    font-family: 'Product Sans';
+    src: url('/dist/assets/fonts/Product-Sans-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }  
 
 *{
     padding: 0;

@@ -99,17 +99,27 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
                     onClick={async () => {
                         try {
                           const values = await form.validateFields();
-                  
-                          const meetingDate = values.date?.toDate?.(); // convert dayjs -> Date
-                          const meetingTime = values.time?.toDate?.(); // convert dayjs -> Date
+
+                          const meetingDate = new Date(values.date?.toDate?.());
+                          const [startTime, endTime] = values.time || []; // array of dayjs
 
                           // ✅ Combine Date + Time into single DateTime
                           const combinedDateTime = new Date(
                             meetingDate.getFullYear(),
                             meetingDate.getMonth(),
                             meetingDate.getDate(),
-                            meetingTime.getHours(),
-                            meetingTime.getMinutes(),
+                            new Date(startTime).getHours(),
+                            new Date(startTime).getMinutes(),
+                            0
+                          );
+
+                          // ✅ Combine Date + End Time
+                          const combinedEndDateTime = new Date(
+                            meetingDate.getFullYear(),
+                            meetingDate.getMonth(),
+                            meetingDate.getDate(),
+                            new Date(endTime).getHours(),
+                            new Date(endTime).getMinutes(),
                             0
                           );
                   
@@ -118,6 +128,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
                               input: {
                                 businessId,
                                 requestedDate: combinedDateTime.toISOString(), // or use ISO string
+                                requestedEndDate: combinedEndDateTime.toISOString(),
                               },
                             },
                           });

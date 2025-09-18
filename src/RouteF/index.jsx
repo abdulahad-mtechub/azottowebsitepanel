@@ -4,7 +4,7 @@ import { UpOutlined } from '@ant-design/icons';
 import { Aboutus, Article, ArticleSingleView, BusinessListingPage, EndaPage, Faqs, ForgotPassword, Home, LoginPage, PrivacyPolicy, ProfileDashboard, SellBusinessCreate, SignupPage, SingleViewlisting } from "../pages";
 import { Footer, Navbar, ScrollTop,Singlebusinessview } from "../components";
 import { Termofuse } from "../pages";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
