@@ -1,13 +1,12 @@
 import React,{useState,useEffect} from 'react'
 import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography,message,Spin } from 'antd'
 import { CheckCircleOutlined } from '@ant-design/icons'
-import { UPDATE_DEAL } from '../../../graphql/';
+import { GET_BUSINESS, UPDATE_DEAL } from '../../../graphql/';
 import { useMutation } from '@apollo/client';
 import Cookies from "js-cookie";
 
 const { Text } = Typography
 const DigitalSaleAgreementStep = ({form,completedeal,details}) => {
-    const userId = Cookies.get("userId"); 
 
     const [messageApi, contextHolder] = message.useMessage();
     let checked 
@@ -17,27 +16,24 @@ const DigitalSaleAgreementStep = ({form,completedeal,details}) => {
     }else{
         checked = details?.status !== 'DSA_FROM_SELLER_PENDING' && details?.status !== 'DSA_FROM_BUYER_PENDING';
     }
-
-    const [isCheckedDetails, setIsCheckedDetails] = useState(false); // first checkbox
-    const [isCheckedTerms, setIsCheckedTerms] = useState(false); // second checkbox
+    const [isCheckedDetails, setIsCheckedDetails] = useState(false)
+    const [isCheckedTerms, setIsCheckedTerms] = useState(false);
     const DSA = details?.status
 
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-        onCompleted: () => {
-            messageApi.success("Status changed successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
+        refetchQueries: [
+            { query: GET_BUSINESS, variables: { getBusinessByIdId: details?.businessId, limit: null, offset: null, search: null, status: null } },
+        ],
+        awaitRefetchQueries: true,
+        onCompleted: () => messageApi.success("Status changed successfully!"),
+        onError: (err) => messageApi.error(err.message || "Something went wrong!"),
     });
 
-    // Set initial state when details change
     useEffect(() => {
         setIsCheckedDetails(checked);
         setIsCheckedTerms(checked);
     }, [checked, details]);
 
-    // Function to handle second checkbox change and trigger update
     const handleTermsChange = (e) => {
         setIsCheckedTerms(e.target.checked);
 
@@ -55,7 +51,8 @@ const DigitalSaleAgreementStep = ({form,completedeal,details}) => {
                 variables: {
                     input: {
                         id: details?.key || null,
-                        status: newStatus
+                        status: newStatus,
+                        isDsaBuyer: true
                     }
                 }
             });

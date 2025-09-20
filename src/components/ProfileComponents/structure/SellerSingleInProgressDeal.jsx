@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
 
 const { Title, Text } = Typography
 const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
-    const userId = Cookies.get("userId"); // read userId from cookie
+    const userId = Cookies.get("userId"); 
     const dealId = inprogressdeal.key;
     const { data, loading, error } = useQuery(GETDEAL, {
       variables: { getDealId: dealId },
@@ -34,6 +34,8 @@ const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
         date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',
         busines: data.getDeal.business || '-',
         banks: data.getDeal.buyer?.banks || '-',
+        isCommissionVerified: data.getDeal?.isCommissionVerified || false,
+        isDsaSeller: data.getDeal?.isDsaSeller || false,
     }: null;
   
     if (!deal) return <Text>No deal found</Text>;

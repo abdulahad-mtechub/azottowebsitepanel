@@ -31,7 +31,7 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
             key: '1',
             label: 'Pay Commission',
             content: <PayCommissionInprogressStep form={form} inprogressdeal={inprogressdeal} />,
-            status: 'Pending',
+            status:  inprogressdeal?.isCommissionVerified ? 'Verified' : 'Pending',
         },
         {
             key: '2',

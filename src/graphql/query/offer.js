@@ -69,6 +69,8 @@ query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
       id
       name
     }
+      isDsaBuyer
+      isCommissionVerified
     business {
       id
       businessTitle
@@ -90,6 +92,7 @@ query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
       id
       name
     }
+      isDsaSeller
     business {
       id
       businessTitle

@@ -41,6 +41,7 @@ const SellerInProgressDeals = ({setInprogressDeal}) => {
                 buyername: deal.buyer.name,
                 businessprice: deal.price,
                 date: new Date(deal.createdAt).toLocaleString(),
+                isDsaSeller: deal?.isDsaSeller,
             })) || [];
         }, [offerDeals]);
 

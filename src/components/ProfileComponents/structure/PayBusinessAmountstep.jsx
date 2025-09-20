@@ -33,6 +33,10 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
       
     // Mutation to upload document
     const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
+        refetchQueries: [
+            { query: GET_BUSINESS, variables: { getBusinessByIdId: inprogressdeal?.businessId, limit: null, offset: null, search: null, status: null } },
+        ],
+        awaitRefetchQueries: true,
         onCompleted: () => messageApi.success("Document uploaded successfully!"),
         onError: (err) => messageApi.error(err.message || "Upload failed!"),
     });

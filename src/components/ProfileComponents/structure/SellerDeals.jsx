@@ -3,7 +3,7 @@ import { ModuleTopHeading } from '../../Pagecomponents'
 import { lazy, Suspense } from 'react'
 import { LoadingOutlined } from '@ant-design/icons';
 import { SellerSingleCompleteDeal } from './SellerSingleCompleteDeal';
-import React,{ useMemo,useState } from 'react'
+import { useMemo,useState } from 'react'
 
 const SellerInProgressDeals = lazy(() => import('./SellerInProgressDeals').then(module => ({ default: module.SellerInProgressDeals })))
 const SellerSingleInProgressDeals = lazy(() => import('./SellerSingleInProgressDeal').then(module => ({ default: module.SellerSingleInProgressDeals })))

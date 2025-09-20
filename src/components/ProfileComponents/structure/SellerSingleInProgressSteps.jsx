@@ -38,6 +38,7 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
     const buyerBanks = data?.getBankDetailsByDealId;
     const found = deal?.busines?.documents?.find(doc => doc.title === "Jasoor Commission");
     const send = buyerBanks?.find(b => b?.isSend === true);
+    console.log("deal", deal);
     const DSA = deal?.status
     const steps = [
         {

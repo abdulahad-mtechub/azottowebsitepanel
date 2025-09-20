@@ -2,7 +2,7 @@ import { Card, Col, Flex, Image, Row, Typography,message } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 import { useQuery ,useMutation} from '@apollo/client';
 import React,{useState} from 'react'
-import {GETADMINACTIVEBANK,GET_BUSINESS } from '../../../graphql/query';
+import {BUYERINPROGRESSDEALS, GETADMINACTIVEBANK,GET_BUSINESS } from '../../../graphql/query';
 import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 
 
@@ -32,6 +32,10 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
   
     // Mutation to upload document
     const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
+      refetchQueries: [
+        { query: GET_BUSINESS, variables: { getBusinessByIdId: inprogressdeal?.businessId, limit: null, offset: null, search: null, status: null } },
+      ],
+      awaitRefetchQueries: true,
       onCompleted: () => messageApi.success("Document uploaded successfully!"),
       onError: (err) => messageApi.error(err.message || "Upload failed!"),
     });

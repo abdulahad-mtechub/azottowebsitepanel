@@ -1,6 +1,6 @@
 import { Card, Flex, Spin, Tabs } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
-import { useState, useMemo, useCallback } from 'react'
+import { useState, useMemo } from 'react'
 import { lazy, Suspense } from 'react'
 import { LoadingOutlined } from '@ant-design/icons';
 import { SingleCompleteDeal } from './SingleCompleteDeal';

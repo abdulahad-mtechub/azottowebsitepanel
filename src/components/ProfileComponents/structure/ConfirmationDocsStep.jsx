@@ -4,6 +4,7 @@ import { CheckCircleOutlined } from '@ant-design/icons'
 import { UPDATE_DEAL,UPLOAD_DOCUMENT} from '../../../graphql/mutation';
 import { useMutation } from '@apollo/client';
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
+import { GETDEAL } from '../../../graphql';
 
 const { Text } = Typography
 const ConfirmationDocsStep = ({ form, details }) => {
@@ -28,22 +29,19 @@ const ConfirmationDocsStep = ({ form, details }) => {
         }
     ].filter(Boolean);
 
+    console.log("details?.businessId", details?.businessId);
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-        onCompleted: () => {
-            messageApi.success("Status changed successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
+        refetchQueries: [
+            { query: GETDEAL, variables: { getDealId: details?.key } },
+        ],
+        awaitRefetchQueries: true,
+        onCompleted: () => messageApi.success("Status changed successfully!"),
+        onError: (err) => messageApi.error(err.message || "Something went wrong!"),
     });
 
     const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
-        onCompleted: () => {
-            messageApi.success("Document uploaded successfully!");
-        },
-        onError: (err) => {
-            messageApi.error(err.message || "Something went wrong!");
-        },
+        onCompleted: () => messageApi.success("Document uploaded successfully!"),
+        onError: (err) => messageApi.error(err.message || "Something went wrong!"),
     });
 
     const handleSingleFileUpload = async (file,title) => {
@@ -77,7 +75,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
                             filePath: result.fileUrl || result.url,
                             fileName: file.name,
                             fileType: file.type,
-                            // businessId:details?.busines?.id
                         },
                     },
                 });
