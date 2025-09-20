@@ -54,12 +54,12 @@ const BusinessInfoCardMobile = ({data}) => {
                         {
                             businessInfoData?.map((stat,i)=>
                                 <Flex gap={10} key={i}>
-                                    <div className={`icon-pre ${stat.id === 1 ? 'bg-light-green':null}`}>
-                                        <Image src={stat?.icon} preview={false} width={'100%'}  alt="stats icon" />
+                                    <div className={`icon-pre-m ${stat.id === 1 ? 'bg-light-green':null}`}>
+                                        <Image src={stat?.icon} preview={false} width={30}  alt="stats icon" />
                                     </div>
                                     <Flex vertical gap={2}>
                                         <Title level={5} className={`m-0 ${stat.id === 1 ? 'text-green':'text-brand'}`}>
-                                            {stat.id === 2 &&<img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" />} {stat?.title}
+                                            {stat.id === 2 &&<img src="/assets/icons/reyal-b.png" width={12} alt="currency-symbol" fetchPriority="high" />} {stat?.title}
                                         </Title>
                                         <Text className='text-gray fs-12 fw-500'>
                                             {stat?.subtitle}

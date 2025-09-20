@@ -60,12 +60,18 @@ const MobileNavbar = ({ visible, onClose }) => {
                                 key={f}
                                 extra={
                                     ((currentPanel?.findIndex(x => x == f)) > -1) ?
-                                        <MinusOutlined className='text-white' style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14 }} />
+                                        <MinusOutlined className='text-white fs-14'/>
                                         :
-                                        <PlusOutlined className='text-white' style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14 }} />
+                                        <PlusOutlined className='text-white fs-14'/>
                                 }
                             >
                                 <div>
+                                    {
+                                        f === 0 &&    
+                                        <NavLink to={'/'}  className='text-white fs-14 block p-2 pl-2'>
+                                            <Title level={5} className='text-white m-0'>Browse All</Title>
+                                        </NavLink>
+                                    }
                                     <Collapse
                                         activeKey={currentPanels}
                                         onChange={(keys) => { setCurrentPanels(keys) }}
@@ -81,9 +87,9 @@ const MobileNavbar = ({ visible, onClose }) => {
                                                         key={f}
                                                         extra={
                                                             ((currentPanels?.findIndex(x => x == f)) > -1) ?
-                                                                <MinusOutlined className='text-white' style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14 }} />
+                                                                <MinusOutlined className='text-white fs-14'/>
                                                                 :
-                                                                <PlusOutlined className='text-white' style={{ transition: 'transform 0.2s ease-in-out', fontSize: 14 }} />
+                                                                <PlusOutlined className='text-white fs-14'/>
                                                         }
                                                     >
                                                         <Flex vertical gap={10}>
@@ -104,12 +110,6 @@ const MobileNavbar = ({ visible, onClose }) => {
                                             )
                                         }
                                     </Collapse>
-                                    {
-                                        f === 0 &&    
-                                        <NavLink to={'/'}  className='text-white fs-14 block mb-2 p-2 pl-2'>
-                                            <Title level={5} className='text-white m-0'>Browse All</Title>
-                                        </NavLink>
-                                    }
                                 </div>
                             </Panel>
                         )

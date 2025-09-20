@@ -18,7 +18,7 @@ const FaqsComponent = () => {
     })) || [];
     if (loading) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );
@@ -50,15 +50,13 @@ const FaqsComponent = () => {
                                     <Panel className={currentPanel.includes(String(f)) ? 'panel-active panel' : 'panel'}  showArrow={false} 
                                         header={
                                             <Title level={5} className={`m-0 fw-500 fs-17 ${currentPanel.includes(String(f)) ? 'text-brand':'text-gray'}`}>
-                                                <span style={{marginRight: 15}}>0{f+1}</span>{faq?.title}
+                                                <span className='mr-15'>0{f+1}</span>{faq?.title}
                                             </Title>
                                         } key={f} 
                                         extra={((currentPanel?.findIndex(x=>x==f))>-1) ?
-                                        <MinusOutlined 
-                                            style={{transition: 'transform 0.2s ease-in-out', fontSize: 18}} />
+                                        <MinusOutlined className='fs-18' />
                                         :
-                                        <PlusOutlined
-                                            style={{transition: 'transform 0.2s ease-in-out', fontSize: 18}}/>}
+                                        <PlusOutlined className='fs-18'/>}
                                             
                                     >
                                         <div>

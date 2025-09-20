@@ -44,7 +44,7 @@ const ExploreLive = () => {
 
     if (loading) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className='h-200'>
                 <Spin size="large" />
             </Flex>
         );
@@ -128,7 +128,7 @@ const ExploreLive = () => {
                                                             </Col>
                                                             {
                                                                 c < pro.child.length - 1 && (
-                                                                <Divider type='vertical' style={{ height: 'auto' }} className='m-0' />
+                                                                <Divider type='vertical' className='m-0 h-auto' />
                                                                 )
                                                             }
                                                         </React.Fragment>

@@ -48,7 +48,7 @@ const SellerAdminSchedulingTable = () => {
                 <SearchInput
                     placeholder="Search"
                     value={form.getFieldValue('name') || ''}
-                    prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} fetchPriority="high" />}
+                    prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
                     onChange={(e) => form.setFieldValue("search", e.target.value)}
                 />
                 </Form.Item>

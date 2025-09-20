@@ -12,7 +12,7 @@ export const MyTimePicker = ({withoutForm, name, label, disabled, required, mess
                     disabled={disabled || false}
                     value={value ? moment(value, 'YYYY-MM-DD') : ''}
                     format={'YYYY-MM-DD-'}
-                    style={{ width: '100%' }}
+                    className='w-100'
                     {...props}
 
                 />
@@ -21,7 +21,7 @@ export const MyTimePicker = ({withoutForm, name, label, disabled, required, mess
                     <DatePicker.RangePicker
                         disabled={disabled || false}
                         value={value ? moment(value, 'YYYY-MM-DD') : ''}
-                        style={{ width: '100%' }}
+                        className='w-100'
                         {...props}
                     /> 
                 :
@@ -30,7 +30,7 @@ export const MyTimePicker = ({withoutForm, name, label, disabled, required, mess
                     // value={moment(value || '00:00')}
                     placeholder={placeholder}
                     format='HH:mm A'
-                    style={{ width: '100%' }}
+                    className='w-100'
                     {...props}
                 />
             )
@@ -51,7 +51,7 @@ export const MyTimePicker = ({withoutForm, name, label, disabled, required, mess
                 <DatePicker
                     disabled={disabled || false}
                     value={value ? moment(value, 'YYYY-MM-DD') : ''}
-                    style={{ width: '100%' }}
+                    className='w-100'
                     {...props}
 
                 />
@@ -60,14 +60,14 @@ export const MyTimePicker = ({withoutForm, name, label, disabled, required, mess
                     <DatePicker.RangePicker
                     disabled={disabled || false}
                     value={value ? moment(value, 'YYYY-MM-DD') : ''}
-                    style={{ width: '100%' }}
+                    className='w-100'
                     {...props}
                 /> :
                 <TimePicker
                     disabled={disabled || false}
                     value={moment(value || '00:00')}
                     format='HH:mm A'
-                    style={{ width: '100%' }}
+                    className='w-100'
                     placeholder={placeholder}
                     {...props}
                 />

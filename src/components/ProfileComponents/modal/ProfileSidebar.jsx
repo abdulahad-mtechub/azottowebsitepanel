@@ -65,7 +65,7 @@ const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activ
             </Flex>
             <Flex vertical gap={30}>
                 <Flex vertical align='center' justify='center' gap={5}>
-                    <Avatar size={40} className='fs-16' style={{backgroundColor:'#4F46E5',textTransform:'uppercase',fontWeight:'bold'}}>
+                    <Avatar size={40} className='fs-16 text-brand fw-bold bg-light-brand textuppercase'>
                         {user?.name?.charAt(0)}
                     </Avatar>
                     <Title level={5} className='fw-500'>{user?.name?.charAt(0)?.toUpperCase() + user?.name?.slice(1)}</Title>

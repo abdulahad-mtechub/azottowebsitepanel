@@ -40,17 +40,17 @@ const SellerAlerts = ({data}) => {
                         <Text>No Alerts</Text>
                     ) : (
                         notifications.map((alert, index) => (
-                        <Flex vertical key={index}>
+                        <Flex vertical gap={15} key={index}>
                             <Text className='fs-15'>{alert?.name}</Text>
-                            <Flex vertical className='mt-2' gap={4} style={{ marginLeft: 15 }}>
-                            <Flex justify='space-between'>
-                                <Title level={5} className='m-0 fw-500'>
-                                {alert?.message}
-                                </Title>
-                                <Text className='text-gray fs-12'>
-                                {alert?.isRead ? 'Read' : 'Unread'}
-                                </Text>
-                            </Flex>
+                            <Flex vertical className='mt-2' gap={4}>
+                              <Flex justify='space-between'>
+                                  <Title level={5} className='m-0 fw-500'>
+                                  {alert?.message}
+                                  </Title>
+                                  <Text className='text-gray fs-12'>
+                                  {alert?.isRead ? 'Read' : 'Unread'}
+                                  </Text>
+                              </Flex>
                             </Flex>
                             <Divider />
                         </Flex>

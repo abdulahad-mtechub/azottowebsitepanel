@@ -60,22 +60,17 @@ const Sellerwork = () => {
           xs={{ span: 24 }}
           key={index}
         >
-          <Card
-            className="border-0 h-100 work-cd bg-transparent"
-            actions={[
-              <Flex vertical className="text-center" align="center">
-                <Title level={4} className="m-0">
-                  {items?.title}
-                </Title>
-                <Text>{items?.desc}</Text>
-              </Flex>,
-            ]}
-          >
+          <Card className="border-0 h-100 work-cd bg-transparent">
             <Flex justify="center">
-              {/* <Image preview={false} src={items?.image} /> */}
-              <div style={{ width: '100%', height: 300 }}>
+              <div className='riv-cs'>
                 {items?.image}
               </div>
+            </Flex>
+            <Flex vertical className="text-center" align="center">
+              <Title level={4} className="m-0">
+                {items?.title}
+              </Title>
+              <Text>{items?.desc}</Text>
             </Flex>
           </Card>
         </Col>

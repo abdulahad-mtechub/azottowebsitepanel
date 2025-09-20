@@ -12,8 +12,9 @@ const AppRoutes = () => {
   const [showButton, setShowButton] = useState(false);
   const [ getcategory, setGetCategory ] = useState(null)
 
-  const hideNavbarFooterOn = ['/login', '/signup']; // Add more paths here if needed
+  const hideNavbarFooterOn = ['/login', '/signup',]; // Add more paths here if needed
   const shouldHideNavbarFooter = hideNavbarFooterOn.includes(location.pathname);
+  const hidescrolltotop = location.pathname.startsWith('/singleviewlisting/');
 
 
   useEffect(() => {
@@ -69,12 +70,11 @@ const AppRoutes = () => {
       </Routes>
 
       {!shouldHideNavbarFooter && <Footer />}
-      {showButton && !shouldHideNavbarFooter && (
+      {(showButton && !shouldHideNavbarFooter && !hidescrolltotop) && (
         <FloatButton 
           icon={<UpOutlined className="fs-14" />}
           type="primary"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-          style={{ right: 24 }}
           
         />
       )}

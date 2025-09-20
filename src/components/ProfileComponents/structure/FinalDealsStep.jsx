@@ -46,8 +46,8 @@ const { data:business, loading:businessLoading, error:businessError } = useQuery
                                 src={"/assets/icons/download.png"}
                                 preview={false}
                                 width={16}
-                                style={{ cursor: "pointer" }}
                                 alt='download icon'
+                                className='cursor'
                             />
                         </a>
                     </Flex>

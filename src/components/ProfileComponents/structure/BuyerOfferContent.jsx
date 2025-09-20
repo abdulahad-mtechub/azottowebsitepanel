@@ -172,7 +172,7 @@ const BuyerOfferContent = () => {
     }, [search, refetch]);
     if (loading) {
         return (
-          <Flex justify="center" align="center" style={{ height: '200px' }}>
+          <Flex justify="center" align="center" className='h-200'>
             <Spin size="large" />
           </Flex>
         );
@@ -192,7 +192,7 @@ const BuyerOfferContent = () => {
                                 <SearchInput
                                     placeholder="Search"
                                     value={form.getFieldValue('name') || ''}
-                                    prefix={<img src="/assets/icons/search.png" alt='search-icon' style={{marginInline: 3}} width={12} fetchPriority="high" />}
+                                    prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
                                 />
                                 </Form.Item>
                                 <Dropdown
@@ -202,7 +202,7 @@ const BuyerOfferContent = () => {
                                     }}
                                     trigger={['click']}
                                 >
-                                    <Button aria-labelledby='status filter' className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
+                                    <Button aria-labelledby='status filter' className='border-light-gray radius-8 p-2 fs-13 h-auto'>
                                         <Flex justify='space-between' className='w-100' gap={10}>
                                             {
                                                 filterstatus === '1' ? 'Received' :

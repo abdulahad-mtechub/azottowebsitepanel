@@ -162,8 +162,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                             <Form.Item name="revenueTime" noStyle>
                                 <Select
                                 placeholder="Select period"
-                                className="addonselect fs-14"
-                                style={{ width: 180 }}
+                                className="addonselect fs-14 w-180"
                                 >
                                 {revenueLookups?.map((list, index) => (
                                     <Select.Option value={list?.id} key={index}>
@@ -194,8 +193,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 <Form.Item name="profittime" noStyle>
                                     <Select
                                     placeholder="Select period"
-                                    className="addonselect fs-14"
-                                    style={{ width: 180 }}
+                                    className="addonselect fs-14 w-180"
                                     >
                                     {revenueLookups?.map((list, index) => (
                                         <Select.Option value={list?.id} key={index}>

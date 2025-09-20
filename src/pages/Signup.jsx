@@ -175,7 +175,7 @@ const SignupPage = () => {
                         addonBefore={
                             <Select 
                                 defaultValue="SA" 
-                                style={{ width: 80 }} 
+                                className="w-80px" 
                                 onChange={(value) => form.setFieldsValue({ countryCode: value })}
                             >
                                 <Select.Option value="sa">SA</Select.Option>
@@ -388,7 +388,7 @@ const SignupPage = () => {
                         </Button>
                         <NavLink to={'/'}>
                             <div className="logo">
-                                <img src="/assets/images/logo-1.png" alt="jusoor-logo" style={{ height: "70px" }} fetchPriority="high" />
+                                <img src="/assets/images/logo-1.png" alt="jusoor-logo" height={70} fetchPriority="high" />
                             </div>
                         </NavLink>
                         <Title level={3}>Verify Your Identity</Title>
@@ -483,7 +483,7 @@ const SignupPage = () => {
                         <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
                     </Flex>
                     <div className="bg-shade">
-                        <img src="/assets/images/login.gif" alt="jusoor-gif-image" style={{ width: "100%",opacity:.7 }} fetchPriority="high" />
+                        <img src="/assets/images/login.gif" alt="jusoor-gif-image" className="w-100 opacity-7" fetchPriority="high" />
                     </div>
                 </Flex>
             </Col>

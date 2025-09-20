@@ -83,7 +83,7 @@ const SingleViewlisting = () => {
 
     if (businessLoading || graphLoading) {
         return (
-            <Flex justify="center" align="center" style={{ height: "200px" }}>
+            <Flex justify="center" align="center" className="h-200">
                 <Spin size="large" />
             </Flex>
         );
@@ -125,74 +125,72 @@ const SingleViewlisting = () => {
             <div className='container'>
                 <Row gutter={[24,24]} className='mt-3'>
                     <Col lg={{span: 18}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
-                        <Card className='shadow-d radius-12 border-gray mb-3'>
-                            <Flex vertical gap={10}>
-                                <Flex vertical gap={1}>
-                                    <Text className='fs-13 text-gray fw-500'>Reference #: {business?.reference ? business?.reference: 'Not Found'}</Text>
-                                    <Title level={5} className='m-0'>
-                                        {business?.businessTitle}
-                                    </Title>
-                                    <Flex align='center' gap={5}>
-                                        <Title level={5} className='m-0'>
-                                            {businessData?.title}
-                                        </Title>
-                                        {
-                                            businessData?.type &&
-                                            <Button aria-labelledby='Business Type' className={`fs-12 border-0 text-white ${businessData.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
-                                                {businessData?.type}
-                                            </Button>
-                                        }
-                                    </Flex>
-                                </Flex>
-                                <Text>
-                                    {business?.description ? business?.description : 'No description available.'}
-                                </Text>
-                                {/* <Text>
-                                Website:{" "}
-                                    {business?.url ? (
-                                        <Link to={business.url}>{business.url}</Link>
-                                    ) : (
-                                        "URL not provided"
-                                    )}
-                                </Text> */}
-                                    {/* This café averages SAR 250,000 in annual revenue with a healthy annual profit of SAR 75,000. Its location offers strong foot traffic, especially during morning and late evening hours. Key assets include high-end espresso machines, seating furniture, POS system, and a fully branded visual identity. The owner is willing to offer 30 days of post-sale support, including supplier contacts, staff training, and marketing handover.
-                                </Text> */}
-                                {/* <Text>
-                                    Website: <Link to={''}>http://almadinahcoffeeshop.com</Link>
-                                </Text> */}
-                            </Flex>
-                        </Card>
                         {/* uncomment this and send business here as well */}
                         {/* <BusinessStats status={'Verified'} /> */}
-                        <MarketAreaChart />
-                        <AnnualProfitBarChart graphData={graphData} />
+                        {/* <MarketAreaChart /> */}
+                        {/* <AnnualProfitBarChart graphData={graphData} /> */}
                         <Card className='shadow-d radius-12 border-gray mb-3'>
-                            <Flex vertical gap={10}>
-                                <Title level={5}>
-                                    Growth Opportunity
-                                </Title>
-                                <Text>
-                                    {business?.growthOpportunities ? business?.growthOpportunities : 'No growth opportunity details available.'}
-                                </Text>
+                            <Flex vertical gap={20}>    
+                                <Flex vertical gap={10}>
+                                    <Flex vertical gap={0}>
+                                        <Text className='fs-13 text-gray fw-500'>Reference #: {business?.reference ? business?.reference: 'Not Found'}</Text>
+                                        <Title level={5} className='m-0'>
+                                            {business?.businessTitle}
+                                        </Title>
+                                        <Flex align='center' gap={5}>
+                                            <Title level={5} className='m-0'>
+                                                {businessData?.title}
+                                            </Title>
+                                            {
+                                                businessData?.type &&
+                                                <Button aria-labelledby='Business Type' className={`fs-12 border-0 text-white ${businessData.type === 'Taqbeel'?'bg-brand':'bg-black'}`}>
+                                                    {businessData?.type}
+                                                </Button>
+                                            }
+                                        </Flex>
+                                    </Flex>
+                                    <Text>
+                                        {business?.description ? business?.description : 'No description available.'}
+                                    </Text>
+                                    {/* <Text>
+                                    Website:{" "}
+                                        {business?.url ? (
+                                            <Link to={business.url}>{business.url}</Link>
+                                        ) : (
+                                            "URL not provided"
+                                        )}
+                                    </Text> */}
+                                        {/* This café averages SAR 250,000 in annual revenue with a healthy annual profit of SAR 75,000. Its location offers strong foot traffic, especially during morning and late evening hours. Key assets include high-end espresso machines, seating furniture, POS system, and a fully branded visual identity. The owner is willing to offer 30 days of post-sale support, including supplier contacts, staff training, and marketing handover.
+                                    </Text> */}
+                                    {/* <Text>
+                                        Website: <Link to={''}>http://almadinahcoffeeshop.com</Link>
+                                    </Text> */}
+                                </Flex>
+                                <Flex vertical gap={0}>
+                                    <Title level={5}>
+                                        Growth Opportunity
+                                    </Title>
+                                    <Text>
+                                        {business?.growthOpportunities ? business?.growthOpportunities : 'No growth opportunity details available.'}
+                                    </Text>
+                                </Flex>
+                                <Flex vertical gap={0}>
+                                    <Title level={5}>
+                                        Reason for Selling
+                                    </Title>
+                                    <Text>
+                                        {business?.reason ? business?.reason : 'No reason for selling provided.'}
+                                    </Text>
+                                </Flex>
+                                <PreviewTableContent title='Post - Sale Support' columns={postsaleColumns} data={postSaleData} />
+                                <PreviewTableContent title='Outstanding Liabilities / Debt' columns={liabColumn} data={liabilitiesData} />
+                                <PreviewTableContent title='Key Asset' columns={keyassetsColumn} data={assetsData} />
+                                <PreviewTableContent title='Inventory' columns={inventColumn} data={inventoryData} />
                             </Flex>
                         </Card>
-                        <Card className='shadow-d radius-12 border-gray mb-3'>
-                            <Flex vertical gap={10}>
-                                <Title level={5}>
-                                    Reason for Selling
-                                </Title>
-                                <Text>
-                                    {business?.reason ? business?.reason : 'No reason for selling provided.'}
-                                </Text>
-                            </Flex>
-                        </Card>
-                        <PreviewTableContent title='Post - Sale Support' columns={postsaleColumns} data={postSaleData} />
-                        <PreviewTableContent title='Outstanding Liabilities / Debt' columns={liabColumn} data={liabilitiesData} />
-                        <PreviewTableContent title='Key Asset' columns={keyassetsColumn} data={assetsData} />
-                        <PreviewTableContent title='Inventory' columns={inventColumn} data={inventoryData} />
                     </Col>
                     <Col lg={{span: 6}} md={{span: 0}} sm={{span: 0}} xs={{span: 0}}>
-                        <div  style={{position:'sticky', top: 100,marginBottom:25}}>
+                        <div className='sticky-comp'>
                             <BusinessInfoCard data={business} />
                         </div>
                     </Col>

@@ -199,7 +199,7 @@ const Navbar = ({setGetCategory}) => {
   return (
     <>
     {contextHolder}
-      <div className='gen-navbar-container' style={{ position: 'relative' }}>
+      <div className='gen-navbar-container relative'>
         <div className='w-100'>
           <div className="gen-navbar-small">
             <div className="gen-navbar-inner">
@@ -250,7 +250,7 @@ const Navbar = ({setGetCategory}) => {
                         trigger={['click']}
                       >
                         
-                        <Image src='/assets/images/av-1.png' alt='user image' preview={false} width={30} style={{borderRadius:50}}/>
+                        <Image src='/assets/images/av-1.png' alt='user image' preview={false} width={30} className='rounded-50'/>
                       </Dropdown>
                     </>
                   }
@@ -277,7 +277,18 @@ const Navbar = ({setGetCategory}) => {
                   </NavLink>
               
                   <ul className='dropdown' >
-                  {businessmenuData?.map((list, index) => (
+                    <li className='drop-item'>
+                      <NavLink to={'/businesslisting'} className='drop-link'>
+                        <Flex gap={10} align='center'>
+                          <Image src={'/assets/icons/browseall.png'} alt='browse all icon' width={30} className='pt-1s' preview={false} />
+                          <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
+                            <Title level={5} className='m-0 fw-500'>Browse All</Title>
+                            <ArrowRightOutlined className='arr text-brand pt-1s' />
+                          </Flex>
+                        </Flex>
+                      </NavLink>
+                    </li>
+                    {businessmenuData?.map((list, index) => (
                       <li className='drop-item' key={index}>
                         <NavLink onClick={(e)=>{e.preventDefault()}} className='drop-link'>
                           <Flex gap={10} align='center'>
@@ -295,17 +306,6 @@ const Navbar = ({setGetCategory}) => {
                         </div>
                       </li>
                     ))}
-                    <li className='drop-item'>
-                      <NavLink to={'/businesslisting'} className='drop-link'>
-                        <Flex gap={10} align='center'>
-                          <Image src={'/assets/icons/browseall.png'} alt='browse all icon' width={30} className='pt-1s' preview={false} />
-                          <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
-                            <Title level={5} className='m-0 fw-500'>Browse All</Title>
-                            <ArrowRightOutlined className='arr text-brand pt-1s' />
-                          </Flex>
-                        </Flex>
-                      </NavLink>
-                    </li>
                   </ul>
                 </li>
                 {/* <li>
@@ -414,25 +414,7 @@ const Navbar = ({setGetCategory}) => {
 
               <Dropdown menu={{ items }} trigger={['click']}>
                 <Flex align='center' gap={10}>
-                  {/* Profile Initial Avatar */}
-                  {/* <div
-                    style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: '50%',
-                      backgroundColor: '#4F46E5',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: '#fff',
-                      fontWeight: 'bold',
-                      fontSize: '16px',
-                      textTransform: 'uppercase',
-                    }}
-                  >
-                    {user?.name?.charAt(0)}
-                  </div> */}
-                  <Avatar size={40} className='fs-16 text-brand' style={{backgroundColor:'#E9EEFC',textTransform:'uppercase',fontWeight:'bold'}}>
+                  <Avatar size={40} className='fs-16 text-brand fw-bold bg-light-brand textuppercase'>
                     {user?.name?.charAt(0)}
                   </Avatar>
                   <DownOutlined className='text-white fs-13' />

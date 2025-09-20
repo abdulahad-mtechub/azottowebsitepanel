@@ -156,8 +156,8 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
                     src={"/assets/icons/download.png"}
                     preview={false}
                     width={16}
-                    style={{ cursor: "pointer" }}
                     alt='download icon'
+                    className='cursor'
                 />
                 </a>
               </Flex>

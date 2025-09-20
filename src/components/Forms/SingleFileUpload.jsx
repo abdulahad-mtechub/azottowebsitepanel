@@ -68,7 +68,7 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, tit
           >
             {fileList.length === 0 || multiple ? (
               <Flex vertical align='center' justify='center' className='upload-flex'>
-                <PlusOutlined style={{ fontSize: 16 }} />
+                <PlusOutlined className='fs-16' />
                 <p className="ant-upload p-0 m-0 text-black">{title}</p>
               </Flex>
             ) : null}
@@ -77,7 +77,7 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, tit
         {fileList.length > 0 && (
           <div className="w-100">
             {fileList.map(file => (
-              <Flex key={file.uid} justify='space-between' className="w-100 p-2 mt-1" style={{ border: '1px solid #d9d9d9', borderRadius: 4 }}>
+              <Flex key={file.uid} justify='space-between' className="w-100 p-2 mt-1 upload-border rounded-4">
                 <Flex align='flex-start' gap={10} className='w-100'>
                   <img src="/assets/icons/file.png" alt="file-icon" width={24} className='pt-1' fetchPriority="high" />
                   <Flex vertical align='flex-start'>

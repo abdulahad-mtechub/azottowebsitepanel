@@ -68,7 +68,7 @@ const LoginPage = () => {
     ];
     if (userLoading || redirecting) {
       return (
-          <Flex justify="center" align="center" style={{ height: "200px" }}>
+          <Flex justify="center" align="center" className="h-200">
               <Spin size="large" />
           </Flex>
       );
@@ -84,7 +84,7 @@ const LoginPage = () => {
                     </Button>
                     <NavLink to={'/'}>
                       <div className="logo">
-                        <img src="/assets/images/logo-1.png" alt="jusoor-logo" style={{ height: "70px" }} fetchPriority="high" />
+                        <img src="/assets/images/logo-1.png" alt="jusoor-logo" height={70} fetchPriority="high" />
                       </div>
                     </NavLink>
 
@@ -169,7 +169,7 @@ const LoginPage = () => {
                     <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
                   </Flex>
                   <div className="bg-shade">
-                    <img src="/assets/images/login.gif" alt="jusoor-gif-image" style={{ width: "100%",opacity:.7 }} fetchPriority="high" />
+                    <img src="/assets/images/login.gif" alt="jusoor-gif-image" className="w-100 opacity-7" fetchPriority="high" />
                   </div>
                 </Flex>
             </Col>
