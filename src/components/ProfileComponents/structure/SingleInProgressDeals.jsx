@@ -4,7 +4,7 @@ import { SingleInprogressSteps } from './SingleInprogressSteps'
 
 const { Title, Text } = Typography
 const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
-
+console.log('inprogressdeal',inprogressdeal)
 const buyerdealsData = [
     {
       title:'Seller Name',

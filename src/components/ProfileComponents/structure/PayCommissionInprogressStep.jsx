@@ -1,4 +1,4 @@
-import { Button, Card, Col, Flex, Image, Row, Typography,message } from 'antd'
+import { Card, Col, Flex, Image, Row, Typography,message } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 import { useQuery ,useMutation} from '@apollo/client';
 import React,{useState} from 'react'
@@ -28,13 +28,7 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
   );
 
     // Mutation to update offer status
-    const [updateOfferStatus] = useMutation(UPDATE_DEAL, {
-      onCompleted: () => {
-        messageApi.success("Offer accepted");
-        setMeeting(true);
-      },
-      onError: (err) => messageApi.error(err.message || "Something went wrong"),
-    });
+    const [updateOfferStatus] = useMutation(UPDATE_DEAL);
   
     // Mutation to upload document
     const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
@@ -92,13 +86,13 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
           filePath: fileUrl,
           fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
         });
-  
+
         // Call GraphQL mutation to save file info
         await uploadDocument({
           variables: {
             input: {
-              title: "Buyer Payment Receipt",
-              businessId: details?.businessId,
+              title: "Jasoor Commission",
+              businessId: inprogressdeal?.businessId,
               filePath: fileUrl,
               fileName: file.name,
               fileType: file.type,
@@ -117,11 +111,12 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
   
         return false; // Prevent default upload behavior
       } catch (error) {
-        messageApi.error(error || "Upload failed!");
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        messageApi.error(errorMsg || "Upload failed!");
         return false;
       }
     };
-  
+
     return (
       <>
        {contextHolder}

@@ -1,11 +1,14 @@
-import React from 'react'
-import { Button, Card, Col, Flex, Image, Row, Typography } from 'antd'
+import React,{useState} from 'react'
+import { Card, Col, Flex, Image, Row, Typography, message } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 import {GET_BUSINESS } from '../../../graphql/query';
-import { useQuery } from '@apollo/client';
+import { useQuery,useMutation } from '@apollo/client';
+import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 
 const { Text } = Typography
 const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
+    const [documents, setDocuments] = useState(null);
+    const [ messageApi, contextHolder ] = message.useMessage();
     const { data:business, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
         variables: { 
             getBusinessByIdId: inprogressdeal?.businessId,
@@ -19,6 +22,20 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
     const bankRecipt = dealBusiness?.documents?.find(
     (doc) => doc.title === "Buyer Payment Receipt"
     );
+    const [updateOfferStatus] = useMutation(UPDATE_DEAL,{
+        onCompleted: () => {
+            messageApi.success("Deal uploaded successfully!")
+        },
+        onError: (err) => {
+            console.error("Error updating offer status:", err);
+        },
+    });
+      
+    // Mutation to upload document
+    const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
+        onCompleted: () => messageApi.success("Document uploaded successfully!"),
+        onError: (err) => messageApi.error(err.message || "Upload failed!"),
+    });
 
     const paybusinessData = [
         {
@@ -27,7 +44,7 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
         },
         {
           title:'Seller’s IBAN',
-          desc:bank?.accountNumber
+          desc:bank?.iban
         },
         {
           title:'Account Holder Name',
@@ -38,8 +55,64 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
           desc:inprogressdeal?.offerprice
         },
       ]
+
+    const handleSingleFileUpload = async (file) => {
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
     
+            // Upload file to server
+            const response = await fetch("https://verify.jusoor-sa.co/upload", {
+            method: "POST",
+            body: formData,
+            });
+    
+            if (!response.ok) throw new Error("Upload failed");
+    
+            const result = await response.json();
+            const fileUrl = result.fileUrl || result.url;
+    
+            // Save uploaded file info to state
+            setDocuments({
+            fileName: file.name,
+            fileType: file.type,
+            filePath: fileUrl,
+            fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
+            });
+
+            // Call GraphQL mutation to save file info
+            await uploadDocument({
+            variables: {
+                input: {
+                title: "Buyer Payment Receipt",
+                businessId: inprogressdeal?.businessId,
+                filePath: fileUrl,
+                fileName: file.name,
+                fileType: file.type,
+                },
+            },
+            });
+
+            await updateOfferStatus({
+                variables: {
+                input: {
+                    id: inprogressdeal?.key,
+                    status: "SELLER_PAYMENT_VERIFICATION_PENDING",
+                },
+                },
+            });
+    
+            return false; // Prevent default upload behavior
+        } catch (error) {
+            const errorMsg = error instanceof Error ? error.message : String(error);
+            messageApi.error(errorMsg || "Upload failed!");
+            return false;
+        }
+    };
+
     return (
+        <>
+        {contextHolder}
         <Row gutter={[16, 24]}>
             {
                 paybusinessData?.map((list,index)=>
@@ -83,13 +156,20 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
                             </Text>
                         </Flex>
                         <Flex  className='w-100'>
-                            <SingleFileUpload form={form} name={'uploadimge'} title={'Upload'} />
+                            <SingleFileUpload 
+                            form={form} 
+                            name={'uploadimge'} 
+                            title={'Upload'} 
+                            onUpload={handleSingleFileUpload}
+                            multiple={false}
+                            message={message}
+                            />
                         </Flex>
                     </Flex>
                 }
             </Col>
-            {
-                !inprogressdeal && (
+            {/* {
+                !bankRecipt && (
                     <Col span={24}>
                         <Flex>
                             <Button aria-labelledby='Submit Payment' type="primary" className='btn bg-brand'>
@@ -98,8 +178,9 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
                         </Flex>
                     </Col>
                 )
-            }
+            } */}
         </Row>
+        </>
     )
 }
 

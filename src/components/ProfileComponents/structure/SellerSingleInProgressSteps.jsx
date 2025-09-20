@@ -64,7 +64,7 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
         {
             key: '3',
             label: 'Payment Confirmation & Docs',
-            content: <ConfirmationDocsStep details={deal} />,
+            content: <ConfirmationDocsStep form={form} details={deal} />,
             status:  deal?.isDocVedifiedSeller ? 'Jusoor verification pending': 'Seller verification pending',
             emptytitle: 'Payment Confirmation Pending!',
             emptydesc: 'Waiting for the seller to transfer the document & approve the payment.',

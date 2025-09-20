@@ -5,19 +5,27 @@ import { PayCommissionInprogressStep } from './PayCommissionInprogressStep';
 import { DigitalSaleAgreementStep } from './DigitalSaleAgreementStep';
 import { PayBusinessAmountstep } from './PayBusinessAmountstep';
 import { FinalDealsStep } from './FinalDealsStep';
+import { ME } from '../../../graphql/query';
+import { useQuery } from '@apollo/client';
 
 const { Text } = Typography;
-const SingleInprogressSteps = ({inprogressdeal,offer}) => {
+const SingleInprogressSteps = ({inprogressdeal}) => {
     const [form] = Form.useForm();
     const [activeStep, setActiveStep] = useState(inprogressdeal ? 3:0);
     const [openPanels, setOpenPanels] = useState( inprogressdeal ? ['1','2','3','4'] : ['1']);
     const [bank, setBank] = useState();
 
+    const { data:user, loading:userLoading, error:userError } = useQuery(ME, {
+        variables: { 
+            getUserId:inprogressdeal?.sellerId
+        },
+    });
+
     useEffect(() => {
-            if (offer) {
-                setBank(offer?.business?.seller?.banks[0]);
+            if (user) {
+                setBank(user?.getUser?.banks[0]);
             }
-    }, [offer]);
+    }, [user]);
     const steps = [
         {
             key: '1',
@@ -34,7 +42,7 @@ const SingleInprogressSteps = ({inprogressdeal,offer}) => {
         {
             key: '3',
             label: 'Pay Business Amount',
-            content: <PayBusinessAmountstep  inprogressdeal={inprogressdeal} bank={bank} />,
+            content: <PayBusinessAmountstep  inprogressdeal={inprogressdeal} bank={bank} form={form} />,
             status: 'Verified'
         },
         {

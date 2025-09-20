@@ -33,13 +33,14 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
         { title: 'Offer Price', dataIndex: 'offerprice' },
         { title: 'Date', dataIndex: 'date' },
     ];
-console.log("offerDeals?.getBuyerInprogressDeals",offerDeals?.getBuyerInprogressDeals)
+
     const offerData = useMemo(() => {
             return offerDeals?.getBuyerInprogressDeals?.map((deal) => ({
                 key: deal?.id,
                 title: deal?.business?.businessTitle,
                 businessId: deal?.business?.id,
                 sellername: deal?.business.seller.name,
+                sellerId: deal?.business.seller.id,
                 buyername: deal?.buyer?.name,
                 status: deal?.status,
                 offerprice: deal?.price,

@@ -22,8 +22,8 @@ const SellerFinalDealsStep = ({form,completedeal,deal,details}) => {
             await finalizDeal({
                 variables:{
                 input: {
-                    id: deal.id, // replace with real ID if needed
-                    status: "WAITING",
+                    id: details.key, // replace with real ID if needed
+                    status: "SELLERCOMPLETED",
                 },
             }
             });
@@ -34,7 +34,9 @@ const SellerFinalDealsStep = ({form,completedeal,deal,details}) => {
           console.error(err);
           messageApi.error("Failed to save documents");
         }
-      };
+    };
+    const dealBusiness = details?.busines?.documents;
+    const uploadDocs = dealBusiness.length === 4;
     return (
         <Row gutter={[16, 24]}>
             {contextHolder}
@@ -46,7 +48,7 @@ const SellerFinalDealsStep = ({form,completedeal,deal,details}) => {
             </Col>
             <>
                 {
-                    !completedeal && (
+                    !uploadDocs && (
                         <>
                             <Col span={24}>
                                 <Checkbox 
