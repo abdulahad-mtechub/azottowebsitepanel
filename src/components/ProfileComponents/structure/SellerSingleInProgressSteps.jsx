@@ -30,23 +30,18 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
     const [form] = Form.useForm();
     const initialStep = deal?.status ? statusToStepIndex[deal.status] || 0 : 0;
     const [activeStep, setActiveStep] = useState(initialStep);
-   const { data, loading: fetching } = useQuery(GETBANKSFORDEAL, {
-       variables: { dealId: deal?.key },
-       fetchPolicy: "network-only", // ensures fresh data
-     });
-    const buyerBanks = data?.getBankDetailsByDealId;
-    const found = deal?.busines?.documents?.find(doc => doc.title === "Jasoor Commission");
-    const send = buyerBanks?.find(b => b?.isSend === true);
+    const send = true
     const DSA = deal?.status
     const steps = [
         {
             key: '1',
             label: 'Digital Sale Agreement',
             content: <DigitalSaleAgreementStep form={form} details={deal} />,
-            status: 
-            DSA === 'DSA_FROM_SELLER_PENDING'
+            status: !deal?.isDsaSeller && !deal?.isDsaBuyer
+                ? 'Seller & Buyer DSA Pending'
+                : !deal?.isDsaSeller && deal?.isDsaBuyer
                 ? 'Seller DSA Pending'
-                : DSA === 'DSA_FROM_BUYER_PENDING'
+                : deal?.isDsaSeller && !deal?.isDsaBuyer
                 ? 'Buyer DSA Pending'
                 : 'Verified',
             emptytitle: 'DSA Pending!',
@@ -56,7 +51,7 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
             key: '2',
             label: 'Bank Account Details',
             content: <BankAccountDetailsStep details={deal} />,
-            status: send?.isSend ? 'Send' : 'Pending',
+            status: send ? 'Send' : 'Pending',
             emptytitle: 'Bank Details Pending!',
             emptydesc: 'Waiting for the seller to choose the bank account.',
         },
@@ -64,7 +59,11 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
             key: '3',
             label: 'Payment Confirmation & Docs',
             content: <ConfirmationDocsStep form={form} details={deal} />,
-            status:  deal?.isDocVedifiedSeller ? 'Jusoor verification pending': 'Seller verification pending',
+            status: deal?.isDocVedifiedSeller && deal?.isDocVedifiedAdmin
+            ? 'Verified'
+            : deal?.isDocVedifiedSeller
+            ? 'Jusoor verification pending'
+            : 'Seller verification pending',
             emptytitle: 'Payment Confirmation Pending!',
             emptydesc: 'Waiting for the seller to transfer the document & approve the payment.',
         },

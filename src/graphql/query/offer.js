@@ -70,6 +70,7 @@ query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
       name
     }
       isDsaBuyer
+      isDsaSeller
       isCommissionVerified
     business {
       id

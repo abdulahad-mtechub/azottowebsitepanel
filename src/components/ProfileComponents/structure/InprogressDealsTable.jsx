@@ -46,6 +46,7 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
                 offerprice: deal?.price,
                 date: new Date(deal?.createdAt).toLocaleString(),
                 isDsaBuyer: deal?.isDsaBuyer,
+                isDsaSeller: deal?.isDsaSeller,
                 isCommissionVerified: deal?.isCommissionVerified,
             })) || [];
         }, [offerDeals]);

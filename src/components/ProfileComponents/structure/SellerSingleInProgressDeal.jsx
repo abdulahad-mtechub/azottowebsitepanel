@@ -37,6 +37,7 @@ const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
         banks: data.getDeal.buyer?.banks || '-',
         isCommissionVerified: data.getDeal?.isCommissionVerified || false,
         isDsaSeller: data.getDeal?.isDsaSeller || false,
+        isDsaBuyer: data.getDeal?.isDsaBuyer || false,
         isDocVedifiedSeller : data.getDeal?.isDocVedifiedSeller || false,
         isSellerCompleted : data.getDeal?.isSellerCompleted || false,
     }: null;
