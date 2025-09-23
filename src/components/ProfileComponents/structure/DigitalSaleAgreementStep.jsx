@@ -1,155 +1,186 @@
-import React from 'react'
-import { Card, Checkbox, Col, Flex, Image, Row, Typography,message,Spin } from 'antd'
-import { CheckCircleOutlined } from '@ant-design/icons'
-import { GET_BUSINESS, UPDATE_DEAL } from '../../../graphql/';
+// Final version: DigitalSaleAgreementStep.jsx (JSX)
+import React, { useEffect, useState } from 'react';
+import { Card, Checkbox, Col, Flex, Image, Row, Typography, message, Spin } from 'antd';
+import { CheckCircleOutlined } from '@ant-design/icons';
+import { BUYERINPROGRESSDEALS, GET_BUSINESS, GETDEAL, UPDATE_DEAL } from '../../../graphql/';
 import { useMutation } from '@apollo/client';
 import Cookies from "js-cookie";
 
-const { Text } = Typography
-const DigitalSaleAgreementStep = ({form,completedeal,details}) => {
-    const [messageApi, contextHolder] = message.useMessage();
-    const userId = Cookies.get("userId"); 
+const { Text } = Typography;
 
-    const isBuyer = userId === completedeal?.buyerId;
-    let isSigned
-    if (isBuyer) {
-        isSigned = details?.isDsaBuyer;
-    }
-    else {
-        isSigned = details?.isDsaSeller;
-    }
+const DigitalSaleAgreementStep = ({ completedeal, details }) => {
 
-    const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
-        refetchQueries: [
-            { query: GET_BUSINESS, variables: { getBusinessByIdId: details?.businessId, limit: null, offset: null, search: null, status: null } },
-        ],
-        awaitRefetchQueries: true,
-        onCompleted: () => messageApi.success("Status changed successfully!"),
-        onError: (err) => messageApi.error(err.message || "Something went wrong!"),
-    });
+  const [confirmChecked, setConfirmChecked] = useState(false)
+  const [messageApi, contextHolder] = message.useMessage();
+  const userId = Cookies.get("userId");
+  const isBuyer = userId === completedeal?.buyerId;
+  console.log("isBuyer:", isBuyer, "userId:", userId, "buyerId:", completedeal?.buyerId, details);
 
-    const handleTermsChange = (e) => {
-      if (e.target.checked) {
-        let newStatus;
-        if (!details?.isDsaBuyer) {
-            newStatus = 'DSA_FROM_SELLER_PENDING';
-        } else if (!details?.isDsaSeller) {
-            newStatus = 'DSA_FROM_BUYER_PENDING';
-        } else {
-            newStatus = 'BANK_DETAILS_FROM_SELLER_PENDING';
-        }
+  const [buyerSigned, setBuyerSigned] = useState(!!details?.isDsaBuyer);
+  const [sellerSigned, setSellerSigned] = useState(!!details?.isDsaSeller);
 
-        updateDeals({
-            variables: {
-                input: {
-                    id: details?.key || null,
-                    status: newStatus,
-                    isDsaBuyer: isBuyer ? true : details?.isDsaBuyer,
-                    isDsaSeller: !isBuyer ? true : details?.isDsaSeller,
-                }
-            }
-        });
-      }
+  useEffect(() => {
+    setBuyerSigned(!!details?.isDsaBuyer); 
+    setSellerSigned(!!details?.isDsaSeller);
+  }, [details?.isDsaBuyer, details?.isDsaSeller]);
+
+  const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
+    refetchQueries: [
+        isBuyer ? 
+        { query: BUYERINPROGRESSDEALS } :
+        { query: GETDEAL, variables: { getDealId: details?.key } }
+    ],
+    awaitRefetchQueries: true,
+    onCompleted: () => messageApi.success("Status changed successfully!"),
+    onError: (err) => messageApi.error(err.message || "Something went wrong!"),
+  });
+
+  const computeNextStatus = (updatedBuyer, updatedSeller) => {
+    if (updatedBuyer && updatedSeller) return 'BANK_DETAILS_FROM_SELLER_PENDING';
+    if (updatedBuyer && !updatedSeller) return 'DSA_FROM_SELLER_PENDING';
+    if (!updatedBuyer && updatedSeller) return 'DSA_FROM_BUYER_PENDING';
+    return 'DSA_PENDING';
+  };
+
+  const handleTermsChange = async (e) => {
+    const checked = !!e.target.checked;
+    // Determine updated values after this user's action
+    const updatedBuyer = isBuyer ? checked : buyerSigned;
+    const updatedSeller = !isBuyer ? checked : sellerSigned;
+
+    // Optimistically update UI
+    if (isBuyer) setBuyerSigned(checked); // CHANGED
+    else setSellerSigned(checked); // CHANGED
+
+    // Prepare variables for mutation.
+    // If you have separate mutations for buyer vs seller use them instead.
+    const variables = {
+      input: {
+        id: details?.key || null,
+        status: computeNextStatus(updatedBuyer, updatedSeller),
+        // set both fields to ensure backend has the correct final state
+        isDsaBuyer: updatedBuyer,
+        isDsaSeller: updatedSeller,
+      },
     };
-    if (updating) {
-      return (
-        <Flex justify="center" align="center" className='h-200'>
-          <Spin size="large" />
-        </Flex>
-      );
+
+    try {
+      await updateDeals({ variables });
+      // success handled by onCompleted handler - UI already updated optimistically
+    } catch (err) {
+      // rollback optimistic update on error
+      if (isBuyer) setBuyerSigned(!!details?.isDsaBuyer);
+      else setSellerSigned(!!details?.isDsaSeller);
+      // onError will show message (because it's set in useMutation) but also show fallback:
+      if (!err?.message) messageApi.error("Failed to update agreement status");
     }
+  };
+
+  if (updating) {
     return (
-      <>
+      <Flex justify="center" align="center" className="h-200">
+        <Spin size="large" />
+      </Flex>
+    );
+  }
+   const handleConfirmChange = (e) => {
+    setConfirmChecked(!!e.target.checked); // CHANGED
+  };
+
+  return (
+    <>
       {contextHolder}
-        <Row gutter={[16, 24]}>
-          <Col span={24}>
-                    <Flex vertical gap={0} className='mb-3'>
-                        <Text className='fw-600 fs-14'>Downloads Digital Sale Agreement</Text>
-                        <Text className='fs-13 text-gray' italic>This agreement outlines the final terms of the business transfer. Please review the details carefully before proceeding.</Text>
+      <Row gutter={[16, 24]}>
+        <Col span={24}>
+          <Flex vertical gap={0} className="mb-3">
+            <Text className="fw-600 fs-14">Downloads Digital Sale Agreement</Text>
+            <Text className="fs-13 text-gray" italic>
+              This agreement outlines the final terms of the business transfer. Please review the details carefully before proceeding.
+            </Text>
+          </Flex>
+
+          <Card className="card-cs border-gray rounded-12">
+            <Flex justify="space-between" align="center">
+              <Flex gap={15}>
+                <Image src={'/assets/icons/file.png'} alt="file icon" preview={false} width={20} />
+                <Flex vertical>
+                  <Text className="fs-13 text-gray">Digital Sale Agreement.pdf</Text>
+                  <Text className="fs-13 text-gray">5.3 MB</Text>
+                </Flex>
+              </Flex>
+              <Image src={'/assets/icons/download.png'} alt="download icon" preview={false} width={20} />
+            </Flex>
+          </Card>
+        </Col>
+
+        <Col span={24}>
+          <Flex vertical gap={3}>
+            <Checkbox
+                className="fit-content"
+                checked={(isBuyer ? buyerSigned : sellerSigned) || updating 
+                   || confirmChecked }
+                disabled={(isBuyer ? buyerSigned : sellerSigned) || updating} // keep disabled if already signed or updating
+                onChange={handleConfirmChange} // CHANGED
+            >
+                I confirm the business details are correct.
+            </Checkbox>
+
+            {/* CHANGED: Accept terms checkbox - only the current actor can click it */}
+            <Checkbox
+              className="fit-content"
+              checked={isBuyer ? buyerSigned : sellerSigned} // CHANGED
+              disabled={ (isBuyer ? buyerSigned : sellerSigned) || updating || !confirmChecked } // disable if already signed or updating
+              onChange={handleTermsChange} // CHANGED: the only checkbox that triggers the mutation
+            >
+              I accept the terms of the agreement and agree to proceed.
+            </Checkbox>
+          </Flex>
+        </Col>
+
+        <Col span={24}>
+          <Flex vertical gap={10}>
+            {/* Status badges: show both sides statuses */}
+            {details?.isDsaSeller && details?.isDsaBuyer ? null : (
+              <>
+                {!details?.isDsaSeller && !details?.isDsaBuyer && (
+                  <>
+                    <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
+                      <CheckCircleOutlined className="fs-14" /> Waiting for seller to sign the sales agreement
                     </Flex>
-                    <Card className='card-cs border-gray rounded-12' >
-                        <Flex justify='space-between' align='center'>
-                            <Flex gap={15}>
-                                <Image src={'/assets/icons/file.png'} alt='file icon' preview={false} width={20} />
-                                <Flex vertical>
-                                    <Text className='fs-13 text-gray'>
-                                        Digital Sale Agreement.pdf
-                                    </Text>
-                                    <Text className='fs-13 text-gray'>
-                                        5.3 MB
-                                    </Text>
-                                </Flex>
-                            </Flex>
-                            <Image src={'/assets/icons/download.png'} alt='download icon' preview={false} width={20} />
-                        </Flex>
-                    </Card>
-            </Col>
-            <Col span={24}>
-            <Flex vertical gap={3}>
-              <Checkbox
-                  className='fit-content'
-                  checked={isSigned}
-                  disabled={isSigned}
-              >
-                  I confirm the business details are correct.
-              </Checkbox>
-              <Checkbox
-                  className='fit-content'
-                  checked={isSigned}
-                  disabled={isSigned}
-                  onChange={handleTermsChange} // only this triggers the mutation
-              >
-                  I accept the terms of the agreement and agree to proceed.
-              </Checkbox>
-            </Flex>
-          </Col>
-          <Col span={24}>
-            <Flex vertical gap={10}>
-              {/* Case 1: Both signed → show nothing */}
-              {details?.isDsaSeller && details?.isDsaBuyer ? null : (
-                <>
-                  {/* Case 2: Neither signed */}
-                  {!details?.isDsaSeller && !details?.isDsaBuyer && (
-                    <>
-                      <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> Waiting for seller to sign the sales agreement
-                      </Flex>
-                      <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> Waiting for buyer to sign the sales agreement
-                      </Flex>
-                    </>
-                  )}
+                    <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
+                      <CheckCircleOutlined className="fs-14" /> Waiting for buyer to sign the sales agreement
+                    </Flex>
+                  </>
+                )}
 
-                  {/* Case 3: Seller signed, buyer not signed */}
-                  {details?.isDsaSeller && !details?.isDsaBuyer && (
-                    <>
-                      <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> Waiting for buyer to sign the sales agreement
-                      </Flex>
-                      <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> Seller accepted the "Sale Agreement"
-                      </Flex>
-                    </>
-                  )}
+                {details?.isDsaSeller && !details?.isDsaBuyer && (
+                  <>
+                    <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
+                      <CheckCircleOutlined className="fs-14" /> Waiting for buyer to sign the sales agreement
+                    </Flex>
+                    <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
+                      <CheckCircleOutlined className="fs-14" /> Seller accepted the "Sale Agreement"
+                    </Flex>
+                  </>
+                )}
 
-                  {/* Case 4: Buyer signed, seller not signed */}
-                  {!details?.isDsaSeller && details?.isDsaBuyer && (
-                    <>
-                      <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> Waiting for seller to sign the sales agreement
-                      </Flex>
-                      <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
-                        <CheckCircleOutlined className="fs-14" /> Buyer accepted the "Sale Agreement"
-                      </Flex>
-                    </>
-                  )}
-                </>
-              )}
-            </Flex>
-            </Col>
-        </Row>
-      </>
-    )
-}
+                {!details?.isDsaSeller && details?.isDsaBuyer && (
+                  <>
+                    <Flex gap={5} className="badge-cs pending fs-12 fit-content" align="center">
+                      <CheckCircleOutlined className="fs-14" /> Waiting for seller to sign the sales agreement
+                    </Flex>
+                    <Flex gap={5} className="badge-cs success fs-12 fit-content" align="center">
+                      <CheckCircleOutlined className="fs-14" /> Buyer accepted the "Sale Agreement"
+                    </Flex>
+                  </>
+                )}
+              </>
+            )}
+          </Flex>
+        </Col>
+      </Row>
+    </>
+  );
+};
 
-export {DigitalSaleAgreementStep}
+export { DigitalSaleAgreementStep };

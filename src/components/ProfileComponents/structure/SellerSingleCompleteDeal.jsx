@@ -7,11 +7,11 @@ import Cookies from "js-cookie";
 
 const { Title, Text } = Typography
 const SellerSingleCompleteDeal = ({completedeal, setCompleteDeal}) => {
-    const userId = Cookies.get("userId"); // read userId from cookie
+    const userId = Cookies.get("userId")
     const dealId = completedeal.key;
     const { data, loading, error } = useQuery(GETDEAL, {
         variables: { getDealId: dealId },
-        fetchPolicy: 'network-only', // always fetch fresh data
+        fetchPolicy: 'network-only',
       });
     const { data:userData, loading:userLoading, error:userError } = useQuery(ME, {
         variables: { getUserId: userId },
