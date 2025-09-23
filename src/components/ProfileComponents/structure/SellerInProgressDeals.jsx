@@ -35,15 +35,15 @@ const SellerInProgressDeals = ({setInprogressDeal}) => {
     ];
 
     const sellerofferData = useMemo(() => {
-            return offerDeals?.getSellerInprogressDeals?.map((deal) => ({
-                key: deal.id,
-                title: deal.business.businessTitle,
-                buyername: deal.buyer.name,
-                businessprice: deal.price,
-                date: new Date(deal.createdAt).toLocaleString(),
-                isDsaSeller: deal?.isDsaSeller,
-            })) || [];
-        }, [offerDeals]);
+        return offerDeals?.getSellerInprogressDeals?.map((deal) => ({
+            key: deal.id,
+            title: deal.business.businessTitle,
+            buyername: deal.buyer.name,
+            businessprice: deal.price,
+            date: new Date(deal.createdAt).toLocaleString(),
+            isDsaSeller: deal?.isDsaSeller,
+        })) || [];
+    }, [offerDeals]);
 
 
     return (
@@ -73,7 +73,6 @@ const SellerInProgressDeals = ({setInprogressDeal}) => {
                                 }
                             },
                         })}
-                        // pagination={false}
                         pagination={{
                             current: pagination.current,
                             pageSize: pagination.pageSize,

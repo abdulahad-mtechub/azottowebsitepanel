@@ -8,6 +8,7 @@ import { GETDEAL } from '../../../graphql';
 
 const { Text } = Typography
 const ConfirmationDocsStep = ({ form, details }) => {
+
     const [messageApi, contextHolder] = message.useMessage();
     const [documents, setDocuments] = useState({});
     const uploadDocs = [
@@ -29,7 +30,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
         }
     ].filter(Boolean);
 
-    console.log("details?.businessId", details?.businessId);
     const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
         refetchQueries: [
             { query: GETDEAL, variables: { getDealId: details?.key } },
@@ -40,10 +40,13 @@ const ConfirmationDocsStep = ({ form, details }) => {
     });
 
     const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
+        refetchQueries: [
+            { query: GETDEAL, variables: { getDealId: details?.key } },
+        ],
         onCompleted: () => messageApi.success("Document uploaded successfully!"),
         onError: (err) => messageApi.error(err.message || "Something went wrong!"),
     });
-
+    console.log( "details..............", details)
     const handleSingleFileUpload = async (file,title) => {
             try {
                 const formData = new FormData();
@@ -71,7 +74,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                     variables: {
                         input: {
                             title:title,
-                            businessId: details?.businessId,
+                            businessId: details?.busines?.id,
                             filePath: result.fileUrl || result.url,
                             fileName: file.name,
                             fileType: file.type,
@@ -218,7 +221,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
             </Flex>
         </Col>
         )}
-
           {/* Seller final confirmation */}
         <Col span={24}>
               <Flex vertical gap={10}>
@@ -240,7 +242,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                           type="primary"
                           className="btnsave bg-brand"
                           onClick={handleMarkVerified}
-                          disabled={!details?.isDocVedifiedSeller} // disable if already verified
+                          disabled={details?.isDocVedifiedSeller}
                       >
                           Mark as Verified
                       </Button>

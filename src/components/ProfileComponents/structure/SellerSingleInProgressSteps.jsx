@@ -8,7 +8,6 @@ import { SellerFinalDealsStep } from './SellerFinalDealStep';
 import { GETBANKSFORDEAL } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 
-
 const statusToStepIndex = {
     COMMISSION_TRANSFER_FROM_BUYER_PENDING: 0, // Step 1: Commission Receipt
     COMMISSION_VERIFIED: 0, // still step 1
@@ -38,7 +37,6 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
     const buyerBanks = data?.getBankDetailsByDealId;
     const found = deal?.busines?.documents?.find(doc => doc.title === "Jasoor Commission");
     const send = buyerBanks?.find(b => b?.isSend === true);
-    console.log("deal", deal);
     const DSA = deal?.status
     const steps = [
         {
@@ -74,7 +72,7 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
             key: '4',
             label: 'Finalize Deal',
             content: <SellerFinalDealsStep details={deal} />,
-            status: deal?.isDocVedifiedAdmin ? "Verified" : 'Pending',
+            status: deal?.isSellerCompleted ? "Verified" : 'Pending',
             emptytitle: 'Deal Pending!',
             emptydesc: 'Waiting for the buyer & seller to finalized the deal.',
         },

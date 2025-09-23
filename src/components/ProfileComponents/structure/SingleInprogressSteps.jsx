@@ -100,7 +100,7 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
                                 item?.status?.toLowerCase().includes('waiting') ? (
                                     <Text className="sendstatus fs-10 badge-cs fw-500 fit-content">
                                         {item?.status}
-                                    </Text>
+                                     </Text>
                                 ) : (
                                     <Text className="received fs-10 badge-cs fw-500 fit-content">
                                         {item?.status}

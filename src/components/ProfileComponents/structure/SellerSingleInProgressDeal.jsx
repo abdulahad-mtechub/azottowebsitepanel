@@ -9,9 +9,10 @@ const { Title, Text } = Typography
 const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
     const userId = Cookies.get("userId"); 
     const dealId = inprogressdeal.key;
+    console.log('inprogressdeal...',inprogressdeal)
     const { data, loading, error } = useQuery(GETDEAL, {
       variables: { getDealId: dealId },
-      fetchPolicy: 'network-only', // always fetch fresh data
+      fetchPolicy: 'network-only',
     });
 
     const { data:userData, loading:userLoading, error:userError } = useQuery(ME, {
@@ -36,6 +37,8 @@ const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
         banks: data.getDeal.buyer?.banks || '-',
         isCommissionVerified: data.getDeal?.isCommissionVerified || false,
         isDsaSeller: data.getDeal?.isDsaSeller || false,
+        isDocVedifiedSeller : data.getDeal?.isDocVedifiedSeller || false,
+        isSellerCompleted : data.getDeal?.isSellerCompleted || false,
     }: null;
   
     if (!deal) return <Text>No deal found</Text>;

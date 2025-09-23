@@ -3,11 +3,18 @@ import { Button, Checkbox, Col, Flex, Row, Typography } from 'antd'
 import {FINALIZE_DEAL} from '../../../graphql/mutation'
 import { useMutation } from '@apollo/client'
 import { message } from "antd";
+import { GETDEAL } from '../../../graphql';
 
 const { Text } = Typography
-const SellerFinalDealsStep = ({form,completedeal,deal,details}) => {
+const SellerFinalDealsStep = ({details}) => {
     const [messageApi, contextHolder] = message.useMessage();
-    const [finalizDeal] = useMutation(FINALIZE_DEAL);
+    const [finalizDeal] = useMutation(FINALIZE_DEAL, {
+        refetchQueries: [
+            {query: GETDEAL, variables: { getDealId: details?.key }},
+        ],
+        awaitRefetchQueries: true,
+    });
+    console.log("details.....", details);
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [loading, setLoading] = useState(false);
     const handleSubmit = async (e) => {
@@ -22,8 +29,9 @@ const SellerFinalDealsStep = ({form,completedeal,deal,details}) => {
             await finalizDeal({
                 variables:{
                 input: {
-                    id: details.key, // replace with real ID if needed
+                    id: details.key,
                     status: "SELLERCOMPLETED",
+                    isSellerCompleted: true
                 },
             }
             });
@@ -52,15 +60,18 @@ const SellerFinalDealsStep = ({form,completedeal,deal,details}) => {
                         <>
                             <Col span={24}>
                                 <Checkbox 
-                                 checked={isConfirmed}
+                                 checked={isConfirmed || details?.isSellerCompleted}
                                  onChange={(e) => setIsConfirmed(e.target.checked)}
+                                 disabled={details?.isSellerCompleted}
                                 >
                                    I confirm that payment is received and documents have been submitted.
                                 </Checkbox>
                             </Col>
                             <Col span={24}>
                                 <Flex>
-                                    <Button aria-labelledby='Notify Jusoor to Finalize' type="primary" className='btn bg-brand' onClick={handleSubmit}>
+                                    <Button aria-labelledby='Notify Jusoor to Finalize' type="primary" className='btn bg-brand' onClick={handleSubmit}
+                                    disabled={details?.isSellerCompleted}
+                                    >
                                         Notify Jusoor to Finalize
                                     </Button>
                                 </Flex>
