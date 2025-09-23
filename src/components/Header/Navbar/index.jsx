@@ -181,7 +181,7 @@ const Navbar = ({setGetCategory}) => {
         </Space>
       ),
       onClick: () =>
-        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png", alt: "Jusoor language logo" }),
     },
     {
       key: "2",

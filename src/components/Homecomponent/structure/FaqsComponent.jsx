@@ -39,35 +39,38 @@ const FaqsComponent = () => {
                         </Flex>
                     </Col>
                     <Col lg={{span: 20}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
-                        <Collapse
-                            className='collapse-fq'
-                            defaultActiveKey={['0']}
-                            onChange={(keys)=>{setCurrentPanel(keys)}}
-                            ghost
-                        >
-                            {
-                                faqsData?.map((faq,f)=>
-                                    <Panel className={currentPanel.includes(String(f)) ? 'panel-active panel' : 'panel'}  showArrow={false} 
-                                        header={
-                                            <Title level={5} className={`m-0 fw-500 fs-17 ${currentPanel.includes(String(f)) ? 'text-brand':'text-gray'}`}>
-                                                <span className='mr-15'>0{f+1}</span>{faq?.title}
-                                            </Title>
-                                        } key={f} 
-                                        extra={((currentPanel?.findIndex(x=>x==f))>-1) ?
-                                        <MinusOutlined className='fs-18' />
-                                        :
-                                        <PlusOutlined className='fs-18'/>}
-                                            
-                                    >
-                                        <div>
-                                            <Text className='fs-16'>
-                                                {faq?.description}
-                                            </Text>
-                                        </div>
-                                    </Panel>
-                                )
-                            }
-                        </Collapse>
+                    <Collapse
+                        className="collapse-fq"
+                        defaultActiveKey={['0']}
+                        onChange={(keys) => setCurrentPanel(keys)}
+                        ghost
+                        items={faqsData?.map((faq, f) => ({
+                            key: String(f),
+                            className: currentPanel.includes(String(f))
+                            ? 'panel-active panel'
+                            : 'panel',
+                            label: (
+                            <Title
+                                level={3}
+                                className={`m-0 fw-500 fs-17 ${
+                                currentPanel.includes(String(f)) ? 'text-brand' : 'text-gray'
+                                }`}
+                            >
+                                <span className="mr-15">0{f + 1}</span>
+                                {faq?.title}
+                            </Title>
+                            ),
+                            extra:
+                            currentPanel?.findIndex((x) => x == f) > -1 ? (
+                                <MinusOutlined className="fs-18" />
+                            ) : (
+                                <PlusOutlined className="fs-18" />
+                            ),
+                            children: (
+                            <Text className="fs-16">{faq?.description}</Text>
+                            ),
+                        }))}
+                        />
                     </Col>
                 </Row>
             </div>
