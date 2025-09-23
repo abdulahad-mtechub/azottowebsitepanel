@@ -29,9 +29,14 @@ const HowWork = () => {
                         <Flex justify="center">
                             <Segmented
                                 className='custom-segment'
-                                options={['Seller', 'Buyer']}
+                                options={[
+                                    { label: 'Seller', value: 'Seller' },
+                                    { label: 'Buyer', value: 'Buyer' }
+                                  ]}
                                 value={activeTab}
                                 onChange={handleTabChange}
+                                aria-label="Select Seller or Buyer workflow"
+                                role="tablist"
                             />
                         </Flex>
 
