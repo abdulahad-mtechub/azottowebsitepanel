@@ -53,7 +53,7 @@ const JusoorFutures = () => {
                                         />
                                         
                                         <Flex vertical gap={10} align='center' className='maxwidth-400'>
-                                            <Title level={4} className='m-0 text-white'>{list?.title}</Title>
+                                            <Title strong className='fs-17 m-0 text-white'>{list?.title}</Title>
                                             <Text className="fs-15 text-white">
                                                 {
                                                     list?.description

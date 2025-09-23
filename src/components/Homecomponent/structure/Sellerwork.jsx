@@ -67,7 +67,7 @@ const Sellerwork = () => {
               </div>
             </Flex>
             <Flex vertical className="text-center" align="center">
-              <Title level={4} className="m-0">
+              <Title level={2} className="m-0">
                 {items?.title}
               </Title>
               <Text>{items?.desc}</Text>

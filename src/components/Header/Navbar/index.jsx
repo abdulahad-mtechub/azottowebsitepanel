@@ -28,6 +28,7 @@ const Navbar = ({setGetCategory}) => {
     key: "1",
     label: "EN",
     icon: "assets/icons/en.png",
+    alt: "Language logo"
   });
   const otherPaths = ['/about', '/termofuse'];
   // ✅ Setup the lazy query
@@ -376,7 +377,7 @@ const Navbar = ({setGetCategory}) => {
                     <Image
                       src={selectedLang.icon}
                       width={20}
-                      alt={selectedLang.alt}
+                      alt={selectedLang.alt || "Language"}
                       preview={false}
                     />
                     <Text className="text-white fs-13">{selectedLang.label}</Text>

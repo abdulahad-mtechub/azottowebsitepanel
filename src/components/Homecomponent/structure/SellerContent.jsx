@@ -3,6 +3,7 @@ import { Col, Flex, Image, Row, Timeline, Typography } from 'antd';
 
 const { Title, Text } = Typography;
 
+
 const steps = [
   {
     title: 'Create Your Listing',
