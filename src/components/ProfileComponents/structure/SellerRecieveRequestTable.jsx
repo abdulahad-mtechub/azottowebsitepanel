@@ -7,7 +7,7 @@ import {RECEIVEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import React,{useState,useEffect} from 'react'
 
-const SellerRecieveRequestTable = () => {
+const SellerRecieveRequestTable = ({ isBuyer }) => {
 
     const [form] = Form.useForm()
     const [ isaccept, setIsAccept ] = useState(false)
@@ -16,7 +16,7 @@ const SellerRecieveRequestTable = () => {
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
-    const [refetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS);
+    const [refetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
 
     const sellerrecievedrequestData =data?.getReceivedMeetingRequests?.map((meeting) => {
@@ -75,7 +75,7 @@ const SellerRecieveRequestTable = () => {
     ];
 
     useEffect(() => {
-        refetchMeetings({ variables: { search: search || "" } });
+        refetchMeetings({ variables: { search: search || "", isBuyer } });
     }, [search]);
 
     return (

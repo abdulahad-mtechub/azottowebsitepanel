@@ -5,10 +5,10 @@ import { useLazyQuery } from '@apollo/client';
 import React,{useEffect} from 'react'
 
 const { Text } = Typography
-const SellerAdminSchedulingTable = () => {
+const SellerAdminSchedulingTable = ({ isBuyer }) => {
 
     const [form] = Form.useForm()
-    const [fetchMeetings,{ data, loading }] = useLazyQuery(READYSCHEDULEDMEETINGS);
+    const [fetchMeetings,{ data, loading }] = useLazyQuery(READYSCHEDULEDMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
 
     const selleradminsechedulingData = data?.getMeetingsReadyForScheduling?.map((meeting) => {
@@ -37,7 +37,7 @@ const SellerAdminSchedulingTable = () => {
     ];
 
     useEffect(() => {
-        fetchMeetings({ variables: { search: search || "" } });
+        fetchMeetings({ variables: { search: search || "", isBuyer } });
     }, [search]);
 
     return (

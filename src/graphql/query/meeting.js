@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 const SENTMEETINGS = gql`
-query GetMySentMeetingRequests($search: String) {
-  getMySentMeetingRequests(search: $search) {
+query GetMySentMeetingRequests($search: String, $isBuyer: Boolean) {
+  getMySentMeetingRequests(search: $search, isBuyer: $isBuyer) {
     id
     createdAt
     createdBy
@@ -21,8 +21,8 @@ query GetMySentMeetingRequests($search: String) {
 }
 `
 const RECEIVEDMEETINGS = gql`
-query GetReceivedMeetingRequests($search: String) {
-  getReceivedMeetingRequests(search: $search) {
+query GetReceivedMeetingRequests($search: String, $isBuyer: Boolean) {
+  getReceivedMeetingRequests(search: $search, isBuyer: $isBuyer) {
     id
     createdAt
     requestedTo {
@@ -43,8 +43,8 @@ query GetReceivedMeetingRequests($search: String) {
 
 
 const READYSCHEDULEDMEETINGS = gql`
-query GetMeetingsReadyForScheduling($search: String) {
-  getMeetingsReadyForScheduling(search: $search) {
+query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean) {
+  getMeetingsReadyForScheduling(search: $search, isBuyer: $isBuyer) {
     id
     createdAt
     requestedDate
@@ -64,8 +64,8 @@ query GetMeetingsReadyForScheduling($search: String) {
 }
 `
 const SCHEDULEDMEETINGS = gql`
-query GetScheduledMeetings($search: String) {
-  getScheduledMeetings(search: $search) {
+query GetScheduledMeetings($search: String, $isBuyer: Boolean) {
+  getScheduledMeetings(search: $search, isBuyer: $isBuyer) {
     id
     createdAt
     requestedDate

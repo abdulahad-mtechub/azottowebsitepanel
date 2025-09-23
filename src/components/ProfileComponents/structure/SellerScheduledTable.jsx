@@ -4,10 +4,9 @@ import {SCHEDULEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import React,{useEffect} from 'react'
 
-const { Text } = Typography
-const SellerScheduledTable = () => {
+const SellerScheduledTable = ({ isBuyer }) => {
     const [form] = Form.useForm()
-    const [fetchMeetings, { data, loading }] = useLazyQuery(SCHEDULEDMEETINGS);
+    const [fetchMeetings, { data, loading }] = useLazyQuery(SCHEDULEDMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
 
 
@@ -52,7 +51,7 @@ const SellerScheduledTable = () => {
     ];
 
     useEffect(() => {
-        fetchMeetings({ variables: { search: search || "" } });
+        fetchMeetings({ variables: { search: search || "", isBuyer } });
       }, [search]);
 
     return (

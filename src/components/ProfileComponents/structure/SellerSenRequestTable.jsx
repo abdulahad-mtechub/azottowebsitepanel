@@ -5,9 +5,10 @@ import { useLazyQuery } from '@apollo/client';
 import React,{useEffect} from 'react'
 
 const { Text } = Typography
-const SellerSendRequestTable = () => {
+const SellerSendRequestTable = ({ isBuyer }) => {
+    console.log("isBuyer in send request table", isBuyer);
     const [form] = Form.useForm()
-    const [fetchMeetings,{ data, loading }] = useLazyQuery(SENTMEETINGS);
+    const [fetchMeetings,{ data, loading }] = useLazyQuery(SENTMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
 
     const columns = [
@@ -36,7 +37,7 @@ const SellerSendRequestTable = () => {
     }) || [];
 
     useEffect(() => {
-            fetchMeetings({ variables: { search: search || "" } });
+        fetchMeetings({ variables: { search: search || "", isBuyer } });
     }, [search]);
 
     return (

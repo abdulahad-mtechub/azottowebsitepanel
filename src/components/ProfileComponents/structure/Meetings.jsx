@@ -4,28 +4,28 @@ import { SellerRecieveRequestTable } from './SellerRecieveRequestTable';
 import { SellerAdminSchedulingTable } from './SellerAdminSchedulingTable';
 import { SellerScheduledTable } from './SellerScheduledTable';
 
-const Meetings = () => {
-    // const [activeKey, setActiveKey] = useState('1');
+const Meetings = ({ isBuyer }) => {
+
     const items = [
         {
             key:'1',
             label:'Send Requests',
-            children:<SellerSendRequestTable/>
+            children:<SellerSendRequestTable isBuyer={isBuyer} />
         },
         {
             key:'2',
             label:'Recieve Requests',
-            children:<SellerRecieveRequestTable />,
+            children:<SellerRecieveRequestTable isBuyer={isBuyer} />,
         },
         {
             key:'3',
             label:'Admin Scheduling',
-            children:<SellerAdminSchedulingTable/>
+            children:<SellerAdminSchedulingTable isBuyer={isBuyer} />
         },
         {
             key:'4',
             label:'Scheduled Meetings',
-            children:<SellerScheduledTable/>
+            children:<SellerScheduledTable isBuyer={isBuyer} />
         }
     ]
     

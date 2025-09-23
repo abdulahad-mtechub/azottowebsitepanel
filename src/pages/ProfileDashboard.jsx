@@ -143,7 +143,7 @@ const ProfileDashboard = () => {
                     <Flex align='center'>
                         <ModuleTopHeading level={4} name='Meetings' />
                     </Flex>
-                    <Meetings />
+                    <Meetings isBuyer={false} />
                 </Flex>
             ),
             sellerdeals: (
@@ -192,7 +192,7 @@ const ProfileDashboard = () => {
             ),
             buyermeeting: (
                 <>
-                    <Meetings />
+                    <Meetings isBuyer={true} />
                 </>
             ),
             buyerdeals: (
