@@ -39,17 +39,38 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
       onCompleted: () => messageApi.success("Document uploaded successfully!"),
       onError: (err) => messageApi.error(err.message || "Upload failed!"),
     });
-  
-    // Handle accepting the offer
-    // const handleAcceptOffer = async () => {
-    //   try {
-        
-    //   } catch (err) {
-    //     console.error("Error accepting offer:", err);
-    //   }
-    // };
-  
-    const commission = inprogressdeal?.offerprice * 0.16;
+
+    function calculateCommission(price) {
+      if (!price) return 0;
+    
+      // Minimum commission rule
+      if (price < 50000) {
+        return 2000;
+      }
+    
+      let commission = 0;
+    
+      // Apply marginal brackets
+      if (price > 2000000) {
+        commission += (price - 2000000) * 0.015; // 1.5% above 2M
+        price = 2000000;
+      }
+      if (price > 500000) {
+        commission += (price - 500000) * 0.025; // 2.5% between 500K–2M
+        price = 500000;
+      }
+      if (price > 100000) {
+        commission += (price - 100000) * 0.03; // 3% between 100K–500K
+        price = 100000;
+      }
+      if (price > 0) {
+        commission += price * 0.04; // 4% up to 100K
+      }
+    
+      return commission;
+    }
+    
+    const commission = calculateCommission(inprogressdeal?.offerprice);
   
     const paycommissionData = [
       {
