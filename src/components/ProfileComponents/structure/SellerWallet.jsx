@@ -1,29 +1,85 @@
 import { useState } from 'react';
-import { Card, Row, Col, Flex, Typography, Dropdown, Button, Image } from 'antd'
-import { ModuleTopHeading } from '../../Pagecomponents';
+import { Card, Row, Col, Flex, Typography, Dropdown, Button, Image,message } from 'antd'
 import { NavLink } from 'react-router-dom';
 import { DeleteModal } from '../../ui';
-import {GETADMINBANK } from '../../../graphql/query';
-import { useQuery } from '@apollo/client';
+import {GETUSERBANK } from '../../../graphql/query';
+import { useQuery,useMutation } from '@apollo/client';
 import { AddWalletModal } from '../modal';
+import {ACTIVEBANK,DELETEBANK} from '../../../graphql/mutation/mutations'
 
 const { Title, Text } = Typography;
 const SellerWallet = ({addwalletvisible, setAddWalletVisible}) => {
+    const [messageApi, contextHolder] = message.useMessage();
     const [deletemodal, setDeleteModal] = useState(false)
-    const { loading, error, data:bankData } = useQuery(GETADMINBANK);
+    const { loading, error, data:bankData } = useQuery(GETUSERBANK);
 
-    const data = (bankData?.getAdminBanks || []).map((bank, index) => ({
-        key: `${index + 1}`,
+    const [setActiveBank] = useMutation(ACTIVEBANK, {
+        onCompleted: () => {
+          messageApi.success('Bank status updated successfully');
+          refetch();
+        },
+        onError: (err) => {
+          messageApi.error(err.message);
+        },
+      });
+    
+    const [deleteBank] = useMutation(DELETEBANK, {
+        onCompleted: () => {
+          messageApi.success('Bank deleted successfully');
+          refetch();
+          setDeleteModal(false);
+        },
+        onError: (err) => {
+          messageApi.error(err.message);
+        },
+    });
+    const data = (bankData?.getUserBanks || []).map((bank, index) => ({
+        key: bank?.id || index,
         bankname: bank?.bankName,
         title: bank?.accountTitle || 'N/A', // Replace with real title if available
         accountnumber: bank?.accountNumber,
-        expirydate: bank?.createdAt // If expiry isn't part of your data, keep this placeholder
+        expirydate: bank?.createdAt, // If expiry isn't part of your data, keep this placeholder
+        isActive: bank?.isActive || false, // Assuming isActive is a boolean in your data
     }));
-    const items = [
-        { label: <NavLink onClick={()=>setDeleteModal(true)}>Remove Account</NavLink>, key: 0 },
-    ]
+    const handleSetActive = (bankId) => {
+        setActiveBank({ variables: { setActiveBankId: bankId } });
+      };
+    
+      const handleDeleteBank = (bankId) => {
+        deleteBank({ variables: { deleteBankId: bankId } });
+      };
+      let items
+      data?.map((wallet, index) => {
+        console.log(wallet)
+        items = [
+          {
+            label: (
+              <NavLink
+                onClick={() => {
+                  setDeleteModal(true);
+                  setSelectedBankId(wallet.key);
+                }}
+              >
+                Remove Account
+              </NavLink>
+            ),
+            key: '0',
+          },
+          {
+            label: (
+              <NavLink
+                onClick={() => handleSetActive(wallet.key)}
+              >
+                {wallet.isActive ? 'Inactive' : 'Active'}
+              </NavLink>
+            ),
+            key: '1',
+          },
+        ];
+    })
     return (
         <>
+        {contextHolder}
             <Card className='border-gray'>
                 <Row gutter={[16, 16]}>
                     <Col span={24}>
@@ -75,6 +131,7 @@ const SellerWallet = ({addwalletvisible, setAddWalletVisible}) => {
                 buttontext='Yes, Remove Account'
                 title='Remove Bank Account?'
                 subtitle='Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account.'
+                onConfirm={() => handleDeleteBank(selectedBankId)}
             />
         </>
     )

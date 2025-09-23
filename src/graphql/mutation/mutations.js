@@ -99,6 +99,23 @@ mutation UploadDocument($input: UpdateDocumentInput!) {
   }
 }
 `
+const ADD_BANK = gql`
+mutation AddBank($input: BankInput!) {
+  addBank(input: $input) {
+    id
+  }
+}
+`
+const ACTIVEBANK = gql`
+mutation SetActiveBank($setActiveBankId: ID!) {
+  setActiveBank(id: $setActiveBankId)
+}
+`
+const DELETEBANK = gql`
+mutation DeleteBank($deleteBankId: ID!) {
+  deleteBank(id: $deleteBankId)
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -114,5 +131,8 @@ export {
   UPDATE_DEAL,
   COUNTER_OFFER,
   SEND_BANK,
-  UPLOAD_DOCUMENT
+  UPLOAD_DOCUMENT,
+  ADD_BANK,
+  ACTIVEBANK,
+  DELETEBANK
 }

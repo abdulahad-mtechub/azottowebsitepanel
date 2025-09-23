@@ -1,13 +1,45 @@
-import { Button, Col, Flex, Form, Image, Modal, Row, Typography } from 'antd'
+import { Button, Col, Flex, Form, Image, Modal, Row, Typography,message,Spin } from 'antd'
 import { MyInput, MySelect } from '../../Forms';
 import { CloseOutlined } from '@ant-design/icons';
+import { ADD_BANK } from '../../../graphql/mutation'
+import { useMutation } from '@apollo/client'
+import { GETUSERBANK } from '../../../graphql/query'
+import Cookies from 'js-cookie';
 
 const { Title, Text } = Typography
 const AddWalletModal = ({ visible, onClose }) => {
+    const userId = Cookies.get("userId"); // read userId from cookie
+    const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
-  
+    
+    const [addBank, { loading }] = useMutation(ADD_BANK, {
+        refetchQueries: [{ query: GETUSERBANK, variables: { getUserBanksId: userId } }],
+        awaitRefetchQueries: true,
+    });
+
+    const onFinish = (values) => {
+        addBank({
+        variables: {
+            input: {
+            bankName: values.bankName,
+            accountTitle: values.accountHoldername,
+            iban: values.ibanNumber,
+            },
+        },
+        });
+        messageApi.success('Bank account added successfully!');
+        onClose();     
+    };  
+    if (loading) {
+        return (
+          <Flex justify="center" align="center" className='h-200'>
+            <Spin size="large" />
+          </Flex>
+        );
+    }
     return (
       <>
+      {contextHolder}
         <Modal
             title={null}
             open={visible}
@@ -59,7 +91,7 @@ const AddWalletModal = ({ visible, onClose }) => {
                 layout="vertical"
                 form={form}
                 requiredMark={false}
-                // onFinish={handleSubmit}
+                onFinish={onFinish}
             >
                 <Row gutter={[12, 12]}>
                     <Col span={24}>
@@ -89,7 +121,7 @@ const AddWalletModal = ({ visible, onClose }) => {
                     <Col span={24}>
                         <MyInput
                             label="IBAN Number"
-                            name="ibanNummber"
+                            name="ibanNumber"
                             required
                             message="Please enter iban nummber"
                             placeholder="Enter iban nummber"

@@ -221,6 +221,7 @@ query GetUserBanks {
     accountNumber
     createdAt
     accountTitle
+    isActive
   }
 }
   `
