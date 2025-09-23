@@ -10,10 +10,58 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
 
+    const computeCommissionMarginal = (amount) => {
+        console.log("amount:", amount);
+        if (!amount || amount <= 0) return 0;
+        let remaining = amount;
+        let commission = 0;
+        const b1Limit = 100_000;
+        if (remaining > 0) {
+            const part = Math.min(remaining, b1Limit);
+            commission += part * 0.04;
+            remaining -= part;
+        }
+        const b2Limit = 400_000; 
+        if (remaining > 0) {
+            const part = Math.min(remaining, b2Limit);
+            commission += part * 0.03;
+            remaining -= part;
+        }
+        const b3Limit = 1_500_000;
+        if (remaining > 0) {
+            const part = Math.min(remaining, b3Limit);
+            commission += part * 0.025;
+            remaining -= part;
+        }
+        if (remaining > 0) {
+            commission += remaining * 0.015;
+        }
+        return commission;
+    };
+
     const handleOfferAmountChange = (e) => {
-        const offerAmount = parseFloat(e.target.value) || 0;
-        const totalAmount = offerAmount + (offerAmount * 0.06);
-        form.setFieldsValue({ totalamount: totalAmount.toFixed(2) });
+        const raw = e?.target?.value;
+        console.log("raw:", raw);
+        const offerAmount = parseFloat(String(raw).replace(/,/g, "")) || 0;
+        console.log(offerAmount, "offerAmount");
+        let commission = 0;
+
+        
+        if (offerAmount === 0) {
+            commission = 0;
+        } else if (offerAmount < 50000) {
+            commission = 2000;
+        } else {
+            commission = computeCommissionMarginal(offerAmount);
+        }
+
+        const commissionRounded = Number(commission.toFixed(2));
+        const totalAmount = Number((offerAmount + commissionRounded).toFixed(2));
+
+        form.setFieldsValue({
+            commission: commissionRounded,
+            totalamount: totalAmount,
+        });
     };
 
     const [createOffer] = useMutation(CREATE_OFFER);

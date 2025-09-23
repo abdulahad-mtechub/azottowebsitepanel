@@ -12,12 +12,57 @@ const CounterOffer = ({visible,onClose,selectedOfferId,title='Counter Offer to S
     const [form] = Form.useForm();
     const [counterOffer, { loading }] = useMutation(COUNTER_OFFER);
 
-    const handleOfferAmountChange = (e) => {
-        const offerAmount = parseFloat(e.target.value) || 0;
-        const totalAmount = offerAmount + (offerAmount * 0.06);
-        form.setFieldsValue({ totalamount: totalAmount.toFixed(2) });
+    const computeCommissionMarginal = (amount) => {
+        
+        if (!amount || amount <= 0) return 0;
+        let remaining = amount;
+        let commission = 0;
+        const b1Limit = 100_000;
+        if (remaining > 0) {
+            const part = Math.min(remaining, b1Limit);
+            commission += part * 0.04;
+            remaining -= part;
+        }
+        const b2Limit = 400_000; 
+        if (remaining > 0) {
+            const part = Math.min(remaining, b2Limit);
+            commission += part * 0.03;
+            remaining -= part;
+        }
+        const b3Limit = 1_500_000;
+        if (remaining > 0) {
+            const part = Math.min(remaining, b3Limit);
+            commission += part * 0.025;
+            remaining -= part;
+        }
+        if (remaining > 0) {
+            commission += remaining * 0.015;
+        }
+        return commission;
     };
 
+    const handleOfferAmountChange = (e) => {
+        const raw = e?.target?.value;
+        console.log("raw:", raw);
+        const offerAmount = parseFloat(String(raw).replace(/,/g, "")) || 0;
+        let commission = 0;
+
+        if (offerAmount === 0) {
+            commission = 0;
+        } else if (offerAmount < 50_000) {
+            commission = 2000;
+        } else {
+            commission = computeCommissionMarginal(offerAmount);
+        }
+
+        const commissionRounded = Number(commission.toFixed(2));
+        const totalAmount = Number((offerAmount + commissionRounded).toFixed(2));
+
+        form.setFieldsValue({
+            commission: commissionRounded,
+            totalamount: totalAmount,
+        });
+    };
     useEffect(() => {
         form.resetFields();
     }, [visible, form]);
@@ -33,7 +78,7 @@ const CounterOffer = ({visible,onClose,selectedOfferId,title='Counter Offer to S
         variables: {
           input: {
             parentOfferId: selectedOfferId,
-            price: totalAmount, // send calculated total amount
+            price: totalAmount, 
           },
         },
       });
