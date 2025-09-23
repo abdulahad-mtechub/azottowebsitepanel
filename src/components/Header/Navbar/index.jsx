@@ -181,7 +181,7 @@ const Navbar = ({setGetCategory}) => {
         </Space>
       ),
       onClick: () =>
-        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png", alt: "Jusoor language logo" }),
+        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png", alt: "English" }),
     },
     {
       key: "2",
@@ -192,7 +192,7 @@ const Navbar = ({setGetCategory}) => {
         </Space>
       ),
       onClick: () =>
-        setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+        setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png",  alt: "Arabic"}),
     },
   ];
 
@@ -376,7 +376,7 @@ const Navbar = ({setGetCategory}) => {
                     <Image
                       src={selectedLang.icon}
                       width={20}
-                      alt={selectedLang.label}
+                      alt={selectedLang.alt}
                       preview={false}
                     />
                     <Text className="text-white fs-13">{selectedLang.label}</Text>
