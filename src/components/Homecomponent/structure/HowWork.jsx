@@ -35,6 +35,8 @@ const HowWork = () => {
                                   ]}
                                 value={activeTab}
                                 onChange={handleTabChange}
+                                aria-label="Select Seller or Buyer workflow"
+                                role="radiogroup"
                             />
                         </Flex>
 
