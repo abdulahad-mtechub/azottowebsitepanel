@@ -6,6 +6,9 @@ query GetMySentMeetingRequests($search: String, $isBuyer: Boolean) {
     id
     createdAt
     createdBy
+    requestedDate
+    requestedEndDate
+    receiverAvailabilityDate
     requestedTo {
       name
     }
@@ -25,6 +28,9 @@ query GetReceivedMeetingRequests($search: String, $isBuyer: Boolean) {
   getReceivedMeetingRequests(search: $search, isBuyer: $isBuyer) {
     id
     createdAt
+    requestedDate
+    requestedEndDate
+    receiverAvailabilityDate
     requestedTo {
       name
     }

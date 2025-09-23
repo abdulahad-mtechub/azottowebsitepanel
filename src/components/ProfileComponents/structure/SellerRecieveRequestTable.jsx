@@ -5,7 +5,7 @@ import { ScheduleMeeting } from '../modal';
 import { DeleteModal } from '../../ui';
 import {RECEIVEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
-import React,{useState,useEffect} from 'react'
+import {useState,useEffect} from 'react'
 
 const SellerRecieveRequestTable = ({ isBuyer }) => {
 
@@ -18,7 +18,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
 
     const [refetchMeetings,{ data, loading }] = useLazyQuery(RECEIVEDMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
-
+    console.log()
     const sellerrecievedrequestData =data?.getReceivedMeetingRequests?.map((meeting) => {
         const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
@@ -43,7 +43,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
         { title: 'Buyer Name', dataIndex: 'buyername' },
         { title: 'Business Price', dataIndex: 'businessprice' },
         { title: 'Offer Price', dataIndex: 'offerprice' },
-        { title: 'Requested Date', dataIndex: 'createdAt' },
+        { title: 'Requested Date', dataIndex: 'date' },
         {
             title: 'Action',
             key: 'action',

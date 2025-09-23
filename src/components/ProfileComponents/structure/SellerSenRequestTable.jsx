@@ -4,7 +4,6 @@ import {SENTMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import React,{useEffect} from 'react'
 
-const { Text } = Typography
 const SellerSendRequestTable = ({ isBuyer }) => {
     console.log("isBuyer in send request table", isBuyer);
     const [form] = Form.useForm()
@@ -16,7 +15,7 @@ const SellerSendRequestTable = ({ isBuyer }) => {
         { title: 'Buyer Name', dataIndex: 'buyername' },
         { title: 'Business Price', dataIndex: 'businessprice' },
         { title: 'Offer Price', dataIndex: 'offerprice' },
-        { title: 'Requested Date', dataIndex: 'date' },
+        { title: 'Requested Date', dataIndex: 'requestedDate' },
     ];
 
     const sendrequestData = data?.getMySentMeetingRequests?.map((meeting) => {
@@ -32,7 +31,7 @@ const SellerSendRequestTable = ({ isBuyer }) => {
             buyername: maskedName,
             businessprice: meeting.business?.price,
             offerprice: meeting.offer?.price,
-            date: new Date(meeting.createdAt).toLocaleString(),
+            requestedDate: new Date(meeting.requestedDate).toLocaleString(),
         };
     }) || [];
 
