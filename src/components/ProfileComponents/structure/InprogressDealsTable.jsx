@@ -41,6 +41,7 @@ const InprogressDealsTable = ({setInprogressDeal}) => {
                 businessId: deal?.business?.id,
                 sellername: deal?.business.seller.name,
                 sellerId: deal?.business.seller.id,
+                buyerId: deal?.buyer?.id,
                 buyername: deal?.buyer?.name,
                 status: deal?.status,
                 offerprice: deal?.price,

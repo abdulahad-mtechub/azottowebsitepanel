@@ -13,8 +13,9 @@ const DigitalSaleAgreementStep = ({ completedeal, details }) => {
   const [confirmChecked, setConfirmChecked] = useState(false)
   const [messageApi, contextHolder] = message.useMessage();
   const userId = Cookies.get("userId");
-  const isBuyer = userId === completedeal?.buyerId;
-  console.log("isBuyer:", isBuyer, "userId:", userId, "buyerId:", completedeal?.buyerId, details);
+  console.log('completedeal...', completedeal);
+  const isBuyer = userId === details?.buyerId;
+  console.log("isBuyer:.", isBuyer, "userId:", userId, "buyerId:", completedeal?.buyerId, details);
 
   const [buyerSigned, setBuyerSigned] = useState(!!details?.isDsaBuyer);
   const [sellerSigned, setSellerSigned] = useState(!!details?.isDsaSeller);
@@ -86,7 +87,7 @@ const DigitalSaleAgreementStep = ({ completedeal, details }) => {
    const handleConfirmChange = (e) => {
     setConfirmChecked(!!e.target.checked); // CHANGED
   };
-
+  console.log( "test",isBuyer, buyerSigned, sellerSigned, confirmChecked, updating);
   return (
     <>
       {contextHolder}

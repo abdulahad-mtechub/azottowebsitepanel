@@ -36,7 +36,7 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
         {
             key: '1',
             label: 'Digital Sale Agreement',
-            content: <DigitalSaleAgreementStep form={form} details={deal} />,
+            content: <DigitalSaleAgreementStep form={form} details={deal} completedeal={completedeal}  />,
             status: !deal?.isDsaSeller && !deal?.isDsaBuyer
                 ? 'Seller & Buyer DSA Pending'
                 : !deal?.isDsaSeller && deal?.isDsaBuyer
