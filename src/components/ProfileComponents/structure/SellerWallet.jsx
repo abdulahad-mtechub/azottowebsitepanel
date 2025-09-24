@@ -140,6 +140,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
       <Modal
         title="Remove Bank Account?"
         visible={deletemodal}
+        centered
         onCancel={() => {
           setDeleteModal(false);
           setSelectedBankId(null);

@@ -10,7 +10,7 @@ import { useState } from 'react';
 const { Title, Text } = Typography;
 
 const AddWalletModal = ({ visible, onClose }) => {
-  const userId = Cookies.get('userId'); // read userId from cookie
+
   const [messageApi, contextHolder] = message.useMessage();
   const [showSuccessAfterClose, setShowSuccessAfterClose] = useState(false);
   const [form] = Form.useForm();
@@ -24,9 +24,7 @@ const AddWalletModal = ({ visible, onClose }) => {
       messageApi.error(err.message || 'Something went wrong');
     },
     refetchQueries: [
-      // if GETUSERBANK takes a variable named `getUserBanksId`, keep the object below,
-      // otherwise just pass { query: GETUSERBANK }.
-      { query: GETUSERBANK, /* variables: { getUserBanksId: userId } */ },
+      { query: GETUSERBANK, },
     ],
     awaitRefetchQueries: true,
   });
