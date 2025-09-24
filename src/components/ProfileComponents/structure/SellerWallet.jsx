@@ -12,7 +12,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
   const [deletemodal, setDeleteModal] = useState(false);
   const [selectedBankId, setSelectedBankId] = useState(null);
 
-  const { loading, error, data: bankData } = useQuery(GETUSERBANK);
+  const { data: bankData } = useQuery(GETUSERBANK);
 
   const [activateBankMutate] = useMutation(ACTIVEBANK, {
     refetchQueries: [{ query: GETUSERBANK }],
@@ -134,9 +134,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
           })}
         </Row>
       </Card>
-
       <AddWalletModal visible={addwalletvisible} onClose={() => setAddWalletVisible(false)} />
-
       <Modal
         title="Remove Bank Account?"
         visible={deletemodal}

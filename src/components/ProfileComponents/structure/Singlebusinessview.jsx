@@ -7,9 +7,9 @@ import { GET_BUSINESS } from '../../../graphql/query/business';
 
 const { Text, Title } = Typography;
 const Singlebusinessview = ({setSingleDetail, singledetail}) => {
-    const { data, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
+    const { data } = useQuery(GET_BUSINESS, {
         variables: { getBusinessByIdId: singledetail },
-        skip: !singledetail, // in case id is undefined
+        skip: !singledetail,
     });
 
     const business = data?.getBusinessById?.business

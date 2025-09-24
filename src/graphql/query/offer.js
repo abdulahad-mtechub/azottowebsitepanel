@@ -167,6 +167,7 @@ query GetDeal($getDealId: ID!) {
         name
       }
       documents {
+        id
         title
         filePath
       }

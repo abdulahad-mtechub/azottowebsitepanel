@@ -99,6 +99,12 @@ mutation UploadDocument($input: UpdateDocumentInput!) {
   }
 }
 `
+
+const DELETE_DOCUMENTS = gql`
+mutation DeleteDocument($deleteDocumentId: ID!) {
+  deleteDocument(id: $deleteDocumentId)
+}
+`
 const ADD_BANK = gql`
 mutation AddBank($input: BankInput!) {
   addBank(input: $input) {
@@ -134,5 +140,6 @@ export {
   UPLOAD_DOCUMENT,
   ADD_BANK,
   ACTIVEBANK,
-  DELETEBANK
+  DELETEBANK,
+  DELETE_DOCUMENTS
 }

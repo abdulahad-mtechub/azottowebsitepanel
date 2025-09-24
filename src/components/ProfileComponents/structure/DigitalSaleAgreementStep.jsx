@@ -8,15 +8,12 @@ import Cookies from "js-cookie";
 
 const { Text } = Typography;
 
-const DigitalSaleAgreementStep = ({ completedeal, details }) => {
+const DigitalSaleAgreementStep = ({ details }) => {
 
   const [confirmChecked, setConfirmChecked] = useState(false)
   const [messageApi, contextHolder] = message.useMessage();
   const userId = Cookies.get("userId");
-  console.log('completedeal...', completedeal);
   const isBuyer = userId === details?.buyerId;
-  console.log("isBuyer:.", isBuyer, "userId:", userId, "buyerId:", completedeal?.buyerId, details);
-
   const [buyerSigned, setBuyerSigned] = useState(!!details?.isDsaBuyer);
   const [sellerSigned, setSellerSigned] = useState(!!details?.isDsaSeller);
 
@@ -52,9 +49,6 @@ const DigitalSaleAgreementStep = ({ completedeal, details }) => {
     // Optimistically update UI
     if (isBuyer) setBuyerSigned(checked); // CHANGED
     else setSellerSigned(checked); // CHANGED
-
-    // Prepare variables for mutation.
-    // If you have separate mutations for buyer vs seller use them instead.
     const variables = {
       input: {
         id: details?.key || null,
@@ -85,9 +79,8 @@ const DigitalSaleAgreementStep = ({ completedeal, details }) => {
     );
   }
    const handleConfirmChange = (e) => {
-    setConfirmChecked(!!e.target.checked); // CHANGED
+    setConfirmChecked(!!e.target.checked);
   };
-  console.log( "test",isBuyer, buyerSigned, sellerSigned, confirmChecked, updating);
   return (
     <>
       {contextHolder}
