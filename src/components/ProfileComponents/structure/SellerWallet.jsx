@@ -75,25 +75,23 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
               {
                 key: 'remove',
                 label: (
-                  <Text
-                    onClick={() => {
-                      setSelectedBankId(wallet.key);
-                      setDeleteModal(true);
-                    }}
-                  >
+                  <Text>
                     Remove Account
                   </Text>
                 ),
+                onClick: () => {
+                  setSelectedBankId(wallet.key);
+                  setDeleteModal(true);
+                },
               },
               {
                 key: 'toggleActive',
                 label: (
-                  <Text
-                    onClick={() => handleSetActive(wallet.key)}
-                  >
+                  <Text>
                     {wallet.isActive ? 'Inactive' : 'Active'}
                   </Text>
                 ),
+                onClick: () => handleSetActive(wallet.key),
               },
             ];
 
@@ -139,7 +137,6 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
 
       <AddWalletModal visible={addwalletvisible} onClose={() => setAddWalletVisible(false)} />
 
-      {/* Inline Delete Confirmation Modal */}
       <Modal
         title="Remove Bank Account?"
         visible={deletemodal}
