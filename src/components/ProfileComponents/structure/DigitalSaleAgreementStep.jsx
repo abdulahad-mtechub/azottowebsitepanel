@@ -2,18 +2,18 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Checkbox, Col, Flex, Image, Row, Typography, message, Spin } from 'antd';
 import { CheckCircleOutlined } from '@ant-design/icons';
-import { BUYERINPROGRESSDEALS, GET_BUSINESS, GETDEAL, UPDATE_DEAL } from '../../../graphql/';
+import { BUYERINPROGRESSDEALS, GETDEAL, UPDATE_DEAL } from '../../../graphql/';
 import { useMutation } from '@apollo/client';
 import Cookies from "js-cookie";
 
 const { Text } = Typography;
 
 const DigitalSaleAgreementStep = ({ details }) => {
-
   const [confirmChecked, setConfirmChecked] = useState(false)
   const [messageApi, contextHolder] = message.useMessage();
   const userId = Cookies.get("userId");
   const isBuyer = userId === details?.buyerId;
+  console.log('details in DSA step...', details);
   const [buyerSigned, setBuyerSigned] = useState(!!details?.isDsaBuyer);
   const [sellerSigned, setSellerSigned] = useState(!!details?.isDsaSeller);
 
@@ -117,8 +117,8 @@ const DigitalSaleAgreementStep = ({ details }) => {
             <Checkbox
               className="fit-content"
               checked={isBuyer ? buyerSigned : sellerSigned} // CHANGED
-              disabled={ (isBuyer ? buyerSigned : sellerSigned) || updating || !confirmChecked } // disable if already signed or updating
-              onChange={handleTermsChange} // CHANGED: the only checkbox that triggers the mutation
+              disabled={ (isBuyer ? buyerSigned : sellerSigned) || updating || !confirmChecked } 
+              onChange={handleTermsChange}
             >
               I accept the terms of the agreement and agree to proceed.
             </Checkbox>
