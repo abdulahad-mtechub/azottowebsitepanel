@@ -225,6 +225,19 @@ query GetUserBanks {
   }
 }
   `
+const GETUSERACTIVEBANK = gql`
+  query GetUserActiveBanks($getUserActiveBanksId: ID) {
+    getUserActiveBanks(id: $getUserActiveBanksId) {
+      accountTitle
+      bankName
+      iban
+      cardNumber
+      cardType
+      isActive
+      id
+    }
+  }
+`
 export {
     ME,
     NOTIFICATION,
@@ -237,5 +250,6 @@ export {
     GETFAVORITBUSINESS,
     GETADMINBANK,
     GETADMINACTIVEBANK,
-    GETUSERBANK
+    GETUSERBANK,
+    GETUSERACTIVEBANK
 }

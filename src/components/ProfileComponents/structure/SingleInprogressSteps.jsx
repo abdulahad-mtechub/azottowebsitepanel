@@ -1,31 +1,28 @@
-import React, { useState,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import { Flex, Typography, Steps, Collapse, Form } from 'antd';
 import { CheckOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { PayCommissionInprogressStep } from './PayCommissionInprogressStep';
 import { DigitalSaleAgreementStep } from './DigitalSaleAgreementStep';
 import { PayBusinessAmountstep } from './PayBusinessAmountstep';
 import { FinalDealsStep } from './FinalDealsStep';
-import { ME } from '../../../graphql/query';
-import { useQuery } from '@apollo/client';
+import { GETUSERACTIVEBANK } from '../../../graphql/query';
+import { useLazyQuery } from '@apollo/client';
 
 const { Text } = Typography;
 const SingleInprogressSteps = ({inprogressdeal}) => {
     const [form] = Form.useForm();
     const [activeStep, setActiveStep] = useState(inprogressdeal ? 3:0);
     const [openPanels, setOpenPanels] = useState( inprogressdeal ? ['1','2','3','4'] : ['1']);
-    const [bank, setBank] = useState();
 
-    const { data:user, loading:userLoading, error:userError } = useQuery(ME, {
-        variables: { 
-            getUserId:inprogressdeal?.sellerId
-        },
-    });
+    const [activeBank, { data: activeBankData }] = useLazyQuery(GETUSERACTIVEBANK)
 
     useEffect(() => {
-            if (user) {
-                setBank(user?.getUser?.banks[0]);
-            }
-    }, [user]);
+        if (inprogressdeal?.sellerId) {
+            activeBank({ variables: { getUserActiveBanksId: inprogressdeal?.sellerId } });
+        }
+    }, [inprogressdeal?.sellerId, activeBankData]);
+
+    console.log('activeBankData', activeBankData)
 
 
     const steps = [
@@ -53,7 +50,7 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
         {
             key: '3',
             label: 'Pay Business Amount',
-            content: <PayBusinessAmountstep  inprogressdeal={inprogressdeal} bank={bank} form={form} />,
+            content: <PayBusinessAmountstep  inprogressdeal={inprogressdeal} bank={activeBankData?.getUserActiveBanks} form={form} />,
             status: 'Verified'
         },
         {
