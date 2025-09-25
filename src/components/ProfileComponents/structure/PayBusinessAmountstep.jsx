@@ -1,6 +1,6 @@
 import { Card, Col, Flex, Image, Row, Typography, message } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
-import {GET_BUSINESS } from '../../../graphql/query';
+import {GET_BUSINESS, GETDEAL } from '../../../graphql/query';
 import { useMutation } from '@apollo/client';
 import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 
@@ -21,10 +21,9 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
         },
     });
       
-    // Mutation to upload document
     const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
         refetchQueries: [
-            { query: GET_BUSINESS, variables: { getBusinessByIdId: inprogressdeal?.businessId, limit: null, offset: null, search: null, status: null } },
+            { query: GETDEAL, variables: { getDealId: inprogressdeal?.key } },
         ],
         awaitRefetchQueries: true,
         onCompleted: () => messageApi.success("Document uploaded successfully!"),
@@ -70,7 +69,7 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
             variables: {
                 input: {
                 title: "Buyer Payment Receipt",
-                businessId: inprogressdeal?.businessId,
+                businessId: inprogressdeal?.busines?.id,
                 filePath: fileUrl,
                 fileName: file.name,
                 fileType: file.type,
@@ -87,7 +86,7 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
                 },
             });
     
-            return false; // Prevent default upload behavior
+            return false;
         } catch (error) {
             const errorMsg = error instanceof Error ? error.message : String(error);
             messageApi.error(errorMsg || "Upload failed!");

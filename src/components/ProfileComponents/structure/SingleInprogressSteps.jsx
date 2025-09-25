@@ -22,9 +22,6 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
         }
     }, [inprogressdeal?.sellerId, activeBankData]);
 
-    console.log('activeBankData', activeBankData)
-
-
     const steps = [
         {
             key: '1',
