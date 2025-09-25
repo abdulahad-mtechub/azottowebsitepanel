@@ -1,22 +1,12 @@
 import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography,message } from 'antd'
-import {GET_BUSINESS } from '../../../graphql/query';
-import { useQuery,useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { UPDATE_DEAL } from '../../../graphql/mutation';
 
 const { Text } = Typography
-const FinalDealsStep = ({form,inprogressdeal}) => {
+const FinalDealsStep = ({inprogressdeal}) => {
+
 const [messageApi, contextHolder] = message.useMessage();
-const { data:business, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
-        variables: { 
-            getBusinessByIdId: inprogressdeal?.businessId,
-            limit: null,
-            offset: null,
-            search: null,
-            status: null
-        },
-    });
-const dealBusiness = business?.getBusinessById?.business
-const uploadDocs = dealBusiness?.documents || [];
+const uploadDocs = inprogressdeal?.busines?.documents || [];
 const allowedTitles = [
     "Commercial Registration (CR)",
     "Notarized Ownership Transfer Letter"
@@ -26,7 +16,6 @@ const documents = uploadDocs.filter(doc =>
     allowedTitles.includes(doc.title?.trim())
 );
 
-const isDoc = uploadDocs.length === 4;
 const [updatedeal] = useMutation(UPDATE_DEAL,{
     onCompleted: () => {
         messageApi.success("Deal uploaded successfully!")
@@ -63,7 +52,6 @@ return (
                         </Flex>
                     </Flex>
 
-                    {/* Download button */}
                     <a href={doc.filePath} download target="_blank" rel="noopener noreferrer">
                         <Image
                             src={"/assets/icons/download.png"}

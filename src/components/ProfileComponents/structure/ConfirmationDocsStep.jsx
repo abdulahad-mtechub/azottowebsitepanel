@@ -48,14 +48,13 @@ const ConfirmationDocsStep = ({ form, details }) => {
       messageApi.success('Documents deleted successfully');
       setDocuments({});
       setCrUploaded(false);
-      setUploadsAllowed('no'); // keep UI hidden after deletion
+      setUploadsAllowed('no'); 
     },
     onError: (err) => {
       messageApi.error(err?.message || 'Failed to delete documents');
     },
   });
 
-  // upload handler (unchanged)
   const handleSingleFileUpload = async (file, title) => {
     try {
       const formData = new FormData();
@@ -114,7 +113,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
     });
   };
 
-  // confirm delete modal
   const handleNoSelected = () => {
     modal.confirm({
       centered: true,
@@ -125,7 +123,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
       cancelText: 'Cancel',
       onOk: async () => {
         try {
-          // delete both if they exist (adjust variables to match your backend)
           const titlesToDelete = [];
           if (existingCrDoc) titlesToDelete.push('Commercial Registration (CR)');
           if (existingNotarizedDoc) titlesToDelete.push('Notarized Ownership Transfer Letter');
@@ -155,7 +152,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
     });
   };
 
-  const onRadioChange = (e) => {
+  const onRadioChange = async (e) => {
     const val = e.target.value;
     const anyDocsExist = Boolean(existingCrDoc || existingNotarizedDoc || bankRecipt);
 
@@ -163,8 +160,35 @@ const ConfirmationDocsStep = ({ form, details }) => {
 
     if (val === 'no' && anyDocsExist) {
       handleNoSelected();
+      return;
     }
-  };
+
+    if (val === 'yes') {
+      if (details?.isPaymentVerifiedSeller) {
+        messageApi.info('Payment already marked as verified by seller.');
+        return;
+      }
+
+      if (!details?.key) {
+        messageApi.error('Deal ID not found.');
+        return;
+      }
+
+      try {
+        await updateDeals({
+          variables: {
+            input: {
+              id: details.key,
+              isPaymentVedifiedSeller: true,
+            },
+          },
+        });
+      } catch (err) {
+        console.error('Error updating payment verified:', err);
+        messageApi.error(err?.message || 'Failed to update deal');
+      }
+    }
+  }
 
   if (updating || uploading || deleting) {
     return (

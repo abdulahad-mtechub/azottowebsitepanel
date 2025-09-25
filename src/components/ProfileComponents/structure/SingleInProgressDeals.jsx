@@ -46,7 +46,6 @@ const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
     }: null;
   
     if (!deal) return <Text>No deal found</Text>;
-    console.log('deal............',deal)
 const buyerdealsData = [
     {
       title:'Seller Name',
