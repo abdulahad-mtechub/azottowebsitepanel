@@ -34,21 +34,27 @@ const SellerOfferTable = ({data}) => {
             search: null,
             status: null
         },
+        fetchPolicy: 'network-only',
     });
 
     const [updateOfferStatus] = useMutation(UPDATE_OFFER);
-    const handleAcceptOffer = async () => {
+    const handleAcceptOffer = async (offerId, businessId) => {
         try {
-          await updateOfferStatus({
-            variables: { input:{
-                id:selectedOfferId,
-                status: "ACCEPTED" 
-            }},
-          });
-          messageApi.info(`offer accepted`)
-          setMeeting(true)
+            await updateOfferStatus({
+                variables: {
+                    input: {
+                        id: offerId,
+                        status: "ACCEPTED"
+                    }
+                },
+            });
+            messageApi.info(`offer accepted`);
+            setSelectedOfferId(offerId);
+            if (businessId) setSelectedBusinessId(businessId);
+            setMeeting(true);
         } catch (err) {
-          console.error("Error accepting offer:", err);
+            console.error("Error accepting offer:", err);
+            messageApi.error("Could not accept offer");
         }
     };
 
@@ -64,15 +70,15 @@ const SellerOfferTable = ({data}) => {
                 return (
                     <Flex gap={10} align="center">
                         <img src="/assets/icons/reyal-b.png" width={12} alt="currency-symbol" fetchPriority="high" /> {row}
-                        {// here if offerdata?.parentOffer?.id then it will be child offer else parent offer
+                        {
                             record?.isProceedToPay ?
-                                <Tooltip title="CO - Counteroffer">
-                                    <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
-                                </Tooltip>
+                            <Tooltip title="CO - Counteroffer">
+                                <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
+                            </Tooltip>
                             :
-                                <Tooltip title="PP - Proceed to Purchase">
-                                    <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>CO</Text>
-                                </Tooltip>
+                            <Tooltip title="PP - Proceed to Purchase">
+                                <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>CO</Text>
+                            </Tooltip>
                         } 
                     </Flex>
                 );
@@ -116,46 +122,64 @@ const SellerOfferTable = ({data}) => {
             align: 'center',
             render: (_, row) => {
                 if (row?.createdBy === userId) {
-                    return null;
+                return null;
                 }
                 const isChild = row?.isProceedToPay ? true : false;
-                const items = [
-                    // Counter Offer case if isChild ture
-                    !isChild && { label: <NavLink onClick={() => {
-                        setSelectedOfferId(row.id)
-                        handleAcceptOffer()
-                        setSelectedBusinessId(row.business.id)
-                    }}>Accept Offer</NavLink>, key: 0 },
-                    !isChild && { label: <NavLink onClick={() =>{ 
-                        setDeleteModal(true)
-                        setSelectedOfferId(row.id)
-                    }}>Reject Offer</NavLink>, key: 1 },
-                    !isChild && { label: <NavLink onClick={() => {
-                        setOfferModal(true)
-                        setSelectedOfferId(row.id)
-                    }}>Counter Offer</NavLink>, key: 2 },
-                    !isChild && { label: <NavLink onClick={() => {
-                        setMeeting(true)
-                        setSelectedOfferId(row.id)
-                        setSelectedBusinessId(row.business.id)
-                    }}>Request For Virtual Meeting</NavLink>, key: 3 },
 
-                    // Proceed to Purchase case if isChild false
-                    isChild && { label: <NavLink onClick={() => {
-                        setSelectedOfferId(row.id)
-                        handleAcceptOffer()
-                        setSelectedBusinessId(row.business.id)
-                    }}>Accept Offer</NavLink>, key: 4 },
-                    isChild && { label: <NavLink onClick={() =>{
-                         setDeleteModal(true)
-                         setSelectedOfferId(row.id)
-                        } }> Reject Offer </NavLink>, key: 5 },
+                const items = [
+                !isChild && {
+                    key: '0',
+                    label: "Accept Offer", 
+                    onClick: () => handleAcceptOffer(row.id, row.business?.id),
+                },
+                !isChild && {
+                    key: '1',
+                    label: "Reject Offer",
+                    onClick: () => {
+                    setDeleteModal(true);
+                    setSelectedOfferId(row.id);
+                    },
+                },
+                !isChild && {
+                    key: '2',
+                    label: "Counter Offer",
+                    onClick: () => {
+                        setOfferModal(true);
+                        setSelectedOfferId(row.id);
+                    },
+                },
+                !isChild && {
+                    key: '3',
+                    label: "Request For Virtual Meeting",
+                    onClick: () => {
+                        setMeeting(true);
+                        setSelectedOfferId(row.id);
+                        setSelectedBusinessId(row.business.id);
+                    },
+                },
+                isChild && {
+                    key: '4',
+                    label: "Accept Offer",
+                    onClick: () => {
+                        setSelectedOfferId(row.id);
+                        handleAcceptOffer();
+                        setSelectedBusinessId(row.business.id);
+                    },
+                },
+                isChild && {
+                    key: '5',
+                    label: ("Reject Offer"),
+                    onClick: () => {
+                        setDeleteModal(true);
+                        setSelectedOfferId(row.id);
+                    },
+                },
                 ].filter(Boolean);
 
                 return (
                     <Dropdown menu={{ items }} trigger={['click']}>
-                        <Button aria-labelledby='dropdown icon' className="bg-transparent border-0 p-0">
-                            <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} fetchPriority="high" />
+                        <Button aria-labelledby="dropdown icon" className="bg-transparent border-0 p-0">
+                        <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} fetchPriority="high" />
                         </Button>
                     </Dropdown>
                 );

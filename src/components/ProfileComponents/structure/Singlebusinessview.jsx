@@ -30,7 +30,7 @@ const Singlebusinessview = ({setSingleDetail, singledetail}) => {
 function mapBusinessPayloadToUI(payload) {
     return {
       id: payload?.id,
-      ref: payload?.reference, // from backend
+      ref: payload?.reference,
       title: payload?.businessTitle,
       description: payload?.description,
       amount: `SAR ${payload?.price?.toLocaleString()}`, // format nicely

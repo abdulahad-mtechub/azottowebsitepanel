@@ -1,25 +1,15 @@
-import React,{useState} from 'react'
 import { Card, Col, Flex, Image, Row, Typography, message } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 import {GET_BUSINESS } from '../../../graphql/query';
-import { useQuery,useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 
 const { Text } = Typography
 const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
-    const [documents, setDocuments] = useState(null);
+
     const [ messageApi, contextHolder ] = message.useMessage();
-    const { data:business, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
-        variables: { 
-            getBusinessByIdId: inprogressdeal?.businessId,
-            limit: null,
-            offset: null,
-            search: null,
-            status: null
-        },
-    });
-    const dealBusiness = business?.getBusinessById?.business
-    const bankRecipt = dealBusiness?.documents?.find(
+
+    const bankRecipt = inprogressdeal?.busines?.documents?.find(
     (doc) => doc.title === "Buyer Payment Receipt"
     );
     const [updateOfferStatus] = useMutation(UPDATE_DEAL,{
@@ -75,16 +65,7 @@ const PayBusinessAmountstep = ({form,inprogressdeal,bank}) => {
     
             const result = await response.json();
             const fileUrl = result.fileUrl || result.url;
-    
-            // Save uploaded file info to state
-            setDocuments({
-            fileName: file.name,
-            fileType: file.type,
-            filePath: fileUrl,
-            fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
-            });
 
-            // Call GraphQL mutation to save file info
             await uploadDocument({
             variables: {
                 input: {

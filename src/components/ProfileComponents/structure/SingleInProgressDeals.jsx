@@ -1,26 +1,66 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
 import { SingleInprogressSteps } from './SingleInprogressSteps'
+import { GETDEAL, ME } from '../../../graphql';
+import { useQuery } from '@apollo/client';
+import Cookies from "js-cookie";
+
 
 const { Title, Text } = Typography
 const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
-console.log('inprogressdeal',inprogressdeal)
+
+    const userId = Cookies.get("userId"); 
+    const dealId = inprogressdeal.key;
+    console.log('inprogressdeal...',inprogressdeal)
+    const { data, loading, error } = useQuery(GETDEAL, {
+        variables: { getDealId: dealId },
+        fetchPolicy: 'network-only',
+    });
+
+    const { data:userData, loading:userLoading, error:userError } = useQuery(ME, {
+        variables: { getUserId: userId },
+    });
+    const user = userData?.getUser;
+
+    // if (loading) return <Spin tip="Loading deal..." />;
+    if (error) return <Text type="danger">Error loading deal: {error.message}</Text>;
+  
+    const deal = data?.getDeal
+    ? {
+        key: data?.getDeal?.id,
+        businessTitle: data?.getDeal?.business?.businessTitle || '-',
+        buyerName: data?.getDeal?.buyer?.name || '-',
+        sellerName: data?.getDeal?.business?.seller?.name || '-',
+        finalizedOffer: data?.getDeal?.offer?.price ? `SAR ${data?.getDeal?.offer?.price.toLocaleString()}` : '-',
+        status: data?.getDeal?.status || 0,
+        date: data?.getDeal?.createdAt ? new Date(data?.getDeal?.createdAt).toLocaleDateString() : '-',
+        busines: data?.getDeal?.business || '-',
+        banks: data?.getDeal?.buyer?.banks || '-',
+        isCommissionVerified: data?.getDeal?.isCommissionVerified || false,
+        isDsaSeller: data?.getDeal?.isDsaSeller || false,
+        isDsaBuyer: data?.getDeal?.isDsaBuyer || false,
+        isDocVedifiedSeller : data?.getDeal?.isDocVedifiedSeller || false,
+        isSellerCompleted : data?.getDeal?.isSellerCompleted || false,
+    }: null;
+  
+    if (!deal) return <Text>No deal found</Text>;
+    console.log('deal............',deal)
 const buyerdealsData = [
     {
       title:'Seller Name',
-      desc:inprogressdeal?.sellername
+      desc:deal?.sellerName
     },
     {
       title:'Buyer Name',
-      desc:inprogressdeal?.buyername
+      desc:deal?.buyerName
     },
     {
       title:'Finalized Offer',
-      desc:`SAR ${inprogressdeal.offerprice}`
+      desc:`SAR ${deal?.finalizedOffer}`
     },
     {
       title:'Status',
-      desc:inprogressdeal?.status
+      desc:deal?.status
     },
   ]
   return (
@@ -68,7 +108,7 @@ const buyerdealsData = [
                     }
                 </Row>
             </div>
-            <SingleInprogressSteps inprogressdeal={inprogressdeal} />
+            <SingleInprogressSteps inprogressdeal={deal} />
         </Card>
     </Flex>
   )

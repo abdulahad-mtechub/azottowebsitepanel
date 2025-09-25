@@ -24,8 +24,14 @@ const DigitalSaleAgreementStep = ({ details }) => {
 
   const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
     refetchQueries: [
-        isBuyer ? 
-        { query: BUYERINPROGRESSDEALS } :
+        isBuyer ?  { query: BUYERINPROGRESSDEALS,
+          variables: {
+            limit: 10,
+            offset: 0,
+            search: '',
+          },
+          fetchPolicy: 'network-only',
+        } :
         { query: GETDEAL, variables: { getDealId: details?.key } }
     ],
     awaitRefetchQueries: true,
@@ -33,27 +39,16 @@ const DigitalSaleAgreementStep = ({ details }) => {
     onError: (err) => messageApi.error(err.message || "Something went wrong!"),
   });
 
-  const computeNextStatus = (updatedBuyer, updatedSeller) => {
-    if (updatedBuyer && updatedSeller) return 'BANK_DETAILS_FROM_SELLER_PENDING';
-    if (updatedBuyer && !updatedSeller) return 'DSA_FROM_SELLER_PENDING';
-    if (!updatedBuyer && updatedSeller) return 'DSA_FROM_BUYER_PENDING';
-    return 'DSA_PENDING';
-  };
-
   const handleTermsChange = async (e) => {
     const checked = !!e.target.checked;
-    // Determine updated values after this user's action
     const updatedBuyer = isBuyer ? checked : buyerSigned;
     const updatedSeller = !isBuyer ? checked : sellerSigned;
 
-    // Optimistically update UI
-    if (isBuyer) setBuyerSigned(checked); // CHANGED
-    else setSellerSigned(checked); // CHANGED
+    if (isBuyer) setBuyerSigned(checked);
+    else setSellerSigned(checked);
     const variables = {
       input: {
         id: details?.key || null,
-        status: computeNextStatus(updatedBuyer, updatedSeller),
-        // set both fields to ensure backend has the correct final state
         isDsaBuyer: updatedBuyer,
         isDsaSeller: updatedSeller,
       },
@@ -61,7 +56,6 @@ const DigitalSaleAgreementStep = ({ details }) => {
 
     try {
       await updateDeals({ variables });
-      // success handled by onCompleted handler - UI already updated optimistically
     } catch (err) {
       // rollback optimistic update on error
       if (isBuyer) setBuyerSigned(!!details?.isDsaBuyer);

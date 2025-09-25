@@ -1,39 +1,26 @@
 import { Card, Col, Flex, Image, Row, Typography,message } from 'antd'
 import { SingleFileUpload } from '../../Forms/SingleFileUpload'
 import { useQuery ,useMutation} from '@apollo/client';
-import React,{useState} from 'react'
-import {BUYERINPROGRESSDEALS, GETADMINACTIVEBANK,GET_BUSINESS } from '../../../graphql/query';
+import {useState} from 'react'
+import { GETADMINACTIVEBANK,GETDEAL } from '../../../graphql/query';
 import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 
 
 const { Text } = Typography
-const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOfferId, setMeeting }) => {
+const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [documents, setDocuments] = useState(null);
-    // Query active admin bank
-    const { loading:adminBankLoad, error:bankError, data } = useQuery(GETADMINACTIVEBANK);
-    const { data:business, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS, {
-        variables: { 
-            getBusinessByIdId: inprogressdeal?.businessId,
-            limit: null,
-            offset: null,
-            search: null,
-            status: null
-        },
-    });
-  const dealBusiness = business?.getBusinessById?.business
+    const { data } = useQuery(GETADMINACTIVEBANK);
 
-  const jasoorCommmission = dealBusiness?.documents?.find(
+  const jasoorCommmission = inprogressdeal?.busines?.documents?.find(
     (doc) => doc.title === "Jasoor Commission"
   );
 
-    // Mutation to update offer status
     const [updateOfferStatus] = useMutation(UPDATE_DEAL);
   
-    // Mutation to upload document
-    const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
+    const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
       refetchQueries: [
-        { query: GET_BUSINESS, variables: { getBusinessByIdId: inprogressdeal?.businessId, limit: null, offset: null, search: null, status: null } },
+        { query: GETDEAL, variables: { getDealId: inprogressdeal?.key } },
       ],
       awaitRefetchQueries: true,
       onCompleted: () => messageApi.success("Document uploaded successfully!"),
@@ -43,30 +30,27 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
     function calculateCommission(price) {
       if (!price) return 0;
     
-      // Minimum commission rule
       if (price < 50000) {
         return 2000;
       }
     
       let commission = 0;
     
-      // Apply marginal brackets
       if (price > 2000000) {
-        commission += (price - 2000000) * 0.015; // 1.5% above 2M
+        commission += (price - 2000000) * 0.015;
         price = 2000000;
       }
       if (price > 500000) {
-        commission += (price - 500000) * 0.025; // 2.5% between 500K–2M
+        commission += (price - 500000) * 0.025;
         price = 500000;
       }
       if (price > 100000) {
-        commission += (price - 100000) * 0.03; // 3% between 100K–500K
+        commission += (price - 100000) * 0.03;
         price = 100000;
       }
       if (price > 0) {
-        commission += price * 0.04; // 4% up to 100K
+        commission += price * 0.04;
       }
-    
       return commission;
     }
     
@@ -87,13 +71,11 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
       },
     ];
   
-    // File upload handler
     const handleSingleFileUpload = async (file) => {
       try {
         const formData = new FormData();
         formData.append("file", file);
   
-        // Upload file to server
         const response = await fetch("https://verify.jusoor-sa.co/upload", {
           method: "POST",
           body: formData,
@@ -104,7 +86,6 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
         const result = await response.json();
         const fileUrl = result.fileUrl || result.url;
   
-        // Save uploaded file info to state
         setDocuments({
           fileName: file.name,
           fileType: file.type,
@@ -112,12 +93,11 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
           fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
         });
 
-        // Call GraphQL mutation to save file info
         await uploadDocument({
           variables: {
             input: {
               title: "Jasoor Commission",
-              businessId: inprogressdeal?.businessId,
+              businessId: inprogressdeal?.busines?.id,
               filePath: fileUrl,
               fileName: file.name,
               fileType: file.type,
@@ -134,7 +114,7 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
             },
         });
   
-        return false; // Prevent default upload behavior
+        return false;
       } catch (error) {
         const errorMsg = error instanceof Error ? error.message : String(error);
         messageApi.error(errorMsg || "Upload failed!");
@@ -146,7 +126,6 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
       <>
        {contextHolder}
        <Row gutter={[16, 24]}>
-        {/* Display bank + commission info */}
         {paycommissionData?.map((list, index) => (
           <Col xs={24} sm={12} md={6} lg={8} key={index}>
             <Flex vertical gap={0}>
@@ -163,11 +142,11 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal, details, selectedOf
                 <Flex gap={15}>
                   <Image src="/assets/icons/file.png" alt='file icon' preview={false} width={20} />
                   <Flex vertical>
-                    <Text className="fs-13 text-gray">{jasoorCommmission.title}</Text>
+                    <Text className="fs-13 text-gray">{jasoorCommmission?.title}</Text>
                   </Flex>
                 </Flex>
                 <a
-                  href={jasoorCommmission.filePath}
+                  href={jasoorCommmission?.filePath}
                   target="_blank"
                   rel="noreferrer"
                   className="fs-13 text-blue-500 underline"

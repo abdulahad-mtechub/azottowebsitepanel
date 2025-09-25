@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Flex, Typography, Steps, Collapse, Form } from 'antd';
 import { CheckOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { DigitalSaleAgreementStep } from './DigitalSaleAgreementStep';
 import { BankAccountDetailsStep } from './BankAccountDetailsStep';
 import { ConfirmationDocsStep } from './ConfirmationDocsStep';
 import { SellerFinalDealsStep } from './SellerFinalDealStep';
-import { GETBANKSFORDEAL } from '../../../graphql/query';
-import { useQuery } from '@apollo/client';
 
 const statusToStepIndex = {
     COMMISSION_TRANSFER_FROM_BUYER_PENDING: 0, // Step 1: Commission Receipt
@@ -32,6 +30,7 @@ const SellerSingleInprogressSteps = ({completedeal,user,deal}) => {
     const [activeStep, setActiveStep] = useState(initialStep);
     const send = true
     const DSA = deal?.status
+
     const steps = [
         {
             key: '1',

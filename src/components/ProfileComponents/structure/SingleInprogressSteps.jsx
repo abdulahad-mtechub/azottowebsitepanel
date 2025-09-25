@@ -26,18 +26,29 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
                 setBank(user?.getUser?.banks[0]);
             }
     }, [user]);
+
+
     const steps = [
         {
             key: '1',
             label: 'Pay Commission',
             content: <PayCommissionInprogressStep form={form} inprogressdeal={inprogressdeal} />,
-            status:  inprogressdeal?.isCommissionVerified ? 'Verified' : 'Pending',
+            status: inprogressdeal?.isCommissionVerified ? "Verified" :
+                    inprogressdeal?.busines?.documents?.find(
+                        (doc) => doc.title === "Jasoor Commission"
+                    ) ? 'Jasoor Verified Pending' : 'Pending',
         },
         {
             key: '2',
             label: 'Digital Sale Agreement',
             content: <DigitalSaleAgreementStep form={form} details={inprogressdeal} />,
-            status: 'Signed'
+            status: !inprogressdeal?.isDsaSeller && !inprogressdeal?.isDsaBuyer
+                ? 'Seller & Buyer DSA Pending'
+                : !inprogressdeal?.isDsaSeller && inprogressdeal?.isDsaBuyer
+                ? 'Seller DSA Pending'
+                : inprogressdeal?.isDsaSeller && !inprogressdeal?.isDsaBuyer
+                ? 'Buyer DSA Pending'
+                : 'Verified',
         },
         {
             key: '3',
@@ -53,7 +64,6 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
         },
     ];
 
-    // Determine which steps are unlocked
     const isStepComplete = (status) =>
         status && !['pending', 'waiting'].includes(status.toLowerCase());
 
