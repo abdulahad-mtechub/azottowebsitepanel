@@ -29,13 +29,10 @@ const HowWork = () => {
                         <Flex justify="center">
                             <Segmented
                                 className='custom-segment'
-                                options={[
-                                    { label: 'Seller', value: 'Seller' },
-                                    { label: 'Buyer', value: 'Buyer' }
-                                  ]}
+                                options={['Seller', 'Buyer']}
                                 value={activeTab}
                                 onChange={handleTabChange}
-                                aria-label="Select Seller or Buyer workflow"
+                                optionRender={(option) => <button type="button">{option}</button>}
                             />
                         </Flex>
 

@@ -41,9 +41,26 @@ const GETTERMS = gql`
 query GetTerms {
   getTerms {
     id
-    policy
     term
+    arabicTerm
+  }
+}
+`
+const GETENDATERMS = gql`
+query GetNDATerms {
+  getNDATerms {
+    id
     ndaTerm
+    arabicNdaTerm
+  }
+}
+`
+const GETPRIVACYPOLICY = gql`
+query GetPrivacyPolicy {
+  getPrivacyPolicy {
+    id
+    policy
+    arabicPolicy
   }
 }
 `
@@ -51,5 +68,7 @@ export {
     GETARTICLES,
     GETARTICLE,
     GETFAQ,
-    GETTERMS
+    GETTERMS,
+    GETENDATERMS,
+    GETPRIVACYPOLICY
 }
