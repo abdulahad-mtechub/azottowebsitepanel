@@ -35,7 +35,7 @@ const SignupPage = () => {
             const formData = form.getFieldsValue(true);
             const input = {
                 name: formData.fullName,
-                email: formData.email,
+                email: formData.email.toLowerCase(),
                 district: formData.district,
                 city: formData.city,
                 phone: formData.phoneNo,

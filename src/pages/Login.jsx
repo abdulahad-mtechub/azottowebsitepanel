@@ -23,7 +23,8 @@ const LoginPage = () => {
 
     const handleFinish = async (values) => {
       try {
-        const { email, password } = values;
+        const email = values.email.toLowerCase(); // convert to lowercase
+        const password = values.password;
     
         const { data } = await loginUser({ variables: { email, password } });
     
