@@ -1,4 +1,3 @@
-// (full component — only important changes highlighted with comments)
 import { useState, useEffect } from 'react';
 import { Button, Card, Col, Flex, Image, Row, Typography, message,
   Spin, Modal, Radio } from 'antd';
@@ -197,7 +196,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
       </Flex>
     );
   }
-  console.log('details in ConfirmationDocsStep...', details);
+
   return (
     <>
       {contextHolder}
