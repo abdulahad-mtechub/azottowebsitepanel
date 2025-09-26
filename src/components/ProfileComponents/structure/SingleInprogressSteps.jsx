@@ -22,6 +22,10 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
         }
     }, [inprogressdeal?.sellerId, activeBankData]);
 
+    const bankRecipt = inprogressdeal?.busines?.documents?.find(
+    (doc) => doc.title === "Buyer Payment Receipt"
+    );
+
     const steps = [
         {
             key: '1',
@@ -47,8 +51,8 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
         {
             key: '3',
             label: 'Pay Business Amount',
-            content: <PayBusinessAmountstep  inprogressdeal={inprogressdeal} bank={activeBankData?.getUserActiveBanks} form={form} />,
-            status: 'Verified'
+            content: <PayBusinessAmountstep inprogressdeal={inprogressdeal} bank={activeBankData?.getUserActiveBanks} form={form} />,
+            status: bankRecipt ? 'Verified' : 'Pending'
         },
         {
             key: '4',
