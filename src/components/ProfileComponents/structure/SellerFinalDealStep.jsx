@@ -34,9 +34,8 @@ const SellerFinalDealsStep = ({details}) => {
                 },
             }
             });
-          
-      
-          messageApi.success("All documents saved successfully");
+
+          messageApi.success("Deal marked as completed from your end. Jusoor will verify shortly.");
         } catch (err) {
           console.error(err);
           messageApi.error("Failed to save documents");

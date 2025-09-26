@@ -19,7 +19,7 @@ const documents = uploadDocs.filter(doc =>
 
 const [updatedeal] = useMutation(UPDATE_DEAL,{
     onCompleted: () => {
-        messageApi.success("Deal uploaded successfully!")
+        messageApi.success("Deal marked as completed from your end. Jusoor will verify shortly.")
     },
     onError: (err) => {
         console.error("Error updating offer status:", err);
@@ -90,6 +90,7 @@ return (
                                             id: inprogressdeal?.key,
                                             status: "BUYERCOMPLETED",
                                             isBuyerCompleted: true,
+                                            isDocVedifiedBuyer: true,
                                           },
                                         },
                                       });
