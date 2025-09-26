@@ -5,7 +5,6 @@ const { Title, Text } = Typography
 const BusinessStats = ({data}) => {
     const [profitTimeValue, setProfitTimeValue] = useState('Last Year');
     const [revenueTimeValue, setRevenueTimeValue] = useState('Last Year');
-    console.log("data",data)
     useEffect(() => {
         if (data?.profittime === 0) {
             setProfitTimeValue('Last 6 Months');

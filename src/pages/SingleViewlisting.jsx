@@ -6,6 +6,7 @@ import { AnnualProfitBarChart, BusinessInfoCard, BusinessInfoCardMobile, Explore
 import { RightOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import { GET_BUSINESS,SIMILER_BUSINESS_CATEGORY_GRAPH } from '../graphql/query/business';
+import {BusinessStats} from '../components/SellBusinessComponents/structure/BusinessStats'
 
 const { Text, Title } = Typography;
 const SingleViewlisting = () => {
@@ -126,9 +127,9 @@ const SingleViewlisting = () => {
                 <Row gutter={[24,24]} className='mt-3'>
                     <Col lg={{span: 18}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                         {/* uncomment this and send business here as well */}
-                        {/* <BusinessStats status={'Verified'} /> */}
-                        {/* <MarketAreaChart /> */}
-                        {/* <AnnualProfitBarChart graphData={graphData} /> */}
+                         <BusinessStats data={business} /> 
+                         <MarketAreaChart /> 
+                         <AnnualProfitBarChart graphData={graphData} /> 
                         <Card className='shadow-d radius-12 border-gray mb-3'>
                             <Flex vertical gap={20}>    
                                 <Flex vertical gap={10}>
