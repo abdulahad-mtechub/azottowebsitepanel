@@ -282,7 +282,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                                 <SingleFileUpload
                                 form={form}
                                 name={expectedTitle === 'Commercial Registration (CR)' ? 'crUpload' : 'notarizedUpload'}
-                                title={expectedTitle === 'Commercial Registration (CR)' ? 'Upload Commercial Registration' : 'Upload Notarized Ownership Transfer Letter'}
+                                title={"Upload"}
                                 onUpload={(file) => handleSingleFileUpload(file, expectedTitle)}
                                 multiple={false}
                                 message={message}

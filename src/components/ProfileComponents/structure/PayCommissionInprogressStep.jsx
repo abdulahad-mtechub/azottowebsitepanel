@@ -8,13 +8,14 @@ import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 
 const { Text } = Typography
 const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
+
     const [messageApi, contextHolder] = message.useMessage();
     const [documents, setDocuments] = useState(null);
     const { data } = useQuery(GETADMINACTIVEBANK);
 
-  const jasoorCommmission = inprogressdeal?.busines?.documents?.find(
-    (doc) => doc.title === "Jasoor Commission"
-  );
+    const jasoorCommmission = inprogressdeal?.busines?.documents?.find(
+      (doc) => doc.title === "Jasoor Commission"
+    );
 
     const [updateOfferStatus] = useMutation(UPDATE_DEAL);
   

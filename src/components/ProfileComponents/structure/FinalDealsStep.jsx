@@ -1,6 +1,7 @@
 import { Button, Card, Checkbox, Col, Flex, Image, Row, Typography,message } from 'antd'
 import { useMutation } from '@apollo/client';
 import { UPDATE_DEAL } from '../../../graphql/mutation';
+import { GETDEAL } from '../../../graphql';
 
 const { Text } = Typography
 const FinalDealsStep = ({inprogressdeal}) => {
@@ -23,6 +24,7 @@ const [updatedeal] = useMutation(UPDATE_DEAL,{
     onError: (err) => {
         console.error("Error updating offer status:", err);
     },
+    refetchQueries: [{ query: GETDEAL, variables: { getDealId: inprogressdeal?.key } }],
 });
 
 return (
@@ -34,7 +36,7 @@ return (
                 <Text className='fw-600 fs-14'>Document Received Confirmation</Text>
                 <Text className='fs-13 text-gray'>The seller has uploaded final documents. Please review and confirm you’ve received all required legal materials before the deal is finalized.</Text>
             </Flex>
-            {documents.map((doc, i) => (
+            {documents?.map((doc, i) => (
             <Card className="card-cs border-gray rounded-12 mb-2" key={i}>
                 <Flex justify="space-between" align="center">
                     <Flex gap={15}>
@@ -67,7 +69,7 @@ return (
 
         </Col>
         <>
-            {inprogressdeal?.isDocVedifiedBuyer && (
+            {!inprogressdeal?.isBuyerCompleted && (
                     <>
                         <Col span={24}>
                             <Checkbox>
@@ -87,8 +89,7 @@ return (
                                           input: {
                                             id: inprogressdeal?.key,
                                             status: "BUYERCOMPLETED",
-                                            isDocVedifiedBuyer: true,
-
+                                            isBuyerCompleted: true,
                                           },
                                         },
                                       });

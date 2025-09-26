@@ -54,7 +54,7 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
             key: '4',
             label: 'Finalize Deal',
             content: <FinalDealsStep  inprogressdeal={inprogressdeal} />,
-            status: 'Deal Closed'
+            status: inprogressdeal?.isBuyerCompleted ? 'Deal Closed' : 'Pending'
         },
     ];
 

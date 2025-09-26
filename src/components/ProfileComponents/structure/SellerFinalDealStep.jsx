@@ -14,7 +14,6 @@ const SellerFinalDealsStep = ({details}) => {
         ],
         awaitRefetchQueries: true,
     });
-    console.log("details.....", details);
     const [isConfirmed, setIsConfirmed] = useState(false);
     const [loading, setLoading] = useState(false);
     const handleSubmit = async (e) => {
@@ -56,7 +55,7 @@ const SellerFinalDealsStep = ({details}) => {
             </Col>
             <>
                 {
-                    !uploadDocs && (
+                     (uploadDocs && !details?.isSellerCompleted) && (
                         <>
                             <Col span={24}>
                                 <Checkbox 
