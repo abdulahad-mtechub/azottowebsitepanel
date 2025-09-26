@@ -40,6 +40,7 @@ const SellerSingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
         isDsaBuyer: data.getDeal?.isDsaBuyer || false,
         isDocVedifiedSeller : data.getDeal?.isDocVedifiedSeller || false,
         isSellerCompleted : data.getDeal?.isSellerCompleted || false,
+        isPaymentVedifiedSeller : data.getDeal?.isPaymentVedifiedSeller || false,
     }: null;
   
     if (!deal) return <Text>No deal found</Text>;

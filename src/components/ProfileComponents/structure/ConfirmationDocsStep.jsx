@@ -21,7 +21,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
   const existingCrDoc = details?.busines?.documents?.find(d => d.title === 'Commercial Registration (CR)');
   const existingNotarizedDoc = details?.busines?.documents?.find(d => d.title === 'Notarized Ownership Transfer Letter');
 
-  const initialUploadsAllowed = bankRecipt ? null : 'no';
+  const initialUploadsAllowed = details?.isPaymentVedifiedSeller ? "yes" : 'no';
   const [uploadsAllowed, setUploadsAllowed] = useState(initialUploadsAllowed);
 
   useEffect(() => {
@@ -197,7 +197,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
       </Flex>
     );
   }
-
+  console.log('details in ConfirmationDocsStep...', details);
   return (
     <>
       {contextHolder}
@@ -206,8 +206,8 @@ const ConfirmationDocsStep = ({ form, details }) => {
         <Col span={24}>
           <Flex vertical gap={8} className="mb-2">
             <Text className="fw-600 text-medium-gray fs-13">Have you received the buyer payment?</Text>
-            <Radio.Group disabled={uploadsAllowed === 'no'} onChange={onRadioChange} value={uploadsAllowed}>
-              <Radio value="yes">Yes</Radio>
+            <Radio.Group disabled={uploadsAllowed === 'yes'} onChange={onRadioChange} value={uploadsAllowed}>
+              <Radio value="yes" checked={details?.isPaymentVedifiedSeller} >Yes</Radio>
               <Radio value="no">No</Radio>
             </Radio.Group>
           </Flex>
