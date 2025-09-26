@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Jusoor</title>
     <meta name="description" content="Jusoor – manage business listing in one place. Simplify your workflows with our powerful panel.">
+    
     <!-- Preconnect to GraphQL API -->
     <link rel="preconnect" href="https://jusoor-sa.co" crossorigin>
 
@@ -17,12 +18,18 @@
 
     <!-- Preload main font -->
     <link rel="preload" as="font" href="/dist/assets/fonts/Product-Sans-Regular.ttf" type="font/woff2" crossorigin>
+
+    <!-- ✅ Google Analytics Tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-S3Y8GNPDEN');
+    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <!-- <script type="module" src="/src/main.jsx"></script> -->
-    <!-- DO NOT manually add /src/main.jsx -->
-    <!-- Vite will inject the built JS bundle automatically -->
   </body>
 </html>
