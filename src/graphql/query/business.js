@@ -132,6 +132,7 @@ query GetRandomBusinesses($getRandomBusinessesId: ID!) {
     revenue
     profit
     price
+    isByTakbeer
     recoveryTime
     isSaved
     multiple

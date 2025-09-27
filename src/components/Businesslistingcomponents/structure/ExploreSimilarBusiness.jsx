@@ -33,6 +33,7 @@ const ExploreSimilarBusiness = ({id}) => {
             },
         ],
     }));
+console.log("Mapped Businesses:", mappedBusinesses);
     return (
         <div className='feature bg-light-brand'>
             <div className='container'>
@@ -52,23 +53,20 @@ const ExploreSimilarBusiness = ({id}) => {
                         <Row gutter={[16,16]}>
                         {
                             mappedBusinesses?.slice(0,4)?.map((pro,i)=>
-                                <Col lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
+                                <Col xl={{span: 6}} lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>       
                                     <Card className='h-100 border-gray rounded-12 card-cs cursor' >
                                         <Flex vertical gap={20}>
                                             <Flex justify='space-between' align='center'>
                                                 <Flex gap={4}>
                                                     <Tag color="default" className="fs-12">
-                                                        Restaurant
-                                                        {/* .split(/\s+/).slice(0, 2).join(' ') + '...' */}
+                                                        {pro.category.name.split(/\s+/).slice(0, 1).join(' ') + '...'}
                                                     </Tag>
-                                                    {
-                                                        pro?.type &&
-                                                        <Tag className="fs-12 bg-brand"
-                                                            color={pro.type ? "bg-black" : "bg-blue"}
-                                                        >
-                                                            {pro?.type}
-                                                        </Tag>
-                                                    }
+                                                    <Tag
+                                                    aria-labelledby="type"
+                                                    className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
+                                                    >
+                                                    {pro.isByTakbeer ? "Taqbeel" : "Acquiring"}
+                                                    </Tag>
                                                 </Flex>
                                                 <Button aria-labelledby={'Bookmark-btn'} className='border-0 bg-transparent p-0'>
                                                     {
