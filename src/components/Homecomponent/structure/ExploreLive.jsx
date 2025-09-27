@@ -4,6 +4,7 @@ import { RightOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { GETRANDOMBUSINESS } from '../../../graphql/query/business'
 import { useQuery } from "@apollo/client";
+import { Singlebusinessview } from '../../ProfileComponents/structure/Singlebusinessview';
 
 const { Text, Title, Paragraph } = Typography
 const ExploreLive = () => {
@@ -54,7 +55,7 @@ const ExploreLive = () => {
         // handle unicode safely
         const chars = Array.from(text);
         return chars.length > max ? chars.slice(0, max).join("") + "..." : text;
-      };
+    };
     return (
         <div className='feature bg-light-brand'>
             <div className='container'>
@@ -73,7 +74,7 @@ const ExploreLive = () => {
                     {
                         exploreData?.slice(0,4)?.map((pro,i)=>
                             <Col xl={{span: 6}} lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
-                                <Card className='h-100 border-gray rounded-12 card-cs' >
+                                <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={() => navigate(`/singleviewlisting/${pro?.id}`)} >
                                     <Flex vertical gap={20}>
                                         <Flex justify='space-between' align='center'>
                                             <Flex gap={4}>
