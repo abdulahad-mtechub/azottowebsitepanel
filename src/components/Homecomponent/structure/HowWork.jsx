@@ -32,7 +32,6 @@ const HowWork = () => {
                                 options={['Seller', 'Buyer']}
                                 value={activeTab}
                                 onChange={handleTabChange}
-                                optionRender={(option) => <button type="button">{option}</button>}
                             />
                         </Flex>
 

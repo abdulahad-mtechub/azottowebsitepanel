@@ -5,7 +5,7 @@ import App from './App.jsx'
 import { ApolloProvider } from '@apollo/client';
 import { client } from './config/apolloClient'; 
 import { AuthProvider } from './context/AuthContext';
-
+import "./i18n"
 createRoot(document.getElementById('root')).render(
   <ApolloProvider client={client}>
     <AuthProvider>
