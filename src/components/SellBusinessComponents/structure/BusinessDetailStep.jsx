@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, {forwardRef, useState,useEffect,useImperativeHandle } from 'react'
 import { Card, Col, Flex, Form, Image, Radio, Row, Tooltip, Typography } from 'antd'
 import { MyDatepicker, MyInput, MySelect } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
@@ -6,15 +6,15 @@ import { teamsizeOp,district, cities  } from '../../../data'
 import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from '@apollo/client';
 
-const { Title, Text } = Typography
-const BusinessDetailStep = ({ data, setData },ref) => {
+const { Text } = Typography
+const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     const { data: categoryData } = useQuery(GET_CATEGORIES);
     const [form] = Form.useForm();
     const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
 
-    React.useImperativeHandle(ref, () => ({
+    useImperativeHandle(ref, () => ({
       validate: () => form.validateFields(),
     }));
 
@@ -202,6 +202,6 @@ const BusinessDetailStep = ({ data, setData },ref) => {
         </Card>
       </>
     );
-  };
+  });
   
 export {BusinessDetailStep}

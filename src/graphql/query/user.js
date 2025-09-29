@@ -172,7 +172,6 @@ query GetFavoritBusiness {
       name
     }
     offerCount
-    status
     isByTakbeer
     businessTitle
     description

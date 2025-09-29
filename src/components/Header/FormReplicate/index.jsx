@@ -142,6 +142,7 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
                           message={field.message}
                           addonBefore={field.addonBefore}
                           className={field.className || ""}
+                          validator={field.validator}
                         />
                       ) : field.type === "select" ? (
                         <MySelect

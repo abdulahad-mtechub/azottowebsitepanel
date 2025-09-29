@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react'
+import React, {forwardRef, useEffect,useImperativeHandle } from 'react'
 import { Card, Col, Flex, Form, Image, Row, Typography } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
 
 const { Text } = Typography
-const BusinessVisionStep = ({ data, setData },ref) => {
-    React.useImperativeHandle(ref, () => ({
+const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
+    const [form] = Form.useForm();    
+    useImperativeHandle(ref, () => ({
             validate: () => form.validateFields(),
         }));
     
@@ -28,14 +29,13 @@ const BusinessVisionStep = ({ data, setData },ref) => {
 
     useEffect(() => {
         form.setFieldsValue({
-            supportDuration: data.supportDuration,
-            noSession: data.supportSession,
+            supportDuration: Number(data.supportDuration),
+            noSession: Number(data.supportSession),
             growthOpportunities: data.growthOpportunities,
             businessPrice: data.price,
             reasonSelling: data.reason,
         });
-    }, [data]);
-    const [form] = Form.useForm();    
+    }, [data, form]);
     return (
         <>
             <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
@@ -101,6 +101,6 @@ const BusinessVisionStep = ({ data, setData },ref) => {
             </Form>
         </>
     )
-}
+})
 
 export {BusinessVisionStep}

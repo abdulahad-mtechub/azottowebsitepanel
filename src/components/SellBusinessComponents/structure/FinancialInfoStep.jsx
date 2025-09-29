@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, {forwardRef, useEffect,useImperativeHandle } from 'react'
 import { Card, Col, Flex, Form, Row, Select, Typography,Input, Image } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
@@ -6,15 +6,15 @@ import { revenueLookups } from '../../../data'
 import { FormReplicate } from '../../Header'
 
 const { Text } = Typography
-const FinancialInfoStep = ({ data, setData },ref) => {
+const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
 
     const [form] = Form.useForm();
 
-    React.useImperativeHandle(ref, () => ({
+    useImperativeHandle(ref, () => ({
         validate: () => form.validateFields(),
     }));
 
-    const foundedYear = new Date(data?.foundedDate).getFullYear();
+    const foundedYear = data?.foundedDate ? new Date(data.foundedDate).getFullYear() : new Date().getFullYear();
     const currentYear = new Date().getFullYear();
 
     const yearOp = [];
@@ -54,8 +54,8 @@ const FinancialInfoStep = ({ data, setData },ref) => {
 
     useEffect(() => {
         form.setFieldsValue({
-            revenueTime: data.revenueTime,
-            revenue: data.revenue,
+            revenueTime: Number(data.revenueTime),
+            revenue: Number(data.revenue),
             profittime: data.profittime,
             profit: data.profit,
             businessPrice: data.price,
@@ -79,7 +79,7 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                 inventoryPrice: item.price,
             })),
         });
-    }, [data]);
+    }, [data.revenueTime, data.profittime]);
 
     useEffect(() => {
         const allValues = form.getFieldsValue();
@@ -290,12 +290,38 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 label: "Asset Name",
                                 placeholder: "Write asset name",
                                 type: "input",
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const rows = getFieldValue("keyassets") || [];
+                                      const row = rows.find(r =>
+                                        r?.assetName || r?.noItems || r?.purchaseYear || r?.price
+                                      );
+                            
+                                      if (!row || value) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter asset name");
+                                    },
+                                }),
                             },
                             {
                                 name: "noItems",
                                 label: "Number of items",
                                 placeholder: "Enter quantity",
                                 type: "input",
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const rows = getFieldValue("keyassets") || [];
+                                      const row = rows.find(r =>
+                                        r?.assetName || r?.noItems || r?.purchaseYear || r?.price
+                                      );
+                            
+                                      if (!row || /^[0-9]+$/.test(value)) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter a valid quantity (number only)");
+                                    },
+                                }),
                             },
                             {
                                 name: "purchaseYear",
@@ -311,6 +337,19 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const currentRow = getFieldValue(["keyassets"]);
+                                      const hasAnyValue = currentRow?.some(
+                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
+                                      );
+                                
+                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter price (number only)");
+                                    },
+                                }),
                             },
                         ]}
                     />
@@ -326,12 +365,38 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 label: "Liabilities Name",
                                 placeholder: "Write liability name",
                                 type: "input",
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const currentRow = getFieldValue(["keyassets"]);
+                                      const hasAnyValue = currentRow?.some(
+                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
+                                      );
+                                
+                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter a valid quantity (number only)");
+                                    },
+                                }),
                             },
                             {
                                 name: "quantity",
                                 label: "Number of items",
                                 placeholder: "Enter quantity",
                                 type: "input",
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const currentRow = getFieldValue(["keyassets"]);
+                                      const hasAnyValue = currentRow?.some(
+                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
+                                      );
+                                
+                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter a valid quantity (number only)");
+                                    },
+                                }),
                             },
                             {
                                 name: "liabilitypurchaseYear",
@@ -347,6 +412,20 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
+                                message: "Please enter total price" ,
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const currentRow = getFieldValue(["keyassets"]);
+                                      const hasAnyValue = currentRow?.some(
+                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
+                                      );
+                                
+                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter price(number only)");
+                                    },
+                                }),
                             },
                         ]}
                     />
@@ -362,12 +441,38 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 label: "Inventory Name",
                                 placeholder: "Write inventory name",
                                 type: "input",
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const currentRow = getFieldValue(["keyassets"]);
+                                      const hasAnyValue = currentRow?.some(
+                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
+                                      );
+                                
+                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter a valid quantity (number only)");
+                                    },
+                                }),
                             },
                             {
                                 name: "inventoryquantity",
                                 label: "Number of items",
                                 placeholder: "Enter quantity",
                                 type: "input",
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const currentRow = getFieldValue(["keyassets"]);
+                                      const hasAnyValue = currentRow?.some(
+                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
+                                      );
+                                
+                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter a valid quantity (number only)");
+                                    },
+                                }),
                             },
                             {
                                 name: "inventoryypurchaseYear",
@@ -383,6 +488,19 @@ const FinancialInfoStep = ({ data, setData },ref) => {
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
+                                validator: ({ getFieldValue }) => ({
+                                    validator(_, value) {
+                                      const currentRow = getFieldValue(["keyassets"]);
+                                      const hasAnyValue = currentRow?.some(
+                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
+                                      );
+                                
+                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
+                                        return Promise.resolve();
+                                      }
+                                      return Promise.reject("Please enter price(number only)");
+                                    },
+                                }),
                             },
                         ]}
                     />
@@ -390,6 +508,6 @@ const FinancialInfoStep = ({ data, setData },ref) => {
             </Form>
         </>
     )
-}
+});
 
 export {FinancialInfoStep}

@@ -1,36 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { PlusOutlined, DeleteOutlined, MinusCircleFilled } from '@ant-design/icons';
-import { message as Mesage, Upload, Form, Typography, Flex, Button } from 'antd';
+import { Upload, Form, Typography, Flex, Button } from 'antd';
 const { Dragger } = Upload;
 
-const SingleFileUpload = ({ multiple = false, name, required, message, form, title,onUpload }) => {
+const SingleFileUpload = ({ multiple = false, name, required, message, form, title,onUpload, initialFileList }) => {
   const [fileList, setFileList] = useState([]);
+  useEffect(()=> {
+    setFileList([...initialFileList])
+  },[initialFileList])
 
   const handleChange = async (info) => {
     let newFileList = [...info.fileList];
-
+  
     if (!multiple) {
-      newFileList = newFileList.slice(-1);
+      newFileList = newFileList.slice(-1); // keep last one only for single
     }
-
+  
     setFileList(newFileList);
+  
+    if (multiple) {
+      const prevFiles = form.getFieldValue(name) || [];
+      const newFiles = newFileList
+        .map(f => f.originFileObj)
+        .filter(Boolean);
 
-    const files = multiple ? newFileList.map(file => file.originFileObj) : newFileList[0]?.originFileObj || null;
-    form.setFieldsValue({ [name]: files });
-    try {
-      if (multiple) {
-        // upload all files in parallel
-        await Promise.all(files.map(file => onUpload(file)));
-      } else {
-        await onUpload(files);
+      const merged = [...prevFiles, ...newFiles, ...initialFileList];
+  
+      form.setFieldsValue({ [name]: merged });
+  
+      if (newFiles.length > 0) {
+        await onUpload(newFiles);
       }
-      // You can show success message or update UI here if needed
-    } catch (error) {
-      console.error("Upload error:", error);
-      message.error("Upload failed");
+    } else {
+      const file = newFileList[0]?.originFileObj || null;
+      form.setFieldsValue({ [name]: file });
+  
+      if (file) {
+        await onUpload(file);
+      }
     }
   };
-
+  
+  
   const handleRemove = (file) => {
     const newFileList = fileList.filter(f => f.uid !== file.uid);
     setFileList(newFileList);

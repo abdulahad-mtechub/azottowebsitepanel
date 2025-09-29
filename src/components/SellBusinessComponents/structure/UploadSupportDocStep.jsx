@@ -1,16 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Card, Flex, Form, Image, Tooltip, Typography } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { SingleFileUpload } from '../../Forms';
 import imageCompression from 'browser-image-compression';
 
 const { Title, Text } = Typography
+
 const UploadSupportDocStep = ({ data, setData },ref) => {
+
   React.useImperativeHandle(ref, () => ({
     validate: () => form.validateFields(),
   }));
   const [form] = Form.useForm();
   const [uploading, setUploading] = useState(false);
+  const [initialCrList, setInitialCrList] = useState([]);
+  const [initialSupportList, setInitialSupportList] = useState([]);
+  const docToUploadItem = (doc, idx) => ({
+    uid: doc.serverId || `doc-${idx}-${Date.now()}`,
+    name: doc.fileName || (doc.filePath ? doc.filePath.split("/").pop() : `file-${idx}`),
+    size: doc.size || 0,
+    status: "done",
+    url: doc.filePath || null,
+    originFileObj: null,
+  });
+
+
+  useEffect(() => {
+    const docs = Array.isArray(data?.documents) ? data.documents : [];
+    const crDoc = docs.length > 0 ? docs[0] : null;
+    const supportDocs = crDoc ? docs.slice(1) : docs.slice(0);
+
+    setInitialCrList(crDoc ? [docToUploadItem(crDoc, 0)] : []);
+    setInitialSupportList(supportDocs.map((d, i) => docToUploadItem(d, i + 1)));
+    try {
+      form.setFieldsValue({
+        uploadcr: crDoc ? (crDoc.filePath || crDoc.fileName) : null,
+        uploadmult: supportDocs.length > 0 ? supportDocs.map(d => d.filePath || d.fileName) : [],
+      });
+    } catch (err) {
+      console.warn("setFieldsValue failed:", err);
+    }
+  }, [data, form]);
 
   const uploadFileToServer = async (file) => {
     setUploading(true);
@@ -44,56 +74,76 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
       };
     } catch (err) {
       console.error(err);
-      message.error('Failed to upload file');
       throw err;
     } finally {
       setUploading(false);
     }
   };
 
-  // Single file upload handler for Commercial Registration (CR)
-  const handleSingleFileUpload = async (file) => {
-    try {
-      const fileInfo = await uploadFileToServer(file);
-      const updatedDocs = [...data.documents];
-      updatedDocs[0] = {
-        title: 'Commercial Registration (CR)',
-        ...fileInfo,
-      };
-      setData((prev) => {
-        const updated = { ...prev, documents: updatedDocs };
-        return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
-      });
-    } catch {
-      // error handled in uploadFileToServer
+const handleSingleFileUpload = async (fileOrFiles) => {
+  // SingleFileUpload will pass a File (not an array) for multiple=false
+  try {
+    const file = fileOrFiles; // single File
+    // perform upload in parent (uploadFileToServer already exists in your code)
+    const fileInfo = await uploadFileToServer(file);
+
+    const updatedDocs = Array.isArray(data.documents) ? [...data.documents] : [];
+    updatedDocs[0] = {
+      title: 'Commercial Registration (CR)',
+      ...fileInfo,
+    };
+
+    const updated = { ...data, documents: updatedDocs };
+    setData(updated);
+  } catch (err) {
+    console.error('handleSingleFileUpload error:', err);
+  }
+};
+
+
+// multiple supporting docs
+const handleMultipleFileUpload = async (fileOrFiles) => {
+  // SingleFileUpload will pass an Array<File> for multiple=true
+  const normalized = Array.isArray(fileOrFiles) ? fileOrFiles : normalizeFiles(fileOrFiles);
+  if (!normalized || normalized.length === 0) return;
+
+  try {
+    // Parent uploads all files in parallel
+    const uploadedFiles = await Promise.all(
+      normalized.map((file) =>
+        uploadFileToServer(file).catch((err) => {
+          console.error('One file failed to upload:', file.name, err);
+          return null;
+        })
+      )
+    );
+
+    const successful = uploadedFiles.filter(Boolean);
+    if (successful.length === 0) {
+      message.warn('No files uploaded successfully');
+      return;
     }
-  };
 
-  // Multiple files upload handler for Supporting Documents
-  const handleMultipleFileUpload = async (files) => {
-    try {
-      // Upload all files in parallel
-      const uploadedFiles = await Promise.all(files.map(uploadFileToServer));
-      const otherDocs = uploadedFiles.map((fileInfo) => ({
-        title: 'Supporting Document',
-        ...fileInfo,
-      }));
+    const otherDocs = successful.map((fileInfo) => ({
+      title: 'Supporting Document',
+      fileName: fileInfo.fileName,
+      filePath: fileInfo.filePath,
+      fileType: fileInfo.fileType,
+      size: fileInfo.size,
+      serverId: fileInfo.serverId || null,
+    }));
 
-      setData((prev) => {
-        const updated = {
-          ...prev,
-          documents: [
-            data.documents[0], // keep CR at index 0 unchanged
-            ...otherDocs,
-          ],
-        };
-        return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
-      });
-    } catch {
-      // error handled in uploadFileToServer
-    }
-  };
+    // Preserve CR (index 0) if exists
+    const firstDoc = Array.isArray(data.documents) && data.documents.length > 0 ? data.documents[0] : null;
+    const newDocs = firstDoc ? [firstDoc, ...otherDocs] : [...otherDocs];
 
+    const updated = { ...data, documents: newDocs };
+    setData(updated);
+
+  } catch (err) {
+    console.error('handleMultipleFileUpload error:', err);
+  }
+};
   return (
     <>
       <Flex justify='space-between' className='mb-3' gap={5} wrap align='flex-start'>
@@ -126,6 +176,7 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
                 onUpload={handleSingleFileUpload}
                 uploading={uploading}
                 multiple={false}
+                initialFileList={initialCrList}
               />
             </Flex>
           </Flex>
@@ -152,6 +203,7 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
                 onUpload={handleMultipleFileUpload}
                 uploading={uploading}
                 multiple={true}
+                initialFileList={initialSupportList}
               />
             </Flex>
           </Flex>

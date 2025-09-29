@@ -69,8 +69,30 @@ const SellBusinessCreate = ({ addstep }) => {
 
     const onChange = (value) => setCurrent(value);
 
-    const next = () => { if (current < steps.length - 1) setCurrent(current + 1); };
-    const prev = () => { if (current === 0) setIsCancel(true); else { setCurrent(current - 1); setIsPreview(false); } };
+    const next = async () => {
+        try {
+            if (businessDetailFormRef.current) {
+              await businessDetailFormRef.current.validate();
+            }
+        
+            if (current < steps.length - 1) {
+              setCurrent(current + 1);
+            }
+          } catch (err) {
+            console.log("Validation failed:", err);
+          }
+    };
+
+    const prev = () => {
+        if (current === 0) {
+            setIsCancel(true);
+        } else if (current === steps.length - 1 && isPreview) {
+            setIsPreview(false);
+        } else {
+            setCurrent(current - 1);
+            setIsPreview(false);
+        }
+    };
 
     const items = steps.map((item, index) => ({
         key: item.title,
