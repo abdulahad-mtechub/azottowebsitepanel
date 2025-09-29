@@ -9,7 +9,7 @@ import { ACCEPT_ENDA,BUSINESS_MEETING } from '../../../graphql'
 import Cookies from "js-cookie";
 
 const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
-  const userId = Cookies.get("userId"); // read userId from cookie
+    const userId = Cookies.get("userId");
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
     const [current, setCurrent] = useState(0);

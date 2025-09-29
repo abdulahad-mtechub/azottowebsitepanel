@@ -1,4 +1,4 @@
-import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography, message } from 'antd';
+import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography,message } from 'antd'
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { DeleteModal } from '../../ui';
@@ -10,9 +10,9 @@ import { GET_BUSINESS_OFFERS } from '../../../graphql/query/offer';
 import { UPDATE_OFFER } from '../../../graphql/mutation/mutations';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
+import { RequestMeetingModal } from '../../Businesslistingcomponents';
 
-const { Text } = Typography;
-
+const {Text} =Typography
 const SellerOfferTable = ({ data }) => {
     const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
@@ -36,21 +36,25 @@ const SellerOfferTable = ({ data }) => {
         },
         fetchPolicy: 'network-only',
     });
+    const [endaVisible, setEndaVisible] = useState(false);
 
     const [updateOfferStatus] = useMutation(UPDATE_OFFER);
 
     const handleAcceptOffer = async (offerId, businessId) => {
         try {
             await updateOfferStatus({
-                variables: { input: { id: offerId, status: "ACCEPTED" } },
+                variables: {
+                    input: {
+                        id: offerId,
+                        status: "ACCEPTED"
+                    }
+                },
             });
-            messageApi.info(t('Offer accepted'));
-            setSelectedOfferId(offerId);
-            if (businessId) setSelectedBusinessId(businessId);
-            setMeeting(true);
+            messageApi.info(`offer accepted`);
+            setEndaVisible(true);
         } catch (err) {
             console.error("Error accepting offer:", err);
-            messageApi.error(t('Could not accept offer'));
+            messageApi.error("Could not accept offer");
         }
     };
 
@@ -135,8 +139,13 @@ const SellerOfferTable = ({ data }) => {
         { key: '2', label: t('Proceed to Purchase') },
     ];
 
-    const handleStatusClick = ({ key }) => setFilterStatus(key);
-    const handleTypeClick = ({ key }) => setFilterType(key);
+    const handleStatusClick = ({ key }) => {
+        setFilterStatus(key)
+    }
+
+    const handleTypeClick = ({ key }) => {
+        setFilterType(key)
+    }
 
     return (
         <>
@@ -197,6 +206,11 @@ const SellerOfferTable = ({ data }) => {
                 type='danger'
                 title={t('Are you sure?')}
                 subtitle={t('This action cannot be undone. Are you sure you want to reject this offer?')}
+            />
+            <RequestMeetingModal
+                businessId={data?.id}
+                visible={endaVisible}
+                onClose={()=>{setEndaVisible(false)}}
             />
         </>
     );

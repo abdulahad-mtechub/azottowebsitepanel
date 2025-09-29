@@ -14,7 +14,7 @@ const LoginPage = () => {
   const {t, i18n}= useTranslation()
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
-  const [loginUser, { loading:userloading, error }] = useMutation(LOGIN);
+  const [loginUser, { loading:userloading }] = useMutation(LOGIN);
   const [form] = Form.useForm();
   const [selectedLang, setSelectedLang] = useState({
       key: "1",
@@ -26,7 +26,7 @@ const LoginPage = () => {
   useEffect(() => {
     let lang = localStorage.getItem("lang") || "en";
     setLanguage(lang);
-    i18n.changeLanguage(lang); // ✅ now works
+    i18n.changeLanguage(lang);
     setSelectedLang(
       lang === "ar"
         ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
@@ -35,7 +35,7 @@ const LoginPage = () => {
   }, []);
   const handleFinish = async (values) => {
     try {
-      const email = values.email.toLowerCase(); // convert to lowercase
+      const email = values.email.toLowerCase();
       const password = values.password;
   
       const { data } = await loginUser({ variables: { email, password } });
@@ -50,8 +50,7 @@ const LoginPage = () => {
         messageApi.error("Login failed: Somthing went Wrong");
       }
     } catch (error) {
-      console.error("Login error:", error);
-      messageApi.error(`Login failed: ${error}`);
+      messageApi.error(`Login failed: ${error?.graphQLErrors[0]?.message}`);
     }
   };
   const handleChange= (value)=>{
@@ -92,9 +91,12 @@ const LoginPage = () => {
   ];
   if (userloading || redirecting) {
     return (
+      <>
+        {contextHolder}
         <Flex justify="center" align="center" className="h-200">
             <Spin size="large" />
         </Flex>
+      </>
     );
   }
   return (
