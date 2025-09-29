@@ -46,6 +46,19 @@
 body{
     overflow-x: hidden;
 }
+/* For RTL (Arabic) */
+body.rtl {
+    direction: rtl;
+    text-align: right;
+    font-family: "Tajawal", "Cairo", "Noto Sans Arabic", sans-serif;
+  }
+  
+  /* For LTR (English) */
+  body.ltr {
+    direction: ltr;
+    text-align: left;
+    font-family: "Inter", sans-serif;
+  }
 
 .bg-light-brand{
     background-color: var(--bg-body) !important;

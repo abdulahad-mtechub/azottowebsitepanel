@@ -4,9 +4,11 @@ import { useEffect, useState,useMemo } from 'react';
 import { CustomTabs } from '../../ui';
 import {GETBUYERMEETINGCOUNT,GETSELLERMEETINGCOUNT} from '../..//../graphql/query'
 import { useQuery } from "@apollo/client";
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activeChildTab, setActiveChildTab,profiletabData}) => {
+    const { t,i18n } = useTranslation();
     const [isDesktop, setIsDesktop] = useState(false);
     // Skip queries when no userId
     const { data: sellerData, loading: sellerLoading, error: sellerError } = useQuery(GETSELLERMEETINGCOUNT);
@@ -74,7 +76,7 @@ const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activ
                     <Flex justify="center">
                         <Segmented
                             className='custom-segment'
-                            options={['Seller', 'Buyer']}
+                            options={[t('Seller'), t('Buyer')]}
                             value={parentTab}
                             onChange={handleParentChange}
                         />

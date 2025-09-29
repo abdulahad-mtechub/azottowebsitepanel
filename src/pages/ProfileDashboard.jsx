@@ -20,10 +20,10 @@ import { useLazyQuery,useQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 
-
 const { Text, Title } = Typography;
 
 const ProfileDashboard = () => {
+    const { t,i18n } = useTranslation();
     const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
     const [parentTab, setParentTab] = useState('Seller');
@@ -32,7 +32,6 @@ const ProfileDashboard = () => {
     const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
     const { data: userStatsData, loading: userStatsLoading, error: userStatsError } = useQuery(PROFESSIONALSTATISTICS);
     const [getBuyerUser,{ data: buyerStatsData, loading: buyerStatsLoading, error: buyerStatsError } ]= useLazyQuery(GETBUYERSTATISTICS);
-const { t } = useTranslation();
     const [user, setUser] = useState(null);
     const [visible, setVisible] = useState(false)
     const [isedit, setIsEdit] = useState(false)
@@ -135,7 +134,7 @@ const { t } = useTranslation();
             sellerSoldBusiness: (
                 <Flex vertical gap={20}>
                     <Flex align='center'>
-                        <ModuleTopHeading level={4} name='Sold Businesses' />
+                        <ModuleTopHeading level={4} name={t('Sold Businesses')} />
                     </Flex>
                     <Soldbussines />
                 </Flex>
@@ -143,7 +142,7 @@ const { t } = useTranslation();
             sellermeeting: (
                 <Flex vertical gap={20}>
                     <Flex align='center'>
-                        <ModuleTopHeading level={4} name='Meetings' />
+                        <ModuleTopHeading level={4} name={t('Meetings')} />
                     </Flex>
                     <Meetings isBuyer={false} />
                 </Flex>
@@ -153,14 +152,14 @@ const { t } = useTranslation();
             ),
             selleralert: (
                 <Flex vertical gap={20}>
-                    <ModuleTopHeading level={4} name='Alerts' />
+                    <ModuleTopHeading level={4} name={t('Alerts')} />
                     <SellerAlerts data={selleralertsData} />
                 </Flex>
             ),
             sellerwallet: (
                 <Flex vertical gap={20}>
                     <Flex justify='space-between' gap={5}>
-                        <ModuleTopHeading level={4} name='Wallet' />
+                        <ModuleTopHeading level={4} name={t('Wallet')} />
                         <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => {setAddWalletVisible(true)}}>
                            <PlusOutlined /> {t("Add Account")}
                         </Button>
@@ -173,13 +172,13 @@ const { t } = useTranslation();
             buyerdashboard: (
                 <Flex vertical gap={20}>
                     <Flex justify='space-between'>
-                        <ModuleTopHeading level={4} name='Profile' />
+                        <ModuleTopHeading level={4} name={t('Profile' )}/>
                         <Flex gap={5}>
                             <Button aria-labelledby='Password Manager' className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
-                                Password Manager
+                                {t("Password Manager")}
                             </Button>
                             <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
-                                Edit Profile
+                                {t("Edit Profile")}
                             </Button>
                         </Flex>
                     </Flex>
@@ -206,7 +205,7 @@ const { t } = useTranslation();
                 <>
                     <Flex vertical gap={20}>
                         <Flex align='center'>
-                            <ModuleTopHeading level={4} name='Favorite Listing' />
+                            <ModuleTopHeading level={4} name={t('Favorite Listing' )}/>
                         </Flex>
                         <Favoritbussines />
                     </Flex>
@@ -215,7 +214,7 @@ const { t } = useTranslation();
             buyeralert: (
                 <>
                     <Flex vertical gap={20}>
-                        <ModuleTopHeading level={4} name='Alerts' />
+                        <ModuleTopHeading level={4} name={t('Alerts')} />
                         <SellerAlerts data={selleralertsData} />
                     </Flex>
                 </>

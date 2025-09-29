@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 const { Text, Title } = Typography;
 
 const Navbar = ({setGetCategory}) => { 
+  const { t,i18n } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   
   const userId = Cookies.get("userId"); // read userId from cookie
@@ -25,6 +26,7 @@ const Navbar = ({setGetCategory}) => {
   const [ visible, setVisible ] = useState(false)
   const location = useLocation();
   const navigate = useNavigate()
+  const [language, setLanguage]= useState()
   const [selectedLang, setSelectedLang] = useState({
     key: "1",
     label: "EN",
@@ -47,7 +49,16 @@ const Navbar = ({setGetCategory}) => {
     onError: (err) => messageApi.error("Logout error:", err)
   });
   
-
+  useEffect(() => {
+    let lang = localStorage.getItem("lang") || "en";
+    setLanguage(lang);
+    i18n.changeLanguage(lang); // ✅ now works
+    setSelectedLang(
+      lang === "ar"
+        ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
+        : { key: "1", label: "EN", icon: "assets/icons/en.png" }
+    );
+  }, []);
   useEffect(() => {
     if (userId) {
       getUser({ variables: { getUserId: userId } });
@@ -197,7 +208,6 @@ const Navbar = ({setGetCategory}) => {
         setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png",  alt: "Arabic"}),
     },
   ];
-  const { t } = useTranslation();
 
   return (
     <>

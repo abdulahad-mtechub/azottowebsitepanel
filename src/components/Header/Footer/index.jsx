@@ -1,12 +1,72 @@
 import { Row, Col, Image, Space, Typography, Divider, Flex, Button } from 'antd'
 import { Link, NavLink, useNavigate } from 'react-router-dom'
-import { footerlinkData } from '../../../data'
 import { WhatsAppOutlined } from '@ant-design/icons'
 import Cookies from "js-cookie";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography
 const Footer = () => {
-
+    const {t}= useTranslation()
+    
+const footerlinkData = [
+    {
+        id: 1,
+        title: t('Categories'),
+        links:[
+            {
+                id: 1,
+                name: t('Restaurants & Cafes'),
+                path: '/businesslisting'
+            },
+            {
+                id: 2,
+                name: t('Retail Services'),
+                path: '/businesslisting'
+            },
+            {
+                id: 3,
+                name: t('Health, Beauty & Fitness'),
+                path: '/businesslisting'
+            },
+            {
+                id: 4,
+                name: t('Automotive, Transportation & Logistics'),
+                path: '/businesslisting'
+            },
+            {
+                id: 5,
+                name: t('Tech & Software'),
+                path: '/businesslisting'
+            },
+        ]
+    },
+    {
+        id: 1,
+        title: t('Quick Link'),
+        links:[
+            {
+                id: 1,
+                name: t('About Jusoor'),
+                path: '/about'
+            },
+            {
+                id: 2,
+                name: t('FAQs'),
+                path: '/faq'
+            },
+            {
+                id: 3,
+                name: t('Term of Use'),
+                path: '/termofuse'
+            },
+            {
+                id: 4,
+                name: t('Articles'),
+                path: '/article'
+            },
+        ]
+    },
+]
     const navigate = useNavigate()
     const userId = Cookies.get("userId");
   return (
@@ -21,7 +81,7 @@ const Footer = () => {
                             </Link>
                         </div>
                         <Text className='fs-13 text-white w-500'>
-                            Jusoor is a Saudi marketplace for buying and selling verified businesses — with secure payments, trusted documents, and smooth ownership transfers.
+                            {t("Jusoor is a Saudi marketplace for buying and selling verified businesses — with secure payments, trusted documents, and smooth ownership transfers.")}
                         </Text>
                         <Flex gap={20}>
                             <Link to="#" target="_blank" rel="noopener noreferrer">
@@ -62,12 +122,12 @@ const Footer = () => {
                     <Flex vertical gap={15}>
                         <Title level={4} className='m-0 text-white'>
                             {
-                                userId ? 'Contact Us' : 'Need more help?'
+                                userId ? t('Contact Us') : t('Need more help?')
                             }
                         </Title>
                         <Text className='fs-14 text-white'>
                             {
-                                userId ? 'Contact us to access support, tools, and verified listings.' : 'Sign up to access support, tools, and verified listings.'
+                                userId ? t('Contact us to access support, tools, and verified listings.') : t('Sign up to access support, tools, and verified listings.')
                             }
                         </Text>
                         <Flex>
@@ -93,22 +153,22 @@ const Footer = () => {
                 <Col lg={{span: 12}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
                     <Flex align='items-center' className='w-100 quote' gap={20}>
                         <Typography.Text className='fs-12 text-white'>
-                            Copyright © {new Date().getFullYear()} Jusoor
+                        {t("Copyright © {{year}} Jusoor", { year: new Date().getFullYear() })}
                         </Typography.Text>
                         <span className='text-brand'> | </span>
                         <NavLink to={''} className='fs-12 text-white'>
-                            Design by Repla Technologies
+                            {t("Design by Repla Technologies")}
                         </NavLink>
                     </Flex>
                 </Col>
                 <Col lg={{span: 12}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
                     <Flex  align='items-center' className='w-100 lastlink' gap={20}>
                         <NavLink to={'/termofuse'} className='fs-12 text-white'>
-                            Term of use
+                            {t("Term of use")}
                         </NavLink>
                         <span className='text-brand'> | </span>
                         <NavLink to={'/privacypolicy'} className='fs-12 text-white'>
-                            Privacy Policy
+                            {t("Privacy Policy")}
                         </NavLink>
                     </Flex>
                 </Col>

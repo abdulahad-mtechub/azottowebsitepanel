@@ -7,7 +7,7 @@ import { ScheduledMeetingTable } from './ScheduledMeetingTable'
 import { useTranslation } from 'react-i18next'
 
 const BuyerMeetingContent = () => {
-    const { t } = useTranslation();
+    const { t,i18n } = useTranslation();
 
     const singleTab = [
         {
