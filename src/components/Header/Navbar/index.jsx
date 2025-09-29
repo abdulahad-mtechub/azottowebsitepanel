@@ -10,6 +10,7 @@ import { useLazyQuery,useMutation } from '@apollo/client';
 import { ME,NOTIFICATION } from '../../../graphql/query';
 import { LOGOUT } from '../../../graphql/mutation/login';
 import { client } from '../../../config/apolloClient';
+import { useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography;
 
@@ -196,6 +197,7 @@ const Navbar = ({setGetCategory}) => {
         setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png",  alt: "Arabic"}),
     },
   ];
+  const { t } = useTranslation();
 
   return (
     <>
@@ -272,7 +274,7 @@ const Navbar = ({setGetCategory}) => {
                 <li>
                   <NavLink to={''}>
                     <Flex gap={10}>
-                      <Text className='text-white nav-item'>Browse Businesses</Text>
+                      <Text className='text-white nav-item'>{t("Browse Businesses")}</Text>
                       <DownOutlined className='fs-12 text-white' />
                     </Flex>
                   </NavLink>
@@ -283,7 +285,7 @@ const Navbar = ({setGetCategory}) => {
                         <Flex gap={10} align='center'>
                           <Image src={'/assets/icons/browseall.png'} alt='browse all icon' width={30} className='pt-1s' preview={false} />
                           <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
-                            <Title level={5} className='m-0 fw-500'>Browse All</Title>
+                            <Title level={5} className='m-0 fw-500'>{t("Browse All")}</Title>
                             <ArrowRightOutlined className='arr text-brand pt-1s' />
                           </Flex>
                         </Flex>
@@ -346,21 +348,21 @@ const Navbar = ({setGetCategory}) => {
                 <li>
                   <NavLink to="/article">
                     <Text className={`nav-item ${location.pathname === '/article' || location.pathname.startsWith('/articlesingleview/') ? 'text-brand' : 'text-white'}`}>
-                      Articles
+                      {t("Articles")}
                     </Text>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/about">
                     <Text className={`nav-item ${location.pathname === '/about' ? 'text-brand' : 'text-white'}`}>
-                      About Jusoor
+                      {t("About Jusoor")}
                     </Text>
                   </NavLink>
                 </li>
                 <li>
                   <NavLink to="/faq">
                     <Text className={`nav-item ${location.pathname === '/faq' ? 'text-brand' : 'text-white'}`}>
-                      FAQs
+                      {t("FAQs")}
                     </Text>
                   </NavLink>
                 </li>
@@ -389,16 +391,16 @@ const Navbar = ({setGetCategory}) => {
                 !isshow ? 
                 <Flex gap={5} justify='end'>
                   <Button aria-labelledby='Sign Up' className='btn btn-outline' onClick={()=>navigate('/signup')}>
-                    Sign up
+                    {t("Sign up")}
                   </Button>
                   <Button aria-labelledby='Login' className='btn bg-brand' onClick={()=>navigate('/login')}>
-                    Sign In
+                   {t(" Sign In")}
                   </Button>
                 </Flex>
               :
               <Flex gap={10} align='center'>
                 <Button aria-labelledby='Sell a Business' className='btn bg-brand' onClick={() => navigate('/sellbusinesscreate')}>
-                  <PlusOutlined /> Sell a Business
+                  <PlusOutlined /> {t("Sell a Business")}
                 </Button>
               
                 <Badge size="small" count={notificationCount} overflowCount={1}>

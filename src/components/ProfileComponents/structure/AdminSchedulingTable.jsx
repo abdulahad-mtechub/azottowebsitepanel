@@ -1,27 +1,27 @@
-import { Col, Form, Row, Table } from 'antd'
+import { Col, Form, Row, Table } from 'antd';
 import { adminsechedulingData } from '../../../data';
 import { SearchInput } from '../../Forms';
+import { useTranslation } from 'react-i18next';
 
 const AdminSchedulingTable = () => {
-
-    const [form] = Form.useForm()
+    const [form] = Form.useForm();
+    const { t } = useTranslation();
 
     const columns = [
-        { title: 'Business Title', dataIndex: 'title' },
-        { title: 'Seller Name', dataIndex: 'sellername' },
-        { title: 'Business Price', dataIndex: 'businessprice' },
-        { title: 'Offer Price', dataIndex: 'offerprice' },
-        { title: 'Prefered Date & Time', dataIndex: 'prefereddatetime' },
+        { title: t('Business Title'), dataIndex: 'title' },
+        { title: t('Seller Name'), dataIndex: 'sellername' },
+        { title: t('Business Price'), dataIndex: 'businessprice' },
+        { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: t('Prefered Date & Time'), dataIndex: 'prefereddatetime' },
     ];
 
-
     return (
-        <Row gutter={[24,12]} className='mt-2'>
-            <Col xs={{span: 24}} sm={{span: 24}} md={{span: 12}} lg={{span: 8}}>
+        <Row gutter={[24, 12]} className='mt-2'>
+            <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
                 <SearchInput
-                    placeholder="Search"
+                    placeholder={t("Search")}
                     value={form.getFieldValue('name') || ''}
-                    prefix={<img src="/assets/icons/search.png" className='mx-3-inline' width={12} alt='search-icon' fetchPriority="high" />}
+                    prefix={<img src="/assets/icons/search.png" className='mx-3-inline' width={12} alt={t('search-icon')} fetchPriority="high" />}
                 />
             </Col>
             <Col span={24}>
@@ -33,21 +33,10 @@ const AdminSchedulingTable = () => {
                     showSorterTooltip={false}
                     scroll={{ x: 800 }}
                     pagination={false}
-                    // pagination={{
-                    //     hideOnSinglePage: true,
-                    //     total: 12,
-                    //     // pageSize: pagination?.pageSize,
-                    //     // defaultPageSize: pagination?.pageSize,
-                    //     // current: pagination?.pageNo,
-                    //     // size: "default",
-                    //     // pageSizeOptions: ['10', '20', '50', '100'],
-                    //     // onChange: (pageNo, pageSize) => call(pageNo, pageSize),
-                    //     showTotal: (total) => <Button className='brand-bg'>Total: {total}</Button>,
-                    // }}
                 />
             </Col>
         </Row>
-    )
-}
+    );
+};
 
-export {AdminSchedulingTable}
+export { AdminSchedulingTable };

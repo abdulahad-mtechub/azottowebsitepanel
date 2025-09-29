@@ -1,4 +1,4 @@
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Flex, Typography, Steps, Collapse, Form } from 'antd';
 import { CheckOutlined, DownOutlined, UpOutlined } from '@ant-design/icons';
 import { PayCommissionInprogressStep } from './PayCommissionInprogressStep';
@@ -7,14 +7,17 @@ import { PayBusinessAmountstep } from './PayBusinessAmountstep';
 import { FinalDealsStep } from './FinalDealsStep';
 import { GETUSERACTIVEBANK } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
-const SingleInprogressSteps = ({inprogressdeal}) => {
-    const [form] = Form.useForm();
-    const [activeStep, setActiveStep] = useState(inprogressdeal ? 3:0);
-    const [openPanels, setOpenPanels] = useState( inprogressdeal ? ['1','2','3','4'] : ['1']);
 
-    const [activeBank, { data: activeBankData }] = useLazyQuery(GETUSERACTIVEBANK)
+const SingleInprogressSteps = ({ inprogressdeal }) => {
+    const { t } = useTranslation();
+    const [form] = Form.useForm();
+    const [activeStep, setActiveStep] = useState(inprogressdeal ? 3 : 0);
+    const [openPanels, setOpenPanels] = useState(inprogressdeal ? ['1','2','3','4'] : ['1']);
+
+    const [activeBank, { data: activeBankData }] = useLazyQuery(GETUSERACTIVEBANK);
 
     useEffect(() => {
         if (inprogressdeal?.sellerId) {
@@ -25,56 +28,54 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
     const steps = [
         {
             key: '1',
-            label: 'Pay Commission',
+            label: t('Pay Commission'),
             content: <PayCommissionInprogressStep form={form} inprogressdeal={inprogressdeal} />,
-            status: inprogressdeal?.isCommissionVerified ? "Verified" :
-                    inprogressdeal?.busines?.documents?.find(
-                        (doc) => doc.title === "Jasoor Commission"
-                    ) ? 'Jasoor Verified Pending' : 'Pending',
+            status: inprogressdeal?.isCommissionVerified
+                ? t('Verified')
+                : inprogressdeal?.busines?.documents?.find((doc) => doc.title === "Jasoor Commission")
+                ? t('Jasoor Verified Pending')
+                : t('Pending'),
         },
         {
             key: '2',
-            label: 'Digital Sale Agreement',
+            label: t('Digital Sale Agreement'),
             content: <DigitalSaleAgreementStep form={form} details={inprogressdeal} />,
             status: !inprogressdeal?.isDsaSeller && !inprogressdeal?.isDsaBuyer
-                ? 'Seller & Buyer DSA Pending'
+                ? t('Seller & Buyer DSA Pending')
                 : !inprogressdeal?.isDsaSeller && inprogressdeal?.isDsaBuyer
-                ? 'Seller DSA Pending'
+                ? t('Seller DSA Pending')
                 : inprogressdeal?.isDsaSeller && !inprogressdeal?.isDsaBuyer
-                ? 'Buyer DSA Pending'
-                : 'Verified',
+                ? t('Buyer DSA Pending')
+                : t('Verified'),
         },
         {
             key: '3',
-            label: 'Pay Business Amount',
+            label: t('Pay Business Amount'),
             content: <PayBusinessAmountstep inprogressdeal={inprogressdeal} bank={activeBankData?.getUserActiveBanks} form={form} />,
-            status: inprogressdeal?.isPaymentVedifiedSeller ? 'Verified' : 'Pending'
+            status: inprogressdeal?.isPaymentVedifiedSeller ? t('Verified') : t('Pending')
         },
         {
             key: '4',
-            label: 'Finalize Deal',
-            content: <FinalDealsStep  inprogressdeal={inprogressdeal} />,
-            status: inprogressdeal?.isBuyerCompleted ? 'Deal Closed' : 'Pending'
+            label: t('Finalize Deal'),
+            content: <FinalDealsStep inprogressdeal={inprogressdeal} />,
+            status: inprogressdeal?.isBuyerCompleted ? t('Deal Closed') : t('Pending')
         },
     ];
 
     const isStepComplete = (status) =>
-        status && !['pending', 'waiting'].includes(status.toLowerCase());
+        status && ![t('pending').toLowerCase(), t('waiting').toLowerCase()].includes(status.toLowerCase());
 
     const getUnlockedStepKeys = () => {
         const keys = [];
         for (let i = 0; i < steps.length; i++) {
             if (i === 0 || isStepComplete(steps[i - 1].status)) {
                 keys.push(steps[i].key);
-            } else {
-                break;
-            }
+            } else break;
         }
         return keys;
     };
 
     const unlockedKeys = getUnlockedStepKeys();
-    
 
     const handleCollapseChange = (keys) => {
         const filteredKeys = keys.filter((key) => unlockedKeys.includes(key));
@@ -83,13 +84,11 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
         if (filteredKeys.length > 0) {
             const lastOpenedKey = filteredKeys[filteredKeys.length - 1];
             const stepIndex = steps.findIndex((step) => step.key === lastOpenedKey);
-            if (stepIndex !== -1) {
-                setActiveStep(stepIndex);
-            }
+            if (stepIndex !== -1) setActiveStep(stepIndex);
         }
     };
 
-    const stepItems = steps.map((item, index) => {
+    const stepItems = steps.map((item) => {
         const isDisabled = !unlockedKeys.includes(item.key);
         return {
             key: item.key,
@@ -99,16 +98,12 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
                     <span className="collapse-indicator">
                         {openPanels.includes(item.key) ? (
                             <Flex align="center" gap={5}>
-                                {item?.status?.toLowerCase() === 'pending' ||
-                                item?.status?.toLowerCase().includes('pending') ||
-                                item?.status?.toLowerCase().includes('waiting') ? (
-                                    <Text className="sendstatus fs-10 badge-cs fw-500 fit-content">
-                                        {item?.status}
-                                     </Text>
+                                {item?.status?.toLowerCase() === t('pending').toLowerCase() ||
+                                item?.status?.toLowerCase().includes(t('pending').toLowerCase()) ||
+                                item?.status?.toLowerCase().includes(t('waiting').toLowerCase()) ? (
+                                    <Text className="sendstatus fs-10 badge-cs fw-500 fit-content">{item?.status}</Text>
                                 ) : (
-                                    <Text className="received fs-10 badge-cs fw-500 fit-content">
-                                        {item?.status}
-                                    </Text>
+                                    <Text className="received fs-10 badge-cs fw-500 fit-content">{item?.status}</Text>
                                 )}
                                 <UpOutlined />
                             </Flex>
@@ -124,14 +119,11 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
         };
     });
 
-
     const stepsProgress = steps.map((item, index) => ({
         key: item.label,
         title: (
             <span
-                className={`custom-step-title ${activeStep >= index ? 'completed' : ''} ${
-                    !unlockedKeys.includes(item.key) ? 'disabled' : ''
-                }`}
+                className={`custom-step-title ${activeStep >= index ? 'completed' : ''} ${!unlockedKeys.includes(item.key) ? 'disabled' : ''}`}
             >
                 {item.label}
             </span>
@@ -145,18 +137,13 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
                 current={activeStep}
                 items={stepsProgress}
                 onChange={(current) => {
-                    // Allow navigation only to unlocked steps
                     if (unlockedKeys.includes(steps[current].key)) {
                         setActiveStep(current);
                         setOpenPanels([steps[current].key]);
                     }
                 }}
-                progressDot={(dot, { status, index }) => (
-                    <span
-                        className={`custom-dot ${
-                            activeStep > index ? 'completed' : ''
-                        } ${activeStep === index ? 'active' : ''}`}
-                    >
+                progressDot={(dot, { index }) => (
+                    <span className={`custom-dot ${activeStep > index ? 'completed' : ''} ${activeStep === index ? 'active' : ''}`}>
                         {activeStep > index ? <CheckOutlined /> : dot}
                     </span>
                 )}
@@ -165,10 +152,7 @@ const SingleInprogressSteps = ({inprogressdeal}) => {
                 <Collapse
                     activeKey={openPanels}
                     onChange={handleCollapseChange}
-                    items={stepItems.map((item) => ({
-                        ...item,
-                        collapsible: unlockedKeys.includes(item.key) ? 'header' : 'disabled',
-                    }))}
+                    items={stepItems.map((item) => ({ ...item, collapsible: unlockedKeys.includes(item.key) ? 'header' : 'disabled' }))}
                     className={`collapse-cs1 step-disabled`}
                     expandIconPosition="end"
                     ghost

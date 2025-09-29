@@ -1,31 +1,32 @@
-import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons'
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd'
-import { SingleInprogressSteps } from './SingleInprogressSteps'
+import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd';
+import { SingleInprogressSteps } from './SingleInprogressSteps';
 import { GETDEAL, ME } from '../../../graphql';
 import { useQuery } from '@apollo/client';
 import Cookies from "js-cookie";
+import { useTranslation } from 'react-i18next';
 
+const { Title, Text } = Typography;
 
-const { Title, Text } = Typography
-const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
+const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
+  const { t } = useTranslation();
 
-    const userId = Cookies.get("userId"); 
-    const dealId = inprogressdeal.key;
-    console.log('inprogressdeal...',inprogressdeal)
-    const { data, loading, error } = useQuery(GETDEAL, {
-        variables: { getDealId: dealId },
-        fetchPolicy: 'network-only',
-    });
+  const userId = Cookies.get("userId"); 
+  const dealId = inprogressdeal.key;
 
-    const { data:userData, loading:userLoading, error:userError } = useQuery(ME, {
-        variables: { getUserId: userId },
-    });
-    const user = userData?.getUser;
+  const { data, loading, error } = useQuery(GETDEAL, {
+    variables: { getDealId: dealId },
+    fetchPolicy: 'network-only',
+  });
 
-    // if (loading) return <Spin tip="Loading deal..." />;
-    if (error) return <Text type="danger">Error loading deal: {error.message}</Text>;
-  
-    const deal = data?.getDeal
+  const { data: userData } = useQuery(ME, {
+    variables: { getUserId: userId },
+  });
+  const user = userData?.getUser;
+
+  if (error) return <Text type="danger">{t('Error loading deal')}: {error.message}</Text>;
+
+  const deal = data?.getDeal
     ? {
         key: data?.getDeal?.id,
         businessTitle: data?.getDeal?.business?.businessTitle || '-',
@@ -45,76 +46,72 @@ const SingleInProgressDeals = ({inprogressdeal, setInprogressDeal}) => {
         isSellerCompleted : data?.getDeal?.isSellerCompleted || false,
         isBuyerCompleted : data?.getDeal?.isBuyerCompleted || false,
         isPaymentVedifiedSeller : data?.getDeal?.isPaymentVedifiedSeller || false,
-    }: null;
-  
-    if (!deal) return <Text>No deal found</Text>;
-const buyerdealsData = [
-    {
-      title:'Seller Name',
-      desc:deal?.sellerName
-    },
-    {
-      title:'Buyer Name',
-      desc:deal?.buyerName
-    },
-    {
-      title:'Finalized Offer',
-      desc:`SAR ${deal?.finalizedOffer}`
-    },
-    {
-      title:'Status',
-      desc:deal?.status
-    },
-  ]
+    } : null;
+
+  if (!deal) return <Text>{t('No deal found')}</Text>;
+
+  const buyerdealsData = [
+    { title: t('Seller Name'), desc: deal?.sellerName },
+    { title: t('Buyer Name'), desc: deal?.buyerName },
+    { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
+    { title: t('Status'), desc: deal?.status },
+  ];
+
   return (
     <Flex vertical gap={20}>
-        <Flex vertical gap={25}>
-            <Breadcrumb
-                separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
-                items={[
-                    {
-                        title: <Text className='fs-13 text-gray cursor' onClick={() => setInprogressDeal(null)}>Deals</Text>,
-                    },
-                    {
-                        title: <Text className='fw-500 fs-13 text-black'>{inprogressdeal?.title}</Text>,
-                    },
-                ]}
-            />
-        </Flex>
-        <Flex gap={15} align='center'>
-            <Button aria-labelledby='Arrow left' className='border-0 p-0 bg-transparent' onClick={() => setInprogressDeal(null)}>
-                <ArrowLeftOutlined />
-            </Button>
-            <Title level={4} className='m-0'>
-                {inprogressdeal?.title}
-            </Title>
-        </Flex>
-        <Card className='radius-12 border-gray'>
-            <div className='deals-status'>
-                <Row gutter={[16, 16]}>
-                    {
-                        buyerdealsData?.map((list,index)=>
-                            <Col xs={24} sm={12} md={6} lg={6} key={index}>
-                                <Flex vertical gap={0}>
-                                    <Text className='fw-600 fs-14'>{list?.title}</Text>
-                                    {
-                                    (list?.title === 'Status') ? (
-                                        list.desc === 'In-progress' ?
-                                        <Text className='bg-brand text-white fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>:
-                                        <Text className='sendstatus fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
-                                    ) : (
-                                        <Text className='fs-14 fw-normal'>{list?.desc}</Text>
-                                    )}
-                                </Flex>
-                            </Col>
-                        )
-                    }
-                </Row>
-            </div>
-            <SingleInprogressSteps inprogressdeal={deal} />
-        </Card>
-    </Flex>
-  )
-}
+      <Flex vertical gap={25}>
+        <Breadcrumb
+          separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
+          items={[
+            {
+              title: <Text className='fs-13 text-gray cursor' onClick={() => setInprogressDeal(null)}>{t('Deals')}</Text>,
+            },
+            {
+              title: <Text className='fw-500 fs-13 text-black'>{inprogressdeal?.title}</Text>,
+            },
+          ]}
+        />
+      </Flex>
 
-export {SingleInProgressDeals}
+      <Flex gap={15} align='center'>
+        <Button
+          aria-labelledby={t('Arrow left')}
+          className='border-0 p-0 bg-transparent'
+          onClick={() => setInprogressDeal(null)}
+        >
+          <ArrowLeftOutlined />
+        </Button>
+        <Title level={4} className='m-0'>
+          {inprogressdeal?.title}
+        </Title>
+      </Flex>
+
+      <Card className='radius-12 border-gray'>
+        <div className='deals-status'>
+          <Row gutter={[16, 16]}>
+            {buyerdealsData.map((list, index) => (
+              <Col xs={24} sm={12} md={6} lg={6} key={index}>
+                <Flex vertical gap={0}>
+                  <Text className='fw-600 fs-14'>{list?.title}</Text>
+                  {list?.title === t('Status') ? (
+                    list.desc === 'In-progress' ? (
+                      <Text className='bg-brand text-white fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                    ) : (
+                      <Text className='sendstatus fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                    )
+                  ) : (
+                    <Text className='fs-14 fw-normal'>{list?.desc}</Text>
+                  )}
+                </Flex>
+              </Col>
+            ))}
+          </Row>
+        </div>
+
+        <SingleInprogressSteps inprogressdeal={deal} user={user} />
+      </Card>
+    </Flex>
+  );
+};
+
+export { SingleInProgressDeals };

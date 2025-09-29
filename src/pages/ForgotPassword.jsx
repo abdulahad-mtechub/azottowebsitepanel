@@ -3,35 +3,32 @@ import { MyInput } from "../components";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
 import { useState } from "react";
+import { t } from "i18next";
 
 const { Title, Text, Paragraph } = Typography;
 
 const ForgotPassword = () => {
     const [form] = Form.useForm();
-    const [ requestState, setRequestState ] = useState('request')
-    const navigate = useNavigate()
+    const [requestState, setRequestState] = useState('request');
+    const navigate = useNavigate();
     const [selectedLang, setSelectedLang] = useState({
         key: "1",
         label: "EN",
         icon: "assets/icons/en.png",
     });
 
-     const forgotpass = () => {
+    const forgotpass = () => {
         if (requestState === "request") {
-            // dispatcher(actionsApi?.forgotPassword(form.getFieldsValue(['email'])));
-            console.log('Request send on email')
-            setRequestState('otp')
+            console.log('Request send on email');
+            setRequestState('otp');
         } 
         if (requestState === "otp") {
-            // dispatcher(actionsApi?.otpVerify(form.getFieldsValue(['otp'])));
-            console.log('Otp receive by email')
-            setRequestState('reset')
+            console.log('Otp receive by email');
+            setRequestState('reset');
         }
         if (requestState === "reset") {
-            // const data = form.getFieldsValue(['password', 'confirmationPassword']);
-            // dispatcher(actionsApi?.resetPassword({data:{token: otpToken, ...data}, navigate}));
-            console.log('Now enter password and confirm password')
-            setRequestState('request')
+            console.log('Now enter password and confirm password');
+            setRequestState('request');
         }
     };
 
@@ -40,18 +37,18 @@ const ForgotPassword = () => {
         key: "1",
         label: (
           <Space>
-            <Image src="assets/icons/en.png" width={20} alt="English" preview={false} />
+            <Image src="assets/icons/en.png" width={20} alt={t("English")} preview={false} />
             <Text className='fs-13'>EN</Text>
           </Space>
         ),
         onClick: () =>
-          setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png",alt: "Jusoor language logo" }),
+          setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png", alt: t("English") }),
       },
       {
         key: "2",
         label: (
           <Space>
-            <Image src="assets/icons/ar.png" width={20} alt="Arabic" preview={false} />
+            <Image src="assets/icons/ar.png" width={20} alt={t("Arabic")} preview={false} />
             <Text className='fs-13'>AR</Text>
           </Space>
         ),
@@ -78,29 +75,25 @@ const ForgotPassword = () => {
                         }
                     </div>
                     <Title level={3}>
-                        {requestState === 'request' && 'Forgot Password'}
-                        {requestState === 'otp' && 'OTP'}
-                        {requestState === 'reset' && 'Reset Password'}
+                        {requestState === 'request' && t('Forgot Password')}
+                        {requestState === 'otp' && t('OTP')}
+                        {requestState === 'reset' && t('Reset Password')}
                     </Title>
                     <Paragraph>
-                        {requestState === 'request' && 'Enter the email address to send you the OTP code.'}
-                        {requestState === 'otp' && 'Enter the 5 digit OTP code sent to your email abc****4@gmail.com'}
+                        {requestState === 'request' && t('Enter the email address to send you the OTP code.')}
+                        {requestState === 'otp' && t('Enter the 5 digit OTP code sent to your email abc****4@gmail.com')}
                         {requestState === 'reset' && null}
                     </Paragraph>
-                    <Form 
-                        layout="vertical" 
-                        form={form} 
-                        requiredMark={false}
-                    >
+                    <Form layout="vertical" form={form} requiredMark={false}>
                       <Row>
                         {requestState === 'request' && (
                             <Col span={24}>
                                 <MyInput
-                                    label='Email Address'
+                                    label={t('Email Address')}
                                     name='email'
                                     required
-                                    message="Please enter Email Address"
-                                    placeholder='Enter Email Address'
+                                    message={t('Please enter Email Address')}
+                                    placeholder={t('Enter Email Address')}
                                 />
                             </Col>
                         )}
@@ -108,12 +101,12 @@ const ForgotPassword = () => {
                             <Col span={24}>
                                 <MyInput
                                     oTp
-                                    label={'OTP'}
+                                    label={t('OTP')}
                                     name='otp'
                                     type='number'
                                     required
-                                    message="Please enter the OTP sent to your email"
-                                    placeholder="Enter OTP"
+                                    message={t('Please enter the OTP sent to your email')}
+                                    placeholder={t('Enter OTP')}
                                     onKeyPress={(e) => {
                                         if (!/[0-9]/.test(e.key)) {
                                         e.preventDefault();
@@ -128,17 +121,17 @@ const ForgotPassword = () => {
                             <>
                                 <Col span={24}>
                                     <MyInput
-                                        label="New Password"
+                                        label={t("New Password")}
                                         type="password"
                                         name="password"
                                         size='large'
                                         required
-                                        message={()=>{}}
+                                        message={() => {}}
                                         validator={({ getFieldValue }) => ({
                                             validator: (_, value) => {
                                                 const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
                                                 if (!reg.test(value)) {
-                                                    return Promise.reject(new Error('Password should contain at least 8 characters, one uppercase letter, one number, one special character'));
+                                                    return Promise.reject(new Error(t('Password should contain at least 8 characters, one uppercase letter, one number, one special character')));
                                                 } else {
                                                     return Promise.resolve();
                                                 }
@@ -148,20 +141,20 @@ const ForgotPassword = () => {
                                 </Col>
                                 <Col span={24}>
                                     <MyInput
-                                        label="Confirm Password"
+                                        label={t("Confirm Password")}
                                         type="password"
                                         name="confirmationPassword"
                                         size='large'
                                         dependencies={['password']}
                                         required
-                                        message='Please enter confirm password'
+                                        message={t('Please enter confirm password')}
                                         rules={[
                                             ({ getFieldValue }) => ({
                                                 validator(_, value) {
                                                     if (!value || getFieldValue('password') === value) {
                                                         return Promise.resolve();
                                                     }
-                                                    return Promise.reject(new Error('The password that you entered do not match!'));
+                                                    return Promise.reject(new Error(t('The password that you entered do not match!')));
                                                 },
                                             }),
                                         ]}
@@ -170,24 +163,24 @@ const ForgotPassword = () => {
                                                 if (!value || getFieldValue('password') === value) {
                                                     return Promise.resolve();
                                                 }
-                                                return Promise.reject(new Error('The password that you entered do not match!'));
+                                                return Promise.reject(new Error(t('The password that you entered do not match!')));
                                             },
                                         })}
                                     />
                                 </Col>
                             </>
-                            )}
+                        )}
                         <Col span={24}>
                             <Button aria-labelledby='Forgot state button' htmlType="submit" className="btn bg-dark-blue fs-16" block onClick={forgotpass}>
-                                {requestState === 'request' && 'Next'}
-                                {requestState === 'otp' && 'Verify OTP'}
-                                {requestState === 'reset' && 'Reset Password'}
+                                {requestState === 'request' && t('Next')}
+                                {requestState === 'otp' && t('Verify OTP')}
+                                {requestState === 'reset' && t('Reset Password')}
                             </Button>
                         </Col>
                         <Col span={24}>
                             <Paragraph className="text-center mt-3">
-                                {requestState === 'request' && <>Remember Password? <NavLink to={'/login'}>Signin</NavLink></>}
-                                {requestState === 'otp' && <>Didn’t receive code? <NavLink to={''}>Resend</NavLink></>}
+                                {requestState === 'request' && <>{t('Remember Password?')} <NavLink to={'/login'}>{t('Signin')}</NavLink></>}
+                                {requestState === 'otp' && <>{t('Didn’t receive code?')} <NavLink to={''}>{t('Resend')}</NavLink></>}
                                 {requestState === 'reset' && null}
                             </Paragraph>
                         </Col>
@@ -196,13 +189,7 @@ const ForgotPassword = () => {
                 </div>
             </Col>
 
-            <Col
-                xs={0}
-                sm={0}
-                md={10}
-                lg={8}
-                className="signup-visual-container"
-            >
+            <Col xs={0} sm={0} md={10} lg={8} className="signup-visual-container">
                 <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
                   <Button
                     onClick={(e) => e.preventDefault()}
@@ -223,11 +210,11 @@ const ForgotPassword = () => {
                 </Dropdown> 
                 <Flex vertical justify="space-between" className="h-100">
                     <Flex vertical justify="center" align="center" className="logo-sp">
-                        <Image src="/assets/images/logo.png" alt="jusoor logo" width={200} preview={false} />
-                        <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
+                        <Image src="/assets/images/logo.png" alt={t("jusoor logo")} width={200} preview={false} />
+                        <Title level={5} className="m-0 text-white text-center">{t('Shorten the path')}</Title>
                     </Flex>
                     <div className="bg-shade">
-                        <img src="/assets/images/login.gif" alt="jusoor-gif-image" className="w-100 opacity-7" fetchPriority="high" />
+                        <img src="/assets/images/login.gif" alt={t("jusoor-gif-image")} className="w-100 opacity-7" fetchPriority="high" />
                     </div>
                 </Flex>
             </Col>

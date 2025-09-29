@@ -1,9 +1,12 @@
 import { useRive } from '@rive-app/react-canvas';
-import { Card, Col, Flex, Image, Row, Typography } from 'antd';
+import { Card, Col, Flex, Row, Typography } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography;
 
 const Sellerwork = () => {
+  const { t } = useTranslation();
+
   const rive1 = useRive({
     src: '/assets/images/riv/create_listing.riv',
     autoplay: true,
@@ -27,29 +30,30 @@ const Sellerwork = () => {
   const data = [
     {
       id: 1,
-      title: 'Create Your Listing',
-      desc: 'Add your business info, financials, and documents. It only takes a few minutes.',
+      title: t('Create Your Listing'),
+      desc: t('Add your business info, financials, and documents. It only takes a few minutes.'),
       image: <rive1.RiveComponent />,
     },
     {
       id: 2,
-      title: 'Get Verified',
-      desc: 'We verify your CR, key metrics, and identity to build buyer trust.',
+      title: t('Get Verified'),
+      desc: t('We verify your CR, key metrics, and identity to build buyer trust.'),
       image: <rive2.RiveComponent />,
     },
     {
       id: 3,
-      title: 'Receive Offers',
-      desc: 'Buyers sign an NDA to view details and send offers through our secure chat.',
+      title: t('Receive Offers'),
+      desc: t('Buyers sign an NDA to view details and send offers through our secure chat.'),
       image: <rive3.RiveComponent />,
     },
     {
       id: 4,
-      title: 'Finalize the Deal',
-      desc: 'Accept the offer, upload the transfer docs, and get paid directly via bank.',
+      title: t('Finalize the Deal'),
+      desc: t('Accept the offer, upload the transfer docs, and get paid directly via bank.'),
       image: <rive4.RiveComponent />,
     },
   ];
+
   return (
     <Row gutter={[24, 24]} className="mt-3">
       {data?.map((items, index) => (
@@ -62,7 +66,7 @@ const Sellerwork = () => {
         >
           <Card className="border-0 h-100 work-cd bg-transparent">
             <Flex justify="center">
-              <div className='riv-cs'>
+              <div className="riv-cs">
                 {items?.image}
               </div>
             </Flex>

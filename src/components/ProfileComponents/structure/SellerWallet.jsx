@@ -4,10 +4,12 @@ import { GETUSERBANK } from '../../../graphql/query';
 import { useQuery, useMutation } from '@apollo/client';
 import { AddWalletModal } from '../modal';
 import { ACTIVEBANK, DELETEBANK } from '../../../graphql/mutation/mutations';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
 const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [deletemodal, setDeleteModal] = useState(false);
   const [selectedBankId, setSelectedBankId] = useState(null);
@@ -17,43 +19,34 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
   const [activateBankMutate] = useMutation(ACTIVEBANK, {
     refetchQueries: [{ query: GETUSERBANK }],
     awaitRefetchQueries: true,
-    onCompleted: () => {
-      messageApi.success('Bank status updated successfully');
-    },
-    onError: (err) => {
-      messageApi.error(err.message);
-    },
+    onCompleted: () => messageApi.success(t('Bank status updated successfully')),
+    onError: (err) => messageApi.error(err.message),
   });
 
   const [deleteBankMutate, { loading: deleting }] = useMutation(DELETEBANK, {
     refetchQueries: [{ query: GETUSERBANK }],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success('Bank deleted successfully');
+      messageApi.success(t('Bank deleted successfully'));
       setDeleteModal(false);
       setSelectedBankId(null);
     },
-    onError: (err) => {
-      messageApi.error(err.message);
-    },
+    onError: (err) => messageApi.error(err.message),
   });
 
   const data = (bankData?.getUserBanks || []).map((bank, index) => ({
     key: bank?.id || index,
     bankname: bank?.bankName,
-    title: bank?.accountTitle || 'N/A',
+    title: bank?.accountTitle || t('N/A'),
     accountnumber: bank?.accountNumber,
     expirydate: bank?.createdAt,
     isActive: Boolean(bank?.isActive),
   }));
 
-  const handleSetActive = (bankId) => {
-    activateBankMutate({ variables: { setActiveBankId: bankId } });
-  };
-
+  const handleSetActive = (bankId) => activateBankMutate({ variables: { setActiveBankId: bankId } });
   const handleDeleteBank = (bankId) => {
     if (!bankId) {
-      messageApi.error('No bank selected for deletion');
+      messageApi.error(t('No bank selected for deletion'));
       return;
     }
     deleteBankMutate({ variables: { deleteBankId: bankId } });
@@ -66,7 +59,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Title level={5} className="m-0">
-              Saved Accounts
+              {t('Saved Accounts')}
             </Title>
           </Col>
 
@@ -74,11 +67,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
             const items = [
               {
                 key: 'remove',
-                label: (
-                  <Text>
-                    Remove Account
-                  </Text>
-                ),
+                label: <Text>{t('Remove Account')}</Text>,
                 onClick: () => {
                   setSelectedBankId(wallet.key);
                   setDeleteModal(true);
@@ -86,11 +75,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
               },
               {
                 key: 'toggleActive',
-                label: (
-                  <Text>
-                    {wallet.isActive ? 'Inactive' : 'Active'}
-                  </Text>
-                ),
+                label: <Text>{wallet.isActive ? t('Inactive') : t('Active')}</Text>,
                 onClick: () => handleSetActive(wallet.key),
               },
             ];
@@ -123,7 +108,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
                       </div>
 
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                        <Text className="text-white fs-14">Expires</Text>
+                        <Text className="text-white fs-14">{t('Expires')}</Text>
                         <Text className="fs-12 text-white">{wallet.expirydate}</Text>
                       </div>
                     </div>
@@ -134,9 +119,11 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
           })}
         </Row>
       </Card>
+
       <AddWalletModal visible={addwalletvisible} onClose={() => setAddWalletVisible(false)} />
+
       <Modal
-        title="Remove Bank Account?"
+        title={t('Remove Bank Account?')}
         visible={deletemodal}
         centered
         onCancel={() => {
@@ -144,13 +131,11 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
           setSelectedBankId(null);
         }}
         onOk={() => handleDeleteBank(selectedBankId)}
-        okText="Yes, Remove Account"
+        okText={t('Yes, Remove Account')}
         okButtonProps={{ danger: true, loading: deleting }}
-        cancelText="Cancel"
+        cancelText={t('Cancel')}
       >
-        <p>
-          Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account.
-        </p>
+        <p>{t('Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account.')}</p>
       </Modal>
     </>
   );

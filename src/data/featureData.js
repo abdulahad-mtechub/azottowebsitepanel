@@ -1,4 +1,4 @@
-
+ 
 const browsetypeData = [
     {
         id: 1,

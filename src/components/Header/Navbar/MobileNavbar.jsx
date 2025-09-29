@@ -4,12 +4,13 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { mobilemenuData } from '../../../data';
 import Cookies from "js-cookie";
+import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography
 const { Panel } = Collapse;
 
 const MobileNavbar = ({ visible, onClose }) => {
-
+    const { t } = useTranslation();
     const [currentPanel, setCurrentPanel] = useState([])
     const [currentPanels, setCurrentPanels] = useState([])
     const userId = Cookies.get("userId");
@@ -117,25 +118,25 @@ const MobileNavbar = ({ visible, onClose }) => {
                 </Collapse>
                 <Flex vertical>
                     <NavLink to={'/article'} onClick={onClose}  className='text-white fs-14 mb-1 block p-2 pl-2'>
-                        <Title level={5} className='text-white m-0'>Articles</Title>
+                        <Title level={5} className='text-white m-0'>{t("Articles")}</Title>
                     </NavLink>
                     <NavLink to={'/faq'} onClick={onClose} className='text-white fs-14 block mb-2 p-2 pl-2'>
-                        <Title level={5} className='text-white m-0'>FAQs</Title>
+                        <Title level={5} className='text-white m-0'>{t("FAQs")}</Title>
                     </NavLink>
                 </Flex>
                 <Flex vertical gap={10} align='center' justify='center'>
                     {
                         userId ? 
                         <Button aria-labelledby='Sell a Business' className='btn bg-brand mt-3 w-100' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
-                            <PlusOutlined /> Sell a Business
+                            <PlusOutlined /> {t("Sell a Business")}
                         </Button>
                         :
                         <>
                             <Button aria-labelledby='Sign Up' className='btn btn-outline w-100' onClick={()=>navigate('/signup')}>
-                                Sign Up
+                               {t(" Sign Up")}
                             </Button>
                             <Button aria-labelledby='Login' className='btn bg-brand w-100' onClick={()=>navigate('/login')}>
-                                Sign In
+                               {t(" Sign In")}
                             </Button>
                         </>
                     }

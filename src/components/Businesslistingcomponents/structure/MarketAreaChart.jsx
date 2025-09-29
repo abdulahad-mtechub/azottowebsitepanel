@@ -1,12 +1,14 @@
-import { Card, Col, Flex, Row, Typography} from 'antd';
+import { Card, Col, Flex, Row, Typography } from 'antd';
 import { ModuleTopHeading } from '../../Pagecomponents';
-// import { Chart } from "react-google-charts";
+import { useTranslation } from 'react-i18next';
 
-const { Text, Title } = Typography
+const { Text, Title } = Typography;
+
 const MarketAreaChart = () => {
+    const { t } = useTranslation();
 
     const data = [
-        ['Province', 'Market Potential'],
+        [t('Province'), t('Market Potential')],
         ['Riyadh', 1000],
         ['Makkah', 900],
         ['Madinah', 800],
@@ -20,24 +22,24 @@ const MarketAreaChart = () => {
         ['Najran', 400],
         ['Al Bahah', 320],
         ['Al Jawf', 280],
-      ];
+    ];
       
-      const options = {
+    const options = {
         region: 'SA',
-        displayMode: 'regions',  // fills provinces (may not color perfectly)
+        displayMode: 'regions',
         colorAxis: { colors: ['#E3F2FD', '#0D47A1'] },
         backgroundColor: '#fff',
         datalessRegionColor: '#f0f0f0',
         legend: { position: 'bottom' },
-      };
+    };
 
     return (
         <div>
             <Card className='radius-12 border-gray mb-3'>
                 <Flex vertical className='mb-3'>
-                    <ModuleTopHeading level={4} name='Market Potential by Location' />
+                    <ModuleTopHeading level={4} name={t('Market Potential by Location')} />
                     <Text>
-                        Analyze local business trends, growth potential, and demand to make smarter buying decisions.
+                        {t('Analyze local business trends, growth potential, and demand to make smarter buying decisions.')}
                     </Text>
                 </Flex>
                 <Row gutter={[24,12]} align={'middle'}>
@@ -53,22 +55,22 @@ const MarketAreaChart = () => {
                     <Col lg={{span: 10}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
                         <Card className='rounded-12 border-gray'>
                             <Title level={5} className='text-center'>
-                                Regional Market Indicators
+                                {t('Regional Market Indicators')}
                             </Title>
                             <Row gutter={[24,24]} className='mt-3' justify={'space-between'}>
                                 <Col span={11}>
                                     <Flex vertical gap={10}>
-                                        <Text>Local Business Growth</Text>
-                                        <Text>Population Density</Text>
-                                        <Text>Industry Demand</Text>
+                                        <Text>{t('Local Business Growth')}</Text>
+                                        <Text>{t('Population Density')}</Text>
+                                        <Text>{t('Industry Demand')}</Text>
                                     </Flex>
                                 </Col>
                                 <div className='horizontalline' />
                                 <Col span={11}>
                                     <Flex vertical gap={10}>
                                         <Text>+4.3% (YoY)</Text>
-                                        <Text>High</Text>
-                                        <Text>High</Text>
+                                        <Text>{t('High')}</Text>
+                                        <Text>{t('High')}</Text>
                                     </Flex>
                                 </Col>
                             </Row>

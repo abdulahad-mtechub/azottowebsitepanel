@@ -1,20 +1,22 @@
-import { Col, Form, Row, Table, Typography } from 'antd'
+import { Col, Form, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
-import {SENTMEETINGS } from '../../../graphql/query';
+import { SENTMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const SellerSendRequestTable = ({ isBuyer }) => {
-    const [form] = Form.useForm()
-    const [fetchMeetings,{ data, loading }] = useLazyQuery(SENTMEETINGS, { fetchPolicy: 'network-only' });
+    const { t } = useTranslation();
+    const [form] = Form.useForm();
+    const [fetchMeetings, { data, loading }] = useLazyQuery(SENTMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
 
     const columns = [
-        { title: 'Business Title', dataIndex: 'title' },
-        { title: 'Buyer Name', dataIndex: 'buyername' },
-        { title: 'Business Price', dataIndex: 'businessprice' },
-        { title: 'Offer Price', dataIndex: 'offerprice' },
-        { title: 'Requested Date', dataIndex: 'requestedDate' },
+        { title: t('Business Title'), dataIndex: 'title' },
+        { title: t('Buyer Name'), dataIndex: 'buyername' },
+        { title: t('Business Price'), dataIndex: 'businessprice' },
+        { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: t('Requested Date'), dataIndex: 'requestedDate' },
     ];
 
     const sendrequestData = data?.getMySentMeetingRequests?.map((meeting) => {
@@ -42,14 +44,14 @@ const SellerSendRequestTable = ({ isBuyer }) => {
         <Form form={form}>
             <Row gutter={[24,12]} className='mt-2'>
                 <Col xs={{span: 24}} sm={{span: 24}} md={{span: 12}} lg={{span: 8}}>
-                <Form.Item name="search" noStyle>
-                    <SearchInput
-                    placeholder="Search"
-                    value={form.getFieldValue('search') || ''}
-                    prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
-                    onChange={(e) => form.setFieldValue("search", e.target.value)}
-                    />
-                </Form.Item>
+                    <Form.Item name="search" noStyle>
+                        <SearchInput
+                            placeholder={t('Search')}
+                            value={form.getFieldValue('search') || ''}
+                            prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
+                            onChange={(e) => form.setFieldValue("search", e.target.value)}
+                        />
+                    </Form.Item>
                 </Col>
                 <Col span={24}>
                     <Table
@@ -60,23 +62,11 @@ const SellerSendRequestTable = ({ isBuyer }) => {
                         showSorterTooltip={false}
                         scroll={{ x: 800 }}
                         pagination={false}
-                        // pagination={{
-                        //     hideOnSinglePage: true,
-                        //     total: 12,
-                        //     // pageSize: pagination?.pageSize,
-                        //     // defaultPageSize: pagination?.pageSize,
-                        //     // current: pagination?.pageNo,
-                        //     // size: "default",
-                        //     // pageSizeOptions: ['10', '20', '50', '100'],
-                        //     // onChange: (pageNo, pageSize) => call(pageNo, pageSize),
-                        //     showTotal: (total) => <Button className='brand-bg'>Total: {total}</Button>,
-                        // }}
                     />
                 </Col>
             </Row>
         </Form>
-       
-    )
+    );
 }
 
-export {SellerSendRequestTable}
+export { SellerSendRequestTable };

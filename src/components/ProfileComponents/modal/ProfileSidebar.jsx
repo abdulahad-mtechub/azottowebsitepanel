@@ -95,7 +95,7 @@ const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activ
                 </Flex>
             </Flex>
         </Drawer>
-    )
-}
+    );
+};
 
-export {ProfileSidebar}
+export { ProfileSidebar };

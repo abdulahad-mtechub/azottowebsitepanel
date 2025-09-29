@@ -1,20 +1,22 @@
-import { Breadcrumb, Col, Flex, Row, Typography,Spin } from 'antd'
+import { Breadcrumb, Col, Flex, Row, Typography, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { ArtticleCards, MyInput, MySelect } from '../components';
-import { useState,useRef } from 'react';
+import { useState, useRef } from 'react';
 import { RightOutlined } from '@ant-design/icons';
-import {GETARTICLES} from '../graphql/query/queries';
+import { GETARTICLES } from '../graphql/query/queries';
 import { useQuery } from "@apollo/client";
+import { t } from 'i18next';
 
 const { Text, Title } = Typography;
+
 const Article = () => {
     const navigate = useNavigate();
-    const [selectfilter, setSelectFilter] = useState('Sorting');
+    const [selectfilter, setSelectFilter] = useState(t('Sorting'));
     const handlePageChange = (page, size) => {
         setCurrent(page);
         setPageSize(size);
     };
-    const  {data, loading , error,refetch} = useQuery(GETARTICLES,{
+    const { data, loading, error, refetch } = useQuery(GETARTICLES, {
         variables: { search: "" },
     });
 
@@ -25,7 +27,8 @@ const Article = () => {
         title: item.title,
         desc: item.body,
         date: item.createdAt,
-      })) || [];
+    })) || [];
+
     const searchTimeout = useRef(null);
 
     const handleSearchChange = (e) => {
@@ -38,7 +41,7 @@ const Article = () => {
         searchTimeout.current = setTimeout(() => {
             refetch({ search: value });
             setCurrent(1); // reset pagination
-        }, 500); // 500ms delay
+        }, 500);
     };
 
     if (loading) {
@@ -58,19 +61,17 @@ const Article = () => {
                             separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                             items={[
                                 {
-                                    title: <Text className='cursor text-gray' onClick={() => navigate('/')}>Home</Text>,
+                                    title: <Text className='cursor text-gray' onClick={() => navigate('/')}>{t('Home')}</Text>,
                                 },
                                 {
-                                    title: <Text className='fw-500 text-white'>
-                                        Articles
-                                    </Text>,
+                                    title: <Text className='fw-500 text-white'>{t('Articles')}</Text>,
                                 },
                             ]}
                         />
                         <Flex vertical gap={15} className='w-100 search-cs text-center'>
-                            <Title level={2} className='text-white m-0'>Articles</Title>
+                            <Title level={2} className='text-white m-0'>{t('Articles')}</Title>
                             <Text className='text-light-gray fs-16'>
-                                Explore expert advice, seller guides, and tips for buying and selling businesses in Saudi Arabia.
+                                {t('Explore expert advice, seller guides, and tips for buying and selling businesses in Saudi Arabia.')}
                             </Text>
                         </Flex>
                     </div>
@@ -80,41 +81,35 @@ const Article = () => {
                         <Row gutter={[24, 12]} justify={'center'}>
                             <Col span={24} className='mb-3'>
                                 <Flex vertical justify='center' align='center' gap={15}>
-                                    <div className='tag bg-secondary fw-500 text-brand'>Articles</div>
+                                    <div className='tag bg-secondary fw-500 text-brand'>{t('Articles')}</div>
                                     <Title className='m-0' level={2}>
-                                        Insights & Ideas to Help You Make <span className='text-brand'>Better Business Decisions</span>
+                                        {t('Insights & Ideas to Help You Make')} <span className='text-brand'>{t('Better Business Decisions')}</span>
                                     </Title>
                                     <Text className='fs-14'>
-                                        Explore articles on buying, selling, valuation, and trends in Saudi Arabia  with expert tips from entrepreneurs and analysts.
+                                        {t('Explore articles on buying, selling, valuation, and trends in Saudi Arabia with expert tips from entrepreneurs and analysts.')}
                                     </Text>
                                 </Flex>
                             </Col>
-                            <Col lg={{span: 6}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
-                                <MyInput 
+                            <Col lg={{ span: 6 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+                                <MyInput
                                     withoutForm
-                                    placeholder='Search'
+                                    placeholder={t('Search')}
                                     prefix={<img src='/assets/icons/search.png' alt='search-icon' width={14} fetchPriority="high" />}
-                                    onChange={handleSearchChange} 
+                                    onChange={handleSearchChange}
                                 />
                             </Col>
-                            <Col lg={{span: 18}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
+                            <Col lg={{ span: 18 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
                                 <Flex justify='end' gap={10} align='center'>
                                     <Text className='text-gray fs-14'>
-                                        Showing 1-10 of 47 Businesses
+                                        {t('Showing 1-10 of 47 Businesses')}
                                     </Text>
-                                    <MySelect 
+                                    <MySelect
                                         withoutForm
                                         showSearch
-                                        placeholder="Sorting"
+                                        placeholder={t('Sorting')}
                                         options={[
-                                            {
-                                                id: 1,
-                                                name: 'Low to High'
-                                            },
-                                            {
-                                                id: 2,
-                                                name: 'High to Low'
-                                            }
+                                            { id: 1, name: t('Low to High') },
+                                            { id: 2, name: t('High to Low') }
                                         ]}
                                         className='select'
                                         value={selectfilter}
@@ -127,10 +122,10 @@ const Article = () => {
                             </Col>
                         </Row>
                     </div>
-                </div> 
+                </div>
             </div>
         </>
-    )
+    );
 }
 
-export { Article }
+export { Article };
