@@ -18,6 +18,8 @@ import { profiletabData, selleralertsData } from '../data';
 import { ME,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
 import { useLazyQuery,useQuery } from '@apollo/client';
 import Cookies from "js-cookie";
+import { useTranslation } from 'react-i18next';
+
 
 const { Text, Title } = Typography;
 
@@ -30,7 +32,7 @@ const ProfileDashboard = () => {
     const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
     const { data: userStatsData, loading: userStatsLoading, error: userStatsError } = useQuery(PROFESSIONALSTATISTICS);
     const [getBuyerUser,{ data: buyerStatsData, loading: buyerStatsLoading, error: buyerStatsError } ]= useLazyQuery(GETBUYERSTATISTICS);
-
+const { t } = useTranslation();
     const [user, setUser] = useState(null);
     const [visible, setVisible] = useState(false)
     const [isedit, setIsEdit] = useState(false)
@@ -113,18 +115,18 @@ const ProfileDashboard = () => {
             sellerdashboard: (
                 <Flex vertical gap={20}>
                     <Flex justify='space-between'>
-                        <ModuleTopHeading level={4} name='Profile' />
+                        <ModuleTopHeading level={4} name={t('Profile')} />
                         <Flex gap={5}>
                             <Button aria-labelledby='Password Manager' className='btn rounded-8 border-brand text-brand' type='button' onClick={() => setVisible(true)}>
-                                Password Manager
+                               {t("Password Manager")}
                             </Button>
                             <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => setIsEdit(true)}>
-                                Edit Profile
+                                {t("Edit Profile")}
                             </Button>
                         </Flex>
                     </Flex>
-                    <Basicinformation buyerDashboardData={buyerDashboardData} title={'Basic Information'} />
-                    <Profilestatistics data={profileStatisticsData} title={'Profile Statistics'} />
+                    <Basicinformation buyerDashboardData={buyerDashboardData} title={t('Basic Information')} />
+                    <Profilestatistics data={profileStatisticsData} title={t('Profile Statistics')} />
                 </Flex>
             ),
             sellerBusiness: (
@@ -160,7 +162,7 @@ const ProfileDashboard = () => {
                     <Flex justify='space-between' gap={5}>
                         <ModuleTopHeading level={4} name='Wallet' />
                         <Button aria-labelledby='Edit Profile' className='btn bg-brand rounded-8' type='button' onClick={() => {setAddWalletVisible(true)}}>
-                           <PlusOutlined /> Add Account
+                           <PlusOutlined /> {t("Add Account")}
                         </Button>
                     </Flex>
                     <SellerWallet {...{addwalletvisible, setAddWalletVisible}} />

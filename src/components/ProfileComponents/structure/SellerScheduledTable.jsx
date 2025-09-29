@@ -1,14 +1,15 @@
-import { Col, Form, Row, Table, Typography } from 'antd'
+import { Col, Form, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
-import {SCHEDULEDMEETINGS } from '../../../graphql/query';
+import { SCHEDULEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
-import React,{useEffect} from 'react'
+import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const SellerScheduledTable = ({ isBuyer }) => {
-    const [form] = Form.useForm()
+    const { t } = useTranslation();
+    const [form] = Form.useForm();
     const [fetchMeetings, { data, loading }] = useLazyQuery(SCHEDULEDMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
-
 
     const sellerscheduledData = data?.getScheduledMeetings?.map((meeting) => {
         const buyerName = meeting.requestedTo?.name || '';
@@ -19,32 +20,32 @@ const SellerScheduledTable = ({ isBuyer }) => {
 
         return {
             key: meeting.id,
-        title: meeting.business?.businessTitle,
-        buyername: maskedName,
-        businessprice: meeting.business?.price,
-        offerprice: meeting.offer?.price,
-        scheduledatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
-        meetinglink: 'https://yourapp.com/meet/' + meeting.id 
+            title: meeting.business?.businessTitle,
+            buyername: maskedName,
+            businessprice: meeting.business?.price,
+            offerprice: meeting.offer?.price,
+            scheduledatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
+            meetinglink: 'https://yourapp.com/meet/' + meeting.id 
         };
     }) || [];
 
     const columns = [
-        { title: 'Business Title', dataIndex: 'title' },
-        { title: 'Buyer Name', dataIndex: 'buyername' },
-        { title: 'Schedule Date & Time', dataIndex: 'scheduledatetime' },
-        { title: 'Business Price', dataIndex: 'businessprice' },
-        { title: 'Offer Price', dataIndex: 'offerprice' },
+        { title: t('Business Title'), dataIndex: 'title' },
+        { title: t('Buyer Name'), dataIndex: 'buyername' },
+        { title: t('Schedule Date & Time'), dataIndex: 'scheduledatetime' },
+        { title: t('Business Price'), dataIndex: 'businessprice' },
+        { title: t('Offer Price'), dataIndex: 'offerprice' },
         {
-            title: 'Meeting Link',
+            title: t('Meeting Link'),
             dataIndex: 'meetinglink',
-            render: (text, record) => (
+            render: (text) => (
                 <a
-                href={text}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500 hover:underline"
+                    href={text}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
                 >
-                Meeting Link
+                    {t('Meeting Link')}
                 </a>
             )
         }
@@ -52,7 +53,7 @@ const SellerScheduledTable = ({ isBuyer }) => {
 
     useEffect(() => {
         fetchMeetings({ variables: { search: search || "", isBuyer } });
-      }, [search]);
+    }, [search]);
 
     return (
         <Form form={form}>
@@ -60,10 +61,10 @@ const SellerScheduledTable = ({ isBuyer }) => {
                 <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
                     <Form.Item name="search" noStyle>
                         <SearchInput
-                        placeholder="Search"
-                        value={form.getFieldValue('search') || ''}
-                        prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
-                        onChange={(e) => form.setFieldValue("search", e.target.value)}
+                            placeholder={t('Search')}
+                            value={form.getFieldValue('search') || ''}
+                            prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
+                            onChange={(e) => form.setFieldValue("search", e.target.value)}
                         />
                     </Form.Item>
                 </Col>
@@ -76,22 +77,11 @@ const SellerScheduledTable = ({ isBuyer }) => {
                         showSorterTooltip={false}
                         scroll={{ x: 1000 }}
                         pagination={false}
-                    // pagination={{
-                    //     hideOnSinglePage: true,
-                    //     total: 12,
-                    //     // pageSize: pagination?.pageSize,
-                    //     // defaultPageSize: pagination?.pageSize,
-                    //     // current: pagination?.pageNo,
-                    //     // size: "default",
-                    //     // pageSizeOptions: ['10', '20', '50', '100'],
-                    //     // onChange: (pageNo, pageSize) => call(pageNo, pageSize),
-                    //     showTotal: (total) => <Button className='brand-bg'>Total: {total}</Button>,
-                    // }}
                     />
                 </Col>
             </Row>
         </Form>
-    )
+    );
 }
 
-export { SellerScheduledTable }
+export { SellerScheduledTable };

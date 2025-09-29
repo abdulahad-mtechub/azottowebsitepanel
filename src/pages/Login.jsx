@@ -113,12 +113,12 @@ const LoginPage = () => {
                   </NavLink>
 
                   <Title level={3}>{t("Sign In to your account")}</Title>
-                  <Paragraph>Enter your credentials to login to your account.</Paragraph>
+                  <Paragraph>{t("Enter your credentials to login to your account")}</Paragraph>
 
                   <Button aria-labelledby='Sign In' className="btn bg-nafth fs-16" block>
-                      Sign In via Nafath
+                     {t("Sign In via Nafath")}
                   </Button>
-                  <Divider className="text-gray">Or</Divider>
+                  <Divider className="text-gray">{t("Or")}</Divider>
 
                   <Form 
                     layout="vertical" 
@@ -127,24 +127,24 @@ const LoginPage = () => {
                     requiredMark={false}
                   >
                     <MyInput
-                      label='Email Address'
+                      label={t("Email Address")}
                       name='email'
                       required
-                      message="Please enter Email Address"
-                      placeholder='Enter Email Address'
+                      message={t("Please enter Email Address")}
+                      placeholder={t("Enter Email Address")}
                     />
                     <MyInput
-                      label='Password'
+                      label={t("Password")}
                       type='password'
                       name='password'
                       required
-                      message="Please enter password"
-                      placeholder='Enter Password'
+                      message={t("Please enter password")}
+                      placeholder={t("Enter Password")}
                     />
                     <Flex justify="space-between" className="mb-3">
-                      <Checkbox>Remember Me</Checkbox>
+                      <Checkbox>{t("Remember Me")}</Checkbox>
                       <NavLink to={'/forgotpass'} className="fs-13 text-brand">
-                          Forget Password?
+                         {t('Forget Password?')}
                       </NavLink>
                     </Flex>
                     <Button
@@ -154,12 +154,12 @@ const LoginPage = () => {
                       block
                       aria-labelledby='Signin'
                     >
-                      Sign In
+                      {t('Sign In')}
                     </Button>
                   </Form>
 
                   <Paragraph className="text-center mt-3">
-                      Don’t have an account? <NavLink to={'/signup'}>Sign Up</NavLink>
+                      {t("Don’t have an account?")} <NavLink to={'/signup'}>{t("Sign Up")}</NavLink>
                   </Paragraph>
               </div>
           </Col>

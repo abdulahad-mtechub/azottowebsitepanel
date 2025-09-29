@@ -1,32 +1,32 @@
-import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography,message } from 'antd'
+import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography, message } from 'antd';
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { DeleteModal } from '../../ui';
 import { DownOutlined } from '@ant-design/icons';
 import { SearchInput } from '../../Forms';
 import { CounterOffer, ScheduleMeeting } from '../modal';
-import { useQuery,useMutation } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_BUSINESS_OFFERS } from '../../../graphql/query/offer';
 import { UPDATE_OFFER } from '../../../graphql/mutation/mutations';
 import Cookies from "js-cookie";
+import { useTranslation } from 'react-i18next';
 
-const { Text } = Typography
-const SellerOfferTable = ({data}) => {
+const { Text } = Typography;
+
+const SellerOfferTable = ({ data }) => {
+    const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
-    const userId = Cookies.get("userId"); 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [limit, setLimit] = useState(10); // default limit
-    const offset = (currentPage - 1) * limit;
-    const [form] = Form.useForm()
-    const [offermodal, setOfferModal] = useState(false)
-    const [deletemodal, setDeleteModal] = useState(false)
-    const [meeting, setMeeting] = useState(false)
-    const [filterstatus, setFilterStatus] = useState()
-    const [filtertype, setFilterType] = useState(null)
+    const userId = Cookies.get("userId");
+    const [form] = Form.useForm();
+    const [offermodal, setOfferModal] = useState(false);
+    const [deletemodal, setDeleteModal] = useState(false);
+    const [meeting, setMeeting] = useState(false);
+    const [filterstatus, setFilterStatus] = useState();
+    const [filtertype, setFilterType] = useState(null);
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
-    const { data:offers, loading:businessLoading, error:businessError } = useQuery(GET_BUSINESS_OFFERS, {
+    const { data: offers } = useQuery(GET_BUSINESS_OFFERS, {
         variables: { 
             getOfferByBusinessIdId: data?.id,
             limit: null,
@@ -38,148 +38,85 @@ const SellerOfferTable = ({data}) => {
     });
 
     const [updateOfferStatus] = useMutation(UPDATE_OFFER);
+
     const handleAcceptOffer = async (offerId, businessId) => {
         try {
             await updateOfferStatus({
-                variables: {
-                    input: {
-                        id: offerId,
-                        status: "ACCEPTED"
-                    }
-                },
+                variables: { input: { id: offerId, status: "ACCEPTED" } },
             });
-            messageApi.info(`offer accepted`);
+            messageApi.info(t('Offer accepted'));
             setSelectedOfferId(offerId);
             if (businessId) setSelectedBusinessId(businessId);
             setMeeting(true);
         } catch (err) {
             console.error("Error accepting offer:", err);
-            messageApi.error("Could not accept offer");
+            messageApi.error(t('Could not accept offer'));
         }
     };
 
-    const offerdata = offers?.getOfferByBusinessId?.offers
-    const total = offers?.getOfferByBusinessId?.count
+    const offerdata = offers?.getOfferByBusinessId?.offers;
+
     const columns = [
-        { title: "Buyer Name", dataIndex: ["buyer", "name"] },
-        { title: "Business Price", dataIndex: ["business", "price"] },
+        { title: t('Buyer Name'), dataIndex: ["buyer", "name"] },
+        { title: t('Business Price'), dataIndex: ["business", "price"] },
         {
-            title: 'Offer Price',
+            title: t('Offer Price'),
             dataIndex: 'price',
-            render: (row,record) => {
-                return (
-                    <Flex gap={10} align="center">
-                        <img src="/assets/icons/reyal-b.png" width={12} alt="currency-symbol" fetchPriority="high" /> {row}
-                        {
-                            record?.isProceedToPay ?
-                            <Tooltip title="CO - Counteroffer">
-                                <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
-                            </Tooltip>
-                            :
-                            <Tooltip title="PP - Proceed to Purchase">
-                                <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>CO</Text>
-                            </Tooltip>
-                        } 
-                    </Flex>
-                );
-            }
+            render: (row, record) => (
+                <Flex gap={10} align="center">
+                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {row}
+                    {record?.isProceedToPay ? (
+                        <Tooltip title={t("CO - Counteroffer")}>
+                            <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title={t("PP - Proceed to Purchase")}>
+                            <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>CO</Text>
+                        </Tooltip>
+                    )}
+                </Flex>
+            )
         },
         {
-            title: 'Status',
+            title: t('Status'),
             dataIndex: 'status',
             render: (status, record) => {
                 if (status === 'PENDING') {
-                  if (record?.createdBy === userId) {
-                    return (
-                      <Text className="sendstatus fs-12 badge-cs fw-500">Send</Text>
-                    );
-                  } else {
-                    return (
-                      <Text className="sendstatus fs-12 badge-cs fw-500">Received</Text>
-                    );
-                  }
+                    return <Text className="sendstatus fs-12 badge-cs fw-500">{record?.createdBy === userId ? t('Send') : t('Received')}</Text>;
                 } else if (status === 'REJECTED') {
-                  return (
-                    <Text className="inactive fs-12 badge-cs fw-500">Rejected</Text>
-                  );
+                    return <Text className="inactive fs-12 badge-cs fw-500">{t('Rejected')}</Text>;
                 } else if (status === 'APPROVED') {
-                  return (
-                    <Text className="received fs-12 badge-cs fw-500">Approved</Text>
-                  );
+                    return <Text className="received fs-12 badge-cs fw-500">{t('Approved')}</Text>;
                 } else {
-                  return (
-                    <Text className="fs-12 badge-cs fw-500">{status}</Text>
-                  ); // fallback in case of new status values
+                    return <Text className="fs-12 badge-cs fw-500">{status}</Text>;
                 }
             },
         },
-        { title: 'Offer Date', dataIndex: 'createdAt' },
+        { title: t('Offer Date'), dataIndex: 'createdAt' },
         {
-            title: 'Action',
+            title: t('Action'),
             key: 'action',
             fixed: 'right',
             width: 100,
             align: 'center',
             render: (_, row) => {
-                if (row?.createdBy === userId) {
-                return null;
-                }
+                if (row?.createdBy === userId) return null;
+
                 const isChild = row?.isProceedToPay ? true : false;
 
                 const items = [
-                !isChild && {
-                    key: '0',
-                    label: "Accept Offer", 
-                    onClick: () => handleAcceptOffer(row.id, row.business?.id),
-                },
-                !isChild && {
-                    key: '1',
-                    label: "Reject Offer",
-                    onClick: () => {
-                    setDeleteModal(true);
-                    setSelectedOfferId(row.id);
-                    },
-                },
-                !isChild && {
-                    key: '2',
-                    label: "Counter Offer",
-                    onClick: () => {
-                        setOfferModal(true);
-                        setSelectedOfferId(row.id);
-                    },
-                },
-                !isChild && {
-                    key: '3',
-                    label: "Request For Virtual Meeting",
-                    onClick: () => {
-                        setMeeting(true);
-                        setSelectedOfferId(row.id);
-                        setSelectedBusinessId(row.business.id);
-                    },
-                },
-                isChild && {
-                    key: '4',
-                    label: "Accept Offer",
-                    onClick: () => {
-                        setSelectedOfferId(row.id);
-                        handleAcceptOffer();
-                        setSelectedBusinessId(row.business.id);
-                    },
-                },
-                isChild && {
-                    key: '5',
-                    label: ("Reject Offer"),
-                    onClick: () => {
-                        setDeleteModal(true);
-                        setSelectedOfferId(row.id);
-                    },
-                },
+                    !isChild && { key: '0', label: t('Accept Offer'), onClick: () => handleAcceptOffer(row.id, row.business?.id) },
+                    !isChild && { key: '1', label: t('Reject Offer'), onClick: () => { setDeleteModal(true); setSelectedOfferId(row.id); } },
+                    !isChild && { key: '2', label: t('Counter Offer'), onClick: () => { setOfferModal(true); setSelectedOfferId(row.id); } },
+                    !isChild && { key: '3', label: t('Request For Virtual Meeting'), onClick: () => { setMeeting(true); setSelectedOfferId(row.id); setSelectedBusinessId(row.business.id); } },
+                    isChild && { key: '4', label: t('Accept Offer'), onClick: () => { setSelectedOfferId(row.id); handleAcceptOffer(); setSelectedBusinessId(row.business.id); } },
+                    isChild && { key: '5', label: t('Reject Offer'), onClick: () => { setDeleteModal(true); setSelectedOfferId(row.id); } },
                 ].filter(Boolean);
 
                 return (
                     <Dropdown menu={{ items }} trigger={['click']}>
-                        <Button aria-labelledby="dropdown icon" className="bg-transparent border-0 p-0">
-                        <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} fetchPriority="high" />
+                        <Button aria-labelledby={t("dropdown icon")} className="bg-transparent border-0 p-0">
+                            <img src="/assets/icons/dots.png" alt={t("dropdown-icon")} width={16} fetchPriority="high" />
                         </Button>
                     </Dropdown>
                 );
@@ -188,65 +125,42 @@ const SellerOfferTable = ({data}) => {
     ];
 
     const items = [
-        { key: '1', label: 'Received' },
-        { key: '2', label: 'Send' },
-        { key: '3', label: 'Rejected' }
-    ]
+        { key: '1', label: t('Received') },
+        { key: '2', label: t('Send') },
+        { key: '3', label: t('Rejected') }
+    ];
 
     const offertype = [
-        { key: '1', label: 'Counter Offer' },
-        { key: '2', label: 'Proceed to Purchase' },
-    ]
+        { key: '1', label: t('Counter Offer') },
+        { key: '2', label: t('Proceed to Purchase') },
+    ];
 
-    const handleStatusClick = ({ key }) => {
-        setFilterStatus(key)
-    }
-
-    const handleTypeClick = ({ key }) => {
-        setFilterType(key)
-    }
+    const handleStatusClick = ({ key }) => setFilterStatus(key);
+    const handleTypeClick = ({ key }) => setFilterType(key);
 
     return (
         <>
-        {contextHolder}
+            {contextHolder}
             <Row gutter={[24, 24]}>
                 <Col span={24}>
                     <Flex gap={5} align='center'>
                         <SearchInput
-                            placeholder="Search"
+                            placeholder={t("Search")}
                             value={form.getFieldValue('name') || ''}
-                            prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
+                            prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
                         />
-                        <Dropdown
-                            menu={{
-                                items,
-                                handleStatusClick
-                            }}
-                            trigger={['click']}
-                        >
-                            <Button aria-labelledby='Status filter' className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
+                        <Dropdown menu={{ items, handleStatusClick }} trigger={['click']}>
+                            <Button aria-labelledby={t('Status filter')} className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
                                 <Flex justify='space-between' className='w-100' gap={10}>
-                                    {
-                                        filterstatus === '1' ? 'Received' :
-                                        filterstatus === '2' ? 'Send' :
-                                        filterstatus === '3' ? 'Rejected' : 'Status'
-                                    }
+                                    {filterstatus === '1' ? t('Received') : filterstatus === '2' ? t('Send') : filterstatus === '3' ? t('Rejected') : t('Status')}
                                     <DownOutlined />
                                 </Flex>
                             </Button>
                         </Dropdown>
-                        <Dropdown
-                            menu={{
-                                items: offertype, onClick: handleTypeClick 
-                            }}
-                            trigger={['click']}
-                        >
-                            <Button aria-labelledby='Offer type' className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
+                        <Dropdown menu={{ items: offertype, onClick: handleTypeClick }} trigger={['click']}>
+                            <Button aria-labelledby={t('Offer type')} className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
                                 <Flex justify='space-between' className='w-100' gap={10}>
-                                    {
-                                        filtertype === '1' ? 'Counter Offer' :
-                                        filtertype === '2' ? 'Proceed to Purchase' : 'Offer Type'
-                                    }
+                                    {filtertype === '1' ? t('Counter Offer') : filtertype === '2' ? t('Proceed to Purchase') : t('Offer Type')}
                                     <DownOutlined />
                                 </Flex>
                             </Button>
@@ -262,17 +176,6 @@ const SellerOfferTable = ({data}) => {
                         showSorterTooltip={false}
                         scroll={{ x: 1300 }}
                         pagination={false}
-                    // pagination={{
-                    //     hideOnSinglePage: true,
-                    //     total: 12,
-                    //     // pageSize: pagination?.pageSize,
-                    //     // defaultPageSize: pagination?.pageSize,
-                    //     // current: pagination?.pageNo,
-                    //     // size: "default",
-                    //     // pageSizeOptions: ['10', '20', '50', '100'],
-                    //     // onChange: (pageNo, pageSize) => call(pageNo, pageSize),
-                    //     showTotal: (total) => <Button className='brand-bg'>Total: {total}</Button>,
-                    // }}
                     />
                 </Col>
             </Row>
@@ -280,11 +183,11 @@ const SellerOfferTable = ({data}) => {
                 visible={offermodal}
                 selectedOfferId={selectedOfferId}
                 onClose={() => setOfferModal(false)}
-                title='Counter Offer to Buyer'
+                title={t('Counter Offer to Buyer')}
             />
-            <ScheduleMeeting 
-                visible={meeting} 
-                onClose={() => setMeeting(false)} 
+            <ScheduleMeeting
+                visible={meeting}
+                onClose={() => setMeeting(false)}
                 offerId={selectedOfferId}
                 businessId={selectedBusinessId}
             />
@@ -292,11 +195,11 @@ const SellerOfferTable = ({data}) => {
                 visible={deletemodal}
                 onClose={() => setDeleteModal(false)}
                 type='danger'
-                title='Are you sure?'
-                subtitle='This action cannot be undone. Are you sure you want to reject this offer?'
+                title={t('Are you sure?')}
+                subtitle={t('This action cannot be undone. Are you sure you want to reject this offer?')}
             />
         </>
-    )
-}
+    );
+};
 
-export { SellerOfferTable }
+export { SellerOfferTable };

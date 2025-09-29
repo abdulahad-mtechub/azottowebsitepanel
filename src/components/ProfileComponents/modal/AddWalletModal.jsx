@@ -6,10 +6,12 @@ import { useMutation } from '@apollo/client';
 import { GETUSERBANK } from '../../../graphql/query';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
 const AddWalletModal = ({ visible, onClose }) => {
+  const { t } = useTranslation();
 
   const [messageApi, contextHolder] = message.useMessage();
   const [showSuccessAfterClose, setShowSuccessAfterClose] = useState(false);
@@ -21,10 +23,10 @@ const AddWalletModal = ({ visible, onClose }) => {
       onClose();
     },
     onError: (err) => {
-      messageApi.error(err.message || 'Something went wrong');
+      messageApi.error(err.message || t('Something went wrong'));
     },
     refetchQueries: [
-      { query: GETUSERBANK, },
+      { query: GETUSERBANK },
     ],
     awaitRefetchQueries: true,
   });
@@ -44,7 +46,7 @@ const AddWalletModal = ({ visible, onClose }) => {
   const handleAfterClose = () => {
     form.resetFields();
     if (showSuccessAfterClose) {
-      messageApi.success('Bank account added successfully!');
+      messageApi.success(t('Bank account added successfully!'));
       setShowSuccessAfterClose(false);
     }
   };
@@ -55,29 +57,27 @@ const AddWalletModal = ({ visible, onClose }) => {
       <Modal
         title={null}
         open={visible}
-        onCancel={() => {
-          onClose();
-        }}
+        onCancel={onClose}
         closeIcon={false}
-        afterClose={handleAfterClose}        // <-- correct prop name
+        afterClose={handleAfterClose}
         footer={
           <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
             <Button
               type="default"
-              onClick={() => onClose()}
-              aria-label="Cancel"
+              onClick={onClose}
+              aria-label={t('Cancel')}
               disabled={loading}
             >
-              Cancel
+              {t('Cancel')}
             </Button>
 
             <Button
               type="primary"
               onClick={() => form.submit()}
-              aria-label="Save Account"
+              aria-label={t('Save Account')}
               loading={loading}   
             >
-              Save Account
+              {t('Save Account')}
             </Button>
           </div>
         }
@@ -87,13 +87,13 @@ const AddWalletModal = ({ visible, onClose }) => {
         <div style={{ opacity: loading ? 0.6 : 1, pointerEvents: loading ? 'none' : 'auto' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
             <Title level={5} style={{ margin: 0 }}>
-              Add New Bank Account
+              {t('Add New Bank Account')}
             </Title>
             <Button
               type="text"
-              onClick={() => onClose()}
+              onClick={onClose}
               style={{ padding: 0 }}
-              aria-label="Close"
+              aria-label={t('Close')}
               disabled={loading}
             >
               <CloseOutlined style={{ fontSize: 14 }} />
@@ -101,22 +101,22 @@ const AddWalletModal = ({ visible, onClose }) => {
           </div>
 
           <Text className="fs-14">
-            Securely link your bank account to receive payments for completed deals. Make sure the IBAN is correct to avoid payout delays.
+            {t('Securely link your bank account to receive payments for completed deals. Make sure the IBAN is correct to avoid payout delays.')}
           </Text>
 
           <Form layout="vertical" form={form} requiredMark={false} onFinish={onFinish} style={{ marginTop: 16 }}>
             <Row gutter={[12, 12]}>
               <Col span={24}>
                 <MySelect
-                  label="Bank Name"
+                  label={t('Bank Name')}
                   name="bankName"
                   required
-                  message="Please choose bank name"
-                  placeholder="select bank"
+                  message={t('Please choose bank name')}
+                  placeholder={t('select bank')}
                   options={[
                     {
                       id: 1,
-                      name: 'The Saudi Investment Bank',
+                      name: t('The Saudi Investment Bank'),
                     },
                   ]}
                 />
@@ -124,29 +124,29 @@ const AddWalletModal = ({ visible, onClose }) => {
 
               <Col span={24}>
                 <MyInput
-                  label="Account Holder Name"
+                  label={t('Account Holder Name')}
                   name="accountHoldername"
                   required
-                  message="Please enter account holder name"
-                  placeholder="Enter account holder name"
+                  message={t('Please enter account holder name')}
+                  placeholder={t('Enter account holder name')}
                 />
               </Col>
 
               <Col span={24}>
                 <MyInput
-                  label="IBAN Number"
+                  label={t('IBAN Number')}
                   name="ibanNumber"
                   required
-                  message="Please enter iban number"
-                  placeholder="Enter iban number"
+                  message={t('Please enter iban number')}
+                  placeholder={t('Enter iban number')}
                 />
               </Col>
 
               <Col span={24}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center', padding: 12, borderRadius: 8, background: '#f0f7ff' }}>
-                  <Image src="/assets/icons/info-b.png" preview={false} width={20} alt="info icon" />
+                  <Image src="/assets/icons/info-b.png" preview={false} width={20} alt={t('info icon')} />
                   <Text className="fs-13" style={{ color: '#096dd9' }}>
-                    Your banking details are encrypted and used only for secure payouts through Jusoor.
+                    {t('Your banking details are encrypted and used only for secure payouts through Jusoor.')}
                   </Text>
                 </div>
               </Col>

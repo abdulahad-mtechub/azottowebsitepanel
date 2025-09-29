@@ -133,4 +133,4 @@ const scheduledData = [
   }
 ]
 
-export {profiletabData, offerData, adminsechedulingData, scheduledData }
+export { profiletabData, offerData, adminsechedulingData, scheduledData };
