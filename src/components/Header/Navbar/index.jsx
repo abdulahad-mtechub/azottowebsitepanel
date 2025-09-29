@@ -26,7 +26,6 @@ const Navbar = ({setGetCategory}) => {
   const [ visible, setVisible ] = useState(false)
   const location = useLocation();
   const navigate = useNavigate()
-  const [language, setLanguage]= useState()
   const [selectedLang, setSelectedLang] = useState({
     key: "1",
     label: "EN",
@@ -51,14 +50,13 @@ const Navbar = ({setGetCategory}) => {
   
   useEffect(() => {
     let lang = localStorage.getItem("lang") || "en";
-    setLanguage(lang);
     i18n.changeLanguage(lang); // ✅ now works
     setSelectedLang(
       lang === "ar"
         ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
         : { key: "1", label: "EN", icon: "assets/icons/en.png" }
     );
-  }, []);
+  }, [i18n]);
   useEffect(() => {
     if (userId) {
       getUser({ variables: { getUserId: userId } });
@@ -183,7 +181,20 @@ const Navbar = ({setGetCategory}) => {
       ),
     },
   ];
-
+  const handleChange = (lang) => {
+    localStorage.setItem("lang", lang);
+    i18n.changeLanguage(lang);
+  
+    setSelectedLang(
+      lang === "ar"
+        ? { key: "2", label: "AR", icon: "assets/icons/ar.png", alt: "Arabic" }
+        : { key: "1", label: "EN", icon: "assets/icons/en.png", alt: "English" }
+    );
+  
+    // Optional: also update <html dir> for RTL support
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+  };
+  
   const lang = [
     {
       key: "1",
@@ -193,8 +204,7 @@ const Navbar = ({setGetCategory}) => {
           <Text className='fs-13'>EN</Text>
         </Space>
       ),
-      onClick: () =>
-        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png", alt: "English" }),
+      onClick: () => handleChange("en"),
     },
     {
       key: "2",
@@ -204,8 +214,7 @@ const Navbar = ({setGetCategory}) => {
           <Text className='fs-13'>AR</Text>
         </Space>
       ),
-      onClick: () =>
-        setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png",  alt: "Arabic"}),
+      onClick: () => handleChange("ar"),
     },
   ];
 
@@ -379,24 +388,19 @@ const Navbar = ({setGetCategory}) => {
               </ul>
             </Flex>
             <Flex gap={10} align='center'>
-              <Dropdown menu={{ items: lang }} trigger={["click"]}>
-                <Button
-                  onClick={(e) => e.preventDefault()}
-                  className="bg-transparent btn-outline btn p-2 border-white"
-                  aria-labelledby='language btn'
-                >
-                  <Space align="center">
-                    <Image
-                      src={selectedLang.icon}
-                      width={20}
-                      alt={selectedLang.alt || "Language"}
-                      preview={false}
-                    />
-                    <Text className="text-white fs-13">{selectedLang.label}</Text>
-                    <DownOutlined className="text-white" />
-                  </Space>
-                </Button>
-              </Dropdown>
+            <Dropdown menu={{ items: lang }} trigger={["click"]}>
+              <Button
+                onClick={(e) => e.preventDefault()}
+                className="bg-transparent btn-outline btn p-2 border-white"
+                aria-label="language button"
+              >
+                <Space align="center">
+                  <Image src={selectedLang.icon} width={20} alt={selectedLang.alt} preview={false} />
+                  <Text className="text-white fs-13">{selectedLang.label}</Text>
+                  <DownOutlined className="text-white" />
+                </Space>
+              </Button>
+            </Dropdown>
               {
                 !isshow ? 
                 <Flex gap={5} justify='end'>
