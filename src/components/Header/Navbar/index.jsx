@@ -162,7 +162,7 @@ const Navbar = ({setGetCategory}) => {
             handleLogout();
           }}
         >
-          Logout
+          {t("Logout")}
         </a>
       ),
     },
@@ -176,7 +176,7 @@ const Navbar = ({setGetCategory}) => {
             navigate('/profiledashboard')
           }}
         >
-          My Profile
+          {t("My Profile")}
         </a>
       ),
     },
