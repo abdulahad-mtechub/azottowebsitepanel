@@ -23,7 +23,36 @@ import { useTranslation } from 'react-i18next';
 const { Text, Title } = Typography;
 
 const ProfileDashboard = () => {
-    const { t,i18n } = useTranslation();
+  const {t, i18n}= useTranslation()
+    const profiletabData = {
+        Seller: [
+          { key: 'sellerdashboard', label: t('Dashboard') },
+          {
+            key: 'sellerlist',
+            label: t('My Listing'),
+            children: [
+              { key: 'sellerBusiness', label: t('All Businesses') },
+              { key: 'sellerSoldBusiness', label: t('Sold Businesses') },
+            ],
+          },
+          {
+            key: 'sellermeeting',
+            label: t('Meetings'),
+            //Meeting(10)
+          },
+          { key: 'sellerdeals', label: t('Deals') },
+          { key: 'selleralert', label: t('Alerts') },
+          { key: 'sellerwallet', label: t('Wallet') },
+        ],
+        Buyer: [
+          { key: 'buyerdashboard', label: t('Dashboard') },
+          { key: 'buyeroffers', label: t('Offers') },
+          { key: 'buyermeeting', label: t('Meetings') },
+          { key: 'buyerdeals', label: t('Deals') },
+          { key: 'buyerfavlist', label: t('Favorite Listing') },
+          { key: 'buyeralert', label: t('Alerts') },
+        ],
+      };
     const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
     const [parentTab, setParentTab] = useState('Seller');
@@ -237,10 +266,10 @@ const ProfileDashboard = () => {
                         separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                         items={[
                             {
-                                title: <Text className='fs-13 text-gray' onClick={() => navigate('/')}>Home</Text>,
+                                title: <Text className='fs-13 text-gray' onClick={() => navigate('/')}>{t("Home")}</Text>,
                             },
                             {
-                                title: <Text className='fw-500 fs-13 text-black'>Profile</Text>,
+                                title: <Text className='fw-500 fs-13 text-black'>{t("Profile")}</Text>,
                             },
                         ]}
                     />
