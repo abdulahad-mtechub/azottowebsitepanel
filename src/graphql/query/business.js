@@ -1,11 +1,15 @@
 import { gql } from "@apollo/client";
 
 const GET_CATEGORIES = gql`
-    query GetAllCategories {
-  getAllCategories {
+query GetAllCategories($limit: Int, $offSet: Int, $filter: CategoryFilter) {
+  getAllCategories(limit: $limit, offSet: $offSet, filter: $filter) {
+    totalcount
+    categories {
     id
     isDigital
     name
+    arabicName
+    }
   }
 }
 `
@@ -15,6 +19,7 @@ const GET_CATEGORY = gql`
     id
     isDigital
     name
+    arabicName
   }
 }
 `

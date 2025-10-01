@@ -21,9 +21,10 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
       validate: () => form.validateFields(),
     }));
 
-    const categories = categoryData?.getAllCategories?.map(cat => ({
+    const categories = categoryData?.getAllCategories?.categories?.map(cat => ({
       id: cat.id,
       name: cat.name,
+      arabicName: cat.name,
       isDigital: cat.isDigital,
     })) || [];
   
