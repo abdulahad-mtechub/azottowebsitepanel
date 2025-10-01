@@ -19,7 +19,7 @@ const SellerSendRequestTable = ({ isBuyer }) => {
         { title: t('Requested Date'), dataIndex: 'requestedDate' },
     ];
 
-    const sendrequestData = data?.getMySentMeetingRequests?.map((meeting) => {
+    const sendrequestData = data?.getMySentMeetingRequests?.items?.map((meeting) => {
         const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3

@@ -16,7 +16,7 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
   const search = Form.useWatch("search", form);
 
   const selleradminsechedulingData =
-    data?.getMeetingsReadyForScheduling?.map((meeting) => {
+    data?.getMeetingsReadyForScheduling?.items?.map((meeting) => {
       const buyerName = meeting.requestedTo?.name || '';
       const maskedName =
         buyerName.length > 3

@@ -88,7 +88,9 @@ query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
 const SELLERINPROGRESSDEALS = gql`
 query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
   getSellerInprogressDeals(limit: $limit, offset: $offset, search: $search) {
-    id
+    totalCount
+    deals {
+      id
     buyer {
       id
       name
@@ -100,6 +102,7 @@ query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
     }
     price
     createdAt
+    }
   }
 }
 `
@@ -127,7 +130,9 @@ query GetBuyerCompletedDeals($limit: Int, $offset: Int, $search: String) {
 const SELLERDEALS = gql`
 query GetSellerCompletedDeals($limit: Int, $offset: Int, $search: String) {
   getSellerCompletedDeals(limit: $limit, offset: $offset, search: $search) {
-    id
+    totalCount
+    deals {
+      id
     buyer {
       id
       name
@@ -139,6 +144,7 @@ query GetSellerCompletedDeals($limit: Int, $offset: Int, $search: String) {
     }
     price
     createdAt
+    }
   }
 }
 `

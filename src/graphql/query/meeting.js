@@ -1,9 +1,11 @@
 import { gql } from "@apollo/client";
 
 const SENTMEETINGS = gql`
-query GetMySentMeetingRequests($search: String, $isBuyer: Boolean) {
-  getMySentMeetingRequests(search: $search, isBuyer: $isBuyer) {
-    id
+query GetMySentMeetingRequests($isBuyer: Boolean, $search: String, $limit: Int, $offSet: Int) {
+  getMySentMeetingRequests(isBuyer: $isBuyer, search: $search, limit: $limit, offSet: $offSet) {
+    totalCount
+    items {
+      id
     createdAt
     createdBy
     requestedDate
@@ -20,13 +22,16 @@ query GetMySentMeetingRequests($search: String, $isBuyer: Boolean) {
       id
       price
     }
+    }
   }
 }
 `
 const RECEIVEDMEETINGS = gql`
-query GetReceivedMeetingRequests($search: String, $isBuyer: Boolean) {
-  getReceivedMeetingRequests(search: $search, isBuyer: $isBuyer) {
-    id
+query GetReceivedMeetingRequests($isBuyer: Boolean, $search: String, $limit: Int, $offSet: Int) {
+  getReceivedMeetingRequests(isBuyer: $isBuyer, search: $search, limit: $limit, offSet: $offSet) {
+    totalCount
+    items {
+      id
     createdAt
     requestedDate
     requestedEndDate
@@ -43,15 +48,18 @@ query GetReceivedMeetingRequests($search: String, $isBuyer: Boolean) {
       id
       price
     }
+    }
   }
 }
 `
 
 
 const READYSCHEDULEDMEETINGS = gql`
-query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean) {
-  getMeetingsReadyForScheduling(search: $search, isBuyer: $isBuyer) {
-    id
+query GetMeetingsReadyForScheduling($isBuyer: Boolean, $search: String, $limit: Int, $offSet: Int) {
+  getMeetingsReadyForScheduling(isBuyer: $isBuyer, search: $search, limit: $limit, offSet: $offSet) {
+    totalCount
+    items {
+      id
     createdAt
     requestedDate
     receiverAvailabilityDate
@@ -66,13 +74,16 @@ query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean) {
       id
       price
     }
+    }
   }
 }
 `
 const SCHEDULEDMEETINGS = gql`
-query GetScheduledMeetings($search: String, $isBuyer: Boolean) {
-  getScheduledMeetings(search: $search, isBuyer: $isBuyer) {
-    id
+query GetScheduledMeetings($isBuyer: Boolean, $search: String, $status: Boolean, $limit: Int, $offSet: Int) {
+  getScheduledMeetings(isBuyer: $isBuyer, search: $search, status: $status, limit: $limit, offSet: $offSet) {
+    totalCount
+    items {
+      id
     createdAt
     requestedDate
     receiverAvailabilityDate
@@ -87,6 +98,7 @@ query GetScheduledMeetings($search: String, $isBuyer: Boolean) {
     offer {
       id
       price
+    }
     }
   }
 }

@@ -35,7 +35,7 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
     ];
 
     const sellerofferData = useMemo(() => {
-        return offerDeals?.getSellerInprogressDeals?.map((deal) => ({
+        return offerDeals?.getSellerInprogressDeals?.deals?.map((deal) => ({
             key: deal.id,
             title: deal.business.businessTitle,
             buyername: deal.buyer.name,

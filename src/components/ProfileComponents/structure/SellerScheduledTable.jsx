@@ -11,7 +11,7 @@ const SellerScheduledTable = ({ isBuyer }) => {
     const [fetchMeetings, { data, loading }] = useLazyQuery(SCHEDULEDMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
 
-    const sellerscheduledData = data?.getScheduledMeetings?.map((meeting) => {
+    const sellerscheduledData = data?.getScheduledMeetings?.items?.map((meeting) => {
         const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3

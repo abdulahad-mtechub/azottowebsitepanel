@@ -28,7 +28,6 @@ const SellerAlerts = ({ data }) => {
     skip: !userId,
     fetchPolicy: "network-only"
   });
-
   const notifications = notification?.getNotifications || [];
 
   return (

@@ -20,7 +20,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
     const [refetchMeetings, { data, loading }] = useLazyQuery(RECEIVEDMEETINGS, { fetchPolicy: 'network-only' });
     const search = Form.useWatch("search", form);
 
-    const sellerrecievedrequestData = data?.getReceivedMeetingRequests?.map((meeting) => {
+    const sellerrecievedrequestData = data?.getReceivedMeetingRequests?.items?.map((meeting) => {
         const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
             buyerName.length > 3

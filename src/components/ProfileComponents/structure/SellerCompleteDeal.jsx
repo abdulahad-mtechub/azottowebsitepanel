@@ -36,7 +36,7 @@ const SellerCompleteDeal = ({ setCompleteDeal, completedeal }) => {
 
   const sellercompletedealData = useMemo(() => {
     return (
-      offerDeals?.getSellerCompletedDeals?.map((offer) => ({
+      offerDeals?.getSellerCompletedDeals?.deals?.map((offer) => ({
         key: offer?.id,
         title: offer?.business?.businessTitle,
         sellername: offer?.buyer?.name,
@@ -84,7 +84,7 @@ const SellerCompleteDeal = ({ setCompleteDeal, completedeal }) => {
             pagination={{
               current: pagination.current,
               pageSize: pagination.pageSize,
-              total: offerDeals?.getSellerCompletedDeals?.length || 0,
+              total: offerDeals?.getSellerCompletedDeals?.totalCount || 0,
               showTotal: (total) => (
                 <Button aria-labelledby='Total' className="brand-bg">{t('Total')}: {total}</Button>
               ),
