@@ -43,7 +43,7 @@ const SingleViewlisting = () => {
     const postSaleData = [
         {
             key: '1',
-            period: business?.suppportDuration || t('N/A'),
+            period: business?.supportDuration || t('N/A'),
             session: business?.supportSession || t('N/A'),
             verified: business?.isSupportVerified,
         }

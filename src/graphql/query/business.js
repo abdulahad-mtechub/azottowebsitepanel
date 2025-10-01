@@ -71,7 +71,7 @@ const GET_BUSINESS = gql`
       revenue
       revenueTime
       supportSession
-      suppportDuration
+      supportDuration
       url
       seller {
         id

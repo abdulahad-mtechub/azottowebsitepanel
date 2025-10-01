@@ -104,7 +104,6 @@ const SellBusinessCreate = () => {
 
     const handleCreateListing = async () => {
         const { categoryName,recoveryTime, ...rest } = businessData;
-        console.log("final data", rest, categoryName,recoveryTime);
         try {
             const variables = {
             input: {

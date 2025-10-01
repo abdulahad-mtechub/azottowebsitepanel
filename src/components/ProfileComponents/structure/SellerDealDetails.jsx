@@ -16,7 +16,7 @@ const SellerDealDetails = ({ data }) => {
   const postSaleData = [
     {
       key: '1',
-      period: businessinfo?.suppportDuration || t('N/A'),
+      period: businessinfo?.supportDuration || t('N/A'),
       session: businessinfo?.supportSession || t('N/A'),
       verified: businessinfo?.isSupportVerified, // 1 or 0
     }
