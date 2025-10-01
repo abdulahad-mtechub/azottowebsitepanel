@@ -18,7 +18,7 @@ const SellerDealDetails = ({ data }) => {
       key: '1',
       period: businessinfo?.supportDuration || t('N/A'),
       session: businessinfo?.supportSession || t('N/A'),
-      verified: businessinfo?.isSupportVerified, // 1 or 0
+      verified: businessinfo?.isSupportVerified,
     }
   ];
 
@@ -46,7 +46,7 @@ const SellerDealDetails = ({ data }) => {
     price: `SAR ${item.price?.toLocaleString()}`,
   }));
 
-  const { data: graphData, loading: graphLoading, error: graphError } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
+  const { data: graphData } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
     variables: { getBusinessByIdId: businessinfo?.id },
   });
 
