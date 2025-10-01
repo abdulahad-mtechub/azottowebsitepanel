@@ -290,7 +290,10 @@ const ProfileDashboard = () => {
                                     <Flex justify="center">
                                         <Segmented
                                             className='custom-segment'
-                                            options={['Seller', 'Buyer']}
+                                            options={[
+                                                { label: t('Seller'), value: 'Seller' },
+                                                { label: t('Buyer'), value: 'Buyer' },
+                                              ]}
                                             value={parentTab}
                                             onChange={handleParentChange}
                                         />
@@ -313,8 +316,8 @@ const ProfileDashboard = () => {
                     </Col>
                     <Col xs={24} sm={24} md={24} lg={16} xl={18}>
                         {
-                            tabContent[parentTab][activeChildTab[parentTab]] || (
-                                <div>Invalid Tab</div>
+                            tabContent?.[parentTab]?.[activeChildTab[parentTab]] || (
+                            <div>Invalid Tab</div>
                             )
                         }
                     </Col>

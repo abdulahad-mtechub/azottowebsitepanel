@@ -38,6 +38,13 @@ const ACCEPT_ENDA = gql `
   }
 }
 `
+const CREATE_ENDA = gql `
+mutation CreateEnda($input: AcceptEndaInput!) {
+  createEnda(input: $input) {
+    id
+  }
+}
+`
 const BUSINESS_MEETING = gql `
   mutation RequestMeeting($input: CreateMeetingInput!) {
   requestMeeting(input: $input) {
