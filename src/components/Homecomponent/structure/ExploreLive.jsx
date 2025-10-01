@@ -39,7 +39,7 @@ const ExploreLive = () => {
             {
                 id: 3,
                 icon:'/assets/icons/team.png',
-                subtitle:`${item?.recoveryTime} months`,
+                subtitle:`${item?.capitalRecovery} months`,
                 subdesc:t('Capital Recovery'),
             },
         ]

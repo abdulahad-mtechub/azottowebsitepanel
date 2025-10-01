@@ -57,7 +57,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
         {
           id: 3,
           icon: '/assets/icons/team.png',
-          subtitle: `${payload?.recoveryTime} ${t('months')}`,
+          subtitle: `${payload?.capitalRecovery} ${t('months')}`,
           subdesc: t('Capital Recovery'),
         },
       ],

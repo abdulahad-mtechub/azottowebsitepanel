@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 const { Text } = Typography;
 const LOCAL_STORAGE_KEY = 'sellBusinessDraft';
 
-const SellBusinessCreate = ({ addstep }) => {
+const SellBusinessCreate = () => {
     const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
     const [current, setCurrent] = useState(0);
@@ -19,7 +19,7 @@ const SellBusinessCreate = ({ addstep }) => {
     const [isPreview, setIsPreview] = useState(false);
     const [reviewmodal, setReviewModal] = useState(false);
     const navigate = useNavigate();
-    const [createBusiness, { loading, error }] = useMutation(CREATE_BUSINESS);
+    const [createBusiness, { loading }] = useMutation(CREATE_BUSINESS);
     const businessDetailFormRef = useRef();
 
     const [businessData, setBusinessData] = useState(() => {
@@ -47,7 +47,6 @@ const SellBusinessCreate = ({ addstep }) => {
             profit: null,
             price: null,
             profitMargen: null,
-            recoveryTime: null,
             multiple: null,
             assets: [{ name: null, price: null, purchaseYear: null, quantity: null }],
             liabilities: [{ name: null, price: null, purchaseYear: null, quantity: null }],
@@ -104,56 +103,98 @@ const SellBusinessCreate = ({ addstep }) => {
     }));
 
     const handleCreateListing = async () => {
+        const { categoryName,recoveryTime, ...rest } = businessData;
+        console.log("final data", rest, categoryName,recoveryTime);
         try {
             const variables = {
-                input: {
-                    ...businessData,
-                    revenueTime: businessData.revenueTime === 1 ? t('Last 6 Months') : businessData.revenueTime === 2 ? t('Last Year') : t('Last 6 Months'),
-                    profittime: businessData.profittime === 1 ? t('Last 6 Months') : businessData.profittime === 2 ? t('Last Year') : t('Last 6 Months'),
-                    revenue: parseFloat(businessData.revenue),
-                    profit: parseFloat(businessData.profit),
-                    price: parseFloat(businessData.price),
-                    profitMargen: parseFloat(businessData.profitMargen),
-                    recoveryTime: parseFloat(businessData.recoveryTime),
-                    multiple: parseFloat(businessData.multiple),
-                    assets: businessData.assets.map(asset => ({
-                        name: asset.name,
-                        price: parseFloat(asset.price),
-                        purchaseYear: parseInt(asset.purchaseYear),
-                        quantity: parseInt(asset.quantity),
-                    })),
-                    liabilities: businessData.liabilities.map(liability => ({
-                        name: liability.name,
-                        price: parseFloat(liability.price),
-                        purchaseYear: parseInt(liability.purchaseYear),
-                        quantity: parseInt(liability.quantity),
-                    })),
-                    inventoryItems: businessData.inventoryItems.map(item => ({
-                        name: item.name,
-                        price: parseFloat(item.price),
-                        purchaseYear: parseFloat(item.purchaseYear),
-                        quantity: parseInt(item.quantity),
-                    })),
-                    suppportDuration: parseInt(businessData.supportDuration),
-                    supportSession: parseInt(businessData.supportSession),
-                    growthOpportunities: businessData.growthOpportunities,
-                    reason: businessData.reason,
-                    documents: businessData.documents,
-                }
+            input: {
+                ...rest,
+                revenueTime: businessData.revenueTime === 1 ? "6" : "12",
+                profittime: businessData.profittime === 1 ? "6" : "12",
+                capitalRecovery: parseFloat(businessData.capitalRecovery),
+                revenue: parseFloat(businessData.revenue),
+                profit: parseFloat(businessData.profit),
+                price: parseFloat(businessData.price),
+                profitMargen: parseFloat(businessData.profitMargen),
+                multiple: parseFloat(businessData.multiple),
+
+                assets: businessData.assets
+                .filter(
+                    (asset) =>
+                    asset &&
+                    Object.values(asset).some(
+                        (val) => val !== null && val !== '' && val !== undefined
+                    )
+                )
+                .map((asset) => ({
+                    name: asset.name,
+                    price: parseFloat(asset.price),
+                    purchaseYear: parseInt(asset.purchaseYear),
+                    quantity: parseInt(asset.quantity),
+                })),
+
+                liabilities: businessData.liabilities
+                .filter(
+                    (liability) =>
+                    liability &&
+                    Object.values(liability).some(
+                        (val) => val !== null && val !== '' && val !== undefined
+                    )
+                )
+                .map((liability) => ({
+                    name: liability.name,
+                    price: parseFloat(liability.price),
+                    purchaseYear: parseInt(liability.purchaseYear),
+                    quantity: parseInt(liability.quantity),
+                })),
+
+                // ✅ Cleaned inventoryItems
+                inventoryItems: businessData.inventoryItems
+                .filter(
+                    (item) =>
+                    item &&
+                    Object.values(item).some(
+                        (val) => val !== null && val !== '' && val !== undefined
+                    )
+                )
+                .map((item) => ({
+                    name: item.name,
+                    price: parseFloat(item.price),
+                    purchaseYear: parseFloat(item.purchaseYear),
+                    quantity: parseInt(item.quantity),
+                })),
+
+                supportDuration: parseInt(businessData.supportDuration),
+                supportSession: parseInt(businessData.supportSession),
+                growthOpportunities: businessData.growthOpportunities,
+                reason: businessData.reason,
+
+                // ✅ Cleaned documents
+                documents: businessData.documents.filter(
+                (doc) =>
+                    doc &&
+                    Object.values(doc).some(
+                    (val) => val !== null && val !== '' && val !== undefined
+                    )
+                ),
+            },
             };
+
             const { data } = await createBusiness({ variables });
             if (data?.createBusiness?.id) {
-                messageApi.success(t('Business listing created successfully!'));
-                setReviewModal(true);
-                localStorage.removeItem(LOCAL_STORAGE_KEY);
+            messageApi.success(t('Business listing created successfully!'));
+            setReviewModal(true);
+            localStorage.removeItem(LOCAL_STORAGE_KEY);
             } else {
-                messageApi.error(t('Failed to create business listing: No ID returned'));
+            messageApi.error(t('Failed to create business listing: No ID returned'));
             }
         } catch (err) {
             console.error(err);
             messageApi.error(t('Failed to create business listing'));
         }
     };
+
+    console.log("checkin", businessData)
 
     const handleSaveDraft = () => {
         localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(businessData));

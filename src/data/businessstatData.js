@@ -1,4 +1,5 @@
 import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const documentData = [
     {
@@ -18,7 +19,11 @@ const documentData = [
     },
 ];
 
-const district = [
+
+const useDistricts = () => {
+  const { t } = useTranslation();
+
+  const districts = [
     { id: 1, name: t('Riyadh'), value: 'riyadh' },
     { id: 2, name: t('Jeddah'), value: 'jeddah' },
     { id: 3, name: t('Dammam'), value: 'dammam' },
@@ -28,10 +33,16 @@ const district = [
     { id: 7, name: t('Taif'), value: 'taif' },
     { id: 8, name: t('Tabuk'), value: 'tabuk' },
     { id: 9, name: t('Hail'), value: 'hail' },
-    { id: 10, name: t('Najran'), value: 'najran' }
-];
+    { id: 10, name: t('Najran'), value: 'najran' },
+  ];
 
-const cities = {
+  return districts;
+};
+
+const useCities = () => {
+  const { t } = useTranslation();
+
+  const cities = {
     riyadh: [
       { id: 1, name: t('Riyadh'), value: 'riyadh' },
       { id: 2, name: t('Al Kharj'), value: 'al-kharj' },
@@ -46,9 +57,7 @@ const cities = {
       { id: 7, name: t('Dhahran'), value: 'dhahran' },
       { id: 8, name: t('Qatif'), value: 'qatif' },
     ],
-    khobar: [
-      { id: 9, name: t('Khobar'), value: 'khobar' },
-    ],
+    khobar: [{ id: 9, name: t('Khobar'), value: 'khobar' }],
     makkah: [
       { id: 10, name: t('Makkah'), value: 'makkah' },
       { id: 11, name: t('Jumum'), value: 'jumum' },
@@ -61,15 +70,12 @@ const cities = {
       { id: 14, name: t('Tabuk'), value: 'tabuk' },
       { id: 15, name: t('Duba'), value: 'duba' },
     ],
-    taif: [
-      { id: 16, name: t('Taif'), value: 'taif' },
-    ],
-    hail: [
-      { id: 17, name: t('Hail'), value: 'hail' },
-    ],
-    najran: [
-      { id: 18, name: t('Najran'), value: 'najran' },
-    ],
+    taif: [{ id: 16, name: t('Taif'), value: 'taif' }],
+    hail: [{ id: 17, name: t('Hail'), value: 'hail' }],
+    najran: [{ id: 18, name: t('Najran'), value: 'najran' }],
+  };
+
+  return cities;
 };
 
-export { documentData, district, cities };
+export { documentData , useDistricts, useCities};

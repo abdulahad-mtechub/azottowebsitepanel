@@ -34,7 +34,7 @@ const GET_ALL_BUSINESSES = gql`
       revenue
       profit
       price
-      recoveryTime
+      capitalRecovery
       savedBy {
         id
       }
@@ -67,7 +67,7 @@ const GET_BUSINESS = gql`
       profitMargen
       profittime
       reason
-      recoveryTime
+      capitalRecovery
       revenue
       revenueTime
       supportSession
@@ -133,7 +133,7 @@ query GetRandomBusinesses($getRandomBusinessesId: ID!) {
     profit
     price
     isByTakbeer
-    recoveryTime
+    capitalRecovery
     isSaved
     multiple
     seller {
@@ -152,7 +152,7 @@ query GetAllBusinessesByCategory($category: String!, $limit: Int, $offSet: Int) 
       revenue
       profit
       price
-      recoveryTime
+      capitalRecovery
       multiple
       savedBy {
         id
@@ -178,7 +178,7 @@ query GetAllBusinessesByCity($city: String!, $limit: Int, $offSet: Int) {
       revenue
       profit
       price
-      recoveryTime
+      capitalRecovery
       multiple
       savedBy {
         id
@@ -204,7 +204,7 @@ query getAllBusinessesByDistrict($district: String!, $limit: Int, $offSet: Int) 
       revenue
       profit
       price
-      recoveryTime
+      capitalRecovery
       multiple
       savedBy {
         id
@@ -230,7 +230,7 @@ query GetAllBusinessesByProfit($profit: [Float]!, $limit: Int, $offSet: Int) {
       revenue
       profit
       price
-      recoveryTime
+      capitalRecovery
       multiple
       savedBy {
         id
@@ -256,7 +256,7 @@ query GetAllBusinessesByRevenue($revenue: [Float]!, $limit: Int, $offSet: Int) {
       revenue
       profit
       price
-      recoveryTime
+      capitalRecovery
       multiple
       savedBy {
         id
@@ -323,7 +323,7 @@ query GetRandomBusinesses {
     isByTakbeer
     revenue
     profit
-    recoveryTime
+    capitalRecovery
   }
 }`
 export {

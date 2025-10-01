@@ -33,7 +33,7 @@ const ExploreSimilarBusiness = ({ id }) => {
             {
                 id: 3,
                 icon: '/assets/icons/team.png',
-                subtitle: `${b?.recoveryTime || t('N/A')} months`,
+                subtitle: `${b?.capitalRecovery || t('N/A')} months`,
                 subdesc: t('Capital Recovery'),
             },
         ],

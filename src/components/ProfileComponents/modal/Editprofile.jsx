@@ -6,17 +6,19 @@ import { UPDATE_USER } from '../../../graphql/mutation';
 import { ME } from '../../../graphql/query';
 import { useMutation, useQuery } from "@apollo/client";
 import Cookies from "js-cookie";
-import { district, cities } from '../../../data';
+import { useDistricts, useCities } from '../../../data';
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
 const Editprofile = ({ visible, onClose }) => {
+
+  const district = useDistricts();
+  const cities = useCities();
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
   const userId = Cookies.get("userId"); // get stored id
-  const [selectedCity, setSelectedCity] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
 
   const { data, loading: queryLoading } = useQuery(ME, {

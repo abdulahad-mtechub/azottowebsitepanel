@@ -1,6 +1,6 @@
 import React, { useState,useEffect,useMemo } from 'react';
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image } from 'antd';
-import { cities,district } from '../data/';
+import { useDistricts, useCities } from '../data/';
 import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { RightOutlined } from '@ant-design/icons';
@@ -13,6 +13,9 @@ import { t } from 'i18next';
 const { Text, Title } = Typography;
 
 const BusinessListingPage = ({getcategory}) => {
+
+    const district = useDistricts();
+    const cities = useCities();
     const [params] = useSearchParams();
     const category = params.get('category');
     const cityParam = params.get('city');
@@ -289,7 +292,7 @@ const BusinessListingPage = ({getcategory}) => {
                                 child: [
                                     { subtitle: `${biz.revenue?.toLocaleString()}`, subdesc: t('Revenue/month') },
                                     { subtitle: `${biz.profit?.toLocaleString()}`, subdesc: t('Profit/month') },
-                                    { subtitle: `${biz.recoveryTime?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
+                                    { subtitle: `${biz.capitalRecovery?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
                                 ]
                             }))}
                             refetchBusinesses={refetch}

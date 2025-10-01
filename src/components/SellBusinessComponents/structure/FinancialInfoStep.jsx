@@ -115,22 +115,18 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
             ? ((adjustedProfit / adjustedRevenue) * 100).toFixed(2)
             : '';
 
-        const annualProfit = profitPeriod === 1 ? adjustedProfit * 2 : adjustedProfit;
-        const recoveryTime = annualProfit ? (price / annualProfit).toFixed(2) : '';
         const capitalRecovery = avgMonthlyProfit ? (price / avgMonthlyProfit).toFixed(2) : '';
 
         setData(prev => ({
             ...prev,
             multiple: scaledMultiple,
             profitMargen: profitMargin,
-            recoveryTime,
             capitalRecovery
         }));
 
         form.setFieldsValue({
             multiple: scaledMultiple,
             profitMargin,
-            recoveryTime,
             capitalRecovery
         });
     }, [form,
@@ -192,8 +188,8 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 <Flex gap={2} className="w-100">
                                 <Form.Item name="profittime" noStyle>
                                     <Select
-                                    placeholder="Select period"
-                                    className="addonselect fs-14 w-180"
+                                        placeholder="Select period"
+                                        className="addonselect fs-14 w-180"
                                     >
                                     {revenueLookups?.map((list, index) => (
                                         <Select.Option value={list?.id} key={index}>
@@ -209,10 +205,10 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                     noStyle
                                 >
                                     <Input
-                                    type='number'
-                                    placeholder="Enter profit"
-                                    className="w-100"
-                                    prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />}
+                                        type='number'
+                                        placeholder="Enter profit"
+                                        className="w-100"
+                                        prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />}
                                     />
                                 </Form.Item>
                                 </Flex>

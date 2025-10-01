@@ -5,7 +5,7 @@ import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutation/login";
 import { useNavigate, NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
-import { district, cities } from '../data';
+import { useDistricts, useCities } from '../data';
 import imageCompression from 'browser-image-compression';
 import { ArrowLeftOutlined, CheckOutlined, DownOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
@@ -15,6 +15,8 @@ const { Title, Text, Paragraph } = Typography;
 const SignupPage = () => {
   const { t } = useTranslation();
 
+  const district = useDistricts();
+  const cities = useCities();
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const [form] = Form.useForm();
@@ -31,7 +33,7 @@ const SignupPage = () => {
     icon: "assets/icons/en.png",
   });
 
-  const [createUser, { loading: userLoading, error }] = useMutation(CREATE_USER);
+  const [createUser] = useMutation(CREATE_USER);
 
   const handleFinish = async () => {
     try {

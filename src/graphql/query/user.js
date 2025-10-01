@@ -84,7 +84,7 @@ query GetAllSellerBusinesses($limit: Int, $offSet: Int) {
     revenue
     profit
     price
-    recoveryTime
+    capitalRecovery
     savedBy {
       id
     }
@@ -109,7 +109,7 @@ query GetAllBuyerBusinesses($limit: Int, $offSet: Int) {
     revenue
     profit
     price
-    recoveryTime
+    capitalRecovery
     savedBy {
       id
     }
@@ -133,7 +133,7 @@ query GetAllSellerSoldBusinesses($limit: Int, $offSet: Int) {
     revenue
     profit
     price
-    recoveryTime
+    capitalRecovery
     savedBy {
       id
     }
@@ -155,7 +155,7 @@ query GetAllBuyerBoughtBusinesses($limit: Int, $offSet: Int) {
     revenue
     profit
     price
-    recoveryTime
+    capitalRecovery
     savedBy {
       id
     }
@@ -178,7 +178,7 @@ query GetFavoritBusiness {
     revenue
     profit
     price
-    recoveryTime
+    capitalRecovery
     savedBy {
       id
     }

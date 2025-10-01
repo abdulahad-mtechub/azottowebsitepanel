@@ -1,13 +1,16 @@
-import React, {forwardRef, useState,useEffect,useImperativeHandle } from 'react'
+import { forwardRef, useState,useEffect,useImperativeHandle } from 'react'
 import { Card, Col, Flex, Form, Image, Radio, Row, Tooltip, Typography } from 'antd'
 import { MyDatepicker, MyInput, MySelect } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
-import { teamsizeOp,district, cities  } from '../../../data'
+import { teamsizeOp,useCities, useDistricts  } from '../../../data'
 import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from '@apollo/client';
 
 const { Text } = Typography
 const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
+
+    const district = useDistricts();
+    const cities = useCities();
     const { data: categoryData } = useQuery(GET_CATEGORIES);
     const [form] = Form.useForm();
     const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
@@ -29,9 +32,8 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     };
 
     const handleFormChange = (_, allValues) => {
-        const selected = categories.find(c => c.name === allValues.category);
-        const id = selected?.id;
-  
+      const selected = categories.find(c => c.name === allValues.category);
+      const id = selected?.id;
       
       setSelectedCategory(allValues.category);
       setData(prev => ({
@@ -66,6 +68,10 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
         setSelectedCategory(cat);
       }
     }, [data]);
+
+    useEffect(() => {
+      console.log("check........", form.getFieldsValue())
+    }, [form.setFieldValue])
 
     return (
       <>
@@ -129,7 +135,6 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   options={categories}
                   placeholder="Choose business category"
                 />
-                
               </Col>
   
               <Col xs={24} sm={24} md={12}>
@@ -150,7 +155,8 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   name="city"
                   required
                   message="Choose city"
-                  options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
+                  readOnly={!selectedDistrict}
+                  options={selectedDistrict ? cities[selectedDistrict?.toLowerCase()] || [] : []}
                   placeholder="Choose city"
                 />
               </Col>
