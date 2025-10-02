@@ -8,11 +8,11 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const BusinessInfoCard = ({ data }) => {
+
   const { t } = useTranslation();
-  const userId = Cookies.get("userId"); // read userId from cookie
+  const userId = Cookies.get("userId");
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const navigate = useNavigate();
-
   const businessInfoData = [
     {
       id: 1,
@@ -29,7 +29,7 @@ const BusinessInfoCard = ({ data }) => {
     {
       id: 3,
       icon:'/assets/icons/businesscate.png',
-      title: t('Restaurant'),
+      title: data?.category?.name || t('Unknown'),
       subtitle: t('Business Category')
     },
     {

@@ -1,31 +1,54 @@
-import { Col, Form, Row, Table, Button } from 'antd';
+import { Col, Form, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
 import { SELLERDEALS } from '../../../graphql/query';
-import { useQuery } from '@apollo/client';
-import React, { useMemo, useEffect, useState } from 'react';
+import { useLazyQuery } from '@apollo/client';
+import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const SellerCompleteDeal = ({ setCompleteDeal, completedeal }) => {
   const { t } = useTranslation();
-  const [form] = Form.useForm();
-  const search = Form.useWatch('search', form);
+  const [searchValue, setSearchValue] = useState('');
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
   });
 
-  const { data: offerDeals, loading, error, refetch } = useQuery(SELLERDEALS, {
-    variables: {
-      limit: pagination.pageSize,
-      offset: (pagination.current - 1) * pagination.pageSize,
-      search: search || '',
-    },
+  const [fetchDeals, { data: offerDeals, loading }] = useLazyQuery(SELLERDEALS, {
     fetchPolicy: 'network-only',
   });
 
+  const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
+    setSearchValue(debouncedSearchValue);
+    setPagination(prev => ({ ...prev, current: 1 }));
+  }, []);
+
+  const handleTableChange = (paginationInfo) => {
+    const newPagination = {
+      current: paginationInfo.current,
+      pageSize: paginationInfo.pageSize
+    };
+    setPagination(newPagination);
+    
+    const offset = (paginationInfo.current - 1) * paginationInfo.pageSize;
+    fetchDeals({ 
+      variables: {
+        limit: paginationInfo.pageSize,
+        offset,
+        search: searchValue || ''
+      }
+    });
+  };
+
   useEffect(() => {
-    refetch({ limit: 10, offset: 0, search: search || '' });
-  }, [search, refetch]);
+    const offset = (pagination.current - 1) * pagination.pageSize;
+    fetchDeals({ 
+      variables: {
+        limit: pagination.pageSize,
+        offset,
+        search: searchValue || ''
+      }
+    });
+  }, [searchValue, fetchDeals, pagination]);
 
   const columns = [
     { title: t('Business Title'), dataIndex: 'title' },
@@ -46,25 +69,27 @@ const SellerCompleteDeal = ({ setCompleteDeal, completedeal }) => {
     );
   }, [offerDeals]);
 
+  const totalCount = offerDeals?.getSellerCompletedDeals?.totalCount || 0;
+
   return (
-    <Form form={form}>
+    <>
       <Row gutter={[24, 12]} className='mt-2'>
         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
-          <Form.Item name="search" noStyle>
-            <SearchInput
-              placeholder={t('Search')}
-              value={form.getFieldValue('name') || ''}
-              prefix={
-                <img
-                  src="/assets/icons/search.png"
-                  alt='search-icon'
-                  className='mx-3-inline'
-                  width={12}
-                  fetchPriority="high"
-                />
-              }
-            />
-          </Form.Item>
+          <SearchInput
+            withoutForm={true}
+            placeholder={t('Search')}
+            onDebouncedChange={handleDebouncedSearch}
+            debounceDelay={500}
+            prefix={
+              <img
+                src="/assets/icons/search.png"
+                alt='search-icon'
+                className='mx-3-inline'
+                width={12}
+                fetchPriority="high"
+              />
+            }
+          />
         </Col>
         <Col span={24}>
           <Table
@@ -81,21 +106,23 @@ const SellerCompleteDeal = ({ setCompleteDeal, completedeal }) => {
                 }
               },
             })}
+            loading={loading}
             pagination={{
+              hideOnSinglePage: true,
               current: pagination.current,
               pageSize: pagination.pageSize,
-              total: offerDeals?.getSellerCompletedDeals?.totalCount || 0,
-              showTotal: (total) => (
-                <Button aria-labelledby='Total' className="brand-bg">{t('Total')}: {total}</Button>
-              ),
-              onChange: (page, pageSize) => {
-                setPagination({ current: page, pageSize });
-              },
+              total: totalCount,
+              showSizeChanger: true,
+              showQuickJumper: true,
+              showTotal: (total, range) => 
+                `${range[0]}-${range[1]} ${t('of')} ${total} ${t('items')}`,
+              pageSizeOptions: ['10', '20', '50', '100']
             }}
+            onChange={handleTableChange}
           />
         </Col>
       </Row>
-    </Form>
+    </>
   );
 };
 

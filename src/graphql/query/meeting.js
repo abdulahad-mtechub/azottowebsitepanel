@@ -1,104 +1,103 @@
 import { gql } from "@apollo/client";
 
 const SENTMEETINGS = gql`
-query GetMySentMeetingRequests($isBuyer: Boolean, $search: String, $limit: Int, $offSet: Int) {
-  getMySentMeetingRequests(isBuyer: $isBuyer, search: $search, limit: $limit, offSet: $offSet) {
+query GetMySentMeetingRequests($search: String, $isBuyer: Boolean, $limit: Int, $offSet: Int) {
+  getMySentMeetingRequests(search: $search, isBuyer: $isBuyer, limit: $limit, offSet: $offSet) {
     totalCount
     items {
       id
-    createdAt
-    createdBy
-    requestedDate
-    requestedEndDate
-    receiverAvailabilityDate
-    requestedTo {
-      name
-    }
-    business {
-      businessTitle
-      price
-    }
-    offer {
-      id
-      price
-    }
+      createdAt
+      createdBy
+      requestedDate
+      requestedEndDate
+      receiverAvailabilityDate
+      requestedTo {
+        name
+      }
+      business {
+        businessTitle
+        price
+      }
+      offer {
+        id
+        price
+      }
     }
   }
 }
 `
 const RECEIVEDMEETINGS = gql`
-query GetReceivedMeetingRequests($isBuyer: Boolean, $search: String, $limit: Int, $offSet: Int) {
-  getReceivedMeetingRequests(isBuyer: $isBuyer, search: $search, limit: $limit, offSet: $offSet) {
+query GetReceivedMeetingRequests($search: String, $isBuyer: Boolean, $limit: Int, $offSet: Int) {
+  getReceivedMeetingRequests(search: $search, isBuyer: $isBuyer, limit: $limit, offSet: $offSet) {
     totalCount
     items {
       id
-    createdAt
-    requestedDate
-    requestedEndDate
-    receiverAvailabilityDate
-    requestedTo {
-      name
-    }
-    business {
-      id
-      businessTitle
-      price
-    }
-    offer {
-      id
-      price
-    }
+      createdAt
+      requestedDate
+      requestedEndDate
+      receiverAvailabilityDate
+      requestedTo {
+        name
+      }
+      business {
+        id
+        businessTitle
+        price
+      }
+      offer {
+        id
+        price
+      }
     }
   }
 }
 `
 
-
 const READYSCHEDULEDMEETINGS = gql`
-query GetMeetingsReadyForScheduling($isBuyer: Boolean, $search: String, $limit: Int, $offSet: Int) {
-  getMeetingsReadyForScheduling(isBuyer: $isBuyer, search: $search, limit: $limit, offSet: $offSet) {
+query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean, $limit: Int, $offSet: Int) {
+  getMeetingsReadyForScheduling(search: $search, isBuyer: $isBuyer, limit: $limit, offSet: $offSet) {
     totalCount
     items {
       id
-    createdAt
-    requestedDate
-    receiverAvailabilityDate
-    requestedTo {
-      name
-    }
-    business {
-      businessTitle
-      price
-    }
-    offer {
-      id
-      price
-    }
+      createdAt
+      requestedDate
+      receiverAvailabilityDate
+      requestedTo {
+        name
+      }
+      business {
+        businessTitle
+        price
+      }
+      offer {
+        id
+        price
+      }
     }
   }
 }
 `
 const SCHEDULEDMEETINGS = gql`
-query GetScheduledMeetings($isBuyer: Boolean, $search: String, $status: Boolean, $limit: Int, $offSet: Int) {
-  getScheduledMeetings(isBuyer: $isBuyer, search: $search, status: $status, limit: $limit, offSet: $offSet) {
+query GetScheduledMeetings($search: String, $isBuyer: Boolean, $limit: Int, $offSet: Int) {
+  getScheduledMeetings(search: $search, isBuyer: $isBuyer, limit: $limit, offSet: $offSet) {
     totalCount
     items {
       id
-    createdAt
-    requestedDate
-    receiverAvailabilityDate
-    status
-    requestedTo {
-      name
-    }
-    business {
-      businessTitle
-      price
-    }
-    offer {
-      id
-      price
-    }
+      createdAt
+      requestedDate
+      receiverAvailabilityDate
+      status
+      requestedTo {
+        name
+      }
+      business {
+        businessTitle
+        price
+      }
+      offer {
+        id
+        price
+      }
     }
   }
 }
@@ -115,13 +114,13 @@ const GETBUYERMEETINGCOUNT = gql`
 query Query {
   getBuyerCount
 }
-  `
+`
 
 const GETSELLERMEETINGCOUNT = gql`
 query Query {
   getSellerCount
 }
-  `
+`
 export {
     SENTMEETINGS,
     RECEIVEDMEETINGS,

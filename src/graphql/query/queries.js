@@ -7,8 +7,12 @@ query GetArticles($search: String) {
     articles {
       id
       title
+      arabicTitle
       image
+      arabicBody
       body
+      isArabic
+      createdAt
     }
   }
 }
@@ -64,11 +68,20 @@ query GetPrivacyPolicy {
   }
 }
 `
+const GETCUSTOMERROLE = gql`
+query GetCustomerRole {
+  getCustomerRole {
+    id
+    name
+  }
+}
+`
 export {
     GETARTICLES,
     GETARTICLE,
     GETFAQ,
     GETTERMS,
     GETENDATERMS,
-    GETPRIVACYPOLICY
+    GETPRIVACYPOLICY,
+    GETCUSTOMERROLE
 }

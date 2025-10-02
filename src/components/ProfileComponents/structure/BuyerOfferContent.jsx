@@ -2,12 +2,12 @@ import { Button, Card, Col, Dropdown, Flex, Form, Row, Table, Typography, messag
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { NavLink } from 'react-router-dom';
 import { OfferSellerModal, RequestMeetingModal } from '../../Businesslistingcomponents';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { DeleteModal } from '../../ui';
 import { SearchInput } from '../../Forms';
 import { DownOutlined } from '@ant-design/icons';
 import { GET_BUYER_OFFER } from '../../../graphql/query'
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 
@@ -16,21 +16,30 @@ const BuyerOfferContent = () => {
     const { t } = useTranslation();
     const userId = Cookies.get("userId"); 
     const [messageApi, contextHolder] = message.useMessage();
-    const [form] = Form.useForm()
     const [ offermodal, setOfferModal ] = useState(false)
     const [ requestPop, setRequestPop ] = useState(false)
     const [ deletemodal, setDeleteModal ] = useState(false)
     const [ filterstatus, setFilterStatus] = useState()
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
     const [selectedOfferId, setSelectedOfferId] = useState(null);
-    const search = Form.useWatch('search', form);
+    const [searchValue, setSearchValue] = useState('');
 
-    const { data, loading, error, refetch } = useQuery(GET_BUYER_OFFER, {
-        variables: {
-          status: filterstatus ? filterstatus : null,
-          search: search,
-        },
+    const [fetchOffers, { data, loading, error }] = useLazyQuery(GET_BUYER_OFFER, {
+        fetchPolicy: 'network-only',
     });
+
+    const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
+        setSearchValue(debouncedSearchValue);
+    }, []);
+
+    useEffect(() => {
+        fetchOffers({
+            variables: {
+                status: filterstatus ? filterstatus : null,
+                search: searchValue,
+            },
+        });
+    }, [fetchOffers, filterstatus, searchValue]);
 
     const tableData = data?.getOffersByUser?.map((offer, idx) => ({
         key: offer.id,
@@ -98,7 +107,14 @@ const BuyerOfferContent = () => {
 
     const onClick = ({ key }) => setFilterStatus(key);
 
-    useEffect(() => { refetch({ limit: 10, offset: 0, search: search || '' }); }, [search, refetch]);
+    const refetch = useCallback(() => {
+        fetchOffers({
+            variables: {
+                status: filterstatus ? filterstatus : null,
+                search: searchValue,
+            },
+        });
+    }, [fetchOffers, filterstatus, searchValue]);
 
     if (loading) {
         return (
@@ -114,17 +130,16 @@ const BuyerOfferContent = () => {
             <Flex vertical gap={20}>
                 <ModuleTopHeading level={4} name={t('Offer')} />
                 <Card className='radius-12 border-gray'>
-                    <Form form={form}>    
                     <Row gutter={[24,24]}>
                         <Col span={24}>
                             <Flex gap={5} align='center'>
-                                <Form.Item name="search" noStyle>
-                                    <SearchInput
-                                        placeholder={t('Search')}
-                                        value={form.getFieldValue('name') || ''}
-                                        prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
-                                    />
-                                </Form.Item>
+                                <SearchInput
+                                    withoutForm={true}
+                                    placeholder={t('Search')}
+                                    onDebouncedChange={handleDebouncedSearch}
+                                    debounceDelay={500}
+                                    prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
+                                />
                                 <Dropdown menu={{ items, onClick }} trigger={['click']}>
                                     <Button aria-labelledby='status filter' className='border-light-gray radius-8 p-2 fs-13 h-auto'>
                                         <Flex justify='space-between' className='w-100' gap={10}>
@@ -149,7 +164,6 @@ const BuyerOfferContent = () => {
                             />
                         </Col>
                     </Row>
-                    </Form>
                 </Card>
             </Flex>
             <OfferSellerModal refetch={refetch} businessId={selectedBusinessId} offerId={selectedOfferId} visible={offermodal} onClose={()=>setOfferModal(false)} />

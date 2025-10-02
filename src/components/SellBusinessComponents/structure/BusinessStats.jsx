@@ -1,23 +1,30 @@
 import { Card, Col, Flex, Image, Row, Tooltip, Typography } from 'antd'
-import React, { useState,useEffect } from 'react'
+import moment from 'moment';
+import { useState,useEffect } from 'react'
 
 const { Title, Text } = Typography
 const BusinessStats = ({data}) => {
     const [profitTimeValue, setProfitTimeValue] = useState('Last Year');
     const [revenueTimeValue, setRevenueTimeValue] = useState('Last Year');
+
+
     useEffect(() => {
-        if (data?.profittime === 0) {
+        if (data?.profittime === "6" || data?.profittime === "Last 6 Months") {
             setProfitTimeValue('Last 6 Months');
         } else {
             setProfitTimeValue('Last Year');
         }
     
-        if (data?.revenueTime === 0) {
+        if (data?.revenueTime === "6" || data?.revenueTime === "Last 6 Months") {
             setRevenueTimeValue('Last 6 Months');
         } else {
             setRevenueTimeValue('Last Year');
         }
     }, [data?.profittime, data?.revenueTime]); 
+
+    const months = data?.capitalRecovery ?? 0;
+
+    console.log("data vf", data)
     
     const stats = [
         {
@@ -41,20 +48,20 @@ const BusinessStats = ({data}) => {
         {
             id: 4,
             icon:'/assets/icons/cap-re.png',
-            title:'3.8 months',
+            title:months >= 12 ? `${(months / 12).toFixed(1)} years` : `${months} months`,
             subtitle:'Capital Recovery'
         },
         {
             id: 5,
             icon:'/assets/icons/foundationdate.png',
-            title:'2020',
+            title: data?.foundedDate ? moment(data?.foundedDate).format('YYYY') : 'N/A',
             subtitle:'Foundation Date'
         },
         {
             id: 6,
             icon:'/assets/icons/teamsize.png',
-            title:'1-10',
-            subtitle:'Team Size'
+            title:data?.numberOfEmployees ? data?.numberOfEmployees : 'N/A',
+            subtitle :'Team Size'
         },
     ]
     return (

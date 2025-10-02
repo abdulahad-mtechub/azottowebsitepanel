@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Form, Button, Upload, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex, Steps, Dropdown } from "antd";
 import { message } from "antd";
-import { useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutation/login";
+import { GETCUSTOMERROLE } from "../graphql/query";
 import { useNavigate, NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
 import { useDistricts, useCities } from '../data';
@@ -27,13 +28,30 @@ const SignupPage = () => {
   const [passportFileName, setPassportFileName] = useState("");
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [customerRole, setCustomerRole] = useState(null);
   const [selectedLang, setSelectedLang] = useState({
     key: "1",
     label: "EN",
     icon: "assets/icons/en.png",
   });
 
+  const [getCustomerRole] = useLazyQuery(GETCUSTOMERROLE, {fetchPolicy:"cache-first"});
   const [createUser] = useMutation(CREATE_USER);
+
+  useEffect(() => {
+    const fetchCustomerRole = async () => {
+      try {
+        const { data } = await getCustomerRole();
+        if (data?.getCustomerRole) {
+          setCustomerRole(data.getCustomerRole);
+        }
+      } catch (error) {
+        console.error('Error fetching customer role:', error);
+      }
+    };
+
+    fetchCustomerRole();
+  }, [getCustomerRole]);
 
   const handleFinish = async () => {
     try {
@@ -46,6 +64,7 @@ const SignupPage = () => {
         phone: formData.phoneNo,
         password: formData.password,
         documents: documents.length > 0 ? documents : undefined,
+        roleId: customerRole?.id,
       };
 
       const { data } = await createUser({ variables: { input } });

@@ -5,29 +5,36 @@ import { useState, useRef } from 'react';
 import { RightOutlined } from '@ant-design/icons';
 import { GETARTICLES } from '../graphql/query/queries';
 import { useQuery } from "@apollo/client";
-import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography;
 
 const Article = () => {
     const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
     const [selectfilter, setSelectFilter] = useState(t('Sorting'));
-    const handlePageChange = (page, size) => {
-        setCurrent(page);
-        setPageSize(size);
-    };
-    const { data, loading, error, refetch } = useQuery(GETARTICLES, {
+    const [current, setCurrent] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+
+    const lang = localStorage.getItem("lang") || i18n.language || "en";
+    const isArabic = lang.toLowerCase() === "ar";
+
+    const { data, loading, refetch } = useQuery(GETARTICLES, {
         variables: { search: "" },
-    });
+    })
+    
+    // Filter articles based on language and map to required format
+    const articleData = data?.getArticles?.articles
+        ?.filter(article => article.isArabic === isArabic)
+        ?.map(item => ({
+            id: item.id,
+            img: item.image,
+            title: isArabic ? item?.arabicTitle : item?.title,
+            desc: isArabic ? item?.arabicBody : item?.body,
+            date: item.createdAt,
+        })) || [];
 
     const total = data?.getArticles?.totalCount || 0;
-    const articleData = data?.getArticles?.articles.map(item => ({
-        id: item.id,
-        img: item.image,
-        title: item.title,
-        desc: item.body,
-        date: item.createdAt,
-    })) || [];
 
     const searchTimeout = useRef(null);
 

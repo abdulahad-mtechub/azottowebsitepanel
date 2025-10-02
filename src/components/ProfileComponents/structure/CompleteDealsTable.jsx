@@ -1,28 +1,51 @@
-import React, { useMemo, useEffect, useState } from 'react'
+import React, { useMemo, useEffect, useState, useCallback } from 'react'
 import { Col, Form, Row, Table, Button } from 'antd'
 import { SearchInput } from '../../Forms';
 import { BUYERDEALS } from '../../../graphql/query';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
 const CompleteDealsTable = ({ setCompleteDeal }) => {
     const { t } = useTranslation();
-    const [form] = Form.useForm();
-    const search = Form.useWatch('search', form);
+    const [searchValue, setSearchValue] = useState('');
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
-    const { data: offerDeals, loading, error, refetch } = useQuery(BUYERDEALS, {
-        variables: {
-            limit: pagination.pageSize,
-            offset: (pagination.current - 1) * pagination.pageSize,
-            search: search || '',
-        },
+    const [fetchDeals, { data: offerDeals, loading }] = useLazyQuery(BUYERDEALS, {
         fetchPolicy: 'network-only',
     });
 
+    const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
+        setSearchValue(debouncedSearchValue);
+        setPagination(prev => ({ ...prev, current: 1 }));
+    }, []);
+
+    const handleTableChange = (paginationInfo) => {
+        const newPagination = {
+            current: paginationInfo.current,
+            pageSize: paginationInfo.pageSize
+        };
+        setPagination(newPagination);
+        
+        const offset = (paginationInfo.current - 1) * paginationInfo.pageSize;
+        fetchDeals({ 
+            variables: {
+                limit: paginationInfo.pageSize,
+                offset,
+                search: searchValue || ''
+            }
+        });
+    };
+
     useEffect(() => {
-        refetch({ limit: 10, offset: 0, search: search || '' });
-    }, [search, refetch]);
+        const offset = (pagination.current - 1) * pagination.pageSize;
+        fetchDeals({ 
+            variables: {
+                limit: pagination.pageSize,
+                offset,
+                search: searchValue || ''
+            }
+        });
+    }, [searchValue, fetchDeals, pagination]);
 
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
@@ -32,7 +55,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     ];
 
     const offerData = useMemo(() => {
-        return offerDeals?.getBuyerCompletedDeals?.map((offer) => ({
+        return offerDeals?.getBuyerCompletedDeals?.data?.map((offer) => ({
             key: offer.id,
             title: offer.business.businessTitle,
             sellername: offer.business.seller.name,
@@ -41,15 +64,18 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
         })) || [];
     }, [offerDeals]);
 
+    const totalCount = offerDeals?.getBuyerCompletedDeals?.totalCount || 0;
+
     return (
         <>    
             <Row gutter={[24,12]} className='mt-2'>
                 <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
                     <SearchInput
+                        withoutForm={true}
                         placeholder={t('Search')}
-                        value={form.getFieldValue('name') || ''}
+                        onDebouncedChange={handleDebouncedSearch}
+                        debounceDelay={500}
                         prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
-                        onChange={(e) => form.setFieldValue("search", e.target.value)}
                     />
                 </Col>
                 <Col span={24}>
@@ -65,17 +91,19 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
                                 if (record.key) setCompleteDeal(record)
                             },
                         })}
+                        loading={loading}
                         pagination={{
+                            hideOnSinglePage: true,
                             current: pagination.current,
                             pageSize: pagination.pageSize,
-                            total: offerDeals?.getBuyerCompletedDeals?.length || 0,
-                            showTotal: (total) => (
-                                <Button aria-labelledby='Total' className="brand-bg">
-                                    {t('Total')}: {total}
-                                </Button>
-                            ),
-                            onChange: (page, pageSize) => setPagination({ current: page, pageSize }),
+                            total: totalCount,
+                            showSizeChanger: true,
+                            showQuickJumper: true,
+                            showTotal: (total, range) => 
+                                `${range[0]}-${range[1]} ${t('of')} ${total} ${t('items')}`,
+                            pageSizeOptions: ['10', '20', '50', '100']
                         }}
+                        onChange={handleTableChange}
                     />
                 </Col>
             </Row>

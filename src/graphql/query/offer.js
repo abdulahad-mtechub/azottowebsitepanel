@@ -63,25 +63,28 @@ query GetOffersById($getOffersByIdId: String) {
 const BUYERINPROGRESSDEALS = gql`
 query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
   getBuyerInprogressDeals(limit: $limit, offset: $offset, search: $search) {
-    id
-    status
-    buyer {
+    totalCount
+    deals {
       id
-      name
-    }
-      isDsaBuyer
-      isDsaSeller
-      isCommissionVerified
-    business {
-      id
-      businessTitle
-      seller {
+      status
+      buyer {
         id
         name
       }
+      isDsaBuyer
+      isDsaSeller
+      isCommissionVerified
+      business {
+        id
+        businessTitle
+        seller {
+          id
+          name
+        }
+      }
+      price
+      createdAt
     }
-    price
-    createdAt
   }
 }
 `
@@ -91,17 +94,17 @@ query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
     totalCount
     deals {
       id
-    buyer {
-      id
-      name
-    }
+      buyer {
+        id
+        name
+      }
       isDsaSeller
-    business {
-      id
-      businessTitle
-    }
-    price
-    createdAt
+      business {
+        id
+        businessTitle
+      }
+      price
+      createdAt
     }
   }
 }
@@ -109,21 +112,24 @@ query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
 const BUYERDEALS = gql`
 query GetBuyerCompletedDeals($limit: Int, $offset: Int, $search: String) {
   getBuyerCompletedDeals(limit: $limit, offset: $offset, search: $search) {
-    id
-    buyer {
+    totalCount
+    deals {
       id
-      name
+      buyer {
+        id
+        name
+      }
+      business {
+        id
+        businessTitle
+        seller {
+          id
+          name
+        }
+      }
+      price
+      createdAt
     }
-    business {
-      id
-      businessTitle
-    seller {
-      id
-      name
-    }
-    }
-    price
-    createdAt
   }
 }
 `
@@ -133,22 +139,21 @@ query GetSellerCompletedDeals($limit: Int, $offset: Int, $search: String) {
     totalCount
     deals {
       id
-    buyer {
-      id
-      name
-    }
-    business {
-      id
-      businessTitle
-    
-    }
-    price
-    createdAt
+      buyer {
+        id
+        name
+      }
+      business {
+        id
+        businessTitle
+      }
+      price
+      createdAt
     }
   }
 }
 `
-const GETDEAL = gql `
+const GETDEAL = gql`
 query GetDeal($getDealId: ID!) {
   getDeal(id: $getDealId) {
     id
@@ -196,7 +201,7 @@ query GetDeal($getDealId: ID!) {
   }
 }
 `
-const GETBANKSFORDEAL = gql `
+const GETBANKSFORDEAL = gql`
 query GetBankDetailsByDealId($dealId: ID!) {
   getBankDetailsByDealId(dealId: $dealId) {
     id
@@ -210,7 +215,7 @@ query GetBankDetailsByDealId($dealId: ID!) {
   }
 }
 `
-const GET_BUSINESS_OFFERS = gql `
+const GET_BUSINESS_OFFERS = gql`
 query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: Int, $search: String, $status: String) {
   getOfferByBusinessId(id: $getOfferByBusinessIdId, limit: $limit, offSet: $offSet, search: $search, status: $status) {
     count
@@ -225,7 +230,6 @@ query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: In
         id
         businessTitle
         price
-        
       }
       buyer {
         id
