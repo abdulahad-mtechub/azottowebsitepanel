@@ -149,9 +149,9 @@ const SignupPage = () => {
     setLanguage(value)
     localStorage.setItem("lang", value)
     i18n?.changeLanguage(value)
-}
+  }
   const prev = () => setCurrent(current - 1);
-
+  
   const steps = [
     {
       title: t("Basic Information"),
@@ -426,7 +426,7 @@ const SignupPage = () => {
     }
     },
   ];
-
+  
   return (
     <>
       {contextHolder}
