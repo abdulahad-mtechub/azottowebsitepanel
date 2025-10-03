@@ -1,4 +1,4 @@
-import React, {forwardRef, useEffect,useImperativeHandle } from 'react'
+import {forwardRef, useEffect,useImperativeHandle } from 'react'
 import { Card, Col, Flex, Form, Row, Select, Typography,Input, Image } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
@@ -6,8 +6,53 @@ import { revenueLookups } from '../../../data'
 import { FormReplicate } from '../../Header'
 
 const { Text } = Typography
-const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
 
+const hasNonEmptyValue = (value) => {
+    if (value === 0) return true;
+    if (typeof value === 'number') return !Number.isNaN(value);
+    if (typeof value === 'string') return value.trim() !== '';
+    return value !== undefined && value !== null;
+};
+
+const createRowValidator = (dayKey, fieldKeys, { emptyMessage, invalidMessage, type = 'text' }) => ({ getFieldValue, index }) => ({
+    validator(_, value) {
+        const rows = getFieldValue(dayKey) || [];
+        const row = rows?.[index] || {};
+        const rowHasAnyValue = fieldKeys.some((key) => hasNonEmptyValue(row?.[key]));
+
+        if (!rowHasAnyValue) {
+            return Promise.resolve();
+        }
+
+        if (!hasNonEmptyValue(value)) {
+            return Promise.reject(new Error(emptyMessage));
+        }
+
+        if (type === 'number') {
+            const numericValue = typeof value === 'string' ? value : String(value);
+            if (!/^\d+(\.\d+)?$/.test(numericValue.trim())) {
+                return Promise.reject(new Error(invalidMessage));
+            }
+        }
+
+        return Promise.resolve();
+    },
+});
+
+const normalizeLookupValue = (value) => {
+    if (value === null || value === undefined || value === '') {
+        return undefined;
+    }
+
+    const numeric = Number(value);
+    if (Number.isNaN(numeric) || numeric <= 0) {
+        return undefined;
+    }
+
+    return numeric;
+};
+
+const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
     const [form] = Form.useForm();
 
     useImperativeHandle(ref, () => ({
@@ -54,9 +99,9 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
 
     useEffect(() => {
         form.setFieldsValue({
-            revenueTime: Number(data.revenueTime),
+            revenueTime: normalizeLookupValue(data.revenueTime),
             revenue: Number(data.revenue),
-            profittime: data.profittime,
+            profittime: normalizeLookupValue(data.profittime),
             profit: data.profit,
             businessPrice: data.price,
             profitMargin: data.profitMargen,
@@ -79,7 +124,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 inventoryPrice: item.price,
             })),
         });
-    }, [data.revenueTime, data.profittime]);
+    }, [data]);
 
     useEffect(() => {
         const allValues = form.getFieldsValue();
@@ -286,38 +331,28 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 label: "Asset Name",
                                 placeholder: "Write asset name",
                                 type: "input",
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const rows = getFieldValue("keyassets") || [];
-                                      const row = rows.find(r =>
-                                        r?.assetName || r?.noItems || r?.purchaseYear || r?.price
-                                      );
-                            
-                                      if (!row || value) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter asset name");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "keyassets",
+                                                                        ["assetName", "noItems", "purchaseYear", "price"],
+                                                                        {
+                                                                                emptyMessage: "Please enter asset name",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "noItems",
                                 label: "Number of items",
                                 placeholder: "Enter quantity",
                                 type: "input",
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const rows = getFieldValue("keyassets") || [];
-                                      const row = rows.find(r =>
-                                        r?.assetName || r?.noItems || r?.purchaseYear || r?.price
-                                      );
-                            
-                                      if (!row || /^[0-9]+$/.test(value)) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter a valid quantity (number only)");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "keyassets",
+                                                                        ["assetName", "noItems", "purchaseYear", "price"],
+                                                                        {
+                                                                                emptyMessage: "Please enter quantity",
+                                                                                invalidMessage: "Please enter a valid quantity (number only)",
+                                                                                type: "number",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "purchaseYear",
@@ -325,6 +360,13 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 placeholder: "Choose purchase year",
                                 type: "select",
                                 options: yearOp,
+                                                                validator: createRowValidator(
+                                                                        "keyassets",
+                                                                        ["assetName", "noItems", "purchaseYear", "price"],
+                                                                        {
+                                                                                emptyMessage: "Please choose purchase year",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "price",
@@ -333,19 +375,15 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const currentRow = getFieldValue(["keyassets"]);
-                                      const hasAnyValue = currentRow?.some(
-                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
-                                      );
-                                
-                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter price (number only)");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "keyassets",
+                                                                        ["assetName", "noItems", "purchaseYear", "price"],
+                                                                        {
+                                                                                emptyMessage: "Please enter price",
+                                                                                invalidMessage: "Please enter price (number only)",
+                                                                                type: "number",
+                                                                        }
+                                                                ),
                             },
                         ]}
                     />
@@ -361,38 +399,28 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 label: "Liabilities Name",
                                 placeholder: "Write liability name",
                                 type: "input",
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const currentRow = getFieldValue(["keyassets"]);
-                                      const hasAnyValue = currentRow?.some(
-                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
-                                      );
-                                
-                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter a valid quantity (number only)");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "liability",
+                                                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
+                                                                        {
+                                                                                emptyMessage: "Please enter liability name",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "quantity",
                                 label: "Number of items",
                                 placeholder: "Enter quantity",
                                 type: "input",
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const currentRow = getFieldValue(["keyassets"]);
-                                      const hasAnyValue = currentRow?.some(
-                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
-                                      );
-                                
-                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter a valid quantity (number only)");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "liability",
+                                                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
+                                                                        {
+                                                                                emptyMessage: "Please enter quantity",
+                                                                                invalidMessage: "Please enter a valid quantity (number only)",
+                                                                                type: "number",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "liabilitypurchaseYear",
@@ -400,6 +428,13 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 placeholder: "Choose purchase year",
                                 type: "select",
                                 options: yearOp,
+                                                                validator: createRowValidator(
+                                                                        "liability",
+                                                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
+                                                                        {
+                                                                                emptyMessage: "Please choose purchase year",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "liabilityPrice",
@@ -409,19 +444,15 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
                                 message: "Please enter total price" ,
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const currentRow = getFieldValue(["keyassets"]);
-                                      const hasAnyValue = currentRow?.some(
-                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
-                                      );
-                                
-                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter price(number only)");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "liability",
+                                                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
+                                                                        {
+                                                                                emptyMessage: "Please enter price",
+                                                                                invalidMessage: "Please enter price (number only)",
+                                                                                type: "number",
+                                                                        }
+                                                                ),
                             },
                         ]}
                     />
@@ -437,38 +468,28 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 label: "Inventory Name",
                                 placeholder: "Write inventory name",
                                 type: "input",
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const currentRow = getFieldValue(["keyassets"]);
-                                      const hasAnyValue = currentRow?.some(
-                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
-                                      );
-                                
-                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter a valid quantity (number only)");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "inventory",
+                                                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
+                                                                        {
+                                                                                emptyMessage: "Please enter inventory name",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "inventoryquantity",
                                 label: "Number of items",
                                 placeholder: "Enter quantity",
                                 type: "input",
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const currentRow = getFieldValue(["keyassets"]);
-                                      const hasAnyValue = currentRow?.some(
-                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
-                                      );
-                                
-                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter a valid quantity (number only)");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "inventory",
+                                                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
+                                                                        {
+                                                                                emptyMessage: "Please enter quantity",
+                                                                                invalidMessage: "Please enter a valid quantity (number only)",
+                                                                                type: "number",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "inventoryypurchaseYear",
@@ -476,6 +497,13 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 placeholder: "Choose purchase year",
                                 type: "select",
                                 options: yearOp,
+                                                                validator: createRowValidator(
+                                                                        "inventory",
+                                                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
+                                                                        {
+                                                                                emptyMessage: "Please choose purchase year",
+                                                                        }
+                                                                ),
                             },
                             {
                                 name: "inventoryPrice",
@@ -484,19 +512,15 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
-                                validator: ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                      const currentRow = getFieldValue(["keyassets"]);
-                                      const hasAnyValue = currentRow?.some(
-                                        row => row?.assetName || row?.noItems || row?.purchaseYear || row?.price
-                                      );
-                                
-                                      if (!hasAnyValue || /^[0-9]+$/.test(value)) {
-                                        return Promise.resolve();
-                                      }
-                                      return Promise.reject("Please enter price(number only)");
-                                    },
-                                }),
+                                                                validator: createRowValidator(
+                                                                        "inventory",
+                                                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
+                                                                        {
+                                                                                emptyMessage: "Please enter price",
+                                                                                invalidMessage: "Please enter price (number only)",
+                                                                                type: "number",
+                                                                        }
+                                                                ),
                             },
                         ]}
                     />

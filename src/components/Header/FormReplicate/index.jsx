@@ -131,31 +131,44 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
                     </Flex>
                   </Col>
 
-                  {fieldsConfig.map((field, index) => (
-                    <Col key={index} xs={24} sm={24} md={24} lg={field.col || 6}>
-                      {field.type === "input" ? (
-                        <MyInput
-                          label={field.label}
-                          name={[name, field.name]}
-                          placeholder={field.placeholder}
-                          required={field.required}
-                          message={field.message}
-                          addonBefore={field.addonBefore}
-                          className={field.className || ""}
-                          validator={field.validator}
-                        />
-                      ) : field.type === "select" ? (
-                        <MySelect
-                          label={field.label}
-                          name={[name, field.name]}
-                          placeholder={field.placeholder}
-                          required={field.required}
-                          message={field.message}
-                          options={field.options || []}
-                        />
-                      ) : null}
-                    </Col>
-                  ))}
+                  {fieldsConfig.map((field, index) => {
+                    const evaluatedValidator =
+                      typeof field.validator === "function"
+                        ? field.validator({
+                            getFieldValue: form.getFieldValue,
+                            index: name,
+                            dayKey,
+                            form,
+                          })
+                        : field.validator;
+
+                    return (
+                      <Col key={index} xs={24} sm={24} md={24} lg={field.col || 6}>
+                        {field.type === "input" ? (
+                          <MyInput
+                            label={field.label}
+                            name={[name, field.name]}
+                            placeholder={field.placeholder}
+                            required={field.required}
+                            message={field.message}
+                            addonBefore={field.addonBefore}
+                            className={field.className || ""}
+                            validator={evaluatedValidator}
+                          />
+                        ) : field.type === "select" ? (
+                          <MySelect
+                            label={field.label}
+                            name={[name, field.name]}
+                            placeholder={field.placeholder}
+                            required={field.required}
+                            message={field.message}
+                            options={field.options || []}
+                            validator={evaluatedValidator}
+                          />
+                        ) : null}
+                      </Col>
+                    );
+                  })}
                 </Row>
               ))}
             </Col>

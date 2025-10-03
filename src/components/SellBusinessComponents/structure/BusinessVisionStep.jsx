@@ -22,7 +22,6 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                 reason:reasonSelling
             };
 
-            // prevent unnecessary re-renders
             return JSON.stringify(updated) !== JSON.stringify(prev) ? updated : prev;
         });
     };

@@ -72,7 +72,6 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
       }
 
       const formData = new FormData();
-      console.log('Uploading file:', compressedFile);
       formData.append('file', compressedFile);
 
       const res = await fetch('https://verify.jusoor-sa.co/upload', {
