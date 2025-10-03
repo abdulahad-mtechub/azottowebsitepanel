@@ -38,17 +38,21 @@ const createRowValidator = (dayKey, fieldKeys, { emptyMessage, invalidMessage, t
         return Promise.resolve();
     },
 });
-const normalizeNumericSelectValue = (value) => {
+
+const normalizeLookupValue = (value) => {
     if (value === null || value === undefined || value === '') {
         return undefined;
     }
 
     const numeric = Number(value);
-    return Number.isNaN(numeric) ? undefined : numeric;
+    if (Number.isNaN(numeric) || numeric <= 0) {
+        return undefined;
+    }
+
+    return numeric;
 };
 
 const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
-    console.log( "data..........................", data?.revenueTime)
     const [form] = Form.useForm();
 
     useImperativeHandle(ref, () => ({
@@ -95,9 +99,9 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
 
     useEffect(() => {
         form.setFieldsValue({
-            revenueTime: normalizeNumericSelectValue(data.revenueTime),
+            revenueTime: normalizeLookupValue(data.revenueTime),
             revenue: Number(data.revenue),
-            profittime: normalizeNumericSelectValue(data.profittime),
+            profittime: normalizeLookupValue(data.profittime),
             profit: data.profit,
             businessPrice: data.price,
             profitMargin: data.profitMargen,
@@ -120,7 +124,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 inventoryPrice: item.price,
             })),
         });
-    }, [data.revenueTime, data.profittime]);
+    }, [data]);
 
     useEffect(() => {
         const allValues = form.getFieldsValue();
