@@ -1,6 +1,6 @@
 import {Form, Select, Typography} from 'antd';
 import './index.css'
-export const MySelect = ({withoutForm,name,label,mode,disabled,showKey,required,message,value,options, ...props}) => {
+export const MySelect = ({withoutForm,name,label,mode,disabled,required,message,value,options,validator, ...props}) => {
   return (
     withoutForm?
       <Select 
@@ -17,17 +17,23 @@ export const MySelect = ({withoutForm,name,label,mode,disabled,showKey,required,
           
       </Select>
       :
-      <Form.Item
-          name={name}
-          label={<Typography.Text className="fs-14 fw-400">{label}</Typography.Text>}
-          rules={[
-              {
-              required,
-              message,
-              },
-          ]}
-          className='custom-select'
-          >
+    <Form.Item
+      name={name}
+      label={<Typography.Text className="fs-14 fw-400">{label}</Typography.Text>}
+      rules={validator ? [
+        {
+        required,
+        message,
+        },
+        validator,
+      ] : [
+        {
+        required,
+        message,
+        },
+      ]}
+      className='custom-select'
+      >
               <Select 
                 value={value || ''} 
                 mode={mode || ''} 
