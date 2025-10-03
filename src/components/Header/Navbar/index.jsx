@@ -3,11 +3,11 @@ import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { businessmenuData } from '../../../data';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { MobileNavbar } from './MobileNavbar';
 import Cookies from "js-cookie";
 import { useLazyQuery,useSubscription } from '@apollo/client';
-import { NAVUSERDATA,NAVNOTIFICATION } from '../../../graphql/query';
+import { NAVUSERDATA,NAVNOTIFICATION,NOTIFICATION } from '../../../graphql/query';
 import { client } from '../../../config/apolloClient';
 import { useTranslation } from 'react-i18next';
 import {NEW_NOTIFICATION_SUBSCRIPTION} from '../../../graphql/subscription'
@@ -18,7 +18,8 @@ const Navbar = ({setGetCategory}) => {
   const { t,i18n } = useTranslation();
   const userId = Cookies.get("userId"); // read userId from cookie
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
-  const [isshow, setIsShow] = useState(!!userId); // true if userId exists
+const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isshow, setIsShow] = useState(!!userId);
   const [user, setUser] = useState(null);
   const [notificationCount, setNotificationCount] = useState();
   const [ visible, setVisible ] = useState(false)
@@ -32,7 +33,8 @@ const Navbar = ({setGetCategory}) => {
     alt: "Language logo"
   });
   const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(NAVUSERDATA);
-  const [getNotification, { data:notificationsData, loading: notificationLoading, error:notificationError }] = useLazyQuery(NAVNOTIFICATION);
+  const [getNavNotification, { data:navNotificationsData, loading: navNotificationLoading, error:navNotificationError }] = useLazyQuery(NAVNOTIFICATION);
+  const [getNotification, { data:notificationsData, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
   const { data: subscriptionData } = useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
     onSubscriptionData: ({ subscriptionData }) => {
         const newNotif = subscriptionData.data?.newNotification;
@@ -53,7 +55,7 @@ const Navbar = ({setGetCategory}) => {
   useEffect(() => {
     if (userId) {
       getUser({ variables: { getNavUserId: userId } });
-      getNotification({ variables: { userId } });
+      getNavNotification({ variables: { userId } });
     }
   }, [userId]);
   useEffect(() => {
@@ -61,7 +63,7 @@ const Navbar = ({setGetCategory}) => {
       setUser(me.getNavUser);
       setNotificationCount(notificationsData?.getNotifications?.count)
     }
-  }, [me,notificationsData]);
+  }, [me,navNotificationsData]);
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
       return (
@@ -207,14 +209,7 @@ const Navbar = ({setGetCategory}) => {
       onClick: () => handleChange("ar"),
     },
   ];
-  if (userLoading,notificationLoading) {
-    return (
-        <Flex justify="center" align="center" className='h-200'>
-            <Spin size="large" />
-        </Flex>
-    );
-  }
-
+  
   // dummy data for notification
   const data = [
     {
@@ -230,31 +225,66 @@ const Navbar = ({setGetCategory}) => {
       title: 'Your service received a 5-star review from CreativeBuyer93!',
     },
   ];
+console.log("nav", navNotificationsData, notificationsData)
 
-  // notification dropdown
-  const dropdownContent = (
-    <Card className='rounded-12 card-cs size-notify'>
-        <Text>Notification ({notificationCount})</Text>
-        <Divider className="bg-divider my-2" />
+console.log("check drop", dropdownOpen)
+const handleDropdownChange = (open) => {
+  setDropdownOpen(open);
+  if (open) {
+    getNotification({
+      variables: { getUserId: userId },
+      fetchPolicy: "network-only"
+    });
+  }
+};
+
+// Memoize dropdown content
+const dropdownContent = useMemo(() => {
+  const notificationCount = notificationsData?.getNotifications?.count || 0;
+  const data = notificationsData?.getNotifications?.notifications || [];
+
+  return (
+    <Card className="rounded-12 card-cs size-notify">
+      <Text>Notification ({notificationCount})</Text>
+      <Divider className="bg-divider my-2" />
+      {notificationLoading ? (
+        <Text>Loading...</Text>
+      ) : (
         <List
-            itemLayout="horizontal"
-            dataSource={data}
-            className="overflowstyle overflow-scroll"
-            renderItem={(item, index) => (
+          itemLayout="horizontal"
+          dataSource={data}
+          className="overflowstyle overflow-scroll"
+          renderItem={(item, index) => (
             <List.Item key={index}>
-                <List.Item.Meta
-                    avatar={<Avatar src={`/assets/icons/notify-ic.png`} size={30} />}
-                    title={<NavLink to={''} className={'fw-500'}>{item.title}</NavLink>}
-                    description={<Flex gap={5} align="center">
-                        <Text className="fs-12 text-gray">1 hour ago</Text>
-                        <Text className="fs-12 text-gray">12:24 AM</Text>
-                    </Flex>}
-                />
+              <List.Item.Meta
+                avatar={<Avatar src={`/assets/icons/notify-ic.png`} size={30} />}
+                title={
+                  <NavLink to={""} className={"fw-500"}>
+                    {item.name}
+                  </NavLink>
+                }
+                description={
+                  <Flex gap={5} align="center">
+                    <Text className="fs-12 text-gray">1 hour ago</Text>
+                    <Text className="fs-12 text-gray">12:24 AM</Text>
+                  </Flex>
+                }
+              />
             </List.Item>
-            )}
+          )}
         />
+      )}
     </Card>
-    );
+  );
+}, [notificationsData, notificationLoading]);
+
+if (userLoading,notificationLoading,navNotificationLoading) {
+  return (
+      <Flex justify="center" align="center" className='h-200'>
+          <Spin size="large" />
+      </Flex>
+  );
+}
 
   return (
     <>
@@ -292,33 +322,30 @@ const Navbar = ({setGetCategory}) => {
                   </Button>
                   {
                     isshow &&
-                    <>
-                      <Dropdown
-                        popupRender={() => dropdownContent}
-                        trigger={['click']}
-                        className='p-0'
-                        placement='bottom'
+                    <Dropdown
+                      popupRender={() => dropdownContent}
+                      trigger={['click']}
+                      className='p-0'
+                      placement='bottom'
+                      open={dropdownOpen}
+                      onOpenChange={handleDropdownChange}
+                    >
+                      <Badge
+                        size="small"
+                        count={notificationsData?.getNotifications?.count || 0}
+                        overflowCount={99}
                       >
-                          <Badge size="small" count={notificationCount} overflowCount={notificationCount}>
-                            <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
-                              <Image 
-                                src='/assets/icons/notification.png' 
-                                width={'28px'} 
-                                preview={false}
-                                alt="notification icon" 
-                                className="up"
-                              />
-                            </Button>
-                          </Badge>
-                      </Dropdown>
-                      <Dropdown
-                        menu={{items}}
-                        trigger={['click']}
-                      >
-                        
-                        <Image src='/assets/images/av-1.png' alt='user image' preview={false} width={30} className='rounded-50'/>
-                      </Dropdown>
-                    </>
+                        <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
+                          <Image
+                            src="/assets/icons/notification.png"
+                            width={"28px"}
+                            preview={false}
+                            alt="notification icon"
+                            className="up"
+                          />
+                        </Button>
+                      </Badge>
+                    </Dropdown>
                   }
                 </Flex>
               </div>

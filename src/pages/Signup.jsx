@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form, Button, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex, Steps, Dropdown } from "antd";
-import { message } from "antd";
+import { Form, Button, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex, Steps, Dropdown,Upload,message } from "antd";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutation/login";
 import { GETCUSTOMERROLE } from "../graphql/query";
@@ -14,7 +13,7 @@ import { useTranslation } from "react-i18next";
 const { Title, Text, Paragraph } = Typography;
 
 const SignupPage = () => {
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
 
   const district = useDistricts();
   const cities = useCities();
@@ -28,6 +27,7 @@ const SignupPage = () => {
   const [passportFileName, setPassportFileName] = useState("");
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [language, setLanguage]= useState()
   const [customerRole, setCustomerRole] = useState(null);
   const [selectedLang, setSelectedLang] = useState({
     key: "1",
@@ -37,6 +37,16 @@ const SignupPage = () => {
 
   const [getCustomerRole] = useLazyQuery(GETCUSTOMERROLE, {fetchPolicy:"cache-first"});
   const [createUser] = useMutation(CREATE_USER);
+  useEffect(() => {
+    let lang = localStorage.getItem("lang") || "en";
+    setLanguage(lang);
+    i18n.changeLanguage(lang);
+    setSelectedLang(
+      lang === "ar"
+        ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
+        : { key: "1", label: "EN", icon: "assets/icons/en.png" }
+    );
+  }, []);
 
   useEffect(() => {
     const fetchCustomerRole = async () => {
@@ -135,7 +145,11 @@ const SignupPage = () => {
       setCurrent(current + 1);
     }
   };
-
+  const handleChange= (value)=>{
+    setLanguage(value)
+    localStorage.setItem("lang", value)
+    i18n?.changeLanguage(value)
+}
   const prev = () => setCurrent(current - 1);
 
   const steps = [
@@ -150,6 +164,10 @@ const SignupPage = () => {
               required
               message={t("Please enter full name")}
               placeholder={t("Enter Full Name")}
+              validator={{
+                pattern: /^[A-Za-z\u0600-\u06FF\s]+$/,
+                message: t("Name should only contain letters (English or Arabic) and spaces")
+              }}
             />
           </Col>
           <Col span={24}>
@@ -159,6 +177,10 @@ const SignupPage = () => {
               required
               message={t("Please enter Email Address")}
               placeholder={t("Enter Email Address")}
+              validator={{
+                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                message: t("Please enter a valid email address")
+              }}
             />
           </Col>
           <Col lg={{ span: 12 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
@@ -169,6 +191,7 @@ const SignupPage = () => {
               message={t("Please enter district")}
               placeholder={t("Select district")}
               options={district}
+              showKey
               onChange={(val) => setSelectedDistrict(val)}
             />
           </Col>
@@ -177,6 +200,7 @@ const SignupPage = () => {
               label={t("Select City")}
               name="city"
               required
+              showKey
               message={t("Please enter city")}
               placeholder={t("Select city")}
               options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
@@ -201,6 +225,10 @@ const SignupPage = () => {
               placeholder={t("Enter mobile number")}
               value={form.getFieldValue("phoneNo") || ""}
               className="w-100"
+              validator={{
+                pattern: /^[0-9\u0660-\u0669]{8,15}$/,
+                message: t("Please enter a valid phone number (8–15 digits, Arabic or English)")
+              }}
             />
           </Col>
         </Row>
@@ -228,7 +256,83 @@ const SignupPage = () => {
               </Radio.Group>
             </Form.Item>
           </Col>
-          {/* ... rest of file upload fields (wrap placeholders, button texts with t) */}
+          {idType === "national_id" ? (
+            <>
+              <Col span={24}>
+                  <Row gutter={8}>
+                      <Col flex="auto">
+                          <MyInput 
+                              withoutForm 
+                              size={'large'} 
+                              className='m-0' 
+                              placeholder={t("Upload Front Side" )}
+                              readOnly 
+                              value={frontFileName} 
+                          />
+                      </Col>
+                      <Col>
+                          <Upload 
+                              beforeUpload={() => false} 
+                              showUploadList={false} 
+                              maxCount={1} 
+                              onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
+                          >
+                              <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
+                          </Upload>
+                      </Col>
+                  </Row>
+              </Col>
+              <Col span={24}>
+                  <Row gutter={8}>
+                      <Col flex="auto">
+                          <MyInput 
+                              withoutForm 
+                              size={'large'} 
+                              className='m-0' 
+                              placeholder={t("Upload Back Side")}
+                              readOnly 
+                              value={backFileName} 
+                          />
+                      </Col>
+                      <Col>
+                          <Upload 
+                              beforeUpload={() => false} 
+                              showUploadList={false} 
+                              maxCount={1} 
+                              onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
+                          >
+                              <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
+                          </Upload>
+                      </Col>
+                  </Row>
+              </Col>
+            </>
+          ) : (
+              <Col span={24}>
+                  <Row gutter={8}>
+                      <Col flex="auto">
+                          <MyInput 
+                              withoutForm 
+                              size={'large'} 
+                              className='m-0' 
+                              placeholder={t("Upload Passport" )}
+                              readOnly 
+                              value={passportFileName} 
+                          />
+                      </Col>
+                      <Col>
+                          <Upload 
+                              beforeUpload={() => false} 
+                              showUploadList={false} 
+                              maxCount={1} 
+                              onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
+                          >
+                              <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
+                          </Upload>
+                      </Col>
+                  </Row>
+              </Col>
+          )}
           <Col span={24}>
             <MyInput
               label={t("New Password")}
@@ -264,7 +368,9 @@ const SignupPage = () => {
                     if (!value || getFieldValue("password") === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error(t("The password that you entered do not match!")));
+                    return Promise.reject(
+                      new Error(t("The password that you entered do not match!"))
+                    );
                   },
                 }),
               ]}
@@ -300,7 +406,11 @@ const SignupPage = () => {
           <Text className="fs-13">EN</Text>
         </Space>
       ),
-      onClick: () => setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+      onClick: () => {
+        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png" }),
+        setLanguage("en")
+        handleChange("en")
+      }
     },
     {
       key: "2",
@@ -310,7 +420,10 @@ const SignupPage = () => {
           <Text className="fs-13">AR</Text>
         </Space>
       ),
-      onClick: () => setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+      onClick: () => {setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+      setLanguage("ar")
+        handleChange("ar")  
+    }
     },
   ];
 

@@ -1,6 +1,6 @@
 import {Form, Select, Typography} from 'antd';
 import './index.css'
-export const MySelect = ({withoutForm,name,label,mode,disabled,required,message,value,options,validator, ...props}) => {
+export const MySelect = ({withoutForm,name,label,mode,disabled,showKey,required,message,value,options,validator, ...props}) => {
   return (
     withoutForm?
       <Select 
@@ -42,7 +42,7 @@ export const MySelect = ({withoutForm,name,label,mode,disabled,required,message,
                 {...props}
                 >
                   {
-                      options?.map(opt=><Select.Option value={opt?.name} key={opt?.id}>{opt?.name}</Select.Option>)
+                      options?.map(opt=><Select.Option value={showKey ? opt?.id : opt.name} key={opt?.id}>{opt?.name}</Select.Option>)
                   }
               </Select>
       </Form.Item>  

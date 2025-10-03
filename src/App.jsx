@@ -3,6 +3,7 @@ import { RouteF } from './RouteF'
 import { client } from './config'; 
 import { ApolloProvider } from '@apollo/client';
 import { AuthProvider } from './context/AuthContext';
+import '@ant-design/v5-patch-for-react-19'; 
 
 function App() {
 
