@@ -32,6 +32,7 @@ const GET_ALL_BUSINESSES = gql`
       id
         category {
         name
+        arabicName
       }
       businessStatus
       businessTitle

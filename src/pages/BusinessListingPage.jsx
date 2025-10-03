@@ -8,12 +8,14 @@ import { useLazyQuery } from '@apollo/client';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import {GET_ALL_BUSINESSES, GET_BUSINESS_BY_CATEGORY, GET_BUSINESS_BY_CITY, GET_BUSINESS_BY_REVENUE, GET_BUSINESS_BY_PROFIT,GET_BUSINESS_BY_DISTRICT } from '../graphql/query/business';
-import { t } from 'i18next';
+import { useTranslation } from "react-i18next";
 
 const { Text, Title } = Typography;
 
 const BusinessListingPage = ({getcategory}) => {
-
+    const {t,i18n}= useTranslation()
+    const lang = localStorage.getItem("lang") || i18n.language || "en";
+    const isArabic = lang.toLowerCase() === "ar";
     const district = useDistricts();
     const cities = useCities();
     const [params] = useSearchParams();
@@ -26,13 +28,16 @@ const BusinessListingPage = ({getcategory}) => {
     const [fetchBusinesses, { data: businesses, loading: isLoading, refetch }] = useLazyQuery(GET_ALL_BUSINESSES,
         { variables:{ limit: null, offSet: null, search: null, sort: { price: null }, filter: {} } }
     );
-
+    const options = [
+        { id: 1, key: t('Low to High')},
+        { id: 2, key: t('High to Low') },
+      ];
     const [selectedDistrict, setSelectedDistrict] = useState(t('Select District'));
     const [selectedCity, setSelectedCity] = useState(null);
     const [searchSelectedCity, setsearchSelectedCity] = useState([]);
     const [cityOptions, setCityOptions] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState('');
-    const [selectfilter, setSelectFilter] = useState(t('Low to High'));
+    const [selectfilter, setSelectFilter] = useState(options[1]);
 
     const [multipleStep, setMultipleStep] = useState(null);
     const [priceRange, setPriceRange] = useState([null, null]);
@@ -76,7 +81,7 @@ const BusinessListingPage = ({getcategory}) => {
             revenueRange: revenue || sanitizeRange(revenueRange),
             multiple: multipleStep !== null ? Number(multipleStep) : null,
           },
-          sort: { price: selectfilter === t('Low to High') ? 'ASC' : 'DESC' },
+          sort: { price: selectfilter === options[0] ? 'ASC' : 'DESC' },
         };
     };
 
@@ -149,6 +154,7 @@ const BusinessListingPage = ({getcategory}) => {
             fetchBusinesses({ query, variables });
         }
     };
+    console.log("exploreData",businessList)
 
     return (
         <div className='padd-1 mb-3'>
@@ -231,15 +237,12 @@ const BusinessListingPage = ({getcategory}) => {
                             withoutForm
                             showSearch
                             placeholder={t('Sorting')}
-                            options={[
-                                { id: 1, name: t('Low to High') },
-                                { id: 2, name: t('High to Low') }
-                            ]}
+                            options={options.map(opt => ({ ...opt, name: t(opt.key) }))}
                             className='select'
                             value={selectfilter}
                             onChange={(id) => {
-                                const selected = id === 1 ? t('Low to High') : t('High to Low');
-                                setSelectFilter(selected);
+                                const selectedOption = options.find(opt => opt.id === id);
+                                setSelectFilter(selectedOption.key);
                             }}
                         />
                     </Flex>
@@ -284,7 +287,7 @@ const BusinessListingPage = ({getcategory}) => {
                             exploreData={businessList?.map((biz) => ({
                                 id: biz.id,
                                 title: biz.businessTitle,
-                                categoryName: biz.category.name,
+                                categoryName: isArabic? biz.category.arabicName:biz.category.name,
                                 description: biz.description,
                                 isSaved: biz.isSaved,
                                 amount: `${biz.price?.toLocaleString()}`,

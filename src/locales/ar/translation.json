@@ -178,6 +178,7 @@
   "Explore Similar Businesses": "استكشاف شركات مماثلة",
   "Discover other verified businesses with similar category tailored to your interests.": "اكتشف شركات موثوقة أخرى ذات فئة مماثلة تتناسب مع اهتماماتك.",
   "Filter By": "فلتر بواسطة",
+  "Filter": "فلتر",
   "Price Range": "نطاق السعر",
   "Annual Revenue": "الإيرادات السنوية",
   "Annual Profit": "الأرباح السنوية",
@@ -719,7 +720,7 @@
   "Insights & Ideas to Help You Make": "رؤى وأفكار لمساعدتك على اتخاذ",
   "Better Business Decisions": "قرارات تجارية أفضل",
   "Explore articles on buying, selling, valuation, and trends in Saudi Arabia with expert tips from entrepreneurs and analysts.": "استكشف مقالات حول الشراء، البيع، التقييم، والاتجاهات في السعودية مع نصائح خبراء من رواد أعمال ومحللين.",
-  "Showing 1-10 of 47 Businesses": "عرض 1-10 من 47 شركة",
+  "Showing {{start}}–{{end}} of {{total}} Businesses": "عرض {{start}}–{{end}} من {{total}} شركة",
   "Sorting": "الترتيب",
   "Low to High": "من الأقل للأعلى",
   "High to Low": "من الأعلى للأقل",
@@ -787,5 +788,15 @@
 "Name should only contain letters (English or Arabic) and spaces":"يجب أن يحتوي الاسم على أحرف (إنجليزية أو عربية) ومسافات فقط",
 "Please enter a valid email address":"يرجى إدخال عنوان بريد إلكتروني صالح",
 "Please enter a valid phone number (8–15 digits, Arabic or English)":"يرجى إدخال رقم هاتف صالح (8–15 رقمًا، بالعربية أو بالإنجليزية)",
-"Please confirm your password":"يرجى تأكيد كلمة المرور"
+"Please confirm your password":"يرجى تأكيد كلمة المرور",
+"Find the Right Business for You":"ابحث عن العمل المناسب لك",
+"Search by city or business type and explore verified listings that match your goals.":"ابحث حسب المدينة أو نوع النشاط التجاري واستعرض القوائم الموثوقة التي تتوافق مع أهدافك",
+"Browse Businesses By Category":"تصفح الأنشطة التجارية حسب الفئة",
+"SAR 0 - SAR 10,000": "ريال سعودي ٠ - ريال سعودي ١٠,٠٠٠",
+"SAR 10,000 - SAR 30,000": "ريال سعودي ١٠,٠٠٠ - ريال سعودي ٣٠,٠٠٠",
+"SAR 30,000 - SAR 60,000": "ريال سعودي ٣٠,٠٠٠ - ريال سعودي ٦٠,٠٠٠",
+"SAR 60,000 - SAR 100,000": "ريال سعودي ٦٠,٠٠٠ - ريال سعودي ١٠٠,٠٠٠",
+"SAR 100,000 - SAR 150,000": "ريال سعودي ١٠٠,٠٠٠ - ريال سعودي ١٥٠,٠٠٠",
+"SAR 150,000+": "ريال سعودي ١٥٠,٠٠٠+"
+
 }

@@ -703,7 +703,7 @@
   "Insights & Ideas to Help You Make": "Insights & Ideas to Help You MakeBetter Business Decisions",
   "Better Business Decisions":"Better Business Decisions",
   "Explore articles on buying, selling, valuation, and trends in Saudi Arabia with expert tips from entrepreneurs and analysts.": "Explore articles on buying, selling, valuation, and trends in Saudi Arabia with expert tips from entrepreneurs and analysts.",
-  "Showing 1-10 of 47 Businesses": "Showing 1-10 of 47 Businesses",
+  "Showing {{start}}–{{end}} of {{total}} Businesses": "Showing {{start}}–{{end}} of {{total}} Businesses",
   "Sorting": "Sorting",
   "Low to High": "Low to High",
   "High to Low": "High to Low",
@@ -816,5 +816,11 @@
   "Name should only contain letters (English or Arabic) and spaces":"Name should only contain letters (English or Arabic) and spaces",
   "Please enter a valid email address":"Please enter a valid email address",
   "Please enter a valid phone number (8–15 digits, Arabic or English)":"Please enter a valid phone number (8–15 digits, Arabic or English)",
-  "Please confirm your password":"Please confirm your password"
+  "Please confirm your password":"Please confirm your password",
+  "SAR 0 - SAR 10,000": "SAR 0 - SAR 10,000",
+"SAR 10,000 - SAR 30,000": "SAR 10,000 - SAR 30,000",
+"SAR 30,000 - SAR 60,000": "SAR 30,000 - SAR 60,000",
+"SAR 60,000 - SAR 100,000": "SAR 60,000 - SAR 100,000",
+"SAR 100,000 - SAR 150,000": "SAR 100,000 - SAR 150,000",
+"SAR 150,000+": "SAR 150,000+"
 }

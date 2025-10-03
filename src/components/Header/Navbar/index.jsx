@@ -2,23 +2,26 @@ import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Spa
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { businessmenuData } from '../../../data';
 import { useEffect, useState, useMemo, useRef } from 'react';
 import { MobileNavbar } from './MobileNavbar';
 import Cookies from "js-cookie";
 import { useLazyQuery,useSubscription } from '@apollo/client';
-import { NAVUSERDATA,NAVNOTIFICATION,NOTIFICATION } from '../../../graphql/query';
+import { NAVUSERDATA,NAVNOTIFICATION,NOTIFICATION,GET_CATEGORIES } from '../../../graphql/query';
 import { client } from '../../../config/apolloClient';
 import { useTranslation } from 'react-i18next';
 import {NEW_NOTIFICATION_SUBSCRIPTION} from '../../../graphql/subscription'
+import { useQuery } from '@apollo/client';
+
 
 const { Text, Title } = Typography;
 
 const Navbar = ({setGetCategory}) => { 
   const { t,i18n } = useTranslation();
+  const lan = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lan.toLowerCase() === "ar";
   const userId = Cookies.get("userId"); // read userId from cookie
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
-const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isshow, setIsShow] = useState(!!userId);
   const [user, setUser] = useState(null);
   const [ visible, setVisible ] = useState(false)
@@ -33,6 +36,39 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
     icon: "assets/icons/en.png",
     alt: "Language logo"
   });
+  const { data: categoryData } = useQuery(GET_CATEGORIES);
+  const categories = categoryData?.getAllCategories?.categories?.map(cat => ({
+    id: cat.id,
+    title: cat.name,
+    arabicTitle:cat.arabicName
+  })) || [];
+  const businessmenuData = [
+    {
+      id: 1,
+      icon: '/assets/icons/m-1.png',
+      title: t("Browse by Categories"),
+      subtitle: 'Choose from popular business types.',
+      subdropdown: categories.map((cat, index) => ({
+        id: index + 1,
+        title: isArabic ? cat.arabicTitle : cat.title,
+        path: `/businesslisting?category=${encodeURIComponent(cat.name)}`,
+      })),
+    },
+    {
+      id: 3,
+      icon: '/assets/icons/m-3.png',
+      title: t('Browse by Revenue'),
+      subtitle: 'Filter by business earnings.',
+      subdropdown: [
+          { id: 1, title: t('SAR 0 - SAR 10,000'), path: '/businesslisting?revenue=0,10000' },
+          { id: 2, title: t('SAR 10,000 - SAR 30,000'), path: '/businesslisting?revenue=10000,30000' },
+          { id: 3, title: t('SAR 30,000 - SAR 60,000'), path: '/businesslisting?revenue=30000,60000' },
+          { id: 4, title: t('SAR 60,000 - SAR 100,000'), path: '/businesslisting?revenue=60000,100000' },
+          { id: 5, title: t('SAR 100,000 - SAR 150,000'), path: '/businesslisting?revenue=100000,150000' },
+          { id: 6, title: t('SAR 150,000+'), path: '/businesslisting?revenue=150000,9999999' },
+        ]
+  },
+  ]
   const [getUser, { data:me, loading: userLoading }] = useLazyQuery(NAVUSERDATA);
   const [getNavNotification, { data:navNotificationsData, loading: navNotificationLoading }] = useLazyQuery(NAVNOTIFICATION);
   const [getNotification, { data:notificationsData, loading: notificationLoading }] = useLazyQuery(NOTIFICATION);
