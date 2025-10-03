@@ -36,9 +36,9 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
       d && (d.filePath || d.fileName) && Object.values(d).some(val => val !== null && val !== '' && val !== undefined)
     ) : [];
     
-    // Separate CR document (first one) from support documents
-    const crDoc = docs.find(d => d.title === 'Commercial Registration (CR)') || docs[0] || null;
-    const supportDocs = docs.filter(d => d.title !== 'Commercial Registration (CR)' && d !== crDoc);
+    // Only find documents that are explicitly titled as CR or Supporting Document
+    const crDoc = docs.find(d => d.title === 'Commercial Registration (CR)') || null;
+    const supportDocs = docs.filter(d => d.title === 'Supporting Document');
 
     const crList = crDoc ? [docToUploadItem(crDoc, 0)] : [];
     const supportList = supportDocs.map((d, i) => docToUploadItem(d, i + 1));
@@ -46,7 +46,6 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
     setInitialCrList(crList);
     setInitialSupportList(supportList);
     
-    // Set form field values with proper synchronization
     setTimeout(() => {
       try {
         form.setFieldsValue({
@@ -73,6 +72,7 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
       }
 
       const formData = new FormData();
+      console.log('Uploading file:', compressedFile);
       formData.append('file', compressedFile);
 
       const res = await fetch('https://verify.jusoor-sa.co/upload', {
@@ -83,7 +83,8 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
       if (!res.ok) throw new Error('Upload failed');
 
       const data = await res.json();
-
+      console.log('Upload response data:', data);
+      alert( "File uploaded: " + data.fileName );
       return {
         fileName: data.fileName,
         fileType: data.fileType,
@@ -110,16 +111,13 @@ const handleSingleFileUpload = async (fileOrFiles) => {
     const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
     const supportDocs = existingDocs.filter(d => d.title !== 'Commercial Registration (CR)');
     
-    // Place CR document first, followed by support documents
     const updatedDocs = [crDocument, ...supportDocs];
 
     const updated = { ...data, documents: updatedDocs };
     setData(updated);
     
-    // Update CR file list for UI
     setInitialCrList([docToUploadItem(crDocument, 0)]);
     
-    // Update form field
     form.setFieldsValue({ uploadcr: [crDocument] });
   } catch (err) {
     console.error('handleSingleFileUpload error:', err);
@@ -129,16 +127,11 @@ const handleSingleFileUpload = async (fileOrFiles) => {
 const handleSingleFileRemove = () => {
   try {
     const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
-    // Keep only support documents (remove CR document)
     const supportDocs = existingDocs.filter(d => d.title !== 'Commercial Registration (CR)');
     
     const updated = { ...data, documents: supportDocs };
     setData(updated);
     
-    // Update CR file list for UI
-    setInitialCrList([]);
-    
-    // Update form state
     form.setFieldsValue({ uploadcr: null });
   } catch (err) {
     console.error('handleSingleFileRemove error:', err);
