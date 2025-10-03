@@ -1,4 +1,4 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin, List, Divider, Card } from 'antd';
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
@@ -213,7 +213,49 @@ const Navbar = ({setGetCategory}) => {
             <Spin size="large" />
         </Flex>
     );
-}
+  }
+
+  // dummy data for notification
+  const data = [
+    {
+      title: 'You’ve received a Requested Proposal for your service from CreativeBuyer93!',
+    },
+    {
+      title: 'Your service received a 5-star review from CreativeBuyer93!',
+    },
+    {
+      title: 'Your service received a 5-star review from CreativeBuyer93!',
+    },
+    {
+      title: 'Your service received a 5-star review from CreativeBuyer93!',
+    },
+  ];
+
+  // notification dropdown
+  const dropdownContent = (
+    <Card className='rounded-12 card-cs size-notify'>
+        <Text>Notification ({notificationCount})</Text>
+        <Divider className="bg-divider my-2" />
+        <List
+            itemLayout="horizontal"
+            dataSource={data}
+            className="overflowstyle overflow-scroll"
+            renderItem={(item, index) => (
+            <List.Item key={index}>
+                <List.Item.Meta
+                    avatar={<Avatar src={`/assets/icons/notify-ic.png`} size={30} />}
+                    title={<NavLink to={''} className={'fw-500'}>{item.title}</NavLink>}
+                    description={<Flex gap={5} align="center">
+                        <Text className="fs-12 text-gray">1 hour ago</Text>
+                        <Text className="fs-12 text-gray">12:24 AM</Text>
+                    </Flex>}
+                />
+            </List.Item>
+            )}
+        />
+    </Card>
+    );
+
   return (
     <>
       <div className='gen-navbar-container relative'>
@@ -251,17 +293,24 @@ const Navbar = ({setGetCategory}) => {
                   {
                     isshow &&
                     <>
-                      <Badge size="small" count={1} overflowCount={1} >
-                        <Button className='bg-transparent border-0 p-0' aria-labelledby='Notification'>
-                          <Image 
-                            src='/assets/icons/notification.png' 
-                            width={'28px'} 
-                            preview={false}
-                            alt="notification icon" 
-                            className="up"
-                          />
-                        </Button>
-                      </Badge>
+                      <Dropdown
+                        popupRender={() => dropdownContent}
+                        trigger={['click']}
+                        className='p-0'
+                        placement='bottom'
+                      >
+                          <Badge size="small" count={notificationCount} overflowCount={notificationCount}>
+                            <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
+                              <Image 
+                                src='/assets/icons/notification.png' 
+                                width={'28px'} 
+                                preview={false}
+                                alt="notification icon" 
+                                className="up"
+                              />
+                            </Button>
+                          </Badge>
+                      </Dropdown>
                       <Dropdown
                         menu={{items}}
                         trigger={['click']}
@@ -412,17 +461,24 @@ const Navbar = ({setGetCategory}) => {
                   <PlusOutlined /> {t("Sell a Business")}
                 </Button>
               
-                <Badge size="small" count={notificationCount} overflowCount={notificationCount}>
-                  <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
-                    <Image 
-                      src='/assets/icons/notification.png' 
-                      width={'28px'} 
-                      preview={false}
-                      alt="notification icon" 
-                      className="up"
-                    />
-                  </Button>
-                </Badge>
+                
+                <Dropdown
+                  popupRender={() => dropdownContent}
+                  trigger={['click']}
+                  className='p-0'
+                >
+                    <Badge size="small" count={notificationCount} overflowCount={notificationCount}>
+                      <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
+                        <Image 
+                          src='/assets/icons/notification.png' 
+                          width={'28px'} 
+                          preview={false}
+                          alt="notification icon" 
+                          className="up"
+                        />
+                      </Button>
+                    </Badge>
+                </Dropdown>
 
               <Dropdown menu={{ items }} trigger={['click']}>
                 <Flex align='center' gap={10}>
