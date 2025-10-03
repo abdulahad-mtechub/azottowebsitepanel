@@ -31,7 +31,7 @@ const SellBusinessCreate = () => {
                 foundedDate: parsed.foundedDate ? dayjs(parsed.foundedDate) : null,
             };
         }
-        return draft ? JSON.parse(draft) : {
+        return {
             isByTakbeer: null,
             businessTitle: null,
             categoryId: null,
@@ -196,7 +196,40 @@ const SellBusinessCreate = () => {
     console.log("checkin", businessData)
 
     const handleSaveDraft = () => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(businessData));
+        // Filter out empty/null/undefined document objects before saving
+        const cleanedBusinessData = {
+            ...businessData,
+            documents: businessData.documents.filter(
+                (doc) =>
+                    doc &&
+                    Object.values(doc).some(
+                        (val) => val !== null && val !== '' && val !== undefined
+                    )
+            ),
+            assets: businessData.assets.filter(
+                (asset) =>
+                    asset &&
+                    Object.values(asset).some(
+                        (val) => val !== null && val !== '' && val !== undefined
+                    )
+            ),
+            liabilities: businessData.liabilities.filter(
+                (liability) =>
+                    liability &&
+                    Object.values(liability).some(
+                        (val) => val !== null && val !== '' && val !== undefined
+                    )
+            ),
+            inventoryItems: businessData.inventoryItems.filter(
+                (item) =>
+                    item &&
+                    Object.values(item).some(
+                        (val) => val !== null && val !== '' && val !== undefined
+                    )
+            )
+        };
+        
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(cleanedBusinessData));
         messageApi.success(t('Draft saved locally!'));
     };
 

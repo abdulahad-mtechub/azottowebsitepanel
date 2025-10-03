@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Form, Button, Upload, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex, Steps, Dropdown } from "antd";
+import { Form, Button, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex, Steps, Dropdown } from "antd";
 import { message } from "antd";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutation/login";

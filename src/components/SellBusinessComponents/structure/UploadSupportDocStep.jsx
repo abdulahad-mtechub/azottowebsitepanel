@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Card, Flex, Form, Image, Tooltip, Typography } from 'antd'
+import { Card, Flex, Form, Image, message, Tooltip, Typography } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { SingleFileUpload } from '../../Forms';
 import imageCompression from 'browser-image-compression';
@@ -11,6 +11,8 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
   React.useImperativeHandle(ref, () => ({
     validate: () => form.validateFields(),
   }));
+
+  const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm();
   const [uploading, setUploading] = useState(false);
   const [initialCrList, setInitialCrList] = useState([]);
@@ -24,23 +26,38 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
     originFileObj: null,
   });
 
+  const normalizeFiles = (fileOrFiles) => {
+    if (!fileOrFiles) return [];
+    return Array.isArray(fileOrFiles) ? fileOrFiles : [fileOrFiles];
+  };
 
   useEffect(() => {
-    const docs = Array.isArray(data?.documents) ? data.documents : [];
-    const crDoc = docs.length > 0 ? docs[0] : null;
-    const supportDocs = crDoc ? docs.slice(1) : docs.slice(0);
+    const docs = Array.isArray(data?.documents) ? data.documents.filter(d => 
+      d && (d.filePath || d.fileName) && Object.values(d).some(val => val !== null && val !== '' && val !== undefined)
+    ) : [];
+    
+    // Separate CR document (first one) from support documents
+    const crDoc = docs.find(d => d.title === 'Commercial Registration (CR)') || docs[0] || null;
+    const supportDocs = docs.filter(d => d.title !== 'Commercial Registration (CR)' && d !== crDoc);
 
-    setInitialCrList(crDoc ? [docToUploadItem(crDoc, 0)] : []);
-    setInitialSupportList(supportDocs.map((d, i) => docToUploadItem(d, i + 1)));
-    try {
-      form.setFieldsValue({
-        uploadcr: crDoc ? (crDoc.filePath || crDoc.fileName) : null,
-        uploadmult: supportDocs.length > 0 ? supportDocs.map(d => d.filePath || d.fileName) : [],
-      });
-    } catch (err) {
-      console.warn("setFieldsValue failed:", err);
-    }
-  }, [data, form]);
+    const crList = crDoc ? [docToUploadItem(crDoc, 0)] : [];
+    const supportList = supportDocs.map((d, i) => docToUploadItem(d, i + 1));
+    
+    setInitialCrList(crList);
+    setInitialSupportList(supportList);
+    
+    // Set form field values with proper synchronization
+    setTimeout(() => {
+      try {
+        form.setFieldsValue({
+          uploadcr: crDoc ? [crDoc] : null,
+          uploadmult: supportDocs.length > 0 ? supportDocs : [],
+        });
+      } catch (err) {
+        console.warn("setFieldsValue failed:", err);
+      }
+    }, 0);
+  }, [data?.documents, form]);
 
   const uploadFileToServer = async (file) => {
     setUploading(true);
@@ -81,34 +98,59 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
   };
 
 const handleSingleFileUpload = async (fileOrFiles) => {
-  // SingleFileUpload will pass a File (not an array) for multiple=false
   try {
-    const file = fileOrFiles; // single File
-    // perform upload in parent (uploadFileToServer already exists in your code)
+    const file = fileOrFiles;
     const fileInfo = await uploadFileToServer(file);
 
-    const updatedDocs = Array.isArray(data.documents) ? [...data.documents] : [];
-    updatedDocs[0] = {
+    const crDocument = {
       title: 'Commercial Registration (CR)',
       ...fileInfo,
     };
 
+    const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
+    const supportDocs = existingDocs.filter(d => d.title !== 'Commercial Registration (CR)');
+    
+    // Place CR document first, followed by support documents
+    const updatedDocs = [crDocument, ...supportDocs];
+
     const updated = { ...data, documents: updatedDocs };
     setData(updated);
+    
+    // Update CR file list for UI
+    setInitialCrList([docToUploadItem(crDocument, 0)]);
+    
+    // Update form field
+    form.setFieldsValue({ uploadcr: [crDocument] });
   } catch (err) {
     console.error('handleSingleFileUpload error:', err);
   }
 };
 
+const handleSingleFileRemove = () => {
+  try {
+    const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
+    // Keep only support documents (remove CR document)
+    const supportDocs = existingDocs.filter(d => d.title !== 'Commercial Registration (CR)');
+    
+    const updated = { ...data, documents: supportDocs };
+    setData(updated);
+    
+    // Update CR file list for UI
+    setInitialCrList([]);
+    
+    // Update form state
+    form.setFieldsValue({ uploadcr: null });
+  } catch (err) {
+    console.error('handleSingleFileRemove error:', err);
+  }
+};
 
-// multiple supporting docs
+
 const handleMultipleFileUpload = async (fileOrFiles) => {
-  // SingleFileUpload will pass an Array<File> for multiple=true
   const normalized = Array.isArray(fileOrFiles) ? fileOrFiles : normalizeFiles(fileOrFiles);
   if (!normalized || normalized.length === 0) return;
 
   try {
-    // Parent uploads all files in parallel
     const uploadedFiles = await Promise.all(
       normalized.map((file) =>
         uploadFileToServer(file).catch((err) => {
@@ -120,32 +162,74 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
 
     const successful = uploadedFiles.filter(Boolean);
     if (successful.length === 0) {
-      message.warn('No files uploaded successfully');
+      messageApi.warn('No files uploaded successfully');
       return;
     }
 
-    const otherDocs = successful.map((fileInfo) => ({
+    const newSupportDocs = successful.map((fileInfo) => ({
       title: 'Supporting Document',
       fileName: fileInfo.fileName,
       filePath: fileInfo.filePath,
       fileType: fileInfo.fileType,
       size: fileInfo.size,
-      serverId: fileInfo.serverId || null,
     }));
 
-    // Preserve CR (index 0) if exists
-    const firstDoc = Array.isArray(data.documents) && data.documents.length > 0 ? data.documents[0] : null;
-    const newDocs = firstDoc ? [firstDoc, ...otherDocs] : [...otherDocs];
+    const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
+    const crDoc = existingDocs.find(d => d.title === 'Commercial Registration (CR)');
+    const existingSupportDocs = existingDocs.filter(d => d.title !== 'Commercial Registration (CR)');
+    
+    // Merge existing support docs with new ones
+    const allSupportDocs = [...existingSupportDocs, ...newSupportDocs];
+    const finalDocs = crDoc ? [crDoc, ...allSupportDocs] : allSupportDocs;
 
-    const updated = { ...data, documents: newDocs };
+    const updated = { ...data, documents: finalDocs };
     setData(updated);
+
+    // Update supporting documents list for UI
+    const updatedSupportList = allSupportDocs.map((d, i) => docToUploadItem(d, i + 1));
+    setInitialSupportList(updatedSupportList);
+    
+    // Update form field
+    form.setFieldsValue({ uploadmult: allSupportDocs });
 
   } catch (err) {
     console.error('handleMultipleFileUpload error:', err);
   }
 };
+
+const handleMultipleFileRemove = (removedFile) => {
+  try {
+    const updatedDocs = Array.isArray(data.documents) ? [...data.documents] : [];
+    const crDoc = updatedDocs.find(d => d.title === 'Commercial Registration (CR)');
+    const existingSupportDocs = updatedDocs.filter(d => d.title !== 'Commercial Registration (CR)');
+    
+    // Find and remove the document by matching file name or path
+    const remainingSupportDocs = existingSupportDocs.filter(doc => {
+      return !(doc.fileName === removedFile.name || 
+               doc.filePath === removedFile.url ||
+               doc.filePath === removedFile.name ||
+               (removedFile.uid && doc.serverId === removedFile.uid));
+    });
+    
+    // Reconstruct documents array
+    const finalDocs = crDoc ? [crDoc, ...remainingSupportDocs] : remainingSupportDocs;
+    
+    const updated = { ...data, documents: finalDocs };
+    setData(updated);
+    
+    // Update supporting documents list for UI
+    const updatedSupportList = remainingSupportDocs.map((d, i) => docToUploadItem(d, i + 1));
+    setInitialSupportList(updatedSupportList);
+    
+    // Update form state with the remaining support documents
+    form.setFieldsValue({ uploadmult: remainingSupportDocs });
+  } catch (err) {
+    console.error('handleMultipleFileRemove error:', err);
+  }
+};
   return (
     <>
+      {contextHolder}
       <Flex justify='space-between' className='mb-3' gap={5} wrap align='flex-start'>
         <Flex vertical gap={1}>
           <ModuleTopHeading level={4} name='Upload supporting documents' />
@@ -170,10 +254,10 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
             </Flex>
             <Flex className="w-100">
               <SingleFileUpload
-                form={form}
                 name={'uploadcr'}
                 title={'Upload'}
                 onUpload={handleSingleFileUpload}
+                onRemove={handleSingleFileRemove}
                 uploading={uploading}
                 multiple={false}
                 initialFileList={initialCrList}
@@ -197,10 +281,10 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
             </Flex>
             <Flex className="w-100">
               <SingleFileUpload
-                form={form}
                 name={'uploadmult'}
                 title={'Upload'}
                 onUpload={handleMultipleFileUpload}
+                onRemove={handleMultipleFileRemove}
                 uploading={uploading}
                 multiple={true}
                 initialFileList={initialSupportList}

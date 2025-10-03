@@ -3,7 +3,7 @@ import { PlusOutlined, DeleteOutlined, MinusCircleFilled } from '@ant-design/ico
 import { Upload, Form, Typography, Flex, Button } from 'antd';
 const { Dragger } = Upload;
 
-const SingleFileUpload = ({ multiple = false, name, required, message, form, title,onUpload, initialFileList }) => {
+const SingleFileUpload = ({ multiple = false, name, required, message, title, onUpload, onRemove, initialFileList }) => {
   const [fileList, setFileList] = useState([]);
   useEffect(()=> {
     setFileList([...initialFileList])
@@ -19,21 +19,15 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, tit
     setFileList(newFileList);
   
     if (multiple) {
-      const prevFiles = form.getFieldValue(name) || [];
       const newFiles = newFileList
         .map(f => f.originFileObj)
         .filter(Boolean);
-
-      const merged = [...prevFiles, ...newFiles, ...initialFileList];
-  
-      form.setFieldsValue({ [name]: merged });
   
       if (newFiles.length > 0) {
         await onUpload(newFiles);
       }
     } else {
       const file = newFileList[0]?.originFileObj || null;
-      form.setFieldsValue({ [name]: file });
   
       if (file) {
         await onUpload(file);
@@ -46,8 +40,11 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, tit
     const newFileList = fileList.filter(f => f.uid !== file.uid);
     setFileList(newFileList);
     
-    const files = multiple ? newFileList.map(f => f.originFileObj) : null;
-    form.setFieldsValue({ [name]: files || null });
+    // Call parent component's onRemove handler if provided
+    // Parent will handle form field updates and state management
+    if (onRemove) {
+      onRemove(file);
+    }
   };
 
   return (
@@ -67,7 +64,7 @@ const SingleFileUpload = ({ multiple = false, name, required, message, form, tit
             name="file"
             multiple={multiple}
             showUploadList={false}
-            customRequest={({ file, onSuccess }) => {
+            customRequest={({ onSuccess }) => {
               setTimeout(() => {
                 onSuccess("ok");
               }, 1000);
