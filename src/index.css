@@ -1482,6 +1482,12 @@ body.rtl {
     }
 }
 
+@media (max-width: 1000px){
+    .size-notify{
+        width: 320px !important;
+    }
+}
+
 .h-auto{
     height: auto !important;
 }
@@ -1573,4 +1579,8 @@ body.rtl {
 
 .opacity-7{
     opacity: .7;
+}
+
+.size-notify{
+    width: 400px;
 }
