@@ -219,10 +219,10 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 noStyle
                             >
                                 <Input
-                                type='number'
-                                placeholder="Enter revenue"
-                                className="w-100 "
-                                prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={15} fetchPriority="high" />}
+                                    type='number'
+                                    placeholder="Enter revenue"
+                                    className="w-100 "
+                                    prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={15} fetchPriority="high" />}
                                 />
                             </Form.Item>
                             </Flex>

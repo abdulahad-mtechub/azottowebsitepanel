@@ -70,9 +70,25 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
           useWebWorker: true,
         });
       }
+      console.log( "file", compressedFile)
+
+      let fileToUpload = compressedFile;
+
+      if (compressedFile && !(compressedFile instanceof File)) {
+        fileToUpload = new File([compressedFile], file.name, {
+          type: compressedFile.type || file.type,
+        });
+      }
+
+      if (!fileToUpload.name) {
+        const extension = fileToUpload.type?.split('/')?.[1] ? `.${fileToUpload.type.split('/')[1]}` : '';
+        fileToUpload = new File([fileToUpload], `${file.name || `upload-${Date.now()}`}${extension}`, {
+          type: fileToUpload.type || file.type,
+        });
+      }
 
       const formData = new FormData();
-      formData.append('file', compressedFile);
+      formData.append('file', fileToUpload, fileToUpload.name);
 
       const res = await fetch('https://verify.jusoor-sa.co/upload', {
         method: 'POST',
@@ -81,9 +97,7 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
 
       if (!res.ok) throw new Error('Upload failed');
 
-      const data = await res.json();
-      console.log('Upload response data:', data);
-      alert( "File uploaded: " + data.fileName );
+  const data = await res.json();
       return {
         fileName: data.fileName,
         fileType: data.fileType,

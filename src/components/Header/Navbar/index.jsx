@@ -1,9 +1,9 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin, List, Divider, Card } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin, List, Divider, Card, Popover } from 'antd';
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { businessmenuData } from '../../../data';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import { MobileNavbar } from './MobileNavbar';
 import Cookies from "js-cookie";
 import { useLazyQuery,useSubscription } from '@apollo/client';
@@ -21,9 +21,10 @@ const Navbar = ({setGetCategory}) => {
 const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isshow, setIsShow] = useState(!!userId);
   const [user, setUser] = useState(null);
-  const [notificationCount, setNotificationCount] = useState();
   const [ visible, setVisible ] = useState(false)
   const [notifications, setNotifications] = useState([]);
+  const [notificationPage, setNotificationPage] = useState(1);
+  const listContainerRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate()
   const [selectedLang, setSelectedLang] = useState({
@@ -32,14 +33,14 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
     icon: "assets/icons/en.png",
     alt: "Language logo"
   });
-  const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(NAVUSERDATA);
-  const [getNavNotification, { data:navNotificationsData, loading: navNotificationLoading, error:navNotificationError }] = useLazyQuery(NAVNOTIFICATION);
-  const [getNotification, { data:notificationsData, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
-  const { data: subscriptionData } = useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
+  const [getUser, { data:me, loading: userLoading }] = useLazyQuery(NAVUSERDATA);
+  const [getNavNotification, { data:navNotificationsData, loading: navNotificationLoading }] = useLazyQuery(NAVNOTIFICATION);
+  const [getNotification, { data:notificationsData, loading: notificationLoading }] = useLazyQuery(NOTIFICATION);
+  useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
     onSubscriptionData: ({ subscriptionData }) => {
         const newNotif = subscriptionData.data?.newNotification;
         if (newNotif) {
-            setNotifications((prev) => [newNotif, ...prev]); // prepend to show latest first
+            setNotifications((prev) => [newNotif, ...prev]);
         }
     }
   });
@@ -57,13 +58,29 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
       getUser({ variables: { getNavUserId: userId } });
       getNavNotification({ variables: { userId } });
     }
-  }, [userId]);
+  }, [userId, getNavNotification, getUser]);
   useEffect(() => {
     if (me?.getNavUser) {
       setUser(me.getNavUser);
-      setNotificationCount(notificationsData?.getNotifications?.count)
     }
-  }, [me,navNotificationsData]);
+  }, [me]);
+
+  useEffect(() => {
+    const latestNotifications = notificationsData?.getNotifications?.notifications;
+    if (latestNotifications) {
+      setNotifications(latestNotifications);
+    }
+  }, [notificationsData]);
+
+  useEffect(() => {
+    setNotificationPage(1);
+  }, [notifications.length]);
+
+  useEffect(() => {
+    if (listContainerRef.current && notifications.length > 0) {
+      listContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [notificationPage, notifications.length]);
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
       return (
@@ -210,38 +227,25 @@ const [dropdownOpen, setDropdownOpen] = useState(false);
     },
   ];
   
-  // dummy data for notification
-  const data = [
-    {
-      title: 'You’ve received a Requested Proposal for your service from CreativeBuyer93!',
-    },
-    {
-      title: 'Your service received a 5-star review from CreativeBuyer93!',
-    },
-    {
-      title: 'Your service received a 5-star review from CreativeBuyer93!',
-    },
-    {
-      title: 'Your service received a 5-star review from CreativeBuyer93!',
-    },
-  ];
-console.log("nav", navNotificationsData, notificationsData)
-
-console.log("check drop", dropdownOpen)
 const handleDropdownChange = (open) => {
   setDropdownOpen(open);
   if (open) {
     getNotification({
-      variables: { getUserId: userId },
+      variables: { userId: userId },
       fetchPolicy: "network-only"
     });
   }
 };
 
 // Memoize dropdown content
+const notificationCount = notificationsData?.getNotifications?.count
+  ?? (notifications.length > 0 ? notifications.length : undefined)
+  ?? navNotificationsData?.getNotifications?.count
+  ?? 0;
+
 const dropdownContent = useMemo(() => {
-  const notificationCount = notificationsData?.getNotifications?.count || 0;
-  const data = notificationsData?.getNotifications?.notifications || [];
+  const data = notifications;
+  const hasOverflow = data.length > 5;
 
   return (
     <Card className="rounded-12 card-cs size-notify">
@@ -249,42 +253,53 @@ const dropdownContent = useMemo(() => {
       <Divider className="bg-divider my-2" />
       {notificationLoading ? (
         <Text>Loading...</Text>
+      ) : data.length > 0 ? (
+        <div
+          ref={listContainerRef}
+          style={{
+            maxHeight: hasOverflow ? 320 : 'auto',
+            overflowY: hasOverflow ? 'auto' : 'visible',
+            paddingRight: hasOverflow ? 4 : 0,
+          }}
+          className="overflowstyle"
+        >
+          <List
+            itemLayout="horizontal"
+            dataSource={data}
+            className="overflow-scroll"
+            pagination={{
+              pageSize: 5,
+              size: 'small',
+              current: notificationPage,
+              onChange: setNotificationPage,
+              hideOnSinglePage: true,
+            }}
+            renderItem={(item, index) => (
+              <List.Item key={index}>
+                <List.Item.Meta
+                  avatar={<Avatar src={`/assets/icons/notify-ic.png`} size={30} />}
+                  title={
+                    <NavLink to={""} className={"fw-500"}>
+                      {item.name}
+                    </NavLink>
+                  }
+                  description={
+                    <Flex gap={5} align="center">
+                      <Text className="fs-12 text-gray">1 hour ago</Text>
+                      <Text className="fs-12 text-gray">12:24 AM</Text>
+                    </Flex>
+                  }
+                />
+              </List.Item>
+            )}
+          />
+        </div>
       ) : (
-        <List
-          itemLayout="horizontal"
-          dataSource={data}
-          className="overflowstyle overflow-scroll"
-          renderItem={(item, index) => (
-            <List.Item key={index}>
-              <List.Item.Meta
-                avatar={<Avatar src={`/assets/icons/notify-ic.png`} size={30} />}
-                title={
-                  <NavLink to={""} className={"fw-500"}>
-                    {item.name}
-                  </NavLink>
-                }
-                description={
-                  <Flex gap={5} align="center">
-                    <Text className="fs-12 text-gray">1 hour ago</Text>
-                    <Text className="fs-12 text-gray">12:24 AM</Text>
-                  </Flex>
-                }
-              />
-            </List.Item>
-          )}
-        />
+        <Text className="fs-13 text-gray">No notifications yet.</Text>
       )}
     </Card>
   );
-}, [notificationsData, notificationLoading]);
-
-if (userLoading,notificationLoading,navNotificationLoading) {
-  return (
-      <Flex justify="center" align="center" className='h-200'>
-          <Spin size="large" />
-      </Flex>
-  );
-}
+}, [notificationCount, notificationLoading, notifications, notificationPage]);
 
   return (
     <>
@@ -320,21 +335,16 @@ if (userLoading,notificationLoading,navNotificationLoading) {
                   <Button className='bg-transparent border-0 p-0' onClick={()=> setVisible(true)}>
                     <img src='/assets/icons/menu-icon.png' alt='hamburger icon' width={30} fetchPriority="high" />
                   </Button>
-                  {
-                    isshow &&
-                    <Dropdown
-                      popupRender={() => dropdownContent}
-                      trigger={['click']}
-                      className='p-0'
-                      placement='bottom'
+                  {isshow && (
+                    <Popover
+                      content={dropdownContent}
+                      trigger="click"
+                      placement="bottomRight"
                       open={dropdownOpen}
                       onOpenChange={handleDropdownChange}
+                      overlayClassName="notification-popover"
                     >
-                      <Badge
-                        size="small"
-                        count={notificationsData?.getNotifications?.count || 0}
-                        overflowCount={99}
-                      >
+                      <Badge size="small" count={notificationCount} overflowCount={99}>
                         <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
                           <Image
                             src="/assets/icons/notification.png"
@@ -345,8 +355,8 @@ if (userLoading,notificationLoading,navNotificationLoading) {
                           />
                         </Button>
                       </Badge>
-                    </Dropdown>
-                  }
+                    </Popover>
+                  )}
                 </Flex>
               </div>
             </div>
@@ -489,23 +499,26 @@ if (userLoading,notificationLoading,navNotificationLoading) {
                 </Button>
               
                 
-                <Dropdown
-                  popupRender={() => dropdownContent}
-                  trigger={['click']}
-                  className='p-0'
+                <Popover
+                  content={dropdownContent}
+                  trigger="click"
+                  placement="bottom"
+                  open={dropdownOpen}
+                  onOpenChange={handleDropdownChange}
+                  overlayClassName="notification-popover"
                 >
-                    <Badge size="small" count={notificationCount} overflowCount={notificationCount}>
-                      <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
-                        <Image 
-                          src='/assets/icons/notification.png' 
-                          width={'28px'} 
-                          preview={false}
-                          alt="notification icon" 
-                          className="up"
-                        />
-                      </Button>
-                    </Badge>
-                </Dropdown>
+                  <Badge size="small" count={notificationCount} overflowCount={99}>
+                    <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
+                      <Image 
+                        src='/assets/icons/notification.png' 
+                        width={'28px'} 
+                        preview={false}
+                        alt="notification icon" 
+                        className="up"
+                      />
+                    </Button>
+                  </Badge>
+                </Popover>
 
               <Dropdown menu={{ items }} trigger={['click']}>
                 <Flex align='center' gap={10}>
