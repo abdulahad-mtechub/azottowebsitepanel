@@ -1,26 +1,20 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin } from 'antd';
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps';
-import { GETDEAL, ME } from '../../../graphql/query';
+import { GETDEAL} from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
 const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
     const { t } = useTranslation();
-    const userId = Cookies.get("userId");
     const dealId = completedeal.key;
 
     const { data, loading, error } = useQuery(GETDEAL, {
         variables: { getDealId: dealId },
         fetchPolicy: 'network-only',
     });
-    const { data: userData, loading: userLoading, error: userError } = useQuery(ME, {
-        variables: { getUserId: userId },
-    });
-    const user = userData?.getUser;
 
     if (error) return <Text type="danger">{t('Error loading deal')}: {error.message}</Text>;
 
@@ -37,14 +31,21 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
             banks: data.getDeal.buyer?.banks || '-',
         } : null;
 
-    if (!deal) return <Text>{t('No deal found')}</Text>;
 
     const sellerdealsData = [
         { title: t('Seller Name'), desc: deal?.sellerName },
         { title: t('Buyer Name'), desc: deal?.buyerName },
-        { title: t('Finalized Offer'), desc: deal.finalizedOffer },
-        { title: t('Status'), desc: deal.status },
+        { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
+        { title: t('Status'), desc: deal?.status },
     ];
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" className='h-200'>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
+    if (!deal) return <Text>{t('No deal found')}</Text>;
 
     return (
         <Flex vertical gap={20}>

@@ -1,5 +1,5 @@
 import React, { useMemo, useEffect, useState, useCallback } from 'react'
-import { Col, Form, Row, Table, Button } from 'antd'
+import { Col, Row, Table } from 'antd'
 import { SearchInput } from '../../Forms';
 import { BUYERDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
@@ -65,7 +65,13 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     }, [offerDeals]);
 
     const totalCount = offerDeals?.getBuyerCompletedDeals?.totalCount || 0;
-
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" className='h-200'>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
     return (
         <>    
             <Row gutter={[24,12]} className='mt-2'>

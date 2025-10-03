@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin } from 'antd';
 import { SingleInprogressSteps } from './SingleInprogressSteps';
 import { GETDEAL, ME } from '../../../graphql';
 import { useQuery } from '@apollo/client';
@@ -48,7 +48,6 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         isPaymentVedifiedSeller : data?.getDeal?.isPaymentVedifiedSeller || false,
     } : null;
 
-  if (!deal) return <Text>{t('No deal found')}</Text>;
 
   const buyerdealsData = [
     { title: t('Seller Name'), desc: deal?.sellerName },
@@ -56,6 +55,14 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
     { title: t('Status'), desc: deal?.status },
   ];
+  if (loading) {
+    return (
+        <Flex justify="center" align="center" className='h-200'>
+            <Spin size="large" />
+        </Flex>
+    );
+}
+if (!deal) return <Text>{t('No deal found')}</Text>;
 
   return (
     <Flex vertical gap={20}>

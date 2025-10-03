@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin } from 'antd';
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps';
 import { GETDEAL, ME } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
@@ -12,7 +12,6 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     const { t } = useTranslation();
     const userId = Cookies.get("userId"); 
     const dealId = inprogressdeal.key;
-    console.log('inprogressdeal...', inprogressdeal);
 
     const { data, loading, error } = useQuery(GETDEAL, {
         variables: { getDealId: dealId },
@@ -45,14 +44,23 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             isPaymentVedifiedSeller : data.getDeal?.isPaymentVedifiedSeller || false,
         } : null;
 
-    if (!deal) return <Text>{t('No deal found')}</Text>;
-
     const sellerdealsData = [
         { title: t('Seller Name'), desc: deal?.sellerName },
         { title: t('Buyer Name'), desc: deal?.buyerName },
-        { title: t('Finalized Offer'), desc: deal.finalizedOffer },
-        { title: t('Status'), desc: deal.status },
+        { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
+        { title: t('Status'), desc: deal?.status },
     ];
+
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" className='h-200'>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
+
+    if (!deal) return <Text>{t('No deal found')}</Text>;
+
 
     return (
         <Flex vertical gap={20}>

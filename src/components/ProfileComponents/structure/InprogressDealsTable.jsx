@@ -1,4 +1,4 @@
-import { Col, Form, Row, Table, Button } from 'antd';
+import { Col, Row, Table, Spin } from 'antd';
 import { SearchInput } from '../../Forms';
 import { BUYERINPROGRESSDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
@@ -76,7 +76,13 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
   }, [offerDeals]);
 
   const totalCount = offerDeals?.getBuyerInprogressDeals?.totalCount || 0;
-
+  if (loading) {
+    return (
+        <Flex justify="center" align="center" className='h-200'>
+            <Spin size="large" />
+        </Flex>
+    );
+}
   return (
     <>
       <Row gutter={[24, 12]} className='mt-2'>
