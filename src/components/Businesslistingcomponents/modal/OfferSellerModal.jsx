@@ -11,7 +11,6 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
     const [form] = Form.useForm(); 
 
     const computeCommissionMarginal = (amount) => {
-        console.log("amount:", amount);
         if (!amount || amount <= 0) return 0;
         let remaining = amount;
         let commission = 0;

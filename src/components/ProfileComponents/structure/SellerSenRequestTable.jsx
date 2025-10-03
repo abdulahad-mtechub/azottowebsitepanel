@@ -35,7 +35,7 @@ const SellerSendRequestTable = ({ isBuyer }) => {
             requestedDate: new Date(meeting.requestedDate).toLocaleString(),
         };
     }) || [];
-
+console.log("sendrequestData",data)
     const totalCount = data?.getMySentMeetingRequests?.totalCount || 0;
 
     const handleDebouncedSearch = useCallback((debouncedSearchValue) => {

@@ -4,6 +4,8 @@ import { useState } from 'react';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
+import { useMutation } from '@apollo/client'
 
 const { Title, Text } = Typography;
 
@@ -13,6 +15,7 @@ const BusinessInfoCard = ({ data }) => {
   const userId = Cookies.get("userId");
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const navigate = useNavigate();
+  const [createOffer] = useMutation(CREATE_OFFER);
   const businessInfoData = [
     {
       id: 1,
@@ -43,6 +46,7 @@ const BusinessInfoCard = ({ data }) => {
   const [offerseller, setOfferSeller] = useState(false);
   const [offerMode, setOfferMode] = useState("offer");
   const [meetingmodal, setMeetingModal] = useState(false);
+  const [offerId, setOfferId] = useState(false);
 
   const handleAction = (callback) => {
     if (isLoggedIn) {
@@ -51,6 +55,23 @@ const BusinessInfoCard = ({ data }) => {
       navigate('/login');
     }
   };
+
+  const handleProceedtoPurchase = async ()=>{
+    const { data: response } = await createOffer({
+      variables: {
+        input: {
+          businessId: data?.id,   // ← this is your prop `data`
+          price: data?.price,
+          isProceedToPay: true,
+        },
+      },
+    });
+
+    if (response?.createOffer?.id) {
+      setOfferId(response.createOffer.id);
+    }
+  setMeetingModal(true)
+  }
 
   return (
     <>
@@ -92,7 +113,7 @@ const BusinessInfoCard = ({ data }) => {
                   {t('Request Meeting')}
                 </Button>
                 <Button aria-labelledby={t('Proceed to Purchase')} className='btn bg-green text-white' 
-                  onClick={()=> handleAction(() => { setOfferMode("proceed"); setOfferSeller(true); })}>
+                  onClick={ handleProceedtoPurchase}>
                   {t('Proceed to Purchase')}
                 </Button>
               </Flex>
@@ -110,6 +131,7 @@ const BusinessInfoCard = ({ data }) => {
       <RequestMeetingModal 
         businessId={data?.id}
         visible={meetingmodal}
+        offerId={offerId}
         onClose={()=>{setMeetingModal(false)}}
       />
     </>

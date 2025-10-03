@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client';
 import { ME } from '../../../graphql/query';
 import { message } from "antd";
 import { useMutation } from '@apollo/client'
-import { ACCEPT_ENDA,BUSINESS_MEETING } from '../../../graphql'
+import { CREATE_ENDA,BUSINESS_MEETING } from '../../../graphql'
 import Cookies from "js-cookie";
 
 const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
@@ -17,7 +17,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
         variables: { getUserId: userId },
     });
     const user = data?.getUser;
-    const [acceptEnda, { loading:acceptEndaLoading }] = useMutation(ACCEPT_ENDA);
+    const [acceptEnda, { loading:acceptEndaLoading }] = useMutation(CREATE_ENDA);
     const [businessMeeting, { loading }] = useMutation(BUSINESS_MEETING);
 
     const steps = [
@@ -127,6 +127,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
                             variables: {
                               input: {
                                 businessId,
+                                offerId,
                                 requestedDate: combinedDateTime.toISOString(), // or use ISO string
                                 requestedEndDate: combinedEndDateTime.toISOString(),
                               },
