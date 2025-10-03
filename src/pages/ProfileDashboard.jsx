@@ -14,8 +14,8 @@ import { ArrowLeftOutlined, PlusOutlined, RightOutlined } from '@ant-design/icon
 import { useNavigate } from 'react-router-dom';
 import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
 import { useEffect, useState,useMemo,useContext } from 'react';
-import { profiletabData, selleralertsData } from '../data';
-import { ME,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
+import { selleralertsData } from '../data';
+import { NAVUSERDATA,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
 import { useLazyQuery,useQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
@@ -52,13 +52,13 @@ const ProfileDashboard = () => {
           { key: 'buyerfavlist', label: t('Favorite Listing') },
           { key: 'buyeralert', label: t('Alerts') },
         ],
-      };
+    };
     const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
     const [parentTab, setParentTab] = useState('Seller');
     const [ addwalletvisible, setAddWalletVisible ] = useState(false)
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-    const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
+    const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(NAVUSERDATA);
     const { data: userStatsData, loading: userStatsLoading, error: userStatsError } = useQuery(PROFESSIONALSTATISTICS);
     const [getBuyerUser,{ data: buyerStatsData, loading: buyerStatsLoading, error: buyerStatsError } ]= useLazyQuery(GETBUYERSTATISTICS);
     const [user, setUser] = useState(null);
@@ -72,13 +72,13 @@ const ProfileDashboard = () => {
 
      useEffect(() => {
         if (userId) {
-        getUser({ variables: { getUserId: userId } });
+        getUser({ variables: { getNavUserId: userId } });
         }
     }, [userId]);
       
     useEffect(() => {
-        if (me?.getUser) {
-        setUser(me.getUser);
+        if (me?.getNavUser) {
+        setUser(me.getNavUser);
         }
     }, [me]);
 

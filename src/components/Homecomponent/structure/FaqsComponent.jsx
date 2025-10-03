@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Col, Collapse, Flex, Row, Typography, Spin } from 'antd'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { GETFAQ } from '../../../graphql/query/queries'
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography;
@@ -11,7 +11,7 @@ const { Panel } = Collapse;
 const FaqsComponent = () => {
     const { t } = useTranslation();
     const [currentPanel, setCurrentPanel] = useState(['0']);
-    const { data, loading, error, refetch } = useQuery(GETFAQ, {
+    const { data, loading, error, refetch } = useLazyQuery(GETFAQ, {
         variables: { search: "" },
     });
 

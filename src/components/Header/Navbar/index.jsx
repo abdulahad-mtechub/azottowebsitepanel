@@ -1,4 +1,4 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,message } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin } from 'antd';
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
@@ -6,24 +6,23 @@ import { businessmenuData } from '../../../data';
 import { useEffect, useState } from 'react';
 import { MobileNavbar } from './MobileNavbar';
 import Cookies from "js-cookie";
-import { useLazyQuery,useMutation } from '@apollo/client';
-import { ME,NOTIFICATION } from '../../../graphql/query';
-import { LOGOUT } from '../../../graphql/mutation/login';
+import { useLazyQuery,useSubscription } from '@apollo/client';
+import { NAVUSERDATA,NAVNOTIFICATION } from '../../../graphql/query';
 import { client } from '../../../config/apolloClient';
 import { useTranslation } from 'react-i18next';
+import {NEW_NOTIFICATION_SUBSCRIPTION} from '../../../graphql/subscription'
 
 const { Text, Title } = Typography;
 
 const Navbar = ({setGetCategory}) => { 
   const { t,i18n } = useTranslation();
-  const [messageApi, contextHolder] = message.useMessage();
-  
   const userId = Cookies.get("userId"); // read userId from cookie
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const [isshow, setIsShow] = useState(!!userId); // true if userId exists
   const [user, setUser] = useState(null);
   const [notificationCount, setNotificationCount] = useState();
   const [ visible, setVisible ] = useState(false)
+  const [notifications, setNotifications] = useState([]);
   const location = useLocation();
   const navigate = useNavigate()
   const [selectedLang, setSelectedLang] = useState({
@@ -32,22 +31,16 @@ const Navbar = ({setGetCategory}) => {
     icon: "assets/icons/en.png",
     alt: "Language logo"
   });
-  const otherPaths = ['/about', '/termofuse'];
-  // ✅ Setup the lazy query
-  const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(ME);
-  const [getNotification, { data:notifications, loading: notificationLoading, error:notificationError }] = useLazyQuery(NOTIFICATION);
-
-  const [logout, { loading }] = useMutation(LOGOUT, {
-    onCompleted: () => {
-      localStorage.removeItem("accessToken"); 
-      localStorage.removeItem("refreshToken");
-      localStorage.removeItem("userId");
-      client.resetStore(); 
-      window.location.reload();
-      },
-    onError: (err) => messageApi.error("Logout error:", err)
+  const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(NAVUSERDATA);
+  const [getNotification, { data:notificationsData, loading: notificationLoading, error:notificationError }] = useLazyQuery(NAVNOTIFICATION);
+  const { data: subscriptionData } = useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
+    onSubscriptionData: ({ subscriptionData }) => {
+        const newNotif = subscriptionData.data?.newNotification;
+        if (newNotif) {
+            setNotifications((prev) => [newNotif, ...prev]); // prepend to show latest first
+        }
+    }
   });
-  
   useEffect(() => {
     let lang = localStorage.getItem("lang") || "en";
     i18n.changeLanguage(lang); // ✅ now works
@@ -59,17 +52,16 @@ const Navbar = ({setGetCategory}) => {
   }, [i18n]);
   useEffect(() => {
     if (userId) {
-      getUser({ variables: { getUserId: userId } });
+      getUser({ variables: { getNavUserId: userId } });
       getNotification({ variables: { userId } });
     }
   }, [userId]);
-
   useEffect(() => {
-    if (me?.getUser) {
-      setUser(me.getUser);
-      setNotificationCount(notifications?.length)
+    if (me?.getNavUser) {
+      setUser(me.getNavUser);
+      setNotificationCount(notificationsData?.getNotifications?.count)
     }
-  }, [me]);
+  }, [me,notificationsData]);
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
       return (
@@ -127,7 +119,6 @@ const Navbar = ({setGetCategory}) => {
       );
     }
   };
-
   useEffect(() => {
     setIsShow(isLoggedIn);
   }, [isLoggedIn]);
@@ -194,7 +185,6 @@ const Navbar = ({setGetCategory}) => {
     // Optional: also update <html dir> for RTL support
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   };
-  
   const lang = [
     {
       key: "1",
@@ -217,10 +207,15 @@ const Navbar = ({setGetCategory}) => {
       onClick: () => handleChange("ar"),
     },
   ];
-
+  if (userLoading,notificationLoading) {
+    return (
+        <Flex justify="center" align="center" className='h-200'>
+            <Spin size="large" />
+        </Flex>
+    );
+}
   return (
     <>
-    {contextHolder}
       <div className='gen-navbar-container relative'>
         <div className='w-100'>
           <div className="gen-navbar-small">
@@ -417,7 +412,7 @@ const Navbar = ({setGetCategory}) => {
                   <PlusOutlined /> {t("Sell a Business")}
                 </Button>
               
-                <Badge size="small" count={notificationCount} overflowCount={1}>
+                <Badge size="small" count={notificationCount} overflowCount={notificationCount}>
                   <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
                     <Image 
                       src='/assets/icons/notification.png' 
