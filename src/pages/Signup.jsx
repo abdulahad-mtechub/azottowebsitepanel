@@ -29,6 +29,11 @@ const SignupPage = () => {
   const [loading, setLoading] = useState(false);
   const [language, setLanguage]= useState()
   const [customerRole, setCustomerRole] = useState(null);
+  const [errors, setErrors] = useState({
+    front: "",
+    back: "",
+    passport: "",
+  });
   const [selectedLang, setSelectedLang] = useState({
     key: "1",
     label: "EN",
@@ -65,6 +70,7 @@ const SignupPage = () => {
 
   const handleFinish = async () => {
     try {
+
       const formData = form.getFieldsValue(true);
       const input = {
         name: formData.fullName,
@@ -90,6 +96,7 @@ const SignupPage = () => {
   };
 
   const handleUpload = async ({ file, title }) => {
+    
     try {
       setLoading(true);
       let compressedFile = file;
@@ -123,7 +130,7 @@ const SignupPage = () => {
           },
         ];
       });
-
+      setErrors((prev) => ({ ...prev, [title]: "" }));
       if (title === "front") setFrontFileName(data.fileName);
       else if (title === "back") setBackFileName(data.fileName);
       else if (title === "passport") setPassportFileName(data.fileName);
@@ -262,13 +269,13 @@ const SignupPage = () => {
                   <Row gutter={8}>
                       <Col flex="auto">
                           <MyInput 
-                              withoutForm 
-                              size={'large'} 
-                              className='m-0' 
-                              placeholder={t("Upload Front Side" )}
-                              readOnly 
-                              value={frontFileName} 
+                            withoutForm 
+                            size={'large'} 
+                            placeholder={t("Upload Front Side" )}
+                            readOnly 
+                            value={frontFileName} 
                           />
+                          
                       </Col>
                       <Col>
                           <Upload 
@@ -280,18 +287,26 @@ const SignupPage = () => {
                               <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
                           </Upload>
                       </Col>
+                      {errors.front && 
+                      <Col span={24} className="mb-1">
+                         <Text className="text-error text-12">{errors.front}</Text>
+                      </Col>
+                      }
+                      
                   </Row>
               </Col>
               <Col span={24}>
                   <Row gutter={8}>
                       <Col flex="auto">
                           <MyInput 
-                              withoutForm 
-                              size={'large'} 
-                              className='m-0' 
-                              placeholder={t("Upload Back Side")}
-                              readOnly 
-                              value={backFileName} 
+                            withoutForm 
+                            size={'large'} 
+                            className='m-0' 
+                            placeholder={t("Upload Back Side")}
+                            readOnly 
+                            value={backFileName} 
+                            required
+                            message={'Please upload back side image'}
                           />
                       </Col>
                       <Col>
@@ -304,20 +319,26 @@ const SignupPage = () => {
                               <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
                           </Upload>
                       </Col>
+                      {errors.back && 
+                      <Col span={24} className="mb-1">
+                         <Text className="text-error text-12">{errors.back}</Text>
+                      </Col>
+                      }
                   </Row>
               </Col>
             </>
           ) : (
               <Col span={24}>
-                  <Row gutter={8}>
+                  <Row gutter={8} className="mb-2">
                       <Col flex="auto">
                           <MyInput 
-                              withoutForm 
-                              size={'large'} 
-                              className='m-0' 
-                              placeholder={t("Upload Passport" )}
-                              readOnly 
-                              value={passportFileName} 
+                            withoutForm 
+                            size={'large'} 
+                            placeholder={t("Upload Passport" )}
+                            readOnly 
+                            value={passportFileName} 
+                            required
+                            message={'Please upload passport image'}
                           />
                       </Col>
                       <Col>
@@ -330,6 +351,11 @@ const SignupPage = () => {
                               <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
                           </Upload>
                       </Col>
+                      {errors.passport && 
+                        <Col span={24} className="mb-1">
+                          <Text className="text-error text-12">{errors.passport}</Text>
+                        </Col>
+                      }
                   </Row>
               </Col>
           )}
@@ -341,14 +367,17 @@ const SignupPage = () => {
               size="large"
               required
               placeholder={t("Enter Password")}
-              rules={[
-                { required: true, message: t("Please enter password") },
-                {
-                  pattern: /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/,
-                  message: t("Password should contain at least 8 characters, one uppercase letter, one number, one special character"),
-                },
-              ]}
-              validateTrigger={["onChange", "onBlur"]}
+              message={() => {}}
+              validator={({ getFieldValue }) => ({
+                  validator: (_, value) => {
+                      const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
+                      if (!reg.test(value)) {
+                          return Promise.reject(new Error(t('Password should contain at least 8 characters, one uppercase letter, one number, one special character')));
+                      } else {
+                          return Promise.resolve();
+                      }
+                  }
+              })}
             />
           </Col>
           <Col span={24}>
@@ -360,20 +389,25 @@ const SignupPage = () => {
               required
               placeholder={t("Enter Confirm Password")}
               dependencies={["password"]}
-              validateTrigger={["onChange", "onBlur"]}
+              message={t('Please enter confirm password')}
               rules={[
-                { required: true, message: t("Please confirm your password") },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue("password") === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(
-                      new Error(t("The password that you entered do not match!"))
-                    );
-                  },
-                }),
+                  ({ getFieldValue }) => ({
+                      validator(_, value) {
+                          if (!value || getFieldValue('password') === value) {
+                              return Promise.resolve();
+                          }
+                          return Promise.reject(new Error(t('The password that you entered do not match!')));
+                      },
+                  }),
               ]}
+              validator={({ getFieldValue }) => ({
+                  validator(_, value) {
+                      if (!value || getFieldValue('password') === value) {
+                          return Promise.resolve();
+                      }
+                      return Promise.reject(new Error(t('The password that you entered do not match!')));
+                  },
+              })}
             />
           </Col>
           <Col span={24}>
@@ -452,7 +486,17 @@ const SignupPage = () => {
               </Button>
               <Divider className="text-gray">{t("Or")}</Divider>
 
-              <Form layout="vertical" form={form} onFinish={handleFinish} requiredMark={false}>
+              <Form layout="vertical" form={form} onFinish={handleFinish} requiredMark={false}
+                onFinishFailed={() => {
+                const newErrors = {
+                  front: !frontFileName ? "Please upload front side image." : "",
+                  back: !backFileName ? "Please upload back side image." : "",
+                  passport: !passportFileName ? "Please upload passport image." : "",
+                };
+                setErrors(newErrors);
+              }}
+              
+              >
                 <Steps
                   current={current}
                   onChange={onChange}

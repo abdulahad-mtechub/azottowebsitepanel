@@ -41,6 +41,7 @@
     --gray: #E6E8EC;
     --pill-brand: #BED5FA;
     --borderupload: #d9d9d9;
+    --error-color: #bc302f;
 }
 
 body{
@@ -1583,4 +1584,8 @@ body.rtl {
 
 .size-notify{
     width: 400px;
+}
+
+.text-error{
+    color: var(--error-color) !important;
 }

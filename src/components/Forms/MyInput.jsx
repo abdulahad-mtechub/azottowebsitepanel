@@ -10,7 +10,7 @@ export const MyInput = ({withoutForm, name, label, tooltip, type, size, disabled
                             placeholder={placeholder || ''}
                             value={value || ''}
                             {...props}
-                            className='custom-input fs-14'
+                            className='custom-input m-0 fs-14'
                         /> :
                     type==='password' ?
                         <Input.Password
@@ -19,7 +19,7 @@ export const MyInput = ({withoutForm, name, label, tooltip, type, size, disabled
                             size={size || 'middle'}
                             disabled={disabled || false}
                             {...props}
-                            className='custom-input fs-14'
+                            className='custom-input m-0 fs-14'
                             />:
                         <Input
                             type={type || 'text'}
@@ -28,7 +28,7 @@ export const MyInput = ({withoutForm, name, label, tooltip, type, size, disabled
                             size={size || 'middle'}
                             disabled={disabled || false}
                             {...props}
-                            className='custom-input fs-14'
+                            className='fs-14'
                         />
                 :
                 <Form.Item
