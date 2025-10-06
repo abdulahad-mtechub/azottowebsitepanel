@@ -3,11 +3,22 @@ import { PlusOutlined, DeleteOutlined, MinusCircleFilled } from '@ant-design/ico
 import { Upload, Form, Typography, Flex, Button } from 'antd';
 const { Dragger } = Upload;
 
-const SingleFileUpload = ({ multiple = false, name, required, message, title, onUpload, onRemove, initialFileList }) => {
+const SingleFileUpload = ({ multiple = false, name, required, message, title, onUpload, onRemove, initialFileList = [] }) => {
   const [fileList, setFileList] = useState([]);
-  useEffect(()=> {
-    setFileList([...initialFileList])
-  },[initialFileList])
+  
+  useEffect(() => {
+    if (Array.isArray(initialFileList) && initialFileList.length > 0) {
+      const isDifferent = 
+        fileList.length !== initialFileList.length ||
+        fileList.some((file, idx) => file.uid !== initialFileList[idx]?.uid);
+      
+      if (isDifferent) {
+        setFileList([...initialFileList]);
+      }
+    } else if (initialFileList.length === 0 && fileList.length > 0) {
+      setFileList([]);
+    }
+  }, [initialFileList.length, initialFileList[0]?.uid])
 
   const handleChange = async (info) => {
     let newFileList = [...info.fileList];

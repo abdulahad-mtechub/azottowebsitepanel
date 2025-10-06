@@ -129,6 +129,11 @@ mutation DeleteBank($deleteBankId: ID!) {
   deleteBank(id: $deleteBankId)
 }
 `
+const MARK_NOTIFICATION_AS_READ = gql`
+mutation MarkNotificationAsRead($userId: ID!) {
+  markNotificationAsRead(id: $userId)
+}
+`
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -149,5 +154,6 @@ export {
   ACTIVEBANK,
   DELETEBANK,
   DELETE_DOCUMENTS,
-  CREATE_ENDA
+  CREATE_ENDA,
+  MARK_NOTIFICATION_AS_READ
 }

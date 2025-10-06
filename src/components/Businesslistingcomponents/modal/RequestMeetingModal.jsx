@@ -13,11 +13,11 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
     const [current, setCurrent] = useState(0);
-    const { data, loading:userLoading, error } = useQuery(ME, {
+    const { data } = useQuery(ME, {
         variables: { getUserId: userId },
     });
     const user = data?.getUser;
-    const [acceptEnda, { loading:acceptEndaLoading }] = useMutation(CREATE_ENDA);
+    const [acceptEnda] = useMutation(CREATE_ENDA);
     const [businessMeeting, { loading }] = useMutation(BUSINESS_MEETING);
 
     const steps = [

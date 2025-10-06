@@ -18,11 +18,9 @@ query GetNavUser($getNavUserId: ID!) {
 `
 
 const NAVNOTIFICATION = gql`
-query GetNotifications($userId: ID!) {
-  getNotifications(userId: $userId) {
-    count
+  query Query {
+    getNotificationCount
   }
-}
 `
 export {
     NAVUSERDATA,

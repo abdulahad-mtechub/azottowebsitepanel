@@ -45,7 +45,6 @@ const ProductCard = ({
             </Flex>
         );
     }
-console.log("exploreData",exploreData)
     return (
         <>
         {contextHolder}

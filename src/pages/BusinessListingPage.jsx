@@ -5,7 +5,7 @@ import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../c
 import { useNavigate } from 'react-router-dom';
 import { RightOutlined } from '@ant-design/icons';
 import { useLazyQuery } from '@apollo/client';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import {GET_ALL_BUSINESSES, GET_BUSINESS_BY_CATEGORY, GET_BUSINESS_BY_CITY, GET_BUSINESS_BY_REVENUE, GET_BUSINESS_BY_PROFIT,GET_BUSINESS_BY_DISTRICT } from '../graphql/query/business';
 import { useTranslation } from "react-i18next";
@@ -19,7 +19,8 @@ const BusinessListingPage = ({getcategory}) => {
     const district = useDistricts();
     const cities = useCities();
     const [params] = useSearchParams();
-    const category = params.get('category');
+    const rawCategoryParam = params.get('category');
+    const categoryParam = rawCategoryParam && rawCategoryParam !== 'undefined' ? rawCategoryParam : null;
     const cityParam = params.get('city');
     const [limit, setLimit] = useState(10);
     const [currentPage, setCurrentPage] = useState(1);
@@ -37,6 +38,61 @@ const BusinessListingPage = ({getcategory}) => {
     const [searchSelectedCity, setsearchSelectedCity] = useState([]);
     const [cityOptions, setCityOptions] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState('');
+    
+    // Clear selectedCategory when URL params change to Browse All
+    useEffect(() => {
+        if (!categoryParam && !getcategory) {
+            setSelectedCategory('');
+        }
+    }, [categoryParam, getcategory]);
+    
+    const categoryParamLabel = categoryParam ? decodeURIComponent(categoryParam) : null;
+    const activeCategoryLabel = getcategory || categoryParamLabel || (selectedCategory || null);
+    
+    // Determine breadcrumb path based on URL params
+    const getBreadcrumbItems = () => {
+        const items = [
+            { title: <Text className='cursor text-gray' onClick={() => navigate('/')}>{t('Home')}</Text> }
+        ];
+
+        if (revenue) {
+            // Browse by Revenue
+            items.push({ title: <Text className='text-gray'>{t('Browse by Revenue')}</Text> });
+            const [min, max] = revenue;
+            items.push({ 
+                title: <Text className='fw-500 text-white'>
+                    {max >= 9999999 
+                        ? t('SAR {{min}}+', { min: min?.toLocaleString() })
+                        : t('SAR {{min}} - SAR {{max}}', { min: min?.toLocaleString(), max: max?.toLocaleString() })
+                    }
+                </Text> 
+            });
+        } else if (profit) {
+            // Browse by Profit
+            items.push({ title: <Text className='text-gray'>{t('Browse by Profit')}</Text> });
+            const [min, max] = profit;
+            items.push({ 
+                title: <Text className='fw-500 text-white'>
+                    {t('SAR {{min}} - SAR {{max}}', { min: min?.toLocaleString(), max: max?.toLocaleString() })}
+                </Text> 
+            });
+        } else if (activeCategoryLabel) {
+            // Browse by Category
+            items.push({ title: <Text className='text-gray'>{t('Browse by Categories')}</Text> });
+            items.push({ title: <Text className='fw-500 text-white'>{activeCategoryLabel}</Text> });
+        } else if (cityParam) {
+            // Browse by City
+            items.push({ title: <Text className='text-gray'>{t('Browse by City')}</Text> });
+            items.push({ title: <Text className='fw-500 text-white'>{decodeURIComponent(cityParam)}</Text> });
+        } else {
+            // Browse All
+            items.push({ title: <Text className='fw-500 text-white'>{t('Browse All')}</Text> });
+        }
+
+        return items;
+    };
+
+    const listingHeading = activeCategoryLabel || t('All Businesses');
     const [selectfilter, setSelectFilter] = useState(options[1]);
 
     const [multipleStep, setMultipleStep] = useState(null);
@@ -89,9 +145,9 @@ const BusinessListingPage = ({getcategory}) => {
     useEffect(() => {
         let variables = getFilterVariables();
         let query = GET_ALL_BUSINESSES;
-        if (category || selectedCategory) {
+        if (categoryParam || selectedCategory) {
             query = GET_BUSINESS_BY_CATEGORY;
-            variables = { category: selectedCategory || category, limit, offSet: 0 };
+            variables = { category: selectedCategory || categoryParam, limit, offSet: 0 };
         } else if (cityParam) {
             query = GET_BUSINESS_BY_CITY;
             variables = { city: cityParam, limit, offSet: 0 };
@@ -105,8 +161,9 @@ const BusinessListingPage = ({getcategory}) => {
             query = GET_ALL_BUSINESSES;
         }
         fetchBusinesses({ query, variables });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        category, cityParam, profit, revenue, limit, currentPage,
+        categoryParam, cityParam, profit, revenue, limit, currentPage,
         employeesRange, operationalYearRange, hasAssets,
         priceRange, profitRange, profitMargenRange, revenueRange,
         multipleStep, selectfilter, selectedCategory,
@@ -133,7 +190,17 @@ const BusinessListingPage = ({getcategory}) => {
         setSelectedDistrict(selectedDistObj?.name || t('Select District'));
     };
       
-    const handleCityChange = (value) => setsearchSelectedCity(value);
+    const handleCityChange = (value) => {
+        setsearchSelectedCity(value);
+        if (!value) {
+            setSelectedCity(null);
+            return;
+        }
+
+        const allCities = Object.values(cities).flat();
+        const selectedCityObj = allCities.find(city => city.id === Number(value));
+        setSelectedCity(selectedCityObj?.name || null);
+    };
 
     const handleSearch = () => {
         let query, variables;
@@ -162,10 +229,7 @@ const BusinessListingPage = ({getcategory}) => {
                 <div className='container'>
                     <Breadcrumb
                         separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
-                        items={[
-                            { title: <Text className='cursor text-gray' onClick={() => navigate('/')}>{t('Home')}</Text> },
-                            { title: <Text className='fw-500 text-white'>{t('Browse Businesses By Category')}</Text> },
-                        ]}
+                        items={getBreadcrumbItems()}
                     />
                     <Flex vertical gap={30} className='w-100 search-cs'>
                         <Flex vertical gap={5} className='text-center'>
@@ -215,7 +279,7 @@ const BusinessListingPage = ({getcategory}) => {
             <div className='container'>
                 <Flex gap={10} justify='space-between' wrap align='center' className='mb-3'>
                     <Flex gap={5} align='center'>
-                        <Title level={4} className='m-0'>{getcategory || t('All Businesses')}</Title>
+                        <Title level={4} className='m-0'>{listingHeading}</Title>
                         <Button aria-labelledby={t('Filter icon')} type='button' onClick={()=>setIsFilter(true)} className='border-0 bg-transparent p-0 filter-btn'>
                             <img src='/assets/icons/filter.png' alt={t('filter-icon')} width={20} fetchPriority="high" />
                         </Button>
@@ -251,7 +315,7 @@ const BusinessListingPage = ({getcategory}) => {
                     <div className='sm-hide'>
                         <AnimatePresence>
                             {isShow && (
-                                <motion.div
+                                <Motion.div
                                     key="filter"
                                     initial={{ width: 0, opacity: 0 }}
                                     animate={{ width: 250, opacity: 1 }}
@@ -271,12 +335,12 @@ const BusinessListingPage = ({getcategory}) => {
                                         setHasAssets={setHasAssets} 
                                         setSelectedCategory={setSelectedCategory}
                                     />
-                                </motion.div>
+                                </Motion.div>
                             )}
                         </AnimatePresence>
                     </div>
 
-                    <motion.div
+                    <Motion.div
                         key="product"
                         animate={{ width: isShow ? 'calc(100% - 250px)' : '100%' }}
                         transition={{ duration: 0.4 }}
@@ -309,7 +373,7 @@ const BusinessListingPage = ({getcategory}) => {
                             }}
                             isLoading={isLoading}
                         />
-                    </motion.div>
+                    </Motion.div>
                 </Flex>
             </div>
             <BusinesslistingFilterDrawer visible={isFilter} onClose={()=>setIsFilter(false)} />

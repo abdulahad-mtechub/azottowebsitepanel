@@ -2,15 +2,17 @@ import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Spa
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
-import { useEffect, useState, useMemo, useRef } from 'react';
+import { useEffect, useState, useMemo, useRef, useCallback } from 'react';
+import moment from 'moment';
 import { MobileNavbar } from './MobileNavbar';
 import Cookies from "js-cookie";
-import { useLazyQuery,useSubscription } from '@apollo/client';
+import { useLazyQuery, useSubscription, useMutation } from '@apollo/client';
 import { NAVUSERDATA,NAVNOTIFICATION,NOTIFICATION,GET_CATEGORIES } from '../../../graphql/query';
 import { client } from '../../../config/apolloClient';
 import { useTranslation } from 'react-i18next';
 import {NEW_NOTIFICATION_SUBSCRIPTION} from '../../../graphql/subscription'
 import { useQuery } from '@apollo/client';
+import { MARK_NOTIFICATION_AS_READ } from '../../../graphql/mutation';
 
 
 const { Text, Title } = Typography;
@@ -26,7 +28,9 @@ const Navbar = ({setGetCategory}) => {
   const [user, setUser] = useState(null);
   const [ visible, setVisible ] = useState(false)
   const [notifications, setNotifications] = useState([]);
-  const [notificationPage, setNotificationPage] = useState(1);
+  const [unreadCount, setUnreadCount] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(5);
+  const [hasMarkedRead, setHasMarkedRead] = useState(false);
   const listContainerRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate()
@@ -40,7 +44,7 @@ const Navbar = ({setGetCategory}) => {
   const categories = categoryData?.getAllCategories?.categories?.map(cat => ({
     id: cat.id,
     title: cat.name,
-    arabicTitle:cat.arabicName
+    arabicTitle: cat.arabicName
   })) || [];
   const businessmenuData = [
     {
@@ -49,9 +53,11 @@ const Navbar = ({setGetCategory}) => {
       title: t("Browse by Categories"),
       subtitle: 'Choose from popular business types.',
       subdropdown: categories.map((cat, index) => ({
-        id: index + 1,
+        id: cat.id ?? index + 1,
         title: isArabic ? cat.arabicTitle : cat.title,
-        path: `/businesslisting?category=${encodeURIComponent(cat.name)}`,
+        path: cat.title
+          ? `/businesslisting?category=${encodeURIComponent(cat.title)}`
+          : '/businesslisting',
       })),
     },
     {
@@ -72,11 +78,18 @@ const Navbar = ({setGetCategory}) => {
   const [getUser, { data:me, loading: userLoading }] = useLazyQuery(NAVUSERDATA);
   const [getNavNotification, { data:navNotificationsData, loading: navNotificationLoading }] = useLazyQuery(NAVNOTIFICATION);
   const [getNotification, { data:notificationsData, loading: notificationLoading }] = useLazyQuery(NOTIFICATION);
+  const [markNotificationAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
+  const isUserPending = userLoading && !user;
+  const canDisplayNotifications = isshow && !isUserPending;
   useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
     onSubscriptionData: ({ subscriptionData }) => {
         const newNotif = subscriptionData.data?.newNotification;
         if (newNotif) {
             setNotifications((prev) => [newNotif, ...prev]);
+            setUnreadCount((prev) => prev + 1);
+            if (dropdownOpen) {
+              setHasMarkedRead(false);
+            }
         }
     }
   });
@@ -92,9 +105,10 @@ const Navbar = ({setGetCategory}) => {
   useEffect(() => {
     if (userId) {
       getUser({ variables: { getNavUserId: userId } });
-      getNavNotification({ variables: { userId } });
+      getNavNotification();
     }
   }, [userId, getNavNotification, getUser]);
+
   useEffect(() => {
     if (me?.getNavUser) {
       setUser(me.getNavUser);
@@ -102,21 +116,62 @@ const Navbar = ({setGetCategory}) => {
   }, [me]);
 
   useEffect(() => {
-    const latestNotifications = notificationsData?.getNotifications?.notifications;
-    if (latestNotifications) {
-      setNotifications(latestNotifications);
+    const navCount = navNotificationsData?.getNotificationCount;
+    if (typeof navCount === 'number') {
+      setUnreadCount(navCount);
+    }
+  }, [navNotificationsData]);
+
+  useEffect(() => {
+    const payload = notificationsData?.getNotifications;
+    if (!payload) {
+      return;
+    }
+
+    const nextNotifications = payload.notifications ?? [];
+    setNotifications(nextNotifications);
+    setVisibleCount(nextNotifications.length > 5 ? 5 : nextNotifications.length);
+
+    if (typeof payload.count === 'number') {
+      setUnreadCount(payload.count);
+    }
+
+    if (listContainerRef.current) {
+      listContainerRef.current.scrollTop = 0;
     }
   }, [notificationsData]);
 
   useEffect(() => {
-    setNotificationPage(1);
-  }, [notifications.length]);
+    if (!dropdownOpen) {
+      setHasMarkedRead(false);
+    }
+  }, [dropdownOpen]);
 
   useEffect(() => {
-    if (listContainerRef.current && notifications.length > 0) {
-      listContainerRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    const payload = notificationsData?.getNotifications;
+    if (!dropdownOpen || hasMarkedRead || !payload || !userId) {
+      return;
     }
-  }, [notificationPage, notifications.length]);
+
+    const unread = payload.count ?? 0;
+    if (unread === 0) {
+      setHasMarkedRead(true);
+      return;
+    }
+
+    markNotificationAsRead({ variables: { userId } })
+      .then(() => {
+        setUnreadCount(0);
+        setNotifications((prev) => prev.map((notification) => ({
+          ...notification,
+          isRead: true,
+        })));
+        getNavNotification();
+      })
+      .catch(() => {})
+      .finally(() => setHasMarkedRead(true));
+  }, [dropdownOpen, hasMarkedRead, notificationsData, markNotificationAsRead, userId, getNavNotification]);
+
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
       return (
@@ -126,7 +181,7 @@ const Navbar = ({setGetCategory}) => {
               <NavLink 
                 to={item.path} 
                 key={item.id}
-                onClick={()=>setGetCategory(item?.title)}
+                onClick={()=>{setGetCategory(item?.title)}}
               >
                 <Text className='fs-14 nav-link'>
                   {item.title}
@@ -194,7 +249,7 @@ const Navbar = ({setGetCategory}) => {
     setIsShow(false);
   
     navigate('/');
-    window.location.reload(); // optional hard reset
+    window.location.reload();
   };
   const items = [
     {
@@ -266,68 +321,113 @@ const Navbar = ({setGetCategory}) => {
 const handleDropdownChange = (open) => {
   setDropdownOpen(open);
   if (open) {
-    getNotification({
-      variables: { userId: userId },
-      fetchPolicy: "network-only"
+  setVisibleCount(() => {
+      if (!notifications.length) {
+        return 0;
+      }
+      return Math.min(5, notifications.length);
     });
+    setHasMarkedRead(false);
+    if (listContainerRef.current) {
+      listContainerRef.current.scrollTop = 0;
+    }
+    if (userId) {
+      getNotification({
+        variables: { userId },
+        fetchPolicy: "network-only"
+      });
+    }
+  } else {
+    setHasMarkedRead(false);
   }
 };
 
-// Memoize dropdown content
-const notificationCount = notificationsData?.getNotifications?.count
-  ?? (notifications.length > 0 ? notifications.length : undefined)
-  ?? navNotificationsData?.getNotifications?.count
-  ?? 0;
+const handleListScroll = useCallback((event) => {
+  const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
+  if (scrollHeight - scrollTop - clientHeight <= 16) {
+    setVisibleCount((prev) => {
+      if (prev >= notifications.length) {
+        return prev;
+      }
+      return Math.min(prev + 5, notifications.length);
+    });
+  }
+}, [notifications.length]);
+
+const isNotificationsLoading = notificationLoading || navNotificationLoading;
 
 const dropdownContent = useMemo(() => {
   const data = notifications;
-  const hasOverflow = data.length > 5;
+  const displayedNotifications = data.slice(0, visibleCount);
+  const isScrollable = data.length > 5;
 
   return (
     <Card className="rounded-12 card-cs size-notify">
-      <Text>Notification ({notificationCount})</Text>
+      <Text>Notification ({unreadCount})</Text>
       <Divider className="bg-divider my-2" />
-      {notificationLoading ? (
+      {isNotificationsLoading ? (
         <Text>Loading...</Text>
       ) : data.length > 0 ? (
         <div
           ref={listContainerRef}
+          onScroll={handleListScroll}
           style={{
-            maxHeight: hasOverflow ? 320 : 'auto',
-            overflowY: hasOverflow ? 'auto' : 'visible',
-            paddingRight: hasOverflow ? 4 : 0,
+            maxHeight: isScrollable ? 320 : 'auto',
+            overflowY: isScrollable ? 'auto' : 'visible',
+            paddingRight: isScrollable ? 4 : 0,
           }}
           className="overflowstyle"
         >
           <List
             itemLayout="horizontal"
-            dataSource={data}
+            dataSource={displayedNotifications}
             className="overflow-scroll"
-            pagination={{
-              pageSize: 5,
-              size: 'small',
-              current: notificationPage,
-              onChange: setNotificationPage,
-              hideOnSinglePage: true,
+            renderItem={(item, index) => {
+              const createdAtMoment = item?.createdAt ? moment(item.createdAt) : null;
+              const relativeTime = createdAtMoment ? createdAtMoment.fromNow() : '';
+              const absoluteTime = createdAtMoment ? createdAtMoment.format('MMM DD, YYYY • hh:mm A') : '';
+              const itemClassName = `notification-item ${item?.isRead ? 'read' : 'unread'}`;
+              const titleText = item?.name || t('Notification');
+
+              return (
+                <List.Item key={item?.id ?? index} className={itemClassName}>
+                  <List.Item.Meta
+                    avatar={<Avatar src={`/assets/icons/notify-ic.png`} size={30} />}
+                    title={
+                      <Text className={`notification-title ${item?.isRead ? 'read' : 'unread'}`}>
+                        {titleText}
+                      </Text>
+                    }
+                    description={
+                      <Flex vertical gap={4} className="notification-description">
+                        {item?.message && (
+                          <Text className="fs-13 text-gray notification-message">
+                            {item.message}
+                          </Text>
+                        )}
+                        {(relativeTime || absoluteTime) && (
+                          <Flex gap={8} align="center">
+                            {relativeTime && (
+                              <Text className="fs-12 text-gray notification-time-relative">
+                                {relativeTime}
+                              </Text>
+                            )}
+                            {relativeTime && absoluteTime && (
+                              <Text className="fs-12 text-gray">•</Text>
+                            )}
+                            {absoluteTime && (
+                              <Text className="fs-12 text-gray notification-time-absolute">
+                                {absoluteTime}
+                              </Text>
+                            )}
+                          </Flex>
+                        )}
+                      </Flex>
+                    }
+                  />
+                </List.Item>
+              );
             }}
-            renderItem={(item, index) => (
-              <List.Item key={index}>
-                <List.Item.Meta
-                  avatar={<Avatar src={`/assets/icons/notify-ic.png`} size={30} />}
-                  title={
-                    <NavLink to={""} className={"fw-500"}>
-                      {item.name}
-                    </NavLink>
-                  }
-                  description={
-                    <Flex gap={5} align="center">
-                      <Text className="fs-12 text-gray">1 hour ago</Text>
-                      <Text className="fs-12 text-gray">12:24 AM</Text>
-                    </Flex>
-                  }
-                />
-              </List.Item>
-            )}
           />
         </div>
       ) : (
@@ -335,7 +435,33 @@ const dropdownContent = useMemo(() => {
       )}
     </Card>
   );
-}, [notificationCount, notificationLoading, notifications, notificationPage]);
+}, [notifications, visibleCount, unreadCount, isNotificationsLoading, handleListScroll, t]);
+
+useEffect(() => {
+  if (!dropdownOpen) {
+    return;
+  }
+
+  const container = listContainerRef.current;
+  if (!container) {
+    return;
+  }
+
+  const parentScrollable = container.parentElement;
+  if (!parentScrollable) {
+    return;
+  }
+
+  const parentScrollHandler = (event) => {
+    handleListScroll(event);
+  };
+
+  parentScrollable.addEventListener('scroll', parentScrollHandler, { passive: true });
+
+  return () => {
+    parentScrollable.removeEventListener('scroll', parentScrollHandler);
+  };
+}, [dropdownOpen, handleListScroll]);
 
   return (
     <>
@@ -371,16 +497,16 @@ const dropdownContent = useMemo(() => {
                   <Button className='bg-transparent border-0 p-0' onClick={()=> setVisible(true)}>
                     <img src='/assets/icons/menu-icon.png' alt='hamburger icon' width={30} fetchPriority="high" />
                   </Button>
-                  {isshow && (
+                  {isshow && isUserPending && <Spin size="small" />}
+                  {canDisplayNotifications && (
                     <Popover
                       content={dropdownContent}
                       trigger="click"
-                      placement="bottomRight"
-                      open={dropdownOpen}
+                      placement="bottomLeft"
+                      open={true}
                       onOpenChange={handleDropdownChange}
-                      overlayClassName="notification-popover"
                     >
-                      <Badge size="small" count={notificationCount} overflowCount={99}>
+                      <Badge size="small" count={unreadCount} overflowCount={99}>
                         <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
                           <Image
                             src="/assets/icons/notification.png"
@@ -417,7 +543,11 @@ const dropdownContent = useMemo(() => {
               
                   <ul className='dropdown' >
                     <li className='drop-item'>
-                      <NavLink to={'/businesslisting'} className='drop-link'>
+                      <NavLink 
+                        to={'/businesslisting'} 
+                        className='drop-link'
+                        onClick={() => setGetCategory(null)}
+                      >
                         <Flex gap={10} align='center'>
                           <Image src={'/assets/icons/browseall.png'} alt='browse all icon' width={30} className='pt-1s' preview={false} />
                           <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
@@ -535,26 +665,30 @@ const dropdownContent = useMemo(() => {
                 </Button>
               
                 
-                <Popover
-                  content={dropdownContent}
-                  trigger="click"
-                  placement="bottom"
-                  open={dropdownOpen}
-                  onOpenChange={handleDropdownChange}
-                  overlayClassName="notification-popover"
-                >
-                  <Badge size="small" count={notificationCount} overflowCount={99}>
-                    <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
-                      <Image 
-                        src='/assets/icons/notification.png' 
-                        width={'28px'} 
-                        preview={false}
-                        alt="notification icon" 
-                        className="up"
-                      />
-                    </Button>
-                  </Badge>
-                </Popover>
+                {isUserPending ? (
+                  <Spin size="small" />
+                ) : (
+                  <Popover
+                    content={dropdownContent}
+                    trigger="click"
+                    placement="bottom"
+                    open={dropdownOpen}
+                    onOpenChange={handleDropdownChange}
+                    overlayClassName="notification-popover"
+                  >
+                    <Badge size="small" count={unreadCount} overflowCount={99}>
+                      <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
+                        <Image 
+                          src='/assets/icons/notification.png' 
+                          width={'28px'} 
+                          preview={false}
+                          alt="notification icon" 
+                          className="up"
+                        />
+                      </Button>
+                    </Badge>
+                  </Popover>
+                )}
 
               <Dropdown menu={{ items }} trigger={['click']}>
                 <Flex align='center' gap={10}>

@@ -1,4 +1,4 @@
-import { Col, Row, Table, Spin } from 'antd';
+import { Col, Row, Table, Spin, Flex } from 'antd';
 import { SearchInput } from '../../Forms';
 import { BUYERINPROGRESSDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';

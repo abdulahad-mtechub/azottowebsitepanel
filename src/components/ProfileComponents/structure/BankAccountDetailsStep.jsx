@@ -1,26 +1,19 @@
-import React, { useState } from 'react';
-import { Button, Card, Checkbox, Col, Flex, Image, Radio, Row, Typography, message, Spin } from 'antd';
-import { SEND_BANK, UPDATE_DEAL } from '../../../graphql/mutation/mutations';
-import { ME } from '../../../graphql/query';
-import { useMutation, useQuery } from '@apollo/client';
+import { Flex, Typography } from 'antd';
+import { GETADMINACTIVEBANK } from '../../../graphql/query';
+import { useQuery } from '@apollo/client';
 import { MaskedAccount } from '../../ui/MaskedAccount';
 import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
 
-const BankAccountDetailsStep = ({ form, completedeal, user, details }) => {
+const BankAccountDetailsStep = () => {
+
   const { t } = useTranslation();
-  const [messageApi, contextHolder] = message.useMessage();
-
-  const { data, loading, error } = useQuery(ME, {
-    variables: { getUserId: details?.busines?.seller.id },
-  });
-
-  const buyerBank = data?.getUser?.banks?.find(bank => bank.isActive);
+  const { data } = useQuery(GETADMINACTIVEBANK);
+  const buyerBank = data?.getActiveAdminBank;
 
   return (
     <>
-      {contextHolder}
       <Flex vertical gap={10}>
         <Text className="fw-600 text-medium-gray fs-13">{t('Bank Account')}</Text>
         {buyerBank ? (

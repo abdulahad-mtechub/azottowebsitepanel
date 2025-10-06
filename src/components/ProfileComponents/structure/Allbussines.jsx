@@ -38,7 +38,6 @@ const Allbussines = () => {
     if (singledetail) {
         return <Singlebusinessview singledetail={singledetail} setSingleDetail={setSingleDetail} />;
     }
-
     return (
         <Flex gap={20} vertical>
             <Flex justify='space-between' align='center'>
@@ -74,11 +73,11 @@ const Allbussines = () => {
                                                 </Button>
                                             )}
                                         </Flex>
-                                        {pro?.status === 'ACTIVE' ? (
+                                        {pro?.businessStatus === 'ACTIVE' ? (
                                             <span className='badge-active rounded-8'>{t('Active')}</span>
-                                        ) : pro?.status === 'INACTIVE' ? (
+                                        ) : pro?.businessStatus === 'INACTIVE' ? (
                                             <span className='badge-inactive rounded-8'>{t('Inactive')}</span>
-                                        ) : pro?.status === 'UNDER_REVIEW' ? (
+                                        ) : pro?.businessStatus === 'UNDER_REVIEW' ? (
                                             <span className='badge-review rounded-8'>{t('Under Review')}</span>
                                         ) : null}
                                     </Flex>
