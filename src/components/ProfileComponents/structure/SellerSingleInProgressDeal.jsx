@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin } from 'antd';
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps';
-import { GETDEAL, ME } from '../../../graphql/query';
+import { GETDEAL } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
@@ -18,17 +18,13 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         fetchPolicy: 'network-only',
     });
 
-    const { data: userData, loading: userLoading, error: userError } = useQuery(ME, {
-        variables: { getUserId: userId },
-    });
-    const user = userData?.getUser;
-
     if (error) return <Text type="danger">{t('Error loading deal')}: {error.message}</Text>;
 
     const deal = data?.getDeal
         ? {
             key: data.getDeal.id,
             businessTitle: data.getDeal.business?.businessTitle || '-',
+            buyerId: data.getDeal.buyer?.id || '-',
             buyerName: data.getDeal.buyer?.name || '-',
             sellerName: data.getDeal.business?.seller?.name || '-',
             finalizedOffer: data.getDeal.offer?.price ? `SAR ${data.getDeal.offer.price.toLocaleString()}` : '-',
@@ -104,7 +100,7 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
                         ))}
                     </Row>
                 </div>
-                <SellerSingleInprogressSteps user={user} deal={deal} />
+                <SellerSingleInprogressSteps deal={deal} />
             </Card>
         </Flex>
     );

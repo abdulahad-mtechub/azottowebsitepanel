@@ -78,49 +78,15 @@ const GET_BUSINESS = gql`
       revenueTime
       supportSession
       supportDuration
+      businessStatus
       url
-      seller {
-        id
-        name
-        email
-      }
+      isStatsVerified
       category {
         id
         name
       }
-      seller {
+      savedBy {
         id
-      }
-      assets {
-        id
-        name
-        price
-        purchaseYear
-        quantity
-        isActive
-      }
-      documents {
-        id
-        title
-        fileName
-        fileType
-        filePath
-      }
-      inventoryItems {
-        id
-        name
-        price
-        purchaseYear
-        quantity
-        isActive
-      }
-      liabilities {
-        id
-        name
-        price
-        purchaseYear
-        quantity
-        isActive
       }
     }
   }
@@ -142,9 +108,6 @@ query GetRandomBusinesses($getRandomBusinessesId: ID!) {
     capitalRecovery
     isSaved
     multiple
-    seller {
-      name
-    }
   }
 }
 `
@@ -164,9 +127,6 @@ query GetAllBusinessesByCategory($category: String!, $limit: Int, $offSet: Int) 
         id
       }
       category {
-        name
-      }
-      seller {
         name
       }
     }
@@ -192,9 +152,6 @@ query GetAllBusinessesByCity($city: String!, $limit: Int, $offSet: Int) {
       category {
         name
       }
-      seller {
-        name
-      }
     }
     totalCount
   }
@@ -216,9 +173,6 @@ query getAllBusinessesByDistrict($district: String!, $limit: Int, $offSet: Int) 
         id
       }
       category {
-        name
-      }
-      seller {
         name
       }
     }
@@ -244,9 +198,6 @@ query GetAllBusinessesByProfit($profit: [Float]!, $limit: Int, $offSet: Int) {
       category {
         name
       }
-      seller {
-        name
-      }
     }
     totalCount
   }
@@ -268,9 +219,6 @@ query GetAllBusinessesByRevenue($revenue: [Float]!, $limit: Int, $offSet: Int) {
         id
       }
       category {
-        name
-      }
-      seller {
         name
       }
     }

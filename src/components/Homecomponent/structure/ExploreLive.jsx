@@ -45,6 +45,11 @@ const ExploreLive = () => {
         ]
     })) || [];
 
+    const truncateChars = (text, max = 25) => {
+        if (!text) return "";
+        const chars = Array.from(text);
+        return chars.length > max ? chars.slice(0, max).join("") + "..." : text;
+    };
     if (loading) {
         return (
             <Flex justify="center" align="center" className='h-200'>
@@ -52,13 +57,6 @@ const ExploreLive = () => {
             </Flex>
         );
     }
-
-    const truncateChars = (text, max = 25) => {
-        if (!text) return "";
-        const chars = Array.from(text);
-        return chars.length > max ? chars.slice(0, max).join("") + "..." : text;
-    };
-
     return (
         <div className='feature bg-light-brand'>
             <div className='container'>

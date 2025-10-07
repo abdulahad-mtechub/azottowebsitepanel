@@ -25,7 +25,7 @@ const statusToStepIndex = {
 
 const { Text, Title } = Typography;
 
-const SellerSingleInprogressSteps = ({ completedeal, user, deal }) => {
+const SellerSingleInprogressSteps = ({ completedeal, deal }) => {
     const { t } = useTranslation();
     const [form] = Form.useForm();
     const initialStep = deal?.status ? statusToStepIndex[deal.status] || 0 : 0;

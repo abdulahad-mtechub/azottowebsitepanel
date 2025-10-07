@@ -1,13 +1,15 @@
-import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography,Spin } from 'antd';
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'
 
 const { Text, Title, Paragraph } = Typography;
 
 const ExploreSimilarBusiness = ({ id }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate()
     const { data, loading, error } = useQuery(GET_RANDOM_BUSINESSES, {
         variables: { getRandomBusinessesId: id },
         skip: !id,
@@ -38,6 +40,13 @@ const ExploreSimilarBusiness = ({ id }) => {
             },
         ],
     }));
+    if (loading) {
+        return (
+            <Flex justify="center" align="center" className='h-200'>
+                <Spin size="large" />
+            </Flex>
+        );
+    }
 
     return (
         <div className='feature bg-light-brand'>
@@ -59,7 +68,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                         {
                             mappedBusinesses?.slice(0,4)?.map((pro,i)=>
                                 <Col xl={{span: 6}} lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>       
-                                    <Card className='h-100 border-gray rounded-12 card-cs cursor' >
+                                    <Card className='h-100 border-gray rounded-12 card-cs cursor'  onClick={() => navigate(`/singleviewlisting/${pro?.id}`)}>
                                         <Flex vertical gap={20}>
                                             <Flex justify='space-between' align='center'>
                                                 <Flex gap={4}>

@@ -21,10 +21,13 @@ const GETARTICLE = gql`
 query GetArticle($getArticleId: ID!) {
   getArticle(id: $getArticleId) {
     id
-    title
     image
+    title
+    arabicTitle
     body
+    arabicBody
     createdAt
+    isArabic
   }
 }
 `
@@ -35,12 +38,14 @@ query GetFAQs($search: String) {
     faqs {
       id
       question
+      arabicQuestion
       answer
+      arabicAnswer
+      isArabic
     }
   }
 }
 `
-
 const GETTERMS = gql`
 query GetTerms {
   getTerms {

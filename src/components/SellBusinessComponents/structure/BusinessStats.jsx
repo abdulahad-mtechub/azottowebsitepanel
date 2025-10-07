@@ -1,9 +1,11 @@
 import { Card, Col, Flex, Image, Row, Tooltip, Typography } from 'antd'
 import moment from 'moment';
 import { useState,useEffect } from 'react'
+import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography
 const BusinessStats = ({data}) => {
+    const { t } = useTranslation();
     const [profitTimeValue, setProfitTimeValue] = useState('Last Year');
     const [revenueTimeValue, setRevenueTimeValue] = useState('Last Year');
 
@@ -23,45 +25,43 @@ const BusinessStats = ({data}) => {
     }, [data?.profittime, data?.revenueTime]); 
 
     const months = data?.capitalRecovery ?? 0;
-
-    console.log("data vf", data)
     
     const stats = [
         {
             id: 1,
             icon:'/assets/icons/rev.png',
             title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.revenue ? data?.revenue : '0'}</>,
-            subtitle:`Revenue ${revenueTimeValue ? '(Last Year)' : ''}`,
+            subtitle:`${t('Revenue')} ${t(revenueTimeValue) || ''}`,
         },
         {
             id: 2,
             icon:'/assets/icons/pro.png',
             title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.profit ? data?.profit : '0'}</>,
-            subtitle:`Profit  ${profitTimeValue ? '(Last Year)' : ''}`,
+            subtitle:`${t('Profit')}  ${t(profitTimeValue) || ''}`,
         },
         {
             id: 3,
             icon:'/assets/icons/promar.png',
-            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.profitMargen ? data?.profitMargen : '0'}</>,
-            subtitle:'Profit Margin %'
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.profitMargen ? data?.profitMargen : '0'}%</>,
+            subtitle: `${t('Profit Margin')}`
         },
         {
             id: 4,
             icon:'/assets/icons/cap-re.png',
             title:months >= 12 ? `${(months / 12).toFixed(1)} years` : `${months} months`,
-            subtitle:'Capital Recovery'
+            subtitle:`${t('Capital Recovery')}`
         },
         {
             id: 5,
             icon:'/assets/icons/foundationdate.png',
             title: data?.foundedDate ? moment(data?.foundedDate).format('YYYY') : 'N/A',
-            subtitle:'Foundation Date'
+            subtitle:`${t('Foundation Date')}`
         },
         {
             id: 6,
             icon:'/assets/icons/teamsize.png',
             title:data?.numberOfEmployees ? data?.numberOfEmployees : 'N/A',
-            subtitle :'Team Size'
+            subtitle :`${t('Team Size')}`
         },
     ]
     return (
@@ -72,7 +72,7 @@ const BusinessStats = ({data}) => {
                         <Title level={5} className='m-0'>
                             Business Stats
                         </Title>
-                        {(status && status.includes('Verified')) ?
+                        {(data?.isStatsVerified) ?
                             <Tooltip title={'Verified'}>
                                 <Image src='/assets/icons/verified-user.png' alt='verified icon' preview={false} width={16} />
                             </Tooltip>

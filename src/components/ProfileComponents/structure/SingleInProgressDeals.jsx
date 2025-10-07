@@ -1,9 +1,8 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin } from 'antd';
 import { SingleInprogressSteps } from './SingleInprogressSteps';
-import { GETDEAL, ME } from '../../../graphql';
+import { GETDEAL,GETUSERACTIVEBANK } from '../../../graphql';
 import { useQuery } from '@apollo/client';
-import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
@@ -11,21 +10,19 @@ const { Title, Text } = Typography;
 const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
   const { t } = useTranslation();
 
-  const userId = Cookies.get("userId"); 
   const dealId = inprogressdeal.key;
 
   const { data, loading, error } = useQuery(GETDEAL, {
     variables: { getDealId: dealId },
     fetchPolicy: 'network-only',
   });
-
-  const { data: userData } = useQuery(ME, {
-    variables: { getUserId: userId },
+  const { data:userBank, loading:bankloading, error:bankError } = useQuery(GETUSERACTIVEBANK, {
+    variables: { getUserActiveBanksId: data?.getDeal?.buyer?.id },
+    fetchPolicy: 'network-only',
   });
-  const user = userData?.getUser;
-
   if (error) return <Text type="danger">{t('Error loading deal')}: {error.message}</Text>;
 
+  const banks=userBank?.getUserActiveBanks
   const deal = data?.getDeal
     ? {
         key: data?.getDeal?.id,
@@ -38,7 +35,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         status: data?.getDeal?.status || 0,
         date: data?.getDeal?.createdAt ? new Date(data?.getDeal?.createdAt).toLocaleDateString() : '-',
         busines: data?.getDeal?.business || '-',
-        banks: data?.getDeal?.buyer?.banks || '-',
+        banks: banks || '-',
         isCommissionVerified: data?.getDeal?.isCommissionVerified || false,
         isDsaSeller: data?.getDeal?.isDsaSeller || false,
         isDsaBuyer: data?.getDeal?.isDsaBuyer || false,
@@ -115,7 +112,7 @@ if (!deal) return <Text>{t('No deal found')}</Text>;
           </Row>
         </div>
 
-        <SingleInprogressSteps inprogressdeal={deal} user={user} />
+        <SingleInprogressSteps inprogressdeal={deal} />
       </Card>
     </Flex>
   );

@@ -92,6 +92,7 @@
   "Revenue/month": "الإيرادات/شهر",
   "Profit/month": "الأرباح/شهر",
   "Capital Recovery": "استرداد رأس المال",
+  "Capital": "رأس المال",
   
   "A": "أ",
  "Trusted Marketplace": "سوق موثوق",
@@ -182,7 +183,7 @@
   "Price Range": "نطاق السعر",
   "Annual Revenue": "الإيرادات السنوية",
   "Annual Profit": "الأرباح السنوية",
-  "Profit Margin (%)": "هامش الربح (%)",
+  "Profit Margin": "هامش الربح",
   "Multiple": "مضاعف",
   "Team Size": "حجم الفريق",
   "Years in Operation": "سنوات التشغيل",

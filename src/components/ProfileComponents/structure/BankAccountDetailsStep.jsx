@@ -1,30 +1,39 @@
-import { Flex, Typography } from 'antd';
-import { GETADMINACTIVEBANK } from '../../../graphql/query';
+import { Flex, Typography,Spin } from 'antd';
+import { GETUSERACTIVEBANK } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 import { MaskedAccount } from '../../ui/MaskedAccount';
 import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography;
 
-const BankAccountDetailsStep = () => {
+const BankAccountDetailsStep = ({details}) => {
 
   const { t } = useTranslation();
-  const { data } = useQuery(GETADMINACTIVEBANK);
-  const buyerBank = data?.getActiveAdminBank;
-
+  const { data:userBank, loading:bankloading, error:bankError } = useQuery(GETUSERACTIVEBANK, {
+    variables: { getUserActiveBanksId: details?.buyerId },
+    fetchPolicy: 'network-only',
+  });
+  const banks=userBank?.getUserActiveBanks
+  if (bankloading) {
+    return (
+        <Flex justify="center" align="center" className='h-200'>
+            <Spin size="large" />
+        </Flex>
+    );
+}
   return (
     <>
       <Flex vertical gap={10}>
         <Text className="fw-600 text-medium-gray fs-13">{t('Bank Account')}</Text>
-        {buyerBank ? (
+        {banks ? (
           <div className="deals-status w-100 sky-lightest rounded-12">
             <Flex vertical gap={6}>
-              <Text className="fs-15 fw-500 text-gray">{buyerBank.bankName}</Text>
+              <Text className="fs-15 fw-500 text-gray">{banks.bankName}</Text>
               <Text className="fs-13 text-gray">
-                {t('Account Title')}: {buyerBank.accountTitle}
+                {t('Account Title')}: {banks.accountTitle}
               </Text>
               <MaskedAccount
-                iban={buyerBank.iban}
+                iban={banks.iban}
                 className="fs-13 text-gray"
               />
             </Flex>

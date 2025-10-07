@@ -16,7 +16,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
     const { data } = useQuery(ME, {
         variables: { getUserId: userId },
     });
-    const user = data?.getUser;
+    const user = data?.getUserDetailsId;
     const [acceptEnda] = useMutation(CREATE_ENDA);
     const [businessMeeting, { loading }] = useMutation(BUSINESS_MEETING);
 

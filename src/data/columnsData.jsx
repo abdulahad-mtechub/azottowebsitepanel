@@ -60,7 +60,7 @@ const inventColumn = [
     { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {price}</>},
     { title: null, dataIndex: 'verified',
         render: (verified) => {
-            if (verified === 1) {
+            if (verified === true || verified === 1) {
                 return <Tooltip title={t('Verified by Jusoor')}>
                     <Image src='/assets/icons/verified-user.png' preview={false} width={14} alt={t("verified icon")} />
                  </Tooltip>;

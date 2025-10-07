@@ -22,7 +22,7 @@ const Editprofile = ({ visible, onClose }) => {
   const [selectedDistrict, setSelectedDistrict] = useState(null);
 
   const { data, loading: queryLoading } = useQuery(ME, {
-    variables: { getUserId: userId },
+    variables: { getUserDetailsId: userId },
     skip: !userId,
     fetchPolicy: "network-only",
   });
@@ -30,12 +30,12 @@ const Editprofile = ({ visible, onClose }) => {
   const [updateUser, { loading: updateLoading }] = useMutation(UPDATE_USER);
 
   useEffect(() => {
-    if (data?.getUser) {
+    if (data?.getUserDetailsId) {
       form.setFieldsValue({
-        email: data.getUser.email,
-        phoneNo: data.getUser.phone,
-        district: data.getUser.district,
-        city: data.getUser.city,
+        email: data.getUserDetailsId.email,
+        phoneNo: data.getUserDetailsId.phone,
+        district: data.getUserDetailsId.district,
+        city: data.getUserDetailsId.city,
       });
     }
   }, [data, form]);

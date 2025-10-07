@@ -6,7 +6,6 @@ import { useLazyQuery } from "@apollo/client";
 import { useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography;
-const { Panel } = Collapse;
 
 const FaqsComponent = () => {
     const { t } = useTranslation();
@@ -14,7 +13,7 @@ const FaqsComponent = () => {
     const { data, loading, error, refetch } = useLazyQuery(GETFAQ, {
         variables: { search: "" },
     });
-
+console.log("data?.getFAQs?.faqs",data?.getFAQs?.faqs)
     const faqsData = data?.getFAQs?.faqs?.map(item => ({
         id: item.id,
         title: t(item.question),

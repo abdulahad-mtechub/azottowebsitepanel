@@ -1,30 +1,14 @@
 import { gql } from "@apollo/client";
 
 const ME = gql`
-   query GetUser($getUserId: ID!) {
-  getUser(id: $getUserId) {
+query GetUserDetails($getUserDetailsId: ID!) {
+  getUserDetails(id: $getUserDetailsId) {
     id
     name
     email
     phone
     city
     district
-    documents {
-      fileName
-      filePath
-    }
-    banks {
-      accountTitle
-      bankName
-      iban
-      cardNumber
-      cardType
-      isActive
-    }
-    role{
-      id
-      name
-    }
   }
 }
 `
@@ -142,32 +126,11 @@ query GetAllSellerSoldBusinesses($limit: Int, $offSet: Int) {
   }
 }
 `
-const GETBUYERBOUGHTBUSINESS = gql`
-query GetAllBuyerBoughtBusinesses($limit: Int, $offSet: Int) {
-  getAllBuyerBoughtBusinesses(limit: $limit, offSet: $offSet) {
-    businesses {
-    id
-      category {
-      name
-    }
-    businessTitle
-    description
-    revenue
-    profit
-    price
-    capitalRecovery
-    savedBy {
-      id
-    }
-    }
-    totalCount
-  }
-}
-`
 const GETFAVORITBUSINESS = gql`
-query GetFavoritBusiness {
-  getFavoritBusiness {
-    id
+query GetFavoritBusiness($limit: Int, $offSet: Int) {
+  getFavoritBusiness(limit: $limit, offSet: $offSet) {
+    businesses {
+      id
       category {
       name
     }
@@ -181,6 +144,7 @@ query GetFavoritBusiness {
     capitalRecovery
     savedBy {
       id
+    }
     }
   }
 }
@@ -224,6 +188,18 @@ query GetUserBanks {
   }
 }
   `
+  const GETBANKBYUSERID = gql`
+query GetUserBanks($getUserBanksId: ID) {
+  getUserBanks(id: $getUserBanksId) {
+    id
+    bankName
+    accountNumber
+    createdAt
+    accountTitle
+    isActive
+  }
+}
+  `
 const GETUSERACTIVEBANK = gql`
   query GetUserActiveBanks($getUserActiveBanksId: ID) {
     getUserActiveBanks(id: $getUserActiveBanksId) {
@@ -245,10 +221,10 @@ export {
     GETSELLERBUSINESS,
     GETBUYERBUSINESS,
     GETSELLERSOLDBUSINESS,
-    GETBUYERBOUGHTBUSINESS,
     GETFAVORITBUSINESS,
     GETADMINBANK,
     GETADMINACTIVEBANK,
     GETUSERBANK,
-    GETUSERACTIVEBANK
+    GETUSERACTIVEBANK,
+    GETBANKBYUSERID
 }
