@@ -8,8 +8,10 @@ const { Title, Text } = Typography;
 
 const Herosection = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const userId = Cookies.get("userId")
+  const lan = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lan.toLowerCase() === "ar";
 
   return (
     <section className='hero'>
@@ -48,7 +50,10 @@ const Herosection = () => {
         <Col sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 10 }} xl={{ span: 10 }}>
           <div className='heroimginner'>
             <img 
-              src='assets/images/banner-web.png' 
+              src={
+                // isArabic ? 'assets/images/arabic-banner.png' : 
+                'assets/images/banner-web.png'
+              } 
               alt={t('Hero Banner Web')} 
               className='web-vw' 
               fetchPriority="high"
