@@ -8,8 +8,10 @@ const { Title, Text } = Typography;
 
 const Herosection = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const userId = Cookies.get("userId")
+  const lan = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lan.toLowerCase() === "ar";
 
   return (
     <section className='hero'>
