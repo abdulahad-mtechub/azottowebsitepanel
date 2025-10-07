@@ -21,7 +21,7 @@ const liabColumn = [
     { title: t('Liability name'), dataIndex: 'name' },
     { title: t('Number of Items'), dataIndex: 'items' },
     { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
-    { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {price}</>},
+    { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {price}</>},
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === true || verified === 1) {
@@ -39,7 +39,7 @@ const keyassetsColumn = [
     { title: t('Asset name'), dataIndex: 'name' },
     { title: t('Number of Items'), dataIndex: 'items' },
     { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
-    { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.png" width={12} alt={t("currency-symbol")} fetchPriority="high"/> {price}</>},
+    { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high"/> {price}</>},
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === true || verified === 1) {
@@ -57,7 +57,7 @@ const inventColumn = [
     { title: t('Inventory name'), dataIndex: 'name' },
     { title: t('Number of Items'), dataIndex: 'items' },
     { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
-    { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {price}</>},
+    { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {price}</>},
     { title: null, dataIndex: 'verified',
         render: (verified) => {
             if (verified === true || verified === 1) {

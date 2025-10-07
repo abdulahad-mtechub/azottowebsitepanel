@@ -49,7 +49,7 @@ const BusinessViewInfoCard = ({ data }) => {
                                 </div>
                                 <Flex vertical gap={2}>
                                     <Title level={5} className={`m-0 ${info.id === 1 ? 'text-green' : 'text-brand'}`}>
-                                        {info?.id === 2 && <img src="/assets/icons/reyal.png" width={14} alt={t("currency-symbol")} fetchPriority="high" />} {info?.title}
+                                        {info?.id === 2 && <img src="/assets/icons/reyal.webp" width={14} alt={t("currency-symbol")} fetchPriority="high" />} {info?.title}
                                     </Title>
                                     <Text className='text-gray fs-12 fw-500'>
                                         {info?.subtitle}

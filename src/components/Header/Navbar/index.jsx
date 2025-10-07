@@ -37,7 +37,7 @@ const Navbar = ({setGetCategory}) => {
   const [selectedLang, setSelectedLang] = useState({
     key: "1",
     label: "EN",
-    icon: "assets/icons/en.png",
+    icon: "assets/icons/en.webp",
     alt: "Language logo"
   });
   const { data: categoryData } = useQuery(GET_CATEGORIES);
@@ -75,6 +75,7 @@ const Navbar = ({setGetCategory}) => {
         ]
   },
   ]
+  console.log("selectedLang",selectedLang)
   const [getUser, { data:me, loading: userLoading }] = useLazyQuery(NAVUSERDATA);
   const [getNavNotification, { data:navNotificationsData, loading: navNotificationLoading }] = useLazyQuery(NAVNOTIFICATION);
   const [getNotification, { data:notificationsData, loading: notificationLoading }] = useLazyQuery(NOTIFICATION);
@@ -98,8 +99,8 @@ const Navbar = ({setGetCategory}) => {
     i18n.changeLanguage(lang); // ✅ now works
     setSelectedLang(
       lang === "ar"
-        ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
-        : { key: "1", label: "EN", icon: "assets/icons/en.png" }
+        ? { key: "2", label: "AR", icon: "assets/icons/ar.png" ,alt: "Arabic Language logo"}
+        : { key: "1", label: "EN", icon: "assets/icons/en.webp" ,alt: "English Language logo"}
     );
   }, [i18n]);
   useEffect(() => {
@@ -289,7 +290,7 @@ const Navbar = ({setGetCategory}) => {
     setSelectedLang(
       lang === "ar"
         ? { key: "2", label: "AR", icon: "assets/icons/ar.png", alt: "Arabic" }
-        : { key: "1", label: "EN", icon: "assets/icons/en.png", alt: "English" }
+        : { key: "1", label: "EN", icon: "assets/icons/en.webp", alt: "English" }
     );
   
     // Optional: also update <html dir> for RTL support
@@ -300,7 +301,7 @@ const Navbar = ({setGetCategory}) => {
       key: "1",
       label: (
         <Space>
-          <Image src="assets/icons/en.png" width={20} alt="English" preview={false} />
+          <Image src="assets/icons/en.webp" width={20} alt="English" preview={false} />
           <Text className='fs-13'>EN</Text>
         </Space>
       ),
@@ -471,7 +472,7 @@ useEffect(() => {
             <div className="gen-navbar-inner">
               <div className='gen-navbar-left'>
                 <Link to={'/'}>
-                  <img src={'/assets/images/logo.png'}  width={'100%'} alt="jusoor-logo" fetchPriority="high" />
+                  <img src={'/assets/images/logo.webp'}  width={'100%'} alt="jusoor-logo" fetchPriority="high" />
                 </Link>
               </div>
               <div className="gen-navbar-right">
@@ -483,13 +484,15 @@ useEffect(() => {
                       aria-labelledby='Arrow down icon'
                     >
                       <Space align="center">
-                        <Image
-                          src={selectedLang.icon}
-                          width={20}
-                          alt={selectedLang.label}
-                          preview={false}
-                        />
-                        <Text className="text-white fs-13">{selectedLang.label}</Text>
+                      <Image 
+                        src={selectedLang.icon}
+                        width={20}
+                        preview={false}
+                        // alt="notification icon" 
+                        alt={selectedLang.alt}
+                        className="up"
+                      />
+                        <Text className="text-white fs-13">{selectedLang?.label}</Text>
                         <DownOutlined className="text-white" />
                       </Space>
                     </Button>
@@ -529,7 +532,7 @@ useEffect(() => {
             <Flex gap={20} align='center'>
               <div className='gen-navbar-left'>
                 <Link to={'/'}>
-                  <img src='/assets/images/logo.png' width={'100%'} className='one' alt="jusoor-logo" fetchPriority="high" />
+                  <img src='/assets/images/logo.webp' width={'100%'} className='one' alt="jusoor-logo" fetchPriority="high" />
                 </Link>
               </div>
               <ul className='nav-list'>
@@ -642,8 +645,15 @@ useEffect(() => {
                 aria-label="language button"
               >
                 <Space align="center">
-                  <Image src={selectedLang.icon} width={20} alt={selectedLang.alt} preview={false} />
-                  <Text className="text-white fs-13">{selectedLang.label}</Text>
+                  <Image 
+                    src={selectedLang.icon}
+                    width={20}
+                    preview={false}
+                    // alt="notification icon" 
+                    alt={selectedLang.alt}
+                    className="up"
+                  />
+                  <Text className="text-white fs-13">{selectedLang?.label}</Text>
                   <DownOutlined className="text-white" />
                 </Space>
               </Button>

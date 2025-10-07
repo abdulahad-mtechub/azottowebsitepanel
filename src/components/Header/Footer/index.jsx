@@ -77,7 +77,7 @@ const footerlinkData = [
                     <Space direction='vertical' size={20} className='w-100'>
                         <div className='mb-1'>
                             <Link to={'/'}>
-                                <img src='/assets/images/logo.png' alt='jusoor-logo' width={130} fetchPriority="high"/>
+                                <img src='/assets/images/logo.webp' alt='jusoor-logo' width={130} fetchPriority="high"/>
                             </Link>
                         </div>
                         <Text className='fs-13 text-white w-500'>

@@ -19,7 +19,7 @@ const LoginPage = () => {
   const [selectedLang, setSelectedLang] = useState({
       key: "1",
       label: "EN",
-      icon: "assets/icons/en.png",
+      icon: "assets/icons/en.webp",
     });
   const [redirecting, setRedirecting] = useState(false);
   const [language, setLanguage]= useState()
@@ -30,7 +30,7 @@ const LoginPage = () => {
     setSelectedLang(
       lang === "ar"
         ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
-        : { key: "1", label: "EN", icon: "assets/icons/en.png" }
+        : { key: "1", label: "EN", icon: "assets/icons/en.webp" }
     );
   }, []);
   const handleFinish = async (values) => {
@@ -63,12 +63,12 @@ const LoginPage = () => {
       key: "1",
       label: (
         <Space>
-          <Image src="assets/icons/en.png" width={20} alt="English" preview={false} />
+          <Image src="assets/icons/en.webp" width={20} alt="English" preview={false} />
           <Text className='fs-13'>EN</Text>
         </Space>
       ),
       onClick: () =>{
-        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png",alt: "Jusoor language logo" }),
+        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.webp",alt: "Jusoor language logo" }),
         setLanguage("en")
         handleChange("en")
       }
@@ -192,7 +192,7 @@ const LoginPage = () => {
               </Dropdown> 
               <Flex vertical justify="space-between" className="h-100">
                 <Flex vertical justify="center" align="center" className="logo-sp">
-                  <Image src="/assets/images/logo.png" alt="jusoor logo" width={200} preview={false} />
+                  <Image src="/assets/images/logo.webp" alt="jusoor logo" width={200} preview={false} fetchPriority="high"/>
                   <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
                 </Flex>
                 <div className="bg-shade">

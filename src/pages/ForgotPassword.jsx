@@ -14,7 +14,7 @@ const ForgotPassword = () => {
     const [selectedLang, setSelectedLang] = useState({
         key: "1",
         label: "EN",
-        icon: "assets/icons/en.png",
+        icon: "assets/icons/en.webp",
     });
 
     const forgotpass = () => {
@@ -37,12 +37,12 @@ const ForgotPassword = () => {
         key: "1",
         label: (
           <Space>
-            <Image src="assets/icons/en.png" width={20} alt={t("English")} preview={false} />
+            <Image src="assets/icons/en.webp" width={20} alt={t("English")} preview={false} />
             <Text className='fs-13'>EN</Text>
           </Space>
         ),
         onClick: () =>
-          setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.png", alt: t("English") }),
+          setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.webp", alt: t("English") }),
       },
       {
         key: "2",
@@ -210,7 +210,7 @@ const ForgotPassword = () => {
                 </Dropdown> 
                 <Flex vertical justify="space-between" className="h-100">
                     <Flex vertical justify="center" align="center" className="logo-sp">
-                        <Image src="/assets/images/logo.png" alt={t("jusoor logo")} width={200} preview={false} />
+                        <Image src="/assets/images/logo.webp" alt={t("jusoor logo")} width={200} preview={false} fetchPriority="high"/>
                         <Title level={5} className="m-0 text-white text-center">{t('Shorten the path')}</Title>
                     </Flex>
                     <div className="bg-shade">

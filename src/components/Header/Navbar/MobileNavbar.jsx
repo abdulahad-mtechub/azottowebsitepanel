@@ -40,7 +40,7 @@ const MobileNavbar = ({ visible, onClose }) => {
         >
             <Flex justify='space-between' align='center'>
                 <NavLink to={'/'} onClick={onClose}>
-                    <Image src='/assets/images/logo.png' alt='jusoor logo' width={120} preview={false} />
+                    <Image src='/assets/images/logo.webp' alt='jusoor logo' width={120} preview={false} fetchPriority="high"/>
                 </NavLink>
                 <Button aria-labelledby='Close' className='bg-transparent border-0 p-0' onClick={onClose}>
                     <CloseOutlined className='text-white fs-18' />

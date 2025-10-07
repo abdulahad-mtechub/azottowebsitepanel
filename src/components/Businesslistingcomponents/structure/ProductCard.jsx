@@ -65,7 +65,7 @@ const ProductCard = ({
                                 <Flex justify='space-between' align='center'>
                                     <Flex gap={4}>
                                         <Tag color="default" className="fs-12">
-                                            {pro.categoryName.split(/\s+/).slice(0, 2).join(' ') + '...'}
+                                            {pro?.categoryName?.split(/\s+/).slice(0, 2).join(' ') + '...'}
                                         </Tag>
                                         <Tag 
                                             className="fs-12 bg-brand"
@@ -125,7 +125,7 @@ const ProductCard = ({
                                     </Row>
                                     <Divider className='my-1' />
                                     <Flex gap={3} align='center'>
-                                        <Image src='/assets/icons/reyal.png' alt={t("currency-symbol")} preview={false} width={20} />
+                                        <Image src='/assets/icons/reyal.webp' alt={t("currency-symbol")} preview={false} width={20} />
                                         <Title level={4} className='m-0'>{pro?.amount}</Title>
                                     </Flex>
                                 </div>

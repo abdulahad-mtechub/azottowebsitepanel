@@ -69,7 +69,7 @@ const Favoritbussines = () => {
                                     </Row>
                                     <Divider className='my-1' />
                                     <Flex gap={3} align='center'>
-                                        <Image src='/assets/icons/reyal.png' alt={t('currency-symbol')} preview={false} width={20} />
+                                        <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
                                         <Title level={4} className='m-0'>{pro?.price}</Title>
                                     </Flex>
                                 </div>
