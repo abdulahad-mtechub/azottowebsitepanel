@@ -79,6 +79,8 @@ const Allbussines = () => {
                                             <span className='badge-active rounded-8'>{t('Active')}</span>
                                         ) : pro?.businessStatus === 'INACTIVE' ? (
                                             <span className='badge-inactive rounded-8'>{t('Inactive')}</span>
+                                        ) : pro?.businessStatus === 'REJECT' ? (
+                                            <span className='badge-inactive rounded-8'>{t('Rejected')}</span>
                                         ) : pro?.businessStatus === 'UNDER_REVIEW' ? (
                                             <span className='badge-review rounded-8'>{t('Under Review')}</span>
                                         ) : null}

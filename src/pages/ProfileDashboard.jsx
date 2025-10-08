@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 const { Text, Title } = Typography;
 
 const ProfileDashboard = () => {
-  const {t, i18n}= useTranslation()
+  const {t}= useTranslation()
     const profiletabData = {
         Seller: [
           { key: 'sellerdashboard', label: t('Dashboard') },
