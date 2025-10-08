@@ -11,11 +11,12 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const Allbussines = () => {
+    
     const navigate = useNavigate();
     const { t } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
     const [singledetail, setSingleDetail] = useState(null);
-    const [limit, setLimit] = useState(10); // default limit
+    const [limit, setLimit] = useState(10); 
     const offset = (currentPage - 1) * limit;
 
     const { data: sellerBusinesses, loading, refetch } = useQuery(GETSELLERBUSINESS, {

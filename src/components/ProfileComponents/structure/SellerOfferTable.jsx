@@ -1,5 +1,4 @@
 import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography } from 'antd'
-import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { DeleteModal } from '../../ui';
 import { DownOutlined } from '@ant-design/icons';
@@ -10,6 +9,7 @@ import { GET_BUSINESS_OFFERS } from '../../../graphql/query/offer';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 import { RequestMeetingModal } from '../../Businesslistingcomponents';
+import moment from 'moment';
 
 const {Text} =Typography
 const SellerOfferTable = ({ data }) => {
@@ -75,12 +75,18 @@ const SellerOfferTable = ({ data }) => {
                     return <Text className="inactive fs-12 badge-cs fw-500">{t('Rejected')}</Text>;
                 } else if (status === 'APPROVED') {
                     return <Text className="received fs-12 badge-cs fw-500">{t('Approved')}</Text>;
+                } else if (status === 'ACCEPTED') {
+                    return <Text className="received fs-12 badge-cs fw-500">{t('Accepted')}</Text>;
                 } else {
                     return <Text className="fs-12 badge-cs fw-500">{status}</Text>;
                 }
             },
         },
-        { title: t('Offer Date'), dataIndex: 'createdAt' },
+        { 
+            title: t('Offer Date'), 
+            dataIndex: 'createdAt',  
+            render: (createdAt) => moment(createdAt).format('DD-MM-YYYY'),
+        },
         {
             title: t('Action'),
             key: 'action',

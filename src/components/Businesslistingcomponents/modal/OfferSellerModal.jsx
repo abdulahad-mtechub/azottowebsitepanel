@@ -7,6 +7,7 @@ import { useMutation } from '@apollo/client'
 
 const { Title, Text } = Typography
 const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => {
+
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
 

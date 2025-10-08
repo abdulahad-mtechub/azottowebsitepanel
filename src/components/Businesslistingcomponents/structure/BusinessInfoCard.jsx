@@ -34,7 +34,7 @@ const BusinessInfoCard = ({ data }) => {
     }
   }, [offerExistsData]);
 
-
+  
   const businessInfoData = [
     {
       id: 1,
