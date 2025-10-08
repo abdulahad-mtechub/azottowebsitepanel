@@ -181,7 +181,6 @@ const SellBusinessCreate = () => {
 
             const { data } = await createBusiness({ variables });
             if (data?.createBusiness?.id) {
-                messageApi.success(t('Business listing created successfully!'));
                 setReviewModal(true);
                 localStorage.removeItem(LOCAL_STORAGE_KEY);
                 

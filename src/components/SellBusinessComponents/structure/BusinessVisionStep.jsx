@@ -60,8 +60,6 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                                 label='Support Duration'
                                 name='supportDuration'
                                 type='number'
-                                required
-                                message="Please enter support duration"
                                 placeholder='Enter support duration'
                                 addonAfter={'Month'}
                                 className='w-100'
@@ -82,8 +80,6 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                                 label="Number of Support Sessions"
                                 name="noSession"
                                 type='number'
-                                required
-                                message='Please enter number of support sessions'
                                 placeholder='Enter number of sessions'
                                 validator={{
                                     validator: (_, value) => {
