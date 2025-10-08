@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Card, Row, Col, Typography, Dropdown, Button, Image, message, Modal } from 'antd';
-import { GETUSERBANK,GETUSERACTIVEBANK } from '../../../graphql/query';
+import { GETUSERBANK } from '../../../graphql/query';
 import { useQuery, useMutation } from '@apollo/client';
 import { AddWalletModal } from '../modal';
 import { ACTIVEBANK, DELETEBANK } from '../../../graphql/mutation/mutations';
@@ -9,12 +9,13 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
+
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [deletemodal, setDeleteModal] = useState(false);
   const [selectedBankId, setSelectedBankId] = useState(null);
 
-  const { data: bankData } = useQuery(GETUSERACTIVEBANK);
+  const { data: bankData } = useQuery(GETUSERBANK);
 
   const [activateBankMutate] = useMutation(ACTIVEBANK, {
     refetchQueries: [{ query: GETUSERBANK }],
@@ -34,7 +35,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
     onError: (err) => messageApi.error(err.message),
   });
 
-  const data = (bankData?.getUserBanks ({
+  const data = (bankData?.getUserBanks || []).map((bank, index) => ({
     key: bank?.id || index,
     bankname: bank?.bankName,
     title: bank?.accountTitle || t('N/A'),
@@ -88,7 +89,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                         <Image src="/assets/icons/home.png" width={35} preview={false} alt="bank-icon" />
                         <Title level={5} className="m-0 text-white fw-normal">
-                          {wallet.bankname}
+                          {wallet?.bankname}
                         </Title>
                       </div>
 
