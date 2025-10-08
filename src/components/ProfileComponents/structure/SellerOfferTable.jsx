@@ -1,13 +1,12 @@
-import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography,message } from 'antd'
+import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography } from 'antd'
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { DeleteModal } from '../../ui';
 import { DownOutlined } from '@ant-design/icons';
 import { SearchInput } from '../../Forms';
 import { CounterOffer, ScheduleMeeting } from '../modal';
-import { useQuery, useMutation } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { GET_BUSINESS_OFFERS } from '../../../graphql/query/offer';
-import { UPDATE_OFFER } from '../../../graphql/mutation/mutations';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 import { RequestMeetingModal } from '../../Businesslistingcomponents';
@@ -15,7 +14,6 @@ import { RequestMeetingModal } from '../../Businesslistingcomponents';
 const {Text} =Typography
 const SellerOfferTable = ({ data }) => {
     const { t } = useTranslation();
-    const [messageApi, contextHolder] = message.useMessage();
     const userId = Cookies.get("userId");
     const [form] = Form.useForm();
     const [offermodal, setOfferModal] = useState(false);
@@ -38,24 +36,10 @@ const SellerOfferTable = ({ data }) => {
     });
     const [endaVisible, setEndaVisible] = useState(false);
 
-    const [updateOfferStatus] = useMutation(UPDATE_OFFER);
-
     const handleAcceptOffer = async (offerId, businessId) => {
-        try {
-            await updateOfferStatus({
-                variables: {
-                    input: {
-                        id: offerId,
-                        status: "ACCEPTED"
-                    }
-                },
-            });
-            messageApi.info(`offer accepted`);
-            setEndaVisible(true);
-        } catch (err) {
-            console.error("Error accepting offer:", err);
-            messageApi.error("Could not accept offer");
-        }
+        setSelectedOfferId(offerId);
+        setSelectedBusinessId(businessId);
+        setEndaVisible(true);
     };
 
     const offerdata = offers?.getOfferByBusinessId?.offers;
@@ -70,11 +54,11 @@ const SellerOfferTable = ({ data }) => {
                 <Flex gap={10} align="center">
                     <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {row}
                     {record?.isProceedToPay ? (
-                        <Tooltip title={t("CO - Counteroffer")}>
+                        <Tooltip title={t("PP - Proceed to Purchase")}>
                             <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
                         </Tooltip>
                     ) : (
-                        <Tooltip title={t("PP - Proceed to Purchase")}>
+                        <Tooltip title={t("CO - Counter Offer")}>
                             <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>CO</Text>
                         </Tooltip>
                     )}
@@ -149,7 +133,6 @@ const SellerOfferTable = ({ data }) => {
 
     return (
         <>
-            {contextHolder}
             <Row gutter={[24, 24]}>
                 <Col span={24}>
                     <Flex gap={5} align='center'>
@@ -208,9 +191,13 @@ const SellerOfferTable = ({ data }) => {
                 subtitle={t('This action cannot be undone. Are you sure you want to reject this offer?')}
             />
             <RequestMeetingModal
-                businessId={data?.id}
+                businessId={selectedBusinessId}
+                offerId={selectedOfferId}
                 visible={endaVisible}
                 onClose={()=>{setEndaVisible(false)}}
+                refetch={() => {
+                    // Refetch offers after modal closes
+                }}
             />
         </>
     );

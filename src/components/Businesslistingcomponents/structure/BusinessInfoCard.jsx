@@ -1,11 +1,12 @@
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd';
 import { OfferSellerModal, RequestMeetingModal } from '../modal';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
-import { useMutation } from '@apollo/client'
+import { useMutation, useQuery } from '@apollo/client'
+import { CHECK_OFFER_EXISTS } from '../../../graphql/query/offer'
 
 const { Title, Text } = Typography;
 
@@ -13,9 +14,27 @@ const BusinessInfoCard = ({ data }) => {
 
   const { t } = useTranslation();
   const userId = Cookies.get("userId");
-  const [isLoggedIn, setisLoggedIn] = useState(!!userId);
+  const isLoggedIn = !!userId;
   const navigate = useNavigate();
   const [createOffer] = useMutation(CREATE_OFFER);
+  const [hasExistingOffer, setHasExistingOffer] = useState(false);
+  
+  const { data: offerExistsData } = useQuery(CHECK_OFFER_EXISTS, {
+    variables: { 
+      businessId: data?.id, 
+      buyerId: userId 
+    },
+    skip: !userId || !data?.id,
+    fetchPolicy: 'network-only',
+  });
+
+  useEffect(() => {
+    if (offerExistsData?.checkOfferExists) {
+      setHasExistingOffer(offerExistsData.checkOfferExists);
+    }
+  }, [offerExistsData]);
+
+
   const businessInfoData = [
     {
       id: 1,
@@ -105,9 +124,13 @@ const BusinessInfoCard = ({ data }) => {
           {data?.seller?.id !== userId && (
             <Col span={24}>
               <Flex vertical gap={5}>
-                <Button className='btn bg-brand' aria-labelledby={t('Make an Offer')}
-                  onClick={()=> handleAction(() => { setOfferMode("offer"); setOfferSeller(true); })}>
-                  {t('Make an Offer')}
+                <Button 
+                  className='btn bg-brand' 
+                  aria-labelledby={t('Make an Offer')}
+                  onClick={()=> handleAction(() => { setOfferMode("offer"); setOfferSeller(true); })}
+                  disabled={hasExistingOffer}
+                >
+                  {hasExistingOffer ? t('Offer Already Submitted') : t('Make an Offer')}
                 </Button>
                 <Button aria-labelledby={t('Request Meeting')} className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>
                   {t('Request Meeting')}

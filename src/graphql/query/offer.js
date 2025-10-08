@@ -233,6 +233,11 @@ query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: In
   }
 }
 `
+const CHECK_OFFER_EXISTS = gql`
+  query CheckOfferExists($businessId: ID!, $buyerId: ID!) {
+    checkOfferExists(businessId: $businessId, buyerId: $buyerId)
+  }
+`
 export {
     OFFERBYBUYER,
     OFFERBYSELLER,
@@ -244,4 +249,5 @@ export {
     GETDEAL,
     GET_BUSINESS_OFFERS,
     GETBANKSFORDEAL,
+    CHECK_OFFER_EXISTS,
 }

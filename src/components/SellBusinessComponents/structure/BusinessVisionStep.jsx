@@ -28,10 +28,10 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
 
     useEffect(() => {
         form.setFieldsValue({
-            supportDuration: Number(data.supportDuration),
-            noSession: Number(data.supportSession),
+            supportDuration: data.supportDuration || undefined,
+            noSession: data.supportSession || undefined,
             growthOpportunities: data.growthOpportunities,
-            businessPrice: data.price,
+            businessPrice: data.price || undefined,
             reasonSelling: data.reason,
         });
     }, [data, form]);
@@ -59,20 +59,42 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                             <MyInput
                                 label='Support Duration'
                                 name='supportDuration'
+                                type='number'
                                 required
                                 message="Please enter support duration"
                                 placeholder='Enter support duration'
                                 addonAfter={'Month'}
                                 className='w-100'
+                                validator={{
+                                    validator: (_, value) => {
+                                        if (!value) {
+                                            return Promise.reject(new Error('Please enter the support duration'));
+                                        } else if (Number(value) <= 0) {
+                                            return Promise.reject(new Error('Support duration must be greater than 0'));
+                                        }
+                                        return Promise.resolve();
+                                    }
+                                }}
                             />
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
                                 label="Number of Support Sessions"
                                 name="noSession"
+                                type='number'
                                 required
                                 message='Please enter number of support sessions'
                                 placeholder='Enter number of sessions'
+                                validator={{
+                                    validator: (_, value) => {
+                                        if (!value) {
+                                            return Promise.reject(new Error('Please enter the number of support sessions'));
+                                        } else if (Number(value) <= 0) {
+                                            return Promise.reject(new Error('Number of sessions must be greater than 0'));
+                                        }
+                                        return Promise.resolve();
+                                    }
+                                }}
                             />
                         </Col>
                         <Col span={24}>

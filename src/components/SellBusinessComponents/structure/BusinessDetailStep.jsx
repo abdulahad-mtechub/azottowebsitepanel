@@ -15,7 +15,7 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     const [form] = Form.useForm();
     const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedDistrict, setSelectedDistrict] = useState(null);
+    const [selectedDistrict, setSelectedDistrict] = useState(data.district || null);
 
     useImperativeHandle(ref, () => ({
       validate: () => form.validateFields(),
@@ -69,10 +69,6 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
         setSelectedCategory(cat);
       }
     }, [data]);
-
-    useEffect(() => {
-      console.log("check........", form.getFieldsValue())
-    }, [form.setFieldValue])
 
     return (
       <>
@@ -146,7 +142,11 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   message="Choose district"
                   placeholder="Choose district"
                   options={district}
-                  onChange={(val) => setSelectedDistrict(val)}
+                  onChange={(val) => {
+                    const selectedDistrictObj = district.find(d => d.name === val);
+                    setSelectedDistrict(selectedDistrictObj?.name || null);
+                    form.setFieldValue('city', undefined);
+                  }}
                 />
               </Col>
   
@@ -156,7 +156,7 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   name="city"
                   required
                   message="Choose city"
-                  readOnly={!selectedDistrict}
+                  disabled={!selectedDistrict}
                   options={selectedDistrict ? cities[selectedDistrict?.toLowerCase()] || [] : []}
                   placeholder="Choose city"
                 />
@@ -182,7 +182,6 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   message="Choose team size"
                   options={teamsizeOp}
                   placeholder="Enter team size"
-                  
                 />
               </Col>
   
@@ -192,6 +191,8 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   label="Description"
                   name="description"
                   placeholder="Write description about your business"
+                  required
+                  message="Please enter description"
                   rows={5}
                 />
               </Col>

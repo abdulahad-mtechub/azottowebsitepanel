@@ -1,4 +1,4 @@
-import React, { useState,useRef } from 'react';
+import { useState,useRef, useEffect } from 'react';
 import { Breadcrumb, Flex, Typography, Steps, Button, Spin, message } from 'antd';
 import { CheckOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
@@ -181,9 +181,38 @@ const SellBusinessCreate = () => {
 
             const { data } = await createBusiness({ variables });
             if (data?.createBusiness?.id) {
-            messageApi.success(t('Business listing created successfully!'));
-            setReviewModal(true);
-            localStorage.removeItem(LOCAL_STORAGE_KEY);
+                messageApi.success(t('Business listing created successfully!'));
+                setReviewModal(true);
+                localStorage.removeItem(LOCAL_STORAGE_KEY);
+                
+                setBusinessData({
+                    isByTakbeer: null,
+                    businessTitle: null,
+                    categoryId: null,
+                    district: null,
+                    city: null,
+                    foundedDate: null,
+                    numberOfEmployees: null,
+                    description: null,
+                    url: null,
+                    revenueTime: null,
+                    revenue: null,
+                    profittime: null,
+                    profit: null,
+                    price: null,
+                    profitMargen: null,
+                    multiple: null,
+                    assets: [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                    liabilities: [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                    inventoryItems: [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                    supportDuration: null,
+                    supportSession: null,
+                    growthOpportunities: null,
+                    reason: null,
+                    documents: [{ title: null, fileName: null, fileType: null, filePath: null, description: null }],
+                });
+                
+                setCurrent(0);
             } else {
             messageApi.error(t('Failed to create business listing: No ID returned'));
             }
@@ -193,10 +222,7 @@ const SellBusinessCreate = () => {
         }
     };
 
-    console.log("checkin", businessData)
-
     const handleSaveDraft = () => {
-        // Filter out empty/null/undefined document objects before saving
         const cleanedBusinessData = {
             ...businessData,
             documents: businessData.documents.filter(
@@ -233,13 +259,12 @@ const SellBusinessCreate = () => {
         messageApi.success(t('Draft saved locally!'));
     };
 
-    if (loading) {
-        return (
-            <Flex justify="center" align="center" className="h-200">
-                <Spin size="large" />
-            </Flex>
-        );
-    }
+    
+    useEffect(() => {
+        document.querySelectorAll('.ant-steps-item-container[role="button"]').forEach(el => {
+            el.removeAttribute('role');
+        });
+    }, []);
 
     return (
         <>
@@ -287,7 +312,7 @@ const SellBusinessCreate = () => {
                                     </Button>
                                 )}
                                 {current === steps.length - 1 && (
-                                    <Button type="primary" className='btn bg-brand' onClick={handleCreateListing}>
+                                    <Button type="primary" disabled={loading} loading={loading} className='btn bg-brand' onClick={handleCreateListing}>
                                         {t('Publish')}
                                     </Button>
                                 )}

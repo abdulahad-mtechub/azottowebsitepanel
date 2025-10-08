@@ -18,7 +18,7 @@ const Allbussines = () => {
     const [limit, setLimit] = useState(10); // default limit
     const offset = (currentPage - 1) * limit;
 
-    const { data: sellerBusinesses, loading, error, refetch } = useQuery(GETSELLERBUSINESS, {
+    const { data: sellerBusinesses, loading, refetch } = useQuery(GETSELLERBUSINESS, {
         variables: { limit, offset },
         fetchPolicy: 'network-only',
     });
@@ -38,6 +38,8 @@ const Allbussines = () => {
     if (singledetail) {
         return <Singlebusinessview singledetail={singledetail} setSingleDetail={setSingleDetail} />;
     }
+
+    console.log('test 3', sellerBusinesses?.getAllSellerBusinesses?.businesses);
     return (
         <Flex gap={20} vertical>
             <Flex justify='space-between' align='center'>
@@ -69,7 +71,7 @@ const Allbussines = () => {
                                                     aria-labelledby={t('Type')}
                                                     className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
                                                 >
-                                                    {pro.isByTakbeer ? t('Taqbeel') : t('Direct')}
+                                                    {pro.isByTakbeer ? t('Taqbeel') : t('Acquiring')}
                                                 </Button>
                                             )}
                                         </Flex>

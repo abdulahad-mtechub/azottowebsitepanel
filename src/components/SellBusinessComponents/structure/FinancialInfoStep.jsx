@@ -100,11 +100,11 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
     useEffect(() => {
         form.setFieldsValue({
             revenueTime: normalizeLookupValue(data.revenueTime),
-            revenue: Number(data.revenue),
+            revenue: data.revenue || undefined,
             profittime: normalizeLookupValue(data.profittime),
-            profit: data.profit,
-            businessPrice: data.price,
-            profitMargin: data.profitMargen,
+            profit: data.profit || undefined,
+            businessPrice: data.price || undefined,
+            profitMargin: data.profitMargen || undefined,
             keyassets: data.assets?.map(item => ({
                 assetName: item.name,
                 noItems: item.quantity,
@@ -215,7 +215,18 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
 
                             <Form.Item
                                 name="revenue"
-                                rules={[{ required: true, message: "Please enter revenue" }]}
+                                rules={[
+                                    {
+                                        validator: (_, value) => {
+                                            if (!value) {
+                                            return Promise.reject(new Error('Please enter the revenue value'));
+                                            } else if (Number(value) <= 0) {
+                                            return Promise.reject(new Error('Revenue must be greater than 0'));
+                                            }
+                                            return Promise.resolve();
+                                        },
+                                    }
+                                ]}
                                 noStyle
                             >
                                 <Input
@@ -246,7 +257,18 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
 
                                 <Form.Item
                                     name="profit"
-                                    rules={[{ required: true, message: "Please enter profit" }]}
+                                    rules={[
+                                        {
+                                            validator: (_, value) => {
+                                                if (!value) {
+                                                    return Promise.reject(new Error('Please enter the profit value'));
+                                                } else if (Number(value) <= 0) {
+                                                    return Promise.reject(new Error('Profit must be greater than 0'));
+                                                }
+                                                return Promise.resolve();
+                                            },
+                                        }
+                                    ]}
                                     noStyle
                                 >
                                     <Input

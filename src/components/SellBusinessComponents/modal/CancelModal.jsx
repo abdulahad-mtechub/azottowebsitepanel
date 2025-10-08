@@ -1,7 +1,19 @@
 import { Button, Divider, Flex, Modal, Typography } from 'antd'
+import { useNavigate } from 'react-router-dom'
 
 const { Title, Text } = Typography
 const CancelModal = ({visible,onClose}) => {
+  const navigate = useNavigate();
+  
+  const handleCancel = () => {
+    onClose();
+  };
+  
+  const handleConfirm = () => {
+    localStorage.removeItem('sellBusinessDraft');
+    navigate('/');
+  };
+  
   return (
     <Modal
         title={null}
@@ -11,10 +23,10 @@ const CancelModal = ({visible,onClose}) => {
         centered
         footer={
             <Flex justify='center' gap={5}>
-                <Button aria-labelledby='Cancel' type='button' className='btn text-black border-gray'>
+                <Button aria-labelledby='Cancel' type='button' className='btn text-black border-gray' onClick={handleCancel}>
                     Cancel
                 </Button>
-                <Button aria-labelledby='Confirm' type="primary" className='btn bg-brand'>
+                <Button aria-labelledby='Confirm' type="primary" className='btn bg-brand' onClick={handleConfirm}>
                     Confirm
                 </Button>
             </Flex>

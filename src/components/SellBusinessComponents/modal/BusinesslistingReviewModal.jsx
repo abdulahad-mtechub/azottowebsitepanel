@@ -2,21 +2,23 @@ import { Button, Divider, Flex, Modal, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
 
 const { Title, Text } = Typography
-const BusinesslistingReviewModal = ({visible,onClose,onCreate}) => {
+const BusinesslistingReviewModal = ({visible,onClose}) => {
 
-    const navigate = useNavigate()
+  const navigate = useNavigate()
+
   return (
     <Modal
         title={null}
         open={visible}
         onCancel={onClose}
         closeIcon={false}
+        centered
         footer={
             <Flex justify='center' gap={5}>
                 <Button aria-labelledby='Back to Home' type='button' className='btn text-black border-gray' onClick={()=>{onClose();navigate('/')}}>
                     Back to Home
                 </Button>
-                <Button aria-labelledby='Create new list' type="primary" className='btn bg-brand' onClick={()=>{onClose();navigate('/sellbusinesscreate')}}>
+                <Button aria-labelledby='Create new list' type="primary" className='btn bg-brand' onClick={()=>{onClose()}}>
                     Create new list
                 </Button>
             </Flex>

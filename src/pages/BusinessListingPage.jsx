@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 const { Text, Title } = Typography;
 
 const BusinessListingPage = ({getcategory}) => {
+    
     const {t,i18n}= useTranslation()
     const lang = localStorage.getItem("lang") || i18n.language || "en";
     const isArabic = lang.toLowerCase() === "ar";

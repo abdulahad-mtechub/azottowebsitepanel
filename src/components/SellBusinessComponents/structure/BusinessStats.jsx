@@ -42,7 +42,7 @@ const BusinessStats = ({data}) => {
         {
             id: 3,
             icon:'/assets/icons/promar.png',
-            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.profitMargen ? data?.profitMargen : '0'}%</>,
+            title: `${data?.profitMargen ? data?.profitMargen : '0'}%`,
             subtitle: `${t('Profit Margin')}`
         },
         {

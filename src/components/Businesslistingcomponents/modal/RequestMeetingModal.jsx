@@ -6,6 +6,7 @@ import { ME } from '../../../graphql/query';
 import { message } from "antd";
 import { useMutation } from '@apollo/client'
 import { CREATE_ENDA,BUSINESS_MEETING } from '../../../graphql'
+import { UPDATE_OFFER } from '../../../graphql/mutation/mutations';
 import Cookies from "js-cookie";
 
 const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
@@ -14,11 +15,15 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
     const [form] = Form.useForm(); 
     const [current, setCurrent] = useState(0);
     const { data } = useQuery(ME, {
-        variables: { getUserId: userId },
+        variables: { getUserDetailsId: userId },
     });
-    const user = data?.getUserDetailsId;
+
+    const user = data?.getUserDetails;
     const [acceptEnda] = useMutation(CREATE_ENDA);
-    const [businessMeeting, { loading }] = useMutation(BUSINESS_MEETING);
+    const [businessMeeting, { loading: meetingLoading }] = useMutation(BUSINESS_MEETING);
+    const [updateOffer, { loading: offerLoading }] = useMutation(UPDATE_OFFER);
+    
+    const loading = meetingLoading || offerLoading;
 
     const steps = [
         {
@@ -50,6 +55,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
               return;
             }
     
+            // Only accept E-NDA terms here
             await acceptEnda({
               variables: {
                 input: {
@@ -62,11 +68,11 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
               },
             });
     
-            messageApi.success("Agreement accepted successfully");
+            messageApi.success("E-NDA Agreement accepted successfully");
             setCurrent(current + 1);
           } catch (error) {
             console.error(error);
-            messageApi.error("Failed to accept agreement.");
+            messageApi.error("Failed to accept E-NDA agreement.");
           }
         } else {
           setCurrent(current + 1);
@@ -123,23 +129,34 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
                             0
                           );
                   
-                          await businessMeeting({
-                            variables: {
-                              input: {
-                                businessId,
-                                offerId,
-                                requestedDate: combinedDateTime.toISOString(), // or use ISO string
-                                requestedEndDate: combinedEndDateTime.toISOString(),
+                          // ✅ Call both APIs together: Meeting Request + Offer Acceptance
+                          await Promise.all([
+                            businessMeeting({
+                              variables: {
+                                input: {
+                                  businessId,
+                                  offerId,
+                                  requestedDate: combinedDateTime.toISOString(),
+                                  requestedEndDate: combinedEndDateTime.toISOString(),
+                                },
                               },
-                            },
-                          });
+                            }),
+                            updateOffer({
+                              variables: {
+                                input: {
+                                  id: offerId,
+                                  status: "ACCEPTED"
+                                },
+                              },
+                            })
+                          ]);
                   
-                          messageApi.success("Meeting request sent successfully!");
+                          messageApi.success("Meeting request sent and offer accepted successfully!");
                           onClose(); // close modal
                           refetch && refetch();
                         } catch (error) {
                           console.error(error);
-                          messageApi.error("Failed to schedule meeting.");
+                          messageApi.error("Failed to schedule meeting or accept offer.");
                         }
                       }}
                       loading={loading}

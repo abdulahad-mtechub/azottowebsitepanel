@@ -1,16 +1,16 @@
 import { gql } from "@apollo/client";
 
 const ME = gql`
-query GetUserDetails($getUserDetailsId: ID!) {
-  getUserDetails(id: $getUserDetailsId) {
-    id
-    name
-    email
-    phone
-    city
-    district
+  query GetUserDetails($getUserDetailsId: ID!) {
+    getUserDetails(id: $getUserDetailsId) {
+      id
+      name
+      email
+      phone
+      city
+      district
+    }
   }
-}
 `
 
 const NOTIFICATION = gql`

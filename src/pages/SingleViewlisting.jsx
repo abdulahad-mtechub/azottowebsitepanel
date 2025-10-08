@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../data';
@@ -12,8 +12,8 @@ import { useTranslation } from 'react-i18next';
 const { Text, Title } = Typography;
 
 const SingleViewlisting = () => {
+
     const { t } = useTranslation();
-    const [form] = Form.useForm(); 
     const { id } = useParams();
     const navigate = useNavigate();
 

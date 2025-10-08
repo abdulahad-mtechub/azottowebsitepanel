@@ -506,7 +506,7 @@ useEffect(() => {
                       content={dropdownContent}
                       trigger="click"
                       placement="bottomLeft"
-                      open={true}
+                      open={dropdownOpen}
                       onOpenChange={handleDropdownChange}
                     >
                       <Badge size="small" count={unreadCount} overflowCount={99}>

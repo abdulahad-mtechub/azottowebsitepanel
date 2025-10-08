@@ -10,7 +10,7 @@ const { Title, Text } = Typography;
 const BusinessInfoCardMobile = ({ data }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const userId = Cookies.get("userId"); // read userId from cookie
+  const userId = Cookies.get("userId");
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const [offerseller, setOfferSeller] = useState(false);
   const [meetingmodal, setMeetingModal] = useState(false);

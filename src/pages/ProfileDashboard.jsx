@@ -58,9 +58,9 @@ const ProfileDashboard = () => {
     const [parentTab, setParentTab] = useState('Seller');
     const [ addwalletvisible, setAddWalletVisible ] = useState(false)
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
-    const [getUser, { data:me, loading: userLoading, error:userError }] = useLazyQuery(NAVUSERDATA);
-    const { data: userStatsData, loading: userStatsLoading, error: userStatsError } = useQuery(PROFESSIONALSTATISTICS);
-    const [getBuyerUser,{ data: buyerStatsData, loading: buyerStatsLoading, error: buyerStatsError } ]= useLazyQuery(GETBUYERSTATISTICS);
+    const [getUser, { data:me }] = useLazyQuery(NAVUSERDATA);
+    const { data: userStatsData } = useQuery(PROFESSIONALSTATISTICS);
+    const [getBuyerUser,{ data: buyerStatsData }] = useLazyQuery(GETBUYERSTATISTICS);
     const [user, setUser] = useState(null);
     const [visible, setVisible] = useState(false)
     const [isedit, setIsEdit] = useState(false)
