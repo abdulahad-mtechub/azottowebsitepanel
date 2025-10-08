@@ -14,6 +14,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
     const [current, setCurrent] = useState(0);
+    const [allTermsAgreed, setAllTermsAgreed] = useState(false);
     const { data } = useQuery(ME, {
         variables: { getUserDetailsId: userId },
     });
@@ -25,10 +26,17 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
     
     const loading = meetingLoading || offerLoading;
 
+    // Check if all checkboxes are checked
+    const checkAllTerms = () => {
+        const values = form.getFieldsValue(['ndaAgree', 'termsAgree', 'commissionAgree']);
+        const allChecked = values.ndaAgree && values.termsAgree && values.commissionAgree;
+        setAllTermsAgreed(allChecked);
+    };
+
     const steps = [
         {
             title: null,
-            content: <SignJusoorEndaStep form={form} onClose={onClose} user={user} />,
+            content: <SignJusoorEndaStep form={form} onClose={onClose} user={user} onCheckboxChange={checkAllTerms} />,
 
         },
         {
@@ -36,26 +44,12 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
             content: <ScheduleMeetingStep form={form} onClose={onClose} />,
         },
     ];
-    // try {
-      //     await updateOffer({
-      //         variables: { input: { id: record.key, status: 'ACCEPTED' } }
-      //     });
-      //     messageApi.success('Offer accepted!');
-      //     refetch();
-      // } catch (err) {
-      //     messageApi.error('Failed to accept offer');
-      // }
+  
     const next = async () => {
         if (current === 0) {
           try {
             const values = await form.validateFields();
     
-            if (!values.ndaAgree || !values.termsAgree || !values.commissionAgree) {
-              messageApi.error("You must agree to all terms to continue.");
-              return;
-            }
-    
-            // Only accept E-NDA terms here
             await acceptEnda({
               variables: {
                 input: {
@@ -68,7 +62,6 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
               },
             });
     
-            messageApi.success("E-NDA Agreement accepted successfully");
             setCurrent(current + 1);
           } catch (error) {
             console.error(error);
@@ -78,14 +71,8 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
           setCurrent(current + 1);
         }
     };
-    
-    const prev = () => {
-        if (current === 0) {
-            onClose();
-        } else {
-            setCurrent(current - 1);
-        }
-    };
+
+    const prev = () => onClose();
 
     return (
         <Modal
@@ -98,11 +85,17 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
         >  {contextHolder}
             <div className="step-content mb-3">{steps[current].content}</div>
             <Flex gap={10} justify='end'>
-                <Button aria-labelledby={current === 0 ? 'Cancel' : 'Back'} className='btn text-black border-gray' onClick={prev}>
-                    {current === 0 ? 'Cancel' : 'Back'}
+                <Button aria-labelledby='Cancel' className='btn text-black border-gray' onClick={prev}>
+                  Cancel
                 </Button>
                 {current < steps.length - 1 && (
-                    <Button type="primary" aria-labelledby='Next' className='btn bg-brand' onClick={next}>
+                    <Button 
+                        type="primary" 
+                        aria-labelledby='Next' 
+                        className='btn bg-brand' 
+                        onClick={next}
+                        disabled={!allTermsAgreed}
+                    >
                         Next
                     </Button>
                 )}
@@ -156,9 +149,9 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
                               },
                             })
                           ]);
-                  
-                          messageApi.success("Meeting request sent and offer accepted successfully!");
-                          onClose(); // close modal
+
+                          messageApi.success("Jusoor E-NDA signed & meeting request sent successfully!");
+                          onClose();
                           refetch && refetch();
                         } catch (error) {
                           console.error(error);

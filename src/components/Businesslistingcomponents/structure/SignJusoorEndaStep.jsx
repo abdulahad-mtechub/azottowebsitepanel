@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
-const SignJusoorEndaStep = ({ form, onClose, user }) => {
+const SignJusoorEndaStep = ({ form, onClose, user, onCheckboxChange }) => {
     const { t } = useTranslation();
 
     useEffect(() => {
@@ -92,17 +92,17 @@ const SignJusoorEndaStep = ({ form, onClose, user }) => {
                     <Col span={24}>
                         <Flex vertical gap={5}>
                             <Form.Item name='ndaAgree' valuePropName='checked' className='m-0'>
-                                <Checkbox>
+                                <Checkbox onChange={onCheckboxChange}>
                                     {t('I agree to the')} <Link to='/endapage'>{t('Jusoor E-NDA Terms')}</Link>
                                 </Checkbox>
                             </Form.Item>
                             <Form.Item name='termsAgree' valuePropName='checked' className='m-0'>
-                                <Checkbox>
+                                <Checkbox onChange={onCheckboxChange}>
                                     {t('I accept Jusoor’s platform')} <Link to='/termofuse'>{t('Terms and Conditions')}</Link>
                                 </Checkbox>
                             </Form.Item>
                             <Form.Item name='commissionAgree' valuePropName='checked' className='m-0'>
-                                <Checkbox>{t('I agree to pay the platform commission if a deal is finalized')}</Checkbox>
+                                <Checkbox onChange={onCheckboxChange}>{t('I agree to pay the platform commission if a deal is finalized')}</Checkbox>
                             </Form.Item>
                         </Flex>
                     </Col>

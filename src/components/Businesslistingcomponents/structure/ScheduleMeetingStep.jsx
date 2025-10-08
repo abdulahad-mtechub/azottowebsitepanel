@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const ScheduleMeetingStep = ({ form, onClose }) => {
-    // const handleSubmit = async (values) => { // try { // const { date, time } = values; // if (!date || !time) { // message.error("Please select both date and time"); // return; // } // const [startTime, endTime] = time; // both are dayjs objects // // Combine date & time into a single Date object // const combinedDateTime = new Date(date); // combinedDateTime.setHours(startTime.hour()); // combinedDateTime.setMinutes(startTime.minute()); // const combinedendDateTime = new Date(date); // combinedendDateTime.setHours(endTime.hour()); // combinedendDateTime.setMinutes(endTime.minute()); // await businessMeeting({ // variables: { // input: { // businessId, // requestedDate: combinedDateTime.toISOString(), // requestedEndDate: combinedendDateTime.toISOString(), // }, // }, // }); // message.success("Meeting request sent successfully!"); // onClose(); // } catch (error) { // console.error(error); // message.error("Failed to send meeting request"); // } // }; // const [businessMeeting, { loading }] =
     const { t } = useTranslation();
 
     return (
