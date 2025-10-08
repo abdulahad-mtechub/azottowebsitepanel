@@ -10,7 +10,7 @@ const DeleteModal = ({ visible, onClose, title, subtitle, type, offerId, refetch
     const [messageApi, contextHolder] = message.useMessage();
     const [updateOffer, { loading: updateOfferLoading }] = useMutation(UPDATE_OFFER);
     const [updateMeeting, { loading: updateMeetingLoading }] = useMutation(UPDATE_MEETING);
-
+    console.log( "offer", offerId);
     const handleConfirm = async () => {
         try {
             if (meetingId) {
@@ -31,14 +31,6 @@ const DeleteModal = ({ visible, onClose, title, subtitle, type, offerId, refetch
             console.error(err);
         }
     };
-
-    if (updateOfferLoading || updateMeetingLoading) {
-        return (
-            <Flex justify="center" align="center" className='h-200'>
-                <Spin size="large" />
-            </Flex>
-        );
-    }
 
     return (
         <>

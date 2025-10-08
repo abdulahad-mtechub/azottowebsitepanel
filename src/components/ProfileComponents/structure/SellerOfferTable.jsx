@@ -191,6 +191,7 @@ const SellerOfferTable = ({ data }) => {
             />
             <DeleteModal
                 visible={deletemodal}
+                offerId={selectedOfferId}
                 onClose={() => setDeleteModal(false)}
                 type='danger'
                 title={t('Are you sure?')}
