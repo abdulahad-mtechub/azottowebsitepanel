@@ -24,7 +24,7 @@ const SellerOfferTable = ({ data }) => {
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
-    const { data: offers } = useQuery(GET_BUSINESS_OFFERS, {
+    const { data: offers, refetch } = useQuery(GET_BUSINESS_OFFERS, {
         variables: { 
             getOfferByBusinessIdId: data?.id,
             limit: null,
@@ -196,15 +196,14 @@ const SellerOfferTable = ({ data }) => {
                 type='danger'
                 title={t('Are you sure?')}
                 subtitle={t('This action cannot be undone. Are you sure you want to reject this offer?')}
+                refetch={refetch}
             />
             <RequestMeetingModal
                 businessId={selectedBusinessId}
                 offerId={selectedOfferId}
                 visible={endaVisible}
                 onClose={()=>{setEndaVisible(false)}}
-                refetch={() => {
-                    // Refetch offers after modal closes
-                }}
+                refetch={refetch}
             />
         </>
     );

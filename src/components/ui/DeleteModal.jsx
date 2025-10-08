@@ -6,11 +6,12 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const DeleteModal = ({ visible, onClose, title, subtitle, type, offerId, refetch, meetingId, buttontext }) => {
+
     const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
     const [updateOffer, { loading: updateOfferLoading }] = useMutation(UPDATE_OFFER);
     const [updateMeeting, { loading: updateMeetingLoading }] = useMutation(UPDATE_MEETING);
-    console.log( "offer", offerId);
+
     const handleConfirm = async () => {
         try {
             if (meetingId) {
