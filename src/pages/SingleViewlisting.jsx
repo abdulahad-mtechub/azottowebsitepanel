@@ -39,7 +39,7 @@ const SingleViewlisting = () => {
     });
     
     const business = businessData?.getBusinessById?.business;
-
+    
     const postSaleData = [
         {
             key: '1',

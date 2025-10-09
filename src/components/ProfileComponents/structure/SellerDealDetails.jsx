@@ -11,7 +11,7 @@ const { Text, Title } = Typography;
 
 const SellerDealDetails = ({ data }) => {
   const { t } = useTranslation();
-
+  console.log('deal details data:', data);
   const businessinfo = data;
   const postSaleData = [
     {

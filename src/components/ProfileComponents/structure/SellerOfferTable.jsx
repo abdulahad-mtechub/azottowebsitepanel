@@ -13,6 +13,7 @@ import moment from 'moment';
 
 const {Text} =Typography
 const SellerOfferTable = ({ data }) => {
+    
     const { t } = useTranslation();
     const userId = Cookies.get("userId");
     const [form] = Form.useForm();

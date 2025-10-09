@@ -88,6 +88,30 @@ const GET_BUSINESS = gql`
       savedBy {
         id
       }
+      assets {
+        id
+        isActive
+        name
+        price
+        purchaseYear
+        quantity
+      }
+      liabilities {
+        id
+        isActive
+        name
+        price
+        purchaseYear
+        quantity
+      }
+      inventoryItems {
+        id
+        isActive
+        name
+        price
+        purchaseYear
+        quantity
+      }
     }
   }
 }
