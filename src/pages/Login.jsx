@@ -89,16 +89,7 @@ const LoginPage = () => {
       }
     },
   ];
-  if (userloading || redirecting) {
-    return (
-      <>
-        {contextHolder}
-        <Flex justify="center" align="center" className="h-200">
-            <Spin size="large" />
-        </Flex>
-      </>
-    );
-  }
+
   return (
     <>
     {contextHolder}
@@ -155,6 +146,7 @@ const LoginPage = () => {
                       className="btn bg-dark-blue fs-16"
                       block
                       aria-labelledby='Signin'
+                      loading={userloading || redirecting}
                     >
                       {t('Sign In')}
                     </Button>
