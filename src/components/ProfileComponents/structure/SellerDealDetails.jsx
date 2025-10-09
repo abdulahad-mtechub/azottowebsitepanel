@@ -2,7 +2,7 @@ import { Row, Col, Card, Flex, Typography } from 'antd';
 import { AnnualProfitBarChart, MarketAreaChart } from '../../Businesslistingcomponents';
 import { BusinessViewInfoCard } from './BusinessViewInfoCard';
 import { BusinessStats, PreviewTableContent } from '../../SellBusinessComponents';
-import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../../../data';
+import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../../../data';
 import { useQuery } from '@apollo/client';
 import { SIMILER_BUSINESS_CATEGORY_GRAPH } from '../../../graphql/query/business';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +11,10 @@ const { Text, Title } = Typography;
 
 const SellerDealDetails = ({ data }) => {
   const { t } = useTranslation();
-  console.log('deal details data:', data);
+  const postsaleColumns = usePostsaleColumns();
+  const liabColumn = useLiabColumn();
+  const keyassetsColumn = useKeyassetsColumn();
+  const inventColumn = useInventColumn();
   const businessinfo = data;
   const postSaleData = [
     {

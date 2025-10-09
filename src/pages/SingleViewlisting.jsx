@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
-import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../data';
+import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../data';
 import { AnnualProfitBarChart, BusinessInfoCard, BusinessInfoCardMobile, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
 import { RightOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
@@ -14,6 +14,10 @@ const { Text, Title } = Typography;
 const SingleViewlisting = () => {
 
     const { t } = useTranslation();
+    const postsaleColumns = usePostsaleColumns();
+    const liabColumn = useLiabColumn();
+    const keyassetsColumn = useKeyassetsColumn();
+    const inventColumn = useInventColumn();
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -39,7 +43,7 @@ const SingleViewlisting = () => {
     });
     
     const business = businessData?.getBusinessById?.business;
-    
+
     const postSaleData = [
         {
             key: '1',

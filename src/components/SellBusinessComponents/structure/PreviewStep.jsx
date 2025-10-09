@@ -2,7 +2,7 @@ import { Card, Col, Flex, Form, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { Link } from 'react-router-dom';
 import { BusinessStats } from './BusinessStats';
-import { inventColumn, keyassetsColumn, liabColumn, postsaleColumns } from '../../../data';
+import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../../../data';
 import { PreviewTableContent } from './PreviewTableContent';
 import { DocumentUploadedPrev } from './DocumentUploadedPrev';
 import { BusinessInfo } from './BusinessInfo';
@@ -11,6 +11,10 @@ import { useQuery } from '@apollo/client';
 
 const { Title, Text } = Typography
 const PreviewStep = ({data}) => {
+    const postsaleColumns = usePostsaleColumns();
+    const liabColumn = useLiabColumn();
+    const keyassetsColumn = useKeyassetsColumn();
+    const inventColumn = useInventColumn();
     const { loading, error, data: categoryData } = useQuery(GET_CATEGORY, {
         variables: { getCategoryByIdId: data.categoryId },
         skip: !data.categoryId, // Skip query if categoryId is null or undefined
