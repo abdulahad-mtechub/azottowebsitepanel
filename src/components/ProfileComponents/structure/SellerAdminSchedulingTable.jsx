@@ -1,11 +1,10 @@
-import { Col, Form, Row, Table, Typography } from 'antd';
+import { Col, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
 import { READYSCHEDULEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const { Text } = Typography;
 
 const SellerAdminSchedulingTable = ({ isBuyer }) => {
   const { t } = useTranslation();
@@ -35,6 +34,7 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
         businessprice: meeting.business?.price,
         offerprice: meeting.offer?.price,
         prefereddatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
+        status: meeting.status
       };
     }) || [];
 
@@ -45,6 +45,7 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
     { title: t('Buyer Name'), dataIndex: 'buyername' },
     { title: t('Business Price'), dataIndex: 'businessprice' },
     { title: t('Offer Price'), dataIndex: 'offerprice' },
+    { title: t('Status'), dataIndex: 'status' },
     { title: t('Preferred Date & Time'), dataIndex: 'prefereddatetime' },
   ];
 

@@ -41,7 +41,8 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
             offerprice: meeting.offer?.price,
             date: new Date(meeting.requestedDate).toLocaleString(),
             offerId: meeting.offer?.id,
-            business: meeting.business
+            business: meeting.business,
+            status: meeting.status
         };
     }) || [];
 
@@ -52,6 +53,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
         { title: t('Buyer Name'), dataIndex: 'buyername' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
         { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: t('Status'), dataIndex: 'status' },
         { title: t('Requested Date'), dataIndex: 'date' },
         {
             title: t('Action'),

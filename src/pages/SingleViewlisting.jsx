@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Breadcrumb, Button, Card, Col, Flex, Form, Row, Typography, Spin } from 'antd';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../data';
 import { AnnualProfitBarChart, BusinessInfoCard, BusinessInfoCardMobile, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';

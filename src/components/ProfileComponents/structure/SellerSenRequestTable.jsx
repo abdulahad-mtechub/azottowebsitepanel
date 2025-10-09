@@ -16,6 +16,7 @@ const SellerSendRequestTable = ({ isBuyer }) => {
         { title: t('Buyer Name'), dataIndex: 'buyername' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
         { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: t('Status'), dataIndex: 'status' },
         { title: t('Requested Date'), dataIndex: 'requestedDate' },
     ];
 
@@ -32,6 +33,7 @@ const SellerSendRequestTable = ({ isBuyer }) => {
             buyername: maskedName,
             businessprice: meeting.business?.price,
             offerprice: meeting.offer?.price,
+            status: meeting.status,
             requestedDate: new Date(meeting.requestedDate).toLocaleString(),
         };
     }) || [];

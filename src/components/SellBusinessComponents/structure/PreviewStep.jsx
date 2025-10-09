@@ -1,4 +1,4 @@
-import { Card, Col, Flex, Form, Row, Typography } from 'antd'
+import { Card, Col, Flex, Row, Typography } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { Link } from 'react-router-dom';
 import { BusinessStats } from './BusinessStats';
@@ -15,9 +15,9 @@ const PreviewStep = ({data}) => {
     const liabColumn = useLiabColumn();
     const keyassetsColumn = useKeyassetsColumn();
     const inventColumn = useInventColumn();
-    const { loading, error, data: categoryData } = useQuery(GET_CATEGORY, {
+    const { data: categoryData } = useQuery(GET_CATEGORY, {
         variables: { getCategoryByIdId: data.categoryId },
-        skip: !data.categoryId, // Skip query if categoryId is null or undefined
+        skip: !data.categoryId,
       });
     
       if (!data.categoryId) {
@@ -25,7 +25,6 @@ const PreviewStep = ({data}) => {
       }
 
     const category = categoryData?.getCategoryById;
-    const [form] = Form.useForm();    
 
     const postsaleData = [
         {

@@ -88,6 +88,9 @@ const GET_BUSINESS = gql`
       savedBy {
         id
       }
+      seller {
+        id
+      }
       assets {
         id
         isActive

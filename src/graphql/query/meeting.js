@@ -11,6 +11,7 @@ query GetMySentMeetingRequests($search: String, $isBuyer: Boolean, $limit: Int, 
       requestedDate
       requestedEndDate
       receiverAvailabilityDate
+      status
       requestedTo {
         name
       }
@@ -36,6 +37,7 @@ query GetReceivedMeetingRequests($search: String, $isBuyer: Boolean, $limit: Int
       requestedDate
       requestedEndDate
       receiverAvailabilityDate
+      status
       requestedTo {
         name
       }
@@ -62,6 +64,7 @@ query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean, $limit: 
       createdAt
       requestedDate
       receiverAvailabilityDate
+      status
       requestedTo {
         name
       }

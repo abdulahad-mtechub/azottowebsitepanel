@@ -1,11 +1,12 @@
-import { Col, Form, Row, Table } from 'antd';
+import { Col, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
 import { SCHEDULEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
-import React, { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const SellerScheduledTable = ({ isBuyer }) => {
+    
     const { t } = useTranslation();
     const [searchValue, setSearchValue] = useState('');
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
@@ -30,7 +31,8 @@ const SellerScheduledTable = ({ isBuyer }) => {
             businessprice: meeting.business?.price,
             offerprice: meeting.offer?.price,
             scheduledatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
-            meetinglink: 'https://yourapp.com/meet/' + meeting.id 
+            meetinglink: 'https://yourapp.com/meet/' + meeting.id,
+            status: meeting.status
         };
     }) || [];
 
@@ -42,6 +44,7 @@ const SellerScheduledTable = ({ isBuyer }) => {
         { title: t('Schedule Date & Time'), dataIndex: 'scheduledatetime' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
         { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: t('Status'), dataIndex: 'status' },
         {
             title: t('Meeting Link'),
             dataIndex: 'meetinglink',
