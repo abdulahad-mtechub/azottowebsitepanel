@@ -26,8 +26,6 @@ const SignupPage = () => {
   const [backFileName, setBackFileName] = useState("");
   const [passportFileName, setPassportFileName] = useState("");
   const [documents, setDocuments] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [language, setLanguage]= useState()
   const [customerRole, setCustomerRole] = useState(null);
   const [errors, setErrors] = useState({
     front: "",
@@ -44,7 +42,6 @@ const SignupPage = () => {
   const [createUser] = useMutation(CREATE_USER);
   useEffect(() => {
     let lang = localStorage.getItem("lang") || "en";
-    setLanguage(lang);
     i18n.changeLanguage(lang);
     setSelectedLang(
       lang === "ar"
@@ -83,7 +80,7 @@ const SignupPage = () => {
         roleId: customerRole?.id,
       };
 
-      const { data } = await createUser({ variables: { input } });
+      await createUser({ variables: { input } });
 
       messageApi.success(t("Account created successfully!"));
       form.resetFields();
@@ -92,16 +89,15 @@ const SignupPage = () => {
       }, 1000);
     } catch (err) {
       messageApi.error(t("Failed to create user. Please try again."));
+      console.error("Error creating user:", err);
     }
   };
 
   const handleUpload = async ({ file, title }) => {
     
     try {
-      setLoading(true);
-      let compressedFile = file;
       if (file.type.startsWith("image/")) {
-        compressedFile = await imageCompression(file, {
+        await imageCompression(file, {
           maxSizeMB: 1,
           maxWidthOrHeight: 1024,
           useWebWorker: true,
@@ -137,8 +133,6 @@ const SignupPage = () => {
     } catch (err) {
       console.error(err);
       messageApi.error(t("Failed to upload file"));
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -153,7 +147,6 @@ const SignupPage = () => {
     }
   };
   const handleChange= (value)=>{
-    setLanguage(value)
     localStorage.setItem("lang", value)
     i18n?.changeLanguage(value)
   }
@@ -442,7 +435,6 @@ const SignupPage = () => {
       ),
       onClick: () => {
         setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.webp" }),
-        setLanguage("en")
         handleChange("en")
       }
     },
@@ -455,7 +447,6 @@ const SignupPage = () => {
         </Space>
       ),
       onClick: () => {setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
-      setLanguage("ar")
         handleChange("ar")  
     }
     },
