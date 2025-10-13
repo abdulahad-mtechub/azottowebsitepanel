@@ -27,7 +27,7 @@ const SignupPage = () => {
   const [passportFileName, setPassportFileName] = useState("");
   const [documents, setDocuments] = useState([]);
   const [customerRole, setCustomerRole] = useState(null);
-  
+
   const [errors, setErrors] = useState({
     front: "",
     back: "",

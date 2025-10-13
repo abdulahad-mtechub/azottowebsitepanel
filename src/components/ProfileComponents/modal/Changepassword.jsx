@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const Changepassword = ({ visible, onClose }) => {
+  
   const { t } = useTranslation();
   const [form] = Form.useForm(); 
   const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#^])[A-Za-z\d@$!%*?&#^]{8,}$/;

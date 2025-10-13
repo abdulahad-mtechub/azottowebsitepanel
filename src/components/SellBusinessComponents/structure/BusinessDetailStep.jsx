@@ -15,7 +15,7 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     const [form] = Form.useForm();
     const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
     const [selectedCategory, setSelectedCategory] = useState(null);
-    const [selectedDistrict, setSelectedDistrict] = useState(data.district || null);
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
 
     useImperativeHandle(ref, () => ({
       validate: () => form.validateFields(),
@@ -53,6 +53,15 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     };
   
     useEffect(() => {
+      // Find district ID from stored name (handles both Arabic and English)
+      if (data.district && district.length > 0) {
+        const districtObj = district.find(d => d.name === data.district) || 
+                           district.find(d => d.id === data.district.toLowerCase());
+        if (districtObj) {
+          setSelectedDistrict(districtObj.id);
+        }
+      }
+      
       form.setFieldsValue({
         title: data.businessTitle,
         category: data.categoryName,
@@ -68,7 +77,7 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
         const cat = categories.find(cat => cat.id === data.categoryId);
         setSelectedCategory(cat);
       }
-    }, [data]);
+    }, [form, data, categories, district]);
 
     return (
       <>
@@ -143,8 +152,10 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   placeholder="Choose district"
                   options={district}
                   onChange={(val) => {
+                    // Find district by name
                     const selectedDistrictObj = district.find(d => d.name === val);
-                    setSelectedDistrict(selectedDistrictObj?.name || null);
+                    // Store the district ID for cities lookup
+                    setSelectedDistrict(selectedDistrictObj?.id || null);
                     form.setFieldValue('city', undefined);
                   }}
                 />
@@ -157,7 +168,7 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   required
                   message="Choose city"
                   disabled={!selectedDistrict}
-                  options={selectedDistrict ? cities[selectedDistrict?.toLowerCase()] || [] : []}
+                  options={selectedDistrict ? cities[selectedDistrict] || [] : []}
                   placeholder="Choose city"
                 />
               </Col>
