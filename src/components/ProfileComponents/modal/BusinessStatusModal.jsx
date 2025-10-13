@@ -1,5 +1,4 @@
 import { Button, Flex, Modal, Typography } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
@@ -19,9 +18,7 @@ const BusinessStatusModal = ({ visible, onClose, currentStatus, onConfirm, loadi
             width={500}
             centered
         >
-            <Flex vertical gap={20} align="center" className="py-3">
-                <ExclamationCircleOutlined className="fs-48 text-warning" />
-                
+            <Flex vertical gap={15} align="center" className="py-3">                
                 <Flex vertical gap={10} align="center">
                     <Title level={4} className="m-0">
                         {isActive ? t('Inactivate Business?') : t('Activate Business?')}
