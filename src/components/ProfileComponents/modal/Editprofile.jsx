@@ -3,15 +3,14 @@ import { Button, Col, Flex, Form, Modal, Row, Select, Typography, message } from
 import { MyInput, MySelect } from '../../Forms';
 import { CloseOutlined } from '@ant-design/icons';
 import { UPDATE_USER } from '../../../graphql/mutation';
-import { ME } from '../../../graphql/query';
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
 import { useDistricts, useCities } from '../../../data';
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
-const Editprofile = ({ visible, onClose }) => {
+const Editprofile = ({ visible, onClose, userData, refetchUser }) => {
 
   const district = useDistricts();
   const cities = useCities();
@@ -21,24 +20,21 @@ const Editprofile = ({ visible, onClose }) => {
   const userId = Cookies.get("userId"); // get stored id
   const [selectedDistrict, setSelectedDistrict] = useState(null);
 
-  const { data, loading: queryLoading } = useQuery(ME, {
-    variables: { getUserDetailsId: userId },
-    skip: !userId,
-    fetchPolicy: "network-only",
-  });
-
   const [updateUser, { loading: updateLoading }] = useMutation(UPDATE_USER);
 
   useEffect(() => {
-    if (data?.getUserDetailsId) {
+    if (userData) {
+      const districtValue = userData.district;
+      setSelectedDistrict(districtValue);
+      
       form.setFieldsValue({
-        email: data.getUserDetailsId.email,
-        phoneNo: data.getUserDetailsId.phone,
-        district: data.getUserDetailsId.district,
-        city: data.getUserDetailsId.city,
+        email: userData.email,
+        phoneNo: userData.phone,
+        district: districtValue,
+        city: userData.city,
       });
     }
-  }, [data, form]);
+  }, [userData, form]);
 
   const handleSubmit = async (values) => {
     try {
@@ -55,6 +51,11 @@ const Editprofile = ({ visible, onClose }) => {
       });
 
       messageApi.success(t("Profile updated successfully ✅"));
+      
+      if (refetchUser) {
+        refetchUser();
+      }
+      
       onClose();
     } catch (err) {
       messageApi.error(t(`Failed to update profile ❌ ${err.message}`));
@@ -157,7 +158,10 @@ const Editprofile = ({ visible, onClose }) => {
                 message={t('Please enter district')}
                 placeholder={t('select district')}
                 options={district}
-                onChange={(val) => setSelectedDistrict(val)}
+                onChange={(val) => {
+                  setSelectedDistrict(val);
+                  form.setFieldValue('city', undefined);
+                }}
               />
             </Col>
             <Col span={24}>
@@ -167,6 +171,7 @@ const Editprofile = ({ visible, onClose }) => {
                 required
                 message={t('Please enter city')}
                 placeholder={t('select city')}
+                disabled={!selectedDistrict}
                 options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
               />
             </Col>
