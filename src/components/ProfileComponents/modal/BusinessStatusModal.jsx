@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const BusinessStatusModal = ({ visible, onClose, currentStatus, onConfirm, loading }) => {
+  
     const { t } = useTranslation();
     const isActive = currentStatus === 'ACTIVE';
     const newStatus = isActive ? 'INACTIVE' : 'ACTIVE';

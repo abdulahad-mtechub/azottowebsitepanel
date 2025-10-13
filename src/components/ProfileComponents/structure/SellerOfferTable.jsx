@@ -1,8 +1,7 @@
-import { Button, Col, Dropdown, Flex, Form, Row, Table, Tooltip, Typography } from 'antd'
-import { useState } from 'react';
+import { Button, Col, Dropdown, Flex, Row, Table, Tooltip, Typography } from 'antd'
+import { useState, useMemo } from 'react';
 import { DeleteModal } from '../../ui';
-import { DownOutlined } from '@ant-design/icons';
-import { SearchInput } from '../../Forms';
+import { SearchInput, MySelect } from '../../Forms';
 import { CounterOffer, ScheduleMeeting } from '../modal';
 import { useQuery } from '@apollo/client';
 import { GET_BUSINESS_OFFERS } from '../../../graphql/query/offer';
@@ -16,12 +15,12 @@ const SellerOfferTable = ({ data }) => {
     
     const { t } = useTranslation();
     const userId = Cookies.get("userId");
-    const [form] = Form.useForm();
     const [offermodal, setOfferModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
     const [meeting, setMeeting] = useState(false);
-    const [filterstatus, setFilterStatus] = useState();
+    const [filterstatus, setFilterStatus] = useState(null);
     const [filtertype, setFilterType] = useState(null);
+    const [searchText, setSearchText] = useState('');
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
@@ -119,62 +118,94 @@ const SellerOfferTable = ({ data }) => {
         }
     ];
 
-    const items = [
-        { key: '1', label: t('Received') },
-        { key: '2', label: t('Send') },
-        { key: '3', label: t('Rejected') }
+    const statusOptions = [
+        { id: 'received', name: t('Received') },
+        { id: 'send', name: t('Send') },
+        { id: 'rejected', name: t('Rejected') },
     ];
 
-    const offertype = [
-        { key: '1', label: t('Counter Offer') },
-        { key: '2', label: t('Proceed to Purchase') },
+    const offerTypeOptions = [
+        { id: 'counter', name: t('Counter Offer') },
+        { id: 'proceed', name: t('Proceed to Purchase') },
     ];
 
-    const handleStatusClick = ({ key }) => {
-        setFilterStatus(key)
-    }
+    // Filter offers based on status, type, and search
+    const filteredOffers = useMemo(() => {
+        if (!offerdata) return [];
+        
+        return offerdata.filter(offer => {
+            if (filterstatus && filterstatus !== 'all') {
+                if (filterstatus === 'received' && offer.createdBy === userId) return false;
+                if (filterstatus === 'send' && offer.createdBy !== userId) return false;
+                if (filterstatus === 'rejected' && offer.status !== 'REJECTED') return false;
+                if (filterstatus === 'approved' && offer.status !== 'APPROVED') return false;
+                if (filterstatus === 'accepted' && offer.status !== 'ACCEPTED') return false;
+            }
 
-    const handleTypeClick = ({ key }) => {
-        setFilterType(key)
-    }
+            if (filtertype && filtertype !== 'all') {
+                if (filtertype === 'counter' && offer.isProceedToPay) return false;
+                if (filtertype === 'proceed' && !offer.isProceedToPay) return false;
+            }
+
+            if (searchText) {
+                const searchLower = searchText.toLowerCase();
+                const buyerName = offer?.buyer?.name?.toLowerCase() || '';
+                const price = offer?.price?.toString() || '';
+                
+                return buyerName.includes(searchLower) || price.includes(searchLower);
+            }
+
+            return true;
+        });
+    }, [offerdata, filterstatus, filtertype, searchText, userId]);
 
     return (
         <>
             <Row gutter={[24, 24]}>
                 <Col span={24}>
-                    <Flex gap={5} align='center'>
+                    <Flex gap={5} align='center' wrap>
                         <SearchInput
-                            placeholder={t("Search")}
-                            value={form.getFieldValue('name') || ''}
+                            placeholder={t("Search by buyer name or price")}
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
                             prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
+                            style={{ minWidth: '250px' }}
                         />
-                        <Dropdown menu={{ items, handleStatusClick }} trigger={['click']}>
-                            <Button aria-labelledby={t('Status filter')} className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
-                                <Flex justify='space-between' className='w-100' gap={10}>
-                                    {filterstatus === '1' ? t('Received') : filterstatus === '2' ? t('Send') : filterstatus === '3' ? t('Rejected') : t('Status')}
-                                    <DownOutlined />
-                                </Flex>
-                            </Button>
-                        </Dropdown>
-                        <Dropdown menu={{ items: offertype, onClick: handleTypeClick }} trigger={['click']}>
-                            <Button aria-labelledby={t('Offer type')} className='border-light-gray radius-8 pad-filter fs-13 h-auto'>
-                                <Flex justify='space-between' className='w-100' gap={10}>
-                                    {filtertype === '1' ? t('Counter Offer') : filtertype === '2' ? t('Proceed to Purchase') : t('Offer Type')}
-                                    <DownOutlined />
-                                </Flex>
-                            </Button>
-                        </Dropdown>
+                        <MySelect
+                            withoutForm
+                            value={filterstatus || 'all'}
+                            options={statusOptions}
+                            placeholder={t('Status')}
+                            onChange={(value) => setFilterStatus(value)}
+                            showKey
+                            style={{ minWidth: '150px' }}
+                            className='border-light-gray radius-8'
+                        />
+                        <MySelect
+                            withoutForm
+                            value={filtertype || 'all'}
+                            options={offerTypeOptions}
+                            placeholder={t('Offer Type')}
+                            onChange={(value) => setFilterType(value)}
+                            showKey
+                            style={{ minWidth: '150px' }}
+                            className='border-light-gray radius-8'
+                        />
                     </Flex>
                 </Col>
                 <Col span={24}>
                     <Table
                         size="large"
                         columns={columns}
-                        dataSource={offerdata}
+                        dataSource={filteredOffers}
                         className="pagination table table-cs"
                         showSorterTooltip={false}
                         scroll={{ x: 1300 }}
-                        pagination={false}
+                        pagination={{
+                            pageSize: 10,
+                            showSizeChanger: true,
+                            showTotal: (total) => t(`Total ${total} offers`),
+                        }}
                     />
                 </Col>
             </Row>
