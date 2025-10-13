@@ -33,15 +33,15 @@ query GetNotifications($userId: ID!) {
 `
 const PROFESSIONALSTATISTICS = gql`
   query GetProfileStatistics {
-  getProfileStatistics {
-    finalizedDealsCount
-    listedBusinessesCount
-    pendingMeetingsCount
-    receivedOffersCount
-    scheduledMeetingsCount
-    viewedBusinessesCount
+    getProfileStatistics {
+      finalizedDealsCount
+      listedBusinessesCount
+      pendingMeetingsCount
+      receivedOffersCount
+      scheduledMeetingsCount
+      viewedBusinessesCount
+    }
   }
-}
 `
 const GETBUYERSTATISTICS = gql`
   query GetBuyerStatistics {

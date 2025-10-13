@@ -171,14 +171,16 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
             >
               {t('Edit')}
             </Button>
-            <Button 
-              aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
-              className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
-              type='button'
-              onClick={() => setStatusModalVisible(true)}
-            >
-              {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
-            </Button>
+            {(business?.businessStatus === 'ACTIVE' || business?.businessStatus === 'INACTIVE') && (
+              <Button 
+                aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
+                className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
+                type='button'
+                onClick={() => setStatusModalVisible(true)}
+              >
+                {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
+              </Button>
+            )}
           </Space>
         </Flex>
         <Card className='radius-12 border-gray card-cs'>

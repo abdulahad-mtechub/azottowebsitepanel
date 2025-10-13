@@ -27,7 +27,7 @@ const SignupPage = () => {
   const [passportFileName, setPassportFileName] = useState("");
   const [documents, setDocuments] = useState([]);
   const [customerRole, setCustomerRole] = useState(null);
-
+  
   const [errors, setErrors] = useState({
     front: "",
     back: "",
@@ -362,7 +362,7 @@ const SignupPage = () => {
               required
               placeholder={t("Enter Password")}
               message={() => {}}
-              validator={({ getFieldValue }) => ({
+              validator={() => ({
                   validator: (_, value) => {
                       const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
                       if (!reg.test(value)) {
@@ -493,7 +493,7 @@ const SignupPage = () => {
                   current={current}
                   onChange={onChange}
                   items={items}
-                  progressDot={(dot, { status, index }) => (
+                  progressDot={(dot, { index }) => (
                     <span className={`custom-dot ${current > index ? "completed" : ""} ${current === index ? "active" : ""}`}>
                       {current > index ? <CheckOutlined /> : dot}
                     </span>
