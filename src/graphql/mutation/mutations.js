@@ -21,6 +21,13 @@ const CREATE_BUSINESS = gql `
     }
   } 
 `
+const UPDATE_BUSINESS = gql `
+  mutation UpdateBusiness($input: UpdateBusinessInput!) {
+    updateBusiness(input: $input) {
+      id
+    }
+  } 
+`
 const CREATE_SAVE_BUSINESS = gql `
   mutation SaveBusiness($saveBusinessId: ID!) {
     saveBusiness(id: $saveBusinessId)
@@ -138,6 +145,7 @@ export {
   CREATE_OFFER,
   UPDATE_OFFER,
   CREATE_BUSINESS,
+  UPDATE_BUSINESS,
   CREATE_SAVE_BUSINESS,
   CREATE_VIEW_BUSINESS,
   ACCEPT_ENDA,

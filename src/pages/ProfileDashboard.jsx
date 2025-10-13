@@ -13,7 +13,7 @@ import {
 import { ArrowLeftOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
-import { useEffect, useState,useMemo,useContext } from 'react';
+import { useEffect, useState,useMemo } from 'react';
 import { selleralertsData } from '../data';
 import { NAVUSERDATA,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
 import { useLazyQuery,useQuery } from '@apollo/client';
@@ -343,6 +343,8 @@ const ProfileDashboard = () => {
             <Editprofile
                 visible={isedit}
                 onClose={() => setIsEdit(false)}
+                userData={user}
+                refetchUser={() => getUser({ variables: { getNavUserId: userId } })}
             />
         </div>
     );

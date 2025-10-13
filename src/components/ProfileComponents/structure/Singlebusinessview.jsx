@@ -1,22 +1,61 @@
-import { Card, Row, Col, Flex, Typography, Breadcrumb, Space, Button, Image, Tabs } from 'antd';
+import { Card, Row, Col, Flex, Typography, Breadcrumb, Space, Button, Image, Tabs, message } from 'antd';
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { SellerOfferTable } from './SellerOfferTable';
 import { SellerDealDetails } from './SellerDealDetails';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_BUSINESS } from '../../../graphql/query/business';
+import { UPDATE_BUSINESS } from '../../../graphql/mutation/mutations';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
+import { BusinessStatusModal } from '../modal/BusinessStatusModal';
+import { useState } from 'react';
 
 const { Text, Title } = Typography;
 
 const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [messageApi, contextHolder] = message.useMessage();
+  const [statusModalVisible, setStatusModalVisible] = useState(false);
 
-  const { data } = useQuery(GET_BUSINESS, {
+  const { data, refetch } = useQuery(GET_BUSINESS, {
     variables: { getBusinessByIdId: singledetail },
     skip: !singledetail,
   });
 
+  const [updateBusiness, { loading: updateLoading }] = useMutation(UPDATE_BUSINESS);
+
   const business = data?.getBusinessById?.business;
+
+  const handleEditBusiness = () => {
+    // Navigate to edit page with business ID
+    navigate(`/sellbusinesscreate?edit=${singledetail}`);
+  };
+
+  const handleStatusToggle = async (newStatus) => {
+    try {
+      await updateBusiness({
+        variables: {
+          input: {
+            id: singledetail,
+            businessStatus: newStatus,
+          },
+        },
+      });
+
+      messageApi.success(
+        newStatus === 'ACTIVE' 
+          ? t('Business activated successfully!') 
+          : t('Business inactivated successfully!')
+      );
+      
+      setStatusModalVisible(false);
+      refetch(); // Refresh the business data
+    } catch (error) {
+      console.error('Error updating business status:', error);
+      messageApi.error(t('Failed to update business status'));
+    }
+  };
 
   const items = [
     {
@@ -99,9 +138,10 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   }
 
   const uiBusiness = mapBusinessPayloadToUI(business);
-
+  console.log('Mapped Business UI:', data);
   return (
     <div className='mb-2'>
+      {contextHolder}
       <Flex vertical gap={20}>
         <Breadcrumb
           separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
@@ -123,11 +163,21 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
             <Title level={5} className='m-0'>{business?.businessTitle}</Title>
           </Space>
           <Space>
-            <Button aria-labelledby={t('Edit')} className='btn bg-brand rounded-8' type='button'>
+            <Button 
+              aria-labelledby={t('Edit')} 
+              className='btn bg-brand rounded-8' 
+              type='button'
+              onClick={handleEditBusiness}
+            >
               {t('Edit')}
             </Button>
-            <Button aria-labelledby={t('Inactivate Business')} className='btn bg-red rounded-8' type='button'>
-              {t('Inactivate Business')}
+            <Button 
+              aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
+              className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
+              type='button'
+              onClick={() => setStatusModalVisible(true)}
+            >
+              {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
             </Button>
           </Space>
         </Flex>
@@ -153,6 +203,14 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
           </Row>
         </Card>
       </Flex>
+
+      <BusinessStatusModal
+        visible={statusModalVisible}
+        onClose={() => setStatusModalVisible(false)}
+        currentStatus={business?.businessStatus}
+        onConfirm={handleStatusToggle}
+        loading={updateLoading}
+      />
     </div>
   );
 };
