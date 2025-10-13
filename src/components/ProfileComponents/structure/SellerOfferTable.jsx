@@ -94,7 +94,8 @@ const SellerOfferTable = ({ data }) => {
             width: 100,
             align: 'center',
             render: (_, row) => {
-                if (row?.createdBy === userId) return null;
+
+                if (row?.status === 'ACCEPTED' || row?.status === 'REJECTED') return null;
 
                 const isChild = row?.isProceedToPay ? true : false;
 
@@ -134,7 +135,7 @@ const SellerOfferTable = ({ data }) => {
         if (!offerdata) return [];
         
         return offerdata.filter(offer => {
-            if (filterstatus && filterstatus !== 'all') {
+            if (filterstatus) {
                 if (filterstatus === 'received' && offer.createdBy === userId) return false;
                 if (filterstatus === 'send' && offer.createdBy !== userId) return false;
                 if (filterstatus === 'rejected' && offer.status !== 'REJECTED') return false;
@@ -142,7 +143,7 @@ const SellerOfferTable = ({ data }) => {
                 if (filterstatus === 'accepted' && offer.status !== 'ACCEPTED') return false;
             }
 
-            if (filtertype && filtertype !== 'all') {
+            if (filtertype) {
                 if (filtertype === 'counter' && offer.isProceedToPay) return false;
                 if (filtertype === 'proceed' && !offer.isProceedToPay) return false;
             }
@@ -171,9 +172,10 @@ const SellerOfferTable = ({ data }) => {
                             prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
                             style={{ minWidth: '250px' }}
                         />
+                        
                         <MySelect
                             withoutForm
-                            value={filterstatus || 'all'}
+                            value={filterstatus}
                             options={statusOptions}
                             placeholder={t('Status')}
                             onChange={(value) => setFilterStatus(value)}
@@ -183,12 +185,12 @@ const SellerOfferTable = ({ data }) => {
                         />
                         <MySelect
                             withoutForm
-                            value={filtertype || 'all'}
+                            value={filtertype}
                             options={offerTypeOptions}
                             placeholder={t('Offer Type')}
                             onChange={(value) => setFilterType(value)}
                             showKey
-                            style={{ minWidth: '150px' }}
+                            style={{ minWidth: '180px' }}
                             className='border-light-gray radius-8'
                         />
                     </Flex>

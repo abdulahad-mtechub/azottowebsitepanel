@@ -19,7 +19,7 @@ const BusinessInfoCard = ({ data }) => {
   const [createOffer] = useMutation(CREATE_OFFER);
   const [hasExistingOffer, setHasExistingOffer] = useState(false);
   
-  const { data: offerExistsData } = useQuery(CHECK_OFFER_EXISTS, {
+  const { data: offerExistsData, refetch: refetchOfferExists } = useQuery(CHECK_OFFER_EXISTS, {
     variables: { 
       businessId: data?.id, 
       buyerId: userId 
@@ -150,6 +150,7 @@ const BusinessInfoCard = ({ data }) => {
         visible={offerseller}
         onClose={()=>setOfferSeller(false)}
         mode={offerMode}
+        refetch={refetchOfferExists}
       />
       <RequestMeetingModal 
         businessId={data?.id}

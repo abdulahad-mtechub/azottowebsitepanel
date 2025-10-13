@@ -64,7 +64,9 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
         });
     };
 
-    const [createOffer] = useMutation(CREATE_OFFER);
+    const [createOffer] = useMutation(CREATE_OFFER, {
+        onCompleted: () => refetch && refetch()
+    });
 
     useEffect(() => {
         form.resetFields();
