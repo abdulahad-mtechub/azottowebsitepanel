@@ -1,10 +1,11 @@
 import { useState,useRef, useEffect } from 'react';
 import { Breadcrumb, Flex, Typography, Steps, Button, message } from 'antd';
 import { CheckOutlined, RightOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { BusinessDetailStep, BusinesslistingReviewModal, BusinessVisionStep, CancelModal, FinancialInfoStep, UploadSupportDocStep } from '../components';
-import { CREATE_BUSINESS } from "../graphql/mutation/mutations";
-import { useMutation } from '@apollo/client';
+import { CREATE_BUSINESS, UPDATE_BUSINESS } from "../graphql/mutation/mutations";
+import { useMutation, useQuery } from '@apollo/client';
+import { GET_BUSINESS } from '../graphql/query/business';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
 
@@ -14,15 +15,57 @@ const LOCAL_STORAGE_KEY = 'sellBusinessDraft';
 const SellBusinessCreate = () => {
     const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
+    const [searchParams] = useSearchParams();
+    const editBusinessId = searchParams.get('edit');
+    
     const [current, setCurrent] = useState(0);
     const [iscancel, setIsCancel] = useState(false);
     const [isPreview, setIsPreview] = useState(false);
     const [reviewmodal, setReviewModal] = useState(false);
     const navigate = useNavigate();
-    const [createBusiness, { loading }] = useMutation(CREATE_BUSINESS);
+    const [createBusiness, { loading: createLoading }] = useMutation(CREATE_BUSINESS);
+    const [updateBusiness, { loading: updateLoading }] = useMutation(UPDATE_BUSINESS);
+    const loading = createLoading || updateLoading;
     const businessDetailFormRef = useRef();
 
+    // Fetch business data if in edit mode
+    const { data: editData, loading: editDataLoading } = useQuery(GET_BUSINESS, {
+        variables: { getBusinessByIdId: editBusinessId },
+        skip: !editBusinessId,
+    });
+
     const [businessData, setBusinessData] = useState(() => {
+        // Don't load draft in edit mode
+        if (editBusinessId) {
+            return {
+                isByTakbeer: null,
+                businessTitle: null,
+                categoryId: null,
+                district: null,
+                city: null,
+                foundedDate: null,
+                numberOfEmployees: null,
+                description: null,
+                url: null,
+                revenueTime: null,
+                revenue: null,
+                profittime: null,
+                profit: null,
+                price: null,
+                profitMargen: null,
+                multiple: null,
+                capitalRecovery: null,
+                assets: [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                liabilities: [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                inventoryItems: [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                supportDuration: null,
+                supportSession: null,
+                growthOpportunities: null,
+                reason: null,
+                documents: [{ title: null, fileName: null, fileType: null, filePath: null, description: null }],
+            };
+        }
+        
         const draft = localStorage.getItem(LOCAL_STORAGE_KEY);
         if (draft) {
             const parsed = JSON.parse(draft);
@@ -48,6 +91,7 @@ const SellBusinessCreate = () => {
             price: null,
             profitMargen: null,
             multiple: null,
+            capitalRecovery: null,
             assets: [{ name: null, price: null, purchaseYear: null, quantity: null }],
             liabilities: [{ name: null, price: null, purchaseYear: null, quantity: null }],
             inventoryItems: [{ name: null, price: null, purchaseYear: null, quantity: null }],
@@ -58,6 +102,40 @@ const SellBusinessCreate = () => {
             documents: [{ title: null, fileName: null, fileType: null, filePath: null, description: null }],
         };
     });
+
+    // Load edit data when available
+    useEffect(() => {
+        if (editData?.getBusinessById?.business && editBusinessId) {
+            const business = editData.getBusinessById.business;
+            setBusinessData({
+                isByTakbeer: business.isByTakbeer,
+                businessTitle: business.businessTitle,
+                categoryId: business.category?.id,
+                district: business.district,
+                city: business.city,
+                foundedDate: business.foundedDate ? dayjs(business.foundedDate) : null,
+                numberOfEmployees: business.numberOfEmployees,
+                description: business.description,
+                url: business.url,
+                revenueTime: business.revenueTime === '6' ? 1 : 2,
+                revenue: business.revenue,
+                profittime: business.profittime === '6' ? 1 : 2,
+                profit: business.profit,
+                price: business.price,
+                profitMargen: business.profitMargen,
+                multiple: business.multiple,
+                capitalRecovery: business.capitalRecovery,
+                assets: business.assets?.length > 0 ? business.assets : [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                liabilities: business.liabilities?.length > 0 ? business.liabilities : [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                inventoryItems: business.inventoryItems?.length > 0 ? business.inventoryItems : [{ name: null, price: null, purchaseYear: null, quantity: null }],
+                supportDuration: business.supportDuration,
+                supportSession: business.supportSession,
+                growthOpportunities: business.growthOpportunities,
+                reason: business.reason,
+                documents: business.documents?.length > 0 ? business.documents : [{ title: null, fileName: null, fileType: null, filePath: null, description: null }],
+            });
+        }
+    }, [editData, editBusinessId]);
 
     const steps = [
         { title: t('Business Details'), content: <BusinessDetailStep ref={businessDetailFormRef} data={businessData} setData={setBusinessData} /> },
@@ -103,10 +181,10 @@ const SellBusinessCreate = () => {
     }));
 
     const handleCreateListing = async () => {
-        const { categoryName,recoveryTime, ...rest } = businessData;
+        // eslint-disable-next-line no-unused-vars
+        const { categoryName, recoveryTime, ...rest } = businessData;
         try {
-            const variables = {
-            input: {
+            const inputData = {
                 ...rest,
                 revenueTime: businessData.revenueTime === 1 ? "6" : "12",
                 profittime: businessData.profittime === 1 ? "6" : "12",
@@ -176,12 +254,29 @@ const SellBusinessCreate = () => {
                     (val) => val !== null && val !== '' && val !== undefined
                     )
                 ),
-            },
             };
 
-            const { data } = await createBusiness({ variables });
-            if (data?.createBusiness?.id) {
-                setReviewModal(true);
+            // Add ID for update
+            if (editBusinessId) {
+                inputData.id = editBusinessId;
+            }
+
+            const variables = { input: inputData };
+            
+            const { data } = editBusinessId 
+                ? await updateBusiness({ variables })
+                : await createBusiness({ variables });
+                
+            if (data?.createBusiness?.id || data?.updateBusiness?.id) {
+                if (editBusinessId) {
+                    messageApi.success(t('Business updated successfully!'));
+                    // Navigate back to profile after 1 second
+                    setTimeout(() => {
+                        navigate('/profiledashboard');
+                    }, 1000);
+                } else {
+                    setReviewModal(true);
+                }
                 localStorage.removeItem(LOCAL_STORAGE_KEY);
                 
                 setBusinessData({
@@ -275,7 +370,7 @@ const SellBusinessCreate = () => {
                             separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                             items={[
                                 { title: <Text className='fs-13 text-gray' onClick={() => navigate('/')}>{t('Home')}</Text> },
-                                { title: <Text className='fw-500 fs-13 text-black'>{t('Create a List')}</Text> },
+                                { title: <Text className='fw-500 fs-13 text-black'>{editBusinessId ? t('Edit Business') : t('Create a List')}</Text> },
                             ]}
                         />
                         <Steps
@@ -311,8 +406,8 @@ const SellBusinessCreate = () => {
                                     </Button>
                                 )}
                                 {current === steps.length - 1 && (
-                                    <Button type="primary" disabled={loading} loading={loading} className='btn bg-brand' onClick={handleCreateListing}>
-                                        {t('Publish')}
+                                    <Button type="primary" disabled={loading || editDataLoading} loading={loading} className='btn bg-brand' onClick={handleCreateListing}>
+                                        {editBusinessId ? t('Update Business') : t('Publish')}
                                     </Button>
                                 )}
                             </Flex>
