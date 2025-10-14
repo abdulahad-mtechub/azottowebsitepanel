@@ -100,7 +100,10 @@ const SellerOfferTable = ({ data }) => {
             width: 100,
             align: 'center',
             render: (_, row) => {
+                // Hide action button if user is the creator (sent offers)
+                if (row?.createdBy === userId) return null;
 
+                // Hide action button if status is ACCEPTED or REJECTED
                 if (row?.status === 'ACCEPTED' || row?.status === 'REJECTED') return null;
 
                 const isChild = row?.isProceedToPay ? true : false;

@@ -265,28 +265,31 @@ query SimilerBusinessAvgAnualProfit($similerBusinessAvgAnualProfitId: ID) {
 }
 `
 const GET_BUYER_OFFER = gql`
-query GetOffersByUser($search: String, $status: String) {
-  getOffersByUser(search: $search, status: $status) {
-    id
-    price
-    status
-    createdAt
-    createdBy
-    isProceedToPay
-    business {
-      id
-      businessTitle
-      price
-      seller {
+    query GetOffersByUser($search: String, $status: String, $limit: Int, $offSet: Int) {
+    getOffersByUser(search: $search, status: $status, limit: $limit, offSet: $offSet) {
+      count
+      offers {
         id
-        name
+        price
+        status
+        createdAt
+        createdBy
+        isProceedToPay
+        business {
+          id
+          businessTitle
+          price
+          seller {
+            id
+            name
+          }
+        }
+        buyer {
+          id
+        }
       }
     }
-    buyer {
-      id
-    }
   }
-}
 `
 
 const GETRANDOMBUSINESS = gql`

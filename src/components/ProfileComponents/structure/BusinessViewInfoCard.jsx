@@ -21,13 +21,13 @@ const BusinessViewInfoCard = ({ data }) => {
         {
             id: 3,
             icon:'/assets/icons/businesscate.png',
-            title: t('Restaurant'),
+            title: data?.category?.name || t('Unknown'),
             subtitle: t('Business Category')
         },
         {
             id: 5,
             icon:'/assets/icons/businessloc.png',
-            title: `${data?.district || t('Unknown')}`,
+            title: `${data?.district + "" + (data?.city ? `, ${data?.city}` : '') || t('Unknown')}`,
             subtitle: t('Business Location')
         },
     ]
@@ -48,8 +48,8 @@ const BusinessViewInfoCard = ({ data }) => {
                                     <Image src={info?.icon} preview={false} width={'100%'} alt={t("icon")} />
                                 </div>
                                 <Flex vertical gap={2}>
-                                    <Title level={5} className={`m-0 ${info.id === 1 ? 'text-green' : 'text-brand'}`}>
-                                        {info?.id === 2 && info?.title}
+                                    <Title level={5} className={`m-0 ${info.id === 1 ? 'text-green' : ''}`}>
+                                        {info?.title}
                                     </Title>
                                     <Text className='text-gray fs-12 fw-500'>
                                         {info?.subtitle}

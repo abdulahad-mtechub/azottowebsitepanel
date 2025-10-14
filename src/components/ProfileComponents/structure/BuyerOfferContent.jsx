@@ -1,11 +1,10 @@
-import { Button, Card, Col, Dropdown, Flex, Row, Table, Typography, message, Spin, Tooltip } from 'antd'
+import { Button, Card, Col, Dropdown, Flex, Row, Table, Typography, Tooltip } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { NavLink } from 'react-router-dom';
 import { OfferSellerModal, RequestMeetingModal } from '../../Businesslistingcomponents';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { DeleteModal } from '../../ui';
-import { SearchInput } from '../../Forms';
-import { DownOutlined } from '@ant-design/icons';
+import { SearchInput, MySelect } from '../../Forms';
 import { GET_BUYER_OFFER } from '../../../graphql/query'
 import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
@@ -13,50 +12,83 @@ import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 const BuyerOfferContent = () => {
-    
+
     const { t } = useTranslation();
     const userId = Cookies.get("userId"); 
-    const [messageApi, contextHolder] = message.useMessage();
-    const [ offermodal, setOfferModal ] = useState(false)
-    const [ requestPop, setRequestPop ] = useState(false)
-    const [ deletemodal, setDeleteModal ] = useState(false)
-    const [ filterstatus, setFilterStatus] = useState()
+    const [offermodal, setOfferModal] = useState(false);
+    const [requestPop, setRequestPop] = useState(false);
+    const [deletemodal, setDeleteModal] = useState(false);
+    const [filterstatus, setFilterStatus] = useState(null);
+    const [filtertype, setFilterType] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [searchValue, setSearchValue] = useState('');
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 10,
+    });
 
     const [fetchOffers, { data, loading }] = useLazyQuery(GET_BUYER_OFFER, {
         fetchPolicy: 'network-only',
     });
 
-    const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
-        setSearchValue(debouncedSearchValue);
+    // Clean search text by removing extra spaces
+    const cleanSearchText = useCallback((text) => {
+        if (!text) return '';
+        return text.trim().replace(/\s+/g, ' ');
+    }, []);
+
+    const handleSearchChange = useCallback((e) => {
+        const rawValue = e?.target?.value || '';
+        setSearchValue(rawValue);
+        // Reset to first page when searching
+        setPagination(prev => ({ ...prev, current: 1 }));
     }, []);
 
     useEffect(() => {
+        const cleanedSearch = cleanSearchText(searchValue);
         fetchOffers({
             variables: {
-                status: filterstatus ? filterstatus : null,
-                search: searchValue,
+                status: filterstatus || null,
+                search: cleanedSearch || null,
+                limit: pagination.pageSize,
+                offSet: pagination.current - 1,
             },
         });
-    }, [fetchOffers, filterstatus, searchValue]);
+    }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText]);
 
-    const tableData = data?.getOffersByUser?.map((offer) => ({
+    const offers = useMemo(() => data?.getOffersByUser?.offers || [], [data]);
+    const totalCount = data?.getOffersByUser?.count || 0;
+
+    // Client-side filtering for offer type
+    const filteredOffers = useMemo(() => {
+        if (!offers || offers.length === 0) return [];
+        
+        return offers.filter(offer => {
+            // Type filter
+            if (filtertype) {
+                if (filtertype === 'counter' && offer.isProceedToPay) return false;
+                if (filtertype === 'proceed' && !offer.isProceedToPay) return false;
+            }
+            return true;
+        });
+    }, [offers, filtertype]);
+
+    const tableData = filteredOffers.map((offer) => ({
         key: offer.id,
         title: offer.business.businessTitle,
         sellername: offer.business.seller?.name
-        ? `${offer.business.seller.name.slice(0, 3)}*****`
-        : null,
+            ? `${offer.business.seller.name.slice(0, 3)}*****`
+            : null,
         businessprice: offer.business.price,
         offerprice: offer.price,
         status: offer.status,
         date: new Date(offer.createdAt).toLocaleString(),
         business: offer.business, 
         buyer: offer.buyer, 
-        createdBy:offer.createdBy, 
+        createdBy: offer.createdBy, 
         isProceedToPay: offer.isProceedToPay
-    })) || [];
+    }));
 
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
@@ -107,8 +139,8 @@ const BuyerOfferContent = () => {
                 }
                 return (
                   <Dropdown menu={{ items }} trigger={['click']}>
-                    <Button aria-labelledby='dropdown icon' className="bg-transparent border-0 p-0">
-                      <img src="/assets/icons/dots.png" alt="dropdown-icon" width={16} fetchPriority="high" />
+                    <Button aria-labelledby={t('dropdown icon')} className="bg-transparent border-0 p-0">
+                      <img src="/assets/icons/dots.png" alt={t("dropdown-icon")} width={16} fetchPriority="high" />
                     </Button>
                   </Dropdown>
                 );
@@ -118,57 +150,80 @@ const BuyerOfferContent = () => {
         }
     ];
 
-    const items = [
-        { key: '1', label: t('Received') },
-        { key: '2', label: t('Send') },
-        { key: '3', label: t('Inactive') }
+    const statusOptions = [
+        { id: 'all', name: t('All Status') },
+        { id: 'PENDING', name: t('Pending') },
+        { id: 'APPROVED', name: t('Approved') },
+        { id: 'REJECTED', name: t('Rejected') },
+        { id: 'ACCEPTED', name: t('Accepted') },
     ];
 
-    const onClick = ({ key }) => setFilterStatus(key);
+    const offerTypeOptions = [
+        { id: 'all', name: t('All Types') },
+        { id: 'counter', name: t('Counter Offer') },
+        { id: 'proceed', name: t('Proceed to Purchase') },
+    ];
+
+    const handleTableChange = (paginationConfig) => {
+        setPagination({
+            current: paginationConfig.current,
+            pageSize: paginationConfig.pageSize,
+        });
+    };
 
     const refetch = useCallback(() => {
+        const cleanedSearch = cleanSearchText(searchValue);
         fetchOffers({
             variables: {
-                status: filterstatus ? filterstatus : null,
-                search: searchValue,
+                status: filterstatus || null,
+                search: cleanedSearch || null,
+                limit: pagination.pageSize,
+                offset: (pagination.current - 1) * pagination.pageSize,
             },
         });
-    }, [fetchOffers, filterstatus, searchValue]);
-
-    if (loading) {
-        return (
-          <Flex justify="center" align="center" className='h-200'>
-            <Spin size="large" />
-          </Flex>
-        );
-    }
+    }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText]);
 
     return (
         <>
-        {contextHolder}
             <Flex vertical gap={20}>
                 <ModuleTopHeading level={4} name={t('Offer')} />
                 <Card className='radius-12 border-gray'>
                     <Row gutter={[24,24]}>
                         <Col span={24}>
-                            <Flex gap={5} align='center'>
+                            <Flex gap={5} align='center' wrap>
                                 <SearchInput
-                                    withoutForm={true}
-                                    placeholder={t('Search')}
-                                    onDebouncedChange={handleDebouncedSearch}
-                                    debounceDelay={500}
-                                    prefix={<img src="/assets/icons/search.png" alt='search-icon' className='mx-3-inline' width={12} fetchPriority="high" />}
+                                    placeholder={t('Search by business title or seller')}
+                                    value={searchValue}
+                                    onChange={handleSearchChange}
+                                    prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
+                                    style={{ minWidth: '250px' }}
                                 />
-                                <Dropdown menu={{ items, onClick }} trigger={['click']}>
-                                    <Button aria-labelledby='status filter' className='border-light-gray radius-8 p-2 fs-13 h-auto'>
-                                        <Flex justify='space-between' className='w-100' gap={10}>
-                                            {filterstatus === '1' ? t('Received') :
-                                             filterstatus === '2' ? t('Send') :
-                                             filterstatus === '3' ? t('Inactive') : t('Status')}
-                                            <DownOutlined />
-                                        </Flex>
-                                    </Button>
-                                </Dropdown>
+                                <MySelect
+                                    withoutForm
+                                    value={filterstatus || 'all'}
+                                    options={statusOptions}
+                                    placeholder={t('Status')}
+                                    onChange={(value) => {
+                                        setFilterStatus(value === 'all' ? null : value);
+                                        setPagination(prev => ({ ...prev, current: 1 }));
+                                    }}
+                                    showKey
+                                    style={{ minWidth: '150px' }}
+                                    className='border-light-gray radius-8'
+                                />
+                                <MySelect
+                                    withoutForm
+                                    value={filtertype || 'all'}
+                                    options={offerTypeOptions}
+                                    placeholder={t('Offer Type')}
+                                    onChange={(value) => {
+                                        setFilterType(value === 'all' ? null : value);
+                                        setPagination(prev => ({ ...prev, current: 1 }));
+                                    }}
+                                    showKey
+                                    style={{ minWidth: '180px' }}
+                                    className='border-light-gray radius-8'
+                                />
                             </Flex>
                         </Col>
                         <Col span={24}>
@@ -179,7 +234,16 @@ const BuyerOfferContent = () => {
                                 className="pagination table table-cs"
                                 showSorterTooltip={false}
                                 scroll={{ x: 1300 }}
-                                pagination={false}
+                                loading={loading}
+                                onChange={handleTableChange}
+                                pagination={{
+                                    current: pagination.current,
+                                    pageSize: pagination.pageSize,
+                                    total: totalCount,
+                                    showSizeChanger: true,
+                                    showTotal: (total) => t(`Total ${total} offers`),
+                                    pageSizeOptions: ['10', '20', '50', '100'],
+                                }}
                             />
                         </Col>
                     </Row>

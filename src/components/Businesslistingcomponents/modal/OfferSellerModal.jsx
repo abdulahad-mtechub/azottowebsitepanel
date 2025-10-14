@@ -64,7 +64,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
         });
     };
 
-    const [createOffer] = useMutation(CREATE_OFFER, {
+    const [createOffer, { loading: createOfferLoading }] = useMutation(CREATE_OFFER, {
         onCompleted: () => refetch && refetch()
     });
 
@@ -85,7 +85,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                     <Button aria-labelledby='Cancel' className='btn text-black border-gray' onClick={onClose}>
                         Cancel
                     </Button>
-                    <Button aria-labelledby='Send an Offer' className='btn bg-brand' onClick={async () => {
+                    <Button aria-labelledby='Send an Offer' loading={createOfferLoading} disabled={createOfferLoading} className='btn bg-brand' onClick={async () => {
                         try {
                             const values = await form.validateFields();
                             await createOffer({
