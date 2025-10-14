@@ -33,7 +33,7 @@ const SellerOfferTable = ({ data }) => {
         variables: { 
             getOfferByBusinessIdId: data?.id,
             limit: pagination.pageSize,
-            offSet: (pagination.current - 1) * pagination.pageSize,
+            offSet: pagination.current - 1,
             search: searchText || null,
             status: null
         },
