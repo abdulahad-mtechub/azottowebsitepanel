@@ -1,4 +1,4 @@
-import { Button, Card, Col, Dropdown, Flex, Row, Table, Typography, message, Spin } from 'antd'
+import { Button, Card, Col, Dropdown, Flex, Row, Table, Typography, message, Spin, Tooltip } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { NavLink } from 'react-router-dom';
 import { OfferSellerModal, RequestMeetingModal } from '../../Businesslistingcomponents';
@@ -24,7 +24,7 @@ const BuyerOfferContent = () => {
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [searchValue, setSearchValue] = useState('');
 
-    const [fetchOffers, { data, loading, error }] = useLazyQuery(GET_BUYER_OFFER, {
+    const [fetchOffers, { data, loading }] = useLazyQuery(GET_BUYER_OFFER, {
         fetchPolicy: 'network-only',
     });
 
@@ -41,7 +41,7 @@ const BuyerOfferContent = () => {
         });
     }, [fetchOffers, filterstatus, searchValue]);
 
-    const tableData = data?.getOffersByUser?.map((offer, idx) => ({
+    const tableData = data?.getOffersByUser?.map((offer) => ({
         key: offer.id,
         title: offer.business.businessTitle,
         sellername: offer.business.seller?.name
@@ -53,14 +53,32 @@ const BuyerOfferContent = () => {
         date: new Date(offer.createdAt).toLocaleString(),
         business: offer.business, 
         buyer: offer.buyer, 
-        createdBy:offer.createdBy
+        createdBy:offer.createdBy, 
+        isProceedToPay: offer.isProceedToPay
     })) || [];
 
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
         { title: t('Seller Name'), dataIndex: 'sellername' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
-        { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { 
+            title: t('Offer Price'), 
+            dataIndex: 'offerprice',
+            render: (row, record) => (
+                <Flex gap={10} align="center">
+                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {row}
+                    {record?.isProceedToPay ? (
+                        <Tooltip title={t("PP - Proceed to Purchase")}>
+                            <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
+                        </Tooltip>
+                    ) : (
+                        <Tooltip title={t("CO - Counter Offer")}>
+                            <Text className='bg-orange bg radius-4 p-1 fs-11 text-white'>CO</Text>
+                        </Tooltip>
+                    )}
+                </Flex>
+            ) 
+        },
         {
             title: t('Status'), dataIndex: 'status',
             render: (status, record) => {

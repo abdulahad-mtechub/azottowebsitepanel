@@ -272,6 +272,7 @@ query GetOffersByUser($search: String, $status: String) {
     status
     createdAt
     createdBy
+    isProceedToPay
     business {
       id
       businessTitle

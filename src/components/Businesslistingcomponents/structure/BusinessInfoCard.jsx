@@ -1,5 +1,5 @@
-import { Button, Card, Col, Divider, Flex, Image, Row, Typography } from 'antd';
-import { OfferSellerModal, RequestMeetingModal } from '../modal';
+import { Button, Card, Col, Divider, Flex, Image, message, Row, Typography } from 'antd';
+import { OfferSellerModal, RequestMeetingModal, ProceedToPurchaseModal } from '../modal';
 import { useState, useEffect } from 'react';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
@@ -12,11 +12,12 @@ const { Title, Text } = Typography;
 
 const BusinessInfoCard = ({ data }) => {
 
+  const [messageApi, contextHolder] = message.useMessage();
   const { t } = useTranslation();
   const userId = Cookies.get("userId");
   const isLoggedIn = !!userId;
   const navigate = useNavigate();
-  const [createOffer] = useMutation(CREATE_OFFER);
+  const [createOffer, { loading: createOfferLoading }] = useMutation(CREATE_OFFER);
   const [hasExistingOffer, setHasExistingOffer] = useState(false);
   
   const { data: offerExistsData, refetch: refetchOfferExists } = useQuery(CHECK_OFFER_EXISTS, {
@@ -65,7 +66,7 @@ const BusinessInfoCard = ({ data }) => {
   const [offerseller, setOfferSeller] = useState(false);
   const [offerMode, setOfferMode] = useState("offer");
   const [meetingmodal, setMeetingModal] = useState(false);
-  const [offerId, setOfferId] = useState(false);
+  const [proceedModal, setProceedModal] = useState(false);
 
   const handleAction = (callback) => {
     if (isLoggedIn) {
@@ -75,25 +76,34 @@ const BusinessInfoCard = ({ data }) => {
     }
   };
 
-  const handleProceedtoPurchase = async ()=>{
-    const { data: response } = await createOffer({
-      variables: {
-        input: {
-          businessId: data?.id,   // ← this is your prop `data`
-          price: data?.price,
-          isProceedToPay: true,
-        },
-      },
-    });
+  const handleProceedButtonClick = () => {
+    handleAction(() => setProceedModal(true));
+  };
 
-    if (response?.createOffer?.id) {
-      setOfferId(response.createOffer.id);
+  const handleConfirmProceed = async () => {
+    try {
+      const { data: response } = await createOffer({
+        variables: {
+          input: {
+            businessId: data?.id,
+            price: data?.price,
+            isProceedToPay: true,
+          },
+        },
+      });
+
+      if (response?.createOffer?.id) {
+        setProceedModal(false);
+        messageApi.success(t('Your purchase request has been sent tot the seller!'));
+      }
+    } catch (error) {
+      console.error('Error creating proceed to purchase offer:', error);
     }
-  setMeetingModal(true)
-  }
+  };
 
   return (
     <>
+      {contextHolder}
       <Card className='shadow-d radius-12 border-gray mb-3'>
         <Row gutter={[24,24]}>
           <Col span={24}>
@@ -135,8 +145,11 @@ const BusinessInfoCard = ({ data }) => {
                 <Button aria-labelledby={t('Request Meeting')} className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>
                   {t('Request Meeting')}
                 </Button>
-                <Button aria-labelledby={t('Proceed to Purchase')} className='btn bg-green text-white' 
-                  onClick={ handleProceedtoPurchase}>
+                <Button 
+                  aria-labelledby={t('Proceed to Purchase')} 
+                  className='btn bg-green text-white' 
+                  onClick={handleProceedButtonClick}
+                >
                   {t('Proceed to Purchase')}
                 </Button>
               </Flex>
@@ -152,10 +165,16 @@ const BusinessInfoCard = ({ data }) => {
         mode={offerMode}
         refetch={refetchOfferExists}
       />
+      <ProceedToPurchaseModal
+        visible={proceedModal}
+        onClose={() => setProceedModal(false)}
+        businessPrice={data?.price || 0}
+        onConfirm={handleConfirmProceed}
+        loading={createOfferLoading}
+      />
       <RequestMeetingModal 
         businessId={data?.id}
         visible={meetingmodal}
-        offerId={offerId}
         onClose={()=>{setMeetingModal(false)}}
       />
     </>

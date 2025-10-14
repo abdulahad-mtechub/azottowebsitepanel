@@ -140,14 +140,14 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
                                 },
                               },
                             }),
-                            updateOffer({
-                              variables: {
-                                input: {
-                                  id: offerId,
-                                  status: "ACCEPTED"
-                                },
-                              },
-                            })
+                            // updateOffer({
+                            //   variables: {
+                            //     input: {
+                            //       id: offerId,
+                            //       status: "ACCEPTED"
+                            //     },
+                            //   },
+                            // })
                           ]);
 
                           messageApi.success("Jusoor E-NDA signed & meeting request sent successfully!");
