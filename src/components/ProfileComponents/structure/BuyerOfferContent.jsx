@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 const BuyerOfferContent = () => {
+    
     const { t } = useTranslation();
     const userId = Cookies.get("userId"); 
     const [messageApi, contextHolder] = message.useMessage();

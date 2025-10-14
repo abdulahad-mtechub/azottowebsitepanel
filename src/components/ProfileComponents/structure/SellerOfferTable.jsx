@@ -23,18 +23,23 @@ const SellerOfferTable = ({ data }) => {
     const [searchText, setSearchText] = useState('');
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
+    const [endaVisible, setEndaVisible] = useState(false);
+    const [pagination, setPagination] = useState({
+        current: 1,
+        pageSize: 10,
+    });
 
-    const { data: offers, refetch } = useQuery(GET_BUSINESS_OFFERS, {
+    const { data: offers, refetch, loading } = useQuery(GET_BUSINESS_OFFERS, {
         variables: { 
             getOfferByBusinessIdId: data?.id,
-            limit: null,
-            offset: null,
-            search: null,
+            limit: pagination.pageSize,
+            offSet: (pagination.current - 1) * pagination.pageSize,
+            search: searchText || null,
             status: null
         },
         fetchPolicy: 'network-only',
+        skip: !data?.id,
     });
-    const [endaVisible, setEndaVisible] = useState(false);
 
     const handleAcceptOffer = async (offerId, businessId) => {
         setSelectedOfferId(offerId);
@@ -42,7 +47,8 @@ const SellerOfferTable = ({ data }) => {
         setEndaVisible(true);
     };
 
-    const offerdata = offers?.getOfferByBusinessId?.offers;
+    const offerdata = useMemo(() => offers?.getOfferByBusinessId?.offers || [], [offers]);
+    const totalCount = offers?.getOfferByBusinessId?.count || 0;
 
     const columns = [
         { title: t('Buyer Name'), dataIndex: ["buyer", "name"] },
@@ -130,11 +136,12 @@ const SellerOfferTable = ({ data }) => {
         { id: 'proceed', name: t('Proceed to Purchase') },
     ];
 
-    // Filter offers based on status, type, and search
+    // Filter offers based on status and type (client-side filtering)
     const filteredOffers = useMemo(() => {
-        if (!offerdata) return [];
+        if (!offerdata || offerdata.length === 0) return [];
         
         return offerdata.filter(offer => {
+            // Status filter
             if (filterstatus) {
                 if (filterstatus === 'received' && offer.createdBy === userId) return false;
                 if (filterstatus === 'send' && offer.createdBy !== userId) return false;
@@ -143,22 +150,22 @@ const SellerOfferTable = ({ data }) => {
                 if (filterstatus === 'accepted' && offer.status !== 'ACCEPTED') return false;
             }
 
+            // Type filter
             if (filtertype) {
                 if (filtertype === 'counter' && offer.isProceedToPay) return false;
                 if (filtertype === 'proceed' && !offer.isProceedToPay) return false;
             }
 
-            if (searchText) {
-                const searchLower = searchText.toLowerCase();
-                const buyerName = offer?.buyer?.name?.toLowerCase() || '';
-                const price = offer?.price?.toString() || '';
-                
-                return buyerName.includes(searchLower) || price.includes(searchLower);
-            }
-
             return true;
         });
-    }, [offerdata, filterstatus, filtertype, searchText, userId]);
+    }, [offerdata, filterstatus, filtertype, userId]);
+
+    const handleTableChange = (paginationConfig) => {
+        setPagination({
+            current: paginationConfig.current,
+            pageSize: paginationConfig.pageSize,
+        });
+    };
 
     return (
         <>
@@ -201,12 +208,18 @@ const SellerOfferTable = ({ data }) => {
                         columns={columns}
                         dataSource={filteredOffers}
                         className="pagination table table-cs"
+                        hideOnSinglePage={true}
                         showSorterTooltip={false}
                         scroll={{ x: 1300 }}
+                        loading={loading}
+                        onChange={handleTableChange}
                         pagination={{
-                            pageSize: 10,
+                            current: pagination.current,
+                            pageSize: pagination.pageSize,
+                            total: totalCount,
                             showSizeChanger: true,
                             showTotal: (total) => t(`Total ${total} offers`),
+                            pageSizeOptions: ['10', '20', '50', '100'],
                         }}
                     />
                 </Col>
