@@ -25,7 +25,7 @@ const ProductCard = ({
 
     const saveBusinessHandler = async (businessId) => {
         try {
-          const res = await saveBusiness({
+          await saveBusiness({
             variables: {
               saveBusinessId: businessId,
             },
@@ -45,6 +45,8 @@ const ProductCard = ({
             </Flex>
         );
     }
+
+    console.log("Explore Data:", exploreData);
     return (
         <>
         {contextHolder}

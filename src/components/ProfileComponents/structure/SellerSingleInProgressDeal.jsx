@@ -3,14 +3,12 @@ import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin } from 'antd'
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps';
 import { GETDEAL } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
-import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
 
 const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     const { t } = useTranslation();
-    const userId = Cookies.get("userId"); 
     const dealId = inprogressdeal.key;
 
     const { data, loading, error } = useQuery(GETDEAL, {

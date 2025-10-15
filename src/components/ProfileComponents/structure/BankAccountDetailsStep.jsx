@@ -3,17 +3,19 @@ import { GETUSERACTIVEBANK } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 import { MaskedAccount } from '../../ui/MaskedAccount';
 import { useTranslation } from 'react-i18next';
-
+import Cookies from "js-cookie";
 const { Text } = Typography;
 
-const BankAccountDetailsStep = ({details}) => {
+const BankAccountDetailsStep = () => {
 
   const { t } = useTranslation();
-  const { data:userBank, loading:bankloading, error:bankError } = useQuery(GETUSERACTIVEBANK, {
-    variables: { getUserActiveBanksId: details?.buyerId },
+  const userId = Cookies.get("userId");
+  const { data:userBank, loading:bankloading } = useQuery(GETUSERACTIVEBANK, {
+    variables: { getUserActiveBanksId: userId },
     fetchPolicy: 'network-only',
   });
   const banks=userBank?.getUserActiveBanks
+
   if (bankloading) {
     return (
         <Flex justify="center" align="center" className='h-200'>

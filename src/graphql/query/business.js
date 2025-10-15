@@ -147,6 +147,7 @@ query GetAllBusinessesByCategory($category: String!, $limit: Int, $offSet: Int) 
       description
       revenue
       profit
+      isSaved
       price
       capitalRecovery
       multiple
@@ -172,6 +173,7 @@ query GetAllBusinessesByCity($city: String!, $limit: Int, $offSet: Int) {
       profit
       price
       capitalRecovery
+      isSaved
       multiple
       savedBy {
         id
@@ -194,6 +196,7 @@ query getAllBusinessesByDistrict($district: String!, $limit: Int, $offSet: Int) 
       revenue
       profit
       price
+      isSaved
       capitalRecovery
       multiple
       savedBy {
@@ -217,6 +220,7 @@ query GetAllBusinessesByProfit($profit: [Float]!, $limit: Int, $offSet: Int) {
       revenue
       profit
       price
+      isSaved
       capitalRecovery
       multiple
       savedBy {
@@ -238,6 +242,7 @@ query GetAllBusinessesByRevenue($revenue: [Float]!, $limit: Int, $offSet: Int) {
       businessTitle
       description
       revenue
+      isSaved
       profit
       price
       capitalRecovery

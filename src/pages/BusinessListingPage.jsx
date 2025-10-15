@@ -222,7 +222,7 @@ const BusinessListingPage = ({getcategory}) => {
             fetchBusinesses({ query, variables });
         }
     };
-    console.log("exploreData",businessList)
+
 
     return (
         <div className='padd-1 mb-3'>

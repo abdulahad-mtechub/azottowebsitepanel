@@ -127,31 +127,34 @@ const BuyerOfferContent = () => {
         {
             title: t('Action'), key: 'action', fixed: 'right', width: 100, align: 'center',
             render: (record) => {
-              if (record.createdBy !== userId) {
-                let items = [];
-                if (record.status === 'PENDING') {
-                  items = [
-                    { label: <NavLink onClick={() => { setSelectedOfferId(record.key); setSelectedBusinessId(record.business.id); setRequestPop(true); }}>{t('Accept Offer')}</NavLink>, key: 0 },
-                    { label: <NavLink onClick={() => { setSelectedOfferId(record.key); setDeleteModal(true); }}>{t('Reject Offer')}</NavLink>, key: 1 },
-                    { label: <NavLink onClick={() => { setSelectedBusinessId(record.business.id); setSelectedOfferId(record.key); setOfferModal(true); }}>{t('Counter Offer')}</NavLink>, key: 2 },
-                    { label: <NavLink onClick={() => { setSelectedBusinessId(record.business.id); setRequestPop(true); }}>{t('Request For Virtual Meeting')}</NavLink>, key: 3 },
-                  ];
-                }
-                return (
-                  <Dropdown menu={{ items }} trigger={['click']}>
-                    <Button aria-labelledby={t('dropdown icon')} className="bg-transparent border-0 p-0">
-                      <img src="/assets/icons/dots.png" alt={t("dropdown-icon")} width={16} fetchPriority="high" />
-                    </Button>
-                  </Dropdown>
-                );
+              // Hide action button if user created the offer (sent by buyer)
+              if (record.createdBy === userId) return null;
+
+              // Hide action button if status is ACCEPTED or REJECTED
+              if (record.status === 'ACCEPTED' || record.status === 'REJECTED') return null;
+
+              let items = [];
+              if (record.status === 'PENDING') {
+                items = [
+                  { label: <NavLink onClick={() => { setSelectedOfferId(record.key); setSelectedBusinessId(record.business.id); setRequestPop(true); }}>{t('Accept Offer')}</NavLink>, key: 0 },
+                  { label: <NavLink onClick={() => { setSelectedOfferId(record.key); setDeleteModal(true); }}>{t('Reject Offer')}</NavLink>, key: 1 },
+                  { label: <NavLink onClick={() => { setSelectedBusinessId(record.business.id); setSelectedOfferId(record.key); setOfferModal(true); }}>{t('Counter Offer')}</NavLink>, key: 2 },
+                  { label: <NavLink onClick={() => { setSelectedBusinessId(record.business.id); setRequestPop(true); }}>{t('Request For Virtual Meeting')}</NavLink>, key: 3 },
+                ];
               }
-              return null;
+              
+              return (
+                <Dropdown menu={{ items }} trigger={['click']}>
+                  <Button aria-labelledby={t('dropdown icon')} className="bg-transparent border-0 p-0">
+                    <img src="/assets/icons/dots.png" alt={t("dropdown-icon")} width={16} fetchPriority="high" />
+                  </Button>
+                </Dropdown>
+              );
             },
         }
     ];
 
     const statusOptions = [
-        { id: 'all', name: t('All Status') },
         { id: 'PENDING', name: t('Pending') },
         { id: 'APPROVED', name: t('Approved') },
         { id: 'REJECTED', name: t('Rejected') },
@@ -159,7 +162,6 @@ const BuyerOfferContent = () => {
     ];
 
     const offerTypeOptions = [
-        { id: 'all', name: t('All Types') },
         { id: 'counter', name: t('Counter Offer') },
         { id: 'proceed', name: t('Proceed to Purchase') },
     ];
@@ -200,8 +202,9 @@ const BuyerOfferContent = () => {
                                 />
                                 <MySelect
                                     withoutForm
-                                    value={filterstatus || 'all'}
+                                    value={filterstatus}
                                     options={statusOptions}
+                                    allowClear
                                     placeholder={t('Status')}
                                     onChange={(value) => {
                                         setFilterStatus(value === 'all' ? null : value);
@@ -213,8 +216,9 @@ const BuyerOfferContent = () => {
                                 />
                                 <MySelect
                                     withoutForm
-                                    value={filtertype || 'all'}
+                                    value={filtertype}
                                     options={offerTypeOptions}
+                                    allowClear
                                     placeholder={t('Offer Type')}
                                     onChange={(value) => {
                                         setFilterType(value === 'all' ? null : value);
