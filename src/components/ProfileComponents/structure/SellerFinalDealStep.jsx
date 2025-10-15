@@ -60,7 +60,7 @@ const SellerFinalDealsStep = ({ details }) => {
                     </Text>
                 </Flex>
             </Col>
-            {uploadDocs && !details?.isSellerCompleted && (
+            {uploadDocs && !details?.isBuyerCompleted && (
                 <>
                     <Col span={24}>
                         <Checkbox
