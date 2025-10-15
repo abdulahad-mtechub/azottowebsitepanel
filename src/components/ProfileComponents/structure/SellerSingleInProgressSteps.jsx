@@ -40,7 +40,7 @@ const SellerSingleInprogressSteps = ({ completedeal, deal }) => {
                              deal?.status === 'BUYERCOMPLETED' ||
                              deal?.status === 'SELLERCOMPLETED' ||
                              deal?.status === 'COMPLETED';
-    const isStep3Completed = deal?.isDocVedifiedSeller && deal?.isDocVedifiedAdmin;
+    const isStep3Completed = deal?.isDocVedifiedBuyer && deal?.isBuyerCompleted;
     const isStep4Completed = deal?.isSellerCompleted;
 
     const initialStep = deal?.status ? statusToStepIndex[deal.status] || 0 : 0;

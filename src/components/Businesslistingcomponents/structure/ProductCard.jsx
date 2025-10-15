@@ -46,7 +46,25 @@ const ProductCard = ({
         );
     }
 
-    console.log("Explore Data:", exploreData);
+    if (!isLoading && (!exploreData || exploreData.length === 0)) {
+        return (
+            <Flex vertical justify="center" align="center" style={{ minHeight: '250px' }}>
+                <img 
+                    src="/assets/icons/info-outline.png" 
+                    alt={t('no-data')} 
+                    width={45} 
+                    style={{ opacity: 0.5, marginBottom: '16px' }}
+                />
+                <Title level={4} className='text-gray m-0'>
+                    {t('No Data Found')}
+                </Title>
+                <Text className='text-gray fs-14'>
+                    {t('No businesses match your search criteria. Try adjusting your filters.')}
+                </Text>
+            </Flex>
+        );
+    }
+
     return (
         <>
         {contextHolder}
@@ -137,7 +155,7 @@ const ProductCard = ({
                 )
             }
             {
-                exploreData?.length > 5 &&
+                exploreData?.length > 0 && totalCount > 12 &&
                 <Col span={24} className='mt-3'>
                     <Row justify="space-between" align="middle">
                         <Col span={6}>
@@ -148,10 +166,11 @@ const ProductCard = ({
                                     value={limit}
                                     onChange={onLimitChange}
                                     options={[
-                                        { value: 5, label: 5 },
-                                        { value: 10, label: 10 },
-                                        { value: 20, label: 20 },
-                                        { value: 50, label: 50 },
+                                        { value: 12, label: 12 },
+                                        { value: 24, label: 24 },
+                                        { value: 36, label: 36 },
+                                        { value: 48, label: 48 },
+                                        { value: 60, label: 60 },
                                     ]}
                                 />
                             </Flex>

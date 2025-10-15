@@ -50,15 +50,11 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
             key: '1',
             label: t('Pay Commission'),
             content: <PayCommissionInprogressStep form={form} inprogressdeal={inprogressdeal} />,
-            status: inprogressdeal?.isCommissionVerified
-                ? t('Verified')
-                : inprogressdeal?.busines?.documents?.find((doc) => doc.title === "Jasoor Commission")
-                ? t('Jasoor Verified Pending')
-                : t('Pending'),
+            status: inprogressdeal?.isCommissionVerified ? t('Verified') : t('Pending'),
             lockedTitle: t('Commission Payment Required'),
             lockedDesc: t('Please pay the commission to proceed with the deal.'),
             isCompleted: isStep1Completed,
-            isEnabled: true, // First step is always enabled
+            isEnabled: true,
         },
         {
             key: '2',

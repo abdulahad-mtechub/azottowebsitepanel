@@ -50,10 +50,49 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
         });
     }, [searchValue, fetchDeals, pagination]);
 
+    // Helper function to get readable status
+    const getStatusLabel = (status) => {
+        const statusMap = {
+            'COMMISSION_TRANSFER_FROM_BUYER_PENDING': t('Commission Pending'),
+            'COMMISSION_VERIFIED': t('Commission Verified'),
+            'DSA_FROM_SELLER_PENDING': t('DSA Seller Pending'),
+            'DSA_FROM_BUYER_PENDING': t('DSA Buyer Pending'),
+            'BANK_DETAILS_FROM_SELLER_PENDING': t('Bank Details Pending'),
+            'SELLER_PAYMENT_VERIFICATION_PENDING': t('Payment Verification Pending'),
+            'PAYMENT_APPROVAL_FROM_SELLER_PENDING': t('Payment Approval Pending'),
+            'DOCUMENT_PAYMENT_CONFIRMATION': t('Document Confirmation'),
+            'WAITING': t('Waiting'),
+            'BUYERCOMPLETED': t('Buyer Completed'),
+            'SELLERCOMPLETED': t('Seller Completed'),
+            'COMPLETED': t('Completed'),
+            'CANCEL': t('Cancelled'),
+            'PENDING': t('Pending'),
+        };
+        return statusMap[status] || status;
+    };
+
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
         { title: t('Buyer Name'), dataIndex: 'buyername' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
+        { 
+            title: t('Status'), 
+            dataIndex: 'status',
+            render: (status) => {
+                const statusLabel = getStatusLabel(status);
+                let badgeClass = 'sendstatus';
+                
+                if (status === 'CANCEL') {
+                    badgeClass = 'inactive'; // Red
+                } else if (status === 'COMPLETED' || status === 'BUYERCOMPLETED' || status === 'SELLERCOMPLETED') {
+                    badgeClass = 'success'; // Green
+                } else if (status === 'COMMISSION_VERIFIED' || status === 'DOCUMENT_PAYMENT_CONFIRMATION') {
+                    badgeClass = 'received'; // Blue
+                }
+                
+                return <span className={`${badgeClass} fs-12 badge-cs fw-500 fit-content`}>{statusLabel}</span>;
+            }
+        },
         { title: t('Finalized Date'), dataIndex: 'date' },
     ];
 
@@ -64,6 +103,7 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
             buyername: deal.buyer.name,
             businessprice: deal.price,
             date: new Date(deal.createdAt).toLocaleString(),
+            status: deal.status,
             isDsaSeller: deal?.isDsaSeller,
         })) || [];
     }, [offerDeals]);

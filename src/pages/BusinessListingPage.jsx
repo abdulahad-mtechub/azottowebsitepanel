@@ -23,7 +23,7 @@ const BusinessListingPage = ({getcategory}) => {
     const rawCategoryParam = params.get('category');
     const categoryParam = rawCategoryParam && rawCategoryParam !== 'undefined' ? rawCategoryParam : null;
     const cityParam = params.get('city');
-    const [limit, setLimit] = useState(10);
+    const [limit, setLimit] = useState(12);
     const [currentPage, setCurrentPage] = useState(1);
     const [ isShow, setIsShow ] = useState(false);
 

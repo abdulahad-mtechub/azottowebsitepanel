@@ -36,6 +36,8 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             isDocVedifiedSeller : data.getDeal?.isDocVedifiedSeller || false,
             isSellerCompleted : data.getDeal?.isSellerCompleted || false,
             isPaymentVedifiedSeller : data.getDeal?.isPaymentVedifiedSeller || false,
+            isBuyerCompleted : data.getDeal?.isBuyerCompleted || false,
+            isDocVedifiedBuyer : data.getDeal?.isDocVedifiedBuyer || false,
         } : null;
 
     const sellerdealsData = [

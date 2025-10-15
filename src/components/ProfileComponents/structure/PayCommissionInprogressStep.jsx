@@ -70,7 +70,7 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
     },
     {
       title: t("Commission Amount to Pay"),
-      desc: commission || 0,
+      desc: inprogressdeal?.commission || 0,
     },
   ];
 

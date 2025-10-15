@@ -16,7 +16,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     variables: { getDealId: dealId },
     fetchPolicy: 'network-only',
   });
-  const { data:userBank, loading:bankloading, error:bankError } = useQuery(GETUSERACTIVEBANK, {
+  const { data:userBank } = useQuery(GETUSERACTIVEBANK, {
     variables: { getUserActiveBanksId: data?.getDeal?.buyer?.id },
     fetchPolicy: 'network-only',
   });
@@ -43,14 +43,38 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         isSellerCompleted : data?.getDeal?.isSellerCompleted || false,
         isBuyerCompleted : data?.getDeal?.isBuyerCompleted || false,
         isPaymentVedifiedSeller : data?.getDeal?.isPaymentVedifiedSeller || false,
+        commission : data?.getDeal?.offer?.commission || 0,
     } : null;
 
+  // Helper function to get readable status
+  const getStatusLabel = (status) => {
+    const statusMap = {
+      'COMMISSION_TRANSFER_FROM_BUYER_PENDING': t('Commission Pending'),
+      
+      'COMMISSION_VERIFIED': t('Commission Verified'),
+      'DSA_FROM_SELLER_PENDING': t('DSA Seller Pending'),
+      'DSA_FROM_BUYER_PENDING': t('DSA Buyer Pending'),
+      'BANK_DETAILS_FROM_SELLER_PENDING': t('Bank Details Pending'),
+      'SELLER_PAYMENT_VERIFICATION_PENDING': t('Payment Verification Pending'),
+      'PAYMENT_APPROVAL_FROM_SELLER_PENDING': t('Payment Approval Pending'),
+      'DOCUMENT_PAYMENT_CONFIRMATION': t('Document Confirmation'),
+      'WAITING': t('Waiting'),
+      'BUYERCOMPLETED': t('Buyer Completed'),
+      'SELLERCOMPLETED': t('Seller Completed'),
+      'COMPLETED': t('Completed'),
+      'CANCEL': t('Cancelled'),
+      'PENDING': t('Pending'),
+    };
+    return statusMap[status] || status;
+  };
+
+  const isCancelled = deal?.status === 'CANCEL';
 
   const buyerdealsData = [
     { title: t('Seller Name'), desc: deal?.sellerName },
     { title: t('Buyer Name'), desc: deal?.buyerName },
     { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
-    { title: t('Status'), desc: deal?.status },
+    { title: t('Status'), desc: getStatusLabel(deal?.status) },
   ];
   if (loading) {
     return (
@@ -58,8 +82,8 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             <Spin size="large" />
         </Flex>
     );
-}
-if (!deal) return <Text>{t('No deal found')}</Text>;
+  }
+  if (!deal) return <Text>{t('No deal found')}</Text>;
 
   return (
     <Flex vertical gap={20}>
@@ -90,21 +114,25 @@ if (!deal) return <Text>{t('No deal found')}</Text>;
         </Title>
       </Flex>
 
-      <Card className='radius-12 border-gray'>
+      <Card className='radius-12 border-gray' style={{ opacity: isCancelled ? 0.7 : 1 }}>
         <div className='deals-status'>
           <Row gutter={[16, 16]}>
             {buyerdealsData.map((list, index) => (
               <Col xs={24} sm={12} md={6} lg={6} key={index}>
-                <Flex vertical gap={0}>
-                  <Text className='fw-600 fs-14'>{list?.title}</Text>
+                <Flex vertical gap={5}>
+                  <Text className='fw-600 fs-14 text-gray'>{list?.title}</Text>
                   {list?.title === t('Status') ? (
-                    list.desc === 'In-progress' ? (
-                      <Text className='bg-brand text-white fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                    deal?.status === 'CANCEL' ? (
+                      <Text className='inactive fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                    ) : deal?.status === 'COMPLETED' || deal?.status === 'BUYERCOMPLETED' || deal?.status === 'SELLERCOMPLETED' ? (
+                      <Text className='success fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                    ) : deal?.status === 'COMMISSION_VERIFIED' || deal?.status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? (
+                      <Text className='received fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
                     ) : (
                       <Text className='sendstatus fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
                     )
                   ) : (
-                    <Text className='fs-14 fw-normal'>{list?.desc}</Text>
+                    <Text className='fs-14 fw-500 text-black'>{list?.desc}</Text>
                   )}
                 </Flex>
               </Col>
@@ -112,7 +140,29 @@ if (!deal) return <Text>{t('No deal found')}</Text>;
           </Row>
         </div>
 
-        <SingleInprogressSteps inprogressdeal={deal} />
+        {isCancelled ? (
+          <Flex 
+            vertical 
+            justify="center" 
+            align="center" 
+            style={{ minHeight: '200px', padding: '40px 0' }}
+          >
+            <img 
+              src="/assets/icons/cancel-ic.png" 
+              alt={t('cancelled')} 
+              width={60} 
+              style={{ opacity: 0.5, marginBottom: '16px' }}
+            />
+            <Title level={4} className='text-gray m-0'>
+              {t('Deal Cancelled')}
+            </Title>
+            <Text className='text-gray fs-14 text-center' style={{ maxWidth: '400px' }}>
+              {t('This deal has been cancelled and no further actions can be taken.')}
+            </Text>
+          </Flex>
+        ) : (
+          <SingleInprogressSteps inprogressdeal={deal} />
+        )}
       </Card>
     </Flex>
   );

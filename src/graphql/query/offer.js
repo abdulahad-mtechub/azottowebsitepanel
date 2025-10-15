@@ -119,6 +119,7 @@ query GetBuyerCompletedDeals($limit: Int, $offset: Int, $search: String) {
         id
         name
       }
+      status
       business {
         id
         businessTitle
@@ -191,6 +192,7 @@ query GetDeal($getDealId: ID!) {
       id
       price
       status
+      commission
     }
   }
 }

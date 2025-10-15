@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography } from 'antd';
 import { SingleInprogressSteps } from './SingleInprogressSteps';
-import { GETADMINACTIVEBANK, OFFERBYID } from '../../../graphql/query';
+import { OFFERBYID } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
@@ -9,9 +9,7 @@ const { Title, Text } = Typography;
 
 const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
   const { t } = useTranslation();
-
-  const { loading: bankLoading, error: bankError, data: bankData } = useQuery(GETADMINACTIVEBANK);
-  const { loading: offerLoading, error: offerError, data: offerData } = useQuery(OFFERBYID, {
+  const { error: offerError, data: offerData } = useQuery(OFFERBYID, {
     variables: { offerId: completedeal?.id },
     skip: !completedeal?.id,
   });
