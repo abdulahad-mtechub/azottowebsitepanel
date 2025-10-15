@@ -47,8 +47,8 @@ const SellerFinalDealsStep = ({ details }) => {
     };
 
     const dealBusiness = details?.busines?.documents || [];
-    const uploadDocs = dealBusiness.length === 4;
-
+    const uploadDocs = dealBusiness.length >= 4;
+    console.log("dealBusiness", dealBusiness, uploadDocs, details);
     return (
         <Row gutter={[16, 24]}>
             {contextHolder}
@@ -60,7 +60,7 @@ const SellerFinalDealsStep = ({ details }) => {
                     </Text>
                 </Flex>
             </Col>
-            {uploadDocs && !details?.isBuyerCompleted && (
+            {uploadDocs && !details?.isSellerCompleted && (
                 <>
                     <Col span={24}>
                         <Checkbox
