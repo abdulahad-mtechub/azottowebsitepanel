@@ -14,16 +14,36 @@ const { Text } = Typography;
 const SingleInprogressSteps = ({ inprogressdeal }) => {
     const { t } = useTranslation();
     const [form] = Form.useForm();
-    const [activeStep, setActiveStep] = useState(inprogressdeal ? 3 : 0);
-    const [openPanels, setOpenPanels] = useState(inprogressdeal ? ['1','2','3','4'] : ['1']);
-
+    
     const [activeBank, { data: activeBankData }] = useLazyQuery(GETUSERACTIVEBANK);
 
     useEffect(() => {
         if (inprogressdeal?.sellerId) {
             activeBank({ variables: { getUserActiveBanksId: inprogressdeal?.sellerId } });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inprogressdeal?.sellerId, activeBankData]);
+
+    // Check if each step is completed based on deal status and admin approvals
+    const isStep1Completed = inprogressdeal?.isCommissionVerified; // Admin verified commission
+    const isStep2Completed = inprogressdeal?.isDsaSeller && inprogressdeal?.isDsaBuyer; // Both signed DSA
+    const isStep3Completed = inprogressdeal?.isPaymentVedifiedSeller; // Payment verified
+    const isStep4Completed = inprogressdeal?.isBuyerCompleted; // Deal finalized
+
+    // Determine initial step based on completion status
+    const getInitialStep = () => {
+        if (isStep4Completed) return 3;
+        if (isStep3Completed) return 3;
+        if (isStep2Completed) return 2;
+        if (isStep1Completed) return 1;
+        return 0;
+    };
+
+    const initialStep = getInitialStep();
+    const [activeStep, setActiveStep] = useState(initialStep);
+    const [openPanels, setOpenPanels] = useState(
+        inprogressdeal ? Array.from({ length: initialStep + 1 }, (_, i) => (i + 1).toString()) : ['1']
+    );
 
     const steps = [
         {
@@ -35,6 +55,10 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
                 : inprogressdeal?.busines?.documents?.find((doc) => doc.title === "Jasoor Commission")
                 ? t('Jasoor Verified Pending')
                 : t('Pending'),
+            lockedTitle: t('Commission Payment Required'),
+            lockedDesc: t('Please pay the commission to proceed with the deal.'),
+            isCompleted: isStep1Completed,
+            isEnabled: true, // First step is always enabled
         },
         {
             key: '2',
@@ -47,54 +71,60 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
                 : inprogressdeal?.isDsaSeller && !inprogressdeal?.isDsaBuyer
                 ? t('Buyer DSA Pending')
                 : t('Verified'),
+            lockedTitle: t('Commission Verification Pending'),
+            lockedDesc: t('Waiting for admin to verify your commission payment.'),
+            isCompleted: isStep2Completed,
+            isEnabled: isStep1Completed, // Enabled only if Step 1 is completed (admin verified commission)
         },
         {
             key: '3',
             label: t('Pay Business Amount'),
             content: <PayBusinessAmountstep inprogressdeal={inprogressdeal} bank={activeBankData?.getUserActiveBanks} form={form} />,
-            status: inprogressdeal?.isPaymentVedifiedSeller ? t('Verified') : t('Pending')
+            status: inprogressdeal?.isPaymentVedifiedSeller ? t('Verified') : t('Pending'),
+            lockedTitle: t('DSA Required'),
+            lockedDesc: t('Waiting for seller & buyer to sign the Digital Sale Agreement.'),
+            isCompleted: isStep3Completed,
+            isEnabled: isStep2Completed, // Enabled only if Step 2 is completed (both signed DSA)
         },
         {
             key: '4',
             label: t('Finalize Deal'),
             content: <FinalDealsStep inprogressdeal={inprogressdeal} />,
-            status: inprogressdeal?.isBuyerCompleted ? t('Deal Closed') : t('Pending')
+            status: inprogressdeal?.isBuyerCompleted ? t('Deal Closed') : t('Pending'),
+            lockedTitle: t('Payment Verification Required'),
+            lockedDesc: t('Waiting for seller to verify the business payment.'),
+            isCompleted: isStep4Completed,
+            isEnabled: isStep3Completed, // Enabled only if Step 3 is completed (payment verified)
         },
     ];
 
-    const isStepComplete = (status) =>
-        status && ![t('pending').toLowerCase(), t('waiting').toLowerCase()].includes(status.toLowerCase());
-
-    const getUnlockedStepKeys = () => {
-        const keys = [];
-        for (let i = 0; i < steps.length; i++) {
-            if (i === 0 || isStepComplete(steps[i - 1].status)) {
-                keys.push(steps[i].key);
-            } else break;
-        }
-        return keys;
-    };
-
-    const unlockedKeys = getUnlockedStepKeys();
-
     const handleCollapseChange = (keys) => {
-        const filteredKeys = keys.filter((key) => unlockedKeys.includes(key));
-        setOpenPanels(filteredKeys);
-
-        if (filteredKeys.length > 0) {
-            const lastOpenedKey = filteredKeys[filteredKeys.length - 1];
-            const stepIndex = steps.findIndex((step) => step.key === lastOpenedKey);
+        // Filter out disabled steps
+        const validKeys = keys.filter(key => {
+            const stepIndex = steps.findIndex(step => step.key === key);
+            return stepIndex !== -1 && steps[stepIndex].isEnabled;
+        });
+        
+        setOpenPanels(validKeys);
+        if (validKeys.length > 0) {
+            const lastKey = validKeys[validKeys.length - 1];
+            const stepIndex = steps.findIndex(step => step.key === lastKey);
             if (stepIndex !== -1) setActiveStep(stepIndex);
         }
     };
 
     const stepItems = steps.map((item) => {
-        const isDisabled = !unlockedKeys.includes(item.key);
+        const isDisabled = !item.isEnabled;
         return {
             key: item.key,
             label: (
                 <Flex justify="space-between" align="center">
-                    <span className="custom-step-title">{item.label}</span>
+                    <span 
+                        className={`custom-step-title fw-600 fs-15 ${isDisabled ? 'step-disabled' : ''}`}
+                        style={{ opacity: isDisabled ? 0.5 : 1, cursor: isDisabled ? 'not-allowed' : 'pointer' }}
+                    >
+                        {item.label}
+                    </span>
                     <span className="collapse-indicator">
                         {openPanels.includes(item.key) ? (
                             <Flex align="center" gap={5}>
@@ -105,15 +135,26 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
                                 ) : (
                                     <Text className="received fs-10 badge-cs fw-500 fit-content">{item?.status}</Text>
                                 )}
-                                <UpOutlined />
+                                <UpOutlined style={{ opacity: isDisabled ? 0.5 : 1 }} />
                             </Flex>
                         ) : (
-                            <DownOutlined />
+                            <DownOutlined style={{ opacity: isDisabled ? 0.5 : 1 }} />
                         )}
                     </span>
                 </Flex>
             ),
-            children: <div className="step-content">{item.content}</div>,
+            children: (
+                !item.isEnabled ? (
+                    <Flex className='text-center' vertical justify='center' align='center'>
+                        <Typography.Title level={5} className='fw-500 m-0 fs-14'>{item?.lockedTitle}</Typography.Title>
+                        <Text className='fs-14 text-gray'>
+                            {item?.lockedDesc}
+                        </Text>
+                    </Flex>
+                ) : (
+                    <div className="step-content">{item.content}</div>
+                )
+            ),
             showArrow: false,
             collapsible: isDisabled ? 'disabled' : 'header',
         };
@@ -122,12 +163,14 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
     const stepsProgress = steps.map((item, index) => ({
         key: item.label,
         title: (
-            <span
-                className={`custom-step-title ${activeStep >= index ? 'completed' : ''} ${!unlockedKeys.includes(item.key) ? 'disabled' : ''}`}
+            <span 
+                className={`custom-step-title ${activeStep >= index ? 'completed' : ''} ${!item.isEnabled ? 'step-disabled' : ''}`}
+                style={{ opacity: !item.isEnabled ? 0.5 : 1 }}
             >
                 {item.label}
             </span>
         ),
+        disabled: !item.isEnabled,
     }));
 
     return (
@@ -137,23 +180,31 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
                 current={activeStep}
                 items={stepsProgress}
                 onChange={(current) => {
-                    if (unlockedKeys.includes(steps[current].key)) {
+                    // Only allow clicking on enabled steps
+                    if (steps[current]?.isEnabled) {
                         setActiveStep(current);
                         setOpenPanels([steps[current].key]);
                     }
                 }}
-                progressDot={(dot, { index }) => (
-                    <span className={`custom-dot ${activeStep > index ? 'completed' : ''} ${activeStep === index ? 'active' : ''}`}>
-                        {activeStep > index ? <CheckOutlined /> : dot}
-                    </span>
-                )}
+                progressDot={(dot, { index }) => {
+                    const step = steps[index];
+                    const isDisabled = !step?.isEnabled;
+                    return (
+                        <span 
+                            className={`custom-dot ${activeStep > index ? 'completed' : ''} ${activeStep === index ? 'active' : ''} ${isDisabled ? 'disabled' : ''}`}
+                            style={{ opacity: isDisabled ? 0.5 : 1, cursor: isDisabled ? 'not-allowed' : 'pointer' }}
+                        >
+                            {activeStep > index ? <CheckOutlined /> : dot}
+                        </span>
+                    );
+                }}
             />
             <Form form={form} layout="vertical">
                 <Collapse
                     activeKey={openPanels}
                     onChange={handleCollapseChange}
-                    items={stepItems.map((item) => ({ ...item, collapsible: unlockedKeys.includes(item.key) ? 'header' : 'disabled' }))}
-                    className={`collapse-cs1 step-disabled`}
+                    items={stepItems}
+                    className='collapse-cs1'
                     expandIconPosition="end"
                     ghost
                 />

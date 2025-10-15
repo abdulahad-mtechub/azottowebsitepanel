@@ -14,7 +14,7 @@ const BankAccountDetailsStep = () => {
     variables: { getUserActiveBanksId: userId },
     fetchPolicy: 'network-only',
   });
-  const banks=userBank?.getUserActiveBanks
+  const banks = userBank?.getUserActiveBanks
 
   if (bankloading) {
     return (
