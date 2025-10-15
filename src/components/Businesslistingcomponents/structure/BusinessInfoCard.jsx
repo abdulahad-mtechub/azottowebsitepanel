@@ -206,7 +206,7 @@ const BusinessInfoCard = ({ data }) => {
         visible={offerseller}
         onClose={() => {
           setOfferSeller(false);
-          refetchOfferExists(); // Refetch after closing modal to update button state
+          refetchOfferExists();
         }}
         mode={offerMode}
         refetch={refetchOfferExists}

@@ -55,6 +55,7 @@ const BuyerOfferContent = () => {
                 offSet: pagination.current - 1,
             },
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText]);
 
     const offers = useMemo(() => data?.getOffersByUser?.offers || [], [data]);
@@ -133,12 +134,25 @@ const BuyerOfferContent = () => {
               // Hide action button if status is ACCEPTED or REJECTED
               if (record.status === 'ACCEPTED' || record.status === 'REJECTED') return null;
 
+              // Check if this is a "Received" offer (created by seller, not by current user)
+              const isReceivedOffer = record.createdBy !== userId;
+              // Disable counter offer if it's a Proceed to Purchase offer and status is Received
+              const disableCounterOffer = !record.isProceedToPay && isReceivedOffer;
+
               let items = [];
               if (record.status === 'PENDING') {
                 items = [
                   { label: <NavLink onClick={() => { setSelectedOfferId(record.key); setSelectedBusinessId(record.business.id); setRequestPop(true); }}>{t('Accept Offer')}</NavLink>, key: 0 },
                   { label: <NavLink onClick={() => { setSelectedOfferId(record.key); setDeleteModal(true); }}>{t('Reject Offer')}</NavLink>, key: 1 },
-                  { label: <NavLink onClick={() => { setSelectedBusinessId(record.business.id); setSelectedOfferId(record.key); setOfferModal(true); }}>{t('Counter Offer')}</NavLink>, key: 2 },
+                  { 
+                    label: disableCounterOffer ? (
+                      <Text style={{ opacity: 0.5, cursor: 'not-allowed' }}>{t('Counter Offer ')}</Text>
+                    ) : (
+                      <NavLink onClick={() => { setSelectedBusinessId(record.business.id); setSelectedOfferId(record.key); setOfferModal(true); }}>{t('Counter Offer ')}</NavLink>
+                    ), 
+                    key: 2,
+                    disabled: disableCounterOffer,
+                  },
                   { label: <NavLink onClick={() => { setSelectedBusinessId(record.business.id); setRequestPop(true); }}>{t('Request For Virtual Meeting')}</NavLink>, key: 3 },
                 ];
               }
@@ -183,6 +197,7 @@ const BuyerOfferContent = () => {
                 offset: (pagination.current - 1) * pagination.pageSize,
             },
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText]);
 
     return (
