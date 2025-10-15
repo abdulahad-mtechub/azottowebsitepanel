@@ -124,6 +124,11 @@ query Query {
   getSellerCount
 }
 `
+const CHECKMEETINGEXISTS = gql`
+query Query($businessId: ID!, $buyerId: ID!) {
+  checkMeetingExists(businessId: $businessId, buyerId: $buyerId)
+}
+`
 export {
     SENTMEETINGS,
     RECEIVEDMEETINGS,
@@ -131,5 +136,6 @@ export {
     SCHEDULEDMEETINGS,
     GETMEETINGS,
     GETBUYERMEETINGCOUNT,
-    GETSELLERMEETINGCOUNT
+    GETSELLERMEETINGCOUNT,
+    CHECKMEETINGEXISTS
 }

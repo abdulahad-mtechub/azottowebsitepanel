@@ -235,7 +235,10 @@ query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: In
 `
 const CHECK_OFFER_EXISTS = gql`
   query CheckOfferExists($businessId: ID!, $buyerId: ID!) {
-    checkOfferExists(businessId: $businessId, buyerId: $buyerId)
+    checkOfferExists(businessId: $businessId, buyerId: $buyerId) {
+      exists
+      isProceedToPay
+    }
   }
 `
 export {

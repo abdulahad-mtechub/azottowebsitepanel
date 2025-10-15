@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
 import { useMutation, useQuery } from '@apollo/client'
 import { CHECK_OFFER_EXISTS } from '../../../graphql/query/offer'
+import { CHECKMEETINGEXISTS } from '../../../graphql/query/meeting'
 
 const { Title, Text } = Typography;
 
@@ -19,6 +20,8 @@ const BusinessInfoCard = ({ data }) => {
   const navigate = useNavigate();
   const [createOffer, { loading: createOfferLoading }] = useMutation(CREATE_OFFER);
   const [hasExistingOffer, setHasExistingOffer] = useState(false);
+  const [existingMeeting, setExistingMeeting] = useState(false);
+  const [existingProceedToPay, setExistingProceedToPay] = useState(false);
   
   const { data: offerExistsData, refetch: refetchOfferExists } = useQuery(CHECK_OFFER_EXISTS, {
     variables: { 
@@ -26,16 +29,31 @@ const BusinessInfoCard = ({ data }) => {
       buyerId: userId 
     },
     skip: !userId || !data?.id,
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network', // Changed from 'network-only' to prevent infinite loops
+  });
+  
+  const { data: meetingExistsData, refetch: refetchMeetingExists } = useQuery(CHECKMEETINGEXISTS, {
+    variables: { 
+      businessId: data?.id,
+      buyerId: userId
+    },
+    skip: !userId || !data?.id,
+    fetchPolicy: 'cache-and-network', // Changed from 'network-only' to prevent infinite loops
   });
 
   useEffect(() => {
     if (offerExistsData?.checkOfferExists) {
-      setHasExistingOffer(offerExistsData.checkOfferExists);
+      setHasExistingOffer(offerExistsData.checkOfferExists.exists);
+      setExistingProceedToPay(offerExistsData.checkOfferExists.isProceedToPay);
     }
   }, [offerExistsData]);
 
-  
+  useEffect(() => {
+    if (meetingExistsData?.checkMeetingExists !== undefined) {
+      setExistingMeeting(meetingExistsData.checkMeetingExists);
+    }
+  }, [meetingExistsData]);
+
   const businessInfoData = [
     {
       id: 1,
@@ -94,10 +112,13 @@ const BusinessInfoCard = ({ data }) => {
 
       if (response?.createOffer?.id) {
         setProceedModal(false);
-        messageApi.success(t('Your purchase request has been sent tot the seller!'));
+        messageApi.success(t('Your purchase request has been sent to the seller!'));
+        // Refetch to update button states
+        refetchOfferExists();
       }
     } catch (error) {
       console.error('Error creating proceed to purchase offer:', error);
+      messageApi.error(t('Failed to send purchase request. Please try again.'));
     }
   };
 
@@ -139,18 +160,40 @@ const BusinessInfoCard = ({ data }) => {
                   aria-labelledby={t('Make an Offer')}
                   onClick={()=> handleAction(() => { setOfferMode("offer"); setOfferSeller(true); })}
                   disabled={hasExistingOffer}
+                  style={{ 
+                    opacity: hasExistingOffer ? 0.5 : 1,
+                    cursor: hasExistingOffer ? 'not-allowed' : 'pointer'
+                  }}
                 >
                   {hasExistingOffer ? t('Offer Already Submitted') : t('Make an Offer')}
                 </Button>
-                <Button aria-labelledby={t('Request Meeting')} className='btn bg-dark-blue' onClick={()=> handleAction(() => setMeetingModal(true))}>
-                  {t('Request Meeting')}
+                <Button 
+                  aria-labelledby={t('Request Meeting')} 
+                  disabled={existingMeeting} 
+                  className='btn bg-dark-blue' 
+                  onClick={()=> handleAction(() => setMeetingModal(true))}
+                  style={{ 
+                    opacity: existingMeeting ? 0.5 : 1,
+                    cursor: existingMeeting ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  {existingMeeting ? t('Meeting Already Requested') : t('Request Meeting')}
                 </Button>
                 <Button 
                   aria-labelledby={t('Proceed to Purchase')} 
                   className='btn bg-green text-white' 
                   onClick={handleProceedButtonClick}
+                  disabled={hasExistingOffer || existingProceedToPay}
+                  style={{ 
+                    opacity: (hasExistingOffer || existingProceedToPay) ? 0.5 : 1,
+                    cursor: (hasExistingOffer || existingProceedToPay) ? 'not-allowed' : 'pointer'
+                  }}
                 >
-                  {t('Proceed to Purchase')}
+                  {existingProceedToPay 
+                    ? t('Purchase Request Sent') 
+                    : hasExistingOffer 
+                    ? t('Offer Already Submitted') 
+                    : t('Proceed to Purchase')}
                 </Button>
               </Flex>
             </Col>
@@ -161,7 +204,10 @@ const BusinessInfoCard = ({ data }) => {
       <OfferSellerModal 
         businessId={data?.id}
         visible={offerseller}
-        onClose={()=>setOfferSeller(false)}
+        onClose={() => {
+          setOfferSeller(false);
+          refetchOfferExists(); // Refetch after closing modal to update button state
+        }}
         mode={offerMode}
         refetch={refetchOfferExists}
       />
@@ -175,7 +221,10 @@ const BusinessInfoCard = ({ data }) => {
       <RequestMeetingModal 
         businessId={data?.id}
         visible={meetingmodal}
-        onClose={()=>{setMeetingModal(false)}}
+        onClose={() => {
+          setMeetingModal(false);
+          refetchMeetingExists(); // Refetch to update meeting button state
+        }}
       />
     </>
   )
