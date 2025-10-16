@@ -125,9 +125,9 @@ query Query {
 }
 `
 const CHECKMEETINGEXISTS = gql`
-query Query($businessId: ID!, $buyerId: ID!) {
-  checkMeetingExists(businessId: $businessId, buyerId: $buyerId)
-}
+  query Query($businessId: ID!, $buyerId: ID!) {
+    checkMeetingExists(businessId: $businessId, buyerId: $buyerId)
+  }
 `
 export {
     SENTMEETINGS,

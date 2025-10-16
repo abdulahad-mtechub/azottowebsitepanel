@@ -221,10 +221,11 @@ const BusinessInfoCard = ({ data }) => {
       <RequestMeetingModal 
         businessId={data?.id}
         visible={meetingmodal}
+        onlyMeeting={true}
         onClose={() => {
           setMeetingModal(false);
-          refetchMeetingExists(); // Refetch to update meeting button state
         }}
+        refetch={refetchMeetingExists}
       />
     </>
   )

@@ -121,12 +121,14 @@ const BuyerOfferContent = () => {
             },
         },
         {
-            title: t('Status'), dataIndex: 'status',
+            title: t('Status'), 
+            dataIndex: 'status',
             render: (status, record) => {
                 if (status === 'PENDING') {
                   if (record.createdBy === userId) return <Text className="sendstatus fs-12 badge-cs fw-500">{t('Send')}</Text>;
                   return <Text className="sendstatus fs-12 badge-cs fw-500">{t('Received')}</Text>;
                 } else if (status === 'REJECTED') return <Text className="inactive fs-12 badge-cs fw-500">{t('Rejected')}</Text>;
+                else if (status === 'ACCEPTED') return <Text className="received fs-12 badge-cs fw-500">{t('Accepted')}</Text>;
                 else if (status === 'APPROVED') return <Text className="received fs-12 badge-cs fw-500">{t('Approved')}</Text>;
                 return <Text className="fs-12 badge-cs fw-500">{status}</Text>;
             },

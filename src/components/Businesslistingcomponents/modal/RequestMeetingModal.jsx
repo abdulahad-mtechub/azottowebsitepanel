@@ -9,7 +9,7 @@ import { CREATE_ENDA,BUSINESS_MEETING } from '../../../graphql'
 import { UPDATE_OFFER } from '../../../graphql/mutation/mutations';
 import Cookies from "js-cookie";
 
-const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
+const RequestMeetingModal = ({ businessId, visible, onClose, offerId, onlyMeeting, refetch }) => {
     const userId = Cookies.get("userId");
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
@@ -32,7 +32,7 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
         const allChecked = values.ndaAgree && values.termsAgree && values.commissionAgree;
         setAllTermsAgreed(allChecked);
     };
-
+    console.log("onlyMeeting", onlyMeeting);
     const steps = [
         {
             title: null,
@@ -76,94 +76,96 @@ const RequestMeetingModal = ({businessId,visible,onClose,offerId,refetch}) => {
 
     return (
         <Modal
-            title={null}
-            open={visible}
-            onCancel={onClose}
-            closeIcon={false}
-            footer={null}
-            width={600}
-        >  {contextHolder}
-            <div className="step-content mb-3">{steps[current].content}</div>
-            <Flex gap={10} justify='end'>
-                <Button aria-labelledby='Cancel' className='btn text-black border-gray' onClick={prev}>
-                  Cancel
-                </Button>
-                {current < steps.length - 1 && (
-                    <Button 
-                        type="primary" 
-                        aria-labelledby='Next' 
-                        className='btn bg-brand' 
-                        onClick={next}
-                        disabled={!allTermsAgreed}
-                    >
-                        Next
-                    </Button>
-                )}
-                {current === steps.length - 1 && (
-                    <Button type="primary" aria-labelledby='Send meeting request' className='btn bg-brand'
-                    onClick={async () => {
-                        try {
-                          const values = await form.validateFields();
+          title={null}
+          open={visible}
+          onCancel={onClose}
+          closeIcon={false}
+          footer={null}
+          width={600}
+          centered
+        >  
+        {contextHolder}
+          <div className="step-content mb-3">{steps[current].content}</div>
+          <Flex gap={10} justify='end'>
+              <Button aria-labelledby='Cancel' className='btn text-black border-gray' onClick={prev}>
+                Cancel
+              </Button>
+              {current < steps.length - 1 && (
+                  <Button 
+                      type="primary" 
+                      aria-labelledby='Next' 
+                      className='btn bg-brand' 
+                      onClick={next}
+                      disabled={!allTermsAgreed}
+                  >
+                      Next
+                  </Button>
+              )}
+              {current === steps.length - 1 && (
+                  <Button type="primary" aria-labelledby='Send meeting request' className='btn bg-brand'
+                  onClick={async () => {
+                      try {
+                        const values = await form.validateFields();
 
-                          const meetingDate = new Date(values.date?.toDate?.());
-                          const [startTime, endTime] = values.time || []; // array of dayjs
+                        const meetingDate = new Date(values.date?.toDate?.());
+                        const [startTime, endTime] = values.time || []; // array of dayjs
 
-                          // ✅ Combine Date + Time into single DateTime
-                          const combinedDateTime = new Date(
-                            meetingDate.getFullYear(),
-                            meetingDate.getMonth(),
-                            meetingDate.getDate(),
-                            new Date(startTime).getHours(),
-                            new Date(startTime).getMinutes(),
-                            0
-                          );
+                        // ✅ Combine Date + Time into single DateTime
+                        const combinedDateTime = new Date(
+                          meetingDate.getFullYear(),
+                          meetingDate.getMonth(),
+                          meetingDate.getDate(),
+                          new Date(startTime).getHours(),
+                          new Date(startTime).getMinutes(),
+                          0
+                        );
 
-                          // ✅ Combine Date + End Time
-                          const combinedEndDateTime = new Date(
-                            meetingDate.getFullYear(),
-                            meetingDate.getMonth(),
-                            meetingDate.getDate(),
-                            new Date(endTime).getHours(),
-                            new Date(endTime).getMinutes(),
-                            0
-                          );
-                  
-                          // ✅ Call both APIs together: Meeting Request + Offer Acceptance
-                          await Promise.all([
-                            businessMeeting({
-                              variables: {
-                                input: {
-                                  businessId,
-                                  offerId,
-                                  requestedDate: combinedDateTime.toISOString(),
-                                  requestedEndDate: combinedEndDateTime.toISOString(),
-                                },
+                        // ✅ Combine Date + End Time
+                        const combinedEndDateTime = new Date(
+                          meetingDate.getFullYear(),
+                          meetingDate.getMonth(),
+                          meetingDate.getDate(),
+                          new Date(endTime).getHours(),
+                          new Date(endTime).getMinutes(),
+                          0
+                        );
+                
+                        // ✅ Call both APIs together: Meeting Request + Offer Acceptance
+                        await Promise.all([
+                          businessMeeting({
+                            variables: {
+                              input: {
+                                businessId,
+                                offerId,
+                                requestedDate: combinedDateTime.toISOString(),
+                                requestedEndDate: combinedEndDateTime.toISOString(),
                               },
-                            }),
-                            // updateOffer({
-                            //   variables: {
-                            //     input: {
-                            //       id: offerId,
-                            //       status: "ACCEPTED"
-                            //     },
-                            //   },
-                            // })
-                          ]);
+                            },
+                          }),
+                          !onlyMeeting && updateOffer({
+                            variables: {
+                              input: {
+                                id: offerId,
+                                status: "ACCEPTED"
+                              },
+                            },
+                          })
+                        ]);
 
-                          messageApi.success("Jusoor E-NDA signed & meeting request sent successfully!");
-                          onClose();
-                          refetch && refetch();
-                        } catch (error) {
-                          console.error(error);
-                          messageApi.error("Failed to schedule meeting or accept offer.");
-                        }
-                      }}
-                      loading={loading}
-                    >
-                        Send Meeting Request
-                    </Button>
-                )}
-            </Flex>
+                        messageApi.success("Jusoor E-NDA signed & meeting request sent successfully!");
+                        onClose();
+                        refetch && refetch();
+                      } catch (error) {
+                        console.error(error);
+                        messageApi.error("Failed to schedule meeting or accept offer.");
+                      }
+                    }}
+                    loading={loading}
+                  >
+                      Send Meeting Request
+                  </Button>
+              )}
+          </Flex>
         </Modal>
     )
 }
