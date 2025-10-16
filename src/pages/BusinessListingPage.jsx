@@ -39,7 +39,8 @@ const BusinessListingPage = ({getcategory}) => {
     const [searchSelectedCity, setsearchSelectedCity] = useState([]);
     const [cityOptions, setCityOptions] = useState(null);
     const [selectedCategory, setSelectedCategory] = useState('');
-    
+    const [sortOrder, setSortOrder] = useState(null); // null by default
+
     // Clear selectedCategory when URL params change to Browse All
     useEffect(() => {
         if (!categoryParam && !getcategory) {
@@ -94,7 +95,6 @@ const BusinessListingPage = ({getcategory}) => {
     };
 
     const listingHeading = activeCategoryLabel || t('All Businesses');
-    const [selectfilter, setSelectFilter] = useState(options[1]);
 
     const [multipleStep, setMultipleStep] = useState(null);
     const [priceRange, setPriceRange] = useState([null, null]);
@@ -138,7 +138,7 @@ const BusinessListingPage = ({getcategory}) => {
             revenueRange: revenue || sanitizeRange(revenueRange),
             multiple: multipleStep !== null ? Number(multipleStep) : null,
           },
-          sort: { price: selectfilter === options[0] ? 'ASC' : 'DESC' },
+          sort: sortOrder !== null ? { price: sortOrder === 'Low to High' ? 'ASC' : 'DESC' } : null,
         };
     };
 
@@ -167,7 +167,7 @@ const BusinessListingPage = ({getcategory}) => {
         categoryParam, cityParam, profit, revenue, limit, currentPage,
         employeesRange, operationalYearRange, hasAssets,
         priceRange, profitRange, profitMargenRange, revenueRange,
-        multipleStep, selectfilter, selectedCategory,
+        multipleStep, sortOrder, selectedCategory,
     ]);
 
     const businessList =
@@ -304,11 +304,12 @@ const BusinessListingPage = ({getcategory}) => {
                             placeholder={t('Sorting')}
                             options={options.map(opt => ({ ...opt, name: t(opt.key) }))}
                             className='select'
-                            value={selectfilter}
+                            value={sortOrder}
+                            allowClear
                             onChange={(id) => {
-                                const selectedOption = options.find(opt => opt.id === id);
-                                setSelectFilter(selectedOption.key);
+                                setSortOrder(id === 1 ? 'Low to High' : id === 2 ? 'High to Low' : null);
                             }}
+                            style={{ minWidth: 120 }}
                         />
                     </Flex>
                 </Flex>
