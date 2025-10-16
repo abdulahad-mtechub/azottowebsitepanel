@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Checkbox, Col, Flex, Row, Typography, message } from 'antd';
 import { FINALIZE_DEAL } from '../../../graphql/mutation';
 import { useMutation } from '@apollo/client';
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 const { Text } = Typography;
 
 const SellerFinalDealsStep = ({ details }) => {
+    
     const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
     const [finalizDeal] = useMutation(FINALIZE_DEAL, {
@@ -48,7 +49,7 @@ const SellerFinalDealsStep = ({ details }) => {
 
     const dealBusiness = details?.busines?.documents || [];
     const uploadDocs = dealBusiness.length >= 4;
-    console.log("dealBusiness", dealBusiness, uploadDocs, details);
+
     return (
         <Row gutter={[16, 24]}>
             {contextHolder}

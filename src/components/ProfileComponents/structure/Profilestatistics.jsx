@@ -1,24 +1,32 @@
-import { Card, Row, Col, Typography, Flex, Button, Image } from 'antd';
+import { Card, Row, Col, Typography, Flex, Image, DatePicker } from 'antd';
 import { ModuleTopHeading } from '../../Pagecomponents';
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 
 const { Title, Text } = Typography;
+const { RangePicker } = DatePicker;
 
-const Profilestatistics = ({ data, title }) => {
+const Profilestatistics = ({ data, title, dateRange, onDateRangeChange }) => {
   const { t } = useTranslation();
+
+  // Default to current month if dateRange is not provided
+  const defaultDateRange = dateRange || [
+    moment().startOf('month'),
+    moment().endOf('month')
+  ];
 
   return (
     <Card className='rounded-12 border-gray'>
-      <Flex justify='space-between'>
+      <Flex justify='space-between' align='center'>
         <ModuleTopHeading level={4} name={t(title)} />
-        <Button aria-labelledby={t('Calendar icon')} type='button' className='bg-transparent border-gray'>
-          <img
-            src='/assets/icons/calendar.png'
-            alt={t('calendar-icon')}
-            width={20}
-            fetchPriority="high"
-          /> {t('01/02/2025 - 30/02/2025')}
-        </Button>
+        <RangePicker
+          value={defaultDateRange}
+          onChange={onDateRangeChange}
+          format='YYYY-MM-DD'
+          placeholder={[t('Start Date'), t('End Date')]}
+          className='w-auto'
+          defaultValue={[moment().startOf('month'), moment().endOf('month')]}
+        />
       </Flex>
       <Row gutter={[16, 16]} className='mt-2'>
         {data?.map((item, i) => (

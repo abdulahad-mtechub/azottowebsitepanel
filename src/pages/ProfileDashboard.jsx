@@ -16,9 +16,10 @@ import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepas
 import { useEffect, useState,useMemo } from 'react';
 import { selleralertsData } from '../data';
 import { NAVUSERDATA,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
-import { useLazyQuery,useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
+import moment from 'moment';
 
 const { Text, Title } = Typography;
 
@@ -56,25 +57,63 @@ const ProfileDashboard = () => {
     };
     const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
-    const [parentTab, setParentTab] = useState('Seller');
+    
+    // Initialize state from localStorage or use defaults
+    const getInitialParentTab = () => {
+        const saved = localStorage.getItem('profileParentTab');
+        return (saved === 'Seller' || saved === 'Buyer') ? saved : 'Seller';
+    };
+    
+    const getInitialChildTabs = () => {
+        const saved = localStorage.getItem('profileChildTabs');
+        if (saved) {
+            try {
+                const parsed = JSON.parse(saved);
+                // Validate that saved tabs exist in current structure
+                const isSellerValid = profiletabData.Seller.some(tab => 
+                    tab.key === parsed.Seller || tab.children?.some(child => child.key === parsed.Seller)
+                );
+                const isBuyerValid = profiletabData.Buyer.some(tab => 
+                    tab.key === parsed.Buyer || tab.children?.some(child => child.key === parsed.Buyer)
+                );
+                
+                if (isSellerValid && isBuyerValid) {
+                    return parsed;
+                }
+            } catch {
+                // Invalid JSON, fall through to defaults
+            }
+        }
+        return {
+            Seller: profiletabData.Seller?.[0]?.key || '',
+            Buyer: profiletabData.Buyer?.[0]?.key || '',
+        };
+    };
+    
+    // Get current month start and end dates
+    const getCurrentMonthRange = () => {
+        const startDate = moment().startOf('month').format('YYYY-MM-DD');
+        const endDate = moment().endOf('month').format('YYYY-MM-DD');
+        return [moment(startDate), moment(endDate)];
+    };
+
+    const [parentTab, setParentTab] = useState(getInitialParentTab);
     const [ addwalletvisible, setAddWalletVisible ] = useState(false)
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+    const [dateRange, setDateRange] = useState(getCurrentMonthRange);
     const [getUser, { data:me }] = useLazyQuery(NAVUSERDATA);
-    const { data: userStatsData } = useQuery(PROFESSIONALSTATISTICS);
+    const [getSellerStats, { data: userStatsData }] = useLazyQuery(PROFESSIONALSTATISTICS);
     const [getBuyerUser,{ data: buyerStatsData }] = useLazyQuery(GETBUYERSTATISTICS);
     const [user, setUser] = useState(null);
     const [visible, setVisible] = useState(false)
     const [isedit, setIsEdit] = useState(false)
-    const defaultChildTab = profiletabData[parentTab]?.[0]?.key || '';
-    const [activeChildTab, setActiveChildTab] = useState({
-        Seller: defaultChildTab,
-        Buyer: profiletabData['Buyer']?.[0]?.key || '',
-    });
+    const [activeChildTab, setActiveChildTab] = useState(getInitialChildTabs);
 
      useEffect(() => {
         if (userId) {
         getUser({ variables: { getNavUserId: userId } });
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userId]);
       
     useEffect(() => {
@@ -83,8 +122,31 @@ const ProfileDashboard = () => {
         }
     }, [me]);
 
+    // Fetch seller stats with date range
+    useEffect(() => {
+        if (dateRange && dateRange[0] && dateRange[1]) {
+            const startDate = dateRange[0].format('YYYY-MM-DD');
+            const endDate = dateRange[1].format('YYYY-MM-DD');
+            getSellerStats({ variables: { startDate, endDate } });
+        }
+    }, [dateRange, getSellerStats]);
+
+    // Save tabs to localStorage whenever they change
+    useEffect(() => {
+        localStorage.setItem('profileParentTab', parentTab);
+    }, [parentTab]);
+
+    useEffect(() => {
+        localStorage.setItem('profileChildTabs', JSON.stringify(activeChildTab));
+    }, [activeChildTab]);
+
     const handleParentChange = (value) => {
-        getBuyerUser()
+        // Fetch buyer stats with date range when switching to Buyer tab
+        if (value === 'Buyer' && dateRange && dateRange[0] && dateRange[1]) {
+            const startDate = dateRange[0].format('YYYY-MM-DD');
+            const endDate = dateRange[1].format('YYYY-MM-DD');
+            getBuyerUser({ variables: { startDate, endDate } });
+        }
         setParentTab(value);
         const firstTabKey = profiletabData[value]?.[0]?.key;
         if (firstTabKey) {
@@ -92,6 +154,21 @@ const ProfileDashboard = () => {
                 ...prev,
                 [value]: firstTabKey,
             }));
+        }
+    }
+
+    const handleDateRangeChange = (dates) => {
+        setDateRange(dates);
+        // Fetch appropriate stats based on current tab
+        if (dates && dates[0] && dates[1]) {
+            const startDate = dates[0].format('YYYY-MM-DD');
+            const endDate = dates[1].format('YYYY-MM-DD');
+            
+            if (parentTab === 'Seller') {
+                getSellerStats({ variables: { startDate, endDate } });
+            } else {
+                getBuyerUser({ variables: { startDate, endDate } });
+            }
         }
     }
     const buyerDashboardData = user ? [
@@ -126,18 +203,20 @@ const ProfileDashboard = () => {
             ...item,
             numbers: stats[item.key]?.toLocaleString() || '0',
         }));
-        }, [userStatsData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [userStatsData]);
     
     const buyerStatisticsData = useMemo(() => {
-        if (!buyerStatsData?.getProfileStatistics) return buyerStats.map(item => ({ ...item, numbers: '0' }));
+        if (!buyerStatsData?.getBuyerStatistics) return buyerStats.map(item => ({ ...item, numbers: '0' }));
         
-        const stats = buyerStatsData.getProfileStatistics;
+        const stats = buyerStatsData.getBuyerStatistics;
         
         return buyerStats.map(item => ({
             ...item,
             numbers: stats[item.key]?.toLocaleString() || '0',
         }));
-        }, [buyerStatsData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [buyerStatsData]);
           
       const tabContent = {
         Seller: {
@@ -155,7 +234,12 @@ const ProfileDashboard = () => {
                         </Flex>
                     </Flex>
                     <Basicinformation buyerDashboardData={buyerDashboardData} title={t('Basic Information')} />
-                    <Profilestatistics data={profileStatisticsData} title={t('Profile Statistics')} />
+                    <Profilestatistics 
+                        data={profileStatisticsData} 
+                        title={t('Profile Statistics')} 
+                        dateRange={dateRange}
+                        onDateRangeChange={handleDateRangeChange}
+                    />
                 </Flex>
             ),
             sellerBusiness: (
@@ -213,7 +297,12 @@ const ProfileDashboard = () => {
                         </Flex>
                     </Flex>
                     <Basicinformation buyerDashboardData={buyerDashboardData} title={'Basic Information'} />
-                    <Profilestatistics data={buyerStatisticsData} title={'Profile Statistics'} />
+                    <Profilestatistics 
+                        data={buyerStatisticsData} 
+                        title={'Profile Statistics'} 
+                        dateRange={dateRange}
+                        onDateRangeChange={handleDateRangeChange}
+                    />
                 </Flex>
             ),
             buyeroffers: (

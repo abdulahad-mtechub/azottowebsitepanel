@@ -72,12 +72,12 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
                                 setIsAccept(true);
                             }}
                         >
-                            {t('Accept Offer')}
+                            {t('Accept')}
                         </NavLink>, 
                         key: 0 
                     },
                     { 
-                        label: <NavLink onClick={() => setDeleteModal(true)}>{t('Reject Offer')}</NavLink>, 
+                        label: <NavLink onClick={() => setDeleteModal(true)}>{t('Reject')}</NavLink>, 
                         key: 1 
                     },
                 ].filter(Boolean);

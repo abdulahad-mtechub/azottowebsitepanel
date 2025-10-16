@@ -32,8 +32,8 @@ query GetNotifications($userId: ID!) {
 }
 `
 const PROFESSIONALSTATISTICS = gql`
-  query GetProfileStatistics {
-    getProfileStatistics {
+  query GetProfileStatistics($startDate: String, $endDate: String) {
+    getProfileStatistics(startDate: $startDate, endDate: $endDate) {
       finalizedDealsCount
       listedBusinessesCount
       pendingMeetingsCount
@@ -44,13 +44,13 @@ const PROFESSIONALSTATISTICS = gql`
   }
 `
 const GETBUYERSTATISTICS = gql`
-  query GetBuyerStatistics {
-  getBuyerStatistics {
-    finalizedDealsCount
-    scheduledMeetingsCount
-    favouriteBusinessesCount
+  query GetBuyerStatistics($startDate: String, $endDate: String) {
+    getBuyerStatistics(startDate: $startDate, endDate: $endDate) {
+      finalizedDealsCount
+      scheduledMeetingsCount
+      favouriteBusinessesCount
+    }
   }
-}
 `
 const GETSELLERBUSINESS = gql`
 query GetAllSellerBusinesses($limit: Int, $offSet: Int) {

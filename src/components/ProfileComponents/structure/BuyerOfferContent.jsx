@@ -53,29 +53,16 @@ const BuyerOfferContent = () => {
                 search: cleanedSearch || null,
                 limit: pagination.pageSize,
                 offSet: pagination.current - 1,
+                isProceedToPay: filtertype || null,
             },
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText]);
+    }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText, filtertype]);
 
     const offers = useMemo(() => data?.getOffersByUser?.offers || [], [data]);
     const totalCount = data?.getOffersByUser?.count || 0;
 
-    // Client-side filtering for offer type
-    const filteredOffers = useMemo(() => {
-        if (!offers || offers.length === 0) return [];
-        
-        return offers.filter(offer => {
-            // Type filter
-            if (filtertype) {
-                if (filtertype === 'counter' && offer.isProceedToPay) return false;
-                if (filtertype === 'proceed' && !offer.isProceedToPay) return false;
-            }
-            return true;
-        });
-    }, [offers, filtertype]);
-
-    const tableData = filteredOffers.map((offer) => ({
+    const tableData = offers?.map((offer) => ({
         key: offer.id,
         title: offer.business.businessTitle,
         sellername: offer.business.seller?.name
@@ -188,8 +175,8 @@ const BuyerOfferContent = () => {
     ];
 
     const offerTypeOptions = [
-        { id: 'counter', name: t('Counter Offer') },
-        { id: 'proceed', name: t('Proceed to Purchase') },
+        { id: false, name: t('Counter Offer') },
+        { id: true, name: t('Proceed to Purchase') },
     ];
 
     const handleTableChange = (paginationConfig) => {
@@ -206,11 +193,12 @@ const BuyerOfferContent = () => {
                 status: filterstatus || null,
                 search: cleanedSearch || null,
                 limit: pagination.pageSize,
-                offset: (pagination.current - 1) * pagination.pageSize,
+                offset: pagination.current - 1,
+                isProceedToPay: filtertype || null,
             },
         });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText]);
+    }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText, filtertype]);
 
     return (
         <>

@@ -98,6 +98,7 @@ query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
         id
         name
       }
+      status
       isDsaSeller
       business {
         id

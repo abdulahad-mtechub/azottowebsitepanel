@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { GETSELLERBUSINESS } from '../../../graphql/query';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { Singlebusinessview } from './Singlebusinessview';
 import { ModuleTopHeading } from '../../Pagecomponents';
 import { PlusOutlined } from '@ant-design/icons';
@@ -16,17 +16,17 @@ const Allbussines = () => {
     const { t } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
     const [singledetail, setSingleDetail] = useState(null);
-    const [limit, setLimit] = useState(10); 
-    const offset = (currentPage - 1) * limit;
+    const [limit, setLimit] = useState(10);
 
-    const { data: sellerBusinesses, loading, refetch } = useQuery(GETSELLERBUSINESS, {
-        variables: { limit, offset },
+    const [getSellerBusinesses, { data: sellerBusinesses, loading }] = useLazyQuery(GETSELLERBUSINESS, {
         fetchPolicy: 'network-only',
     });
 
+    // Fetch data whenever page or limit changes
     useEffect(() => {
-        refetch({ limit, offset });
-    }, [limit, offset]);
+        const offSet = (currentPage - 1) * limit;
+        getSellerBusinesses({ variables: { limit, offSet } });
+    }, [currentPage, limit, getSellerBusinesses]);
 
     if (loading) {
         return (
@@ -39,8 +39,6 @@ const Allbussines = () => {
     if (singledetail) {
         return <Singlebusinessview singledetail={singledetail} setSingleDetail={setSingleDetail} />;
     }
-
-    console.log('test 3', sellerBusinesses?.getAllSellerBusinesses?.businesses);
     return (
         <Flex gap={20} vertical>
             <Flex justify='space-between' align='center'>
@@ -130,7 +128,7 @@ const Allbussines = () => {
                                             value={limit}
                                             onChange={(value) => {
                                                 setLimit(value);
-                                                setCurrentPage(1);
+                                                setCurrentPage(1); // Reset to first page when limit changes
                                             }}
                                             options={[
                                                 { value: 6, label: 6 },
@@ -145,9 +143,12 @@ const Allbussines = () => {
                                     <Pagination
                                         className='pagination'
                                         align="end"
+                                        current={currentPage}
                                         pageSize={limit}
                                         total={sellerBusinesses?.getAllSellerBusinesses?.totalCount || 0}
                                         onChange={(page) => setCurrentPage(page)}
+                                        showSizeChanger={false}
+                                        showTotal={(total, range) => `${range[0]}-${range[1]} ${t('of')} ${total} ${t('items')}`}
                                     />
                                 </Col>
                             </Row>
