@@ -75,13 +75,22 @@ const BuyerOfferContent = () => {
         business: offer.business, 
         buyer: offer.buyer, 
         createdBy: offer.createdBy, 
-        isProceedToPay: offer.isProceedToPay
+        isProceedToPay: offer.isProceedToPay,
+        commission: offer.commission,
     }));
 
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
         { title: t('Seller Name'), dataIndex: 'sellername' },
-        { title: t('Business Price'), dataIndex: 'businessprice' },
+        { 
+            title: t('Business Price'),
+            dataIndex: 'businessprice',
+            render: (row) => (
+                <Flex gap={10} align="center">
+                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {row}
+                </Flex>
+            )
+         },
         { 
             title: t('Offer Price'), 
             dataIndex: 'offerprice',
@@ -99,6 +108,17 @@ const BuyerOfferContent = () => {
                     )}
                 </Flex>
             ) 
+        },
+        {
+            title: t('Commission'), dataIndex: 'commission',
+            render: (commission) => {
+                return (
+                    <Flex gap={10} align="center">
+                        <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" />
+                        <Text className=''>{commission || 0}</Text>
+                    </Flex>
+                );
+            },
         },
         {
             title: t('Status'), dataIndex: 'status',

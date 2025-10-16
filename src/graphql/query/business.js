@@ -280,6 +280,7 @@ const GET_BUYER_OFFER = gql`
         createdAt
         createdBy
         isProceedToPay
+        commission
         business {
           id
           businessTitle
