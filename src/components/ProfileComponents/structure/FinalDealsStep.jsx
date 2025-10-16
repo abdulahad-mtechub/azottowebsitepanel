@@ -98,7 +98,6 @@ const FinalDealsStep = ({ inprogressdeal }) => {
                           },
                         },
                       });
-                      console.log("Offer status updated");
                     } catch (err) {
                       console.error("Failed to update offer status", err);
                     }

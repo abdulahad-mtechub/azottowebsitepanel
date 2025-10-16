@@ -155,8 +155,8 @@ const SellBusinessCreate = () => {
             if (current < steps.length - 1) {
               setCurrent(current + 1);
             }
-          } catch (err) {
-            console.log("Validation failed:", err);
+          } catch {
+            //
           }
     };
 

@@ -222,6 +222,7 @@ query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: In
       status
       createdAt
       createdBy
+      commission
       isProceedToPay
       business {
         id

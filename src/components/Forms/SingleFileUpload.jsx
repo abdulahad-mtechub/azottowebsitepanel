@@ -82,7 +82,6 @@ const SingleFileUpload = ({ multiple = false, name, required, message, title, on
             }}
             fileList={fileList}
             onChange={handleChange}
-            onDrop={(e) => console.log('Dropped files', e.dataTransfer.files)}
             className='upload-d'
           >
             {fileList.length === 0 || multiple ? (

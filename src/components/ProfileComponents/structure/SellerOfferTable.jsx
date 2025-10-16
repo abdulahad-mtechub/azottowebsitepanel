@@ -40,7 +40,7 @@ const SellerOfferTable = ({ data }) => {
         fetchPolicy: 'network-only',
         skip: !data?.id,
     });
-
+    console.log('Offers Data:', offers);
     const handleAcceptOffer = async (offerId, businessId) => {
         setSelectedOfferId(offerId);
         setSelectedBusinessId(businessId);
@@ -232,6 +232,7 @@ const SellerOfferTable = ({ data }) => {
                 selectedOfferId={selectedOfferId}
                 onClose={() => setOfferModal(false)}
                 title={t('Counter Offer to Buyer')}
+                refetch={refetch}
             />
             <ScheduleMeeting
                 visible={meeting}

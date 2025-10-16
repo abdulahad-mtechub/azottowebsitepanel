@@ -75,7 +75,6 @@ const Navbar = ({setGetCategory}) => {
         ]
   },
   ]
-  console.log("selectedLang",selectedLang)
   const [getUser, { data:me, loading: userLoading }] = useLazyQuery(NAVUSERDATA);
   const [getNavNotification, { data:navNotificationsData, loading: navNotificationLoading }] = useLazyQuery(NAVNOTIFICATION);
   const [getNotification, { data:notificationsData, loading: notificationLoading }] = useLazyQuery(NOTIFICATION);

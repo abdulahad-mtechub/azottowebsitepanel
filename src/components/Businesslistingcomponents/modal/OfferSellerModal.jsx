@@ -41,9 +41,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
 
     const handleOfferAmountChange = (e) => {
         const raw = e?.target?.value;
-        console.log("raw:", raw);
         const offerAmount = parseFloat(String(raw).replace(/,/g, "")) || 0;
-        console.log(offerAmount, "offerAmount");
         let commission = 0;
 
         

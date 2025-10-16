@@ -70,7 +70,6 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
           useWebWorker: true,
         });
       }
-      console.log( "file", compressedFile)
 
       let fileToUpload = compressedFile;
 

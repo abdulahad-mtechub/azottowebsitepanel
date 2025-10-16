@@ -19,15 +19,12 @@ const ForgotPassword = () => {
 
     const forgotpass = () => {
         if (requestState === "request") {
-            console.log('Request send on email');
             setRequestState('otp');
         } 
         if (requestState === "otp") {
-            console.log('Otp receive by email');
             setRequestState('reset');
         }
         if (requestState === "reset") {
-            console.log('Now enter password and confirm password');
             setRequestState('request');
         }
     };
@@ -127,7 +124,7 @@ const ForgotPassword = () => {
                                         size='large'
                                         required
                                         message={() => {}}
-                                        validator={({ getFieldValue }) => ({
+                                        validator={() => ({
                                             validator: (_, value) => {
                                                 const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
                                                 if (!reg.test(value)) {

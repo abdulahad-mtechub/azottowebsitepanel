@@ -10,10 +10,9 @@ const { Text, Title } = Typography;
 const FaqsComponent = () => {
     const { t } = useTranslation();
     const [currentPanel, setCurrentPanel] = useState(['0']);
-    const { data, loading, error, refetch } = useLazyQuery(GETFAQ, {
+    const { data, loading } = useLazyQuery(GETFAQ, {
         variables: { search: "" },
     });
-console.log("data?.getFAQs?.faqs",data?.getFAQs?.faqs)
     const faqsData = data?.getFAQs?.faqs?.map(item => ({
         id: item.id,
         title: t(item.question),

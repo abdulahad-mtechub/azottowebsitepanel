@@ -138,7 +138,6 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   }
 
   const uiBusiness = mapBusinessPayloadToUI(business);
-  console.log('Mapped Business UI:', data);
   return (
     <div className='mb-2'>
       {contextHolder}
