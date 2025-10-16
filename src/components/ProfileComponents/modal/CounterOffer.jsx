@@ -81,6 +81,7 @@ const CounterOffer = ({ visible, onClose, selectedOfferId, title, refetch }) => 
           },
         },
       });
+      
 
       messageApi.success(t('Counter offer sent successfully!'));
       refetch();
