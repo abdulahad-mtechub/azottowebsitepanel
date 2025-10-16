@@ -70,9 +70,8 @@ const CounterOffer = ({ visible, onClose, selectedOfferId, title, refetch }) => 
 
   const handleSubmit = async () => {
     try {
-      const values = form.validateFields();
+      const values = form.getFieldsValue();
       const offerAmount = parseFloat(values.offeramount);
-
       await counterOffer({
         variables: {
           input: {
@@ -81,8 +80,6 @@ const CounterOffer = ({ visible, onClose, selectedOfferId, title, refetch }) => 
           },
         },
       });
-      
-
       messageApi.success(t('Counter offer sent successfully!'));
       refetch();
       onClose();
