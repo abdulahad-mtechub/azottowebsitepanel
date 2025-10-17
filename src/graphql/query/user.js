@@ -14,22 +14,22 @@ const ME = gql`
 `
 
 const NOTIFICATION = gql`
-query GetNotifications($userId: ID!) {
-  getNotifications(userId: $userId) {
-    count
-    notifications {
-      id
-      createdAt
-      isRead
-      name
-      message
-      user {
+  query GetNotifications($userId: ID!, $limit: Int, $offSet: Int) {
+    getNotifications(userId: $userId, limit: $limit, offSet: $offSet) {
+      count
+      notifications {
         id
+        createdAt
+        isRead
         name
+        message
+        user {
+          id
+          name
+        }
       }
     }
   }
-}
 `
 const PROFESSIONALSTATISTICS = gql`
   query GetProfileStatistics($startDate: String, $endDate: String) {

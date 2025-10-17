@@ -29,7 +29,11 @@ const Navbar = ({setGetCategory}) => {
   const [ visible, setVisible ] = useState(false)
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [visibleCount, setVisibleCount] = useState(5);
+  const NOTIFICATIONS_PAGE_SIZE = 10;
+  const notificationOffsetRef = useRef(0);
+  const [hasMoreNotifications, setHasMoreNotifications] = useState(true);
+  const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
+  const loadingNotificationsRef = useRef(false);
   const [hasMarkedRead, setHasMarkedRead] = useState(false);
   const listContainerRef = useRef(null);
   const location = useLocation();
@@ -75,17 +79,75 @@ const Navbar = ({setGetCategory}) => {
         ]
   },
   ]
-  const [getUser, { data:me, loading: userLoading }] = useLazyQuery(NAVUSERDATA);
-  const [getNavNotification, { data:navNotificationsData, loading: navNotificationLoading }] = useLazyQuery(NAVNOTIFICATION);
-  const [getNotification, { data:notificationsData, loading: notificationLoading }] = useLazyQuery(NOTIFICATION);
+  const [getUser, { data:me }] = useLazyQuery(NAVUSERDATA);
+  const [getNavNotification, { data:navNotificationsData }] = useLazyQuery(NAVNOTIFICATION);
+  const [getNotification] = useLazyQuery(NOTIFICATION);
+  
+  const loadNotifications = useCallback(async (reset = false) => {
+    if (!userId || loadingNotificationsRef.current) {
+      return;
+    }
+
+    const nextOffset = reset ? 0 : notificationOffsetRef.current;
+    loadingNotificationsRef.current = true;
+    setIsLoadingNotifications(true);
+
+    try {
+      const { data } = await getNotification({
+        variables: {
+          userId,
+          limit: NOTIFICATIONS_PAGE_SIZE,
+          offSet: nextOffset,
+        },
+        fetchPolicy: 'network-only',
+      });
+
+      const payload = data?.getNotifications;
+      if (!payload) {
+        setHasMoreNotifications(false);
+        return;
+      }
+
+      const fetchedNotifications = payload.notifications ?? [];
+
+      setNotifications((prev) => {
+        const base = reset ? [] : prev;
+        const merged = [...base];
+        fetchedNotifications.forEach((item) => {
+          if (!merged.some((existing) => existing.id === item.id)) {
+            merged.push(item);
+          }
+        });
+        return merged;
+      });
+
+      notificationOffsetRef.current = nextOffset + fetchedNotifications.length;
+      setHasMoreNotifications(fetchedNotifications.length === NOTIFICATIONS_PAGE_SIZE);
+
+      if (reset && listContainerRef.current) {
+        listContainerRef.current.scrollTop = 0;
+      }
+    } catch (error) {
+      // Optional: log error for debugging
+      console.error('Failed to load notifications', error);
+    } finally {
+      loadingNotificationsRef.current = false;
+      setIsLoadingNotifications(false);
+    }
+  }, [userId, getNotification, NOTIFICATIONS_PAGE_SIZE]);
+
   const [markNotificationAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
-  const isUserPending = userLoading && !user;
-  const canDisplayNotifications = isshow && !isUserPending;
   useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
     onSubscriptionData: ({ subscriptionData }) => {
         const newNotif = subscriptionData.data?.newNotification;
         if (newNotif) {
-            setNotifications((prev) => [newNotif, ...prev]);
+            setNotifications((prev) => {
+              if (prev.some((item) => item.id === newNotif.id)) {
+                return prev;
+              }
+              notificationOffsetRef.current += 1;
+              return [newNotif, ...prev];
+            });
             setUnreadCount((prev) => prev + 1);
             if (dropdownOpen) {
               setHasMarkedRead(false);
@@ -102,6 +164,7 @@ const Navbar = ({setGetCategory}) => {
         : { key: "1", label: "EN", icon: "assets/icons/en.webp" ,alt: "English Language logo"}
     );
   }, [i18n]);
+
   useEffect(() => {
     if (userId) {
       getUser({ variables: { getNavUserId: userId } });
@@ -123,38 +186,17 @@ const Navbar = ({setGetCategory}) => {
   }, [navNotificationsData]);
 
   useEffect(() => {
-    const payload = notificationsData?.getNotifications;
-    if (!payload) {
-      return;
-    }
-
-    const nextNotifications = payload.notifications ?? [];
-    setNotifications(nextNotifications);
-    setVisibleCount(nextNotifications.length > 5 ? 5 : nextNotifications.length);
-
-    if (typeof payload.count === 'number') {
-      setUnreadCount(payload.count);
-    }
-
-    if (listContainerRef.current) {
-      listContainerRef.current.scrollTop = 0;
-    }
-  }, [notificationsData]);
-
-  useEffect(() => {
     if (!dropdownOpen) {
       setHasMarkedRead(false);
     }
   }, [dropdownOpen]);
 
   useEffect(() => {
-    const payload = notificationsData?.getNotifications;
-    if (!dropdownOpen || hasMarkedRead || !payload || !userId) {
+    if (!dropdownOpen || hasMarkedRead || !userId) {
       return;
     }
 
-    const unread = payload.count ?? 0;
-    if (unread === 0) {
+    if (unreadCount === 0) {
       setHasMarkedRead(true);
       return;
     }
@@ -170,7 +212,7 @@ const Navbar = ({setGetCategory}) => {
       })
       .catch(() => {})
       .finally(() => setHasMarkedRead(true));
-  }, [dropdownOpen, hasMarkedRead, notificationsData, markNotificationAsRead, userId, getNavNotification]);
+  }, [dropdownOpen, hasMarkedRead, unreadCount, markNotificationAsRead, userId, getNavNotification]);
 
   const renderSubdropdownItems = (items) => {
     if (items.length <= 6) {
@@ -321,21 +363,13 @@ const Navbar = ({setGetCategory}) => {
 const handleDropdownChange = (open) => {
   setDropdownOpen(open);
   if (open) {
-  setVisibleCount(() => {
-      if (!notifications.length) {
-        return 0;
-      }
-      return Math.min(5, notifications.length);
-    });
     setHasMarkedRead(false);
-    if (listContainerRef.current) {
-      listContainerRef.current.scrollTop = 0;
-    }
     if (userId) {
-      getNotification({
-        variables: { userId },
-        fetchPolicy: "network-only"
-      });
+      notificationOffsetRef.current = 0;
+      setNotifications([]);
+      setHasMoreNotifications(true);
+      loadNotifications(true);
+      getNavNotification();
     }
   } else {
     setHasMarkedRead(false);
@@ -344,29 +378,26 @@ const handleDropdownChange = (open) => {
 
 const handleListScroll = useCallback((event) => {
   const { scrollTop, scrollHeight, clientHeight } = event.currentTarget;
-  if (scrollHeight - scrollTop - clientHeight <= 16) {
-    setVisibleCount((prev) => {
-      if (prev >= notifications.length) {
-        return prev;
-      }
-      return Math.min(prev + 5, notifications.length);
-    });
+  const isNearBottom = scrollHeight - scrollTop - clientHeight <= 16;
+  if (isNearBottom && hasMoreNotifications && !loadingNotificationsRef.current) {
+    loadNotifications();
   }
-}, [notifications.length]);
-
-const isNotificationsLoading = notificationLoading || navNotificationLoading;
+}, [hasMoreNotifications, loadNotifications]);
 
 const dropdownContent = useMemo(() => {
   const data = notifications;
-  const displayedNotifications = data.slice(0, visibleCount);
-  const isScrollable = data.length > 5;
-
+  const isScrollable = data.length >= NOTIFICATIONS_PAGE_SIZE;
+  const showInitialLoader = dropdownOpen && data.length === 0 && isLoadingNotifications;
+  const showLoadMoreSpinner = dropdownOpen && data.length > 0 && isLoadingNotifications && hasMoreNotifications;
+  console.log("data...", data)
   return (
-    <Card className="rounded-12 card-cs size-notify">
+    <Card className="rounded-12 card-cs size-notify border-0">
       <Text>Notification ({unreadCount})</Text>
       <Divider className="bg-divider my-2" />
-      {isNotificationsLoading ? (
-        <Text>Loading...</Text>
+      {showInitialLoader ? (
+        <Flex align="center" justify="center" style={{ minHeight: 120 }}>
+          <Spin size="small" />
+        </Flex>
       ) : data.length > 0 ? (
         <div
           ref={listContainerRef}
@@ -380,7 +411,7 @@ const dropdownContent = useMemo(() => {
         >
           <List
             itemLayout="horizontal"
-            dataSource={displayedNotifications}
+            dataSource={data}
             className="overflow-scroll"
             renderItem={(item, index) => {
               const createdAtMoment = item?.createdAt ? moment(item.createdAt) : null;
@@ -429,13 +460,18 @@ const dropdownContent = useMemo(() => {
               );
             }}
           />
+          {showLoadMoreSpinner && (
+            <Flex justify="center" className="mt-2">
+              <Spin size="small" />
+            </Flex>
+          )}
         </div>
       ) : (
         <Text className="fs-13 text-gray">No notifications yet.</Text>
       )}
     </Card>
   );
-}, [notifications, visibleCount, unreadCount, isNotificationsLoading, handleListScroll, t]);
+}, [notifications, unreadCount, dropdownOpen, isLoadingNotifications, hasMoreNotifications, handleListScroll, t, NOTIFICATIONS_PAGE_SIZE]);
 
 useEffect(() => {
   if (!dropdownOpen) {
@@ -499,28 +535,25 @@ useEffect(() => {
                   <Button className='bg-transparent border-0 p-0' onClick={()=> setVisible(true)}>
                     <img src='/assets/icons/menu-icon.png' alt='hamburger icon' width={30} fetchPriority="high" />
                   </Button>
-                  {isshow && isUserPending && <Spin size="small" />}
-                  {canDisplayNotifications && (
-                    <Popover
-                      content={dropdownContent}
-                      trigger="click"
-                      placement="bottomLeft"
-                      open={dropdownOpen}
-                      onOpenChange={handleDropdownChange}
-                    >
-                      <Badge size="small" count={unreadCount} overflowCount={99}>
-                        <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
-                          <Image
-                            src="/assets/icons/notification.png"
-                            width={"28px"}
-                            preview={false}
-                            alt="notification icon"
-                            className="up"
-                          />
-                        </Button>
-                      </Badge>
-                    </Popover>
-                  )}
+                  <Popover
+                    content={dropdownContent}
+                    trigger="click"
+                    placement="bottomLeft"
+                    open={dropdownOpen}
+                    onOpenChange={handleDropdownChange}
+                  >
+                    <Badge size="small" count={unreadCount} overflowCount={99}>
+                      <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
+                        <Image
+                          src="/assets/icons/notification.png"
+                          width={"28px"}
+                          preview={false}
+                          alt="notification icon"
+                          className="up"
+                        />
+                      </Button>
+                    </Badge>
+                  </Popover>
                 </Flex>
               </div>
             </div>
@@ -673,31 +706,26 @@ useEffect(() => {
                   <PlusOutlined /> {t("Sell a Business")}
                 </Button>
               
-                
-                {isUserPending ? (
-                  <Spin size="small" />
-                ) : (
-                  <Popover
-                    content={dropdownContent}
-                    trigger="click"
-                    placement="bottom"
-                    open={dropdownOpen}
-                    onOpenChange={handleDropdownChange}
-                    overlayClassName="notification-popover"
-                  >
-                    <Badge size="small" count={unreadCount} overflowCount={99}>
-                      <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
-                        <Image 
-                          src='/assets/icons/notification.png' 
-                          width={'28px'} 
-                          preview={false}
-                          alt="notification icon" 
-                          className="up"
-                        />
-                      </Button>
-                    </Badge>
-                  </Popover>
-                )}
+                <Popover
+                  content={dropdownContent}
+                  trigger="click"
+                  placement="bottomLeft"
+                  open={dropdownOpen}
+                  onOpenChange={handleDropdownChange}
+                  overlayClassName="notification-popover"
+                >
+                  <Badge size="small" count={unreadCount} overflowCount={99}>
+                    <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>
+                      <Image 
+                        src='/assets/icons/notification.png' 
+                        width={'28px'} 
+                        preview={false}
+                        alt="notification icon" 
+                        className="up"
+                      />
+                    </Button>
+                  </Badge>
+                </Popover>
 
               <Dropdown menu={{ items }} trigger={['click']}>
                 <Flex align='center' gap={10}>
