@@ -1,5 +1,5 @@
 import { useState,useRef, useEffect } from 'react';
-import { Breadcrumb, Flex, Typography, Steps, Button, message } from 'antd';
+import { Breadcrumb, Flex, Typography, Steps, Button, message, Tooltip } from 'antd';
 import { CheckOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { BusinessDetailStep, BusinesslistingReviewModal, BusinessVisionStep, CancelModal, FinancialInfoStep, UploadSupportDocStep } from '../components';
@@ -180,7 +180,41 @@ const SellBusinessCreate = () => {
         ),
     }));
 
+    // Check if CR document and support documents are uploaded for last step
+    const isCRDocumentUploaded = () => {
+        const docs = Array.isArray(businessData?.documents) ? businessData.documents : [];
+        const crDoc = docs.find(d => d.title === 'Commercial Registration (CR)' && d.filePath);
+        return !!crDoc;
+    };
+
+    const isSupportDocumentUploaded = () => {
+        const docs = Array.isArray(businessData?.documents) ? businessData.documents : [];
+        const supportDocs = docs.filter(d => d.title === 'Supporting Document' && d.filePath);
+        return supportDocs.length > 0;
+    };
+
+    const areRequiredDocumentsUploaded = () => {
+        return isCRDocumentUploaded() && isSupportDocumentUploaded();
+    };
+
+    // Determine if user can publish (on last step with all required documents uploaded)
+    const canPublish = current === steps.length - 1 && areRequiredDocumentsUploaded();
+    const showNextButton = current === steps.length - 1 && !areRequiredDocumentsUploaded();
+
     const handleCreateListing = async () => {
+        // Validate current step (last step) before publishing
+        try {
+            if (businessDetailFormRef.current) {
+                await businessDetailFormRef.current.validate();
+            }
+        } catch (error) {
+            console.error('Validation failed:', error);
+            // Error message already shown by the validation function
+            // Just scroll to top to show the error
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            return;
+        }
+
         // eslint-disable-next-line no-unused-vars
         const { categoryName, recoveryTime, ...rest } = businessData;
         try {
@@ -405,7 +439,14 @@ const SellBusinessCreate = () => {
                                         {t('Next')}
                                     </Button>
                                 )}
-                                {current === steps.length - 1 && (
+                                {showNextButton && (
+                                    <Tooltip title={t('Upload all required documents to continue')}>
+                                    <Button type="primary" className='btn bg-brand' onClick={next} disabled>
+                                        {t('Next')}
+                                    </Button>
+                                    </Tooltip>
+                                )}
+                                {canPublish && (
                                     <Button type="primary" disabled={loading || editDataLoading} loading={loading} className='btn bg-brand' onClick={handleCreateListing}>
                                         {editBusinessId ? t('Update Business') : t('Publish')}
                                     </Button>

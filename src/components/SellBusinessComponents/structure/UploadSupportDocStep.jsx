@@ -8,15 +8,25 @@ const { Title, Text } = Typography
 
 const UploadSupportDocStep = ({ data, setData },ref) => {
 
-  React.useImperativeHandle(ref, () => ({
-    validate: () => form.validateFields(),
-  }));
-
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm();
-  const [uploading, setUploading] = useState(false);
+  const [uploadingCR, setUploadingCR] = useState(false);
+  const [uploadingSupport, setUploadingSupport] = useState(false);
   const [initialCrList, setInitialCrList] = useState([]);
   const [initialSupportList, setInitialSupportList] = useState([]);
+
+  React.useImperativeHandle(ref, () => ({
+    validate: async () => {
+      // Just validate form fields, CR check is done in parent
+      try {
+        await form.validateFields();
+      } catch (err) {
+        console.error('Form validation failed:', err);
+        throw err;
+      }
+      return true;
+    },
+  }));
   const docToUploadItem = (doc, idx) => ({
     uid: doc.serverId || `doc-${idx}-${Date.now()}`,
     name: doc.fileName || (doc.filePath ? doc.filePath.split("/").pop() : `file-${idx}`),
@@ -59,7 +69,6 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
   }, [data?.documents, form]);
 
   const uploadFileToServer = async (file) => {
-    setUploading(true);
     try {
       let compressedFile = file;
 
@@ -96,21 +105,21 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
 
       if (!res.ok) throw new Error('Upload failed');
 
-  const data = await res.json();
+      const data = await res.json();
       return {
         fileName: data.fileName,
         fileType: data.fileType,
         filePath: data.fileUrl,
+        size: file.size,
       };
     } catch (err) {
       console.error(err);
       throw err;
-    } finally {
-      setUploading(false);
     }
   };
 
 const handleSingleFileUpload = async (fileOrFiles) => {
+  setUploadingCR(true);
   try {
     const file = fileOrFiles;
     const fileInfo = await uploadFileToServer(file);
@@ -131,8 +140,12 @@ const handleSingleFileUpload = async (fileOrFiles) => {
     setInitialCrList([docToUploadItem(crDocument, 0)]);
     
     form.setFieldsValue({ uploadcr: [crDocument] });
+    messageApi.success('Commercial Registration uploaded successfully');
   } catch (err) {
     console.error('handleSingleFileUpload error:', err);
+    messageApi.error('Failed to upload Commercial Registration');
+  } finally {
+    setUploadingCR(false);
   }
 };
 
@@ -155,17 +168,22 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
   const normalized = Array.isArray(fileOrFiles) ? fileOrFiles : normalizeFiles(fileOrFiles);
   if (!normalized || normalized.length === 0) return;
 
+  setUploadingSupport(true);
+  
   try {
-    const uploadedFiles = await Promise.all(
-      normalized.map((file) =>
-        uploadFileToServer(file).catch((err) => {
-          console.error('One file failed to upload:', file.name, err);
-          return null;
-        })
-      )
-    );
+    const uploadPromises = normalized.map(async (file) => {
+      try {
+        return await uploadFileToServer(file);
+      } catch (err) {
+        console.error('One file failed to upload:', file.name, err);
+        messageApi.error(`Failed to upload ${file.name}`);
+        return null;
+      }
+    });
 
+    const uploadedFiles = await Promise.all(uploadPromises);
     const successful = uploadedFiles.filter(Boolean);
+    
     if (successful.length === 0) {
       messageApi.warn('No files uploaded successfully');
       return;
@@ -181,7 +199,7 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
 
     const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
     const crDoc = existingDocs.find(d => d.title === 'Commercial Registration (CR)');
-    const existingSupportDocs = existingDocs.filter(d => d.title !== 'Commercial Registration (CR)');
+    const existingSupportDocs = existingDocs.filter(d => d.title === 'Supporting Document');
     
     // Merge existing support docs with new ones
     const allSupportDocs = [...existingSupportDocs, ...newSupportDocs];
@@ -196,9 +214,13 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
     
     // Update form field
     form.setFieldsValue({ uploadmult: allSupportDocs });
-
+    
+    messageApi.success(`${successful.length} file(s) uploaded successfully`);
   } catch (err) {
     console.error('handleMultipleFileUpload error:', err);
+    messageApi.error('Failed to upload supporting documents');
+  } finally {
+    setUploadingSupport(false);
   }
 };
 
@@ -250,9 +272,12 @@ const handleMultipleFileRemove = (removedFile) => {
         <Card className="shadow-d radius-12 border-gray mb-3">
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
-              <Title level={5} className="m-0 fw-500">
-                Commercial Registration (CR)
-              </Title>
+              <Flex align='center' gap={5}>
+                <Title level={5} className="m-0 fw-500">
+                  Commercial Registration (CR)
+                </Title>
+                <Text type='danger' className='fw-500'>*</Text>
+              </Flex>
               <Text className="text-gray">
                 Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file.
               </Text>
@@ -263,8 +288,10 @@ const handleMultipleFileRemove = (removedFile) => {
                 title={'Upload'}
                 onUpload={handleSingleFileUpload}
                 onRemove={handleSingleFileRemove}
-                uploading={uploading}
+                uploading={uploadingCR}
                 multiple={false}
+                required={true}
+                message={'Please upload Commercial Registration (CR)'}
                 initialFileList={initialCrList}
               />
             </Flex>
@@ -290,7 +317,7 @@ const handleMultipleFileRemove = (removedFile) => {
                 title={'Upload'}
                 onUpload={handleMultipleFileUpload}
                 onRemove={handleMultipleFileRemove}
-                uploading={uploading}
+                uploading={uploadingSupport}
                 multiple={true}
                 initialFileList={initialSupportList}
               />

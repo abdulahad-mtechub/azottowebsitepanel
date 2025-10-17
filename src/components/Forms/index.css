@@ -66,3 +66,18 @@
 .custom-select {
   margin-bottom: 12px !important;
 }
+
+/* Upload error state styles */
+.upload-error .ant-upload-drag {
+  border-color: #ff4d4f !important;
+  background-color: #fff2f0 !important;
+}
+
+.upload-error .ant-upload-drag:hover {
+  border-color: #ff7875 !important;
+}
+
+.ant-form-item-has-error .upload-d .ant-upload-drag {
+  border-color: #ff4d4f !important;
+  background-color: #fff2f0 !important;
+}
