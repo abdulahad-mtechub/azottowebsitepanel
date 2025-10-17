@@ -300,8 +300,7 @@ const BusinessListingPage = ({getcategory}) => {
                         </Button>
                         <MySelect 
                             withoutForm
-                            showSearch
-                            placeholder={t('Sorting')}
+                            placeholder={t('Sort By')}
                             options={options.map(opt => ({ ...opt, name: t(opt.key) }))}
                             className='select'
                             value={sortOrder}
