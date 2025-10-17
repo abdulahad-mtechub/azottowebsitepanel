@@ -15,26 +15,19 @@ const BuyerDeals = () => {
     const [ inprogressdeal, setInprogressDeal ] = useState()
     const [ completedeal, setCompleteDeal ] = useState()
 
-    const singleTab = useMemo(() => [
+   const singleTab = useMemo(() => [
         {
             key: '1',
             label: t('In-Progress Deals'),
-            children: (
-                <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                    <InprogressDealsTable setInprogressDeal={setInprogressDeal} />
-                </Suspense>
-            )
+            // no Suspense here — just the component
+            children: <InprogressDealsTable setInprogressDeal={setInprogressDeal} />
         },
         {
             key: '2',
             label: t('Completed Deals'),
-            children: (
-                <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-                    <CompleteDealsTable setCompleteDeal={setCompleteDeal} />
-                </Suspense>
-            )
+            children: <CompleteDealsTable setCompleteDeal={setCompleteDeal} />
         },
-    ], [setCompleteDeal, setInprogressDeal, t])
+    ], [t])
 
     if (inprogressdeal && !completedeal) {
         return (

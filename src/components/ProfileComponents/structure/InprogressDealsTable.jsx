@@ -6,7 +6,7 @@ import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const InprogressDealsTable = ({ setInprogressDeal }) => {
-  
+
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [pagination, setPagination] = useState({
@@ -116,13 +116,7 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
   }, [offerDeals]);
 
   const totalCount = offerDeals?.getBuyerInprogressDeals?.totalCount || 0;
-  if (loading) {
-    return (
-        <Flex justify="center" align="center" className='h-200'>
-            <Spin size="large" />
-        </Flex>
-    );
-}
+  
   return (
     <>
       <Row gutter={[24, 12]} className='mt-2'>

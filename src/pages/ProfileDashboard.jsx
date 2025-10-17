@@ -14,7 +14,6 @@ import { ArrowLeftOutlined, PlusOutlined, RightOutlined } from '@ant-design/icon
 import { useNavigate } from 'react-router-dom';
 import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
 import { useEffect, useState,useMemo } from 'react';
-import { selleralertsData } from '../data';
 import { NAVUSERDATA,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
@@ -267,7 +266,7 @@ const ProfileDashboard = () => {
             selleralert: (
                 <Flex vertical gap={20}>
                     <ModuleTopHeading level={4} name={t('Alerts')} />
-                    <SellerAlerts data={selleralertsData} />
+                    <SellerAlerts />
                 </Flex>
             ),
             sellerwallet: (
@@ -334,7 +333,7 @@ const ProfileDashboard = () => {
                 <>
                     <Flex vertical gap={20}>
                         <ModuleTopHeading level={4} name={t('Alerts')} />
-                        <SellerAlerts data={selleralertsData} />
+                        <SellerAlerts />
                     </Flex>
                 </>
             ),

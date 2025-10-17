@@ -127,27 +127,29 @@ query GetAllSellerSoldBusinesses($limit: Int, $offSet: Int) {
 }
 `
 const GETFAVORITBUSINESS = gql`
-query GetFavoritBusiness($limit: Int, $offSet: Int) {
-  getFavoritBusiness(limit: $limit, offSet: $offSet) {
-    businesses {
-      id
-      category {
-      name
-    }
-    offerCount
-    isByTakbeer
-    businessTitle
-    description
-    revenue
-    profit
-    price
-    capitalRecovery
-    savedBy {
-      id
-    }
+  query GetFavoritBusiness($limit: Int, $offSet: Int) {
+    getFavoritBusiness(limit: $limit, offSet: $offSet) {
+      businesses {
+        id
+        category {
+          name
+        }
+      businessStatus
+      offerCount
+      isByTakbeer
+      businessTitle
+      description
+      revenue
+      profit
+      price
+      capitalRecovery
+      savedBy {
+        id
+      }
+      }
+      totalCount
     }
   }
-}
 `
 
 const GETADMINBANK = gql`

@@ -65,13 +65,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     }, [offerDeals]);
 
     const totalCount = offerDeals?.getBuyerCompletedDeals?.totalCount || 0;
-    if (loading) {
-        return (
-            <Flex justify="center" align="center" className='h-200'>
-                <Spin size="large" />
-            </Flex>
-        );
-    }
+    
     return (
         <>    
             <Row gutter={[24,12]} className='mt-2'>
