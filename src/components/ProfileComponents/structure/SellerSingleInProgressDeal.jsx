@@ -115,7 +115,7 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
                             title: <Text className='fs-13 text-gray cursor' onClick={() => setInprogressDeal(null)}>{t('Deals')}</Text>,
                         },
                         {
-                            title: <Text className='fw-500 fs-13 text-black'>{deal?.business?.businessTitle}</Text>,
+                            title: <Text className='fw-500 fs-13 text-black'>{deal?.businessTitle}</Text>,
                         },
                     ]}
                 />
@@ -125,7 +125,7 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
                     <ArrowLeftOutlined />
                 </Button>
                 <Title level={4} className='m-0'>
-                    {deal?.business?.businessTitle}
+                    {deal?.businessTitle}
                 </Title>
             </Flex>
             <Card className='radius-12 border-gray'>
