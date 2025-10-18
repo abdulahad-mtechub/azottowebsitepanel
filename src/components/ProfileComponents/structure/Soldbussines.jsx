@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client';
 import { GETSELLERSOLDBUSINESS } from '../../../graphql/query';
 import { useTranslation } from 'react-i18next';
 
@@ -11,22 +11,30 @@ const Soldbussines = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
-    const [limit, setLimit] = useState(10); // default limit
-    const offset = (currentPage - 1) * limit;
+    const [limit, setLimit] = useState(10);
 
-    const { data: sellerSoldBusinesses, loading, error, refetch } = useQuery(GETSELLERSOLDBUSINESS, {
-        variables: { limit, offset },
+    const [getSellerSoldBusinesses, { data: sellerSoldBusinesses, loading, error }] = useLazyQuery(GETSELLERSOLDBUSINESS, {
         fetchPolicy: 'network-only',
     });
 
     useEffect(() => {
-        refetch({ limit, offset });
-    }, [limit, offset]);
+        const offSet = (currentPage - 1) * limit;
+        getSellerSoldBusinesses({ variables: { limit, offSet } });
+    }, [currentPage, limit, getSellerSoldBusinesses]);
 
     return (
         <Card className='border-gray'>
-            <Row gutter={[16, 16]}>
-                {sellerSoldBusinesses?.getAllSellerBusinesses?.businesses?.map((pro, i) => (
+            {loading ? (
+                <Flex justify="center" align="center" style={{ minHeight: '300px' }}>
+                    <Spin size="large" />
+                </Flex>
+            ) : error ? (
+                <Flex justify="center" align="center" style={{ minHeight: '300px' }}>
+                    <Text type="danger">{t('Error loading sold businesses')}: {error.message}</Text>
+                </Flex>
+            ) : (
+                <Row gutter={[16, 16]}>
+                    {sellerSoldBusinesses?.getAllSellerSoldBusinesses?.businesses?.map((pro, i) => (
                     <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }} key={i}>
                         <Card
                             className='h-100 border-gray rounded-12 card-cs cursor'
@@ -47,12 +55,14 @@ const Soldbussines = () => {
                                             </Button>
                                         )}
                                     </Flex>
-                                    {pro?.status === 'ACTIVE' ? (
+                                    {pro?.businessStatus === 'ACTIVE' ? (
                                         <span className='badge-active rounded-8'>{t('Active')}</span>
-                                    ) : pro?.status === 'INACTIVE' ? (
+                                    ) : pro?.businessStatus === 'INACTIVE' ? (
                                         <span className='badge-inactive rounded-8'>{t('Inactive')}</span>
-                                    ) : pro?.status === 'UNDER_REVIEW' ? (
+                                    ) : pro?.businessStatus === 'UNDER_REVIEW' ? (
                                         <span className='badge-review rounded-8'>{t('Under Review')}</span>
+                                    ) : pro?.businessStatus === 'SOLD' ? (
+                                        <span className='badge-active rounded-8'>{t('Sold')}</span>
                                     ) : null}
                                 </Flex>
 
@@ -95,44 +105,42 @@ const Soldbussines = () => {
                     </Col>
                 ))}
 
-                {sellerSoldBusinesses?.getAllSellerBusinesses?.totalCount > 0 ? (
-                    <Row gutter={[16, 16]}>
-                        <Col span={24} className='mt-3'>
-                            <Row justify="space-between" align="middle">
-                                <Col span={6}>
-                                    <Flex gap={5} align='center'>
-                                        <Text>{t('Rows Per Page')}:</Text>
-                                        <Select
-                                            className="select-filter"
-                                            value={limit}
-                                            onChange={(value) => {
-                                                setLimit(value);
-                                                setCurrentPage(1);
-                                            }}
-                                            options={[6,10,20,50].map(v => ({ value: v, label: v }))}
-                                        />
-                                    </Flex>
-                                </Col>
-                                <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }}>
-                                    <Pagination
-                                        className='pagination'
-                                        align="end"
-                                        pageSize={limit}
-                                        total={sellerSoldBusinesses?.getAllSellerBusinesses?.totalCount || 0}
-                                        onChange={(page) => setCurrentPage(page)}
+                {sellerSoldBusinesses?.getAllSellerSoldBusinesses?.totalCount > 0 ? (
+                    <Col span={24} className='mt-3'>
+                        <Row justify="space-between" align="middle">
+                            <Col span={6}>
+                                <Flex gap={5} align='center'>
+                                    <Text>{t('Rows Per Page')}:</Text>
+                                    <Select
+                                        className="select-filter"
+                                        value={limit}
+                                        onChange={(value) => {
+                                            setLimit(value);
+                                            setCurrentPage(1);
+                                        }}
+                                        options={[6,10,20,50].map(v => ({ value: v, label: v }))}
                                     />
-                                </Col>
-                            </Row>
-                        </Col>
-                    </Row>
+                                </Flex>
+                            </Col>
+                            <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+                                <Pagination
+                                    className='pagination'
+                                    align="end"
+                                    current={currentPage}
+                                    pageSize={limit}
+                                    total={sellerSoldBusinesses?.getAllSellerSoldBusinesses?.totalCount || 0}
+                                    onChange={(page) => setCurrentPage(page)}
+                                />
+                            </Col>
+                        </Row>
+                    </Col>
                 ) : (
-                    <Row>
-                        <Col span={24} className='text-center mt-4'>
-                            <Text>{t('No Business Found')}</Text>
-                        </Col>
-                    </Row>
+                    <Col span={24} className='text-center mt-4'>
+                        <Text>{t('No Business Found')}</Text>
+                    </Col>
                 )}
             </Row>
+            )}
         </Card>
     );
 };

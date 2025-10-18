@@ -19,7 +19,7 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
     onError: (err) => console.error("Error updating offer status:", err),
   });
 
-  const [uploadDocument, { loading: uploading }] = useMutation(UPLOAD_DOCUMENT, {
+  const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
     refetchQueries: [
       { query: GETDEAL, variables: { getDealId: inprogressdeal?.key } },
     ],

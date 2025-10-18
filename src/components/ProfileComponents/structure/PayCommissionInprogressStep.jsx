@@ -56,8 +56,6 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
     return commission;
   }
 
-  const commission = calculateCommission(inprogressdeal?.offerprice);
-
   const paycommissionData = [
     {
       title: t("Jusoor Bank Name"),

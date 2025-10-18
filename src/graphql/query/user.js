@@ -106,21 +106,21 @@ const GETSELLERSOLDBUSINESS = gql`
 query GetAllSellerSoldBusinesses($limit: Int, $offSet: Int) {
   getAllSellerSoldBusinesses(limit: $limit, offSet: $offSet) {
     businesses {
-    id
-      category {
-      name
-    }
-    businessStatus
-    isByTakbeer
-    businessTitle
-    description
-    revenue
-    profit
-    price
-    capitalRecovery
-    savedBy {
       id
-    }
+      category {
+        name
+      }
+      businessStatus
+      isByTakbeer
+      businessTitle
+      description
+      revenue
+      profit
+      price
+      capitalRecovery
+      savedBy {
+        id
+      }
     }
     totalCount
   }
