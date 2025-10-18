@@ -10,9 +10,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     const [searchValue, setSearchValue] = useState('');
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
-    const [fetchDeals, { data: offerDeals, loading }] = useLazyQuery(BUYERDEALS, {
-        fetchPolicy: 'network-only',
-    });
+    const [fetchDeals, { data: offerDeals, loading }] = useLazyQuery(BUYERDEALS, {  fetchPolicy: 'network-only' });
 
     const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
         setSearchValue(debouncedSearchValue);
@@ -55,7 +53,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     ];
 
     const offerData = useMemo(() => {
-        return offerDeals?.getBuyerCompletedDeals?.data?.map((offer) => ({
+        return offerDeals?.getBuyerCompletedDeals?.deals?.map((offer) => ({
             key: offer.id,
             title: offer.business.businessTitle,
             sellername: offer.business.seller.name,

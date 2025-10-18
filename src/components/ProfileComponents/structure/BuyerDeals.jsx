@@ -19,7 +19,6 @@ const BuyerDeals = () => {
         {
             key: '1',
             label: t('In-Progress Deals'),
-            // no Suspense here — just the component
             children: <InprogressDealsTable setInprogressDeal={setInprogressDeal} />
         },
         {

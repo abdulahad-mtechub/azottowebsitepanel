@@ -116,7 +116,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
     if (anyDocsExist) {
       modal.confirm({
         centered: true,
-        content: t('Are you sure you are not receiving your payment? This action cannot be undone.'),
+        content: t('Are you sure you have not receiving your payment? This action cannot be undone.'),
         okText: t('Yes'),
         okType: 'danger',
         cancelText: t('Cancel'),
