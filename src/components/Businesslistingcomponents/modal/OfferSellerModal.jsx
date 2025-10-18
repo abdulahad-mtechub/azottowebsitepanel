@@ -78,6 +78,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
             open={visible}
             onCancel={onClose}
             closeIcon={false}
+            centered
             footer={
                 <Flex justify='end' gap={5}>
                     <Button aria-labelledby='Cancel' className='btn text-black border-gray' onClick={onClose}>

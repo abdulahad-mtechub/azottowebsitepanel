@@ -12,7 +12,7 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
     const [meeting] = useMutation(BUSINESS_MEETING);
-    const [updateMeeting] = useMutation(UPDATE_MEETING);
+    const [updateMeeting, { loading: updateLoading }] = useMutation(UPDATE_MEETING);
 
     const handleSubmit = async (values) => {
         try {
@@ -50,6 +50,7 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
             }
 
             messageApi.success(t("Meeting request sent successfully!"));
+            form.resetFields();
             onClose();
             await refetchMeetings({ variables: { search: "" } });
         } catch (error) {
@@ -72,7 +73,7 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
                         <Button aria-labelledby={t('Cancel')} type='button' className='btn text-black border-gray' onClick={onClose}>
                             {t('Cancel')}
                         </Button>
-                        <Button aria-labelledby={t('Send Meeting Request')} type="primary" className='btn bg-brand' onClick={() => form.submit()}>
+                        <Button aria-labelledby={t('Send Meeting Request')} type="primary" className='btn bg-brand' loading={updateLoading} disabled={updateLoading} onClick={() => form.submit()}>
                             {t('Send Meeting Request')}
                         </Button>
                     </Flex>
