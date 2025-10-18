@@ -198,51 +198,71 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <Row gutter={24}>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                        <Form.Item label="Revenue" className="w-100">
-                            <Flex gap={2} className="w-100">
-                            <Form.Item name="revenueTime" noStyle>
-                                <Select
-                                placeholder="Select period"
-                                className="addonselect fs-14 w-180"
+                            <Form.Item label="Revenue" className="w-100">
+                                <Flex gap={2} className="w-100">
+                                <Form.Item 
+                                    name="revenueTime"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please select revenue period',
+                                        }
+                                    ]}
+                                    noStyle
                                 >
-                                {revenueLookups?.map((list, index) => (
-                                    <Select.Option value={list?.id} key={index}>
-                                    {list?.name}
-                                    </Select.Option>
-                                ))}
-                                </Select>
-                            </Form.Item>
+                                    <Select
+                                        placeholder="Select period"
+                                        className="addonselect fs-14 w-180"
+                                    >
+                                    {revenueLookups?.map((list, index) => (
+                                        <Select.Option value={list?.id} key={index}>
+                                        {list?.name}
+                                        </Select.Option>
+                                    ))}
+                                    </Select>
+                                </Form.Item>
 
-                            <Form.Item
-                                name="revenue"
-                                rules={[
-                                    {
-                                        validator: (_, value) => {
-                                            if (!value) {
-                                            return Promise.reject(new Error('Please enter the revenue value'));
-                                            } else if (Number(value) <= 0) {
-                                            return Promise.reject(new Error('Revenue must be greater than 0'));
-                                            }
-                                            return Promise.resolve();
+                                <Form.Item
+                                    name="revenue"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please enter revenue value',
                                         },
-                                    }
-                                ]}
-                                noStyle
-                            >
-                                <Input
-                                    type='number'
-                                    placeholder="Enter revenue"
-                                    className="w-100 "
-                                    prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={15} fetchPriority="high" />}
-                                />
+                                        {
+                                            validator: (_, value) => {
+                                                if (value && Number(value) <= 0) {
+                                                    return Promise.reject(new Error('Revenue must be greater than 0'));
+                                                }
+                                                return Promise.resolve();
+                                            },
+                                        }
+                                    ]}
+                                    noStyle
+                                >
+                                    <Input
+                                        type='number'
+                                        placeholder="Enter revenue"
+                                        className="w-100 "
+                                        prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={15} fetchPriority="high" />}
+                                    />
+                                </Form.Item>
+                                </Flex>
                             </Form.Item>
-                            </Flex>
-                        </Form.Item>
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
                             <Form.Item label="Profit" className="w-100">
                                 <Flex gap={2} className="w-100">
-                                <Form.Item name="profittime" noStyle>
+                                <Form.Item 
+                                    name="profittime"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please select profit period',
+                                        }
+                                    ]}
+                                    noStyle
+                                >
                                     <Select
                                         placeholder="Select period"
                                         className="addonselect fs-14 w-180"
@@ -259,10 +279,12 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                     name="profit"
                                     rules={[
                                         {
+                                            required: true,
+                                            message: 'Please enter profit value',
+                                        },
+                                        {
                                             validator: (_, value) => {
-                                                if (!value) {
-                                                    return Promise.reject(new Error('Please enter the profit value'));
-                                                } else if (Number(value) <= 0) {
+                                                if (value && Number(value) <= 0) {
                                                     return Promise.reject(new Error('Profit must be greater than 0'));
                                                 }
                                                 return Promise.resolve();

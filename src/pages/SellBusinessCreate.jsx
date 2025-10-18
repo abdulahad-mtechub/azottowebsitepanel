@@ -281,13 +281,19 @@ const SellBusinessCreate = () => {
                 reason: businessData.reason,
 
                 // ✅ Cleaned documents
-                documents: businessData.documents.filter(
-                (doc) =>
-                    doc &&
-                    Object.values(doc).some(
-                    (val) => val !== null && val !== '' && val !== undefined
-                    )
-                ),
+                documents: businessData.documents
+                .filter(
+                    (doc) =>
+                        doc &&
+                        Object.values(doc).some(
+                        (val) => val !== null && val !== '' && val !== undefined
+                        )
+                )
+                .map((doc) => {
+                    // eslint-disable-next-line no-unused-vars
+                    const { size, ...docWithoutSize } = doc;
+                    return docWithoutSize;
+                }),
             };
 
             // Add ID for update
@@ -353,13 +359,19 @@ const SellBusinessCreate = () => {
     const handleSaveDraft = () => {
         const cleanedBusinessData = {
             ...businessData,
-            documents: businessData.documents.filter(
-                (doc) =>
-                    doc &&
-                    Object.values(doc).some(
-                        (val) => val !== null && val !== '' && val !== undefined
-                    )
-            ),
+            documents: businessData.documents
+                .filter(
+                    (doc) =>
+                        doc &&
+                        Object.values(doc).some(
+                            (val) => val !== null && val !== '' && val !== undefined
+                        )
+                )
+                .map((doc) => {
+                    // eslint-disable-next-line no-unused-vars
+                    const { size, ...docWithoutSize } = doc;
+                    return docWithoutSize;
+                }),
             assets: businessData.assets.filter(
                 (asset) =>
                     asset &&
