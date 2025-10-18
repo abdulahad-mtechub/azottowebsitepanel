@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useState, useCallback } from 'react';
-import { Col, Form, Row, Table } from 'antd';
+import { Col, Row, Table } from 'antd';
 import { SearchInput } from '../../Forms';
 import { SELLERINPROGRESSDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
@@ -13,7 +13,7 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
         pageSize: 10,
     });
 
-    const [fetchDeals, { data: offerDeals }] = useLazyQuery(SELLERINPROGRESSDEALS, {
+    const [fetchDeals, { data: offerDeals, loading: loadingDeals }] = useLazyQuery(SELLERINPROGRESSDEALS, {
         fetchPolicy: 'network-only',
     });
 
@@ -50,7 +50,6 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
         });
     }, [searchValue, fetchDeals, pagination]);
 
-    // Determine status based on boolean fields (matching InprogressDealsTable logic)
     const getStatusLabel = useCallback((deal) => {
         if (!deal) return t('Pending');
         
@@ -99,7 +98,7 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
         { title: t('Buyer Name'), dataIndex: 'buyername' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
         { 
-            title: t('Status........'), 
+            title: t('Status'), 
             dataIndex: 'status',
             render: (status, record) => {
                 const isCancelled = record.statusRaw === 'CANCEL';
@@ -169,6 +168,7 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
                         className="pagination table table-cs"
                         showSorterTooltip={false}
                         scroll={{ x: 800 }}
+                        loading={loadingDeals}
                         onRow={record => ({
                             onClick: () => {
                                 if (record.key) setInprogressDeal(record);

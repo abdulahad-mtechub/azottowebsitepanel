@@ -5,7 +5,7 @@ import { useLazyQuery } from '@apollo/client';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const SellerCompleteDeal = ({ setCompleteDeal, completedeal }) => {
+const SellerCompleteDeal = ({ setCompleteDeal }) => {
   const { t } = useTranslation();
   const [searchValue, setSearchValue] = useState('');
   const [pagination, setPagination] = useState({

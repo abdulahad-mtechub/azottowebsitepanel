@@ -71,9 +71,16 @@ query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
         id
         name
       }
-      isDsaBuyer
       isDsaSeller
+      isDsaBuyer
+      isPaymentVedifiedSeller
+      isDocVedifiedSeller
+      isDocVedifiedAdmin
       isCommissionVerified
+      isPaymentVedifiedAdmin
+      isBuyerCompleted
+      isSellerCompleted
+      isDocVedifiedBuyer
       business {
         id
         businessTitle
@@ -100,6 +107,15 @@ query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
       }
       status
       isDsaSeller
+      isDsaBuyer
+      isPaymentVedifiedSeller
+      isDocVedifiedSeller
+      isDocVedifiedAdmin
+      isCommissionVerified
+      isPaymentVedifiedAdmin
+      isBuyerCompleted
+      isSellerCompleted
+      isDocVedifiedBuyer
       business {
         id
         businessTitle
