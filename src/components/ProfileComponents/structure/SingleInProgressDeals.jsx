@@ -46,6 +46,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         commission : data?.getDeal?.offer?.commission || 0,
     } : null;
   // Determine status based on boolean fields
+  console.log("deal",deal);
   const getStatusLabel = (deal) => {
     if (!deal) return t('Pending');
     
