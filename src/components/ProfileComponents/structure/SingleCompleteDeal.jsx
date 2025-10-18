@@ -99,6 +99,36 @@ const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
     return t('Pending');
   };
 
+  // Get badge class based on deal status
+  const getStatusBadgeClass = (deal, status) => {
+    if (!deal) return 'sendstatus';
+    
+    // Cancelled deals
+    if (deal.status === 'CANCEL') {
+      return 'inactive';
+    }
+    
+    // Completed deals
+    if ((deal.isBuyerCompleted && deal.isSellerCompleted) || deal.isBuyerCompleted || deal.isSellerCompleted) {
+      return 'success';
+    }
+    
+    // Verified states (payment or DSA verified)
+    if (
+      status === t('Payment Verified') ||
+      status === t('Commission Verified') ||
+      status === t('Finalizing Deal') ||
+      deal.isPaymentVedifiedSeller ||
+      (deal.isDsaSeller && deal.isDsaBuyer) ||
+      deal.isCommissionVerified
+    ) {
+      return 'received';
+    }
+    
+    // Pending states
+    return 'sendstatus';
+  };
+
   const dealInfo = [
     { title: t('Seller Name'), desc: deal?.sellerName },
     { title: t('Buyer Name'), desc: deal?.buyerName },
@@ -153,13 +183,9 @@ const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
                 <Flex vertical gap={5}>
                   <Text className='fw-600 fs-14 text-gray'>{list?.title}</Text>
                   {list?.title === t('Status') ? (
-                    (deal?.isBuyerCompleted && deal?.isSellerCompleted) || deal?.isBuyerCompleted || deal?.isSellerCompleted ? (
-                      <Text className='success fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
-                    ) : deal?.isCommissionVerified || deal?.isPaymentVedifiedSeller ? (
-                      <Text className='received fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
-                    ) : (
-                      <Text className='sendstatus fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
-                    )
+                    <Text className={`${getStatusBadgeClass(deal, list?.desc)} fs-12 badge-cs fw-500 fit-content`}>
+                      {list?.desc}
+                    </Text>
                   ) : (
                     <Text className='fs-14 fw-500 text-black'>{list?.desc}</Text>
                   )}

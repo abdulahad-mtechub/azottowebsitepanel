@@ -1164,7 +1164,8 @@ body.rtl {
     padding: 0 5px;
 }
 
-.badge-cs{
+/* ==================== Status Badge Styles ==================== */
+.badge-cs {
     padding: 3px 15px;
     white-space: nowrap;
     border-radius: 4px;
@@ -1172,18 +1173,27 @@ body.rtl {
     align-items: center;
 }
 
-.received{
+/* Success - Green (Completed deals) */
+.success {
     background-color: var(--light-green) !important;
     color: var(--green) !important;
 }
 
-.inactive{
+/* Received/Verified - Blue (Payment/Commission verified) */
+.received {
+    background-color: var(--light-blue-1) !important;
+    color: var(--blue) !important;
+}
+
+/* Inactive - Red/Gray (Cancelled deals) */
+.inactive {
     background-color: var(--light-red) !important;
     color: var(--red-color) !important;
 }
 
-.sendstatus{
-    background-color:var(--light-orange) !important;
+/* Send Status - Orange (Pending states) */
+.sendstatus {
+    background-color: var(--light-orange) !important;
     color: var(--orange) !important;
 }
 
