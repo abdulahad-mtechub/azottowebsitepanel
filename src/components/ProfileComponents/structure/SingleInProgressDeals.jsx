@@ -45,27 +45,55 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         isPaymentVedifiedSeller : data?.getDeal?.isPaymentVedifiedSeller || false,
         commission : data?.getDeal?.offer?.commission || 0,
     } : null;
-
-  // Helper function to get readable status
-  const getStatusLabel = (status) => {
-    const statusMap = {
-      'COMMISSION_TRANSFER_FROM_BUYER_PENDING': t('Commission Pending'),
-      
-      'COMMISSION_VERIFIED': t('Commission Verified'),
-      'DSA_FROM_SELLER_PENDING': t('DSA Seller Pending'),
-      'DSA_FROM_BUYER_PENDING': t('DSA Buyer Pending'),
-      'BANK_DETAILS_FROM_SELLER_PENDING': t('Bank Details Pending'),
-      'SELLER_PAYMENT_VERIFICATION_PENDING': t('Payment Verification Pending'),
-      'PAYMENT_APPROVAL_FROM_SELLER_PENDING': t('Payment Approval Pending'),
-      'DOCUMENT_PAYMENT_CONFIRMATION': t('Document Confirmation'),
-      'WAITING': t('Waiting'),
-      'BUYERCOMPLETED': t('Buyer Completed'),
-      'SELLERCOMPLETED': t('Seller Completed'),
-      'COMPLETED': t('Completed'),
-      'CANCEL': t('Cancelled'),
-      'PENDING': t('Pending'),
-    };
-    return statusMap[status] || status;
+    console.log("deal",deal);
+  // Determine status based on boolean fields
+  const getStatusLabel = (deal) => {
+    if (!deal) return t('Pending');
+    
+    // Check if deal is cancelled
+    if (deal.status === 'CANCEL') {
+      return t('Cancelled');
+    }
+    
+    // Check completion status
+    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+      return t('Completed');
+    }
+    if (deal.isBuyerCompleted) {
+      return t('Buyer Completed');
+    }
+    if (deal.isSellerCompleted) {
+      return t('Seller Completed');
+    }
+    
+    // Step 4: Payment verification
+    if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
+      return t('Payment Verification Pending');
+    }
+    if (deal.isPaymentVedifiedSeller && !deal.isBuyerCompleted) {
+      return t('Finalizing Deal');
+    }
+    
+    // Step 3: DSA signing
+    if (deal.isCommissionVerified && !deal.isDsaSeller && !deal.isDsaBuyer) {
+      return t('Seller & Buyer DSA Pending');
+    }
+    if (deal.isCommissionVerified && !deal.isDsaSeller && deal.isDsaBuyer) {
+      return t('Seller DSA Pending');
+    }
+    if (deal.isCommissionVerified && deal.isDsaSeller && !deal.isDsaBuyer) {
+      return t('Buyer DSA Pending');
+    }
+    
+    // Step 2: Commission verification
+    if (!deal.isCommissionVerified) {
+      return t('Commission Verification Pending');
+    }
+    if (deal.isCommissionVerified) {
+      return t('Commission Verified');
+    }
+    
+    return t('Pending');
   };
 
   const isCancelled = deal?.status === 'CANCEL';
@@ -74,7 +102,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     { title: t('Seller Name'), desc: deal?.sellerName },
     { title: t('Buyer Name'), desc: deal?.buyerName },
     { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
-    { title: t('Status'), desc: getStatusLabel(deal?.status) },
+    { title: t('Status'), desc: getStatusLabel(deal) },
   ];
   if (loading) {
     return (
@@ -122,11 +150,11 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
                 <Flex vertical gap={5}>
                   <Text className='fw-600 fs-14 text-gray'>{list?.title}</Text>
                   {list?.title === t('Status') ? (
-                    deal?.status === 'CANCEL' ? (
+                    isCancelled ? (
                       <Text className='inactive fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
-                    ) : deal?.status === 'COMPLETED' || deal?.status === 'BUYERCOMPLETED' || deal?.status === 'SELLERCOMPLETED' ? (
+                    ) : (deal?.isBuyerCompleted && deal?.isSellerCompleted) || deal?.isBuyerCompleted || deal?.isSellerCompleted ? (
                       <Text className='success fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
-                    ) : deal?.status === 'COMMISSION_VERIFIED' || deal?.status === 'DOCUMENT_PAYMENT_CONFIRMATION' ? (
+                    ) : deal?.isCommissionVerified || deal?.isPaymentVedifiedSeller ? (
                       <Text className='received fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
                     ) : (
                       <Text className='sendstatus fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>

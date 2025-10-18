@@ -51,26 +51,55 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
     });
   }, [searchValue, fetchDeals, pagination]);
 
-  // Helper function to get readable status
-  const getStatusLabel = (status) => {
-    const statusMap = {
-      'COMMISSION_TRANSFER_FROM_BUYER_PENDING': t('Commission Pending'),
-      'COMMISSION_VERIFIED': t('Commission Verified'),
-      'DSA_FROM_SELLER_PENDING': t('DSA Seller Pending'),
-      'DSA_FROM_BUYER_PENDING': t('DSA Buyer Pending'),
-      'BANK_DETAILS_FROM_SELLER_PENDING': t('Bank Details Pending'),
-      'SELLER_PAYMENT_VERIFICATION_PENDING': t('Payment Verification Pending'),
-      'PAYMENT_APPROVAL_FROM_SELLER_PENDING': t('Payment Approval Pending'),
-      'DOCUMENT_PAYMENT_CONFIRMATION': t('Document Confirmation'),
-      'WAITING': t('Waiting'),
-      'BUYERCOMPLETED': t('Buyer Completed'),
-      'SELLERCOMPLETED': t('Seller Completed'),
-      'COMPLETED': t('Completed'),
-      'CANCEL': t('Cancelled'),
-      'PENDING': t('Pending'),
-    };
-    return statusMap[status] || status;
-  };
+  // Determine status based on boolean fields
+  const getStatusLabel = useCallback((deal) => {
+    if (!deal) return t('Pending');
+    
+    // Check if deal is cancelled
+    if (deal.status === 'CANCEL') {
+      return t('Cancelled');
+    }
+    
+    // Check completion status (Step 4 complete)
+    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+      return t('Completed');
+    }
+    if (deal.isBuyerCompleted) {
+      return t('Buyer Completed');
+    }
+    if (deal.isSellerCompleted) {
+      return t('Seller Completed');
+    }
+    
+    // Step 4: Payment verification
+    if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
+      return t('Payment Verification Pending');
+    }
+    if (deal.isPaymentVedifiedSeller && !deal.isBuyerCompleted) {
+      return t('Finalizing Deal');
+    }
+    
+    // Step 3: DSA signing
+    if (deal.isCommissionVerified && !deal.isDsaSeller && !deal.isDsaBuyer) {
+      return t('Seller & Buyer DSA Pending');
+    }
+    if (deal.isCommissionVerified && !deal.isDsaSeller && deal.isDsaBuyer) {
+      return t('Seller DSA Pending');
+    }
+    if (deal.isCommissionVerified && deal.isDsaSeller && !deal.isDsaBuyer) {
+      return t('Buyer DSA Pending');
+    }
+    
+    // Step 2: Commission verification
+    if (!deal.isCommissionVerified) {
+      return t('Commission Verification Pending');
+    }
+    if (deal.isCommissionVerified) {
+      return t('Commission Verified');
+    }
+    
+    return t('Pending');
+  }, [t]);
 
   const columns = [
     { title: t('Business Title'), dataIndex: 'title' },
@@ -79,19 +108,19 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
     { 
       title: t('Status'), 
       dataIndex: 'status',
-      render: (status) => {
-        const statusLabel = getStatusLabel(status);
-        let badgeClass = 'sendstatus'; // Default: pending/yellow
+      render: (status, record) => {
+        const isCancelled = record.statusRaw === 'CANCEL';
+        let badgeClass = 'sendstatus';
         
-        if (status === 'CANCEL') {
+        if (isCancelled) {
           badgeClass = 'inactive'; // Red
-        } else if (status === 'COMPLETED' || status === 'BUYERCOMPLETED' || status === 'SELLERCOMPLETED') {
+        } else if (record.isBuyerCompleted || record.isSellerCompleted) {
           badgeClass = 'success'; // Green
-        } else if (status === 'COMMISSION_VERIFIED' || status === 'DOCUMENT_PAYMENT_CONFIRMATION') {
+        } else if (record.isCommissionVerified || record.isPaymentVedifiedSeller) {
           badgeClass = 'received'; // Blue
         }
         
-        return <span className={`${badgeClass} fs-12 badge-cs fw-500 fit-content`}>{statusLabel}</span>;
+        return <span className={`${badgeClass} fs-12 badge-cs fw-500 fit-content`}>{status}</span>;
       }
     },
     { title: t('Date'), dataIndex: 'date' },
@@ -106,14 +135,18 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
       sellerId: deal?.business.seller.id,
       buyerId: deal?.buyer?.id,
       buyername: deal?.buyer?.name,
-      status: deal?.status,
+      status: getStatusLabel(deal),
+      statusRaw: deal?.status,
       offerprice: deal?.price,
       date: new Date(deal?.createdAt).toLocaleString(),
-      isDsaBuyer: deal?.isDsaBuyer,
-      isDsaSeller: deal?.isDsaSeller,
+      isBuyerCompleted: deal?.isBuyerCompleted,
+      isSellerCompleted: deal?.isSellerCompleted,
       isCommissionVerified: deal?.isCommissionVerified,
+      isPaymentVedifiedSeller: deal?.isPaymentVedifiedSeller,
+      isDsaSeller: deal?.isDsaSeller,
+      isDsaBuyer: deal?.isDsaBuyer,
     })) || [];
-  }, [offerDeals]);
+  }, [offerDeals, getStatusLabel]);
 
   const totalCount = offerDeals?.getBuyerInprogressDeals?.totalCount || 0;
   

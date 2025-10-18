@@ -40,11 +40,58 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             isDocVedifiedBuyer : data.getDeal?.isDocVedifiedBuyer || false,
         } : null;
 
+    // Determine status based on boolean fields
+    const getStatusLabel = (deal) => {
+        if (!deal) return t('Pending');
+        
+        if (deal.status === 'CANCEL') {
+            return t('Cancelled');
+        }
+        
+        if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+            return t('Completed');
+        }
+        if (deal.isBuyerCompleted) {
+            return t('Buyer Completed');
+        }
+        if (deal.isSellerCompleted) {
+            return t('Seller Completed');
+        }
+        
+        if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
+            return t('Payment Verification Pending');
+        }
+        if (deal.isPaymentVedifiedSeller && !deal.isBuyerCompleted) {
+            return t('Finalizing Deal');
+        }
+        
+        if (deal.isCommissionVerified && !deal.isDsaSeller && !deal.isDsaBuyer) {
+            return t('Seller & Buyer DSA Pending');
+        }
+        if (deal.isCommissionVerified && !deal.isDsaSeller && deal.isDsaBuyer) {
+            return t('Seller DSA Pending');
+        }
+        if (deal.isCommissionVerified && deal.isDsaSeller && !deal.isDsaBuyer) {
+            return t('Buyer DSA Pending');
+        }
+        
+        if (!deal.isCommissionVerified) {
+            return t('Commission Verification Pending');
+        }
+        if (deal.isCommissionVerified) {
+            return t('Commission Verified');
+        }
+        
+        return t('Pending');
+    };
+
+    const isCancelled = deal?.status === 'CANCEL';
+
     const sellerdealsData = [
         { title: t('Seller Name'), desc: deal?.sellerName },
         { title: t('Buyer Name'), desc: deal?.buyerName },
         { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
-        { title: t('Status'), desc: deal?.status },
+        { title: t('Status'), desc: getStatusLabel(deal) },
     ];
 
     if (loading) {
@@ -89,9 +136,17 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
                                 <Flex vertical gap={0}>
                                     <Text className='fw-600 fs-14'>{list?.title}</Text>
                                     {(list?.title === t('Status')) ? (
-                                        list.desc === 'In-progress' ?
-                                            <Text className='bg-brand text-white fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text> :
+                                        isCancelled ? (
+                                            <Text className='inactive fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                        ) : (deal?.isBuyerCompleted && deal?.isSellerCompleted) || 
+                                             deal?.isBuyerCompleted || 
+                                             deal?.isSellerCompleted ? (
+                                            <Text className='success fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                        ) : deal?.isCommissionVerified || deal?.isPaymentVedifiedSeller ? (
+                                            <Text className='received fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                        ) : (
                                             <Text className='sendstatus fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                        )
                                     ) : (
                                         <Text className='fs-14 fw-normal'>{list?.desc}</Text>
                                     )}
