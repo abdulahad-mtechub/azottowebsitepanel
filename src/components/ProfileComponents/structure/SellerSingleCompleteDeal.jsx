@@ -1,7 +1,7 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin } from 'antd';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin } from 'antd';
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps';
-import { GETDEAL} from '../../../graphql/query';
+import { GETDEAL, GETUSERACTIVEBANK } from '../../../graphql';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
@@ -15,29 +15,94 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
         variables: { getDealId: dealId },
         fetchPolicy: 'network-only',
     });
+    const { data: userBank } = useQuery(GETUSERACTIVEBANK, {
+        variables: { getUserActiveBanksId: data?.getDeal?.buyer?.id },
+        fetchPolicy: 'network-only',
+    });
 
     if (error) return <Text type="danger">{t('Error loading deal')}: {error.message}</Text>;
 
+    const banks = userBank?.getUserActiveBanks;
     const deal = data?.getDeal
         ? {
-            key: data.getDeal.id,
-            businessTitle: data.getDeal.business?.businessTitle || '-',
-            buyerName: data.getDeal.buyer?.name || '-',
-            sellerName: data.getDeal.business?.seller?.name || '-',
-            finalizedOffer: data.getDeal.offer?.price ? `SAR ${data.getDeal.offer.price.toLocaleString()}` : '-',
-            status: data.getDeal.status || 0,
-            date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',
-            busines: data.getDeal.business || '-',
-            banks: data.getDeal.buyer?.banks || '-',
+            key: data?.getDeal?.id,
+            businessTitle: data?.getDeal?.business?.businessTitle || '-',
+            buyerId: data?.getDeal?.buyer?.id || null,
+            buyerName: data?.getDeal?.buyer?.name || '-',
+            sellerId: data?.getDeal?.business?.seller?.id || null,
+            sellerName: data?.getDeal?.business?.seller?.name || '-',
+            finalizedOffer: data?.getDeal?.offer?.price ? `SAR ${data?.getDeal?.offer?.price.toLocaleString()}` : '-',
+            status: data?.getDeal?.status || 0,
+            date: data?.getDeal?.createdAt ? new Date(data?.getDeal?.createdAt).toLocaleDateString() : '-',
+            busines: data?.getDeal?.business || '-',
+            banks: banks || '-',
+            isCommissionVerified: data?.getDeal?.isCommissionVerified || false,
+            isDsaSeller: data?.getDeal?.isDsaSeller || false,
+            isDsaBuyer: data?.getDeal?.isDsaBuyer || false,
+            isDocVedifiedSeller: data?.getDeal?.isDocVedifiedSeller || false,
+            isDocVedifiedBuyer: data?.getDeal?.isDocVedifiedBuyer,
+            isSellerCompleted: data?.getDeal?.isSellerCompleted,
+            isBuyerCompleted: data?.getDeal?.isBuyerCompleted,
+            isPaymentVedifiedSeller: data?.getDeal?.isPaymentVedifiedSeller,
+            commission: data?.getDeal?.offer?.commission || 0,
         } : null;
 
+    // Determine status based on boolean fields
+    const getStatusLabel = (deal) => {
+        if (!deal) return t('Pending');
+
+        // Check if deal is cancelled
+        if (deal.status === 'CANCEL') {
+            return t('Cancelled');
+        }
+        // Check completion status
+        if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+            return t('Completed');
+        }
+        if (deal.isBuyerCompleted) {
+            return t('Buyer Completed');
+        }
+        if (deal.isSellerCompleted) {
+            return t('Seller Completed');
+        }
+
+        // Step 4: Payment verification
+        if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
+            return t('Payment Verification Pending');
+        }
+        if (deal.isPaymentVedifiedSeller && !deal.isBuyerCompleted) {
+            return t('Finalizing Deal');
+        }
+
+        // Step 3: DSA signing
+        if (deal.isCommissionVerified && !deal.isDsaSeller && !deal.isDsaBuyer) {
+            return t('Seller & Buyer DSA Pending');
+        }
+        if (deal.isCommissionVerified && !deal.isDsaSeller && deal.isDsaBuyer) {
+            return t('Seller DSA Pending');
+        }
+        if (deal.isCommissionVerified && deal.isDsaSeller && !deal.isDsaBuyer) {
+            return t('Buyer DSA Pending');
+        }
+
+        // Step 2: Commission verification
+        if (!deal.isCommissionVerified) {
+            return t('Commission Verification Pending');
+        }
+        if (deal.isCommissionVerified) {
+            return t('Commission Verified');
+        }
+
+        return t('Pending');
+    };
 
     const sellerdealsData = [
         { title: t('Seller Name'), desc: deal?.sellerName },
         { title: t('Buyer Name'), desc: deal?.buyerName },
         { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
-        { title: t('Status'), desc: deal?.status },
+        { title: t('Status'), desc: getStatusLabel(deal) },
     ];
+
     if (loading) {
         return (
             <Flex justify="center" align="center" className='h-200'>
@@ -45,6 +110,7 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
             </Flex>
         );
     }
+
     if (!deal) return <Text>{t('No deal found')}</Text>;
 
     return (
@@ -57,7 +123,7 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
                             title: <Text className='fs-13 text-gray cursor' onClick={() => setCompleteDeal(null)}>{t('Deals')}</Text>,
                         },
                         {
-                            title: <Text className='fw-500 fs-13 text-black'>{deal?.businessTitle}</Text>,
+                            title: <Text className='fw-500 fs-13 text-black'>{completedeal?.title}</Text>,
                         },
                     ]}
                 />
@@ -67,7 +133,7 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
                     <ArrowLeftOutlined />
                 </Button>
                 <Title level={4} className='m-0'>
-                    {deal?.businessTitle}
+                    {completedeal?.title}
                 </Title>
             </Flex>
             <Card className='radius-12 border-gray'>
@@ -75,21 +141,25 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
                     <Row gutter={[16, 16]}>
                         {sellerdealsData?.map((list, index) => (
                             <Col xs={24} sm={12} md={6} lg={6} key={index}>
-                                <Flex vertical gap={0}>
-                                    <Text className='fw-600 fs-14'>{list?.title}</Text>
-                                    {(list?.title === t('Status')) ? (
-                                        list.desc === 'Completed' ?
-                                            <Text className='bg-green text-white fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text> :
-                                            <Text className='bg-brand text-white fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                <Flex vertical gap={5}>
+                                    <Text className='fw-600 fs-14 text-gray'>{list?.title}</Text>
+                                    {list?.title === t('Status') ? (
+                                        (deal?.isBuyerCompleted && deal?.isSellerCompleted) || deal?.isBuyerCompleted || deal?.isSellerCompleted ? (
+                                            <Text className='success fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                        ) : deal?.isCommissionVerified || deal?.isPaymentVedifiedSeller ? (
+                                            <Text className='received fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                        ) : (
+                                            <Text className='sendstatus fs-12 badge-cs fw-500 fit-content'>{list?.desc}</Text>
+                                        )
                                     ) : (
-                                        <Text className='fs-14 fw-normal'>{list?.desc}</Text>
+                                        <Text className='fs-14 fw-500 text-black'>{list?.desc}</Text>
                                     )}
                                 </Flex>
                             </Col>
                         ))}
                     </Row>
                 </div>
-                <SellerSingleInprogressSteps completedeal={completedeal} />
+                <SellerSingleInprogressSteps deal={deal} />
             </Card>
         </Flex>
     );

@@ -41,6 +41,7 @@ const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
         isDsaSeller: data?.getDeal?.isDsaSeller || false,
         isDsaBuyer: data?.getDeal?.isDsaBuyer || false,
         isDocVedifiedSeller: data?.getDeal?.isDocVedifiedSeller || false,
+        isDocVedifiedBuyer: data?.getDeal?.isDocVedifiedBuyer || false,
         isSellerCompleted: data?.getDeal?.isSellerCompleted || false,
         isBuyerCompleted: data?.getDeal?.isBuyerCompleted || false,
         isPaymentVedifiedSeller: data?.getDeal?.isPaymentVedifiedSeller || false,

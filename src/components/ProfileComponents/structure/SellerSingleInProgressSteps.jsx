@@ -25,11 +25,11 @@ const statusToStepIndex = {
 
 const { Text, Title } = Typography;
 
-const SellerSingleInprogressSteps = ({ completedeal, deal }) => {
+const SellerSingleInprogressSteps = ({ deal }) => {
 
     const { t } = useTranslation();
     const [form] = Form.useForm();
-    
+    console.log('deal in steps:', deal);
     // Check if each step is completed based on deal status and admin approvals
     const isCommissionVerified = deal?.isCommissionVerified || deal?.status === 'COMMISSION_VERIFIED';
     const isStep1Completed = deal?.isDsaSeller && deal?.isDsaBuyer;
@@ -53,7 +53,7 @@ const SellerSingleInprogressSteps = ({ completedeal, deal }) => {
         {
             key: '1',
             label: t('Digital Sale Agreement'),
-            content: <DigitalSaleAgreementStep form={form} details={deal} completedeal={completedeal} />,
+            content: <DigitalSaleAgreementStep form={form} details={deal} />,
             status: !deal?.isDsaSeller && !deal?.isDsaBuyer
                 ? t('Seller & Buyer DSA Pending')
                 : !deal?.isDsaSeller && deal?.isDsaBuyer
