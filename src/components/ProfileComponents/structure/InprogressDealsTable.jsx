@@ -51,7 +51,7 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
     });
   }, [searchValue, fetchDeals, pagination]);
 
-  // Determine status based on boolean fields
+  // Determine status based on boolean fields (matching SingleInprogressSteps logic for buyer)
   const getStatusLabel = useCallback((deal) => {
     if (!deal) return t('Pending');
     
@@ -60,42 +60,36 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
       return t('Cancelled');
     }
     
-    // Check completion status (Step 4 complete)
-    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
-      return t('Completed');
-    }
+    // Step 4: Deal finalized by buyer
     if (deal.isBuyerCompleted) {
       return t('Buyer Completed');
     }
-    if (deal.isSellerCompleted) {
-      return t('Seller Completed');
+    
+    // Step 3: Payment verification
+    if (deal.isDsaSeller && deal.isDsaBuyer) {
+      if (deal.isPaymentVedifiedSeller) {
+        return t('Payment Verified');
+      } else {
+        return t('Payment Verification Pending');
+      }
     }
     
-    // Step 4: Payment verification
-    if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
-      return t('Payment Verification Pending');
-    }
-    if (deal.isPaymentVedifiedSeller && !deal.isBuyerCompleted) {
-      return t('Finalizing Deal');
-    }
-    
-    // Step 3: DSA signing
-    if (deal.isCommissionVerified && !deal.isDsaSeller && !deal.isDsaBuyer) {
-      return t('Seller & Buyer DSA Pending');
-    }
-    if (deal.isCommissionVerified && !deal.isDsaSeller && deal.isDsaBuyer) {
-      return t('Seller DSA Pending');
-    }
-    if (deal.isCommissionVerified && deal.isDsaSeller && !deal.isDsaBuyer) {
-      return t('Buyer DSA Pending');
+    // Step 2: DSA signing
+    if (deal.isCommissionVerified) {
+      if (!deal.isDsaSeller && !deal.isDsaBuyer) {
+        return t('Seller & Buyer DSA Pending');
+      } else if (!deal.isDsaSeller && deal.isDsaBuyer) {
+        return t('Seller DSA Pending');
+      } else if (deal.isDsaSeller && !deal.isDsaBuyer) {
+        return t('Buyer DSA Pending');
+      } else if (deal.isDsaSeller && deal.isDsaBuyer) {
+        return t('DSA Verified');
+      }
     }
     
-    // Step 2: Commission verification
+    // Step 1: Commission verification
     if (!deal.isCommissionVerified) {
       return t('Commission Verification Pending');
-    }
-    if (deal.isCommissionVerified) {
-      return t('Commission Verified');
     }
     
     return t('Pending');
@@ -110,14 +104,24 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
       dataIndex: 'status',
       render: (status, record) => {
         const isCancelled = record.statusRaw === 'CANCEL';
-        let badgeClass = 'sendstatus';
+        let badgeClass = 'sendstatus'; // Default: pending/orange
         
         if (isCancelled) {
-          badgeClass = 'inactive'; // Red
-        } else if (record.isBuyerCompleted || record.isSellerCompleted) {
-          badgeClass = 'success'; // Green
-        } else if (record.isCommissionVerified || record.isPaymentVedifiedSeller) {
-          badgeClass = 'received'; // Blue
+          badgeClass = 'inactive'; // Gray - Cancelled
+        } else if (record.isBuyerCompleted) {
+          badgeClass = 'success'; // Green - Buyer completed
+        } else if (
+          status === t('Payment Verified') ||
+          status === t('DSA Verified') ||
+          record.isPaymentVedifiedSeller ||
+          (record.isDsaSeller && record.isDsaBuyer)
+        ) {
+          badgeClass = 'received'; // Blue - Verified states
+        } else if (
+          status?.toLowerCase().includes('pending') || 
+          !record.isCommissionVerified
+        ) {
+          badgeClass = 'sendstatus'; // Orange - Pending states
         }
         
         return <span className={`${badgeClass} fs-12 badge-cs fw-500 fit-content`}>{status}</span>;
