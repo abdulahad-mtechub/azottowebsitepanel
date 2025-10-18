@@ -86,11 +86,11 @@ mutation UpdateDeal($input: UpdateDealInput!) {
 }
 `
 const UPDATE_DEAL = gql`
-mutation UpdateDeal($input: UpdateDealInput!) {
-  updateDeal(input: $input) {
-    id
+  mutation UpdateDeal($input: UpdateDealInput!) {
+    updateDeal(input: $input) {
+      id
+    }
   }
-}
 `
 const COUNTER_OFFER = gql `
 mutation CounterOffer($input: CounterOfferInput!) {

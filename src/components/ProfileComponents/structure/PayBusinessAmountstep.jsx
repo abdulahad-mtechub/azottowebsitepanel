@@ -16,7 +16,6 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
   );
 
   const [updateOfferStatus] = useMutation(UPDATE_DEAL, {
-    onCompleted: () => messageApi.success(t("Deal uploaded successfully!")),
     onError: (err) => console.error("Error updating offer status:", err),
   });
 
@@ -67,6 +66,7 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
         variables: {
           input: {
             id: inprogressdeal?.key,
+            isPaymentVedifiedSeller: null,
             status: "SELLER_PAYMENT_VERIFICATION_PENDING",
           },
         },

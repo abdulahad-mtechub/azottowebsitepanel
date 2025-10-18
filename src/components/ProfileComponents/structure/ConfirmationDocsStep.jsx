@@ -14,6 +14,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
   const { t } = useTranslation();
   const [modal, modalContextHolder] = Modal.useModal();
   const [messageApi, contextHolder] = message.useMessage();
+  // eslint-disable-next-line no-unused-vars
   const [documents, setDocuments] = useState({});
   const [crUploaded, setCrUploaded] = useState(false);
 
@@ -21,9 +22,15 @@ const ConfirmationDocsStep = ({ form, details }) => {
   const existingCrDoc = details?.busines?.documents?.find(d => d.title === t('Commercial Registration (CR)'));
   const existingNotarizedDoc = details?.busines?.documents?.find(d => d.title === t('Notarized Ownership Transfer Letter'));
 
-  const initialUploadsAllowed = details?.isPaymentVedifiedSeller ? "yes" : 'no';
+  // Initialize based on the actual boolean value: null, true, or false
+  const initialUploadsAllowed = details?.isPaymentVedifiedSeller === null 
+    ? undefined
+    : details?.isPaymentVedifiedSeller === true 
+    ? "yes" 
+    : "no";
+  
   const [uploadsAllowed, setUploadsAllowed] = useState(initialUploadsAllowed);
-
+  console.log('Uploads Allowed:', details);  
   useEffect(() => {
     if (existingCrDoc) setCrUploaded(true);
   }, [existingCrDoc]);
@@ -103,44 +110,70 @@ const ConfirmationDocsStep = ({ form, details }) => {
       variables: { input: { id: details.key, isDocVedifiedSeller: true } },
     });
   };
-
   const handleNoSelected = () => {
-    modal.confirm({
-      centered: true,
-      title: t('Delete documents?'),
-      content: t('Are you sure you want to delete uploaded documents for this business? This action cannot be undone.'),
-      okText: t('Yes'),
-      okType: 'danger',
-      cancelText: t('Cancel'),
-      onOk: async () => {
-        try {
-          const titlesToDelete = [];
-          if (existingCrDoc) titlesToDelete.push(t('Commercial Registration (CR)'));
-          if (existingNotarizedDoc) titlesToDelete.push(t('Notarized Ownership Transfer Letter'));
-          if (bankRecipt) titlesToDelete.push(t('Buyer Payment Receipt'));
+    const anyDocsExist = Boolean(existingCrDoc || existingNotarizedDoc || bankRecipt);
 
-          if (titlesToDelete.length === 0) {
-            messageApi.info(t('No documents to delete.'));
-            setUploadsAllowed('no');
-            return;
+    if (anyDocsExist) {
+      modal.confirm({
+        centered: true,
+        content: t('Are you sure you are not receiving your payment? This action cannot be undone.'),
+        okText: t('Yes'),
+        okType: 'danger',
+        cancelText: t('Cancel'),
+        onOk: async () => {
+          try {
+            const titlesToDelete = [];
+            if (bankRecipt) titlesToDelete.push(t('Buyer Payment Receipt'));
+
+            if (titlesToDelete.length === 0) {
+              messageApi.info(t('No documents to delete.'));
+              setUploadsAllowed('no');
+              return;
+            }
+            await deleteDocuments({ variables: { deleteDocumentId: bankRecipt?.id } });
+            
+            await updateDeals({
+              variables: { input: { id: details.key, isPaymentVedifiedSeller: false } },
+            });
+          } catch (err) {
+            console.error('delete error', err);
           }
-
-          await deleteDocuments({ variables: { input: { businessId: details?.busines?.id, titles: titlesToDelete } } });
-        } catch (err) {
-          console.error('delete error', err);
-        }
-      },
-      onCancel: () => { setUploadsAllowed(null); },
-    });
+        },
+        onCancel: () => { 
+          setUploadsAllowed(undefined);
+        },
+      });
+    } else {
+      // No documents exist, just update payment verification to false
+      modal.confirm({
+        centered: true,
+        title: t('Confirm No Payment'),
+        content: t('Are you sure you have not received payment from the buyer?'),
+        okText: t('Yes'),
+        okType: 'danger',
+        cancelText: t('Cancel'),
+        onOk: async () => {
+          try {
+            await updateDeals({
+              variables: { input: { id: details.key, isPaymentVedifiedSeller: false } },
+            });
+            setUploadsAllowed('no');
+          } catch (err) {
+            console.error('Error updating payment verified:', err);
+            messageApi.error(err?.message || t('Failed to update deal'));
+          }
+        },
+        onCancel: () => {
+          setUploadsAllowed(undefined);
+        },
+      });
+    }
   };
 
   const onRadioChange = async (e) => {
     const val = e.target.value;
-    const anyDocsExist = Boolean(existingCrDoc || existingNotarizedDoc || bankRecipt);
 
-    setUploadsAllowed(val);
-
-    if (val === 'no' && anyDocsExist) {
+    if (val === 'no') {
       handleNoSelected();
       return;
     }
@@ -160,6 +193,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
         await updateDeals({
           variables: { input: { id: details.key, isPaymentVedifiedSeller: true } },
         });
+        setUploadsAllowed(val);
       } catch (err) {
         console.error('Error updating payment verified:', err);
         messageApi.error(err?.message || t('Failed to update deal'));
@@ -183,13 +217,14 @@ const ConfirmationDocsStep = ({ form, details }) => {
         <Col span={24}>
           <Flex vertical gap={8} className="mb-2">
             <Text className="fw-600 text-medium-gray fs-13">{t('Have you received the buyer payment?')}</Text>
-            <Radio.Group disabled={uploadsAllowed === 'yes'} onChange={onRadioChange} value={uploadsAllowed}>
+            <Radio.Group disabled={uploadsAllowed !== undefined} onChange={onRadioChange} value={uploadsAllowed}>
               <Radio value="yes" checked={details?.isPaymentVedifiedSeller}>{t('Yes')}</Radio>
               <Radio value="no">{t('No')}</Radio>
             </Radio.Group>
           </Flex>
 
-          {uploadsAllowed !== 'no' ? (
+          {/* Show payment receipt when: null (undefined) or yes. Hide when no */}
+          {uploadsAllowed !== 'no' && (
             bankRecipt ? (
               <>
                 <Text className="fw-600 text-medium-gray fs-13">{t(bankRecipt.title)}</Text>
@@ -211,10 +246,11 @@ const ConfirmationDocsStep = ({ form, details }) => {
             ) : (
               <Text className="fs-13 text-gray">{t('No receipt uploaded')}</Text>
             )
-          ) : null}
+          )}
         </Col>
 
-        {uploadsAllowed !== 'no' && (
+        {/* Only show upload sections when YES is selected */}
+        {uploadsAllowed === 'yes' && (
           <>
             <Col span={24}>
               <Flex vertical gap={16} className="w-100">
