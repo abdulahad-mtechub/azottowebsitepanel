@@ -24,20 +24,12 @@ const SellerDeals = () => {
     {
       key: '1',
       label: t('In-Progress Deals'),
-      children: (
-        <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-          <SellerInProgressDeals setInprogressDeal={setInprogressDeal} />
-        </Suspense>
-      )
+      children: <SellerInProgressDeals setInprogressDeal={setInprogressDeal} />
     },
     {
       key: '2',
       label: t('Completed Deals'),
-      children: (
-        <Suspense fallback={<div><Spin indicator={<LoadingOutlined spin />} size="large" /></div>}>
-          <SellerCompleteDeal setCompleteDeal={setCompleteDeal} completedeal={completedeal} />
-        </Suspense>
-      )
+      children: <SellerCompleteDeal setCompleteDeal={setCompleteDeal} completedeal={completedeal} />
     },
   ], [setCompleteDeal, setInprogressDeal, completedeal, t]);
 
