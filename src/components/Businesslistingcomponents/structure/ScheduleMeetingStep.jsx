@@ -35,6 +35,8 @@ const ScheduleMeetingStep = ({ form, onClose }) => {
                             label={t('Meeting Date')}
                             name='date'
                             className='w-100'
+                            required
+                            message={t('Please select meeting date')}
                         />
                     </Col>
                     <Col span={24}>
@@ -43,6 +45,8 @@ const ScheduleMeetingStep = ({ form, onClose }) => {
                             label={t('Meeting Time')}
                             name='time'
                             className='w-100'
+                            required
+                            message={t('Please select meeting time')}
                         />
                     </Col>
                 </Row>

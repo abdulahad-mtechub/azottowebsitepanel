@@ -157,6 +157,12 @@ const RequestMeetingModal = ({ businessId, visible, onClose, offerId, onlyMeetin
                         refetch && refetch();
                       } catch (error) {
                         console.error(error);
+                        // Check if it's a validation error
+                        if (error.errorFields && error.errorFields.length > 0) {
+                          // Validation failed - don't show error message, validation UI handles it
+                          return;
+                        }
+                        // API error - show error message
                         messageApi.error("Failed to schedule meeting or accept offer.");
                       }
                     }}

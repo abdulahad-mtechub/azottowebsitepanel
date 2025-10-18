@@ -19,7 +19,7 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
             const { date, time } = values;
 
             if (!date || !time) {
-                message.error(t("Please select both date and time"));
+                messageApi.error(t("Please select both date and time"));
                 return;
             }
 
@@ -101,6 +101,8 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
                                 label={t('Meeting Date')}
                                 name='date'
                                 className='w-100'
+                                required
+                                message={t('Please select meeting date')}
                             />
                         </Col>
                         <Col span={24}>
@@ -108,6 +110,8 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
                                 label={t('Meeting Time')}
                                 name='time'
                                 className='w-100'
+                                required
+                                message={t('Please select meeting time')}
                             />
                         </Col>
                     </Row>
