@@ -22,7 +22,6 @@ const Allbussines = () => {
         fetchPolicy: 'network-only',
     });
 
-    // Fetch data whenever page or limit changes
     useEffect(() => {
         const offSet = (currentPage - 1) * limit;
         getSellerBusinesses({ variables: { limit, offSet } });

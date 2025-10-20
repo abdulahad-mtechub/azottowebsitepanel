@@ -13,6 +13,7 @@ import { useState } from 'react';
 const { Text, Title } = Typography;
 
 const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
+  
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();

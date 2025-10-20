@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings, businessId }) => {
+    
     const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm();
@@ -52,10 +53,9 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
             messageApi.success(t("Meeting request sent successfully!"));
             form.resetFields();
             onClose();
-            await refetchMeetings({ variables: { search: "" } });
+            refetchMeetings && refetchMeetings({ variables: { search: "" } });
         } catch (error) {
             console.error(error);
-            messageApi.error(t("Failed to send meeting request"));
         }
     };
 
