@@ -1,4 +1,4 @@
-import { Button, Col, Dropdown, Flex, Row, Table, Tooltip, Typography } from 'antd'
+import { Button, Col, Dropdown, Flex, Row, Table, Tooltip, Typography, Alert } from 'antd'
 import { useState, useMemo } from 'react';
 import { DeleteModal } from '../../ui';
 import { SearchInput, MySelect } from '../../Forms';
@@ -96,6 +96,7 @@ const SellerOfferTable = ({ data }) => {
 
     const offerdata = useMemo(() => offers?.getOfferByBusinessId?.offers || [], [offers]);
     const totalCount = offers?.getOfferByBusinessId?.count || 0;
+    const isBusinessInactive = data?.businessStatus === 'INACTIVE';
 
     const columns = [
         { title: t('Buyer Name'), dataIndex: ["buyer", "name"] },
@@ -223,6 +224,7 @@ const SellerOfferTable = ({ data }) => {
                             onChange={(e) => setSearchText(e.target.value)}
                             prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
                             style={{ minWidth: '250px' }}
+                            disabled={isBusinessInactive}
                         />
                         
                         <MySelect
@@ -234,6 +236,7 @@ const SellerOfferTable = ({ data }) => {
                             showKey
                             style={{ minWidth: '150px' }}
                             className='border-light-gray radius-8'
+                            disabled={isBusinessInactive}
                         />
                         <MySelect
                             withoutForm
@@ -244,6 +247,7 @@ const SellerOfferTable = ({ data }) => {
                             showKey
                             style={{ minWidth: '180px' }}
                             className='border-light-gray radius-8'
+                            disabled={isBusinessInactive}
                         />
                     </Flex>
                 </Col>
@@ -251,7 +255,7 @@ const SellerOfferTable = ({ data }) => {
                     <Table
                         size="large"
                         columns={columns}
-                        dataSource={filteredOffers}
+                        dataSource={isBusinessInactive ? [] : filteredOffers}
                         className="pagination table table-cs"
                         hideOnSinglePage={true}
                         showSorterTooltip={false}
@@ -259,12 +263,18 @@ const SellerOfferTable = ({ data }) => {
                         loading={loading}
                         onChange={handleTableChange}
                         pagination={{
+                            hideOnSinglePage: true,
                             current: pagination.current,
                             pageSize: pagination.pageSize,
-                            total: totalCount,
+                            total: isBusinessInactive ? 0 : totalCount,
                             showSizeChanger: true,
                             showTotal: (total) => t(`Total ${total} offers`),
                             pageSizeOptions: ['10', '20', '50', '100'],
+                        }}
+                        locale={{
+                            emptyText: isBusinessInactive 
+                                ? t('Business is inactive. Please activate your business to view and manage offers.')
+                                : t('No offers available')
                         }}
                     />
                 </Col>

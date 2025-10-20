@@ -45,6 +45,7 @@ query GetReceivedMeetingRequests($search: String, $isBuyer: Boolean, $limit: Int
         id
         businessTitle
         price
+        businessStatus
       }
       offer {
         id

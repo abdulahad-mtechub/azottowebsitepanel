@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Button, Col, Dropdown, Form, Row, Table } from 'antd';
+import { Button, Col, Dropdown, Row, Table, Tooltip, Flex, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { NavLink } from 'react-router-dom';
 import { ScheduleMeeting } from '../modal';
@@ -7,6 +7,8 @@ import { DeleteModal } from '../../ui';
 import { RECEIVEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+
+const { Text } = Typography;
 
 const SellerRecieveRequestTable = ({ isBuyer }) => {
 
@@ -42,14 +44,35 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
             date: new Date(meeting.requestedDate).toLocaleString(),
             offerId: meeting.offer?.id,
             business: meeting.business,
-            status: meeting.status
+            status: meeting.status,
+            businessStatus: meeting.business?.businessStatus
         };
     }) || [];
 
     const totalCount = data?.getReceivedMeetingRequests?.totalCount || 0;
 
     const columns = [
-        { title: t('Business Title'), dataIndex: 'title' },
+        { 
+            title: t('Business Title'), 
+            dataIndex: 'title',
+            render: (title, record) => {
+                const isInactive = record.businessStatus === 'INACTIVE';
+                
+                if (isInactive) {
+                    return (
+                        <Flex gap={8} align="center">
+                            <Text>{title}</Text>
+                            <Tooltip title={t('Seller has marked this business as inactive')}>
+                                <Text className='inactive fs-12 badge-cs fw-500 fit-content'>
+                                    {t('Inactive')}
+                                </Text>
+                            </Tooltip>
+                        </Flex>
+                    );
+                }
+                return <Text>{title}</Text>;
+            }
+        },
         { title: t('Buyer Name'), dataIndex: 'buyername' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
         { title: t('Offer Price'), dataIndex: 'offerprice' },
@@ -62,6 +85,10 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
             width: 100,
             align: 'center',
             render: (record) => {
+                if (record.businessStatus === 'INACTIVE') {
+                    return null;
+                }
+
                 const items = [
                     { 
                         label: <NavLink 
@@ -142,7 +169,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
                         dataSource={sellerrecievedrequestData}
                         className="pagination table table-cs"
                         showSorterTooltip={false}
-                        scroll={{ x: 800 }}
+                        scroll={{ x: 1300 }}
                         loading={loading}
                         pagination={{
                             hideOnSinglePage: true,

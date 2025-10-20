@@ -77,10 +77,30 @@ const BuyerOfferContent = () => {
         createdBy: offer.createdBy, 
         isProceedToPay: offer.isProceedToPay,
         commission: offer.commission,
+        businessStatus: offer.business.businessStatus,
     }));
 
     const columns = [
-        { title: t('Business Title'), dataIndex: 'title' },
+        { 
+            title: t('Business Title'), 
+            dataIndex: 'title',
+            render: (title, record) => {
+                const isInactive = record.businessStatus === 'INACTIVE';
+                if (isInactive) {
+                    return (
+                        <Flex gap={8} align="center">
+                            <Text>{title}</Text>
+                            <Tooltip title={t('This business is currently inactive')}>
+                                <Text className='inactive fs-12 badge-cs fw-500 fit-content'>
+                                    {t('Inactive')}
+                                </Text>
+                            </Tooltip>
+                        </Flex>
+                    );
+                }
+                return <Text>{title}</Text>;
+            }
+        },
         { title: t('Seller Name'), dataIndex: 'sellername' },
         { 
             title: t('Business Price'),
@@ -137,6 +157,9 @@ const BuyerOfferContent = () => {
         {
             title: t('Action'), key: 'action', fixed: 'right', width: 100, align: 'center',
             render: (record) => {
+              // Hide action button if business is inactive
+              if (record.businessStatus === 'INACTIVE') return null;
+
               // Hide action button if user created the offer (sent by buyer)
               if (record.createdBy === userId) return null;
 
@@ -274,10 +297,11 @@ const BuyerOfferContent = () => {
                                 dataSource={tableData}
                                 className="pagination table table-cs"
                                 showSorterTooltip={false}
-                                scroll={{ x: 1300 }}
+                                scroll={{ x: 1600 }}
                                 loading={loading}
                                 onChange={handleTableChange}
                                 pagination={{
+                                    hideOnSinglePage: true,
                                     current: pagination.current,
                                     pageSize: pagination.pageSize,
                                     total: totalCount,

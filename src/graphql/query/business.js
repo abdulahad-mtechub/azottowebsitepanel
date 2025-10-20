@@ -285,6 +285,7 @@ const GET_BUYER_OFFER = gql`
           id
           businessTitle
           price
+          businessStatus
           seller {
             id
             name
