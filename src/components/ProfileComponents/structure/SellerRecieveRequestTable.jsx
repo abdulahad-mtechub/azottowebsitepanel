@@ -77,7 +77,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
                         key: 0 
                     },
                     { 
-                        label: <NavLink onClick={() => setDeleteModal(true)}>{t('Reject')}</NavLink>, 
+                        label: <NavLink onClick={() => {setDeleteModal(true); setSelectedMeetingId(record.key);}}>{t('Reject')}</NavLink>, 
                         key: 1 
                     },
                 ].filter(Boolean);
@@ -185,7 +185,15 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
                 onClose={() => setDeleteModal(false)}
                 type='danger'
                 title={t('Are you sure?')}
-                subtitle={t('Rejecting this meeting request will remove it from your request list. Are you sure you want to proceed?')}
+                subtitle={t('Rejecting this meeting request will remove it from your request list. Are you sure you want to proceed?......')}
+                refetch={() => refetchMeetings({ 
+                    variables: { 
+                        search: searchValue || "", 
+                        isBuyer,
+                        limit: pagination.pageSize,
+                        offset: (pagination.current - 1) * pagination.pageSize
+                    } 
+                })}
             />
         </>
     );

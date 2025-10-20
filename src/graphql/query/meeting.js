@@ -129,6 +129,13 @@ const CHECKMEETINGEXISTS = gql`
     checkMeetingExists(businessId: $businessId, buyerId: $buyerId)
   }
 `
+
+const REJECT_MEETING = gql`
+  mutation RejectMeeting($meetingId: ID!) {
+    rejectMeeting(meetingId: $meetingId)
+  }
+`
+
 export {
     SENTMEETINGS,
     RECEIVEDMEETINGS,
@@ -137,5 +144,6 @@ export {
     GETMEETINGS,
     GETBUYERMEETINGCOUNT,
     GETSELLERMEETINGCOUNT,
-    CHECKMEETINGEXISTS
+    CHECKMEETINGEXISTS,
+    REJECT_MEETING
 }

@@ -1,7 +1,8 @@
 import { Button, Divider, Flex, Modal, Typography, Spin, message } from 'antd';
-import { UPDATE_OFFER, UPDATE_MEETING } from '../../graphql/mutation';
+import { UPDATE_OFFER } from '../../graphql/mutation';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { REJECT_MEETING } from '../../graphql';
 
 const { Title, Text } = Typography;
 
@@ -10,22 +11,26 @@ const DeleteModal = ({ visible, onClose, title, subtitle, type, offerId, refetch
     const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
     const [updateOffer, { loading: updateOfferLoading }] = useMutation(UPDATE_OFFER);
-    const [updateMeeting, { loading: updateMeetingLoading }] = useMutation(UPDATE_MEETING);
-
+    const [updateMeeting, { loading: updateMeetingLoading }] = useMutation(REJECT_MEETING);
+    console.log("meetingId in delete modal", meetingId);
     const handleConfirm = async () => {
         try {
             if (meetingId) {
                 await updateMeeting({
-                    variables: { input: { id: meetingId, status: 'REJECTED' } }
+                    variables: { meetingId } 
                 });
             } else if (offerId) {
                 await updateOffer({
                     variables: { input: { id: offerId, status: 'REJECTED' } }
                 });
             }
-
-            messageApi.success(t('Offer rejected!'));
-            refetch && refetch();
+            if (meetingId) {
+                messageApi.success(t('Meeting rejected!'));
+                refetch && refetch();
+            } else if (offerId) {
+                messageApi.success(t('Offer rejected!'));
+                refetch && refetch();
+            }
             onClose();
         } catch (err) {
             messageApi.error(t('Failed to reject offer'));
