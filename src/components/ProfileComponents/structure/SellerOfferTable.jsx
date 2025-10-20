@@ -5,12 +5,58 @@ import { SearchInput, MySelect } from '../../Forms';
 import { CounterOffer, ScheduleMeeting } from '../modal';
 import { useQuery } from '@apollo/client';
 import { GET_BUSINESS_OFFERS } from '../../../graphql/query/offer';
+import { CHECKMEETINGEXISTS } from '../../../graphql/query/meeting';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 import { RequestMeetingModal } from '../../Businesslistingcomponents';
 import moment from 'moment';
 
 const {Text} =Typography
+
+// Component to check meeting existence for each offer row
+const OfferActionDropdown = ({ row, t, handleAcceptOffer, setDeleteModal, setOfferModal, setMeeting, setSelectedOfferId, setSelectedBusinessId, userId, setMeetingRefetch }) => {
+    const { data: meetingExistsData, refetch: refetchMeetingExists } = useQuery(CHECKMEETINGEXISTS, {
+        variables: { 
+            businessId: row?.business?.id,
+            buyerId: userId
+        },
+        skip: !row?.business?.id || !userId,
+        fetchPolicy: 'network-only',
+    });
+
+    const meetingExists = meetingExistsData?.checkMeetingExists || false;
+    const isChild = row?.isProceedToPay ? true : false;
+
+    const items = [
+        !isChild && { key: '0', label: t('Accept Offer'), onClick: () => handleAcceptOffer(row?.id, row?.business?.id) },
+        !isChild && { key: '1', label: t('Reject Offer'), onClick: () => { setDeleteModal(true); setSelectedOfferId(row.id); } },
+        !isChild && { key: '2', label: t('Counter Offer'), onClick: () => { setOfferModal(true); setSelectedOfferId(row.id); } },
+        !isChild && { 
+            key: '3', 
+            label: t('Request For Virtual Meeting'), 
+            disabled: meetingExists,
+            onClick: () => { 
+                if (!meetingExists) {
+                    setMeeting(true); 
+                    setSelectedOfferId(row.id); 
+                    setSelectedBusinessId(row.business.id);
+                    setMeetingRefetch(() => refetchMeetingExists);
+                }
+            } 
+        },
+        isChild && { key: '4', label: t('Accept Offer'), onClick: () => {handleAcceptOffer(row?.id, row?.business?.id) } },
+        isChild && { key: '5', label: t('Reject Offer'), onClick: () => { setDeleteModal(true); setSelectedOfferId(row.id); } },
+    ].filter(Boolean);
+
+    return (
+        <Dropdown menu={{ items }} trigger={['click']}>
+            <Button aria-labelledby={t("dropdown icon")} className="bg-transparent border-0 p-0">
+                <img src="/assets/icons/dots.png" alt={t("dropdown-icon")} width={16} fetchPriority="high" />
+            </Button>
+        </Dropdown>
+    );
+};
+
 const SellerOfferTable = ({ data }) => {
     
     const { t } = useTranslation();
@@ -24,6 +70,7 @@ const SellerOfferTable = ({ data }) => {
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
     const [endaVisible, setEndaVisible] = useState(false);
+    const [meetingRefetch, setMeetingRefetch] = useState(null);
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
@@ -40,7 +87,6 @@ const SellerOfferTable = ({ data }) => {
         fetchPolicy: 'network-only',
         skip: !data?.id,
     });
-    console.log('Offers Data:', offers);
     const handleAcceptOffer = (offerId, businessId) => {
         console.log('Accepting offer:', offerId, 'for business:', businessId);
         setSelectedOfferId(offerId);
@@ -105,25 +151,20 @@ const SellerOfferTable = ({ data }) => {
                 if (row?.createdBy === userId) return null;
                 // Hide action button if status is ACCEPTED or REJECTED
                 if (row?.status === 'ACCEPTED' || row?.status === 'REJECTED') return null;
-                
-                const isChild = row?.isProceedToPay ? true : false;
-                console.log('Offer Row:', row);
-
-                const items = [
-                    !isChild && { key: '0', label: t('Accept Offer'), onClick: () => handleAcceptOffer(row?.id, row?.business?.id) },
-                    !isChild && { key: '1', label: t('Reject Offer'), onClick: () => { setDeleteModal(true); setSelectedOfferId(row.id); } },
-                    !isChild && { key: '2', label: t('Counter Offer'), onClick: () => { setOfferModal(true); setSelectedOfferId(row.id); } },
-                    !isChild && { key: '3', label: t('Request For Virtual Meeting'), onClick: () => { setMeeting(true); setSelectedOfferId(row.id); setSelectedBusinessId(row.business.id); } },
-                    isChild && { key: '4', label: t('Accept Offer'), onClick: () => {handleAcceptOffer(row?.id, row?.business?.id) } },
-                    isChild && { key: '5', label: t('Reject Offer'), onClick: () => { setDeleteModal(true); setSelectedOfferId(row.id); } },
-                ].filter(Boolean);
 
                 return (
-                    <Dropdown menu={{ items }} trigger={['click']}>
-                        <Button aria-labelledby={t("dropdown icon")} className="bg-transparent border-0 p-0">
-                            <img src="/assets/icons/dots.png" alt={t("dropdown-icon")} width={16} fetchPriority="high" />
-                        </Button>
-                    </Dropdown>
+                    <OfferActionDropdown 
+                        row={row}
+                        t={t}
+                        handleAcceptOffer={handleAcceptOffer}
+                        setDeleteModal={setDeleteModal}
+                        setOfferModal={setOfferModal}
+                        setMeeting={setMeeting}
+                        setSelectedOfferId={setSelectedOfferId}
+                        setSelectedBusinessId={setSelectedBusinessId}
+                        userId={userId}
+                        setMeetingRefetch={setMeetingRefetch}
+                    />
                 );
             },
         }
@@ -240,6 +281,12 @@ const SellerOfferTable = ({ data }) => {
                 onClose={() => setMeeting(false)}
                 offerId={selectedOfferId}
                 businessId={selectedBusinessId}
+                refetchMeetings={() => {
+                    refetch();
+                    if (meetingRefetch) {
+                        meetingRefetch();
+                    }
+                }}
             />
             <DeleteModal
                 visible={deletemodal}

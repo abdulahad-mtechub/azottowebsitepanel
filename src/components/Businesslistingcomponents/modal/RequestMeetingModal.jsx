@@ -32,7 +32,7 @@ const RequestMeetingModal = ({ businessId, visible, onClose, offerId, onlyMeetin
         const allChecked = values.ndaAgree && values.termsAgree && values.commissionAgree;
         setAllTermsAgreed(allChecked);
     };
-    console.log("onlyMeeting", onlyMeeting);
+    
     const steps = [
         {
             title: null,

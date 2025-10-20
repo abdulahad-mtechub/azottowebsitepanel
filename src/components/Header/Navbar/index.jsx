@@ -389,7 +389,7 @@ const dropdownContent = useMemo(() => {
   const isScrollable = data.length >= NOTIFICATIONS_PAGE_SIZE;
   const showInitialLoader = dropdownOpen && data.length === 0 && isLoadingNotifications;
   const showLoadMoreSpinner = dropdownOpen && data.length > 0 && isLoadingNotifications && hasMoreNotifications;
-  console.log("data...", data)
+
   return (
     <Card className="rounded-12 card-cs size-notify border-0">
       <Text>Notification ({unreadCount})</Text>

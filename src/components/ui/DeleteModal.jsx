@@ -12,7 +12,7 @@ const DeleteModal = ({ visible, onClose, title, subtitle, type, offerId, refetch
     const [messageApi, contextHolder] = message.useMessage();
     const [updateOffer, { loading: updateOfferLoading }] = useMutation(UPDATE_OFFER);
     const [updateMeeting, { loading: updateMeetingLoading }] = useMutation(REJECT_MEETING);
-    console.log("meetingId in delete modal", meetingId);
+
     const handleConfirm = async () => {
         try {
             if (meetingId) {
