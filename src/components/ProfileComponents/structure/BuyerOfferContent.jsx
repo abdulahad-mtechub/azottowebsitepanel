@@ -41,7 +41,6 @@ const BuyerOfferContent = () => {
     const handleSearchChange = useCallback((e) => {
         const rawValue = e?.target?.value || '';
         setSearchValue(rawValue);
-        // Reset to first page when searching
         setPagination(prev => ({ ...prev, current: 1 }));
     }, []);
 

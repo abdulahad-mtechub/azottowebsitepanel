@@ -4,7 +4,7 @@ import { UpOutlined } from '@ant-design/icons';
 import { Aboutus, Article, ArticleSingleView, BusinessListingPage, EndaPage, Faqs, ForgotPassword, Home, LoginPage, PrivacyPolicy, ProfileDashboard, SellBusinessCreate, SignupPage, SingleViewlisting } from "../pages";
 import { Footer, Navbar, ScrollTop,Singlebusinessview } from "../components";
 import { Termofuse } from "../pages";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 
 const AppRoutes = () => {
@@ -83,6 +83,12 @@ const AppRoutes = () => {
 };
 
 const RouteF = () => {
+
+  // Run after Select is opened
+  document.querySelectorAll('.ant-select-item-option[title]').forEach((el) => {
+    el.removeAttribute('title');
+  });
+
   return (
     <BrowserRouter>
       <AppRoutes />
