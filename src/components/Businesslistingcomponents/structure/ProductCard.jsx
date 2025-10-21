@@ -30,7 +30,7 @@ const ProductCard = ({
               saveBusinessId: businessId,
             },
           });
-          messageApi.success(t("Business saved successfully!"));
+          messageApi.success(t("Business added to favorite succesfully"));
           refetchBusinesses(); 
         } catch (err) {
           console.error("Save mutation error:", err);

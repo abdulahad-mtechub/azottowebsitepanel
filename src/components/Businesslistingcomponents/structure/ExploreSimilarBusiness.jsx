@@ -1,7 +1,8 @@
-import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography,Spin } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography, Spin, message } from 'antd';
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery, useMutation } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';
+import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom'
 
@@ -9,13 +10,33 @@ const { Text, Title, Paragraph } = Typography;
 
 const ExploreSimilarBusiness = ({ id }) => {
     const { t } = useTranslation();
-    const navigate = useNavigate()
-    const { data, loading, error } = useQuery(GET_RANDOM_BUSINESSES, {
+    const navigate = useNavigate();
+    const [messageApi, contextHolder] = message.useMessage();
+    const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
+    
+    const { data, loading, refetch } = useQuery(GET_RANDOM_BUSINESSES, {
         variables: { getRandomBusinessesId: id },
         skip: !id,
+        fetchPolicy: 'network-only',
     });
 
     const randomBusiness = data?.getRandomBusinesses;
+
+    const saveBusinessHandler = async (businessId, e) => {
+        e.stopPropagation();
+        try {
+            await saveBusiness({
+                variables: {
+                    saveBusinessId: businessId,
+                },
+            });
+            messageApi.success(t("Business added to favorite succesfully"));
+            refetch(); 
+        } catch (err) {
+            console.error("Save mutation error:", err);
+            messageApi.error(t("Save failed: ") + err.message);
+        }
+    };
 
     const mappedBusinesses = randomBusiness?.map((b) => ({
         ...b,
@@ -49,9 +70,11 @@ const ExploreSimilarBusiness = ({ id }) => {
     }
 
     return (
-        <div className='feature bg-light-brand'>
-            <div className='container'>
-                <Row gutter={[24, 60]}>
+        <>
+            {contextHolder}
+            <div className='feature bg-light-brand'>
+                <div className='container'>
+                    <Row gutter={[24, 60]}>
                     <Col span={24}>
                         <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
                             <div className='tag fw-500 bg-secondary fw-500 text-brand'>{t('You May Also Like')}</div>
@@ -82,7 +105,11 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                         {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
                                                     </Tag>
                                                 </Flex>
-                                                <Button aria-labelledby={t('Bookmark-btn')} className='border-0 bg-transparent p-0'>
+                                                <Button 
+                                                    aria-labelledby={t('Bookmark-btn')} 
+                                                    className='border-0 bg-transparent p-0'
+                                                    onClick={(e) => saveBusinessHandler(pro?.id, e)}
+                                                >
                                                     {pro?.isSaved ?
                                                         <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} /> :
                                                         <img src='/assets/icons/bk-bl.png' alt={t('un-bookmarked-image')} width={22} />
@@ -137,6 +164,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                 </Row>
             </div>
         </div>
+        </>
     )
 }
 
