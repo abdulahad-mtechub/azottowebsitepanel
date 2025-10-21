@@ -36,6 +36,7 @@ const useDistricts = () => {
     { id: 'al-jouf', name: t('Al Jouf') },
     { id: 'jazan', name: t('Jazan') },
     { id: 'najran', name: t('Najran') },
+    { id: 'taif', name: t('Taif') },
     { id: 'al-baha', name: t('Al Baha') },
   ];
 

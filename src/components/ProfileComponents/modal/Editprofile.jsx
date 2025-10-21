@@ -7,10 +7,11 @@ import { useMutation } from "@apollo/client";
 import Cookies from "js-cookie";
 import { useDistricts, useCities } from '../../../data';
 import { useTranslation } from 'react-i18next';
+import { NAVUSERDATA } from '../../../graphql';
 
 const { Title, Text } = Typography;
 
-const Editprofile = ({ visible, onClose, userData, refetchUser }) => {
+const Editprofile = ({ visible, onClose, userData }) => {
 
   const district = useDistricts();
   const cities = useCities();
@@ -19,11 +20,25 @@ const Editprofile = ({ visible, onClose, userData, refetchUser }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const userId = Cookies.get("userId");
   const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  const [updateUser, { loading: updateLoading }] = useMutation(UPDATE_USER);
+  const [updateUser, { loading: updateLoading }] = useMutation(UPDATE_USER, {
+    refetchQueries: [{ query: NAVUSERDATA, variables: { getNavUserId: userId } }],
+  });
+  
+  // Reset initialization when modal opens/closes
+  useEffect(() => {
+    if (visible) {
+      setIsInitialized(false);
+    } else {
+      // Reset form and state when modal closes
+      form.resetFields();
+      setSelectedDistrict(null);
+    }
+  }, [visible, form]);
 
   useEffect(() => {
-    if (userData && district.length > 0) {
+    if (userData && district.length > 0 && visible && !isInitialized) {
       // Map of common Arabic/English names to IDs
       const districtNameToId = {
         'riyadh': 'riyadh',
@@ -143,8 +158,11 @@ const Editprofile = ({ visible, onClose, userData, refetchUser }) => {
         district: districtId,
         city: cityId,
       });
+      
+      // Mark as initialized so form values don't reset when user makes changes
+      setIsInitialized(true);
     }
-  }, [userData, form, district, cities]);
+  }, [userData, form, district, cities, visible, isInitialized]);
 
   const handleSubmit = async (values) => {
     try {
@@ -165,10 +183,6 @@ const Editprofile = ({ visible, onClose, userData, refetchUser }) => {
       });
 
       messageApi.success(t("Profile updated successfully ✅"));
-      
-      if (refetchUser) {
-        refetchUser();
-      }
       
       onClose();
     } catch (err) {

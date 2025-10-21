@@ -1,4 +1,4 @@
-import { forwardRef, useState,useEffect,useImperativeHandle } from 'react'
+import { forwardRef, useState,useEffect,useImperativeHandle,useMemo } from 'react'
 import { Card, Col, Flex, Form, Image, Radio, Row, Tooltip, Typography } from 'antd'
 import { MyDatepicker, MyInput, MySelect } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
@@ -16,17 +16,21 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
+    const [isInitialized, setIsInitialized] = useState(false);
 
     useImperativeHandle(ref, () => ({
       validate: () => form.validateFields(),
     }));
 
-    const categories = categoryData?.getAllCategories?.categories?.map(cat => ({
-      id: cat.id,
-      name: cat.name,
-      arabicName: cat.name,
-      isDigital: cat.isDigital,
-    })) || [];
+    // Memoize categories to prevent recreation on every render
+    const categories = useMemo(() => 
+      categoryData?.getAllCategories?.categories?.map(cat => ({
+        id: cat.id,
+        name: cat.name,
+        arabicName: cat.name,
+        isDigital: cat.isDigital,
+      })) || []
+    , [categoryData]);
   
     const handleRadioChange = (e) => {
       setIsAccess(e.target.value === 2);
@@ -53,31 +57,38 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     };
   
     useEffect(() => {
-      // Find district ID from stored name (handles both Arabic and English)
-      if (data.district && district.length > 0) {
-        const districtObj = district.find(d => d.name === data.district) || 
-                           district.find(d => d.id === data.district.toLowerCase());
-        if (districtObj) {
-          setSelectedDistrict(districtObj.id);
+      // Only initialize form once when data and options are available
+      if (!isInitialized && data && district.length > 0 && categories.length > 0) {
+        // Find district ID from stored name (handles both Arabic and English)
+        if (data.district) {
+          const districtObj = district.find(d => d.name === data.district) || 
+                             district.find(d => d.id === data.district.toLowerCase());
+          if (districtObj) {
+            setSelectedDistrict(districtObj.id);
+          }
         }
+        
+        form.setFieldsValue({
+          title: data.businessTitle,
+          category: data.categoryName,
+          district: data.district,
+          city: data.city,
+          dob: data.foundedDate,
+          teamSize: data.numberOfEmployees,
+          description: data.description,
+          url: data.url,
+        });
+    
+        if (data.categoryId) {
+          const cat = categories.find(cat => cat.id === data.categoryId);
+          setSelectedCategory(cat);
+        }
+        
+        // Mark as initialized to prevent re-running
+        setIsInitialized(true);
       }
-      
-      form.setFieldsValue({
-        title: data.businessTitle,
-        category: data.categoryName,
-        district: data.district,
-        city: data.city,
-        dob: data.foundedDate,
-        teamSize: data.numberOfEmployees,
-        description: data.description,
-        url: data.url,
-      });
-  
-      if (data.categoryId) {
-        const cat = categories.find(cat => cat.id === data.categoryId);
-        setSelectedCategory(cat);
-      }
-    }, [form, data, categories, district]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data.businessTitle, data.categoryId, district.length, categories.length, isInitialized]);
 
     return (
       <>

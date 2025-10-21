@@ -432,7 +432,6 @@ const ProfileDashboard = () => {
                 visible={isedit}
                 onClose={() => setIsEdit(false)}
                 userData={user}
-                refetchUser={() => getUser({ variables: { getNavUserId: userId } })}
             />
         </div>
     );

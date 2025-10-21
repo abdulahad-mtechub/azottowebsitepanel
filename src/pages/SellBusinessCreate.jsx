@@ -415,7 +415,7 @@ const SellBusinessCreate = () => {
                         <Breadcrumb
                             separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
                             items={[
-                                { title: <Text className='fs-13 text-gray' onClick={() => navigate('/')}>{t('Home')}</Text> },
+                                { title: <Text className='fs-13 text-gray cursor' onClick={() => navigate('/')}>{t('Home')}</Text> },
                                 { title: <Text className='fw-500 fs-13 text-black'>{editBusinessId ? t('Edit Business') : t('Create a List')}</Text> },
                             ]}
                         />
