@@ -1,10 +1,11 @@
-import { Col, Row, Table } from 'antd';
+import { Col, Row, Table, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { READYSCHEDULEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 
+const { Text } = Typography;
 
 const SellerAdminSchedulingTable = ({ isBuyer }) => {
   const { t } = useTranslation();
@@ -18,6 +19,25 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
     setSearchValue(debouncedSearchValue);
     setPagination(prev => ({ ...prev, current: 1 }));
   }, []);
+
+  const getStatusBadgeClass = (status) => {
+    const statusUpper = status?.toUpperCase();
+    switch (statusUpper) {
+        case 'SCHEDULED':
+        case 'ACCEPTED':
+        case 'COMPLETED':
+            return 'success';
+        case 'PENDING':
+        case 'PENDING_APPROVAL':
+        case 'READY_FOR_SCHEDULING':
+            return 'sendstatus';
+        case 'REJECTED':
+        case 'CANCELLED':
+            return 'inactive';
+        default:
+            return 'received';
+    }
+  };
 
   const selleradminsechedulingData =
     data?.getMeetingsReadyForScheduling?.items?.map((meeting) => {
@@ -45,7 +65,15 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
     { title: t('Buyer Name'), dataIndex: 'buyername' },
     { title: t('Business Price'), dataIndex: 'businessprice' },
     { title: t('Offer Price'), dataIndex: 'offerprice' },
-    { title: t('Status'), dataIndex: 'status' },
+    { 
+      title: t('Status'), 
+      dataIndex: 'status',
+      render: (status) => (
+        <Text className={`${getStatusBadgeClass(status)} fs-12 badge-cs fw-500`}>
+          {t(status)}
+        </Text>
+      )
+    },
     { title: t('Preferred Date & Time'), dataIndex: 'prefereddatetime' },
   ];
 

@@ -1,5 +1,5 @@
 import { useMemo, useEffect, useState, useCallback } from 'react'
-import { Col, Flex, Row, Spin, Table } from 'antd'
+import { Col, Row, Table } from 'antd'
 import { SearchInput } from '../../Forms';
 import { BUYERDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';

@@ -56,14 +56,16 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     }
     
     // Check completion status
-    if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+    if (deal.isBuyerCompleted && deal.isSellerCompleted && deal?.status ==='COMPLETED') {
       return t('Completed');
     }
     if (deal.isBuyerCompleted) {
-      return t('Buyer Completed');
+      return t('Waiting for Jusoor to complete the deal');
     }
-    if (deal.isSellerCompleted) {
-      return t('Seller Completed');
+    
+    // Step 4: Document verification
+    if (deal.isPaymentVedifiedSeller && !deal.isDocVedifiedBuyer) {
+      return t('Document Verification Pending');
     }
     
     // Step 4: Payment verification
@@ -122,7 +124,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
       return 'received';
     }
     
-    // Pending states
+    // Pending states (including Document Verification Pending)
     return 'sendstatus';
   };
 

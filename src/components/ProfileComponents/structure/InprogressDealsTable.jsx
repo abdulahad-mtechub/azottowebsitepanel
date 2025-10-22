@@ -62,7 +62,12 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
     
     // Step 4: Deal finalized by buyer
     if (deal.isBuyerCompleted) {
-      return t('Buyer Completed');
+      return t('Waiting for Jusoor to complete the deal');
+    }
+    
+    // Check for document verification pending
+    if (deal.isPaymentVedifiedSeller && !deal.isDocVedifiedBuyer) {
+      return t('Document Verification Pending');
     }
     
     // Step 3: Payment verification
@@ -119,7 +124,8 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
           badgeClass = 'received'; // Blue - Verified states
         } else if (
           status?.toLowerCase().includes('pending') || 
-          !record.isCommissionVerified
+          !record.isCommissionVerified ||
+          status === t('Document Verification Pending')
         ) {
           badgeClass = 'sendstatus'; // Orange - Pending states
         }
@@ -149,6 +155,7 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
       isPaymentVedifiedSeller: deal?.isPaymentVedifiedSeller,
       isDsaSeller: deal?.isDsaSeller,
       isDsaBuyer: deal?.isDsaBuyer,
+      isDocVedifiedBuyer: deal?.isDocVedifiedBuyer,
     })) || [];
   }, [offerDeals, getStatusLabel]);
 

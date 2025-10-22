@@ -321,7 +321,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                 </Flex>
 
                 <Flex>
-                  <Button type="primary" className="btnsave bg-brand" onClick={handleMarkVerified} disabled={details?.isDocVedifiedSeller}>
+                  <Button type="primary" className="btnsave bg-brand text-white" onClick={handleMarkVerified} disabled={details?.isDocVedifiedSeller}>
                     {t('Mark as Verified')}
                   </Button>
                 </Flex>

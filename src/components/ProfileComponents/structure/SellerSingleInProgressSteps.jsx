@@ -60,7 +60,7 @@ const SellerSingleInprogressSteps = ({ deal }) => {
                 ? t('Seller DSA Pending')
                 : deal?.isDsaSeller && !deal?.isDsaBuyer
                 ? t('Buyer DSA Pending')
-                : t('Verified'),
+                : t('Signed'),
             emptytitle: t('DSA Pending!'),
             emptydesc: t('Waiting for the seller & buyer to sign the digital sale agreement.'),
             lockedTitle: t('Commission Payment Pending'),
@@ -84,11 +84,10 @@ const SellerSingleInprogressSteps = ({ deal }) => {
             key: '3',
             label: t('Payment Confirmation & Docs'),
             content: <ConfirmationDocsStep form={form} details={deal} />,
-            status: deal?.isDocVedifiedSeller && deal?.isDocVedifiedAdmin
-                ? t('Verified')
-                : deal?.isDocVedifiedSeller
-                ? t('Jusoor verification pending')
-                : t('Seller verification pending'),
+            status: deal?.isPaymentVedifiedSeller && !deal?.isDocVedifiedBuyer
+                ? t('Document verification pending')
+                : deal?.isDocVedifiedSeller && deal?.isPaymentVedifiedSeller
+                ? t('Verified') : t('Pending'),
             emptytitle: t('Payment Confirmation Pending!'),
             emptydesc: t('Waiting for the seller to transfer the document & approve the payment.'),
             lockedTitle: t('Bank Account Required'),
@@ -100,7 +99,7 @@ const SellerSingleInprogressSteps = ({ deal }) => {
             key: '4',
             label: t('Finalize Deal'),
             content: <SellerFinalDealsStep details={deal} />,
-            status: deal?.isSellerCompleted ? t("Verified") : t('Pending'),
+            status: deal?.isSellerCompleted ? t("Completed") : t('Pending'),
             emptytitle: t('Deal Pending!'),
             emptydesc: t('Waiting for the buyer & seller to finalize the deal.'),
             lockedTitle: t('Document Verification Required'),

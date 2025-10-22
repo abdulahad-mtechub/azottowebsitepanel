@@ -28,6 +28,25 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
         setPagination(prev => ({ ...prev, current: 1 }));
     }, []);
 
+    const getStatusBadgeClass = (status) => {
+        const statusUpper = status?.toUpperCase();
+        switch (statusUpper) {
+            case 'SCHEDULED':
+            case 'ACCEPTED':
+            case 'COMPLETED':
+                return 'success';
+            case 'PENDING':
+            case 'PENDING_APPROVAL':
+            case 'READY_FOR_SCHEDULING':
+                return 'sendstatus';
+            case 'REJECTED':
+            case 'CANCELLED':
+                return 'inactive';
+            default:
+                return 'received';
+        }
+    };
+
     const sellerrecievedrequestData = data?.getReceivedMeetingRequests?.items?.map((meeting) => {
         const buyerName = meeting.requestedTo?.name || '';
         const maskedName =
@@ -76,7 +95,15 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
         { title: t('Buyer Name'), dataIndex: 'buyername' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
         { title: t('Offer Price'), dataIndex: 'offerprice' },
-        { title: t('Status'), dataIndex: 'status' },
+        { 
+            title: t('Status'), 
+            dataIndex: 'status',
+            render: (status) => (
+                <Text className={`${getStatusBadgeClass(status)} fs-12 badge-cs fw-500`}>
+                    {t(status)}
+                </Text>
+            )
+        },
         { title: t('Requested Date'), dataIndex: 'date' },
         {
             title: t('Action'),

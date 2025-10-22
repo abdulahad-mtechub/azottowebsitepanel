@@ -28,7 +28,7 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
     const isStep1Completed = inprogressdeal?.isCommissionVerified; // Admin verified commission
     const isStep2Completed = inprogressdeal?.isDsaSeller && inprogressdeal?.isDsaBuyer; // Both signed DSA
     const isStep3Completed = inprogressdeal?.isPaymentVedifiedSeller; // Payment verified
-    const isStep4Completed = inprogressdeal?.isBuyerCompleted; // Deal finalized
+    const isStep4Completed = inprogressdeal?.isBuyerCompleted;
 
     // Determine initial step based on completion status
     const getInitialStep = () => {
@@ -66,7 +66,7 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
                 ? t('Seller DSA Pending')
                 : inprogressdeal?.isDsaSeller && !inprogressdeal?.isDsaBuyer
                 ? t('Buyer DSA Pending')
-                : t('Verified'),
+                : t('Signed'),
             lockedTitle: t('Commission Verification Pending'),
             lockedDesc: t('Waiting for admin to verify your commission payment.'),
             isCompleted: isStep2Completed,
@@ -86,7 +86,7 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
             key: '4',
             label: t('Finalize Deal'),
             content: <FinalDealsStep inprogressdeal={inprogressdeal} />,
-            status: inprogressdeal?.isBuyerCompleted ? t('Deal Closed') : t('Pending'),
+            status: inprogressdeal?.isBuyerCompleted ? t('Completed') : t('Pending'),
             lockedTitle: t('Payment Verification Required'),
             lockedDesc: t('Waiting for seller to verify the business payment.'),
             isCompleted: isStep4Completed,

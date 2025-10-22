@@ -1,9 +1,11 @@
-import { Col, Form, Row, Table } from 'antd';
+import { Col, Form, Row, Table, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { SENTMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+
+const { Text } = Typography;
 
 const SellerSendRequestTable = ({ isBuyer }) => {
     const { t } = useTranslation();
@@ -11,12 +13,39 @@ const SellerSendRequestTable = ({ isBuyer }) => {
     const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
     const [fetchMeetings, { data, loading }] = useLazyQuery(SENTMEETINGS, { fetchPolicy: 'network-only' });
 
+    const getStatusBadgeClass = (status) => {
+        const statusUpper = status?.toUpperCase();
+        switch (statusUpper) {
+            case 'SCHEDULED':
+            case 'ACCEPTED':
+            case 'COMPLETED':
+                return 'success';
+            case 'PENDING':
+            case 'PENDING_APPROVAL':
+            case 'READY_FOR_SCHEDULING':
+                return 'sendstatus';
+            case 'REJECTED':
+            case 'CANCELLED':
+                return 'inactive';
+            default:
+                return 'received';
+        }
+    };
+
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
         { title: t('Buyer Name'), dataIndex: 'buyername' },
         { title: t('Business Price'), dataIndex: 'businessprice' },
         { title: t('Offer Price'), dataIndex: 'offerprice' },
-        { title: t('Status'), dataIndex: 'status' },
+        { 
+            title: t('Status'), 
+            dataIndex: 'status',
+            render: (status) => (
+                <Text className={`${getStatusBadgeClass(status)} fs-12 badge-cs fw-500`}>
+                    {t(status)}
+                </Text>
+            )
+        },
         { title: t('Requested Date'), dataIndex: 'requestedDate' },
     ];
 

@@ -1,7 +1,6 @@
 import { Card, Col, Flex, Image, Row, Typography, message } from 'antd';
 import { SingleFileUpload } from '../../Forms/SingleFileUpload';
 import { useQuery, useMutation } from '@apollo/client';
-import { useState } from 'react';
 import { GETADMINACTIVEBANK, GETDEAL } from '../../../graphql/query';
 import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 import { useTranslation } from 'react-i18next';
@@ -11,7 +10,6 @@ const { Text } = Typography;
 const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-  const [documents, setDocuments] = useState(null);
 
   const { data } = useQuery(GETADMINACTIVEBANK, {fetchPolicy: 'network-only'});
 
@@ -28,33 +26,6 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
     onCompleted: () => messageApi.success(t("Document uploaded successfully!")),
     onError: (err) => messageApi.error(err.message || t("Upload failed!")),
   });
-
-  function calculateCommission(price) {
-    if (!price) return 0;
-
-    if (price < 50000) {
-      return 2000;
-    }
-
-    let commission = 0;
-
-    if (price > 2000000) {
-      commission += (price - 2000000) * 0.015;
-      price = 2000000;
-    }
-    if (price > 500000) {
-      commission += (price - 500000) * 0.025;
-      price = 500000;
-    }
-    if (price > 100000) {
-      commission += (price - 100000) * 0.03;
-      price = 100000;
-    }
-    if (price > 0) {
-      commission += price * 0.04;
-    }
-    return commission;
-  }
 
   const paycommissionData = [
     {
@@ -85,13 +56,6 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
 
       const result = await response.json();
       const fileUrl = result.fileUrl || result.url;
-
-      setDocuments({
-        fileName: file.name,
-        fileType: file.type,
-        filePath: fileUrl,
-        fileSize: `${(file.size / (1024 * 1024)).toFixed(2)} MB`,
-      });
 
       await uploadDocument({
         variables: {

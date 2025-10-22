@@ -60,7 +60,12 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
         
         // Step 4: Deal finalized by seller
         if (deal.isSellerCompleted) {
-            return t('Seller Completed');
+            return t('Waiting for Jusoor to complete the deal');
+        }
+        
+        // Step 3.5: Document verification
+        if (deal.isPaymentVedifiedSeller && !deal.isDocVedifiedBuyer) {
+            return t('Document Verification Pending');
         }
         
         // Step 3: Payment verification
@@ -80,8 +85,6 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
                 return t('Seller DSA Pending');
             } else if (deal.isDsaSeller && !deal.isDsaBuyer) {
                 return t('Buyer DSA Pending');
-            } else if (deal.isDsaSeller && deal.isDsaBuyer) {
-                return t('DSA Verified');
             }
         }
         
@@ -143,6 +146,7 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
             isPaymentVedifiedSeller: deal?.isPaymentVedifiedSeller,
             isDsaSeller: deal?.isDsaSeller,
             isDsaBuyer: deal?.isDsaBuyer,
+            isDocVedifiedBuyer: deal?.isDocVedifiedBuyer,
         })) || [];
     }, [offerDeals, getStatusLabel]);
 

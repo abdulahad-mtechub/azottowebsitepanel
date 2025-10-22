@@ -47,22 +47,23 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         if (deal.status === 'CANCEL') {
             return t('Cancelled');
         }
-        
-        if (deal.isBuyerCompleted && deal.isSellerCompleted) {
+
+        if (deal.isBuyerCompleted && deal.isSellerCompleted && deal?.status === 'COMPLETED') {
             return t('Completed');
         }
-        if (deal.isBuyerCompleted) {
-            return t('Buyer Completed');
-        }
+
         if (deal.isSellerCompleted) {
-            return t('Seller Completed');
+            return t('Waiting for Jusoor to complete the deal');
+        }
+        if (deal.isBuyerCompleted && deal.isDocVedifiedBuyer) {
+            return t('Finalizing Deal');
+        }
+        if (deal.isPaymentVedifiedSeller && !deal.isDocVedifiedBuyer) {
+            return t('Document Verification Pending');
         }
         
         if (deal.isDsaSeller && deal.isDsaBuyer && !deal.isPaymentVedifiedSeller) {
             return t('Payment Verification Pending');
-        }
-        if (deal.isPaymentVedifiedSeller && !deal.isBuyerCompleted) {
-            return t('Finalizing Deal');
         }
         
         if (deal.isCommissionVerified && !deal.isDsaSeller && !deal.isDsaBuyer) {
@@ -111,7 +112,7 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             return 'received';
         }
         
-        // Pending states
+        // Pending states (including Document Verification Pending)
         return 'sendstatus';
     };
 
