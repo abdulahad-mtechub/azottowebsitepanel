@@ -148,9 +148,7 @@ const SellerOfferTable = ({ data }) => {
             width: 100,
             align: 'center',
             render: (_, row) => {
-                // Hide action button if user is the creator (sent offers)
                 if (row?.createdBy === userId) return null;
-                // Hide action button if status is ACCEPTED or REJECTED
                 if (row?.status === 'ACCEPTED' || row?.status === 'REJECTED') return null;
 
                 return (
@@ -182,7 +180,6 @@ const SellerOfferTable = ({ data }) => {
         { id: 'proceed', name: t('Proceed to Purchase') },
     ];
 
-    // Filter offers based on status and type (client-side filtering)
     const filteredOffers = useMemo(() => {
         if (!offerdata || offerdata.length === 0) return [];
         
@@ -221,14 +218,15 @@ const SellerOfferTable = ({ data }) => {
                         <SearchInput
                             placeholder={t("Search by buyer name or price")}
                             value={searchText}
+                            allowClear
                             onChange={(e) => setSearchText(e.target.value)}
                             prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
                             style={{ minWidth: '250px' }}
                             disabled={isBusinessInactive}
                         />
-                        
                         <MySelect
                             withoutForm
+                            allowClear
                             value={filterstatus}
                             options={statusOptions}
                             placeholder={t('Status')}
@@ -240,6 +238,7 @@ const SellerOfferTable = ({ data }) => {
                         />
                         <MySelect
                             withoutForm
+                            allowClear
                             value={filtertype}
                             options={offerTypeOptions}
                             placeholder={t('Offer Type')}

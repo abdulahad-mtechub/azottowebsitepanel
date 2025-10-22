@@ -34,10 +34,11 @@ const BusinessListingPage = ({getcategory}) => {
         { id: 1, key: t('Low to High')},
         { id: 2, key: t('High to Low') },
       ];
-    const [selectedDistrict, setSelectedDistrict] = useState(t('Select District'));
+    const [selectedDistrict, setSelectedDistrict] = useState(null);
+    const [selectedDistrictId, setSelectedDistrictId] = useState(null);
     const [selectedCity, setSelectedCity] = useState(null);
-    const [searchSelectedCity, setsearchSelectedCity] = useState([]);
-    const [cityOptions, setCityOptions] = useState(null);
+    const [searchSelectedCity, setsearchSelectedCity] = useState(null);
+    const [cityOptions, setCityOptions] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState('');
     const [sortOrder, setSortOrder] = useState(null); // null by default
 
@@ -187,36 +188,52 @@ const BusinessListingPage = ({getcategory}) => {
         0;
       
     const handleDistrictChange = (value) => {
+        if (!value) {
+            setSelectedDistrict(null);
+            setSelectedDistrictId(null);
+            setsearchSelectedCity(null);
+            setSelectedCity(null);
+            setCityOptions([]);
+            return;
+        }
+        
         const selectedDistObj = district.find(d => d.id === value);
-        setSelectedDistrict(selectedDistObj?.name || t('Select District'));
+        if (selectedDistObj) {
+            setSelectedDistrict(selectedDistObj.name);
+            setSelectedDistrictId(selectedDistObj.id);
+            // Update city options based on selected district
+            setCityOptions(cities[selectedDistObj.id] || []);
+            // Clear city selection when district changes
+            setsearchSelectedCity(null);
+            setSelectedCity(null);
+        }
     };
       
     const handleCityChange = (value) => {
-        setsearchSelectedCity(value);
         if (!value) {
+            setsearchSelectedCity(null);
             setSelectedCity(null);
             return;
         }
 
-        const allCities = Object.values(cities).flat();
-        const selectedCityObj = allCities.find(city => city.id === Number(value));
+        setsearchSelectedCity(value);
+        
+        // Find city from current district's cities or all cities
+        const cityList = selectedDistrictId ? (cities[selectedDistrictId] || []) : Object.values(cities).flat();
+        const selectedCityObj = cityList.find(city => city.id === Number(value));
         setSelectedCity(selectedCityObj?.name || null);
     };
 
     const handleSearch = () => {
         let query, variables;
-        if (searchSelectedCity) {
-            const allCities = Object.values(cities).flat();
-            const selectedCityObj = allCities.find(city => city.id === Number(searchSelectedCity));
-            if (selectedCityObj) {
-                query = GET_BUSINESS_BY_CITY;
-                variables = { city: selectedCityObj.name, limit, offSet: 0 };
-            } else if(selectedDistrict) {
-                query = GET_BUSINESS_BY_DISTRICT;
-                variables = { district: selectedDistrict, limit, offSet: 0 };
-            }
+        
+        if (searchSelectedCity && selectedCity) {
+            // Search by city
+            query = GET_BUSINESS_BY_CITY;
+            variables = { city: selectedCity, limit, offSet: 0 };
             fetchBusinesses({ query, variables });
-        } else if (selectedDistrict && selectedDistrict !== t('Select District')) {
+        } else if (selectedDistrict && !searchSelectedCity) {
+            // Search by district only
             query = GET_BUSINESS_BY_DISTRICT;
             variables = { district: selectedDistrict, limit, offSet: 0 };
             fetchBusinesses({ query, variables });
@@ -242,34 +259,32 @@ const BusinessListingPage = ({getcategory}) => {
                                 <Col lg={{span: 12}} md={{span:12}} sm={{span: 24}} xs={{span: 24}}>
                                     <MySelect
                                         withoutForm
-                                        showSearch
                                         placeholder={t('Select District')}
                                         options={district}
                                         className='w-100 select'
-                                        value={selectedDistrict}
+                                        value={selectedDistrictId}
                                         onChange={handleDistrictChange}
+                                        allowClear
                                     />
                                 </Col>
                                 <Col xl={{span: 9}} lg={{span: 8}} md={{span:12}} sm={{span: 24}} xs={{span: 24}}>
                                     <MySelect
                                         withoutForm
-                                        showSearch 
                                         placeholder={t('Select City')}
                                         options={cityOptions}
                                         className='w-100 select'
                                         value={searchSelectedCity}
                                         onChange={handleCityChange}
-                                        onFocus={() => {
-                                            if (selectedDistrict && selectedDistrict !== t('Select District')) {
-                                                const selectedDistObj = district.find(d => d.name === selectedDistrict);
-                                                setCityOptions(selectedDistObj ? cities[selectedDistObj.value] || [] : []);
-                                            } else setCityOptions(Object.values(cities).flat());
-                                        }}
+                                        allowClear
                                     />
                                 </Col>
                                 <Col xl={{span: 3}} lg={{span: 4}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
-                                    <Button aria-labelledby={t('Search')} className='btn bg-brand fs-14 fw-400 w-100'>
-                                        <Image src="/assets/icons/search-w.png" preview={false} width={16} alt={t('search icon')} onClick={handleSearch}/> {t('Search')}
+                                    <Button 
+                                        aria-labelledby={t('Search')} 
+                                        className='btn bg-brand fs-14 fw-400 w-100'
+                                        onClick={handleSearch}
+                                    >
+                                        <Image src="/assets/icons/search-w.png" preview={false} width={16} alt={t('search icon')} /> {t('Search')}
                                     </Button>
                                 </Col>
                             </Row>

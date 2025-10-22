@@ -18,10 +18,11 @@ import { MARK_NOTIFICATION_AS_READ } from '../../../graphql/mutation';
 const { Text, Title } = Typography;
 
 const Navbar = ({setGetCategory}) => { 
+
   const { t,i18n } = useTranslation();
   const lan = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lan.toLowerCase() === "ar";
-  const userId = Cookies.get("userId"); // read userId from cookie
+  const userId = Cookies.get("userId"); 
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isshow, setIsShow] = useState(!!userId);
@@ -128,7 +129,6 @@ const Navbar = ({setGetCategory}) => {
         listContainerRef.current.scrollTop = 0;
       }
     } catch (error) {
-      // Optional: log error for debugging
       console.error('Failed to load notifications', error);
     } finally {
       loadingNotificationsRef.current = false;
@@ -157,7 +157,7 @@ const Navbar = ({setGetCategory}) => {
   });
   useEffect(() => {
     let lang = localStorage.getItem("lang") || "en";
-    i18n.changeLanguage(lang); // ✅ now works
+    i18n.changeLanguage(lang);
     setSelectedLang(
       lang === "ar"
         ? { key: "2", label: "AR", icon: "assets/icons/ar.png" ,alt: "Arabic Language logo"}
@@ -538,9 +538,10 @@ useEffect(() => {
                   <Popover
                     content={dropdownContent}
                     trigger="click"
-                    placement="bottomLeft"
+                    placement="bottomRight"
                     open={dropdownOpen}
                     onOpenChange={handleDropdownChange}
+                    getPopupContainer={(trigger) => trigger.parentElement}
                   >
                     <Badge size="small" count={unreadCount} overflowCount={99}>
                       <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
@@ -709,10 +710,11 @@ useEffect(() => {
                 <Popover
                   content={dropdownContent}
                   trigger="click"
-                  placement="bottomLeft"
+                  placement="bottomRight"
                   open={dropdownOpen}
                   onOpenChange={handleDropdownChange}
                   overlayClassName="notification-popover"
+                  getPopupContainer={(trigger) => trigger.parentElement}
                 >
                   <Badge size="small" count={unreadCount} overflowCount={99}>
                     <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>

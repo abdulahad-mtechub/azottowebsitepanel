@@ -242,7 +242,7 @@ const ProfileDashboard = () => {
                 </Flex>
             ),
             sellerBusiness: (
-                <Allbussines/>
+                <Allbussines />
             ),
             sellerSoldBusiness: (
                 <Flex vertical gap={20}>

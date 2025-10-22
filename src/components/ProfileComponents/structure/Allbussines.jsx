@@ -38,6 +38,8 @@ const Allbussines = () => {
     if (singledetail) {
         return <Singlebusinessview singledetail={singledetail} setSingleDetail={setSingleDetail} />;
     }
+
+    console.log('sellerBusinesses', sellerBusinesses);  
     return (
         <Flex gap={20} vertical>
             <Flex justify='space-between' align='center'>
