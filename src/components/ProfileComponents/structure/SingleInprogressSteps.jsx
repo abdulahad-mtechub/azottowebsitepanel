@@ -67,7 +67,7 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
                 : inprogressdeal?.isDsaSeller && !inprogressdeal?.isDsaBuyer
                 ? t('Buyer DSA Pending')
                 : t('Signed'),
-            lockedTitle: t('Commission Verification Pending'),
+            lockedTitle: t('Commission Pending'),
             lockedDesc: t('Waiting for admin to verify your commission payment.'),
             isCompleted: isStep2Completed,
             isEnabled: isStep1Completed, // Enabled only if Step 1 is completed (admin verified commission)

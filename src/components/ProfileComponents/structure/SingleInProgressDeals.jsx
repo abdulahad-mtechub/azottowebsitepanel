@@ -44,6 +44,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         isBuyerCompleted : data?.getDeal?.isBuyerCompleted || false,
         isPaymentVedifiedSeller : data?.getDeal?.isPaymentVedifiedSeller || false,
         commission : data?.getDeal?.offer?.commission || 0,
+        isCommissionUploaded : data?.getDeal?.isCommissionUploaded,  
     } : null;
   // Determine status based on boolean fields
   console.log("deal",deal);
@@ -88,14 +89,14 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     }
     
     // Step 2: Commission verification
-    if (!deal.isCommissionVerified) {
+    if (!deal.isCommissionVerified && deal.isCommissionUploaded) {
       return t('Commission Verification Pending');
     }
     if (deal.isCommissionVerified) {
       return t('Commission Verified');
     }
-    
-    return t('Pending');
+
+    return t('Commission Pending');
   };
 
   // Get badge class based on deal status

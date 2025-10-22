@@ -38,9 +38,9 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             isPaymentVedifiedSeller : data.getDeal?.isPaymentVedifiedSeller,
             isBuyerCompleted : data.getDeal?.isBuyerCompleted || false,
             isDocVedifiedBuyer : data.getDeal?.isDocVedifiedBuyer || false,
+            isCommissionUploaded : data.getDeal?.isCommissionUploaded,
         } : null;
 
-    // Determine status based on boolean fields
     const getStatusLabel = (deal) => {
         if (!deal) return t('Pending');
         
@@ -76,14 +76,14 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             return t('Buyer DSA Pending');
         }
         
-        if (!deal.isCommissionVerified) {
+        if (!deal.isCommissionVerified && deal.isCommissionUploaded) {
             return t('Commission Verification Pending');
         }
         if (deal.isCommissionVerified) {
             return t('Commission Verified');
         }
         
-        return t('Pending');
+        return t('Commission Pending');
     };
 
     // Get badge class based on deal status

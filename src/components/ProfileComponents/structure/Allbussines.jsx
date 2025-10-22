@@ -13,7 +13,8 @@ const { Title, Text } = Typography;
 const Allbussines = () => {
     
     const navigate = useNavigate();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const isArabic = i18n.language === 'ar';
     const [currentPage, setCurrentPage] = useState(1);
     const [singledetail, setSingleDetail] = useState(null);
     const [limit, setLimit] = useState(10);
@@ -21,6 +22,27 @@ const Allbussines = () => {
     const [getSellerBusinesses, { data: sellerBusinesses, loading }] = useLazyQuery(GETSELLERBUSINESS, {
         fetchPolicy: 'network-only',
     });
+
+    const allBusinessesData = sellerBusinesses?.getAllSellerBusinesses?.businesses?.map((biz) => ({
+        id: biz.id,
+        title: biz.businessTitle,
+        categoryName: isArabic ? biz.category.arabicName : biz.category.name,
+        description: biz.description,
+        isSaved: biz.isSaved,
+        amount: `${biz.price?.toLocaleString()}`,
+        price: biz.price,
+        businessTitle: biz.businessTitle,
+        category: biz.category,
+        isByTakbeer: biz.isByTakbeer,
+        businessStatus: biz.businessStatus,
+        offerCount: biz.offerCount,
+        save: 'no',
+        child: [
+            { subtitle: `${biz.revenue?.toLocaleString()}`, subdesc: t('Revenue/month') },
+            { subtitle: `${biz.profit?.toLocaleString()}`, subdesc: t('Profit/month') },
+            { subtitle: `${biz.capitalRecovery?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
+        ]
+    })) || [];
 
     useEffect(() => {
         const offSet = (currentPage - 1) * limit;
@@ -57,14 +79,14 @@ const Allbussines = () => {
             </Flex>
             <Card className='border-gray'>
                 <Row gutter={[16, 16]}>
-                    {sellerBusinesses?.getAllSellerBusinesses?.businesses?.map((pro, i) => (
+                    {allBusinessesData?.map((pro, i) => (
                         <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }} key={i}>
                             <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={() => setSingleDetail(pro?.id)}>
                                 <Flex vertical gap={20}>
                                     <Flex justify='space-between' align='center'>
                                         <Flex gap={4}>
                                             <Button aria-labelledby={t('Category name')} className='fs-13'>
-                                                {pro?.category?.name}
+                                                {isArabic ? pro?.category?.arabicName : pro?.category?.name}
                                             </Button>
                                             {pro?.isByTakbeer !== undefined && (
                                                 <Button
@@ -90,7 +112,7 @@ const Allbussines = () => {
                                             <img src="/assets/images/card-1.webp" width={'100%'} height={'100%'} alt={t('product-image')} fetchPriority="high" />
                                         </div>
                                         <Title className='' level={5}>{pro?.businessTitle}</Title>
-                                        <Text className='fs-14 text-gray'>{pro?.description}</Text>
+                                        <Text className='fs-14 text-gray'>{pro?.description || "No description available"}</Text>
                                         <Divider className='my-1' />
                                         <Row justify={'space-between'}>
                                             {pro?.child?.map((item, c) => (
@@ -111,7 +133,7 @@ const Allbussines = () => {
                                                 <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
                                                 <Title level={4} className='m-0'>{pro?.price}</Title>
                                             </Flex>
-                                            <Text className='text-brand fs-14'>{pro.offerCount}</Text>
+                                            <Text className='text-brand fs-14'>{pro.offerCount >= 10 ? `10+` : pro.offerCount} Offers</Text>
                                         </Flex>
                                     </div>
                                 </Flex>

@@ -8,10 +8,11 @@ import { useTranslation } from 'react-i18next';
 const { Title, Text } = Typography;
 
 const Soldbussines = () => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
+    const isArabic = i18n.language === 'ar';
 
     const [getSellerSoldBusinesses, { data: sellerSoldBusinesses, loading, error }] = useLazyQuery(GETSELLERSOLDBUSINESS, {
         fetchPolicy: 'network-only',
@@ -21,6 +22,26 @@ const Soldbussines = () => {
         const offSet = (currentPage - 1) * limit;
         getSellerSoldBusinesses({ variables: { limit, offSet } });
     }, [currentPage, limit, getSellerSoldBusinesses]);
+
+    const soldBusinessesData = sellerSoldBusinesses?.getAllSellerSoldBusinesses?.businesses?.map((biz) => ({
+        id: biz.id,
+        title: biz.businessTitle,
+        categoryName: isArabic ? biz.category.arabicName : biz.category.name,
+        description: biz.description,
+        isSaved: biz.isSaved,
+        amount: `${biz.price?.toLocaleString()}`,
+        price: biz.price,
+        businessTitle: biz.businessTitle,
+        category: biz.category,
+        isByTakbeer: biz.isByTakbeer,
+        businessStatus: biz.businessStatus,
+        save: 'no',
+        child: [
+            { subtitle: `${biz.revenue?.toLocaleString()}`, subdesc: t('Revenue/month') },
+            { subtitle: `${biz.profit?.toLocaleString()}`, subdesc: t('Profit/month') },
+            { subtitle: `${biz.capitalRecovery?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
+        ]
+    })) || [];
 
     return (
         <Card className='border-gray'>
@@ -34,7 +55,7 @@ const Soldbussines = () => {
                 </Flex>
             ) : (
                 <Row gutter={[16, 16]}>
-                    {sellerSoldBusinesses?.getAllSellerSoldBusinesses?.businesses?.map((pro, i) => (
+                    {soldBusinessesData?.map((pro, i) => (
                     <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }} key={i}>
                         <Card
                             className='h-100 border-gray rounded-12 card-cs cursor'
@@ -44,7 +65,7 @@ const Soldbussines = () => {
                                 <Flex justify='space-between' align='center'>
                                     <Flex gap={4}>
                                         <Button aria-labelledby={t('Category name')} className='fs-13'>
-                                            {pro?.category?.name}
+                                            {isArabic ? pro?.category?.arabicName : pro?.category?.name}
                                         </Button>
                                         {pro?.isByTakbeer !== undefined && (
                                             <Button
@@ -76,7 +97,7 @@ const Soldbussines = () => {
                                             fetchPriority="high"
                                         />
                                     </div>
-                                    <Title level={5}>{pro?.title}</Title>
+                                    <Title level={5}>{pro?.businessTitle}</Title>
                                     <Text className='fs-14 text-gray'>{pro?.description}</Text>
                                     <Divider className='my-1' />
                                     <Row justify={'space-between'}>

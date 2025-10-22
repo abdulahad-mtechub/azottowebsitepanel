@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 const { Text } = Typography;
 
 const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
+  
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
 
@@ -16,7 +17,13 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
   const jasoorCommmission = inprogressdeal?.busines?.documents?.find(
     (doc) => doc.title === "Jasoor Commission"
   );
-  const [updateOfferStatus] = useMutation(UPDATE_DEAL);
+  const [updateOfferStatus] = useMutation(UPDATE_DEAL, 
+    {
+      refetchQueries: [
+        { query: GETDEAL, variables: { getDealId: inprogressdeal?.key } },
+      ],
+    } 
+  );
 
   const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
     refetchQueries: [
@@ -73,7 +80,7 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
         variables: {
           input: {
             id: inprogressdeal?.key,
-            status: "COMMISSION_VERIFICATION_PENDING",
+            isCommissionUploaded: true,
           },
         },
       });

@@ -87,7 +87,7 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
 
         // Step 2: Commission verification
         if (!deal.isCommissionVerified) {
-            return t('Commission Verification Pending');
+            return t('Commission Pending');
         }
         if (deal.isCommissionVerified) {
             return t('Commission Verified');

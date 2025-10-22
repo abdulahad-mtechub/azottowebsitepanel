@@ -80,6 +80,7 @@ query GetBuyerInprogressDeals($limit: Int, $offset: Int, $search: String) {
       isPaymentVedifiedAdmin
       isBuyerCompleted
       isSellerCompleted
+      isCommissionUploaded
       isDocVedifiedBuyer
       business {
         id
@@ -116,6 +117,7 @@ query GetSellerInprogressDeals($limit: Int, $offset: Int, $search: String) {
       isBuyerCompleted
       isSellerCompleted
       isDocVedifiedBuyer
+      isCommissionUploaded
       business {
         id
         businessTitle
@@ -187,6 +189,7 @@ query GetDeal($getDealId: ID!) {
     isBuyerCompleted
     isSellerCompleted
     isDocVedifiedBuyer
+    isCommissionUploaded
     createdAt
     business {
       id

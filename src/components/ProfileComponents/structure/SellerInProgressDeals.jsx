@@ -88,12 +88,11 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
             }
         }
         
-        // Step 1: Commission verification
-        if (!deal.isCommissionVerified) {
+        if (!deal.isCommissionVerified && deal.isCommissionUploaded) {
             return t('Commission Verification Pending');
         }
-        
-        return t('Pending');
+
+        return t('Commission Pending');
     }, [t]);
 
     const columns = [

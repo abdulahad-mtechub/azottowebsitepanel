@@ -66,6 +66,7 @@ const GET_BUSINESS = gql`
       foundedDate
       growthOpportunities
       isByTakbeer
+      isAbleInActive
       multiple
       numberOfEmployees
       price

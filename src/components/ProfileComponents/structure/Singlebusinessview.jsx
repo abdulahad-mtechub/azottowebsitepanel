@@ -1,4 +1,4 @@
-import { Card, Row, Col, Flex, Typography, Breadcrumb, Space, Button, Image, Tabs, message } from 'antd';
+import { Card, Row, Col, Flex, Typography, Breadcrumb, Space, Button, Image, Tabs, message, Tooltip } from 'antd';
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
 import { SellerOfferTable } from './SellerOfferTable';
 import { SellerDealDetails } from './SellerDealDetails';
@@ -80,6 +80,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
       amount: `SAR ${payload?.price?.toLocaleString()}`,
       status: payload?.isSupportVerified ? t('Active') : t('Under-review'),
       type: payload?.isByTakbeer ? t('Taqbeel') : t('Acquiring'),
+      isAbleToInactive: payload?.isAbleToInactive,
 
       child: [
         {
@@ -139,6 +140,8 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   }
 
   const uiBusiness = mapBusinessPayloadToUI(business);
+
+  console.log("business",business);
   return (
     <div className='mb-2'>
       {contextHolder}
@@ -172,14 +175,30 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
               {t('Edit')}
             </Button>
             {(business?.businessStatus === 'ACTIVE' || business?.businessStatus === 'INACTIVE') && (
-              <Button 
-                aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
-                className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
-                type='button'
-                onClick={() => setStatusModalVisible(true)}
-              >
-                {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
-              </Button>
+              <>
+              {
+              (business?.isAbleInActive) ? (
+                <Button 
+                  aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
+                  className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
+                  type='button'
+                  onClick={() => setStatusModalVisible(true)}
+                >
+                  {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
+                </Button>
+              ) : (
+                <Tooltip title={t('Cannot inactivate business with active deals')}>
+                  <Button 
+                    aria-labelledby={t('Inactivate Business...')} 
+                    className='btn rounded-8 bg-gray'
+                    type='button'
+                    disabled
+                  >
+                    {t('Inactivate Business')}
+                  </Button>
+                </Tooltip>
+              )}
+              </>
             )}
           </Space>
         </Flex>
