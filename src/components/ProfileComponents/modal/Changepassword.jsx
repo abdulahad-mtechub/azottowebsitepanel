@@ -1,4 +1,4 @@
-import { Button, Col, Flex, Form, Modal, Row, Typography, message } from 'antd';
+import { Button, Col, Flex, Form, Modal, Row, Typography, message, Input } from 'antd';
 import { MyInput } from '../../Forms';
 import { CloseOutlined } from '@ant-design/icons';
 import { CHANGE_PASSWORD } from '../../../graphql/mutation';
@@ -16,6 +16,11 @@ const Changepassword = ({ visible, onClose }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const [changePassword, { loading }] = useMutation(CHANGE_PASSWORD);
+
+  const handleClose = () => {
+    form.resetFields();
+    onClose();
+  };
 
   const handleSubmit = async (values) => {
     try {
@@ -42,11 +47,12 @@ const Changepassword = ({ visible, onClose }) => {
       <Modal
         title={null}
         open={visible}
-        onCancel={onClose}
+        onCancel={handleClose}
         closeIcon={false}
+        centered
         footer={
           <Flex justify="end" gap={5}>
-            <Button aria-labelledby={t('Cancel')} type="button" className="btn text-black border-gray" onClick={onClose}>
+            <Button aria-labelledby={t('Cancel')} type="button" className="btn text-black border-gray" onClick={handleClose}>
               {t('Cancel')}
             </Button>
             <Button
@@ -67,7 +73,7 @@ const Changepassword = ({ visible, onClose }) => {
             <Title level={5} className="m-0">
               {t('Change Password')}
             </Title>
-            <Button aria-labelledby={t('Close')} type="button" onClick={onClose} className="p-0 border-0 bg-transparent">
+            <Button aria-labelledby={t('Close')} type="button" onClick={handleClose} className="p-0 border-0 bg-transparent">
               <CloseOutlined className="fs-14" />
             </Button>
           </Flex>
@@ -81,12 +87,14 @@ const Changepassword = ({ visible, onClose }) => {
           form={form}
           requiredMark={false}
           onFinish={handleSubmit}
+          preserve={false}
         >
           <Row>
             <Col span={24}>
               <MyInput
                 label={t('Current Password')}
                 name="currentpassword"
+                required={true}
                 message={t('Enter your current password')}
                 placeholder={t('Enter your current password')}
                 className="w-100"
@@ -96,6 +104,7 @@ const Changepassword = ({ visible, onClose }) => {
 
             <Col span={24}>
               <Form.Item
+                label={<Typography.Text className='fs-14 fw-400'>{t('New Password')}</Typography.Text>}
                 name="newpassword"
                 rules={[
                   { required: true, message: t('Enter your new password') },
@@ -105,23 +114,25 @@ const Changepassword = ({ visible, onClose }) => {
                   },
                 ]}
                 hasFeedback
+                className='custom-input fs-14'
               >
-                <MyInput
-                  label={t('New Password')}
+                <Input.Password
                   placeholder={t('Enter your new password')}
-                  className="w-100"
-                  type="password"
+                  size="middle"
+                  className="m-0 fs-14"
                 />
               </Form.Item>
             </Col>
 
             <Col span={24}>
               <Form.Item
+                label={<Typography.Text className='fs-14 fw-400'>{t('Confirm Password')}</Typography.Text>}
                 name="confirmnewpassword"
                 dependencies={["newpassword"]}
                 hasFeedback
+                className='custom-input fs-14'
                 rules={[
-                  { required: true, message: t('Please confirm your new password') },
+                  { required: true, message: t('Please confirm your password') },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (!value || getFieldValue("newpassword") === value) {
@@ -132,11 +143,10 @@ const Changepassword = ({ visible, onClose }) => {
                   }),
                 ]}
               >
-                <MyInput
-                  label={t('Confirm New Password')}
-                  placeholder={t('Enter your confirm new password')}
-                  className="w-100"
-                  type="password"
+                <Input.Password
+                  placeholder={t('Enter your confirm password')}
+                  size="middle"
+                  className="m-0 fs-14"
                 />
               </Form.Item>
             </Col>

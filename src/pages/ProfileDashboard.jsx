@@ -18,7 +18,7 @@ import { NAVUSERDATA,PROFESSIONALSTATISTICS,GETBUYERSTATISTICS } from '../graphq
 import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Text, Title } = Typography;
 
@@ -91,9 +91,9 @@ const ProfileDashboard = () => {
     
     // Get current month start and end dates
     const getCurrentMonthRange = () => {
-        const startDate = moment().startOf('month').format('YYYY-MM-DD');
-        const endDate = moment().endOf('month').format('YYYY-MM-DD');
-        return [moment(startDate), moment(endDate)];
+        const startDate = dayjs().startOf('month').format('YYYY-MM-DD');
+        const endDate = dayjs().endOf('month').format('YYYY-MM-DD');
+        return [dayjs(startDate), dayjs(endDate)];
     };
 
     const [parentTab, setParentTab] = useState(getInitialParentTab);

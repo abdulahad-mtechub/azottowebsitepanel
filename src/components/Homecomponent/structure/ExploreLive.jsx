@@ -1,17 +1,38 @@
 import React from 'react'
-import { Button, Card, Col, Divider, Flex, Image, Row, Typography, Spin } from 'antd'
+import { Button, Card, Col, Divider, Flex, Image, Row, Typography, Spin, message } from 'antd'
 import { RightOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { GETRANDOMBUSINESS } from '../../../graphql/query/business'
-import { useQuery } from "@apollo/client";
+import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations'
+import { useQuery, useMutation } from "@apollo/client";
 import { useTranslation } from 'react-i18next'
+import { truncateChars } from '../../../utils'
 
 const { Text, Title, Paragraph } = Typography
 
 const ExploreLive = () => {
     const navigate = useNavigate()
     const { t } = useTranslation()
-    const { data, loading, error, refetch } = useQuery(GETRANDOMBUSINESS);
+    const [messageApi, contextHolder] = message.useMessage();
+    const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
+    
+    const { data, loading, refetch} = useQuery(GETRANDOMBUSINESS);
+
+    const saveBusinessHandler = async (businessId, e) => {
+        e.stopPropagation();
+        try {
+            await saveBusiness({
+                variables: {
+                    saveBusinessId: businessId,
+                },
+            });
+            messageApi.success(t("Business added to favorite succesfully"));
+            refetch(); 
+        } catch (err) {
+            console.error("Save mutation error:", err);
+            messageApi.error(t("Save failed: ") + err.message);
+        }
+    };
 
     const exploreData = data?.getRandomBusinesses?.map(item => ({
         id: item.id,
@@ -45,11 +66,6 @@ const ExploreLive = () => {
         ]
     })) || [];
 
-    const truncateChars = (text, max = 25) => {
-        if (!text) return "";
-        const chars = Array.from(text);
-        return chars.length > max ? chars.slice(0, max).join("") + "..." : text;
-    };
     if (loading) {
         return (
             <Flex justify="center" align="center" className='h-200'>
@@ -58,9 +74,11 @@ const ExploreLive = () => {
         );
     }
     return (
-        <div className='feature bg-light-brand'>
-            <div className='container'>
-                <Row gutter={[12, 24]}>
+        <>
+            {contextHolder}
+            <div className='feature bg-light-brand'>
+                <div className='container'>
+                    <Row gutter={[12, 24]}>
                     <Col span={24}>
                         <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
                             <div className='tag fw-500 bg-secondary fw-500 text-brand'>
@@ -89,19 +107,21 @@ const ExploreLive = () => {
                                                     aria-labelledby="type"
                                                     className={`fs-12 text-white ${pro.type ? 'bg-brand' : 'bg-black'}`}
                                                 >
-                                                    {pro.type ? t("Taqbeel") : t("Acquiring")}
-                                                </Button>
-                                            )}
+                                                {pro.type ? t("Taqbeel") : t("Acquiring")}
+                                            </Button>
+                                        )}
                                         </Flex>
-                                        <Button className='border-0 bg-transparent p-0' aria-labelledby='bookmarked button'>
+                                        <Button 
+                                            className='border-0 bg-transparent p-0' 
+                                            aria-labelledby='bookmarked button'
+                                            onClick={(e) => saveBusinessHandler(pro?.id, e)}
+                                        >
                                             {pro?.save === true ? 
                                                 <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} fetchPriority="high" /> : 
                                                 <img src='/assets/icons/bk-bl.png' alt={t('un-bookmarked-image')} width={22} fetchPriority="high" />
                                             }
                                         </Button>
-                                    </Flex>
-
-                                    <div>
+                                    </Flex>                                    <div>
                                         <div className='w-full card-img mb-2 rounded-12'>
                                             <img src="/assets/images/card-1.webp" width={'100%'} height={'100%'} alt={t('product-image')} fetchPriority="high" />
                                         </div>
@@ -152,6 +172,7 @@ const ExploreLive = () => {
                 </Row>
             </div>
         </div>
+        </>
     )
 }
 

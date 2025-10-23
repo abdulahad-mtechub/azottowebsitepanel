@@ -14,3 +14,9 @@ export const normalizeSearchInput = (input) => {
   const sanitized = sanitizeSearchInput(input);
   return isEmptySearch(sanitized) ? '' : sanitized;
 };
+
+export const truncateChars = (text, max = 25) => {
+    if (!text) return "";
+    const chars = Array.from(text);
+    return chars.length > max ? chars.slice(0, max).join("") + "..." : text;
+};

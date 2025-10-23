@@ -72,7 +72,7 @@ const Sellerwork = () => {
                 </div>
               </Flex>
               <Flex vertical className="text-center" align="center" gap={8}>
-                <Title level={3} className="m-0">
+                <Title level={4} className="m-0">
                   {items?.title}
                 </Title>
                 <Text>{items?.desc}</Text>

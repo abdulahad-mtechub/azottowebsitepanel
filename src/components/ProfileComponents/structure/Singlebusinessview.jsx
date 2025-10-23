@@ -149,7 +149,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
         <Breadcrumb
           separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
           items={[
-            { title: <Text className='fs-13 text-gray' italic>{t('Business Listing')}</Text> },
+            { title: <Text className='fs-13 text-gray cursor' onClick={() => setSingleDetail(null)} italic>{t('Business Listing')}</Text> },
             { title: <Text className='fw-500 fs-13 text-black' italic>{business?.businessTitle}</Text> },
           ]}
         />

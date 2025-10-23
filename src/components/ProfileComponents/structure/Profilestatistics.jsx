@@ -1,7 +1,7 @@
 import { Card, Row, Col, Typography, Flex, Image, DatePicker } from 'antd';
 import { ModuleTopHeading } from '../../Pagecomponents';
 import { useTranslation } from 'react-i18next';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const { Title, Text } = Typography;
 const { RangePicker } = DatePicker;
@@ -11,8 +11,8 @@ const Profilestatistics = ({ data, title, dateRange, onDateRangeChange }) => {
 
   // Default to current month if dateRange is not provided
   const defaultDateRange = dateRange || [
-    moment().startOf('month'),
-    moment().endOf('month')
+    dayjs().startOf('month'),
+    dayjs().endOf('month')
   ];
 
   return (
@@ -25,7 +25,6 @@ const Profilestatistics = ({ data, title, dateRange, onDateRangeChange }) => {
           format='YYYY-MM-DD'
           placeholder={[t('Start Date'), t('End Date')]}
           className='w-auto'
-          defaultValue={[moment().startOf('month'), moment().endOf('month')]}
         />
       </Flex>
       <Row gutter={[16, 16]} className='mt-2'>

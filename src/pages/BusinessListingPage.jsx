@@ -168,12 +168,13 @@ const BusinessListingPage = ({getcategory}) => {
         categoryParam, cityParam, profit, revenue, limit, currentPage,
         employeesRange, operationalYearRange, hasAssets,
         priceRange, profitRange, profitMargenRange, revenueRange,
-        multipleStep, sortOrder, selectedCategory,
+        multipleStep, sortOrder, selectedCategory
     ]);
 
     const businessList =
         businesses?.getAllBusinesses?.businesses ||
         businesses?.getAllBusinessesByCategory?.businesses ||
+        businesses?.getAllBusinessesByDistrict?.businesses ||
         businesses?.getAllBusinessesByCity?.businesses ||
         businesses?.getAllBusinessesByProfit?.businesses ||
         businesses?.getAllBusinessesByRevenue?.businesses ||
@@ -181,6 +182,7 @@ const BusinessListingPage = ({getcategory}) => {
 
     const totalCount =
         businesses?.getAllBusinesses?.totalCount ||
+        businesses?.getAllBusinessesByDistrict?.totalCount ||
         businesses?.getAllBusinessesByCategory?.totalCount ||
         businesses?.getAllBusinessesByCity?.totalCount ||
         businesses?.getAllBusinessesByProfit?.totalCount ||
@@ -225,18 +227,34 @@ const BusinessListingPage = ({getcategory}) => {
     };
 
     const handleSearch = () => {
-        let query, variables;
+        setCurrentPage(1); // Reset to first page
         
         if (searchSelectedCity && selectedCity) {
             // Search by city
-            query = GET_BUSINESS_BY_CITY;
-            variables = { city: selectedCity, limit, offSet: 0 };
+            const query = GET_BUSINESS_BY_CITY;
+            const variables = { 
+                city: selectedCity, 
+                limit, 
+                offSet: 0,
+                filter: getFilterVariables().filter,
+                sort: getFilterVariables().sort
+            };
             fetchBusinesses({ query, variables });
         } else if (selectedDistrict && !searchSelectedCity) {
             // Search by district only
-            query = GET_BUSINESS_BY_DISTRICT;
-            variables = { district: selectedDistrict, limit, offSet: 0 };
+            const query = GET_BUSINESS_BY_DISTRICT;
+            const variables = { 
+                district: selectedDistrict, 
+                limit, 
+                offSet: 0,
+                filter: getFilterVariables().filter,
+                sort: getFilterVariables().sort
+            };
             fetchBusinesses({ query, variables });
+        } else {
+            // No district/city selected, fetch all
+            const variables = getFilterVariables();
+            fetchBusinesses({ query: GET_ALL_BUSINESSES, variables });
         }
     };
 
@@ -370,6 +388,7 @@ const BusinessListingPage = ({getcategory}) => {
                                 categoryName: isArabic? biz.category.arabicName:biz.category.name,
                                 description: biz.description,
                                 isSaved: biz.isSaved,
+                                isByTakbeer: biz.isByTakbeer,
                                 amount: `${biz.price?.toLocaleString()}`,
                                 save: 'no',
                                 child: [

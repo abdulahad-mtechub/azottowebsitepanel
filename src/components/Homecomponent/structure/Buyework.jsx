@@ -65,14 +65,16 @@ const Buyework = () => {
           key={index}
         >
           <Card className="border-0 h-100 work-cd bg-transparent">
+            <Flex vertical align="center" gap={20}>
             <Flex justify="center">
               <div className="riv-cs">{items?.image}</div>
             </Flex>
-            <Flex vertical className="text-center" align="center">
+            <Flex vertical className="text-center" align="center" gap={8}>
               <Title level={4} className="m-0">
                 {items?.title}
               </Title>
               <Text>{items?.desc}</Text>
+            </Flex>
             </Flex>
           </Card>
         </Col>

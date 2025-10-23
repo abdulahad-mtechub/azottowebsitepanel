@@ -214,7 +214,7 @@ const SellerOfferTable = ({ data }) => {
         <>
             <Row gutter={[24, 24]}>
                 <Col span={24}>
-                    <Flex gap={5} align='center' wrap>
+                    <Flex gap={12} align='center' wrap>
                         <SearchInput
                             placeholder={t("Search by buyer name or price")}
                             value={searchText}

@@ -1,22 +1,33 @@
 import { Card, Checkbox, Col, Collapse, Flex, Input, Radio, Row, Typography } from 'antd';
 import { LineOutlined } from '@ant-design/icons';
-import { categoriesData, teamsizeFilter, yearOper } from '../../../data';
+import { teamsizeFilter, yearOper } from '../../../data';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { CustomProgressBar } from '../../ui';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from '@apollo/client';
+import { GET_CATEGORIES } from '../../../graphql/query';
 
 const { Text, Title } = Typography;
 
 const Filter = ({ 
-    multipleStep, setMultipleStep,
+    setMultipleStep,
     setPriceRange, setRevenueRange, setProfitRange,
     setProfitMargenRange, setEmployeesRange,
     setOperationalYearRange, setHasAssets, setSelectedCategory
 }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const isArabic = i18n.language === 'ar';
     const [activeStep, setActiveStep] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
+    const [activeCategoryId, setActiveCategoryId] = useState(null);
+
+    const { data: categoryData } = useQuery(GET_CATEGORIES);
+    const categories = categoryData?.getAllCategories?.categories?.map(cat => ({
+        id: cat.id,
+        title: cat.name,
+        arabicTitle: cat.arabicName
+    })) || [];
 
     const steps = ["1x", "2x", "3x", "4x", "5x", "5x+"];
     const onStepChange = (step) => {
@@ -128,9 +139,17 @@ const Filter = ({
             key: '1',
             label: <Title level={5} className='m-0 py-2 fw-500'>{t('Categories')}</Title>,
             children: <Flex vertical>
-                {categoriesData?.map((list,i) => (
-                    <Link to={list?.path} className='cate-filter' key={i} onClick={() => setSelectedCategory(list?.name)}>
-                        {t(list?.name)}
+                {categories?.map((cat) => (
+                    <Link 
+                        to={`/businesslisting?category=${encodeURIComponent(cat.title)}`} 
+                        className={`cate-filter ${activeCategoryId === cat.id ? 'active' : ''}`}
+                        key={cat.id} 
+                        onClick={() => {
+                            setSelectedCategory(cat.title);
+                            setActiveCategoryId(cat.id);
+                        }}
+                    >
+                        {isArabic ? cat.arabicTitle : cat.title}
                     </Link>
                 ))}
             </Flex>

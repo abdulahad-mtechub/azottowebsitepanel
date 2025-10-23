@@ -5,6 +5,7 @@ import { CREATE_SAVE_BUSINESS } from "../../../graphql";
 import { useMutation } from '@apollo/client';
 import { message } from "antd";
 import { useTranslation } from 'react-i18next';
+import { truncateChars } from '../../../utils';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -45,7 +46,6 @@ const ProductCard = ({
             </Flex>
         );
     }
-
     if (!isLoading && (!exploreData || exploreData.length === 0)) {
         return (
             <Flex vertical justify="center" align="center" style={{ minHeight: '250px' }}>
@@ -84,15 +84,15 @@ const ProductCard = ({
                             <Flex vertical gap={20}>
                                 <Flex justify='space-between' align='center'>
                                     <Flex gap={4}>
-                                        <Tag color="default" className="fs-12">
-                                            {pro?.categoryName?.split(/\s+/).slice(0, 2).join(' ') + '...'}
-                                        </Tag>
-                                        <Tag 
-                                            className="fs-12 bg-brand"
-                                            color={pro.isByTakbeer ? "bg-black" : "bg-blue"}
-                                        >
+                                        <Button className='fs-13' aria-labelledby='Restaurant'>
+                                            {truncateChars(pro?.categoryName, 20)}
+                                        </Button>
+                                        <Button
+                                                aria-labelledby="type"
+                                                className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
+                                            >
                                             {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
-                                        </Tag>
+                                        </Button>
                                     </Flex>
                                     <Button 
                                         aria-labelledby='bookmarked-btn'
