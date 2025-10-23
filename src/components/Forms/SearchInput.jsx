@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useDebounce } from '../../hooks/useDebounce';
 import { normalizeSearchInput } from '../../utils';
 import './index.css'
@@ -7,7 +7,6 @@ import './index.css'
 export const SearchInput = ({
   withoutForm, 
   name, 
-  label, 
   tooltip, 
   type, 
   size, 

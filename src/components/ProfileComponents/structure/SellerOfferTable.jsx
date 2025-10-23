@@ -67,6 +67,7 @@ const SellerOfferTable = ({ data }) => {
     const [filterstatus, setFilterStatus] = useState(null);
     const [filtertype, setFilterType] = useState(null);
     const [searchText, setSearchText] = useState('');
+    const [debouncedSearchText, setDebouncedSearchText] = useState('');
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
     const [endaVisible, setEndaVisible] = useState(false);
@@ -81,7 +82,7 @@ const SellerOfferTable = ({ data }) => {
             getOfferByBusinessIdId: data?.id,
             limit: pagination.pageSize,
             offSet: pagination.current - 1,
-            search: searchText || null,
+            search: debouncedSearchText || null,
             status: null
         },
         fetchPolicy: 'network-only',
@@ -220,6 +221,8 @@ const SellerOfferTable = ({ data }) => {
                             value={searchText}
                             allowClear
                             onChange={(e) => setSearchText(e.target.value)}
+                            onDebouncedChange={setDebouncedSearchText}
+                            debounceDelay={500}
                             prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
                             style={{ minWidth: '250px' }}
                             disabled={isBusinessInactive}
