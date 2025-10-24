@@ -6,6 +6,7 @@ import { useMutation } from '@apollo/client';
 import { message } from "antd";
 import { useTranslation } from 'react-i18next';
 import { truncateChars } from '../../../utils';
+import Cookies from "js-cookie";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -23,21 +24,40 @@ const ProductCard = ({
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
+    const userId = Cookies.get("userId");
 
     const saveBusinessHandler = async (businessId) => {
-        try {
-          await saveBusiness({
-            variables: {
-              saveBusinessId: businessId,
-            },
-          });
-          messageApi.success(t("Business added to favorite succesfully"));
-          refetchBusinesses(); 
-        } catch (err) {
-          console.error("Save mutation error:", err);
-          messageApi.error(t("Save failed: ") + err.message);
+        if (!userId) {
+            messageApi.info({
+                content: (
+                    <span>
+                        {t('Please')}{' '}
+                        <a
+                            onClick={() => navigate('/login')}
+                            style={{ color: '#1677ff', textDecoration: 'underline', cursor: 'pointer' }}
+                        >
+                            {t('login')}
+                        </a>{' '}
+                        {t('to continue')}.
+                    </span>
+                ),
+            });
+            return;
         }
-      };
+
+        try {
+            await saveBusiness({
+            variables: {
+                saveBusinessId: businessId,
+            },
+            });
+            messageApi.success(t("Business added to favorite succesfully"));
+            refetchBusinesses(); 
+        } catch (err) {
+            console.error("Save mutation error:", err);
+            messageApi.error(t("Save failed: ") + err.message);
+        }
+    };
     if (isLoading) {
         return (
             <div

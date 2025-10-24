@@ -134,7 +134,7 @@ const SingleViewlisting = () => {
                                     <Flex vertical gap={12}>
                                         <Text className='fs-13 text-gray fw-500'>{t('Reference #')}: {business?.reference || t('Not Found')}</Text>
                                         <Flex gap={10} align='center'>
-                                            <Button aria-label="Arrow left" className='p-0' type="text" onClick={() => navigate("/")}>
+                                            <Button aria-label="Arrow left" className='p-0' type="text" onClick={() => navigate("/businesslisting")}>
                                                 <Image src="/assets/icons/back-arr.png" alt="Arrow Left" width={26} height={26} preview={false} />
                                             </Button>
                                             <Title level={3} className='m-0'>{business?.businessTitle}</Title>

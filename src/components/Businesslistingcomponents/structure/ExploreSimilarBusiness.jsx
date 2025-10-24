@@ -4,15 +4,18 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';
 import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom';
+import Cookies from "js-cookie";
 
 const { Text, Title, Paragraph } = Typography;
 
 const ExploreSimilarBusiness = ({ id }) => {
+
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
+    const userId = Cookies.get("userId");
     
     const { data, loading, refetch } = useQuery(GET_RANDOM_BUSINESSES, {
         variables: { getRandomBusinessesId: id },
@@ -24,6 +27,25 @@ const ExploreSimilarBusiness = ({ id }) => {
 
     const saveBusinessHandler = async (businessId, e) => {
         e.stopPropagation();
+
+        if (!userId) {
+            messageApi.info({
+                content: (
+                    <span>
+                        {t('Please')}{' '}
+                        <a
+                            onClick={() => navigate('/login')}
+                            style={{ color: '#1677ff', textDecoration: 'underline', cursor: 'pointer' }}
+                        >
+                            {t('login')}
+                        </a>{' '}
+                        {t('to continue')}.
+                    </span>
+                ),
+            });
+            return;
+        }
+
         try {
             await saveBusiness({
                 variables: {
