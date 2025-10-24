@@ -324,6 +324,7 @@ query GetRandomBusinesses {
     capitalRecovery
   }
 }`
+
 export {
     GET_CATEGORIES,
     GET_CATEGORY,

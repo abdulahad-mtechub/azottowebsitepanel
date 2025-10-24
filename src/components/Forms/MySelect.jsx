@@ -42,7 +42,7 @@ export const MySelect = ({withoutForm,name,label,mode,disabled,showKey,required,
                 {...props}
                 >
                   {
-                      options?.map(opt=><Select.Option value={showKey ? opt?.id : opt.name} key={opt?.id}>{opt?.name}</Select.Option>)
+                      options?.map(opt=><Select.Option value={showKey ? opt?.id : opt.name} title="" key={opt?.id}>{opt?.name}</Select.Option>)
                   }
               </Select>
       </Form.Item>  

@@ -139,7 +139,22 @@ const SignupPage = () => {
 
   const [current, setCurrent] = useState(0);
 
-  const onChange = (value) => setCurrent(value);
+  const onChange = async (value) => {
+    // Only allow going to previous steps or staying on current
+    // Don't allow jumping forward without validation
+    if (value <= current) {
+      setCurrent(value);
+    } else {
+      // Try to validate current step before moving forward
+      try {
+        await form.validateFields();
+        setCurrent(value);
+      } catch {
+        // Validation failed, don't move
+        messageApi.warning(t("Please complete the current step before proceeding"));
+      }
+    }
+  };
 
   const next = async () => {
     if (current < steps.length - 1) {
@@ -164,7 +179,7 @@ const SignupPage = () => {
               name="fullName"
               required
               message={t("Please enter full name")}
-              placeholder={t("Enter Full Name")}
+              placeholder={t("Enter full name")}
               validator={{
                 pattern: /^[A-Za-z\u0600-\u06FF\s]+$/,
                 message: t("Name should only contain letters (English or Arabic) and spaces")
@@ -176,8 +191,8 @@ const SignupPage = () => {
               label={t("Email Address")}
               name="email"
               required
-              message={t("Please enter Email Address")}
-              placeholder={t("Enter Email Address")}
+              message={t("Please enter email address")}
+              placeholder={t("Enter email address")}
               validator={{
                 pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
                 message: t("Please enter a valid email address")
@@ -186,7 +201,7 @@ const SignupPage = () => {
           </Col>
           <Col lg={{ span: 12 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
             <MySelect
-              label={t("Select District")}
+              label={t("District")}
               name="district"
               required
               message={t("Please enter district")}
@@ -198,7 +213,7 @@ const SignupPage = () => {
           </Col>
           <Col lg={{ span: 12 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
             <MySelect
-              label={t("Select City")}
+              label={t("City")}
               name="city"
               required
               showKey
@@ -260,7 +275,7 @@ const SignupPage = () => {
           {idType === "national_id" ? (
             <>
               <Col span={24}>
-                  <Row gutter={8}>
+                  <Row gutter={8} className="mb-2">
                       <Col flex="auto">
                           <MyInput 
                             withoutForm 
@@ -269,7 +284,6 @@ const SignupPage = () => {
                             readOnly 
                             value={frontFileName} 
                           />
-                          
                       </Col>
                       <Col>
                           <Upload 
@@ -278,7 +292,7 @@ const SignupPage = () => {
                               maxCount={1} 
                               onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
                           >
-                              <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
+                              <Button aria-labelledby='Upload' className='btn btn-sm text-black bg-gray border-gray'>{t("Upload")}</Button>
                           </Upload>
                       </Col>
                       {errors.front && 
@@ -290,7 +304,7 @@ const SignupPage = () => {
                   </Row>
               </Col>
               <Col span={24}>
-                  <Row gutter={8}>
+                  <Row gutter={8} className="mb-2">
                       <Col flex="auto">
                           <MyInput 
                             withoutForm 
@@ -310,7 +324,7 @@ const SignupPage = () => {
                               maxCount={1} 
                               onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
                           >
-                              <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
+                              <Button aria-labelledby='Upload' className='btn btn-sm text-black bg-gray border-gray'>{t("Upload")}</Button>
                           </Upload>
                       </Col>
                       {errors.back && 
@@ -360,7 +374,7 @@ const SignupPage = () => {
               name="password"
               size="large"
               required
-              placeholder={t("Enter Password")}
+              placeholder={t("Enter password")}
               message={() => {}}
               validator={() => ({
                   validator: (_, value) => {
@@ -381,7 +395,7 @@ const SignupPage = () => {
               name="confirmationPassword"
               size="large"
               required
-              placeholder={t("Enter Confirm Password")}
+              placeholder={t("Enter confirm password")}
               dependencies={["password"]}
               message={t('Please enter confirm password')}
               rules={[
@@ -406,8 +420,8 @@ const SignupPage = () => {
           </Col>
           <Col span={24}>
             <Checkbox>
-              {t("I agree to")} <NavLink to="/termofuse">{t("Terms of Service")}</NavLink> {t("and")}{" "}
-              <NavLink to="">{t("Privacy Policy")}</NavLink>
+              {t("I agree to")} <NavLink to="/termofuse">{t("Terms of Service ")}</NavLink> {t("and")}{" "}
+              <NavLink to="/privacypolicy">{t("Privacy Policy")}</NavLink>
             </Checkbox>
           </Col>
         </Row>
@@ -502,16 +516,17 @@ const SignupPage = () => {
                 />
                 <div className="step-content">{steps[current].content}</div>
                 <Flex gap={10} justify="end">
-                  <Button
-                    aria-label="Back"
-                    type="button"
-                    className="btn bg-transparent border-gray text-black fs-14 my-2"
-                    onClick={prev}
-                    disabled={current <= 0}
-                    block
-                  >
-                    {t("Back")}
-                  </Button>
+                  {current > 0 && (
+                    <Button
+                      aria-label="Back"
+                      type="button"
+                      className="btn bg-transparent border-gray text-black fs-14 my-2"
+                      onClick={prev}
+                      block
+                    >
+                      {t("Back")}
+                    </Button>
+                  )}
                   {current < steps.length - 1 && (
                     <Button aria-label="Next" className="btn bg-dark-blue fs-14 my-2" block onClick={next}>
                       {t("Next")}

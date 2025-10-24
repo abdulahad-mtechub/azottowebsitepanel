@@ -11,6 +11,7 @@ import { truncateChars } from '../../../utils'
 const { Text, Title, Paragraph } = Typography
 
 const ExploreLive = () => {
+
     const navigate = useNavigate()
     const { t } = useTranslation()
     const [messageApi, contextHolder] = message.useMessage();
@@ -92,10 +93,9 @@ const ExploreLive = () => {
                             </Text>
                         </Flex>
                     </Col>
-
-                    {exploreData?.slice(0,4)?.map((pro, i) => (
-                        <Col xl={{span: 6}} lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
-                            <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={() => navigate(`/singleviewlisting/${pro?.id}`)} >
+                    {exploreData?.slice(0,3)?.map((pro, i) => (
+                        <Col xl={{span: 8}} lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
+                            <Card className='h-100 border-gray rounded-12 bg-lightest-gray card-cs cursor' onClick={() => navigate(`/singleviewlisting/${pro?.id}`)} >
                                 <Flex vertical gap={20}>
                                     <Flex justify='space-between' align='center'>
                                         <Flex gap={4}>

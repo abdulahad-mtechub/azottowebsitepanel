@@ -125,7 +125,7 @@ const BusinessInfoCard = ({ data }) => {
   return (
     <>
       {contextHolder}
-      <Card className='shadow-d radius-12 border-gray mb-3'>
+      <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
         <Row gutter={[24,24]}>
           <Col span={24}>
             <Title level={5} className='m-0'>

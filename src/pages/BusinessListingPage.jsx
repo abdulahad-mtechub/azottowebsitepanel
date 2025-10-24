@@ -373,41 +373,42 @@ const BusinessListingPage = ({getcategory}) => {
                             )}
                         </AnimatePresence>
                     </div>
-
                     <Motion.div
                         key="product"
                         animate={{ width: isShow ? 'calc(100% - 250px)' : '100%' }}
                         transition={{ duration: 0.4 }}
-                        style={{ minWidth: 0 }}
+                        style={{ minWidth: 0, position: 'relative', width: '100%' }}
                         className='mobile-100'
                     >
-                        <ProductCard
-                            exploreData={businessList?.map((biz) => ({
-                                id: biz.id,
-                                title: biz.businessTitle,
-                                categoryName: isArabic? biz.category.arabicName:biz.category.name,
-                                description: biz.description,
-                                isSaved: biz.isSaved,
-                                isByTakbeer: biz.isByTakbeer,
-                                amount: `${biz.price?.toLocaleString()}`,
-                                save: 'no',
-                                child: [
-                                    { subtitle: `${biz.revenue?.toLocaleString()}`, subdesc: t('Revenue/month') },
-                                    { subtitle: `${biz.profit?.toLocaleString()}`, subdesc: t('Profit/month') },
-                                    { subtitle: `${biz.capitalRecovery?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
-                                ]
-                            }))}
-                            refetchBusinesses={refetch}
-                            totalCount={totalCount || 0}
-                            currentPage={currentPage}
-                            onPageChange={(page) => setCurrentPage(page)}
-                            limit={limit}
-                            onLimitChange={(value) => {
-                                setLimit(value);
-                                setCurrentPage(1);
-                            }}
-                            isLoading={isLoading}
-                        />
+                        <div style={{ position: 'relative', width: '100%' }}>
+                            <ProductCard
+                                exploreData={businessList?.map((biz) => ({
+                                    id: biz.id,
+                                    title: biz.businessTitle,
+                                    categoryName: isArabic? biz.category.arabicName:biz.category.name,
+                                    description: biz.description,
+                                    isSaved: biz.isSaved,
+                                    isByTakbeer: biz.isByTakbeer,
+                                    amount: `${biz.price?.toLocaleString()}`,
+                                    save: 'no',
+                                    child: [
+                                        { subtitle: `${biz.revenue?.toLocaleString()}`, subdesc: t('Revenue/month') },
+                                        { subtitle: `${biz.profit?.toLocaleString()}`, subdesc: t('Profit/month') },
+                                        { subtitle: `${biz.capitalRecovery?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
+                                    ]
+                                }))}
+                                refetchBusinesses={refetch}
+                                totalCount={totalCount || 0}
+                                currentPage={currentPage}
+                                onPageChange={(page) => setCurrentPage(page)}
+                                limit={limit}
+                                onLimitChange={(value) => {
+                                    setLimit(value);
+                                    setCurrentPage(1);
+                                }}
+                                isLoading={isLoading}
+                            />
+                        </div>
                     </Motion.div>
                 </Flex>
             </div>

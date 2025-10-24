@@ -695,7 +695,7 @@ useEffect(() => {
                 !isshow ? 
                 <Flex gap={5} justify='end'>
                   <Button aria-labelledby='Sign Up' className='btn btn-outline' onClick={()=>navigate('/signup')}>
-                    {t("Sign up")}
+                    {t("Sign Up")}
                   </Button>
                   <Button aria-labelledby='Login' className='btn bg-brand' onClick={()=>navigate('/login')}>
                    {t(" Sign In")}

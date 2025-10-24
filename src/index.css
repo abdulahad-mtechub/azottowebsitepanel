@@ -32,6 +32,7 @@
   --blue: #3b82f6;
   --color-nafth: #36999a;
   --bg-light-green: #d3e3d0;
+  --lightest-gray: #fcfcfd;
   --light-blue-1: #e6f0ff;
   --light-sky: #5898ff;
   --light-green: #dcf3e7;
@@ -69,6 +70,10 @@ body.ltr {
   background-color: var(--bg-light-green) !important;
 }
 
+.bg-lightest-gray {
+  background-color: var(--lightest-gray) !important;
+}
+
 .pill-brand {
   background-color: var(--pill-brand) !important;
 }
@@ -96,6 +101,10 @@ body.ltr {
   color: var(--white-text) !important;
   border: 0 !important;
   height: auto !important;
+}
+
+.btn-sm {
+  padding: 10px 18px !important;
 }
 
 .btn-outline {

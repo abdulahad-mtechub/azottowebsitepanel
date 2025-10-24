@@ -186,6 +186,7 @@ query GetUserBanks {
     accountNumber
     createdAt
     accountTitle
+    iban
     isActive
   }
 }

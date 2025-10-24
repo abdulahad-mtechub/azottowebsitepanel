@@ -84,11 +84,6 @@ const AppRoutes = () => {
 
 const RouteF = () => {
 
-  // Run after Select is opened
-  document.querySelectorAll('.ant-select-item-option[title]').forEach((el) => {
-    el.removeAttribute('title');
-  });
-
   return (
     <BrowserRouter>
       <AppRoutes />

@@ -89,8 +89,12 @@ const ForgotPassword = () => {
                                     label={t('Email Address')}
                                     name='email'
                                     required
-                                    message={t('Please enter Email Address')}
-                                    placeholder={t('Enter Email Address')}
+                                    message={t('Please enter email address')}
+                                    placeholder={t('Enter email address')}
+                                    validator={{
+                                        pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                                        message: t("Please enter a valid email address")
+                                    }}
                                 />
                             </Col>
                         )}
@@ -176,7 +180,7 @@ const ForgotPassword = () => {
                         </Col>
                         <Col span={24}>
                             <Paragraph className="text-center mt-3">
-                                {requestState === 'request' && <>{t('Remember Password?')} <NavLink to={'/login'}>{t('Signin')}</NavLink></>}
+                                {requestState === 'request' && <>{t('Remember Password?')} <NavLink to={'/login'}>{t('Sign In')}</NavLink></>}
                                 {requestState === 'otp' && <>{t('Didn’t receive code?')} <NavLink to={''}>{t('Resend')}</NavLink></>}
                                 {requestState === 'reset' && null}
                             </Paragraph>

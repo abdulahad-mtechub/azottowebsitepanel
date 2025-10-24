@@ -38,12 +38,20 @@ const ProductCard = ({
           messageApi.error(t("Save failed: ") + err.message);
         }
       };
-
     if (isLoading) {
         return (
-            <Flex justify="center" align="center" className='h-200'>
-                <Spin size="large" />
-            </Flex>
+            <div
+            style={{
+                width: '100%',
+                minHeight: '300px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'relative',
+            }}
+            >
+            <Spin size="large" />
+            </div>
         );
     }
     if (!isLoading && (!exploreData || exploreData.length === 0)) {
@@ -71,8 +79,8 @@ const ProductCard = ({
         <Row gutter={[16,16]}>
             {
                 exploreData?.map((pro,i) =>
-                    <Col lg={{span: 6}} md={{span: 8}} sm={{span: 24}} xs={{span: 24}} key={i}>
-                        <Card className='h-100 border-gray rounded-12 card-cs cursor' 
+                    <Col lg={{span: 8}} md={{span: 8}} sm={{span: 24}} xs={{span: 24}} key={i}>
+                        <Card className='h-100 border-gray rounded-12 card-cs cursor bg-lightest-gray' 
                             onClick={() => {
                                 if (pro?.id) {
                                     navigate(`/singleviewlisting/${pro.id}`);

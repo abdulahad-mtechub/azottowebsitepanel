@@ -40,7 +40,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
     bankname: bank?.bankName,
     title: bank?.accountTitle || t('N/A'),
     accountnumber: bank?.accountNumber,
-    expirydate: bank?.createdAt,
+    iban: bank?.iban,
     isActive: Boolean(bank?.isActive),
   }));
 
@@ -105,12 +105,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
                         <Title level={5} className="m-0 text-white fw-500">
                           {wallet.title}
                         </Title>
-                        <Text className="fs-16 text-white">{wallet.accountnumber}</Text>
-                      </div>
-
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                        <Text className="text-white fs-14">{t('Expires')}</Text>
-                        <Text className="fs-12 text-white">{wallet.expirydate}</Text>
+                        <Text className="fs-16 text-white">{wallet.iban}</Text>
                       </div>
                     </div>
                   </div>

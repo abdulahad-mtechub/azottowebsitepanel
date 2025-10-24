@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin } from 'antd';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin, Image } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../data';
 import { AnnualProfitBarChart, BusinessInfoCard, BusinessInfoCardMobile, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
@@ -87,9 +87,18 @@ const SingleViewlisting = () => {
 
     if (businessLoading || graphLoading) {
         return (
-            <Flex justify="center" align="center" className="h-200">
-                <Spin size="large" />
-            </Flex>
+            <div
+                style={{
+                    width: '100%',
+                    minHeight: '550px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'relative',
+                }}
+            >
+            <Spin size="large" />
+            </div>
         );
     }
 
@@ -119,15 +128,23 @@ const SingleViewlisting = () => {
             <div className='container'>
                 <Row gutter={[24,24]} className='mt-3'>
                     <Col lg={{span: 18}} md={{span: 24}} sm={{span: 24}} xs={{span: 24}}>
-                        <BusinessStats data={business} /> 
-                        <MarketAreaChart /> 
-                        <AnnualProfitBarChart graphData={graphData} /> 
-                        <Card className='shadow-d radius-12 border-gray mb-3'>
+                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
                             <Flex vertical gap={20}>    
                                 <Flex vertical gap={10}>
-                                    <Flex vertical gap={0}>
+                                    <Flex vertical gap={12}>
                                         <Text className='fs-13 text-gray fw-500'>{t('Reference #')}: {business?.reference || t('Not Found')}</Text>
-                                        <Title level={5} className='m-0'>{business?.businessTitle}</Title>
+                                        <Flex gap={10} align='center'>
+                                            <Button aria-label="Arrow left" className='p-0' type="text" onClick={() => navigate("/")}>
+                                                <Image src="/assets/icons/back-arr.png" alt="Arrow Left" width={26} height={26} preview={false} />
+                                            </Button>
+                                            <Title level={3} className='m-0'>{business?.businessTitle}</Title>
+                                            <Button
+                                                    aria-labelledby="type"
+                                                    className={`fs-12 text-white ${business.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
+                                                >
+                                                {business.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
+                                            </Button>
+                                        </Flex>
                                         <Flex align='center' gap={5}>
                                             <Title level={5} className='m-0'>{businessData?.title}</Title>
                                             {businessData?.type &&
@@ -139,19 +156,35 @@ const SingleViewlisting = () => {
                                     </Flex>
                                     <Text>{business?.description || t('No description available.')}</Text>
                                 </Flex>
-                                <Flex vertical gap={0}>
-                                    <Title level={5}>{t('Growth Opportunity')}</Title>
-                                    <Text>{business?.growthOpportunities || t('No growth opportunity details available.')}</Text>
-                                </Flex>
-                                <Flex vertical gap={0}>
-                                    <Title level={5}>{t('Reason for Selling')}</Title>
-                                    <Text>{business?.reason || t('No reason for selling provided.')}</Text>
-                                </Flex>
-                                <PreviewTableContent title={t('Post - Sale Support')} columns={postsaleColumns} data={postSaleData} />
-                                <PreviewTableContent title={t('Outstanding Liabilities / Debt')} columns={liabColumn} data={liabilitiesData} />
-                                <PreviewTableContent title={t('Key Asset')} columns={keyassetsColumn} data={assetsData} />
-                                <PreviewTableContent title={t('Inventory')} columns={inventColumn} data={inventoryData} />
+                                
                             </Flex>
+                        </Card>
+                        <BusinessStats data={business} /> 
+                        <MarketAreaChart /> 
+                        <AnnualProfitBarChart graphData={graphData} /> 
+                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+                            <Flex vertical gap={0}>
+                                <Title level={5}>{t('Growth Opportunity')}</Title>
+                                <Text>{business?.growthOpportunities || t('No growth opportunity details available.')}</Text>
+                            </Flex>
+                        </Card>
+                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+                            <Flex vertical gap={0}>
+                                <Title level={5}>{t('Reason for Selling')}</Title>
+                                <Text>{business?.reason || t('No reason for selling provided.')}</Text>
+                            </Flex>
+                        </Card>
+                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+                            <PreviewTableContent title={t('Post - Sale Support')} columns={postsaleColumns} data={postSaleData} />
+                        </Card>
+                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+                            <PreviewTableContent title={t('Outstanding Liabilities / Debt')} columns={liabColumn} data={liabilitiesData} />
+                        </Card>
+                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+                            <PreviewTableContent title={t('Key Asset')} columns={keyassetsColumn} data={assetsData} />
+                        </Card>
+                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+                            <PreviewTableContent title={t('Inventory')} columns={inventColumn} data={inventoryData} />
                         </Card>
                     </Col>
 

@@ -35,7 +35,7 @@ const MarketAreaChart = () => {
 
     return (
         <div>
-            <Card className='radius-12 border-gray mb-3'>
+            <Card className='radius-12 border-gray bg-lightest-gray mb-3'>
                 <Flex vertical className='mb-3'>
                     <ModuleTopHeading level={4} name={t('Market Potential by Location')} />
                     <Text>

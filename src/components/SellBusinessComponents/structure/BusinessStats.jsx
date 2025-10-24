@@ -65,7 +65,7 @@ const BusinessStats = ({data}) => {
         },
     ]
     return (
-        <Card className='radius-12 border-gray mb-3'>
+        <Card className='radius-12 border-gray bg-lightest-gray mb-3'>
             <Row gutter={[24,24]}>
                 <Col span={24}>
                     <Flex align='center' gap={3}>

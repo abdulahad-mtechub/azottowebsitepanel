@@ -123,8 +123,12 @@ const LoginPage = () => {
                       label={t("Email Address")}
                       name='email'
                       required
-                      message={t("Please enter Email Address")}
-                      placeholder={t("Enter Email Address")}
+                      message={t("Please enter email address")}
+                      placeholder={t("Enter email address")}
+                      validator={{
+                          pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: t("Please enter a valid email address")
+                      }}
                     />
                     <MyInput
                       label={t("Password")}
@@ -132,7 +136,7 @@ const LoginPage = () => {
                       name='password'
                       required
                       message={t("Please enter password")}
-                      placeholder={t("Enter Password")}
+                      placeholder={t("Enter password")}
                     />
                     <Flex justify="space-between" className="mb-3">
                       <Checkbox>{t("Remember Me")}</Checkbox>
