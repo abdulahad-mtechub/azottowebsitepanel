@@ -141,6 +141,7 @@ const GETFAVORITBUSINESS = gql`
       description
       revenue
       profit
+      isSaved
       price
       capitalRecovery
       savedBy {
