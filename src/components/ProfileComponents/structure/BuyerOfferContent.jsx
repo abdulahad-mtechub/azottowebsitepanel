@@ -39,9 +39,17 @@ const BuyerOfferContent = () => {
     }, []);
 
     useEffect(() => {
+        // Convert frontend filter to API status
+        let apiStatus = filterstatus;
+        
+        // For SENT and RECEIVED, we use PENDING in API and filter client-side
+        if (filterstatus === 'SENT' || filterstatus === 'RECEIVED') {
+            apiStatus = 'PENDING';
+        }
+        
         fetchOffers({
             variables: {
-                status: filterstatus || null,
+                status: apiStatus || null,
                 search: debouncedSearchValue || null,
                 limit: pagination.pageSize,
                 offSet: (pagination.current - 1) * pagination.pageSize,
@@ -53,7 +61,24 @@ const BuyerOfferContent = () => {
     const offers = useMemo(() => data?.getOffersByUser?.offers || [], [data]);
     const totalCount = data?.getOffersByUser?.count || 0;
 
-    const tableData = offers?.map((offer) => ({
+    // Apply client-side filtering for SENT/RECEIVED status
+    const filteredOffers = useMemo(() => {
+        if (!filterstatus || (filterstatus !== 'SENT' && filterstatus !== 'RECEIVED')) {
+            return offers;
+        }
+        
+        if (filterstatus === 'SENT') {
+            // Show only offers created by current user (sent by buyer)
+            return offers.filter(offer => offer.createdBy === userId);
+        } else if (filterstatus === 'RECEIVED') {
+            // Show only offers NOT created by current user (received from seller)
+            return offers.filter(offer => offer.createdBy !== userId);
+        }
+        
+        return offers;
+    }, [offers, filterstatus, userId]);
+
+    const tableData = filteredOffers?.map((offer) => ({
         key: offer.id,
         title: offer.business.businessTitle,
         sellername: offer.business.seller?.name
@@ -204,10 +229,10 @@ const BuyerOfferContent = () => {
     ];
 
     const statusOptions = [
-        { id: 'PENDING', name: t('Pending') },
-        { id: 'APPROVED', name: t('Approved') },
-        { id: 'REJECTED', name: t('Rejected') },
+        { id: 'SENT', name: t('Sent') },
+        { id: 'RECEIVED', name: t('Received') },
         { id: 'ACCEPTED', name: t('Accepted') },
+        { id: 'REJECTED', name: t('Rejected') },
     ];
 
     const offerTypeOptions = [
@@ -223,9 +248,17 @@ const BuyerOfferContent = () => {
     };
 
     const refetch = useCallback(() => {
+        // Convert frontend filter to API status
+        let apiStatus = filterstatus;
+        
+        // For SENT and RECEIVED, we use PENDING in API and filter client-side
+        if (filterstatus === 'SENT' || filterstatus === 'RECEIVED') {
+            apiStatus = 'PENDING';
+        }
+        
         fetchOffers({
             variables: {
-                status: filterstatus || null,
+                status: apiStatus || null,
                 search: debouncedSearchValue || null,
                 limit: pagination.pageSize,
                 offSet: (pagination.current - 1) * pagination.pageSize,

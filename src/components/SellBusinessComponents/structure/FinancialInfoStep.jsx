@@ -97,6 +97,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
         }));
     };
 
+    // Sync form with incoming data (edit mode or draft load)
     useEffect(() => {
         form.setFieldsValue({
             revenueTime: normalizeLookupValue(data.revenueTime),
@@ -124,7 +125,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 inventoryPrice: item.price,
             })),
         });
-    }, [data]);
+    }, [data, form]);
 
     useEffect(() => {
         const allValues = form.getFieldsValue();
@@ -369,6 +370,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                         dayKey="keyassets"
                         title="Key Assets (Optional)"
                         form={form}
+                        allowEmpty
                         fieldsConfig={[
                             {
                                 name: "assetName",
@@ -437,6 +439,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                         dayKey="liability"
                         title="Outstanding Liabilities / Debt (Optional)"
                         form={form}
+                        allowEmpty
                         fieldsConfig={[
                             {
                                 name: "liabilityName",
@@ -506,6 +509,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                         dayKey="inventory"
                         title="Inventory (Optional)"
                         form={form}
+                        allowEmpty
                         fieldsConfig={[
                             {
                                 name: "inventoryName",

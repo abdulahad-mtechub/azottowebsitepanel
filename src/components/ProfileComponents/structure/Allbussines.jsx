@@ -8,7 +8,7 @@ import { ModuleTopHeading } from '../../Pagecomponents';
 import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const Allbussines = () => {
     
@@ -112,7 +112,11 @@ const Allbussines = () => {
                                             <img src="/assets/images/card-1.webp" width={'100%'} height={'100%'} alt={t('product-image')} fetchPriority="high" />
                                         </div>
                                         <Title className='' level={5}>{pro?.businessTitle}</Title>
-                                        <Text className='fs-14 text-gray'>{pro?.description || "No description available"}</Text>
+                                        <div className='h-80'>
+                                            <Paragraph className='fs-14 text-gray justify-clamp'>
+                                                {pro?.description}
+                                            </Paragraph>
+                                        </div>
                                         <Divider className='my-1' />
                                         <Row justify={'space-between'}>
                                             {pro?.child?.map((item, c) => (

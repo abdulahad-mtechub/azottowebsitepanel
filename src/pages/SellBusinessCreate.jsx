@@ -4,7 +4,7 @@ import { CheckOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { BusinessDetailStep, BusinesslistingReviewModal, BusinessVisionStep, CancelModal, FinancialInfoStep, UploadSupportDocStep } from '../components';
 import { CREATE_BUSINESS, UPDATE_BUSINESS } from "../graphql/mutation/mutations";
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useLazyQuery } from '@apollo/client';
 import { GET_BUSINESS } from '../graphql/query/business';
 import dayjs from 'dayjs';
 import { useTranslation } from 'react-i18next';
@@ -27,12 +27,16 @@ const SellBusinessCreate = () => {
     const [updateBusiness, { loading: updateLoading }] = useMutation(UPDATE_BUSINESS);
     const loading = createLoading || updateLoading;
     const businessDetailFormRef = useRef();
-
-    // Fetch business data if in edit mode
-    const { data: editData, loading: editDataLoading } = useQuery(GET_BUSINESS, {
-        variables: { getBusinessByIdId: editBusinessId },
-        skip: !editBusinessId,
+    // Fetch business data explicitly when edit mode is active
+    const [loadBusinessById, { data: editData, loading: editDataLoading }] = useLazyQuery(GET_BUSINESS, {
+        fetchPolicy: 'network-only',
     });
+
+    useEffect(() => {
+        if (editBusinessId) {
+            loadBusinessById({ variables: { getBusinessByIdId: editBusinessId } });
+        }
+    }, [editBusinessId, loadBusinessById]);
 
     const [businessData, setBusinessData] = useState(() => {
         // Don't load draft in edit mode
@@ -103,23 +107,30 @@ const SellBusinessCreate = () => {
         };
     });
 
-    // Load edit data when available
     useEffect(() => {
         if (editData?.getBusinessById?.business && editBusinessId) {
             const business = editData.getBusinessById.business;
+
+            // Normalize period fields that may come as string or number
+            const revTime = business.revenueTime;
+            const profTime = business.profittime;
+            const revenueTimeValue = revTime === '6' || revTime === 6 ? 1 : 2;
+            const profitTimeValue = profTime === '6' || profTime === 6 ? 1 : 2;
+
             setBusinessData({
                 isByTakbeer: business.isByTakbeer,
                 businessTitle: business.businessTitle,
                 categoryId: business.category?.id,
+                categoryName: business.category?.name || business.category?.arabicName || null,
                 district: business.district,
                 city: business.city,
                 foundedDate: business.foundedDate ? dayjs(business.foundedDate) : null,
                 numberOfEmployees: business.numberOfEmployees,
                 description: business.description,
                 url: business.url,
-                revenueTime: business.revenueTime === '6' ? 1 : 2,
+                revenueTime: revenueTimeValue,
                 revenue: business.revenue,
-                profittime: business.profittime === '6' ? 1 : 2,
+                profittime: profitTimeValue,
                 profit: business.profit,
                 price: business.price,
                 profitMargen: business.profitMargen,
@@ -280,19 +291,22 @@ const SellBusinessCreate = () => {
                 growthOpportunities: businessData.growthOpportunities,
                 reason: businessData.reason,
 
-                // ✅ Cleaned documents
+                // ✅ Cleaned documents (strip Apollo/client fields)
                 documents: businessData.documents
                 .filter(
                     (doc) =>
                         doc &&
                         Object.values(doc).some(
-                        (val) => val !== null && val !== '' && val !== undefined
+                          (val) => val !== null && val !== '' && val !== undefined
                         )
                 )
                 .map((doc) => {
-                    // eslint-disable-next-line no-unused-vars
-                    const { size, ...docWithoutSize } = doc;
-                    return docWithoutSize;
+                    // Remove fields not accepted by CreateDocumentInput
+                    const safeDoc = { ...doc };
+                    delete safeDoc.size;
+                    delete safeDoc.__typename;
+                    delete safeDoc.id;
+                    return safeDoc;
                 }),
             };
 
@@ -368,9 +382,11 @@ const SellBusinessCreate = () => {
                         )
                 )
                 .map((doc) => {
-                    // eslint-disable-next-line no-unused-vars
-                    const { size, ...docWithoutSize } = doc;
-                    return docWithoutSize;
+                    const cleaned = { ...doc };
+                    delete cleaned.size;
+                    delete cleaned.__typename;
+                    delete cleaned.id;
+                    return cleaned;
                 }),
             assets: businessData.assets.filter(
                 (asset) =>

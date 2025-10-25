@@ -124,7 +124,7 @@ const Favoritbussines = () => {
                                         </div>
                                         <Title level={5}>{truncateChars(pro?.businessTitle, 42)}</Title>
                                         <div className='h-80'>
-                                            <Paragraph ellipsis={{ rows: 3, expandable: false, symbol: 'more' }} className='fs-14 text-gray'>
+                                            <Paragraph className='fs-14 text-gray justify-clamp'>
                                                 {pro?.description}
                                             </Paragraph>
                                         </div>

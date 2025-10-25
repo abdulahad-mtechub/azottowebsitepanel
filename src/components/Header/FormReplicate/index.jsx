@@ -97,17 +97,18 @@ import { MyInput, MySelect } from "../../Forms";
 import { MinusCircleFilled } from "@ant-design/icons";
 import { ModuleTopHeading } from "../../Pagecomponents";
 
-const FormReplicate = ({ dayKey, title, form, fieldsConfig = [] }) => {
+const FormReplicate = ({ dayKey, title, form, fieldsConfig = [], allowEmpty = false }) => {
   useEffect(() => {
     const fields = form.getFieldValue(dayKey) || [];
-    if (fields.length === 0) {
+    // Only auto-insert a default row when empty if allowEmpty is false
+    if (!allowEmpty && fields.length === 0) {
       const defaultItem = {};
       fieldsConfig.forEach((f) => {
         defaultItem[f.name] = null;
       });
       form.setFieldsValue({ [dayKey]: [defaultItem] });
     }
-  }, [dayKey, form, fieldsConfig]);
+  }, [dayKey, form, fieldsConfig, allowEmpty]);
 
   return (
     <Form.List name={dayKey}>

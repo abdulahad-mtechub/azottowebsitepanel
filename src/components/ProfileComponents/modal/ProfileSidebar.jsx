@@ -8,18 +8,17 @@ import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activeChildTab, setActiveChildTab,profiletabData}) => {
-    const { t,i18n } = useTranslation();
+    const { t } = useTranslation();
     const [isDesktop, setIsDesktop] = useState(false);
     // Skip queries when no userId
-    const { data: sellerData, loading: sellerLoading, error: sellerError } = useQuery(GETSELLERMEETINGCOUNT);
+    const { data: sellerData, loading: sellerLoading } = useQuery(GETSELLERMEETINGCOUNT);
 
-    const { data: buyerData, loading: buyerLoading, error: buyerError } = useQuery(GETBUYERMEETINGCOUNT);
+    const { data: buyerData, loading: buyerLoading } = useQuery(GETBUYERMEETINGCOUNT);
     
     const sellerCount = sellerData?.getSellerCount ?? 0;
     const buyerCount = buyerData?.getBuyerCount ?? 0;
     const countsLoading = sellerLoading || buyerLoading;
   
-    // Build items to pass to CustomTabs, recompute when counts or parentTab changes
     const itemsForRender = useMemo(() => {
       const clone = (arr) => arr.map(item => {
         if (item.children) {

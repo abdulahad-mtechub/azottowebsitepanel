@@ -21,7 +21,12 @@ const CustomTabs = ({ items, activeKey, onChange }) => {
         const isParentActive = item.key === activeKey;
         const isOpen = openKeys.includes(item.key);
         const hasChildren = !!item.children?.length;
-        const isActive = isParentActive || (hasChildren && isOpen);
+        
+        // Check if any child is selected
+        const isChildSelected = hasChildren && item.children.some(child => child.key === activeKey);
+        
+        // Parent is active only if it's directly selected OR one of its children is selected
+        const isActive = isParentActive || isChildSelected;
 
         return (
           <List.Item

@@ -181,7 +181,7 @@ const SellerScheduledTable = ({ isBuyer }) => {
                         dataSource={sellerscheduledData}
                         className="pagination table table-cs"
                         showSorterTooltip={false}
-                        scroll={{ x: 1300 }}
+                        scroll={{ x: 1600 }}
                         loading={loading}
                         pagination={{
                             hideOnSinglePage: true,

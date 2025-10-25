@@ -154,7 +154,7 @@ const SingleViewlisting = () => {
                                             }
                                         </Flex>
                                     </Flex>
-                                    <Text>{business?.description || t('No description available.')}</Text>
+                                    <Text className='text-justify'>{business?.description || t('No description available.')}</Text>
                                 </Flex>
                                 
                             </Flex>
@@ -165,13 +165,13 @@ const SingleViewlisting = () => {
                         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
                             <Flex vertical gap={0}>
                                 <Title level={5}>{t('Growth Opportunity')}</Title>
-                                <Text>{business?.growthOpportunities || t('No growth opportunity details available.')}</Text>
+                                <Text className='text-justify'>{business?.growthOpportunities || t('No growth opportunity details available.')}</Text>
                             </Flex>
                         </Card>
                         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
                             <Flex vertical gap={0}>
                                 <Title level={5}>{t('Reason for Selling')}</Title>
-                                <Text>{business?.reason || t('No reason for selling provided.')}</Text>
+                                <Text className='text-justify'>{business?.reason || t('No reason for selling provided.')}</Text>
                             </Flex>
                         </Card>
                         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>

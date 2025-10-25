@@ -13,7 +13,7 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     const cities = useCities();
     const { data: categoryData } = useQuery(GET_CATEGORIES);
     const [form] = Form.useForm();
-    const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
+  const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [isInitialized, setIsInitialized] = useState(false);
@@ -56,39 +56,85 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
       }));
     };
   
+    // Initial hydration: do not wait for async options; set whatever we have once
     useEffect(() => {
-      // Only initialize form once when data and options are available
-      if (!isInitialized && data && district.length > 0 && categories.length > 0) {
-        // Find district ID from stored name (handles both Arabic and English)
-        if (data.district) {
-          const districtObj = district.find(d => d.name === data.district) || 
-                             district.find(d => d.id === data.district.toLowerCase());
-          if (districtObj) {
-            setSelectedDistrict(districtObj.id);
-          }
-        }
-        
+      if (!isInitialized && data) {
+        setIsAccess(data.isByTakbeer === true);
+
+        const initialTeamSize = (() => {
+          if (!data.numberOfEmployees) return undefined;
+          const byName = teamsizeOp.find((opt) => String(opt.name) === String(data.numberOfEmployees));
+          if (byName) return byName.name;
+          const byId = teamsizeOp.find((opt) => String(opt.id) === String(data.numberOfEmployees));
+          return byId ? byId.name : undefined;
+        })();
+
         form.setFieldsValue({
           title: data.businessTitle,
           category: data.categoryName,
           district: data.district,
           city: data.city,
           dob: data.foundedDate,
-          teamSize: data.numberOfEmployees,
+          teamSize: initialTeamSize,
           description: data.description,
           url: data.url,
         });
-    
-        if (data.categoryId) {
-          const cat = categories.find(cat => cat.id === data.categoryId);
-          setSelectedCategory(cat);
-        }
-        
-        // Mark as initialized to prevent re-running
+
         setIsInitialized(true);
       }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [data.businessTitle, data.categoryId, district.length, categories.length, isInitialized]);
+    }, [data, isInitialized]);
+
+    // After options load, derive dependent UI state (selected district/cat) without overwriting form values
+    useEffect(() => {
+      if (!data) return;
+      if (data.district && district.length > 0) {
+        const districtObj = district.find(d => d.name === data.district) ||
+                            district.find(d => d.id === String(data.district).toLowerCase());
+        if (districtObj) setSelectedDistrict(districtObj.id);
+      }
+      if (data.categoryId && categories.length > 0) {
+        const cat = categories.find(cat => cat.id === data.categoryId);
+        if (cat) setSelectedCategory(cat);
+      }
+    }, [data, district, categories]);
+
+    // Once options are available, ensure ALL fields show initial values if they were set before options loaded
+    useEffect(() => {
+      if (!data) return;
+      const current = form.getFieldsValue([
+        'title',
+        'category',
+        'district',
+        'city',
+        'dob',
+        'teamSize',
+        'description',
+        'url',
+      ]);
+
+      // Normalize team size to the label the Select expects
+      const initialTeamSize = (() => {
+        if (!data.numberOfEmployees) return undefined;
+        const byName = teamsizeOp.find((opt) => String(opt.name) === String(data.numberOfEmployees));
+        if (byName) return byName.name;
+        const byId = teamsizeOp.find((opt) => String(opt.id) === String(data.numberOfEmployees));
+        return byId ? byId.name : undefined;
+      })();
+
+      const patch = {};
+      if (!current.title && data.businessTitle) patch.title = data.businessTitle;
+      if (!current.category && data.categoryName) patch.category = data.categoryName;
+      if (!current.district && data.district) patch.district = data.district;
+      // Re-apply city once district options are ready
+      if (!current.city && data.city && selectedDistrict) patch.city = data.city;
+      if (!current.dob && data.foundedDate) patch.dob = data.foundedDate;
+      if (!current.teamSize && initialTeamSize) patch.teamSize = initialTeamSize;
+      if (!current.description && data.description) patch.description = data.description;
+      if (!current.url && data.url) patch.url = data.url;
+
+      if (Object.keys(patch).length > 0) form.setFieldsValue(patch);
+    }, [categories.length, district.length, selectedDistrict, data, form]);
 
     return (
       <>

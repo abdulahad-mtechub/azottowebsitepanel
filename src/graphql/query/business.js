@@ -116,6 +116,14 @@ const GET_BUSINESS = gql`
         purchaseYear
         quantity
       }
+      documents {
+        id
+        title
+        fileName
+        fileType
+        filePath
+        description
+      }
     }
   }
 }

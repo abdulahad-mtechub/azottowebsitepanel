@@ -155,9 +155,11 @@ const ExploreLive = () => {
                                         <Title className='' level={5}>
                                             {truncateChars(pro?.title, 42)}
                                         </Title>
-                                        <Paragraph ellipsis={{ rows: 3, expandable: false, symbol: 'more' }} className='fs-14 text-gray'>
-                                            {pro?.description}
-                                        </Paragraph>
+                                        <div className='h-80'>
+                                            <Paragraph className='fs-14 text-gray justify-clamp'>
+                                                {pro?.description}
+                                            </Paragraph>
+                                        </div>
                                         <Divider className='my-1' />
                                         <Row justify={'space-between'} align="middle">
                                             {pro?.child?.map((item, c) => (

@@ -1,4 +1,4 @@
-import { Row, Col, Card, Flex, Typography } from 'antd';
+import { Row, Col, Card, Flex, Typography, Button } from 'antd';
 import { AnnualProfitBarChart, MarketAreaChart } from '../../Businesslistingcomponents';
 import { BusinessViewInfoCard } from './BusinessViewInfoCard';
 import { BusinessStats, PreviewTableContent } from '../../SellBusinessComponents';
@@ -56,45 +56,54 @@ const SellerDealDetails = ({ data }) => {
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        <Card className='radius-12 border-gray mb-3'>
-          <Flex vertical gap={10}>
-            <Flex vertical gap={3}>
-              <Text className='fs-13 text-gray fw-500'>
-                {t('Reference')} #: {businessinfo?.reference ? businessinfo?.reference : t('Not Found')}
-              </Text>
-              <Title level={5} className='m-0'>
-                {businessinfo?.businessTitle ? businessinfo?.businessTitle : t('Not Found')}
-              </Title>
+        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+          <Flex vertical gap={20}>    
+            <Flex vertical gap={10}>
+                <Flex vertical gap={12}>
+                    <Text className='fs-13 text-gray fw-500'>{t('Reference #')}: {businessinfo?.reference || t('Not Found')}</Text>
+                    <Title level={4} className='m-0'>{businessinfo?.businessTitle}</Title>
+                    <Flex align='center' gap={5}>
+                        <Title level={5} className='m-0'>{businessinfo?.title}</Title>
+                        {businessinfo?.type && (
+                            <Button className={`fs-12 border-0 text-white ${businessinfo.type === 'Taqbeel' ? 'bg-brand' : 'bg-black'}`}>
+                                {businessinfo?.type}
+                            </Button>
+                        )
+                        }
+                    </Flex>
+                </Flex>
+                <Text className='text-justify'>{businessinfo?.description || t('No description available.')}</Text>
             </Flex>
-            <Text>
-              {businessinfo?.description ? businessinfo?.description : t('Not Found')}
-            </Text>
           </Flex>
         </Card>
         <BusinessViewInfoCard data={businessinfo} />
         <BusinessStats data={businessinfo} />
         <MarketAreaChart data={businessinfo} />
         <AnnualProfitBarChart graphData={graphData} />
-        <Card className='radius-12 border-gray mb-3'>
-          <Flex vertical gap={10}>
+        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+          <Flex vertical gap={0}>
             <Title level={5}>{t('Growth Opportunity')}</Title>
-            <Text>
-              {businessinfo?.growthOpportunities ? businessinfo?.growthOpportunities : t('No growth opportunity details available.')}
-            </Text>
+            <Text className='text-justify'>{businessinfo?.growthOpportunities || t('No growth opportunity details available.')}</Text>
           </Flex>
         </Card>
-        <Card className='radius-12 border-gray mb-3'>
-          <Flex vertical gap={10}>
-            <Title level={5}>{t('Reason for Selling')}</Title>
-            <Text>
-              {businessinfo?.reason ? businessinfo?.reason : t('No reason for selling provided.')}
-            </Text>
+        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+          <Flex vertical gap={0}>
+              <Title level={5}>{t('Reason for Selling')}</Title>
+              <Text className='text-justify'>{businessinfo?.reason || t('No reason for selling provided.')}</Text>
           </Flex>
         </Card>
-        <PreviewTableContent title={t('Post - Sale Support')} columns={postsaleColumns} data={postSaleData} />
-        <PreviewTableContent title={t('Outstanding Liabilities / Debt')} columns={liabColumn} data={liabilitiesData} />
-        <PreviewTableContent title={t('Key Asset')} columns={keyassetsColumn} data={assetsData} />
-        <PreviewTableContent title={t('Inventory')} columns={inventColumn} data={inventoryData} />
+        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+          <PreviewTableContent title={t('Post - Sale Support')} columns={postsaleColumns} data={postSaleData} />
+        </Card>
+        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+            <PreviewTableContent title={t('Outstanding Liabilities / Debt')} columns={liabColumn} data={liabilitiesData} />
+        </Card>
+        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+          <PreviewTableContent title={t('Key Asset')} columns={keyassetsColumn} data={assetsData} />
+        </Card>
+        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+            <PreviewTableContent title={t('Inventory')} columns={inventColumn} data={inventoryData} />
+        </Card>
       </Col>
     </Row>
   );
