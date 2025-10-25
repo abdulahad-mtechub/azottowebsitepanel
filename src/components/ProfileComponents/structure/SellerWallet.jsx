@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Card, Row, Col, Typography, Dropdown, Button, Image, message, Modal } from 'antd';
+import { Card, Row, Col, Typography, Button, Image, message, Modal, Badge, Switch, Flex, Spin } from 'antd';
 import { GETUSERBANK } from '../../../graphql/query';
 import { useQuery, useMutation } from '@apollo/client';
 import { AddWalletModal } from '../modal';
@@ -14,14 +14,21 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const [deletemodal, setDeleteModal] = useState(false);
   const [selectedBankId, setSelectedBankId] = useState(null);
+  const [activatingBankId, setActivatingBankId] = useState(null);
 
   const { data: bankData } = useQuery(GETUSERBANK);
 
   const [activateBankMutate] = useMutation(ACTIVEBANK, {
     refetchQueries: [{ query: GETUSERBANK }],
     awaitRefetchQueries: true,
-    onCompleted: () => messageApi.success(t('Bank status updated successfully')),
-    onError: (err) => messageApi.error(err.message),
+    onCompleted: () => {
+      messageApi.success(t('Bank status updated successfully'));
+      setActivatingBankId(null);
+    },
+    onError: (err) => {
+      messageApi.error(err.message);
+      setActivatingBankId(null);
+    },
   });
 
   const [deleteBankMutate, { loading: deleting }] = useMutation(DELETEBANK, {
@@ -44,7 +51,11 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
     isActive: Boolean(bank?.isActive),
   }));
 
-  const handleSetActive = (bankId) => activateBankMutate({ variables: { setActiveBankId: bankId } });
+  const handleSetActive = (bankId) => {
+    setActivatingBankId(bankId);
+    activateBankMutate({ variables: { setActiveBankId: bankId } });
+  };
+  
   const handleDeleteBank = (bankId) => {
     if (!bankId) {
       messageApi.error(t('No bank selected for deletion'));
@@ -52,7 +63,6 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
     }
     deleteBankMutate({ variables: { deleteBankId: bankId } });
   };
-
   return (
     <>
       {contextHolder}
@@ -65,25 +75,37 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
           </Col>
 
           {data?.map((wallet) => {
-            const items = [
-              {
-                key: 'remove',
-                label: <Text>{t('Remove Account')}</Text>,
-                onClick: () => {
-                  setSelectedBankId(wallet.key);
-                  setDeleteModal(true);
-                },
-              },
-              {
-                key: 'toggleActive',
-                label: <Text>{wallet.isActive ? t('Inactive') : t('Active')}</Text>,
-                onClick: () => handleSetActive(wallet.key),
-              },
-            ];
-
+            const isLoading = activatingBankId === wallet.key;
+            
             return (
               <Col xs={24} sm={24} md={12} lg={12} key={wallet.key}>
-                <Card className="walletCard">
+                <Card 
+                  className="walletCard"
+                  style={{
+                    position: 'relative',
+                    opacity: isLoading ? 0.6 : 1,
+                    pointerEvents: isLoading ? 'none' : 'auto',
+                  }}
+                >
+                  {isLoading && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(16, 23, 40, 0.5)',
+                        borderRadius: '12px',
+                        zIndex: 10,
+                      }}
+                    >
+                      <Spin size="large" />
+                    </div>
+                  )}
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -93,11 +115,35 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
                         </Title>
                       </div>
 
-                      <Dropdown menu={{ items }} trigger={['click']}>
-                        <Button aria-label="dropdown icon" className="bg-transparent border-0 p-0">
-                          <img src="/assets/icons/line-dot.png" alt="dropdown-icon" width={25} />
+                      <Flex gap={10} align="center">
+                        <Switch
+                          checkedChildren={t("Active")}
+                          unCheckedChildren={t("Inactive")}
+                          checked={wallet.isActive}
+                          disabled={wallet.isActive || isLoading}
+                          onChange={() => handleSetActive(wallet.key)}
+                          style={{
+                            backgroundColor: "#101728",
+                          }}
+                        />
+                        <Button 
+                          aria-label="delete bank account" 
+                          className="bg-transparent border-0 p-0"
+                          disabled={isLoading}
+                          onClick={() => {
+                            setSelectedBankId(wallet.key);
+                            setDeleteModal(true);
+                          }}
+                        >
+                          <Image 
+                            src="/assets/icons/delete.png" 
+                            alt="delete-icon" 
+                            width={30} 
+                            preview={false}
+                            style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}
+                          />
                         </Button>
-                      </Dropdown>
+                      </Flex>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>

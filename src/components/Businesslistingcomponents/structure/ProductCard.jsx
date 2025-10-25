@@ -148,12 +148,12 @@ const ProductCard = ({
                                         </Paragraph>
                                     </div>
                                     <Divider className='my-1' />
-                                    <Row justify={'space-between'}>
+                                    <Row justify={'space-between'} align="middle">
                                         {
                                             pro?.child?.map((item, c) => (
                                                 <React.Fragment key={c}>
                                                     <Col span={7}>
-                                                        <Flex vertical>
+                                                        <Flex vertical align="center">
                                                             <Title level={5} className='text-brand m-0 fs-13 fw-500'>
                                                                 {c !== 2 && <img src="/assets/icons/reyal-b.png" width={10} alt={t("currency-symbol")} fetchPriority="high" />} {item?.subtitle}
                                                             </Title>

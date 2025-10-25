@@ -1,10 +1,10 @@
-import { Col, Row, Table, Spin, Flex } from 'antd';
+import { Col, Row, Space, Table, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { BUYERINPROGRESSDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-
+const { Text } = Typography;
 const InprogressDealsTable = ({ setInprogressDeal }) => {
 
   const { t } = useTranslation();
@@ -103,7 +103,27 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
   const columns = [
     { title: t('Business Title'), dataIndex: 'title' },
     { title: t('Seller Name'), dataIndex: 'sellername' },
-    { title: t('Offer Price'), dataIndex: 'offerprice' },
+    { 
+      title: t('Offer Price'), 
+      dataIndex: 'offerprice',
+      render: (offerprice) => (
+        <Space size={5} align="center">
+            {offerprice != null && offerprice !== '' ? (
+            <>
+                <img
+                src="/assets/icons/reyal-b.png"
+                width={16}
+                alt="currency-symbol"
+                fetchPriority="high"
+                />
+                <Text>{offerprice}</Text>
+            </>
+            ) : (
+            <Text>-</Text>
+            )}
+        </Space>
+      )
+    },
     { 
       title: t('Status'), 
       dataIndex: 'status',

@@ -394,7 +394,12 @@ const BusinessListingPage = ({getcategory}) => {
                                     child: [
                                         { subtitle: `${biz.revenue?.toLocaleString()}`, subdesc: t('Revenue/month') },
                                         { subtitle: `${biz.profit?.toLocaleString()}`, subdesc: t('Profit/month') },
-                                        { subtitle: `${biz.capitalRecovery?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
+                                        { 
+                                            subtitle: biz.capitalRecovery >= 12 
+                                                ? `${(biz.capitalRecovery / 12).toFixed(1)} ${t('years')}` 
+                                                : `${biz.capitalRecovery} ${t('months')}`, 
+                                            subdesc: t('Capital Recovery') 
+                                        },
                                     ]
                                 }))}
                                 refetchBusinesses={refetch}

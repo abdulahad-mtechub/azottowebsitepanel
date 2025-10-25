@@ -1,10 +1,11 @@
 import { useMemo, useEffect, useState, useCallback } from 'react'
-import { Col, Row, Table } from 'antd'
+import { Col, Row, Space, Table, Typography } from 'antd'
 import { SearchInput } from '../../Forms';
 import { BUYERDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
+const { Text } = Typography;
 const CompleteDealsTable = ({ setCompleteDeal }) => {
     const { t } = useTranslation();
     const [searchValue, setSearchValue] = useState('');
@@ -48,7 +49,25 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
         { title: t('Seller Name'), dataIndex: 'sellername' },
-        { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: t('Offer Price'), dataIndex: 'offerprice',
+          render: (offerprice) => (
+            <Space size={5} align="center">
+              {offerprice != null && offerprice !== '' ? (
+                <>
+                  <img
+                    src="/assets/icons/reyal-b.png"
+                    width={16}
+                    alt="currency-symbol"
+                    fetchPriority="high"
+                  />
+                  <Text>{offerprice}</Text>
+                </>
+              ) : (
+                <Text>-</Text>
+              )}
+            </Space>
+          )
+        },
         { title: t('Finalized Date'), dataIndex: 'date' },
     ];
 

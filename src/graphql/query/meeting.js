@@ -82,29 +82,30 @@ query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean, $limit: 
 }
 `
 const SCHEDULEDMEETINGS = gql`
-query GetScheduledMeetings($search: String, $isBuyer: Boolean, $limit: Int, $offSet: Int) {
-  getScheduledMeetings(search: $search, isBuyer: $isBuyer, limit: $limit, offSet: $offSet) {
-    totalCount
-    items {
-      id
-      createdAt
-      requestedDate
-      receiverAvailabilityDate
-      status
-      requestedTo {
-        name
-      }
-      business {
-        businessTitle
-        price
-      }
-      offer {
+  query GetScheduledMeetings($search: String, $isBuyer: Boolean, $limit: Int, $offSet: Int) {
+    getScheduledMeetings(search: $search, isBuyer: $isBuyer, limit: $limit, offSet: $offSet) {
+      totalCount
+      items {
         id
-        price
+        createdAt
+        requestedDate
+        receiverAvailabilityDate
+        status
+        requestedTo {
+          name
+        }
+        business {
+          businessTitle
+          price
+        }
+        meetingLink
+        offer {
+          id
+          price
+        }
       }
     }
   }
-}
 `
 
 const GETMEETINGS = gql`

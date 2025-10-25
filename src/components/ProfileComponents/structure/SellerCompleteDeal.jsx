@@ -1,9 +1,11 @@
-import { Col, Form, Row, Table } from 'antd';
+import { Col, Form, Row, Table, Space, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { SELLERDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+
+const { Text } = Typography;
 
 const SellerCompleteDeal = ({ setCompleteDeal }) => {
   const { t } = useTranslation();
@@ -53,7 +55,27 @@ const SellerCompleteDeal = ({ setCompleteDeal }) => {
   const columns = [
     { title: t('Business Title'), dataIndex: 'title' },
     { title: t('Seller Name'), dataIndex: 'sellername' },
-    { title: t('Finalized Price'), dataIndex: 'finalizedprice' },
+    { 
+      title: t('Finalized Price'), 
+      dataIndex: 'finalizedprice',
+      render: (finalizedprice) => (
+        <Space size={5} align="center">
+            {finalizedprice != null && finalizedprice !== '' ? (
+            <>
+                <img
+                src="/assets/icons/reyal-b.png"
+                width={16}
+                alt="currency-symbol"
+                fetchPriority="high"
+                />
+                <Text>{finalizedprice}</Text>
+            </>
+            ) : (
+            <Text>-</Text>
+            )}
+        </Space>
+      )
+    },
     { title: t('Finalized Date'), dataIndex: 'date' },
   ];
 

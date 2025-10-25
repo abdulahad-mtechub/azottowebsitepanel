@@ -78,8 +78,10 @@ const ExploreSimilarBusiness = ({ id }) => {
             {
                 id: 3,
                 icon: '/assets/icons/team.png',
-                subtitle: `${b?.capitalRecovery || t('N/A')} months`,
-                subdesc: t('Capital Recovery'),
+                subtitle: <>{b?.capitalRecovery >= 12
+                    ? `${(b.capitalRecovery / 12).toFixed(1)} ${t('years')}`
+                    : `${b.capitalRecovery} ${t('months')}`}</>,
+                subdesc: t('Capital Recovery')
             },
         ],
     }));
@@ -153,11 +155,11 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                     </Paragraph>
                                                 </div>
                                                 <Divider className='my-1' />
-                                                <Row justify={'space-between'}>
+                                                <Row justify={'space-between'} align="middle">
                                                     {pro?.child?.map((item, c) => (
                                                         <React.Fragment key={c}>
                                                             <Col span={7}>
-                                                                <Flex vertical>
+                                                                <Flex vertical align="center">
                                                                     <Title level={5} className='text-brand m-0 fs-13 fw-500'>
                                                                         {item?.subtitle}
                                                                     </Title>

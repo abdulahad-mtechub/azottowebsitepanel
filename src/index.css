@@ -1604,3 +1604,35 @@ body.ltr {
 .text-error {
   color: var(--error-color) !important;
 }
+
+.ant-switch.ant-switch-checked .ant-switch-handle,
+.ant-switch.ant-switch-checked .ant-switch-handle::before {
+  background: #1db242 !important;
+  border-radius: 50% !important;
+}
+
+.ant-switch:not(.ant-switch-checked) .ant-switch-handle,
+.ant-switch:not(.ant-switch-checked) .ant-switch-handle::before {
+  background: #b1b5c3 !important;
+  border-radius: 50% !important;
+}
+
+.ant-switch .ant-switch-handle {
+  width: 12px;
+  height: 12px;
+}
+
+.ant-switch.ant-switch-checked .ant-switch-handle {
+  transform: translateX(calc(100% - 8px - 2px));
+  top: 5px;
+}
+
+.ant-switch:not(.ant-switch-checked) .ant-switch-handle {
+  inset-inline-start: 6px !important;
+  top: 5px;
+}
+
+.ant-switch {
+  line-height: 23px !important;
+  height: 23px !important;
+}

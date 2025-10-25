@@ -1,4 +1,4 @@
-import { Col, Form, Row, Table, Typography } from 'antd';
+import { Col, Flex, Form, Row, Space, Table, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { SENTMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
@@ -34,9 +34,49 @@ const SellerSendRequestTable = ({ isBuyer }) => {
 
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
-        { title: t('Buyer Name'), dataIndex: 'buyername' },
-        { title: t('Business Price'), dataIndex: 'businessprice' },
-        { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: isBuyer ? t('Seller Name') : t('Buyer Name'), dataIndex: 'buyername' },
+        { 
+            title: t('Business Price'), 
+            dataIndex: 'businessprice',
+            render: (businessprice) => (
+            <Space size={5} align="center">
+                {businessprice != null && businessprice !== '' ? (
+                <>
+                    <img
+                    src="/assets/icons/reyal-b.png"
+                    width={16}
+                    alt="currency-symbol"
+                    fetchPriority="high"
+                    />
+                    <Text>{businessprice}</Text>
+                </>
+                ) : (
+                <Text>-</Text>
+                )}
+            </Space>
+            )
+        },
+        { 
+            title: t('Offer Price'), 
+            dataIndex: 'offerprice',
+            render: (businessprice) => (
+                <Space size={5} align="center">
+                    {businessprice != null && businessprice !== '' ? (
+                    <>
+                        <img
+                        src="/assets/icons/reyal-b.png"
+                        width={16}
+                        alt="currency-symbol"
+                        fetchPriority="high"
+                        />
+                        <Text>{businessprice}</Text>
+                    </>
+                    ) : (
+                    <Text>-</Text>
+                    )}
+                </Space>
+            )
+        },
         { 
             title: t('Status'), 
             dataIndex: 'status',

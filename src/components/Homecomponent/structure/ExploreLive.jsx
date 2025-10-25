@@ -82,8 +82,10 @@ const ExploreLive = () => {
             {
                 id: 3,
                 icon:'/assets/icons/team.png',
-                subtitle:`${item?.capitalRecovery} months`,
-                subdesc:t('Capital Recovery'),
+                subtitle: item.capitalRecovery >= 12
+                    ? `${(item.capitalRecovery / 12).toFixed(1)} ${t('years')}`
+                    : `${item.capitalRecovery} ${t('months')}`,
+                subdesc: t('Capital Recovery')
             },
         ]
     })) || [];
@@ -153,11 +155,11 @@ const ExploreLive = () => {
                                             {pro?.description}
                                         </Paragraph>
                                         <Divider className='my-1' />
-                                        <Row justify={'space-between'}>
+                                        <Row justify={'space-between'} align="middle">
                                             {pro?.child?.map((item, c) => (
                                                 <React.Fragment key={c}>
                                                     <Col span={7}>
-                                                        <Flex vertical>
+                                                        <Flex vertical align="center">
                                                             <Text className='text-brand fw-500 m-0 fs-13'>
                                                                 {item?.id !== 3 && <img src="/assets/icons/reyal-b.png" width={8} alt={t('currency-symbol')} />} {item?.subtitle}
                                                             </Text>

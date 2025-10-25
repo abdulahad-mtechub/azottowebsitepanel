@@ -1,10 +1,11 @@
 import { useMemo, useEffect, useState, useCallback } from 'react';
-import { Col, Row, Table } from 'antd';
+import { Col, Row, Space, Table, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { SELLERINPROGRESSDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 
+const { Text } = Typography;
 const SellerInProgressDeals = ({ setInprogressDeal }) => {
     const { t } = useTranslation();
     const [searchValue, setSearchValue] = useState('');
@@ -98,7 +99,27 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
         { title: t('Buyer Name'), dataIndex: 'buyername' },
-        { title: t('Business Price'), dataIndex: 'businessprice' },
+        { 
+            title: t('Business Price'), 
+            dataIndex: 'businessprice',
+            render: (businessprice) => (
+                <Space size={5} align="center">
+                    {businessprice != null && businessprice !== '' ? (
+                    <>
+                        <img
+                        src="/assets/icons/reyal-b.png"
+                        width={16}
+                        alt="currency-symbol"
+                        fetchPriority="high"
+                        />
+                        <Text>{businessprice}</Text>
+                    </>
+                    ) : (
+                    <Text>-</Text>
+                    )}
+                </Space>
+            )
+        },
         { 
             title: t('Status'), 
             dataIndex: 'status',

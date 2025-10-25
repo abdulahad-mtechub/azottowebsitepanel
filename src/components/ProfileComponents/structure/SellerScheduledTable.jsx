@@ -1,4 +1,4 @@
-import { Col, Row, Table, Typography } from 'antd';
+import { Col, Row, Space, Table, Typography } from 'antd';
 import { SearchInput } from '../../Forms';
 import { SCHEDULEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
@@ -52,7 +52,7 @@ const SellerScheduledTable = ({ isBuyer }) => {
             businessprice: meeting.business?.price,
             offerprice: meeting.offer?.price,
             scheduledatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
-            meetinglink: 'https://yourapp.com/meet/' + meeting.id,
+            meetinglink: meeting.meetingLink,
             status: meeting.status
         };
     }) || [];
@@ -61,10 +61,50 @@ const SellerScheduledTable = ({ isBuyer }) => {
 
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
-        { title: t('Buyer Name'), dataIndex: 'buyername' },
-        { title: t('Schedule Date & Time'), dataIndex: 'scheduledatetime' },
-        { title: t('Business Price'), dataIndex: 'businessprice' },
-        { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: isBuyer ? t('Seller Name') : t('Buyer Name'), dataIndex: 'buyername' },
+        { title: t('Scheduled Date & Time'), dataIndex: 'scheduledatetime' },
+        { 
+            title: t('Business Price'), 
+            dataIndex: 'businessprice',
+            render: (businessprice) => (
+                <Space size={5} align="center">
+                    {businessprice != null && businessprice !== '' ? (
+                    <>
+                        <img
+                        src="/assets/icons/reyal-b.png"
+                        width={16}
+                        alt="currency-symbol"
+                        fetchPriority="high"
+                        />
+                        <Text>{businessprice}</Text>
+                    </>
+                    ) : (
+                    <Text>-</Text>
+                    )}
+                </Space>
+            )
+        },
+        { 
+            title: t('Offer Price'), 
+            dataIndex: 'offerprice',
+            render: (offerprice) => (
+                <Space size={5} align="center">
+                    {offerprice != null && offerprice !== '' ? (
+                    <>
+                        <img
+                        src="/assets/icons/reyal-b.png"
+                        width={16}
+                        alt="currency-symbol"
+                        fetchPriority="high"
+                        />
+                        <Text>{offerprice}</Text>
+                    </>
+                    ) : (
+                    <Text>-</Text>
+                    )}
+                </Space>
+            )
+        },
         { 
             title: t('Status'), 
             dataIndex: 'status',
@@ -84,7 +124,7 @@ const SellerScheduledTable = ({ isBuyer }) => {
                     rel="noopener noreferrer"
                     className="text-blue-500 hover:underline"
                 >
-                    {t('Meeting Link')}
+                    {text}
                 </a>
             )
         }
@@ -97,25 +137,25 @@ const SellerScheduledTable = ({ isBuyer }) => {
         };
         setPagination(newPagination);
         
-        const offset = (paginationInfo.current - 1) * paginationInfo.pageSize;
+        const offSet = (paginationInfo.current - 1) * paginationInfo.pageSize;
         fetchMeetings({ 
             variables: { 
                 search: searchValue || "", 
                 isBuyer,
                 limit: paginationInfo.pageSize,
-                offset
+                offSet
             } 
         });
     };
 
     useEffect(() => {
-        const offset = (pagination.current - 1) * pagination.pageSize;
+        const offSet = (pagination.current - 1) * pagination.pageSize;
         fetchMeetings({ 
             variables: { 
                 search: searchValue || "", 
                 isBuyer,
                 limit: pagination.pageSize,
-                offset
+                offSet
             } 
         });
     }, [searchValue, fetchMeetings, isBuyer, pagination]);
@@ -139,7 +179,7 @@ const SellerScheduledTable = ({ isBuyer }) => {
                         dataSource={sellerscheduledData}
                         className="pagination table table-cs"
                         showSorterTooltip={false}
-                        scroll={{ x: 1000 }}
+                        scroll={{ x: 1300 }}
                         loading={loading}
                         pagination={{
                             hideOnSinglePage: true,

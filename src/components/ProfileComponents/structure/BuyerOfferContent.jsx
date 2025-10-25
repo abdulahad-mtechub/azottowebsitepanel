@@ -1,4 +1,4 @@
-import { Button, Card, Col, Dropdown, Flex, Row, Table, Typography, Tooltip } from 'antd'
+import { Button, Card, Col, Dropdown, Flex, Row, Table, Typography, Tooltip, Space } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { NavLink } from 'react-router-dom';
 import { OfferSellerModal, RequestMeetingModal } from '../../Businesslistingcomponents';
@@ -23,6 +23,7 @@ const BuyerOfferContent = () => {
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [searchValue, setSearchValue] = useState('');
+    const [debouncedSearchValue, setDebouncedSearchValue] = useState('');
     const [pagination, setPagination] = useState({
         current: 1,
         pageSize: 10,
@@ -32,31 +33,22 @@ const BuyerOfferContent = () => {
         fetchPolicy: 'network-only',
     });
 
-    // Clean search text by removing extra spaces
-    const cleanSearchText = useCallback((text) => {
-        if (!text) return '';
-        return text.trim().replace(/\s+/g, ' ');
-    }, []);
-
-    const handleSearchChange = useCallback((e) => {
-        const rawValue = e?.target?.value || '';
-        setSearchValue(rawValue);
+    const handleDebouncedSearch = useCallback((sanitizedValue) => {
+        setDebouncedSearchValue(sanitizedValue);
         setPagination(prev => ({ ...prev, current: 1 }));
     }, []);
 
     useEffect(() => {
-        const cleanedSearch = cleanSearchText(searchValue);
         fetchOffers({
             variables: {
                 status: filterstatus || null,
-                search: cleanedSearch || null,
+                search: debouncedSearchValue || null,
                 limit: pagination.pageSize,
-                offSet: pagination.current - 1,
-                isProceedToPay: filtertype || null,
+                offSet: (pagination.current - 1) * pagination.pageSize,
+                isProceedToPay: filtertype !== null ? filtertype : null,
             },
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText, filtertype]);
+    }, [fetchOffers, filterstatus, debouncedSearchValue, pagination.current, pagination.pageSize, filtertype]);
 
     const offers = useMemo(() => data?.getOffersByUser?.offers || [], [data]);
     const totalCount = data?.getOffersByUser?.count || 0;
@@ -231,18 +223,16 @@ const BuyerOfferContent = () => {
     };
 
     const refetch = useCallback(() => {
-        const cleanedSearch = cleanSearchText(searchValue);
         fetchOffers({
             variables: {
                 status: filterstatus || null,
-                search: cleanedSearch || null,
+                search: debouncedSearchValue || null,
                 limit: pagination.pageSize,
-                offset: pagination.current - 1,
-                isProceedToPay: filtertype || null,
+                offSet: (pagination.current - 1) * pagination.pageSize,
+                isProceedToPay: filtertype !== null ? filtertype : null,
             },
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [fetchOffers, filterstatus, searchValue, pagination.current, pagination.pageSize, cleanSearchText, filtertype]);
+    }, [fetchOffers, filterstatus, debouncedSearchValue, pagination.current, pagination.pageSize, filtertype]);
 
     return (
         <>
@@ -252,13 +242,15 @@ const BuyerOfferContent = () => {
                     <Row gutter={[24,24]}>
                         <Col span={24}>
                             <Flex gap={5} align='center' wrap>
-                                <SearchInput
-                                    placeholder={t('Search by business title or seller')}
-                                    value={searchValue}
-                                    onChange={handleSearchChange}
-                                    prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
-                                    style={{ minWidth: '250px' }}
-                                />
+                                    <SearchInput
+                                        placeholder={t('Search by business title or seller')}
+                                        value={searchValue}
+                                        onChange={(e) => setSearchValue(e.target.value)}
+                                        onDebouncedChange={handleDebouncedSearch}
+                                        debounceDelay={500}
+                                        prefix={<img src="/assets/icons/search.png" alt={t('search-icon')} className='mx-3-inline' width={12} fetchPriority="high" />}
+                                        style={{ minWidth: '250px' }}
+                                    />
                                 <MySelect
                                     withoutForm
                                     value={filterstatus}
@@ -266,7 +258,7 @@ const BuyerOfferContent = () => {
                                     allowClear
                                     placeholder={t('Status')}
                                     onChange={(value) => {
-                                        setFilterStatus(value === 'all' ? null : value);
+                                        setFilterStatus(value);
                                         setPagination(prev => ({ ...prev, current: 1 }));
                                     }}
                                     showKey
@@ -280,7 +272,7 @@ const BuyerOfferContent = () => {
                                     allowClear
                                     placeholder={t('Offer Type')}
                                     onChange={(value) => {
-                                        setFilterType(value === 'all' ? null : value);
+                                        setFilterType(value);
                                         setPagination(prev => ({ ...prev, current: 1 }));
                                     }}
                                     showKey

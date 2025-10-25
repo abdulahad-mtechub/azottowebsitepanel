@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Button, Col, Dropdown, Row, Table, Tooltip, Flex, Typography } from 'antd';
+import { Button, Col, Dropdown, Row, Table, Tooltip, Flex, Typography, Space } from 'antd';
 import { SearchInput } from '../../Forms';
 import { NavLink } from 'react-router-dom';
 import { ScheduleMeeting } from '../modal';
@@ -92,9 +92,49 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
                 return <Text>{title}</Text>;
             }
         },
-        { title: t('Buyer Name'), dataIndex: 'buyername' },
-        { title: t('Business Price'), dataIndex: 'businessprice' },
-        { title: t('Offer Price'), dataIndex: 'offerprice' },
+        { title: isBuyer ? t('Seller Name') : t('Buyer Name'), dataIndex: 'buyername' },
+        {   
+            title: t('Business Price'), 
+            dataIndex: 'businessprice',
+            render: (businessprice) => (
+                <Space size={5} align="center">
+                    {businessprice != null && businessprice !== '' ? (
+                    <>
+                        <img
+                        src="/assets/icons/reyal-b.png"
+                        width={16}
+                        alt="currency-symbol"
+                        fetchPriority="high"
+                        />
+                        <Text>{businessprice}</Text>
+                    </>
+                    ) : (
+                    <Text>-</Text>
+                    )}
+                </Space>
+            )
+        },
+        { 
+            title: t('Offer Price'), 
+            dataIndex: 'offerprice',
+            render: (offerprice) => (
+                <Space size={5} align="center">
+                {offerprice != null && offerprice !== '' ? (
+                <>
+                    <img
+                    src="/assets/icons/reyal-b.png"
+                    width={16}
+                    alt="currency-symbol"
+                    fetchPriority="high"
+                    />
+                    <Text>{offerprice}</Text>
+                </>
+                ) : (
+                <Text>-</Text>
+                )}
+                </Space>
+            )
+        },
         { 
             title: t('Status'), 
             dataIndex: 'status',
@@ -239,7 +279,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
                 onClose={() => setDeleteModal(false)}
                 type='danger'
                 title={t('Are you sure?')}
-                subtitle={t('Rejecting this meeting request will remove it from your request list. Are you sure you want to proceed?......')}
+                subtitle={t('Rejecting this meeting request will remove it from your request list. Are you sure you want to proceed?')}
                 refetch={() => refetchMeetings({ 
                     variables: { 
                         search: searchValue || "", 
