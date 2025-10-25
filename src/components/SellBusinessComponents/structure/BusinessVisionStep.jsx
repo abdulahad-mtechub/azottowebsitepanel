@@ -100,6 +100,8 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                                 name='growthOpportunities'
                                 placeholder='Write about future opportunities for the buyer.'
                                 rows={5}
+                                showCount
+                                maxLength={200}
                             />
                         </Col>
                         <Col span={24}>
@@ -111,6 +113,8 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                                 message='Please enter reason for selling'
                                 placeholder='Briefly explain why you’re selling this business.'
                                 rows={5}
+                                showCount
+                                maxLength={200}
                             />
                         </Col>
                     </Row>   

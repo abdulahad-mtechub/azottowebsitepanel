@@ -191,6 +191,7 @@ query GetDeal($getDealId: ID!) {
     isDocVedifiedBuyer
     isCommissionUploaded
     createdAt
+    ndaPdfPath
     business {
       id
       businessTitle

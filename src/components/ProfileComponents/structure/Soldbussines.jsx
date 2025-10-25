@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { GETSELLERSOLDBUSINESS } from '../../../graphql/query';
 import { useTranslation } from 'react-i18next';
+import { truncateChars } from '../../../utils';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -64,8 +65,8 @@ const Soldbussines = () => {
                             <Flex vertical gap={20}>
                                 <Flex justify='space-between' align='center'>
                                     <Flex gap={4}>
-                                        <Button aria-labelledby={t('Category name')} className='fs-13'>
-                                            {isArabic ? pro?.category?.arabicName : pro?.category?.name}
+                                        <Button className='fs-13' aria-labelledby='Restaurant'>
+                                            {truncateChars(isArabic ? pro?.category?.arabicName : pro?.category?.name, 20)}
                                         </Button>
                                         {pro?.isByTakbeer !== undefined && (
                                             <Button

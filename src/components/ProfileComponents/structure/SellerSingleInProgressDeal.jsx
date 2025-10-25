@@ -26,6 +26,7 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             buyerName: data.getDeal.buyer?.name || '-',
             sellerName: data.getDeal.business?.seller?.name || '-',
             finalizedOffer: data.getDeal.offer?.price ? `SAR ${data.getDeal.offer.price.toLocaleString()}` : '-',
+            ndaPdfPath: data.getDeal.ndaPdfPath,
             status: data.getDeal.status || 0,
             date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',
             busines: data.getDeal.business || '-',

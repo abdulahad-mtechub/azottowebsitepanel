@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Tag, Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { CREATE_SAVE_BUSINESS } from "../../../graphql";
 import { useMutation } from '@apollo/client';
 import { message } from "antd";
@@ -44,7 +44,6 @@ const ProductCard = ({
             });
             return;
         }
-
         try {
             await saveBusiness({
             variables: {
@@ -104,43 +103,40 @@ const ProductCard = ({
             {
                 exploreData?.map((pro,i) =>
                     <Col lg={{span: 8}} md={{span: 8}} sm={{span: 24}} xs={{span: 24}} key={i}>
-                        <Card className='h-100 border-gray rounded-12 card-cs cursor bg-lightest-gray' 
-                            onClick={() => {
-                                if (pro?.id) {
-                                    navigate(`/singleviewlisting/${pro.id}`);
-                                } else {
-                                    console.warn("Business ID is undefined", pro);
-                                }
-                            }}
+                        <Link 
+                            to={`/singleviewlisting/${pro.id}`}
+                            style={{ textDecoration: 'none', color: 'inherit', display: 'block', height: '100%' }}
                         >
-                            <Flex vertical gap={20}>
-                                <Flex justify='space-between' align='center'>
-                                    <Flex gap={4}>
-                                        <Button className='fs-13' aria-labelledby='Restaurant'>
-                                            {truncateChars(pro?.categoryName, 20)}
-                                        </Button>
-                                        <Button
-                                                aria-labelledby="type"
-                                                className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
-                                            >
-                                            {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
+                            <Card className='h-100 border-gray rounded-12 card-cs cursor bg-lightest-gray'>
+                                <Flex vertical gap={20}>
+                                    <Flex justify='space-between' align='center'>
+                                        <Flex gap={4}>
+                                            <Button className='fs-13' aria-labelledby='Restaurant'>
+                                                {truncateChars(pro?.categoryName, 20)}
+                                            </Button>
+                                            <Button
+                                                    aria-labelledby="type"
+                                                    className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
+                                                >
+                                                {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
+                                            </Button>
+                                        </Flex>
+                                        <Button 
+                                            aria-labelledby='bookmarked-btn'
+                                            className='border-0 bg-transparent p-0'
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                saveBusinessHandler(pro?.id, pro?.isSaved);
+                                            }}
+                                        >
+                                            {
+                                                pro?.isSaved
+                                                ? <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} fetchPriority="high" />
+                                                : <img src='/assets/icons/bk-bl.png' alt={t('un-bookmarked-image')} width={22} fetchPriority="high" />
+                                            }
                                         </Button>
                                     </Flex>
-                                    <Button 
-                                        aria-labelledby='bookmarked-btn'
-                                        className='border-0 bg-transparent p-0'
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            saveBusinessHandler(pro?.id, pro?.isSaved);
-                                        }}
-                                    >
-                                        {
-                                            pro?.isSaved
-                                            ? <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} fetchPriority="high" />
-                                            : <img src='/assets/icons/bk-bl.png' alt={t('un-bookmarked-image')} width={22} fetchPriority="high" />
-                                        }
-                                    </Button>
-                                </Flex>
                                 <div>
                                     <div className='w-full card-img mb-2 rounded-12'>
                                         <img src="/assets/images/card-1.webp" width={'100%'} height={'100%'} alt={t("product-image")} fetchPriority="high" />
@@ -183,6 +179,7 @@ const ProductCard = ({
                                 </div>
                             </Flex>
                         </Card>
+                        </Link>
                     </Col>
                 )
             }

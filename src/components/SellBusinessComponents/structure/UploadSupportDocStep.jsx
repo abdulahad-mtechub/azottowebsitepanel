@@ -203,6 +203,8 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
     
     // Merge existing support docs with new ones
     const allSupportDocs = [...existingSupportDocs, ...newSupportDocs];
+    
+    // Always preserve CR document if it exists
     const finalDocs = crDoc ? [crDoc, ...allSupportDocs] : allSupportDocs;
 
     const updated = { ...data, documents: finalDocs };
@@ -212,8 +214,16 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
     const updatedSupportList = allSupportDocs.map((d, i) => docToUploadItem(d, i + 1));
     setInitialSupportList(updatedSupportList);
     
+    // Keep CR in the initial list if it exists
+    if (crDoc) {
+      setInitialCrList([docToUploadItem(crDoc, 0)]);
+    }
+    
     // Update form field
-    form.setFieldsValue({ uploadmult: allSupportDocs });
+    form.setFieldsValue({ 
+      uploadmult: allSupportDocs,
+      uploadcr: crDoc ? [crDoc] : form.getFieldValue('uploadcr')
+    });
     
     messageApi.success(`${successful.length} file(s) uploaded successfully`);
   } catch (err) {
@@ -228,7 +238,7 @@ const handleMultipleFileRemove = (removedFile) => {
   try {
     const updatedDocs = Array.isArray(data.documents) ? [...data.documents] : [];
     const crDoc = updatedDocs.find(d => d.title === 'Commercial Registration (CR)');
-    const existingSupportDocs = updatedDocs.filter(d => d.title !== 'Commercial Registration (CR)');
+    const existingSupportDocs = updatedDocs.filter(d => d.title === 'Supporting Document');
     
     // Find and remove the document by matching file name or path
     const remainingSupportDocs = existingSupportDocs.filter(doc => {
@@ -238,7 +248,7 @@ const handleMultipleFileRemove = (removedFile) => {
                (removedFile.uid && doc.serverId === removedFile.uid));
     });
     
-    // Reconstruct documents array
+    // Reconstruct documents array - always preserve CR
     const finalDocs = crDoc ? [crDoc, ...remainingSupportDocs] : remainingSupportDocs;
     
     const updated = { ...data, documents: finalDocs };
@@ -248,8 +258,16 @@ const handleMultipleFileRemove = (removedFile) => {
     const updatedSupportList = remainingSupportDocs.map((d, i) => docToUploadItem(d, i + 1));
     setInitialSupportList(updatedSupportList);
     
-    // Update form state with the remaining support documents
-    form.setFieldsValue({ uploadmult: remainingSupportDocs });
+    // Keep CR in the initial list if it exists
+    if (crDoc) {
+      setInitialCrList([docToUploadItem(crDoc, 0)]);
+    }
+    
+    // Update form state with the remaining support documents and preserve CR
+    form.setFieldsValue({ 
+      uploadmult: remainingSupportDocs,
+      uploadcr: crDoc ? [crDoc] : form.getFieldValue('uploadcr')
+    });
   } catch (err) {
     console.error('handleMultipleFileRemove error:', err);
   }

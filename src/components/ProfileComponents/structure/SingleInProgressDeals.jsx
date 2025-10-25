@@ -33,6 +33,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         sellerName: data?.getDeal?.business?.seller?.name || '-',
         finalizedOffer: data?.getDeal?.offer?.price ? `SAR ${data?.getDeal?.offer?.price.toLocaleString()}` : '-',
         status: data?.getDeal?.status || 0,
+        ndaPdfPath: data?.getDeal?.ndaPdfPath,
         date: data?.getDeal?.createdAt ? new Date(data?.getDeal?.createdAt).toLocaleDateString() : '-',
         busines: data?.getDeal?.business || '-',
         banks: banks || '-',

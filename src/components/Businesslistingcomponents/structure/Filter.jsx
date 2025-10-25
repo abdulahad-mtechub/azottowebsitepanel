@@ -21,6 +21,16 @@ const Filter = ({
     const [activeStep, setActiveStep] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
     const [activeCategoryId, setActiveCategoryId] = useState(null);
+    
+    // Local state for input values
+    const [priceMin, setPriceMin] = useState('');
+    const [priceMax, setPriceMax] = useState('');
+    const [revenueMin, setRevenueMin] = useState('');
+    const [revenueMax, setRevenueMax] = useState('');
+    const [profitMin, setProfitMin] = useState('');
+    const [profitMax, setProfitMax] = useState('');
+    const [profitMarginMin, setProfitMarginMin] = useState('');
+    const [profitMarginMax, setProfitMarginMax] = useState('');
 
     const { data: categoryData } = useQuery(GET_CATEGORIES);
     const categories = categoryData?.getAllCategories?.categories?.map(cat => ({
@@ -37,41 +47,137 @@ const Filter = ({
         setMultipleStep(newStep);
     };
 
+    const handlePriceMinChange = (e) => {
+        const val = e.target.value;
+        setPriceMin(val);
+        setPriceRange([val || null, priceMax || null]);
+    };
+
+    const handlePriceMaxChange = (e) => {
+        const val = e.target.value;
+        setPriceMax(val);
+        setPriceRange([priceMin || null, val || null]);
+    };
+
+    const handleRevenueMinChange = (e) => {
+        const val = e.target.value;
+        setRevenueMin(val);
+        setRevenueRange([val || null, revenueMax || null]);
+    };
+
+    const handleRevenueMaxChange = (e) => {
+        const val = e.target.value;
+        setRevenueMax(val);
+        setRevenueRange([revenueMin || null, val || null]);
+    };
+
+    const handleProfitMinChange = (e) => {
+        const val = e.target.value;
+        setProfitMin(val);
+        setProfitRange([val || null, profitMax || null]);
+    };
+
+    const handleProfitMaxChange = (e) => {
+        const val = e.target.value;
+        setProfitMax(val);
+        setProfitRange([profitMin || null, val || null]);
+    };
+
+    const handleProfitMarginMinChange = (e) => {
+        const val = e.target.value;
+        setProfitMarginMin(val);
+        setProfitMargenRange([val || null, profitMarginMax || null]);
+    };
+
+    const handleProfitMarginMaxChange = (e) => {
+        const val = e.target.value;
+        setProfitMarginMax(val);
+        setProfitMargenRange([profitMarginMin || null, val || null]);
+    };
+
     const itemsNest = [
         {
             key: '1',
             label: <Text>{t('Price Range')}</Text>,
             children: <Flex align='center' gap={4} className='w-100'>
-                <Input placeholder={t('Min')} className='input-cs' onChange={(e) => setPriceRange(prev => [e.target.value, prev?.[1]])} />
+                <Input 
+                    placeholder={t('Min')} 
+                    className='input-cs' 
+                    value={priceMin}
+                    onChange={handlePriceMinChange}
+                    type="number"
+                />
                 <LineOutlined />
-                <Input placeholder={t('Max')} className='input-cs' onChange={(e) => setPriceRange(prev => [prev?.[0], e.target.value])} />
+                <Input 
+                    placeholder={t('Max')} 
+                    className='input-cs' 
+                    value={priceMax}
+                    onChange={handlePriceMaxChange}
+                    type="number"
+                />
             </Flex>,
         },
         {
             key: '2',
             label: <Text>{t('Annual Revenue')}</Text>,
             children: <Flex align='center' gap={4} className='w-100'>
-                <Input placeholder={t('Min')} className='input-cs' onChange={(e) => setRevenueRange(prev => [e.target.value, prev?.[1]])} />
+                <Input 
+                    placeholder={t('Min')} 
+                    className='input-cs' 
+                    value={revenueMin}
+                    onChange={handleRevenueMinChange}
+                    type="number"
+                />
                 <LineOutlined />
-                <Input placeholder={t('Max')} className='input-cs' onChange={(e) => setRevenueRange(prev => [prev?.[0], e.target.value])} />
+                <Input 
+                    placeholder={t('Max')} 
+                    className='input-cs' 
+                    value={revenueMax}
+                    onChange={handleRevenueMaxChange}
+                    type="number"
+                />
             </Flex>,
         },
         {
             key: '3',
             label: <Text>{t('Annual Profit')}</Text>,
             children: <Flex align='center' gap={4} className='w-100'>
-                <Input placeholder={t('Min')} className='input-cs' onChange={(e) => setProfitRange(prev => [e.target.value, prev?.[1]])} />
+                <Input 
+                    placeholder={t('Min')} 
+                    className='input-cs' 
+                    value={profitMin}
+                    onChange={handleProfitMinChange}
+                    type="number"
+                />
                 <LineOutlined />
-                <Input placeholder={t('Max')} className='input-cs' onChange={(e) => setProfitRange(prev => [prev?.[0], e.target.value])} />
+                <Input 
+                    placeholder={t('Max')} 
+                    className='input-cs' 
+                    value={profitMax}
+                    onChange={handleProfitMaxChange}
+                    type="number"
+                />
             </Flex>,
         },
         {
             key: '4',
             label: <Text>{t('Profit Margin (%)')}</Text>,
             children: <Flex align='center' gap={4} className='w-100'>
-                <Input placeholder={t('Min')} className='input-cs' onChange={(e) => setProfitMargenRange(prev => [e.target.value, prev?.[1]])} />
+                <Input 
+                    placeholder={t('Min')} 
+                    className='input-cs' 
+                    value={profitMarginMin}
+                    onChange={handleProfitMarginMinChange}
+                    type="number"
+                />
                 <LineOutlined />
-                <Input placeholder={t('Max')} className='input-cs' onChange={(e) => setProfitMargenRange(prev => [prev?.[0], e.target.value])} />
+                <Input 
+                    placeholder={t('Max')} 
+                    className='input-cs' 
+                    value={profitMarginMax}
+                    onChange={handleProfitMarginMaxChange}
+                    type="number"
+                />
             </Flex>,
         },
         {

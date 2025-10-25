@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useMemo } from 'react';
+import { useState,useEffect,useMemo } from 'react';
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image } from 'antd';
 import { useDistricts, useCities } from '../data/';
 import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../components';
@@ -119,9 +119,23 @@ const BusinessListingPage = ({getcategory}) => {
     }, [params]);
 
     const getFilterVariables = () => {
-        const sanitizeRange = (range) => Array.isArray(range) && (range[0] != null || range[1] != null)
-            ? range.map((val) => (val != null ? Number(val) : null))
-            : null;
+        const sanitizeRange = (range) => {
+            if (!Array.isArray(range)) return null;
+            
+            const [min, max] = range;
+            const hasMin = min !== null && min !== '' && min !== undefined;
+            const hasMax = max !== null && max !== '' && max !== undefined;
+            
+            // If both are empty, return null
+            if (!hasMin && !hasMax) return null;
+            
+            // Return array with proper null handling
+            return [
+                hasMin ? Number(min) : null,
+                hasMax ? Number(max) : null
+            ];
+        };
+        
         const sanitizeSingle = (val) => val != null && val !== '' && val !== t('Select City') && val !== t('Select District') ? val : null;
       
         return {

@@ -81,10 +81,12 @@ const DigitalSaleAgreementStep = ({ details }) => {
                 <Image src={'/assets/icons/file.png'} alt={t("file icon")} preview={false} width={20} />
                 <Flex vertical>
                   <Text className="fs-13 text-gray">{t("Digital Sale Agreement.pdf")}</Text>
-                  <Text className="fs-13 text-gray">5.3 MB</Text>
+                  {/* <Text className="fs-13 text-gray">5.3 MB</Text> */}
                 </Flex>
               </Flex>
+              <a href={details.ndaPdfPath} target="_blank" rel="noopener noreferrer">
               <Image src={'/assets/icons/download.png'} alt={t("download icon")} preview={false} width={20} />
+              </a>
             </Flex>
           </Card>
         </Col>
