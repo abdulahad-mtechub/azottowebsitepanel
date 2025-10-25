@@ -119,6 +119,12 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
   };
 
 const handleSingleFileUpload = async (fileOrFiles) => {
+  // Prevent upload if support docs are uploading
+  if (uploadingSupport) {
+    messageApi.warning('Please wait for support documents to finish uploading');
+    return;
+  }
+  
   setUploadingCR(true);
   try {
     const file = fileOrFiles;
@@ -129,16 +135,19 @@ const handleSingleFileUpload = async (fileOrFiles) => {
       ...fileInfo,
     };
 
+    // Get current state snapshot to avoid race conditions
     const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
-    const supportDocs = existingDocs.filter(d => d.title !== 'Commercial Registration (CR)');
+    const supportDocs = existingDocs.filter(d => d.title === 'Supporting Document');
     
+    // CR always goes first
     const updatedDocs = [crDocument, ...supportDocs];
 
-    const updated = { ...data, documents: updatedDocs };
-    setData(updated);
+    setData({ ...data, documents: updatedDocs });
     
+    // Update CR UI list only
     setInitialCrList([docToUploadItem(crDocument, 0)]);
     
+    // Update only CR form field, don't touch support docs field
     form.setFieldsValue({ uploadcr: [crDocument] });
     messageApi.success('Commercial Registration uploaded successfully');
   } catch (err) {
@@ -150,13 +159,22 @@ const handleSingleFileUpload = async (fileOrFiles) => {
 };
 
 const handleSingleFileRemove = () => {
+  // Prevent removal if support docs are uploading
+  if (uploadingSupport) {
+    messageApi.warning('Please wait for support documents to finish uploading');
+    return;
+  }
+  
   try {
     const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
-    const supportDocs = existingDocs.filter(d => d.title !== 'Commercial Registration (CR)');
+    const supportDocs = existingDocs.filter(d => d.title === 'Supporting Document');
     
-    const updated = { ...data, documents: supportDocs };
-    setData(updated);
+    setData({ ...data, documents: supportDocs });
     
+    // Clear CR UI list
+    setInitialCrList([]);
+    
+    // Update only CR form field
     form.setFieldsValue({ uploadcr: null });
   } catch (err) {
     console.error('handleSingleFileRemove error:', err);
@@ -165,6 +183,12 @@ const handleSingleFileRemove = () => {
 
 
 const handleMultipleFileUpload = async (fileOrFiles) => {
+  // Prevent upload if CR is uploading
+  if (uploadingCR) {
+    messageApi.warning('Please wait for Commercial Registration to finish uploading');
+    return;
+  }
+  
   const normalized = Array.isArray(fileOrFiles) ? fileOrFiles : normalizeFiles(fileOrFiles);
   if (!normalized || normalized.length === 0) return;
 
@@ -197,6 +221,7 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
       size: fileInfo.size,
     }));
 
+    // Get current state snapshot to avoid race conditions
     const existingDocs = Array.isArray(data.documents) ? [...data.documents] : [];
     const crDoc = existingDocs.find(d => d.title === 'Commercial Registration (CR)');
     const existingSupportDocs = existingDocs.filter(d => d.title === 'Supporting Document');
@@ -204,26 +229,17 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
     // Merge existing support docs with new ones
     const allSupportDocs = [...existingSupportDocs, ...newSupportDocs];
     
-    // Always preserve CR document if it exists
+    // Always preserve CR document if it exists (CR goes first)
     const finalDocs = crDoc ? [crDoc, ...allSupportDocs] : allSupportDocs;
 
-    const updated = { ...data, documents: finalDocs };
-    setData(updated);
+    setData({ ...data, documents: finalDocs });
 
-    // Update supporting documents list for UI
+    // Update supporting documents UI list only
     const updatedSupportList = allSupportDocs.map((d, i) => docToUploadItem(d, i + 1));
     setInitialSupportList(updatedSupportList);
     
-    // Keep CR in the initial list if it exists
-    if (crDoc) {
-      setInitialCrList([docToUploadItem(crDoc, 0)]);
-    }
-    
-    // Update form field
-    form.setFieldsValue({ 
-      uploadmult: allSupportDocs,
-      uploadcr: crDoc ? [crDoc] : form.getFieldValue('uploadcr')
-    });
+    // Update only support docs form field, don't touch CR field
+    form.setFieldsValue({ uploadmult: allSupportDocs });
     
     messageApi.success(`${successful.length} file(s) uploaded successfully`);
   } catch (err) {
@@ -235,7 +251,14 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
 };
 
 const handleMultipleFileRemove = (removedFile) => {
+  // Prevent removal if CR is uploading
+  if (uploadingCR) {
+    messageApi.warning('Please wait for Commercial Registration to finish uploading');
+    return;
+  }
+  
   try {
+    // Get current state snapshot
     const updatedDocs = Array.isArray(data.documents) ? [...data.documents] : [];
     const crDoc = updatedDocs.find(d => d.title === 'Commercial Registration (CR)');
     const existingSupportDocs = updatedDocs.filter(d => d.title === 'Supporting Document');
@@ -248,26 +271,17 @@ const handleMultipleFileRemove = (removedFile) => {
                (removedFile.uid && doc.serverId === removedFile.uid));
     });
     
-    // Reconstruct documents array - always preserve CR
+    // Reconstruct documents array - always preserve CR (CR goes first)
     const finalDocs = crDoc ? [crDoc, ...remainingSupportDocs] : remainingSupportDocs;
     
-    const updated = { ...data, documents: finalDocs };
-    setData(updated);
+    setData({ ...data, documents: finalDocs });
     
-    // Update supporting documents list for UI
+    // Update supporting documents UI list only
     const updatedSupportList = remainingSupportDocs.map((d, i) => docToUploadItem(d, i + 1));
     setInitialSupportList(updatedSupportList);
     
-    // Keep CR in the initial list if it exists
-    if (crDoc) {
-      setInitialCrList([docToUploadItem(crDoc, 0)]);
-    }
-    
-    // Update form state with the remaining support documents and preserve CR
-    form.setFieldsValue({ 
-      uploadmult: remainingSupportDocs,
-      uploadcr: crDoc ? [crDoc] : form.getFieldValue('uploadcr')
-    });
+    // Update only support docs form field, don't touch CR field
+    form.setFieldsValue({ uploadmult: remainingSupportDocs });
   } catch (err) {
     console.error('handleMultipleFileRemove error:', err);
   }
