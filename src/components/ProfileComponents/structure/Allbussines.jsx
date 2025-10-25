@@ -7,6 +7,7 @@ import { Singlebusinessview } from './Singlebusinessview';
 import { ModuleTopHeading } from '../../Pagecomponents';
 import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
+import { truncateChars } from '../../../utils';
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -85,8 +86,8 @@ const Allbussines = () => {
                                 <Flex vertical gap={20}>
                                     <Flex justify='space-between' align='center'>
                                         <Flex gap={4}>
-                                            <Button aria-labelledby={t('Category name')} className='fs-13'>
-                                                {isArabic ? pro?.category?.arabicName : pro?.category?.name}
+                                            <Button className='fs-13' aria-labelledby={t(pro?.category?.arabicName)}>
+                                                {truncateChars(isArabic ? pro?.category?.arabicName : pro?.category?.name, 20)}
                                             </Button>
                                             {pro?.isByTakbeer !== undefined && (
                                                 <Button

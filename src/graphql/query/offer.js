@@ -233,30 +233,31 @@ query GetBankDetailsByDealId($dealId: ID!) {
 }
 `
 const GET_BUSINESS_OFFERS = gql`
-query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: Int, $search: String, $status: String) {
-  getOfferByBusinessId(id: $getOfferByBusinessIdId, limit: $limit, offSet: $offSet, search: $search, status: $status) {
-    count
-    offers {
-      id
-      price
-      status
-      createdAt
-      createdBy
-      commission
-      isProceedToPay
-      business {
+  query GetOfferByBusinessId($getOfferByBusinessIdId: ID, $limit: Int, $offSet: Int, $search: String, $isProceedToPay: Boolean, $status: OfferStatus) {
+    getOfferByBusinessId(id: $getOfferByBusinessIdId, limit: $limit, offSet: $offSet, search: $search, isProceedToPay: $isProceedToPay, status: $status) {
+      count
+      offers {
         id
-        businessTitle
         price
-      }
-      buyer {
-        id
-        name
+        status
+        createdAt
+        createdBy
+        commission
+        isProceedToPay
+        business {
+          id
+          businessTitle
+          price
+        }
+        buyer {
+          id
+          name
+        }
       }
     }
   }
-}
 `
+
 const CHECK_OFFER_EXISTS = gql`
   query CheckOfferExists($businessId: ID!, $buyerId: ID!) {
     checkOfferExists(businessId: $businessId, buyerId: $buyerId) {

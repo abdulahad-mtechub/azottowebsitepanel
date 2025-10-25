@@ -126,7 +126,7 @@ const ExploreLive = () => {
                                 <Flex vertical gap={20}>
                                     <Flex justify='space-between' align='center'>
                                         <Flex gap={4}>
-                                            <Button className='fs-13' aria-labelledby='Restaurant'>
+                                            <Button className='fs-13' aria-labelledby={t(pro?.categoryName)}>
                                                 {truncateChars(pro?.categoryName, 20)}
                                             </Button>
                                             {typeof pro?.type === "boolean" && (

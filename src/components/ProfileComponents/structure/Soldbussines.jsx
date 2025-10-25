@@ -65,7 +65,7 @@ const Soldbussines = () => {
                             <Flex vertical gap={20}>
                                 <Flex justify='space-between' align='center'>
                                     <Flex gap={4}>
-                                        <Button className='fs-13' aria-labelledby='Restaurant'>
+                                        <Button className='fs-13' aria-labelledby={pro?.category?.name} >
                                             {truncateChars(isArabic ? pro?.category?.arabicName : pro?.category?.name, 20)}
                                         </Button>
                                         {pro?.isByTakbeer !== undefined && (

@@ -37,8 +37,15 @@ const Changepassword = ({ visible, onClose }) => {
       form.resetFields();
       onClose();
     } catch (err) {
-      messageApi.error(t(`Failed to change password ❌ ${err}`));
-    }
+        const graphQLError = err?.graphQLErrors?.[0]?.message;
+        if (graphQLError) {
+          messageApi.error(t(graphQLError));
+        } else if (err?.networkError) {
+          messageApi.error(t('Network error. Please check your connection.'));
+        } else {
+          messageApi.error(t(err?.message || 'Something went wrong. Please try again.'));
+        }
+      }
   };
 
   return (

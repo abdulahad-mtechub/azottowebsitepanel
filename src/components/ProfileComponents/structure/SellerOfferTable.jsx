@@ -1,9 +1,9 @@
 import { Button, Col, Dropdown, Flex, Row, Table, Tooltip, Typography, Alert } from 'antd'
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { DeleteModal } from '../../ui';
 import { SearchInput, MySelect } from '../../Forms';
 import { CounterOffer, ScheduleMeeting } from '../modal';
-import { useQuery } from '@apollo/client';
+import { useLazyQuery, useQuery } from '@apollo/client';
 import { GET_BUSINESS_OFFERS } from '../../../graphql/query/offer';
 import { CHECKMEETINGEXISTS } from '../../../graphql/query/meeting';
 import Cookies from "js-cookie";
@@ -77,17 +77,51 @@ const SellerOfferTable = ({ data }) => {
         pageSize: 10,
     });
 
-    const { data: offers, refetch, loading } = useQuery(GET_BUSINESS_OFFERS, {
-        variables: { 
+    // Map UI status filters to API variables
+    const mapStatusToApi = (status) => {
+        if (!status) return null;
+        if (status === 'rejected') return 'REJECTED';
+        if (status === 'approved') return 'APPROVED';
+        if (status === 'accepted') return 'ACCEPTED';
+        // 'send' or 'received' both map to PENDING in API
+        if (status === 'send' || status === 'received') return 'PENDING';
+        return null;
+    };
+
+    const mapTypeToIsProceed = (type) => {
+        if (!type) return null;
+        if (type === 'proceed') return true;
+        if (type === 'counter') return false;
+        return null;
+    };
+
+    const buildVariables = () => {
+        const statusParam = mapStatusToApi(filterstatus);
+        const isProceedParam = mapTypeToIsProceed(filtertype);
+        const limit = pagination.pageSize;
+        const offSet = (pagination.current - 1) * pagination.pageSize;
+        return {
             getOfferByBusinessIdId: data?.id,
-            limit: pagination.pageSize,
-            offSet: pagination.current - 1,
+            limit,
+            offSet,
             search: debouncedSearchText || null,
-            status: null
-        },
+            status: statusParam,
+            isProceedToPay: typeof isProceedParam === 'boolean' ? isProceedParam : null,
+        };
+    };
+
+    const [loadOffers, { data: offers, refetch, loading } ] = useLazyQuery(GET_BUSINESS_OFFERS, {
         fetchPolicy: 'network-only',
-        skip: !data?.id,
     });
+
+    // Execute the query when dependencies change
+    useEffect(() => {
+        if (!data?.id) return;
+        // Do not fetch for inactive business
+        if (data?.businessStatus === 'INACTIVE') return;
+        loadOffers({ variables: buildVariables() });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [data?.id, data?.businessStatus, pagination.current, pagination.pageSize, debouncedSearchText, filterstatus, filtertype]);
     const handleAcceptOffer = (offerId, businessId) => {
         console.log('Accepting offer:', offerId, 'for business:', businessId);
         setSelectedOfferId(offerId);
@@ -182,6 +216,8 @@ const SellerOfferTable = ({ data }) => {
     const statusOptions = [
         { id: 'received', name: t('Received') },
         { id: 'send', name: t('Send') },
+        { id: 'accepted', name: t('Accepted') },
+        { id: 'approved', name: t('Approved') },
         { id: 'rejected', name: t('Rejected') },
     ];
 
@@ -196,6 +232,7 @@ const SellerOfferTable = ({ data }) => {
         return offerdata.filter(offer => {
             // Status filter
             if (filterstatus) {
+                // received/send are client-side interpretations of PENDING
                 if (filterstatus === 'received' && offer.createdBy === userId) return false;
                 if (filterstatus === 'send' && offer.createdBy !== userId) return false;
                 if (filterstatus === 'rejected' && offer.status !== 'REJECTED') return false;
