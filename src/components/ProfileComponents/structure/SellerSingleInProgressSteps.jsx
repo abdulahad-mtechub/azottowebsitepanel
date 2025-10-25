@@ -30,7 +30,6 @@ const SellerSingleInprogressSteps = ({ deal }) => {
     const { t } = useTranslation();
     const [form] = Form.useForm();
     console.log('deal in steps:', deal);
-    // Check if each step is completed based on deal status and admin approvals
     const isCommissionVerified = deal?.isCommissionVerified || deal?.status === 'COMMISSION_VERIFIED';
     const isStep1Completed = deal?.isDsaSeller && deal?.isDsaBuyer;
     const isStep2Completed = deal?.bankAccountId || deal?.status === 'SELLER_PAYMENT_VERIFICATION_PENDING' || 
@@ -66,7 +65,7 @@ const SellerSingleInprogressSteps = ({ deal }) => {
             lockedTitle: t('Commission Payment Pending'),
             lockedDesc: t('Waiting for buyer commission payment verification.'),
             isCompleted: isStep1Completed,
-            isEnabled: isCommissionVerified, // Enabled only if commission is verified by admin
+            isEnabled: isCommissionVerified,
         },
         {
             key: '2',

@@ -5,7 +5,7 @@ import { useLazyQuery } from '@apollo/client';
 import { GETSELLERSOLDBUSINESS } from '../../../graphql/query';
 import { useTranslation } from 'react-i18next';
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 const Soldbussines = () => {
     const { t, i18n } = useTranslation();
@@ -98,7 +98,11 @@ const Soldbussines = () => {
                                         />
                                     </div>
                                     <Title level={5}>{pro?.businessTitle}</Title>
-                                    <Text className='fs-14 text-gray'>{pro?.description}</Text>
+                                    <div className='h-80'>
+                                        <Paragraph ellipsis={{ rows: 3, expandable: false, symbol: 'more' }} className='fs-14 text-gray'>
+                                            {pro?.description}
+                                        </Paragraph>
+                                    </div>
                                     <Divider className='my-1' />
                                     <Row justify={'space-between'}>
                                         {pro?.child?.map((item, c) => (

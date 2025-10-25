@@ -26,7 +26,7 @@ const ProductCard = ({
     const [messageApi, contextHolder] = message.useMessage();
     const userId = Cookies.get("userId");
 
-    const saveBusinessHandler = async (businessId) => {
+    const saveBusinessHandler = async (businessId, currentSaveState) => {
         if (!userId) {
             messageApi.info({
                 content: (
@@ -51,11 +51,15 @@ const ProductCard = ({
                 saveBusinessId: businessId,
             },
             });
-            messageApi.success(t("Business added to favorite succesfully"));
+            if (currentSaveState) {
+                messageApi.success(t("Business removed from favorites successfully"));
+            } else {
+                messageApi.success(t("Business added to favorites successfully"));
+            }
             refetchBusinesses(); 
         } catch (err) {
             console.error("Save mutation error:", err);
-            messageApi.error(t("Save failed: ") + err.message);
+            messageApi.error(t("Failed to update favorites: ") + err.message);
         }
     };
     if (isLoading) {
@@ -127,7 +131,7 @@ const ProductCard = ({
                                         className='border-0 bg-transparent p-0'
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            saveBusinessHandler(pro?.id);
+                                            saveBusinessHandler(pro?.id, pro?.isSaved);
                                         }}
                                     >
                                         {

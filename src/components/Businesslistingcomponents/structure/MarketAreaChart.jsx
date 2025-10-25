@@ -1,6 +1,7 @@
 import { Card, Col, Flex, Row, Typography } from 'antd';
 import { ModuleTopHeading } from '../../Pagecomponents';
 import { useTranslation } from 'react-i18next';
+import Chart from 'react-google-charts';
 
 const { Text, Title } = Typography;
 
@@ -28,8 +29,8 @@ const MarketAreaChart = () => {
         region: 'SA',
         displayMode: 'regions',
         colorAxis: { colors: ['#E3F2FD', '#0D47A1'] },
-        backgroundColor: '#fff',
-        datalessRegionColor: '#f0f0f0',
+        backgroundColor: '#0D47A1',
+        datalessRegionColor: '#0D47A1',
         legend: { position: 'bottom' },
     };
 
@@ -58,7 +59,7 @@ const MarketAreaChart = () => {
                                 {t('Regional Market Indicators')}
                             </Title>
                             <Row gutter={[24,24]} className='mt-3' justify={'space-between'}>
-                                <Col span={11}>
+                                <Col span={12}>
                                     <Flex vertical gap={10}>
                                         <Text>{t('Local Business Growth')}</Text>
                                         <Text>{t('Population Density')}</Text>

@@ -1,6 +1,26 @@
 import { Form, Input, Typography } from 'antd';
 import './index.css'
-export const MyInput = ({withoutForm, name, label, tooltip, type, size, disabled, required, message, value, placeholder, textArea, oTp, nolabel=true, validator, ...props }) => {
+export const MyInput = ({
+    withoutForm, 
+    name, 
+    label, 
+    tooltip, 
+    type, 
+    size, 
+    disabled, 
+    required, 
+    message, 
+    value, 
+    placeholder, 
+    textArea, 
+    oTp, 
+    nolabel=true, 
+    validator, 
+    showCount,
+    maxLength,
+    autoSize,
+    ...props 
+}) => {
     return (
         <>
             {
@@ -9,8 +29,12 @@ export const MyInput = ({withoutForm, name, label, tooltip, type, size, disabled
                         <Input.TextArea
                             placeholder={placeholder || ''}
                             value={value || ''}
+                            showCount={showCount}
+                            maxLength={maxLength}
+                            autoSize={autoSize !== undefined ? autoSize : false}
                             {...props}
                             className='custom-input m-0 fs-14'
+                            style={{ resize: 'none', ...props.style }}
                         /> :
                     type==='password' ?
                         <Input.Password
@@ -54,8 +78,12 @@ export const MyInput = ({withoutForm, name, label, tooltip, type, size, disabled
                             <Input.TextArea
                                 placeholder={placeholder || ''}
                                 value={value || ''}
+                                showCount={showCount}
+                                maxLength={maxLength}
+                                autoSize={autoSize !== undefined ? autoSize : false}
                                 {...props}
                                 disabled={disabled || false}
+                                style={{ resize: 'none', ...props.style }}
                             /> :
                             oTp ?
                             <Input.OTP 

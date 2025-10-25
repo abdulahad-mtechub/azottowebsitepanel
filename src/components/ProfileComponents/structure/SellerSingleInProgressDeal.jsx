@@ -111,8 +111,6 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         ) {
             return 'received';
         }
-        
-        // Pending states (including Document Verification Pending)
         return 'sendstatus';
     };
 
@@ -132,7 +130,6 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     }
 
     if (!deal) return <Text>{t('No deal found')}</Text>;
-
 
     return (
         <Flex vertical gap={20}>

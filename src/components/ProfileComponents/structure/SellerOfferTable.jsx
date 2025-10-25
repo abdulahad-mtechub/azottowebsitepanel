@@ -101,7 +101,16 @@ const SellerOfferTable = ({ data }) => {
 
     const columns = [
         { title: t('Buyer Name'), dataIndex: ["buyer", "name"] },
-        { title: t('Business Price'), dataIndex: ["business", "price"] },
+        { 
+            title: t('Business Price'), 
+            dataIndex: ["business", "price"],
+            render: (price) => price ? (
+                <Flex gap={10} align="center">
+                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> 
+                    {price}
+                </Flex>
+            ) : "-"
+        },
         {
             title: t('Offer Price'),
             dataIndex: 'price',

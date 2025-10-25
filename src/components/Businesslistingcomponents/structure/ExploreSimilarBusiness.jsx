@@ -25,7 +25,7 @@ const ExploreSimilarBusiness = ({ id }) => {
 
     const randomBusiness = data?.getRandomBusinesses;
 
-    const saveBusinessHandler = async (businessId, e) => {
+    const saveBusinessHandler = async (businessId, currentSaveState, e) => {
         e.stopPropagation();
 
         if (!userId) {
@@ -52,11 +52,15 @@ const ExploreSimilarBusiness = ({ id }) => {
                     saveBusinessId: businessId,
                 },
             });
-            messageApi.success(t("Business added to favorite succesfully"));
+            if (currentSaveState) {
+                messageApi.success(t("Business removed from favorites successfully"));
+            } else {
+                messageApi.success(t("Business added to favorites successfully"));
+            }
             refetch(); 
         } catch (err) {
             console.error("Save mutation error:", err);
-            messageApi.error(t("Save failed: ") + err.message);
+            messageApi.error(t("Failed to update favorites: ") + err.message);
         }
     };
 
@@ -133,7 +137,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                 <Button 
                                                     aria-labelledby={t('Bookmark-btn')} 
                                                     className='border-0 bg-transparent p-0'
-                                                    onClick={(e) => saveBusinessHandler(pro?.id, e)}
+                                                    onClick={(e) => saveBusinessHandler(pro?.id, pro?.isSaved, e)}
                                                 >
                                                     {pro?.isSaved ?
                                                         <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} /> :

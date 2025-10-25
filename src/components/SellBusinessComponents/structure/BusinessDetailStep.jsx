@@ -216,6 +216,8 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   required
                   message="Please enter description"
                   rows={5}
+                  showCount
+                  maxLength={2000}
                 />
               </Col>
   

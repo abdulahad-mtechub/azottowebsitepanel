@@ -399,7 +399,6 @@ const SellBusinessCreate = () => {
         messageApi.success(t('Draft saved locally!'));
     };
 
-    
     useEffect(() => {
         document.querySelectorAll('.ant-steps-item-container[role="button"]').forEach(el => {
             el.removeAttribute('role');

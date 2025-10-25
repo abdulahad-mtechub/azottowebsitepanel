@@ -234,7 +234,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                       <Image src={'/assets/icons/file.png'} alt="file icon" preview={false} width={20} />
                       <Flex vertical>
                         <Text className="fs-13 text-gray">{t(bankRecipt.title)}</Text>
-                        <Text className="fs-13 text-gray">{bankRecipt.fileSize || '5.3 MB'}</Text>
+                        {/* <Text className="fs-13 text-gray">{bankRecipt.fileSize || '5.3 MB'}</Text> */}
                       </Flex>
                     </Flex>
                     <a href={bankRecipt.filePath} target="_blank" rel="noopener noreferrer">
@@ -267,7 +267,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                               <Image src={'/assets/icons/file.png'} alt="file icon" preview={false} width={20} />
                               <Flex vertical>
                                 <Text className="fs-13 text-gray">{t(existing?.title)}</Text>
-                                <Text className="fs-13 text-gray">{existing?.fileSize || '—'}</Text>
+                                {/* <Text className="fs-13 text-gray">{existing?.fileSize || '—'}</Text> */}
                               </Flex>
                             </Flex>
 
