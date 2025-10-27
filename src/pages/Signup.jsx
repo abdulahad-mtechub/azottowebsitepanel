@@ -89,8 +89,14 @@ const SignupPage = () => {
         navigate("/");
       }, 1000);
     } catch (err) {
-      messageApi.error(t("Failed to create user. Please try again."));
-      console.error("Error creating user:", err);
+      const msg = err?.graphQLErrors?.[0]?.message || err?.message;
+      if (msg?.includes('The email already exists')) {
+        messageApi.error('The email already exists');
+      } else if (err?.networkError) {
+        messageApi.error(t('Network error. Please check your connection.'));
+      } else {
+        messageApi.error(t(msg || 'Something went wrong. Please try again.'));
+      }
     }
   };
 
@@ -140,8 +146,6 @@ const SignupPage = () => {
   const [current, setCurrent] = useState(0);
 
   const onChange = async (value) => {
-    // Only allow going to previous steps or staying on current
-    // Don't allow jumping forward without validation
     if (value <= current) {
       setCurrent(value);
     } else {

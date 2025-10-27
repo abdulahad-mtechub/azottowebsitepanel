@@ -37,15 +37,15 @@ const Changepassword = ({ visible, onClose }) => {
       form.resetFields();
       onClose();
     } catch (err) {
-        const graphQLError = err?.graphQLErrors?.[0]?.message;
-        if (graphQLError) {
-          messageApi.error(t(graphQLError));
-        } else if (err?.networkError) {
-          messageApi.error(t('Network error. Please check your connection.'));
-        } else {
-          messageApi.error(t(err?.message || 'Something went wrong. Please try again.'));
-        }
+      const graphQLError = err?.graphQLErrors?.[0]?.message;
+      if (graphQLError) {
+        messageApi.error(t(graphQLError));
+      } else if (err?.networkError) {
+        messageApi.error(t('Network error. Please check your connection.'));
+      } else {
+        messageApi.error(t(err?.message || 'Something went wrong. Please try again.'));
       }
+    }
   };
 
   return (
