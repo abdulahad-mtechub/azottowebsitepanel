@@ -50,50 +50,71 @@ const Filter = ({
     const handlePriceMinChange = (e) => {
         const val = e.target.value;
         setPriceMin(val);
-        setPriceRange([val || null, priceMax || null]);
     };
 
     const handlePriceMaxChange = (e) => {
         const val = e.target.value;
         setPriceMax(val);
-        setPriceRange([priceMin || null, val || null]);
     };
 
     const handleRevenueMinChange = (e) => {
         const val = e.target.value;
         setRevenueMin(val);
-        setRevenueRange([val || null, revenueMax || null]);
     };
 
     const handleRevenueMaxChange = (e) => {
         const val = e.target.value;
         setRevenueMax(val);
-        setRevenueRange([revenueMin || null, val || null]);
     };
 
     const handleProfitMinChange = (e) => {
         const val = e.target.value;
         setProfitMin(val);
-        setProfitRange([val || null, profitMax || null]);
     };
 
     const handleProfitMaxChange = (e) => {
         const val = e.target.value;
         setProfitMax(val);
-        setProfitRange([profitMin || null, val || null]);
     };
 
     const handleProfitMarginMinChange = (e) => {
         const val = e.target.value;
         setProfitMarginMin(val);
-        setProfitMargenRange([val || null, profitMarginMax || null]);
     };
 
     const handleProfitMarginMaxChange = (e) => {
         const val = e.target.value;
         setProfitMarginMax(val);
-        setProfitMargenRange([profitMarginMin || null, val || null]);
     };
+
+    // Debounce updates to parent filters to avoid frequent API calls while typing
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setPriceRange([priceMin || null, priceMax || null]);
+        }, 400);
+        return () => clearTimeout(timeout);
+    }, [priceMin, priceMax, setPriceRange]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setRevenueRange([revenueMin || null, revenueMax || null]);
+        }, 400);
+        return () => clearTimeout(timeout);
+    }, [revenueMin, revenueMax, setRevenueRange]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setProfitRange([profitMin || null, profitMax || null]);
+        }, 400);
+        return () => clearTimeout(timeout);
+    }, [profitMin, profitMax, setProfitRange]);
+
+    useEffect(() => {
+        const timeout = setTimeout(() => {
+            setProfitMargenRange([profitMarginMin || null, profitMarginMax || null]);
+        }, 400);
+        return () => clearTimeout(timeout);
+    }, [profitMarginMin, profitMarginMax, setProfitMargenRange]);
 
     const itemsNest = [
         {

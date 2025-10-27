@@ -1,10 +1,10 @@
-import { useState,useEffect,useMemo } from 'react';
+import { useState,useEffect,useMemo, useRef, useCallback } from 'react';
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image } from 'antd';
 import { useDistricts, useCities } from '../data/';
 import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../components';
 import { useNavigate } from 'react-router-dom';
 import { RightOutlined } from '@ant-design/icons';
-import { useLazyQuery } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import {GET_ALL_BUSINESSES, GET_BUSINESS_BY_CATEGORY, GET_BUSINESS_BY_CITY, GET_BUSINESS_BY_REVENUE, GET_BUSINESS_BY_PROFIT,GET_BUSINESS_BY_DISTRICT } from '../graphql/query/business';
@@ -27,9 +27,28 @@ const BusinessListingPage = ({getcategory}) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [ isShow, setIsShow ] = useState(false);
 
-    const [fetchBusinesses, { data: businesses, loading: isLoading, refetch }] = useLazyQuery(GET_ALL_BUSINESSES,
-        { variables:{ limit: null, offSet: null, search: null, sort: { price: null }, filter: {} } }
-    );
+    const apolloClient = useApolloClient();
+    const [businesses, setBusinesses] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const lastQueryRef = useRef(null);
+    const lastVarsRef = useRef(null);
+
+    const runQuery = useCallback(async (queryDoc, variables) => {
+        setIsLoading(true);
+        lastQueryRef.current = queryDoc;
+        lastVarsRef.current = variables;
+        try {
+            const res = await apolloClient.query({ query: queryDoc, variables, fetchPolicy: 'network-only' });
+            setBusinesses(res.data);
+        } finally {
+            setIsLoading(false);
+        }
+    }, [apolloClient]);
+
+    const refetch = useCallback(() => {
+        if (!lastQueryRef.current) return;
+        return runQuery(lastQueryRef.current, lastVarsRef.current);
+    }, [runQuery]);
     const options = [
         { id: 1, key: t('Low to High')},
         { id: 2, key: t('High to Low') },
@@ -108,6 +127,9 @@ const BusinessListingPage = ({getcategory}) => {
     const [isFilter, setIsFilter] = useState(false);
   
     const navigate = useNavigate();
+    // Extracted deps to satisfy lint rule for complex expressions in dependency arrays
+    const priceMinDep = priceRange?.[0];
+    const priceMaxDep = priceRange?.[1];
     const profit = useMemo(() => {
         const val = params.get('profit');
         return val ? val.split(',').map(Number) : null;
@@ -117,7 +139,7 @@ const BusinessListingPage = ({getcategory}) => {
         const val = params.get('revenue');
         return val ? val.split(',').map(Number) : null;
     }, [params]);
-
+    console.log(priceRange, "check price")
     const getFilterVariables = () => {
         const sanitizeRange = (range) => {
             if (!Array.isArray(range)) return null;
@@ -156,7 +178,7 @@ const BusinessListingPage = ({getcategory}) => {
           sort: sortOrder !== null ? { price: sortOrder === 'Low to High' ? 'ASC' : 'DESC' } : null,
         };
     };
-
+    console.log(sortOrder, "check this")
     // 🟩 Fetch correct query based on search params
     useEffect(() => {
         let variables = getFilterVariables();
@@ -176,12 +198,12 @@ const BusinessListingPage = ({getcategory}) => {
         } else if(employeesRange || operationalYearRange) {
             query = GET_ALL_BUSINESSES;
         }
-        fetchBusinesses({ query, variables });
+        runQuery(query, variables);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         categoryParam, cityParam, profit, revenue, limit, currentPage,
         employeesRange, operationalYearRange, hasAssets,
-        priceRange, profitRange, profitMargenRange, revenueRange,
+        priceMinDep, priceMaxDep, profitRange, profitMargenRange, revenueRange,
         multipleStep, sortOrder, selectedCategory
     ]);
 
@@ -253,7 +275,7 @@ const BusinessListingPage = ({getcategory}) => {
                 filter: getFilterVariables().filter,
                 sort: getFilterVariables().sort
             };
-            fetchBusinesses({ query, variables });
+            runQuery(query, variables);
         } else if (selectedDistrict && !searchSelectedCity) {
             // Search by district only
             const query = GET_BUSINESS_BY_DISTRICT;
@@ -264,11 +286,11 @@ const BusinessListingPage = ({getcategory}) => {
                 filter: getFilterVariables().filter,
                 sort: getFilterVariables().sort
             };
-            fetchBusinesses({ query, variables });
+            runQuery(query, variables);
         } else {
             // No district/city selected, fetch all
             const variables = getFilterVariables();
-            fetchBusinesses({ query: GET_ALL_BUSINESSES, variables });
+            runQuery(GET_ALL_BUSINESSES, variables);
         }
     };
 
@@ -340,9 +362,9 @@ const BusinessListingPage = ({getcategory}) => {
                                 total: totalCount || 0
                             })}
                         </Text>
-                        <Button aria-labelledby={t('Filter')} type='button' onClick={()=>setIsShow(!isShow)} className='btn rounded-8 border-gray text-black sm-hide'>
-                            <Flex align='center' gap={3}>
-                                <img src='/assets/icons/filter-bar.png' alt={t('filter-icon')} width={14} fetchPriority="high"/> {t('Filter')}
+                        <Button aria-labelledby={t('Filter')} type='button' onClick={()=>setIsShow(!isShow)} className='btn btn-sm rounded-8 border-gray text-black sm-hide'>
+                            <Flex align='center' gap={5}>
+                                <img src='/assets/icons/filter-bar.png' alt={t('filter-icon')} width={20} fetchPriority="high"/> {t('Filter')}
                             </Flex>
                         </Button>
                         <MySelect 
@@ -353,6 +375,7 @@ const BusinessListingPage = ({getcategory}) => {
                             value={sortOrder}
                             allowClear
                             onChange={(id) => {
+                                console.log("id", id)
                                 setSortOrder(id === 1 ? 'Low to High' : id === 2 ? 'High to Low' : null);
                             }}
                             style={{ minWidth: 120 }}
