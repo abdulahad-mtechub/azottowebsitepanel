@@ -25,6 +25,9 @@ const Navbar = ({setGetCategory}) => {
   const userId = Cookies.get("userId"); 
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  // Controls the hover state for the "Browse Businesses" dropdown (desktop)
+  const [browseOpen, setBrowseOpen] = useState(false);
+  const browseHoverTimeoutRef = useRef(null);
   const [isshow, setIsShow] = useState(!!userId);
   const [user, setUser] = useState(null);
   const [ visible, setVisible ] = useState(false)
@@ -499,6 +502,30 @@ useEffect(() => {
   };
 }, [dropdownOpen, handleListScroll]);
 
+  // Cleanup any pending hover-close timers when component unmounts
+  useEffect(() => {
+    return () => {
+      if (browseHoverTimeoutRef.current) {
+        clearTimeout(browseHoverTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Handlers for smooth open/close of the top-level Browse menu
+  const handleBrowseEnter = () => {
+    if (browseHoverTimeoutRef.current) {
+      clearTimeout(browseHoverTimeoutRef.current);
+    }
+    setBrowseOpen(true);
+  };
+
+  const handleBrowseLeave = () => {
+    // Small delay prevents flicker when moving between parent and dropdown
+    browseHoverTimeoutRef.current = setTimeout(() => {
+      setBrowseOpen(false);
+    }, 120);
+  };
+
   return (
     <>
       <div className='gen-navbar-container relative'>
@@ -569,7 +596,7 @@ useEffect(() => {
                 </Link>
               </div>
               <ul className='nav-list'>
-                <li>
+                <li onMouseEnter={handleBrowseEnter} onMouseLeave={handleBrowseLeave} className={browseOpen ? 'open' : ''}>
                   <NavLink to={''}>
                     <Flex gap={10}>
                       <Text className='text-white nav-item'>{t("Browse Businesses")}</Text>
@@ -577,7 +604,7 @@ useEffect(() => {
                     </Flex>
                   </NavLink>
               
-                  <ul className='dropdown' >
+                  <ul className='dropdown' style={{ display: browseOpen ? 'block' : undefined }}>
                     <li className='drop-item'>
                       <NavLink 
                         to={'/businesslisting'} 
