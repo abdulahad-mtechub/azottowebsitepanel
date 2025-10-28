@@ -1,12 +1,25 @@
-import { Image, Tooltip } from "antd";
+import { Image, Tooltip, Typography } from "antd";
 import { useTranslation } from "react-i18next";
 
+const { Text } = Typography;
 const usePostsaleColumns = () => {
     const { t } = useTranslation();
 
     const postsaleColumns = [
-        { title: t('Support Period'), dataIndex: 'period' },
-        { title: t('Number of Session'), dataIndex: 'session' },
+        {  
+            title: t('Support Period'), 
+            dataIndex: 'period',
+            render: (period) => (
+                <Text>{period ? <>{`${period} Months`}</> : "-"}</Text>
+            )
+        },
+        { 
+            title: t('Number of Session'), 
+            dataIndex: 'Session',
+            render: (session) => (
+                <Text>{session ? <>{`${session} sessions`}</> : "-"}</Text>
+            )
+        },
         { title: null, dataIndex: 'verified',
             render: (verified) => {
                 if (verified === true || verified === 1) {

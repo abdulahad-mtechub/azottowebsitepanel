@@ -1,4 +1,4 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin, List, Divider, Card, Popover } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin, List, Divider, Card, Popover, message } from 'antd';
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
@@ -12,7 +12,7 @@ import { client } from '../../../config/apolloClient';
 import { useTranslation } from 'react-i18next';
 import {NEW_NOTIFICATION_SUBSCRIPTION} from '../../../graphql/subscription'
 import { useQuery } from '@apollo/client';
-import { MARK_NOTIFICATION_AS_READ } from '../../../graphql/mutation';
+import { MARK_NOTIFICATION_AS_READ, LOGOUT } from '../../../graphql/mutation';
 
 
 const { Text, Title } = Typography;
@@ -140,6 +140,7 @@ const Navbar = ({setGetCategory}) => {
   }, [userId, getNotification, NOTIFICATIONS_PAGE_SIZE]);
 
   const [markNotificationAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
+  const [logoutMutation, { loading: logoutLoading }] = useMutation(LOGOUT);
   useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
     onSubscriptionData: ({ subscriptionData }) => {
         const newNotif = subscriptionData.data?.newNotification;
@@ -278,23 +279,28 @@ const Navbar = ({setGetCategory}) => {
     setIsShow(isLoggedIn);
   }, [isLoggedIn]);
 
-  const handleLogout = () => {
-    // Clear cookies
-    Cookies.remove("userId");
-    Cookies.remove("authToken");
-  
-    // Clear localStorage (in case you still store something there)
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    localStorage.removeItem("userId");
-  
-    client.resetStore(); 
-  
-    setisLoggedIn(false);
-    setIsShow(false);
-  
-    navigate('/');
-    window.location.reload();
+  const handleLogout = async () => {
+    try {
+      await logoutMutation();
+      message.success(t('Logged out successfully'));
+    } catch {
+      // Even if API fails, proceed with local cleanup to guarantee logout UX
+      message.warning(t('Network issue. You were logged out locally.'));
+    } finally {
+      // Clear cookies
+      Cookies.remove('userId');
+      Cookies.remove('authToken');
+      // Clear localStorage
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userId');
+      // Reset Apollo cache
+      client.resetStore();
+      setisLoggedIn(false);
+      setIsShow(false);
+      navigate('/');
+      window.location.reload();
+    }
   };
   const items = [
     {
@@ -308,7 +314,7 @@ const Navbar = ({setGetCategory}) => {
             handleLogout();
           }}
         >
-          {t("Logout")}
+          {logoutLoading ? t('Logging out...') : t("Logout")}
         </a>
       ),
     },
@@ -568,7 +574,7 @@ useEffect(() => {
                     placement="bottomRight"
                     open={dropdownOpen}
                     onOpenChange={handleDropdownChange}
-                    getPopupContainer={(trigger) => trigger.parentElement}
+                    getPopupContainer={() => document.body}
                   >
                     <Badge size="small" count={unreadCount} overflowCount={99}>
                       <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
@@ -673,14 +679,14 @@ useEffect(() => {
                       </li>
                     ))}
                   </ul>
-                </li> */}
+                </li>
                 <li>
                   <NavLink to="/article">
                     <Text className={`nav-item ${location.pathname === '/article' || location.pathname.startsWith('/articlesingleview/') ? 'text-brand' : 'text-white'}`}>
                       {t("Articles")}
                     </Text>
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink to="/about">
                     <Text className={`nav-item ${location.pathname === '/about' ? 'text-brand' : 'text-white'}`}>
@@ -741,7 +747,7 @@ useEffect(() => {
                   open={dropdownOpen}
                   onOpenChange={handleDropdownChange}
                   overlayClassName="notification-popover"
-                  getPopupContainer={(trigger) => trigger.parentElement}
+                  getPopupContainer={() => document.body}
                 >
                   <Badge size="small" count={unreadCount} overflowCount={99}>
                     <Button aria-labelledby='Notification' className='bg-transparent border-0 p-0'>

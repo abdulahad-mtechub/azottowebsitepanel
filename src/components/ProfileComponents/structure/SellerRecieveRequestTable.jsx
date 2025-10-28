@@ -48,7 +48,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
     };
 
     const sellerrecievedrequestData = data?.getReceivedMeetingRequests?.items?.map((meeting) => {
-        const buyerName = meeting.requestedTo?.name || '';
+        const buyerName = meeting.requestedBy?.name || '';
         const maskedName =
             buyerName.length > 3
                 ? buyerName.substring(0, 3) + '*'.repeat(10)

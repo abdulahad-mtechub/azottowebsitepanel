@@ -1,15 +1,19 @@
 import { CloseOutlined, MinusOutlined, PlusOutlined } from '@ant-design/icons'
-import { Button, Collapse, Drawer, Flex, Image, Typography } from 'antd'
+import { Button, Collapse, Drawer, Flex, Image, Typography, message } from 'antd'
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { mobilemenuData } from '../../../data';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
+import { useMutation } from '@apollo/client';
+import { LOGOUT } from '../../../graphql/mutation';
+import { client } from '../../../config/apolloClient';
 
 const { Title } = Typography
 const { Panel } = Collapse;
 
 const MobileNavbar = ({ visible, onClose }) => {
+
     const { t } = useTranslation();
     const [currentPanel, setCurrentPanel] = useState([])
     const [currentPanels, setCurrentPanels] = useState([])
@@ -17,6 +21,7 @@ const MobileNavbar = ({ visible, onClose }) => {
     const navigate = useNavigate()
 
     const [isDesktop, setIsDesktop] = useState(false);
+    const [logoutMutation, { loading: logoutLoading }] = useMutation(LOGOUT);
 
     useEffect(() => {
         const handleResize = () => setIsDesktop(window.innerWidth > 1199);
@@ -29,7 +34,27 @@ const MobileNavbar = ({ visible, onClose }) => {
 
     if (isDesktop) return null;
 
+    const handleLogout = async () => {
+        try {
+            await logoutMutation();
+            onClose?.();
+            message.success(t('Logged out successfully'));
+        } catch {
+            message.warning(t('Network issue. You were logged out locally.'));
+        } finally {
+            Cookies.remove('userId');
+            Cookies.remove('authToken');
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('userId');
+            client.resetStore();
+            navigate('/');
+            window.location.reload();
+        }
+    };
+
     return (
+        <>
         <Drawer
             onClose={onClose}
             open={visible}
@@ -125,25 +150,29 @@ const MobileNavbar = ({ visible, onClose }) => {
                     </NavLink>
                 </Flex>
                 <Flex vertical gap={10} align='center' justify='center'>
-                    {
-                        userId ? 
-                        <Button aria-labelledby='Sell a Business' className='btn bg-brand mt-3 w-100' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
-                            <PlusOutlined /> {t("Sell a Business")}
-                        </Button>
-                        :
+                    {userId ? (
                         <>
-                            <Button aria-labelledby='Sign Up' className='btn btn-outline w-100' onClick={()=>navigate('/signup')}>
-                               {t(" Sign Up")}
+                            <Button aria-labelledby='Sell a Business' className='btn bg-brand mt-3 w-100' onClick={() => { navigate('/sellbusinesscreate'); onClose() }}>
+                                <PlusOutlined /> {t('Sell a Business')}
                             </Button>
-                            <Button aria-labelledby='Login' className='btn bg-brand w-100' onClick={()=>navigate('/login')}>
-                               {t(" Sign In")}
+                            <Button aria-labelledby='Logout' className='btn btn-outline w-100' danger loading={logoutLoading} onClick={handleLogout}>
+                                {t('Logout')}
                             </Button>
                         </>
-                    }
-                    
+                    ) : (
+                        <>
+                            <Button aria-labelledby='Sign Up' className='btn btn-outline w-100' onClick={() => navigate('/signup')}>
+                                {t(' Sign Up')}
+                            </Button>
+                            <Button aria-labelledby='Login' className='btn bg-brand w-100' onClick={() => navigate('/login')}>
+                                {t(' Sign In')}
+                            </Button>
+                        </>
+                    )}
                 </Flex>
             </div>
         </Drawer>
+        </>
     )
 }
 

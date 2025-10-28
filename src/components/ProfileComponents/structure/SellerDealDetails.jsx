@@ -1,10 +1,8 @@
 import { Row, Col, Card, Flex, Typography, Button } from 'antd';
-import { AnnualProfitBarChart, MarketAreaChart } from '../../Businesslistingcomponents';
+import { MarketAreaChart } from '../../Businesslistingcomponents';
 import { BusinessViewInfoCard } from './BusinessViewInfoCard';
 import { BusinessStats, PreviewTableContent } from '../../SellBusinessComponents';
 import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../../../data';
-import { useQuery } from '@apollo/client';
-import { SIMILER_BUSINESS_CATEGORY_GRAPH } from '../../../graphql/query/business';
 import { useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography;
@@ -49,9 +47,9 @@ const SellerDealDetails = ({ data }) => {
     price: `SAR ${item.price?.toLocaleString()}`,
   }));
 
-  const { data: graphData } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
-    variables: { getBusinessByIdId: businessinfo?.id },
-  });
+  // const { data: graphData } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
+  //   variables: { getBusinessByIdId: businessinfo?.id },
+  // });
 
   return (
     <Row gutter={[24, 24]}>
@@ -79,7 +77,7 @@ const SellerDealDetails = ({ data }) => {
         <BusinessViewInfoCard data={businessinfo} />
         <BusinessStats data={businessinfo} />
         <MarketAreaChart data={businessinfo} />
-        <AnnualProfitBarChart graphData={graphData} />
+        {/* <AnnualProfitBarChart graphData={graphData} /> */}
         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
           <Flex vertical gap={0}>
             <Title level={5}>{t('Growth Opportunity')}</Title>

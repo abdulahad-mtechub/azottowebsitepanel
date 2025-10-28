@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography, Spin, message } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography, Spin, message, Tooltip, Space } from 'antd';
 import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';
@@ -6,6 +6,7 @@ import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
+import { truncateChars } from '../../../utils';
 
 const { Text, Title, Paragraph } = Typography;
 
@@ -124,15 +125,20 @@ const ExploreSimilarBusiness = ({ id }) => {
                                         <Flex vertical gap={20}>
                                             <Flex justify='space-between' align='center'>
                                                 <Flex gap={4}>
-                                                    <Tag color="default" className="fs-12">
-                                                        {pro.category.name.split(/\s+/).slice(0, 1).join(' ') + '...'}
-                                                    </Tag>
-                                                    <Tag
-                                                        aria-labelledby={t("type")}
-                                                        className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
+                                                    <Button className='fs-13' aria-labelledby={t(pro?.category?.name)}>
+                                                        {truncateChars(pro?.category?.name, 18)}
+                                                    </Button>
+                                                    <Button
+                                                        aria-labelledby="type"
+                                                        className={`${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
                                                     >
-                                                        {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
-                                                    </Tag>
+                                                        <Space align='center' justify='center' >
+                                                            <Text className='fs-12 text-white'>{pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
+                                                            <Tooltip title={pro.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
+                                                            <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
+                                                            </Tooltip>
+                                                        </Space>
+                                                    </Button>
                                                 </Flex>
                                                 <Button 
                                                     aria-labelledby={t('Bookmark-btn')} 

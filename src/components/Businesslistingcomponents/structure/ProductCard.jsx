@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Tag, Spin } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Tag, Spin, Tooltip, Space } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
 import { CREATE_SAVE_BUSINESS } from "../../../graphql";
 import { useMutation } from '@apollo/client';
@@ -116,9 +116,14 @@ const ProductCard = ({
                                             </Button>
                                             <Button
                                                     aria-labelledby="type"
-                                                    className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
+                                                    className={`${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
                                                 >
-                                                {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
+                                                <Space align='center' justify='center' >
+                                                    <Text className='fs-12 text-white'>{pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
+                                                    <Tooltip title={pro.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
+                                                    <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
+                                                    </Tooltip>
+                                                </Space>
                                             </Button>
                                         </Flex>
                                         <Button 

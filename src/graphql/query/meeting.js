@@ -41,6 +41,10 @@ query GetReceivedMeetingRequests($search: String, $isBuyer: Boolean, $limit: Int
       requestedTo {
         name
       }
+      requestedBy {
+        name
+        id
+      }
       business {
         id
         businessTitle

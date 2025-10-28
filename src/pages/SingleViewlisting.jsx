@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin, Image } from 'antd';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin, Image, Tooltip, Space } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../data';
 import { AnnualProfitBarChart, BusinessInfoCard, BusinessInfoCardMobile, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
@@ -139,10 +139,15 @@ const SingleViewlisting = () => {
                                             </Button>
                                             <Title level={3} className='m-0'>{business?.businessTitle}</Title>
                                             <Button
-                                                    aria-labelledby="type"
-                                                    className={`fs-12 text-white ${business.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
-                                                >
-                                                {business.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
+                                                aria-labelledby="type"
+                                                className={`${business.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
+                                            >
+                                                <Space align='center' justify='center' >
+                                                    <Text className='fs-12 text-white'>{business.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
+                                                    <Tooltip title={business.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
+                                                        <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
+                                                    </Tooltip>
+                                                </Space>
                                             </Button>
                                         </Flex>
                                         <Flex align='center' gap={5}>
@@ -161,7 +166,7 @@ const SingleViewlisting = () => {
                         </Card>
                         <BusinessStats data={business} /> 
                         <MarketAreaChart /> 
-                        <AnnualProfitBarChart graphData={graphData} /> 
+                        {/* <AnnualProfitBarChart graphData={graphData} />  */}
                         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
                             <Flex vertical gap={0}>
                                 <Title level={5}>{t('Growth Opportunity')}</Title>
@@ -177,17 +182,34 @@ const SingleViewlisting = () => {
                         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
                             <PreviewTableContent title={t('Post - Sale Support')} columns={postsaleColumns} data={postSaleData} />
                         </Card>
-                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-                            <PreviewTableContent title={t('Outstanding Liabilities / Debt')} columns={liabColumn} data={liabilitiesData} />
-                        </Card>
-                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-                            <PreviewTableContent title={t('Key Asset')} columns={keyassetsColumn} data={assetsData} />
-                        </Card>
-                        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-                            <PreviewTableContent title={t('Inventory')} columns={inventColumn} data={inventoryData} />
-                        </Card>
+                        {liabilitiesData?.length > 0 && (
+                            <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+                                <PreviewTableContent
+                                title={t('Outstanding Liabilities / Debt')}
+                                columns={liabColumn}
+                                data={liabilitiesData}
+                                />
+                            </Card>
+                        )}
+                        {assetsData?.length > 0 && (
+                            <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+                                <PreviewTableContent
+                                title={t('Key Asset')}
+                                columns={keyassetsColumn}
+                                data={assetsData}
+                                />
+                            </Card>
+                        )}
+                        {inventoryData?.length > 0 && (
+                            <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+                                <PreviewTableContent
+                                title={t('Inventory')}
+                                columns={inventColumn}
+                                data={inventoryData}
+                                />
+                            </Card>
+                        )}
                     </Col>
-
                     <Col lg={{span: 6}} md={{span: 0}} sm={{span: 0}} xs={{span: 0}}>
                         <div className='sticky-comp'>
                             <BusinessInfoCard data={business} />
