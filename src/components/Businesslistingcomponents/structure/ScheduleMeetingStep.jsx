@@ -8,6 +8,10 @@ const { Title, Text } = Typography;
 const ScheduleMeetingStep = ({ form, onClose }) => {
     const { t } = useTranslation();
 
+    const disabledTime = () => ({
+        disabledHours: () => [1,2,3,4,5,6,7,8],
+    });
+
     return (
         <div>
             <Flex vertical className='mb-3' gap={0}>
@@ -47,6 +51,7 @@ const ScheduleMeetingStep = ({ form, onClose }) => {
                             className='w-100'
                             required
                             message={t('Please select meeting time')}
+                            disabledTime={disabledTime}
                         />
                     </Col>
                 </Row>

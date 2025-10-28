@@ -59,6 +59,9 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
         }
     };
 
+    // Disable hours 1 AM through 8 AM in the time picker
+    const disabledHours = () => [1,2,3,4,5,6,7,8];
+
     return (
         <>
             {contextHolder}
@@ -112,6 +115,7 @@ const ScheduleMeeting = ({ visible, onClose, meetingId, offerId, refetchMeetings
                                 className='w-100'
                                 required
                                 message={t('Please select meeting time')}
+                                disabledHours={disabledHours}
                             />
                         </Col>
                     </Row>

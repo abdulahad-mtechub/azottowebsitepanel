@@ -15,9 +15,9 @@ const usePostsaleColumns = () => {
         },
         { 
             title: t('Number of Session'), 
-            dataIndex: 'Session',
+            dataIndex: 'session',
             render: (session) => (
-                <Text>{session ? <>{`${session} sessions`}</> : "-"}</Text>
+                <Text>{session ? <>{`${session} Sessions`}</> : "-"}</Text>
             )
         },
         { title: null, dataIndex: 'verified',
