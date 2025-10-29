@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin, message } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin, message, Space, Tooltip } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { GETFAVORITBUSINESS } from '../../../graphql/query';
 import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations';
@@ -10,6 +10,7 @@ import { truncateChars } from '../../../utils';
 const { Title, Text, Paragraph } = Typography;
 
 const Favoritbussines = () => {
+    
     const { t } = useTranslation();
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
@@ -102,7 +103,12 @@ const Favoritbussines = () => {
                                             </Button>
                                             {pro?.isByTakbeer !== undefined && (
                                                 <Button aria-labelledby={t('type')} className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}>
-                                                    {pro.isByTakbeer ? t('Taqbeel') : t('Acquiring')}
+                                                    <Space align='center' justify='center' >
+                                                        <Text className='fs-12 text-white'>{pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
+                                                        <Tooltip title={pro.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
+                                                        <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
+                                                        </Tooltip>
+                                                    </Space>
                                                 </Button>
                                             )}
                                         </Flex>

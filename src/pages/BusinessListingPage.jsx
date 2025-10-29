@@ -45,10 +45,30 @@ const BusinessListingPage = ({getcategory}) => {
         }
     }, [apolloClient]);
 
-    const refetch = useCallback(() => {
+    const refetch = useCallback(async () => {
         if (!lastQueryRef.current) return;
-        return runQuery(lastQueryRef.current, lastVarsRef.current);
-    }, [runQuery]);
+        // Silent refetch: read from cache first (instant), then update from network in background
+        try {
+            const res = await apolloClient.query({ 
+                query: lastQueryRef.current, 
+                variables: lastVarsRef.current, 
+                fetchPolicy: 'cache-first' 
+            });
+            setBusinesses(res.data);
+            // Then silently fetch fresh data from network
+            apolloClient.query({ 
+                query: lastQueryRef.current, 
+                variables: lastVarsRef.current, 
+                fetchPolicy: 'network-only' 
+            }).then(freshRes => {
+                setBusinesses(freshRes.data);
+            }).catch(err => {
+                console.error('Background refetch failed:', err);
+            });
+        } catch (error) {
+            console.error('Refetch failed:', error);
+        }
+    }, [apolloClient]);
     const options = [
         { id: 1, key: t('Low to High')},
         { id: 2, key: t('High to Low') },
