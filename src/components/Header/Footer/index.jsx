@@ -85,7 +85,7 @@ const footerlinkData = [
                         </Text>
                         <Flex gap={20}>
                             <Link to="#" target="_blank" rel="noopener noreferrer">
-                                <Image src='/assets/icons/facebook.png' width={'23px'} alt='facebook-icon' preview={false} />
+                                <Image src='/assets/icons/telegram.png' width={'23px'} alt='telegram-icon' preview={false} />
                             </Link>
                             <Link to="#" target="_blank" rel="noopener noreferrer">
                                 <Image src='/assets/icons/instagram.png' width={'23px'} alt='facebook-icon' preview={false} />
@@ -151,18 +151,18 @@ const footerlinkData = [
                     <Divider className='m-0 bg-brand'/>
                 </Col>
                 <Col lg={{span: 12}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
-                    <Flex align='items-center' className='w-100 quote' gap={20}>
+                    <Flex align='center' className='w-100 quote' gap={20}>
                         <Typography.Text className='fs-12 text-white'>
                         {t("Copyright © {{year}} Jusoor", { year: new Date().getFullYear() })}
                         </Typography.Text>
                         <span className='text-brand'> | </span>
                         <NavLink to={''} className='fs-12 text-white'>
-                            {t("Design by Repla Technologies")}
+                            {t("Developed and maintained by REPLA Technologies PVT Ltd")}
                         </NavLink>
                     </Flex>
                 </Col>
                 <Col lg={{span: 12}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
-                    <Flex  align='items-center' className='w-100 lastlink' gap={20}>
+                    <Flex  align='center' className='w-100 lastlink' gap={20}>
                         <NavLink to={'/termofuse'} className='fs-12 text-white'>
                             {t("Term of use")}
                         </NavLink>
