@@ -71,12 +71,19 @@ query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean, $limit: 
       requestedEndDate
       receiverAvailabilityDate
       status
+      requestedBy {
+        id
+        name
+      }
       requestedTo {
         name
       }
       business {
         businessTitle
         price
+        seller {
+          id
+        }
       }
       offer {
         id

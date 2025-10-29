@@ -4,6 +4,7 @@ import { READYSCHEDULEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
@@ -41,19 +42,22 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
 
   const selleradminsechedulingData =
     data?.getMeetingsReadyForScheduling?.items?.map((meeting) => {
+      const isSellerMeeting = meeting.business?.seller?.id === meeting.requestedBy?.id;
       const buyerName = meeting.requestedTo?.name || '';
       const maskedName =
         buyerName.length > 3
           ? buyerName.substring(0, 3) + '*'.repeat(10)
           : buyerName + '*'.repeat(10 - buyerName.length);
-
+      console.log(isSellerMeeting, "hello ")
       return {
         key: meeting.id,
         title: meeting.business?.businessTitle,
         buyername: maskedName,
         businessprice: meeting.business?.price,
         offerprice: meeting.offer?.price,
-        prefereddatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
+        prefereddatetime: isBuyer ? `${dayjs(meeting.requestedDate)?.format("DD MMM YYYY, hh:mm A")} - ${dayjs(meeting.requestedEndDate)?.format(
+          "hh:mm A"
+        )}` : dayjs(meeting.receiverAvailabilityDate)?.format("DD MMM YYYY, hh:mm A"),
         status: meeting.status
       };
     }) || [];
