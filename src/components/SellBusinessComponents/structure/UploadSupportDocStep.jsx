@@ -17,13 +17,29 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
 
   React.useImperativeHandle(ref, () => ({
     validate: async () => {
-      // Just validate form fields, CR check is done in parent
+      // Validate form fields first
       try {
         await form.validateFields();
       } catch (err) {
         console.error('Form validation failed:', err);
         throw err;
       }
+
+      // Then validate required documents
+      const docs = Array.isArray(data?.documents) ? data.documents : [];
+      const crDoc = docs.find(d => d.title === 'Commercial Registration (CR)' && d.filePath);
+      const supportDocs = docs.filter(d => d.title === 'Supporting Document' && d.filePath);
+
+      if (!crDoc) {
+        messageApi.error('Please upload Commercial Registration (CR) document');
+        throw new Error('CR document is required');
+      }
+
+      if (supportDocs.length === 0) {
+        messageApi.error('Please upload at least one Supporting Document');
+        throw new Error('At least one supporting document is required');
+      }
+
       return true;
     },
   }));
@@ -333,12 +349,15 @@ const handleMultipleFileRemove = (removedFile) => {
         <Card className="shadow-d radius-12 border-gray mb-3">
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
-              <Title level={5} className="m-0 fw-500">
-                Upload Other Supporting Documents{' '}
-                <Tooltip title="Info">
-                  <img src="/assets/icons/info-outline.png"  width={14} alt="info-icon" fetchPriority="high" />
-                </Tooltip>
-              </Title>
+              <Flex align='center' gap={5}>
+                <Title level={5} className="m-0 fw-500">
+                  Upload Other Supporting Documents{' '}
+                  <Tooltip title="Please upload at least one supporting document">
+                    <img src="/assets/icons/info-outline.png"  width={14} alt="info-icon" fetchPriority="high" />
+                  </Tooltip>
+                </Title>
+                <Text type='danger' className='fw-500'>*</Text>
+              </Flex>
               <Text className="text-gray">
                 Accepted formats: PDF, JPG, PNG, DOCX, XLSX. Max size: 10MB per file.
               </Text>
@@ -351,6 +370,8 @@ const handleMultipleFileRemove = (removedFile) => {
                 onRemove={handleMultipleFileRemove}
                 uploading={uploadingSupport}
                 multiple={true}
+                required={true}
+                message={'Please upload at least one Supporting Document'}
                 initialFileList={initialSupportList}
               />
             </Flex>

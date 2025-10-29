@@ -210,7 +210,7 @@ const SellBusinessCreate = () => {
 
     // Determine if user can publish (on last step with all required documents uploaded)
     const canPublish = current === steps.length - 1 && areRequiredDocumentsUploaded();
-    const showNextButton = current === steps.length - 1 && !areRequiredDocumentsUploaded();
+    // Remove showNextButton - validation now happens in component itself
 
     const handleCreateListing = async () => {
         // Validate current step (last step) before publishing
@@ -465,13 +465,6 @@ const SellBusinessCreate = () => {
                                     <Button type="primary" className='btn bg-brand' onClick={next}>
                                         {t('Next')}
                                     </Button>
-                                )}
-                                {showNextButton && (
-                                    <Tooltip title={t('Upload all required documents to continue')}>
-                                    <Button type="primary" className='btn bg-brand' onClick={next} disabled>
-                                        {t('Next')}
-                                    </Button>
-                                    </Tooltip>
                                 )}
                                 {canPublish && (
                                     <Button type="primary" disabled={loading || editDataLoading} loading={loading} className='btn bg-brand' onClick={handleCreateListing}>
