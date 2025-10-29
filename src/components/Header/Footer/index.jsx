@@ -141,7 +141,7 @@ const footerlinkData = [
                                 </NavLink>
                                 :
                                 <Button type='primary' aria-labelledby='Sign Up' className='btn bg-brand' onClick={()=>navigate('/signup')}>
-                                    Sign Up
+                                    {t('Sign Up')}
                                 </Button>
                             }
                         </Flex>

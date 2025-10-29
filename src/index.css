@@ -62,6 +62,15 @@ body.ltr {
   font-family: "Inter", sans-serif;
 }
 
+/* Prevent directional icons from being flipped in RTL */
+[dir="rtl"] .ant-breadcrumb-separator,
+[dir="rtl"] img[alt*="Arrow"],
+[dir="rtl"] img[alt*="arrow"],
+[dir="rtl"] img[src*="back-arr"],
+[dir="rtl"] img[src*="back-btn"] {
+  transform: scaleX(-1);
+}
+
 .bg-light-brand {
   background-color: var(--bg-body) !important;
 }

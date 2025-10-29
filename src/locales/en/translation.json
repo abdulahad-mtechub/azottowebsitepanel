@@ -822,5 +822,9 @@
 "SAR 30,000 - SAR 60,000": "SAR 30,000 - SAR 60,000",
 "SAR 60,000 - SAR 100,000": "SAR 60,000 - SAR 100,000",
 "SAR 100,000 - SAR 150,000": "SAR 100,000 - SAR 150,000",
-"SAR 150,000+": "SAR 150,000+"
+"SAR 150,000+": "SAR 150,000+",
+"Developed and maintained by REPLA Technologies PVT Ltd": "Developed and maintained by REPLA Technologies PVT Ltd",
+"Account created successfully!": "Account created successfully!",
+"Logged out successfully": "Logged out successfully",
+"Network issue. You were logged out locally.": "Network issue. You were logged out locally."
 }

@@ -77,7 +77,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
       ref: payload?.reference,
       title: payload?.businessTitle,
       description: payload?.description,
-      amount: `SAR ${payload?.price?.toLocaleString()}`,
+      amount: `${t('SAR')} ${payload?.price?.toLocaleString()}`,
       status: payload?.isSupportVerified ? t('Active') : t('Under-review'),
       type: payload?.isByTakbeer ? t('Taqbeel') : t('Acquiring'),
       isAbleToInactive: payload?.isAbleToInactive,
@@ -86,13 +86,13 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
         {
           id: 1,
           icon: '/assets/icons/year-p.png',
-          subtitle: `SAR ${payload?.revenue.toLocaleString()}`,
+          subtitle: `${t('SAR')} ${payload?.revenue.toLocaleString()}`,
           subdesc: `${payload?.revenueTime}`,
         },
         {
           id: 2,
           icon: '/assets/icons/revenue.png',
-          subtitle: `SAR ${payload?.profit.toLocaleString()}`,
+          subtitle: `${t('SAR')} ${payload?.profit.toLocaleString()}`,
           subdesc: `${payload?.profittime}`,
         },
         {
@@ -161,7 +161,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
               className='p-0 border-0 bg-transparent'
               onClick={() => setSingleDetail(null)}
             >
-              <ArrowLeftOutlined />
+              <Image src="/assets/icons/back-arr.png" alt="Arrow Left" width={22} height={22} preview={false} />
             </Button>
             <Title level={5} className='m-0'>{business?.businessTitle}</Title>
           </Space>

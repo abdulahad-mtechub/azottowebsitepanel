@@ -59,7 +59,7 @@ const Navbar = ({setGetCategory}) => {
       id: 1,
       icon: '/assets/icons/m-1.png',
       title: t("Browse by Categories"),
-      subtitle: 'Choose from popular business types.',
+      subtitle: t('Choose from popular business types.'),
       subdropdown: categories.map((cat, index) => ({
         id: cat.id ?? index + 1,
         title: isArabic ? cat.arabicTitle : cat.title,
@@ -72,7 +72,7 @@ const Navbar = ({setGetCategory}) => {
       id: 3,
       icon: '/assets/icons/m-3.png',
       title: t('Browse by Revenue'),
-      subtitle: 'Filter by business earnings.',
+      subtitle: t('Filter by business earnings.'),
       subdropdown: [
           { id: 1, title: t('SAR 0 - SAR 10,000'), path: '/businesslisting?revenue=0,10000' },
           { id: 2, title: t('SAR 10,000 - SAR 30,000'), path: '/businesslisting?revenue=10000,30000' },
@@ -401,7 +401,7 @@ const dropdownContent = useMemo(() => {
 
   return (
     <Card className="rounded-12 card-cs size-notify border-0">
-      <Text>Notification ({unreadCount})</Text>
+      <Text>{t("Notification")} ({unreadCount})</Text>
       <Divider className="bg-divider my-2" />
       {showInitialLoader ? (
         <Flex align="center" justify="center" style={{ minHeight: 120 }}>
@@ -654,7 +654,7 @@ useEffect(() => {
                             others ? 'text-brand':'text-white'
                           }
                         `}>
-                        Others
+                        {t("Others")}
                       </Text>
                       <DownOutlined className={`fs-12
                           ${

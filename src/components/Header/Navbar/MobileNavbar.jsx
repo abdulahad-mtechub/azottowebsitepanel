@@ -95,7 +95,7 @@ const MobileNavbar = ({ visible, onClose }) => {
                                     {
                                         f === 0 &&    
                                         <NavLink to={'/'}  className='text-white fs-14 block p-2 pl-2'>
-                                            <Title level={5} className='text-white m-0'>Browse All</Title>
+                                            <Title level={5} className='text-white m-0'>{t('Browse All')}</Title>
                                         </NavLink>
                                     }
                                     <Collapse
