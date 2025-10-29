@@ -54,7 +54,6 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
             buyerName.length > 3
                 ? buyerName.substring(0, 3) + '*'.repeat(10)
                 : buyerName + '*'.repeat(10 - buyerName.length);
-
         return {
             key: meeting.id,
             title: meeting.business?.businessTitle,

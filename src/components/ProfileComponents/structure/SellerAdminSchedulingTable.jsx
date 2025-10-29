@@ -115,7 +115,7 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
       render: (status) => {
         return (
           <Text className={`${getStatusBadgeClass(status)} fs-12 badge-cs fw-500`}>
-              { status === "REJECTED" ? t('Rejected') : status === "REQUESTED" ? t('Requested') : status === "CANCELLED" ? t('Cancelled') : status === "SCHEDULED" ? t('Scheduled') : status === "ACCEPTED" ? t('Accepted') : status === "COMPLETED" ? t('Completed') : status === "PENDING" ? t('Pending') : status === "PENDING_APPROVAL" ? t('Pending Approval') : status === "READY_FOR_SCHEDULING" ? t('Ready for Scheduling') : t(status) }
+              { status === "REJECTED" ? t('Rejected') : status === "REQUESTED" ? t('Requested') : status === "CANCELLED" ? t('Cancelled') : status === "SCHEDULED" ? t('Scheduled') : status === "ACCEPTED" ? t('Under Admin Review') : status === "COMPLETED" ? t('Completed') : status === "PENDING" ? t('Pending') : status === "PENDING_APPROVAL" ? t('Pending Approval') : status === "READY_FOR_SCHEDULING" ? t('Ready for Scheduling') : t(status) }
           </Text>
         )
       }
