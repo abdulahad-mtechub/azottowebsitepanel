@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin, Space, Tooltip } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { GETSELLERBUSINESS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
@@ -94,7 +94,12 @@ const Allbussines = () => {
                                                     aria-labelledby={t('Type')}
                                                     className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
                                                 >
-                                                    {pro.isByTakbeer ? t('Taqbeel') : t('Acquiring')}
+                                                    <Space align='center' justify='center' >
+                                                        <Text className='fs-12 text-white'>{pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
+                                                        <Tooltip title={pro.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
+                                                            <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
+                                                        </Tooltip>
+                                                    </Space>
                                                 </Button>
                                             )}
                                         </Flex>
