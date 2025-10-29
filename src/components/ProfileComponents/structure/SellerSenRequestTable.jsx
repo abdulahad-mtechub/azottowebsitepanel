@@ -4,6 +4,7 @@ import { SENTMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
@@ -89,7 +90,12 @@ const SellerSendRequestTable = ({ isBuyer }) => {
                 )
             }
         },
-        { title: t('Requested Date'), dataIndex: 'requestedDate' },
+        { 
+            title: t('Requested Date'), 
+            render: (record) => {
+                return <Text>{`${dayjs(record?.requestedDate)?.format("DD MMM YYYY, hh:mm A")} - ${dayjs(record?.requestedEndDate)?.format("hh:mm A")}`}</Text>;
+            }
+        },
     ];
 
     const sendrequestData = data?.getMySentMeetingRequests?.items?.map((meeting) => {
@@ -106,7 +112,8 @@ const SellerSendRequestTable = ({ isBuyer }) => {
             businessprice: meeting.business?.price,
             offerprice: meeting.offer?.price,
             status: meeting.status,
-            requestedDate: new Date(meeting.requestedDate).toLocaleString(),
+            requestedDate: meeting.requestedDate,
+            requestedEndDate: meeting.requestedEndDate,
         };
     }) || [];
 

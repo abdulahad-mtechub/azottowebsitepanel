@@ -68,6 +68,7 @@ query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean, $limit: 
       id
       createdAt
       requestedDate
+      requestedEndDate
       receiverAvailabilityDate
       status
       requestedTo {

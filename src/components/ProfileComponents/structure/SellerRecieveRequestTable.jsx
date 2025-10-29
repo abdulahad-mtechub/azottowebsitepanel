@@ -7,6 +7,7 @@ import { DeleteModal } from '../../ui';
 import { RECEIVEDMEETINGS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
@@ -60,7 +61,8 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
             buyername: maskedName,
             businessprice: meeting.business?.price,
             offerprice: meeting.offer?.price,
-            date: new Date(meeting.requestedDate).toLocaleString(),
+            requestedDate: meeting.requestedDate,
+            requestedEndDate: meeting.requestedEndDate,
             offerId: meeting.offer?.id,
             business: meeting.business,
             status: meeting.status,
@@ -147,7 +149,12 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
                 )
             }
         },
-        { title: t('Requested Date'), dataIndex: 'date' },
+        { 
+            title: t('Requested Date'), 
+            render: (record) => {
+                return <Text>{`${dayjs(record?.requestedDate)?.format("DD MMM YYYY, hh:mm A")} - ${dayjs(record?.requestedEndDate)?.format("hh:mm A")}`}</Text>;
+            }
+        },
         {
             title: t('Action'),
             key: 'action',
