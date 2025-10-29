@@ -100,8 +100,7 @@ const SCHEDULEDMEETINGS = gql`
       items {
         id
         createdAt
-        requestedDate
-        receiverAvailabilityDate
+        adminAvailabilityDate
         status
         requestedTo {
           name

@@ -51,7 +51,7 @@ const SellerScheduledTable = ({ isBuyer }) => {
             buyername: maskedName,
             businessprice: meeting.business?.price,
             offerprice: meeting.offer?.price,
-            scheduledatetime: new Date(meeting.receiverAvailabilityDate).toLocaleString(),
+            scheduledatetime: meeting?.adminAvailabilityDate ? new Date(meeting.adminAvailabilityDate).toLocaleString() : "-",
             meetinglink: meeting.meetingLink,
             status: meeting.status
         };
