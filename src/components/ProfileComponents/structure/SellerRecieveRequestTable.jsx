@@ -246,7 +246,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
                         dataSource={sellerrecievedrequestData}
                         className="pagination table table-cs"
                         showSorterTooltip={false}
-                        scroll={{ x: 1300 }}
+                        scroll={{ x: 1500 }}
                         loading={loading}
                         pagination={{
                             hideOnSinglePage: true,

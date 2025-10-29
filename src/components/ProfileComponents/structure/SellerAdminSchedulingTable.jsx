@@ -43,7 +43,7 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
   const selleradminsechedulingData =
     data?.getMeetingsReadyForScheduling?.items?.map((meeting) => {
       const isSellerMeeting = meeting.business?.seller?.id === meeting.requestedBy?.id;
-      const buyerName = meeting.requestedTo?.name || '';
+      const buyerName = isSellerMeeting ? meeting?.requestedTo?.name || "-" : meeting?.requestedBy?.name || "-";
       const maskedName =
         buyerName.length > 3
           ? buyerName.substring(0, 3) + '*'.repeat(10)

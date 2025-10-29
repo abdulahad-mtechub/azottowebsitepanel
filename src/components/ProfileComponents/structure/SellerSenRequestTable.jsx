@@ -173,7 +173,7 @@ const SellerSendRequestTable = ({ isBuyer }) => {
                         dataSource={sendrequestData}
                         className="pagination table table-cs"
                         showSorterTooltip={false}
-                        scroll={{ x: 800 }}
+                        scroll={{ x: 950 }}
                         loading={loading}
                         pagination={{
                             hideOnSinglePage: true,
