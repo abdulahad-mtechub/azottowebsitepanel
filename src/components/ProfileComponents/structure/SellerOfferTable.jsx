@@ -14,7 +14,7 @@ import moment from 'moment';
 const {Text} =Typography
 
 // Component to check meeting existence for each offer row
-const OfferActionDropdown = ({ row, t, handleAcceptOffer, setDeleteModal, setOfferModal, setMeeting, setSelectedOfferId, setSelectedBusinessId, userId, setMeetingRefetch }) => {
+const OfferActionDropdown = ({ row, t, handleAcceptOffer, handleRequestMeeting, setDeleteModal, setOfferModal, setSelectedOfferId, userId, setMeetingRefetch }) => {
     const { data: meetingExistsData, refetch: refetchMeetingExists } = useQuery(CHECKMEETINGEXISTS, {
         variables: { 
             businessId: row?.business?.id,
@@ -37,9 +37,7 @@ const OfferActionDropdown = ({ row, t, handleAcceptOffer, setDeleteModal, setOff
             disabled: meetingExists,
             onClick: () => { 
                 if (!meetingExists) {
-                    setMeeting(true); 
-                    setSelectedOfferId(row.id); 
-                    setSelectedBusinessId(row.business.id);
+                    handleRequestMeeting(row?.business?.id, row?.id);
                     setMeetingRefetch(() => refetchMeetingExists);
                 }
             } 
@@ -63,7 +61,6 @@ const SellerOfferTable = ({ data }) => {
     const userId = Cookies.get("userId");
     const [offermodal, setOfferModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
-    const [meeting, setMeeting] = useState(false);
     const [filterstatus, setFilterStatus] = useState(null);
     const [filtertype, setFilterType] = useState(null);
     const [searchText, setSearchText] = useState('');
@@ -71,6 +68,8 @@ const SellerOfferTable = ({ data }) => {
     const [selectedOfferId, setSelectedOfferId] = useState(null);
     const [selectedBusinessId, setSelectedBusinessId] = useState(null);
     const [endaVisible, setEndaVisible] = useState(false);
+    const [onlyMeeting, setOnlyMeeting] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [meetingRefetch, setMeetingRefetch] = useState(null);
     const [pagination, setPagination] = useState({
         current: 1,
@@ -123,9 +122,16 @@ const SellerOfferTable = ({ data }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data?.id, data?.businessStatus, pagination.current, pagination.pageSize, debouncedSearchText, filterstatus, filtertype]);
     const handleAcceptOffer = (offerId, businessId) => {
-        console.log('Accepting offer:', offerId, 'for business:', businessId);
         setSelectedOfferId(offerId);
         setSelectedBusinessId(businessId);
+        setOnlyMeeting(false);
+        setEndaVisible(true);
+    };
+
+    const handleRequestMeeting = (businessId, offerId) => {
+        setSelectedOfferId(offerId);
+        setSelectedBusinessId(businessId);
+        setOnlyMeeting(true);
         setEndaVisible(true);
     };
 
@@ -200,11 +206,10 @@ const SellerOfferTable = ({ data }) => {
                         row={row}
                         t={t}
                         handleAcceptOffer={handleAcceptOffer}
+                        handleRequestMeeting={handleRequestMeeting}
                         setDeleteModal={setDeleteModal}
                         setOfferModal={setOfferModal}
-                        setMeeting={setMeeting}
                         setSelectedOfferId={setSelectedOfferId}
-                        setSelectedBusinessId={setSelectedBusinessId}
                         userId={userId}
                         setMeetingRefetch={setMeetingRefetch}
                     />
@@ -334,7 +339,7 @@ const SellerOfferTable = ({ data }) => {
                 title={t('Counter Offer to Buyer')}
                 refetch={refetch}
             />
-            <ScheduleMeeting
+            {/* <ScheduleMeeting
                 visible={meeting}
                 onClose={() => setMeeting(false)}
                 offerId={selectedOfferId}
@@ -345,7 +350,7 @@ const SellerOfferTable = ({ data }) => {
                         meetingRefetch();
                     }
                 }}
-            />
+            /> */}
             <DeleteModal
                 visible={deletemodal}
                 offerId={selectedOfferId}
@@ -361,6 +366,7 @@ const SellerOfferTable = ({ data }) => {
                 visible={endaVisible}
                 onClose={()=>{setEndaVisible(false)}}
                 refetch={refetch}
+                onlyMeeting={onlyMeeting}
             />
         </>
     );

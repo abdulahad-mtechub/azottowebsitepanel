@@ -220,8 +220,6 @@ const SellBusinessCreate = () => {
             }
         } catch (error) {
             console.error('Validation failed:', error);
-            // Error message already shown by the validation function
-            // Just scroll to top to show the error
             window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
         }
