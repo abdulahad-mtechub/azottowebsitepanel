@@ -170,7 +170,7 @@ const BusinessInfoCard = ({ data }) => {
                   }}
                 >
                   {isUserInactive 
-                    ? t('Account Inactive') 
+                    ? t('Verification Pending') 
                     : hasExistingOffer 
                     ? t('Offer Already Submitted') 
                     : t('Make an Offer')}
@@ -186,7 +186,7 @@ const BusinessInfoCard = ({ data }) => {
                   }}
                 >
                   {isUserInactive 
-                    ? t('Account Inactive') 
+                    ? t('Verification Pending') 
                     : existingMeeting 
                     ? t('Meeting Already Requested') 
                     : t('Request Meeting')}
@@ -202,7 +202,7 @@ const BusinessInfoCard = ({ data }) => {
                   }}
                 >
                   {isUserInactive 
-                    ? t('Account Inactive') 
+                    ? t('Verification Pending') 
                     : existingProceedToPay 
                     ? t('Purchase Request Sent') 
                     : hasExistingOffer 

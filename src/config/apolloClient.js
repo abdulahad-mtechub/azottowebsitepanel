@@ -33,7 +33,7 @@ const wsLink = new WebSocketLink({
   options: {
     reconnect: true,
     connectionParams: {
-      authorization: `Bearer${localStorage.getItem("accessToken")}`,
+      authorization: `Bearer${Cookies.get("authToken") || ""}`,
     },
   },
 });
@@ -60,6 +60,11 @@ const errorLink = onError(({ graphQLErrors }) => {
         err.message?.includes("Token is invalid or expired") ||
         err.message?.includes("Invalid token or authentication failed")
       ) {
+        // Clear cookies
+        Cookies.remove('userId');
+        Cookies.remove('authToken');
+        Cookies.remove('userStatus');
+        // Clear localStorage (if any legacy data exists)
         localStorage.clear();
         window.location.href = "/";
       }

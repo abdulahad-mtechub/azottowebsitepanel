@@ -751,7 +751,7 @@ useEffect(() => {
               :
               <Flex gap={10} align='center'>
                 <Tooltip 
-                  title={isUserInactive ? t("Your account is inactive. Please contact support.") : ""}
+                  title={isUserInactive ? t("Account Verification Pending. Please contact support.") : ""}
                   trigger={['hover', 'click']}
                   placement="bottom"
                 >

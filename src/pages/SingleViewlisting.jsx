@@ -194,7 +194,7 @@ const SingleViewlisting = () => {
                                     <Panel 
                                         header={<Title level={5} className='m-0'>{t('Outstanding Liabilities / Debt')}</Title>} 
                                         key="1"
-                                        className='shadow-d radius-12 border-gray bg-lightest-gray'
+                                        className='shadow-d radius-12 bg-lightest-gray'
                                     >
                                         <PreviewTableContent
                                             title={null}
@@ -216,7 +216,7 @@ const SingleViewlisting = () => {
                                     <Panel 
                                         header={<Title level={5} className='m-0'>{t('Key Asset')}</Title>} 
                                         key="1"
-                                        className='shadow-d radius-12 border-gray bg-lightest-gray'
+                                        className='shadow-d radius-12 bg-lightest-gray'
                                     >
                                         <PreviewTableContent
                                             title={null}
@@ -238,7 +238,7 @@ const SingleViewlisting = () => {
                                     <Panel 
                                         header={<Title level={5} className='m-0'>{t('Inventory')}</Title>} 
                                         key="1"
-                                        className='shadow-d radius-12 border-gray bg-lightest-gray'
+                                        className='shadow-d radius-12 bg-lightest-gray'
                                     >
                                         <PreviewTableContent
                                             title={null}
