@@ -153,21 +153,23 @@ const ExploreLive = () => {
                                             </Button>
                                         )}
                                         </Flex>
-                                        <Button 
-                                            className='border-0 bg-transparent p-0' 
-                                            aria-labelledby='bookmarked button'
-                                            onClick={(e) => saveBusinessHandler(pro?.id, pro?.save, e)}
-                                            disabled={isUserInactive && userId}
-                                            style={{
-                                                opacity: (isUserInactive && userId) ? 0.5 : 1,
-                                                cursor: (isUserInactive && userId) ? 'not-allowed' : 'pointer'
-                                            }}
-                                        >
-                                            {pro?.save === true ? 
-                                                <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} fetchPriority="high" /> : 
-                                                <img src='/assets/icons/bk-bl.png' alt={t('un-bookmarked-image')} width={22} fetchPriority="high" />
-                                            }
-                                        </Button>
+                                        {userId && (
+                                            <Button 
+                                                className='border-0 bg-transparent p-0' 
+                                                aria-labelledby='bookmarked button'
+                                                onClick={(e) => saveBusinessHandler(pro?.id, pro?.save, e)}
+                                                disabled={isUserInactive}
+                                                style={{
+                                                    opacity: isUserInactive ? 0.5 : 1,
+                                                    cursor: isUserInactive ? 'not-allowed' : 'pointer'
+                                                }}
+                                            >
+                                                {pro?.save === true ? 
+                                                    <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} fetchPriority="high" /> : 
+                                                    <img src='/assets/icons/bk-bl.png' alt={t('un-bookmarked-image')} width={22} fetchPriority="high" />
+                                                }
+                                            </Button>
+                                        )}
                                     </Flex>                                    <div>
                                         <div className='w-full card-img mb-2 rounded-12'>
                                             <img src="/assets/images/card-1.webp" width={'100%'} height={'100%'} alt={t('product-image')} fetchPriority="high" />

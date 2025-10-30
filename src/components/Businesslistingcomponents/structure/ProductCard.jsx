@@ -137,26 +137,28 @@ const ProductCard = ({
                                                 </Space>
                                             </Button>
                                         </Flex>
-                                        <Button 
-                                            aria-labelledby='bookmarked-btn'
-                                            className='border-0 bg-transparent p-0'
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                saveBusinessHandler(pro?.id, pro?.isSaved);
-                                            }}
-                                            disabled={isUserInactive && userId}
-                                            style={{
-                                                opacity: (isUserInactive && userId) ? 0.5 : 1,
-                                                cursor: (isUserInactive && userId) ? 'not-allowed' : 'pointer'
-                                            }}
-                                        >
-                                            {
-                                                pro?.isSaved
-                                                ? <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} fetchPriority="high" />
-                                                : <img src='/assets/icons/bk-bl.png' alt={t('un-bookmarked-image')} width={22} fetchPriority="high" />
-                                            }
-                                        </Button>
+                                        {userId && (
+                                            <Button 
+                                                aria-labelledby='bookmarked-btn'
+                                                className='border-0 bg-transparent p-0'
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    saveBusinessHandler(pro?.id, pro?.isSaved);
+                                                }}
+                                                disabled={isUserInactive}
+                                                style={{
+                                                    opacity: isUserInactive ? 0.5 : 1,
+                                                    cursor: isUserInactive ? 'not-allowed' : 'pointer'
+                                                }}
+                                            >
+                                                {
+                                                    pro?.isSaved
+                                                    ? <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} fetchPriority="high" />
+                                                    : <img src='/assets/icons/bk-bl.png' alt={t('un-bookmarked-image')} width={22} fetchPriority="high" />
+                                                }
+                                            </Button>
+                                        )}
                                     </Flex>
                                 <div>
                                     <div className='w-full card-img mb-2 rounded-12'>
