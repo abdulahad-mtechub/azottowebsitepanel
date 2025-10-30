@@ -826,5 +826,8 @@
 "Developed and maintained by REPLA Technologies PVT Ltd": "Developed and maintained by REPLA Technologies PVT Ltd",
 "Account created successfully!": "Account created successfully!",
 "Logged out successfully": "Logged out successfully",
-"Network issue. You were logged out locally.": "Network issue. You were logged out locally."
+"Network issue. You were logged out locally.": "Network issue. You were logged out locally.",
+"Account Inactive": "Account Inactive",
+"Your account is inactive. Please contact support.": "Your account is inactive. Please contact support.",
+"Signup failed: Something went wrong": "Signup failed: Something went wrong"
 }

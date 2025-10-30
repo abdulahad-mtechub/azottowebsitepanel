@@ -817,6 +817,8 @@
 "Account created successfully!": "تم إنشاء الحساب بنجاح!",
 "Logged out successfully": "تم تسجيل الخروج بنجاح",
 "Network issue. You were logged out locally.": "مشكلة في الشبكة. تم تسجيل خروجك محلياً.",
-"Developed and maintained by REPLA Technologies PVT Ltd": "تطوير وصيانة بواسطة ريبلا تكنولوجيز المحدودة"
-
+"Developed and maintained by REPLA Technologies PVT Ltd": "تطوير وصيانة بواسطة ريبلا تكنولوجيز المحدودة",
+"Account Inactive": "الحساب غير نشط",
+"Your account is inactive. Please contact support.": "حسابك غير نشط. يرجى التواصل مع الدعم الفني.",
+"Signup failed: Something went wrong": "فشل التسجيل: حدث خطأ ما"
 }

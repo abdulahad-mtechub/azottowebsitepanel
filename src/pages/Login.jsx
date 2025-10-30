@@ -43,6 +43,10 @@ const LoginPage = () => {
       if (data?.login?.token) {
         Cookies.set("userId", data.login.user.id, { expires: 7 }); // expires in 7 days
         Cookies.set("authToken", data.login.token, { expires: 7, secure: true }); 
+        
+        const userStatus = data.login.user.status;
+        Cookies.set("userStatus", userStatus, { expires: 7 });
+        
         messageApi.success("Login successful!");
         setRedirecting(true); 
         setTimeout(() => navigate("/"), 1000);

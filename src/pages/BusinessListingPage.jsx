@@ -326,7 +326,7 @@ const BusinessListingPage = ({getcategory}) => {
                     <Flex vertical gap={30} className='w-100 search-cs'>
                         <Flex vertical gap={5} className='text-center'>
                             <Title level={2} className='text-white m-0'>{t('Find the Right Business for You')}</Title>
-                            <Text className='text-light-gray fs-16'>{t('Search by city or business type and explore verified listings that match your goals.')}</Text>
+                            {/* <Text className='text-light-gray fs-16'>{t('Search by city or business type and explore verified listings that match your goals.')}</Text> */}
                         </Flex>
                         <Card className='shadow-c rounded'>
                             <Row gutter={[24,24]} align={'middle'}>

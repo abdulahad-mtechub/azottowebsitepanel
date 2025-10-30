@@ -9,6 +9,7 @@ import { useDistricts, useCities } from '../data';
 import imageCompression from 'browser-image-compression';
 import { ArrowLeftOutlined, CheckOutlined, DownOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
+import Cookies from "js-cookie";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -81,13 +82,25 @@ const SignupPage = () => {
         roleId: customerRole?.id,
       };
 
-      await createUser({ variables: { input } });
+      const { data } = await createUser({ variables: { input } });
 
-      messageApi.success(t("Account created successfully!"));
-      form.resetFields();
-      setTimeout(() => {
-        navigate("/");
-      }, 1000);
+      if (data?.createUser?.token) {
+        // Store auth data in cookies
+        Cookies.set("userId", data.createUser.user.id, { expires: 7 });
+        Cookies.set("authToken", data.createUser.token, { expires: 7, secure: true });
+        
+        // Store user status in cookies
+        const userStatus = data.createUser.user.status;
+        Cookies.set("userStatus", userStatus, { expires: 7 });
+
+        messageApi.success(t("Account created successfully!"));
+        form.resetFields();
+        setTimeout(() => {
+          navigate("/");
+        }, 1000);
+      } else {
+        messageApi.error(t("Signup failed: Something went wrong"));
+      }
     } catch (err) {
       const msg = err?.graphQLErrors?.[0]?.message || err?.message;
       if (msg?.includes('The email already exists')) {

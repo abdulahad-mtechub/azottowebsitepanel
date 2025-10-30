@@ -1,4 +1,4 @@
-import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin, List, Divider, Card, Popover, message } from 'antd';
+import { Typography, Button, Flex, Image, Row, Col, Badge, Dropdown, Avatar, Space,Spin, List, Divider, Card, Popover, message, Tooltip } from 'antd';
 import './index.css';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRightOutlined, DownOutlined, PlusOutlined } from '@ant-design/icons';
@@ -290,6 +290,7 @@ const Navbar = ({setGetCategory}) => {
       // Clear cookies
       Cookies.remove('userId');
       Cookies.remove('authToken');
+      Cookies.remove('userStatus');
       // Clear localStorage
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
@@ -302,6 +303,10 @@ const Navbar = ({setGetCategory}) => {
       window.location.reload();
     }
   };
+  // Check if user is inactive
+  const userStatus = Cookies.get("userStatus");
+  const isUserInactive = userStatus === "pending" || userStatus === "inactive";
+
   const items = [
     {
       key: '1',
@@ -325,12 +330,19 @@ const Navbar = ({setGetCategory}) => {
           href=""
           onClick={(e) => {
             e.preventDefault();
-            navigate('/profiledashboard')
+            if (!isUserInactive) {
+              navigate('/profiledashboard');
+            }
+          }}
+          style={{
+            opacity: isUserInactive ? 0.5 : 1,
+            cursor: isUserInactive ? 'not-allowed' : 'pointer',
           }}
         >
           {t("My Profile")}
         </a>
       ),
+      disabled: isUserInactive,
     },
   ];
   const handleChange = (lang) => {
@@ -568,26 +580,28 @@ useEffect(() => {
                   <Button className='bg-transparent border-0 p-0' onClick={()=> setVisible(true)}>
                     <img src='/assets/icons/menu-icon.png' alt='hamburger icon' width={30} fetchPriority="high" />
                   </Button>
-                  <Popover
-                    content={dropdownContent}
-                    trigger="click"
-                    placement="bottomRight"
-                    open={dropdownOpen}
-                    onOpenChange={handleDropdownChange}
-                    getPopupContainer={() => document.body}
-                  >
-                    <Badge size="small" count={unreadCount} overflowCount={99}>
-                      <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
-                        <Image
-                          src="/assets/icons/notification.png"
-                          width={"28px"}
-                          preview={false}
-                          alt="notification icon"
-                          className="up"
-                        />
-                      </Button>
-                    </Badge>
-                  </Popover>
+                  {isshow && (
+                    <Popover
+                      content={dropdownContent}
+                      trigger="click"
+                      placement="bottomRight"
+                      open={dropdownOpen}
+                      onOpenChange={handleDropdownChange}
+                      getPopupContainer={() => document.body}
+                    >
+                      <Badge size="small" count={unreadCount} overflowCount={99}>
+                        <Button aria-labelledby="Notification" className="bg-transparent border-0 p-0">
+                          <Image
+                            src="/assets/icons/notification.png"
+                            width={"28px"}
+                            preview={false}
+                            alt="notification icon"
+                            className="up"
+                          />
+                        </Button>
+                      </Badge>
+                    </Popover>
+                  )}
                 </Flex>
               </div>
             </div>
@@ -736,9 +750,24 @@ useEffect(() => {
                 </Flex>
               :
               <Flex gap={10} align='center'>
-                <Button aria-labelledby='Sell a Business' className='btn bg-brand' onClick={() => navigate('/sellbusinesscreate')}>
-                  <PlusOutlined /> {t("Sell a Business")}
-                </Button>
+                <Tooltip 
+                  title={isUserInactive ? t("Your account is inactive. Please contact support.") : ""}
+                  trigger={['hover', 'click']}
+                  placement="bottom"
+                >
+                  <Button 
+                    aria-labelledby='Sell a Business' 
+                    className='btn bg-brand' 
+                    onClick={() => !isUserInactive && navigate('/sellbusinesscreate')}
+                    disabled={isUserInactive}
+                    style={{
+                      opacity: isUserInactive ? 0.6 : 1,
+                      cursor: isUserInactive ? 'not-allowed' : 'pointer',
+                    }}
+                  >
+                    <PlusOutlined /> {t("Sell a Business")}
+                  </Button>
+                </Tooltip>
               
                 <Popover
                   content={dropdownContent}

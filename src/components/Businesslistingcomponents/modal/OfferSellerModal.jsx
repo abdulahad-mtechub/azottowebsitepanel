@@ -154,7 +154,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                         <MyInput
                             label={
                                 <Flex gap={2}>
-                                    Total Amount <Tooltip title='Includes Jusoor’s 6% commission fee'>
+                                    Total Amount <Tooltip title='info'>
                                         <Image preview={false} src="/assets/icons/info-outline.png" width={14} alt="info icon" />
                                     </Tooltip>
                                 </Flex>

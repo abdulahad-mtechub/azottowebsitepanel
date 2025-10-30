@@ -18,6 +18,10 @@ const BusinessInfoCard = ({ data }) => {
   const userId = Cookies.get("userId");
   const isLoggedIn = !!userId;
   const navigate = useNavigate();
+  
+  // Check if user is inactive
+  const userStatus = Cookies.get("userStatus");
+  const isUserInactive = userStatus === "pending" || userStatus === "inactive";
   const [createOffer, { loading: createOfferLoading }] = useMutation(CREATE_OFFER);
   const [hasExistingOffer, setHasExistingOffer] = useState(false);
   const [existingMeeting, setExistingMeeting] = useState(false);
@@ -159,37 +163,47 @@ const BusinessInfoCard = ({ data }) => {
                   className='btn bg-brand' 
                   aria-labelledby={t('Make an Offer')}
                   onClick={()=> handleAction(() => { setOfferMode("offer"); setOfferSeller(true); })}
-                  disabled={hasExistingOffer}
+                  disabled={hasExistingOffer || isUserInactive}
                   style={{ 
-                    opacity: hasExistingOffer ? 0.5 : 1,
-                    cursor: hasExistingOffer ? 'not-allowed' : 'pointer'
+                    opacity: (hasExistingOffer || isUserInactive) ? 0.5 : 1,
+                    cursor: (hasExistingOffer || isUserInactive) ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  {hasExistingOffer ? t('Offer Already Submitted') : t('Make an Offer')}
+                  {isUserInactive 
+                    ? t('Account Inactive') 
+                    : hasExistingOffer 
+                    ? t('Offer Already Submitted') 
+                    : t('Make an Offer')}
                 </Button>
                 <Button 
                   aria-labelledby={t('Request Meeting')} 
-                  disabled={existingMeeting} 
+                  disabled={existingMeeting || isUserInactive} 
                   className='btn bg-dark-blue' 
                   onClick={()=> handleAction(() => setMeetingModal(true))}
                   style={{ 
-                    opacity: existingMeeting ? 0.5 : 1,
-                    cursor: existingMeeting ? 'not-allowed' : 'pointer'
+                    opacity: (existingMeeting || isUserInactive) ? 0.5 : 1,
+                    cursor: (existingMeeting || isUserInactive) ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  {existingMeeting ? t('Meeting Already Requested') : t('Request Meeting')}
+                  {isUserInactive 
+                    ? t('Account Inactive') 
+                    : existingMeeting 
+                    ? t('Meeting Already Requested') 
+                    : t('Request Meeting')}
                 </Button>
                 <Button 
                   aria-labelledby={t('Proceed to Purchase')} 
                   className='btn bg-green text-white' 
                   onClick={handleProceedButtonClick}
-                  disabled={hasExistingOffer || existingProceedToPay}
+                  disabled={hasExistingOffer || existingProceedToPay || isUserInactive}
                   style={{ 
-                    opacity: (hasExistingOffer || existingProceedToPay) ? 0.5 : 1,
-                    cursor: (hasExistingOffer || existingProceedToPay) ? 'not-allowed' : 'pointer'
+                    opacity: (hasExistingOffer || existingProceedToPay || isUserInactive) ? 0.5 : 1,
+                    cursor: (hasExistingOffer || existingProceedToPay || isUserInactive) ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  {existingProceedToPay 
+                  {isUserInactive 
+                    ? t('Account Inactive') 
+                    : existingProceedToPay 
                     ? t('Purchase Request Sent') 
                     : hasExistingOffer 
                     ? t('Offer Already Submitted') 

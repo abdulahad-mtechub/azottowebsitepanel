@@ -19,6 +19,10 @@ const ExploreLive = () => {
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const userId = Cookies.get("userId");
     
+    // Check if user is inactive
+    const userStatus = Cookies.get("userStatus");
+    const isUserInactive = userStatus === "pending" || userStatus === "inactive";;
+    
     const { data, loading, refetch} = useQuery(GETRANDOMBUSINESS);
 
     const saveBusinessHandler = async (businessId, currentSaveState, e) => {
@@ -39,6 +43,12 @@ const ExploreLive = () => {
                     </span>
                 ),
             });
+            return;
+        }
+
+        // Check if user account is inactive
+        if (isUserInactive) {
+            messageApi.warning(t("Your account is inactive. Please contact support."));
             return;
         }
 
@@ -147,6 +157,11 @@ const ExploreLive = () => {
                                             className='border-0 bg-transparent p-0' 
                                             aria-labelledby='bookmarked button'
                                             onClick={(e) => saveBusinessHandler(pro?.id, pro?.save, e)}
+                                            disabled={isUserInactive && userId}
+                                            style={{
+                                                opacity: (isUserInactive && userId) ? 0.5 : 1,
+                                                cursor: (isUserInactive && userId) ? 'not-allowed' : 'pointer'
+                                            }}
                                         >
                                             {pro?.save === true ? 
                                                 <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} fetchPriority="high" /> : 

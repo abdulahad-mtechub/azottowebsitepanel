@@ -18,6 +18,10 @@ const ExploreSimilarBusiness = ({ id }) => {
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const userId = Cookies.get("userId");
     
+    // Check if user is inactive
+    const userStatus = Cookies.get("userStatus");
+    const isUserInactive = userStatus === "pending" || userStatus === "inactive";
+
     const { data, loading, refetch } = useQuery(GET_RANDOM_BUSINESSES, {
         variables: { getRandomBusinessesId: id },
         skip: !id,
@@ -44,6 +48,12 @@ const ExploreSimilarBusiness = ({ id }) => {
                     </span>
                 ),
             });
+            return;
+        }
+
+        // Check if user account is inactive
+        if (isUserInactive) {
+            messageApi.warning(t("Your account is inactive. Please contact support."));
             return;
         }
 
@@ -144,6 +154,11 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                     aria-labelledby={t('Bookmark-btn')} 
                                                     className='border-0 bg-transparent p-0'
                                                     onClick={(e) => saveBusinessHandler(pro?.id, pro?.isSaved, e)}
+                                                    disabled={isUserInactive && userId}
+                                                    style={{
+                                                        opacity: (isUserInactive && userId) ? 0.5 : 1,
+                                                        cursor: (isUserInactive && userId) ? 'not-allowed' : 'pointer'
+                                                    }}
                                                 >
                                                     {pro?.isSaved ?
                                                         <img src='/assets/icons/bk-bl-d.png' alt={t('bookmarked-image')} width={22} /> :

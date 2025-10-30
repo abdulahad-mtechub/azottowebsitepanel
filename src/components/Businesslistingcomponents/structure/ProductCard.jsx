@@ -25,6 +25,10 @@ const ProductCard = ({
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const userId = Cookies.get("userId");
+    
+    // Check if user is inactive
+    const userStatus = Cookies.get("userStatus");
+    const isUserInactive = userStatus === "pending" || userStatus === "inactive";
 
     const saveBusinessHandler = async (businessId, currentSaveState) => {
         if (!userId) {
@@ -44,6 +48,13 @@ const ProductCard = ({
             });
             return;
         }
+
+        // Check if user account is inactive
+        if (isUserInactive) {
+            messageApi.warning(t("Your account is inactive. Please contact support."));
+            return;
+        }
+
         try {
             await saveBusiness({
             variables: {
@@ -133,6 +144,11 @@ const ProductCard = ({
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 saveBusinessHandler(pro?.id, pro?.isSaved);
+                                            }}
+                                            disabled={isUserInactive && userId}
+                                            style={{
+                                                opacity: (isUserInactive && userId) ? 0.5 : 1,
+                                                cursor: (isUserInactive && userId) ? 'not-allowed' : 'pointer'
                                             }}
                                         >
                                             {
