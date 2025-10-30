@@ -42,10 +42,19 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
 
   const selleradminsechedulingData =
     data?.getMeetingsReadyForScheduling?.items?.map((meeting) => {
-      const isSellerMeeting = meeting.business?.seller?.id === meeting.requestedBy?.id;
-      const buyerName = isSellerMeeting ? meeting?.requestedTo?.name || "-" : meeting?.requestedBy?.name || "-";
+      const { requestedBy, requestedTo, business } = meeting;
+      const isSellerMeeting = business?.seller?.id === requestedBy?.id;
+
+      const displayName = isBuyer
+        ? isSellerMeeting
+          ? requestedBy?.name || "-"
+          : requestedTo?.name || "-"
+        : isSellerMeeting
+          ? requestedTo?.name || "-" 
+          : requestedBy?.name || "-";
+      const buyerName = isBuyer ? (!isSellerMeeting ? meeting?.requestedTo?.name || "-" : meeting?.requestedBy?.name || "-") : meeting?.requestedBy?.name || "-";
       const maskedName =
-        buyerName.length > 3
+        displayName.length > 3
           ? buyerName.substring(0, 3) + '*'.repeat(10)
           : buyerName + '*'.repeat(10 - buyerName.length);
       console.log(isSellerMeeting, "hello ")
@@ -55,7 +64,9 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
         buyername: maskedName,
         businessprice: meeting.business?.price,
         offerprice: meeting.offer?.price,
-        prefereddatetime: isBuyer ? `${dayjs(meeting.requestedDate)?.format("DD MMM YYYY, hh:mm A")} - ${dayjs(meeting.requestedEndDate)?.format(
+        prefereddatetime: isBuyer ? (isSellerMeeting ? `${dayjs(meeting.requestedDate)?.format("DD MMM YYYY, hh:mm A")} - ${dayjs(meeting.requestedEndDate)?.format(
+          "hh:mm A"
+        )}` : dayjs(meeting.receiverAvailabilityDate)?.format("DD MMM YYYY, hh:mm A")) : !isSellerMeeting ? `${dayjs(meeting.requestedDate)?.format("DD MMM YYYY, hh:mm A")} - ${dayjs(meeting.requestedEndDate)?.format(
           "hh:mm A"
         )}` : dayjs(meeting.receiverAvailabilityDate)?.format("DD MMM YYYY, hh:mm A"),
         status: meeting.status

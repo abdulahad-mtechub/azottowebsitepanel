@@ -1,12 +1,13 @@
-import { Row, Col, Card, Flex, Typography, Button } from 'antd';
+import { Row, Col, Card, Flex, Typography, Button, Collapse } from 'antd';
 import { MarketAreaChart } from '../../Businesslistingcomponents';
 import { BusinessViewInfoCard } from './BusinessViewInfoCard';
 import { BusinessStats, PreviewTableContent } from '../../SellBusinessComponents';
 import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../../../data';
 import { useTranslation } from 'react-i18next';
+import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 
 const { Text, Title } = Typography;
-
+const { Panel } = Collapse;
 const SellerDealDetails = ({ data }) => {
   const { t } = useTranslation();
   const postsaleColumns = usePostsaleColumns();
@@ -76,7 +77,7 @@ const SellerDealDetails = ({ data }) => {
         </Card>
         <BusinessViewInfoCard data={businessinfo} />
         <BusinessStats data={businessinfo} />
-        <MarketAreaChart data={businessinfo} />
+        {/* <MarketAreaChart data={businessinfo} /> */}
         {/* <AnnualProfitBarChart graphData={graphData} /> */}
         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
           <Flex vertical gap={0}>
@@ -93,15 +94,72 @@ const SellerDealDetails = ({ data }) => {
         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
           <PreviewTableContent title={t('Post - Sale Support')} columns={postsaleColumns} data={postSaleData} />
         </Card>
-        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-            <PreviewTableContent title={t('Outstanding Liabilities / Debt')} columns={liabColumn} data={liabilitiesData} />
-        </Card>
-        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-          <PreviewTableContent title={t('Key Asset')} columns={keyassetsColumn} data={assetsData} />
-        </Card>
-        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-            <PreviewTableContent title={t('Inventory')} columns={inventColumn} data={inventoryData} />
-        </Card>
+        {liabilitiesData?.length > 0 && (
+          <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+              <Collapse
+                  defaultActiveKey={['1']}
+                  expandIcon={({ isActive }) => isActive ? <MinusOutlined /> : <PlusOutlined />}
+                  expandIconPosition="end"
+                  className='custom-collapse'
+              >
+                  <Panel 
+                      header={<Title level={5} className='m-0'>{t('Outstanding Liabilities / Debt')}</Title>} 
+                      key="1"
+                      className='shadow-d radius-12 bg-lightest-gray'
+                  >
+                      <PreviewTableContent
+                          title={null}
+                          columns={liabColumn}
+                          data={liabilitiesData}
+                      />
+                  </Panel>
+              </Collapse>
+          </Card>
+        )}
+        {assetsData?.length > 0 && (
+          <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+              <Collapse
+                  defaultActiveKey={['1']}
+                  expandIcon={({ isActive }) => isActive ? <MinusOutlined /> : <PlusOutlined />}
+                  expandIconPosition="end"
+                  className='custom-collapse'
+              >
+                  <Panel 
+                      header={<Title level={5} className='m-0'>{t('Key Asset')}</Title>} 
+                      key="1"
+                      className='shadow-d radius-12 bg-lightest-gray'
+                  >
+                      <PreviewTableContent
+                          title={null}
+                          columns={keyassetsColumn}
+                          data={assetsData}
+                      />
+                  </Panel>
+              </Collapse>
+          </Card>
+        )}
+        {inventoryData?.length > 0 && (
+          <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+              <Collapse
+                  defaultActiveKey={['1']}
+                  expandIcon={({ isActive }) => isActive ? <MinusOutlined /> : <PlusOutlined />}
+                  expandIconPosition="end"
+                  className='custom-collapse'
+              >
+                  <Panel 
+                      header={<Title level={5} className='m-0'>{t('Inventory')}</Title>} 
+                      key="1"
+                      className='shadow-d radius-12 bg-lightest-gray'
+                  >
+                      <PreviewTableContent
+                          title={null}
+                          columns={inventColumn}
+                          data={inventoryData}
+                      />
+                  </Panel>
+              </Collapse>
+          </Card>
+        )}
       </Col>
     </Row>
   );

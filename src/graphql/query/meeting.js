@@ -105,9 +105,16 @@ const SCHEDULEDMEETINGS = gql`
         requestedTo {
           name
         }
+        requestedBy {
+          id
+          name
+        }
         business {
           businessTitle
           price
+          seller {
+            id
+          }
         }
         meetingLink
         offer {

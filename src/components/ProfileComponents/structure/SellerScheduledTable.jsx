@@ -39,12 +39,20 @@ const SellerScheduledTable = ({ isBuyer }) => {
     };
 
     const sellerscheduledData = data?.getScheduledMeetings?.items?.map((meeting) => {
-        const isSellerMeeting = meeting.business?.seller?.id === meeting.requestedBy?.id;
-        const buyerName = isSellerMeeting ? meeting?.requestedTo?.name || "-" : meeting?.requestedBy?.name || "-";
+        const { requestedBy, requestedTo, business } = meeting;
+        const isSellerMeeting = business?.seller?.id === requestedBy?.id;
+
+        const displayName = isBuyer
+            ? isSellerMeeting
+            ? requestedBy?.name || "-"
+            : requestedTo?.name || "-"
+            : isSellerMeeting
+            ? requestedTo?.name || "-" 
+            : requestedBy?.name || "-";
         const maskedName =
-            buyerName.length > 3
-                ? buyerName.substring(0, 3) + '*'.repeat(10)
-                : buyerName + '*'.repeat(10 - buyerName.length);
+            displayName.length > 3
+                ? displayName.substring(0, 3) + '*'.repeat(10)
+                : displayName + '*'.repeat(10 - displayName.length);
 
         return {
             key: meeting.id,

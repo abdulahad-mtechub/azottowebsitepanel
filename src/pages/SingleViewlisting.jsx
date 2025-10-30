@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin, Image, Tooltip, Space, Collapse } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../data';
-import { AnnualProfitBarChart, BusinessInfoCard, BusinessInfoCardMobile, ExploreSimilarBusiness, MarketAreaChart, PreviewTableContent } from '../components';
+import { BusinessInfoCard, BusinessInfoCardMobile, ExploreSimilarBusiness, PreviewTableContent } from '../components';
 import { RightOutlined, PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import { useQuery } from '@apollo/client';
 import { GET_BUSINESS, SIMILER_BUSINESS_CATEGORY_GRAPH } from '../graphql/query/business';
