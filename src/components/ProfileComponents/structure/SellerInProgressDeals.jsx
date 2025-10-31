@@ -125,24 +125,38 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
             dataIndex: 'status',
             render: (status, record) => {
                 const isCancelled = record.statusRaw === 'CANCEL';
-                let badgeClass = 'sendstatus'; // Default: pending/orange
+                let badgeClass = 'sendstatus'; // Default: pending/yellow
                 
-                if (isCancelled) {
-                    badgeClass = 'inactive'; // Gray - Cancelled
-                } else if (record.isSellerCompleted) {
-                    badgeClass = 'success'; // Green - Seller completed
-                } else if (
+                // Check if DSA is pending - Yellow
+                if (
+                    status === t('Seller & Buyer DSA Pending') ||
+                    status === t('Seller DSA Pending') ||
+                    status === t('Buyer DSA Pending') ||
+                    (!record.isDsaSeller || !record.isDsaBuyer)
+                ) {
+                    badgeClass = 'sendstatus'; // Yellow
+                }
+                // Successful states - Green
+                else if (
+                    isCancelled ||
+                    record.isSellerCompleted ||
+                    record.isBuyerCompleted ||
                     status === t('Payment Verified') ||
                     status === t('DSA Verified') ||
+                    status === t('Commission Verified') ||
+                    status === t('Completed') ||
+                    status === t('Verified') ||
                     record.isPaymentVedifiedSeller ||
-                    (record.isDsaSeller && record.isDsaBuyer)
+                    (record.isDsaSeller && record.isDsaBuyer) ||
+                    record.isCommissionVerified
                 ) {
-                    badgeClass = 'received'; // Blue - Verified states
+                    badgeClass = 'success'; // Green
                 } else if (
                     status?.toLowerCase().includes('pending') || 
-                    !record.isCommissionVerified
+                    status?.toLowerCase().includes('waiting') ||
+                    status?.toLowerCase().includes('verification')
                 ) {
-                    badgeClass = 'sendstatus'; // Orange - Pending states
+                    badgeClass = 'sendstatus'; // Yellow - Pending states
                 }
                 
                 return <span className={`${badgeClass} fs-12 badge-cs fw-500 fit-content`}>{status}</span>;

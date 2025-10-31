@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin, Space, Tooltip } from 'antd';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { useLazyQuery } from '@apollo/client';
 import { GETSELLERSOLDBUSINESS } from '../../../graphql/query';
 import { useTranslation } from 'react-i18next';
@@ -10,7 +10,7 @@ const { Title, Text, Paragraph } = Typography;
 
 const Soldbussines = () => {
     const { t, i18n } = useTranslation();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
     const isArabic = i18n.language === 'ar';
@@ -59,8 +59,14 @@ const Soldbussines = () => {
                     {soldBusinessesData?.map((pro, i) => (
                     <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }} key={i}>
                         <Card
-                            className='h-100 border-gray rounded-12 card-cs cursor'
-                            onClick={() => navigate('/singleviewlisting/' + pro?.id)}
+                            className='h-100 border-gray rounded-12 card-cs'
+                            aria-disabled={true}
+                            style={{ 
+                                opacity: 0.6, 
+                                backgroundColor: '#FCFCFD',
+                                cursor: 'not-allowed',
+                                pointerEvents: 'none'
+                            }}
                         >
                             <Flex vertical gap={20}>
                                 <Flex justify='space-between' align='center'>
