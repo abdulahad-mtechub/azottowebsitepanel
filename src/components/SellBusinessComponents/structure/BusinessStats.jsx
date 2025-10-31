@@ -30,13 +30,13 @@ const BusinessStats = ({data}) => {
         {
             id: 1,
             icon:'/assets/icons/rev.png',
-            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.revenue ? data?.revenue : '0'}</>,
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.revenue ? (typeof data.revenue === 'number' ? data.revenue.toLocaleString() : data.revenue) : '0'}</>,
             subtitle:`${t('Revenue')} ${t(revenueTimeValue) || ''}`,
         },
         {
             id: 2,
             icon:'/assets/icons/pro.png',
-            title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.profit ? data?.profit : '0'}</>,
+            title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.profit ? (typeof data.profit === 'number' ? data.profit.toLocaleString() : data.profit) : '0'}</>,
             subtitle:`${t('Profit')}  ${t(profitTimeValue) || ''}`,
         },
         {

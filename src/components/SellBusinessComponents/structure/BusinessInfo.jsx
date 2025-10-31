@@ -4,7 +4,7 @@ import { useQuery } from '@apollo/client';
 
 const { Title, Text } = Typography
 const BusinessInfo = ({data}) => {
-    const { loading, error, data: categoryData } = useQuery(GET_CATEGORY, {
+    const { data: categoryData } = useQuery(GET_CATEGORY, {
         variables: { getCategoryByIdId: data.categoryId },
         skip: !data.categoryId, // Skip query if categoryId is null or undefined
       });
@@ -19,7 +19,7 @@ const BusinessInfo = ({data}) => {
         {
             id: 1,
             icon:'/assets/icons/businessprice.png',
-            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data.price}</>,
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {typeof data.price === 'number' ? data.price.toLocaleString() : data.price}</>,
             subtitle:'Business Price'
         },
         {

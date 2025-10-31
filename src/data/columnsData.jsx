@@ -43,7 +43,7 @@ const useLiabColumn = () => {
         { title: t('Liability name'), dataIndex: 'name' },
         { title: t('Number of Items'), dataIndex: 'items' },
         { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
-        { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {price}</>},
+        { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {typeof price === 'number' ? price.toLocaleString() : price}</>},
         { title: null, dataIndex: 'verified',
             render: (verified) => {
                 if (verified === true || verified === 1) {
@@ -67,7 +67,7 @@ const useKeyassetsColumn = () => {
         { title: t('Asset name'), dataIndex: 'name' },
         { title: t('Number of Items'), dataIndex: 'items' },
         { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
-        { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high"/> {price}</>},
+        { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high"/> {typeof price === 'number' ? price.toLocaleString() : price}</>},
         { title: null, dataIndex: 'verified',
             render: (verified) => {
                 if (verified === true || verified === 1) {
@@ -91,7 +91,7 @@ const useInventColumn = () => {
         { title: t('Inventory name'), dataIndex: 'name' },
         { title: t('Number of Items'), dataIndex: 'items' },
         { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
-        { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {price}</>},
+        { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {typeof price === 'number' ? price.toLocaleString() : price}</>},
         { title: null, dataIndex: 'verified',
             render: (verified) => {
                 if (verified === true || verified === 1) {

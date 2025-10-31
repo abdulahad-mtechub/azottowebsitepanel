@@ -147,7 +147,7 @@ const SellerOfferTable = ({ data }) => {
             render: (price) => price ? (
                 <Flex gap={10} align="center">
                     <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> 
-                    {price}
+                    {typeof price === 'number' ? price.toLocaleString() : price}
                 </Flex>
             ) : "-"
         },
@@ -156,7 +156,7 @@ const SellerOfferTable = ({ data }) => {
             dataIndex: 'price',
             render: (row, record) => (
                 <Flex gap={10} align="center">
-                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {row}
+                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {typeof row === 'number' ? row.toLocaleString() : row}
                     {record?.isProceedToPay ? (
                         <Tooltip title={t("PP - Proceed to Purchase")}>
                             <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>

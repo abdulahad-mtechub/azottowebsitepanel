@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin } from 'antd';
+import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Spin, Image } from 'antd';
 import { SingleInprogressSteps } from './SingleInprogressSteps';
 import { GETDEAL, GETUSERACTIVEBANK } from '../../../graphql';
 import { useQuery } from '@apollo/client';
@@ -165,10 +165,11 @@ const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
       <Flex gap={15} align='center'>
         <Button
           aria-labelledby={t('Arrow left')}
-          className='border-0 p-0 bg-transparent'
+          type='button'
+          className='p-0 border-0 bg-transparent'
           onClick={() => setCompleteDeal(null)}
         >
-          <ArrowLeftOutlined />
+          <Image src="/assets/icons/back-arr.png" alt="Arrow Left" width={22} height={22} preview={false} />
         </Button>
         <Title level={4} className='m-0'>
           {completedeal?.title}

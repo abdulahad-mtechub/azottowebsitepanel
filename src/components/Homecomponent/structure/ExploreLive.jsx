@@ -76,7 +76,7 @@ const ExploreLive = () => {
         ref: item.reference,
         title: item.businessTitle,
         description: item.description,
-        amount: item.price,
+        amount: typeof item.price === 'number' ? item.price.toLocaleString() : item.price,
         save: item.isSaved,
         status: item.isSold,
         type: item.isByTakbeer,
@@ -84,13 +84,13 @@ const ExploreLive = () => {
             {
                 id: 1,
                 icon:'/assets/icons/year-p.png',
-                subtitle:item.revenue,
+                subtitle: typeof item.revenue === 'number' ? item.revenue.toLocaleString() : item.revenue,
                 subdesc:t('Revenue/month'),
             },
             {
                 id: 2,
                 icon:'/assets/icons/revenue.png',
-                subtitle:item.profit,
+                subtitle: typeof item.profit === 'number' ? item.profit.toLocaleString() : item.profit,
                 subdesc:t('Profit/month'),
             },
             {

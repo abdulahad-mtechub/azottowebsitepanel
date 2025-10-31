@@ -38,7 +38,7 @@ const PreviewStep = ({data}) => {
         name: item.name || 'N/A',
         items: item.quantity || '0',
         purchaseyear: item.purchaseYear || 'N/A',
-        price: item.price ? `SAR ${item.price}` : 'SAR 0',
+        price: item.price ? `SAR ${typeof item.price === 'number' ? item.price.toLocaleString() : item.price}` : 'SAR 0',
     })) || [];
     
     const keyassetes = data.assets?.map((item, index) => ({
@@ -46,7 +46,7 @@ const PreviewStep = ({data}) => {
         name: item.name || 'N/A',
         items: item.quantity || '0',
         purchaseyear: item.purchaseYear || 'N/A',
-        price: item.price ? `SAR ${item.price}` : 'SAR 0',
+        price: item.price ? `SAR ${typeof item.price === 'number' ? item.price.toLocaleString() : item.price}` : 'SAR 0',
     })) || [];
     
     const inventoryItems = data.inventoryItems?.map((item, index) => ({
@@ -54,7 +54,7 @@ const PreviewStep = ({data}) => {
         name: item.name || 'N/A',
         items: item.quantity || '0',
         purchaseyear: item.purchaseYear || 'N/A',
-        price: item.price ? `SAR ${item.price}` : 'SAR 0',
+        price: item.price ? `SAR ${typeof item.price === 'number' ? item.price.toLocaleString() : item.price}` : 'SAR 0',
     })) || [];
       
     return (

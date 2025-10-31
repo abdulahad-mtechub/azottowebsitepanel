@@ -20,3 +20,24 @@ export const truncateChars = (text, max = 25) => {
     const chars = Array.from(text);
     return chars.length > max ? chars.slice(0, max).join("") + "..." : text;
 };
+
+/**
+ * Format a number with commas (thousands separator)
+ * @param {number|string} value - The number to format
+ * @returns {string} - Formatted number with commas
+ */
+export const formatNumber = (value) => {
+    if (value === null || value === undefined || value === '') return '';
+    const num = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(num)) return '';
+    return num.toLocaleString();
+};
+
+/**
+ * Format currency display - Riyal symbol should always appear on the left
+ * @param {number|string} amount - The amount to format
+ * @returns {string} - Formatted currency string with commas
+ */
+export const formatCurrency = (amount) => {
+    return formatNumber(amount);
+};

@@ -181,7 +181,7 @@ const SingleViewlisting = () => {
                             </Flex>
                         </Card>
                         <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-                            <PreviewTableContent title={null} columns={postsaleColumns} data={postSaleData} />
+                            <PreviewTableContent title={t('Post - Sale Support')} columns={postsaleColumns} data={postSaleData} />
                         </Card>
                         {liabilitiesData?.length > 0 && (
                             <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">

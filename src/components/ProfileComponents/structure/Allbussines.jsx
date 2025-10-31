@@ -62,7 +62,6 @@ const Allbussines = () => {
         return <Singlebusinessview singledetail={singledetail} setSingleDetail={setSingleDetail} />;
     }
 
-    console.log('sellerBusinesses', sellerBusinesses);  
     return (
         <Flex gap={20} vertical>
             <Flex justify='space-between' align='center'>
@@ -141,7 +140,7 @@ const Allbussines = () => {
                                         <Flex align='center' justify='space-between'>
                                             <Flex gap={3} align='center'>
                                                 <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
-                                                <Title level={4} className='m-0'>{pro?.price}</Title>
+                                                <Title level={4} className='m-0'>{typeof pro?.price === 'number' ? pro.price.toLocaleString() : pro?.price}</Title>
                                             </Flex>
                                             <Text className='text-brand fs-14'>{pro.offerCount >= 10 ? `10+` : pro.offerCount} Offers</Text>
                                         </Flex>

@@ -84,8 +84,8 @@ const BuyerOfferContent = () => {
         sellername: offer.business.seller?.name
             ? `${offer.business.seller.name.slice(0, 3)}*****`
             : null,
-        businessprice: offer.business.price,
-        offerprice: offer.price,
+        businessprice: typeof offer.business.price === 'number' ? offer.business.price.toLocaleString() : offer.business.price,
+        offerprice: typeof offer.price === 'number' ? offer.price.toLocaleString() : offer.price,
         status: offer.status,
         date: new Date(offer.createdAt).toLocaleString(),
         business: offer.business, 
