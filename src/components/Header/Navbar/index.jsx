@@ -7,7 +7,7 @@ import moment from 'moment';
 import { MobileNavbar } from './MobileNavbar';
 import Cookies from "js-cookie";
 import { useLazyQuery, useSubscription, useMutation } from '@apollo/client';
-import { NAVUSERDATA,NAVNOTIFICATION,NOTIFICATION,GET_CATEGORIES } from '../../../graphql/query';
+import { NAVUSERDATA,NAVNOTIFICATION,NOTIFICATION,GET_CATEGORIES, ME } from '../../../graphql/query';
 import { client } from '../../../config/apolloClient';
 import { useTranslation } from 'react-i18next';
 import {NEW_NOTIFICATION_SUBSCRIPTION} from '../../../graphql/subscription'
@@ -20,6 +20,7 @@ const { Text, Title } = Typography;
 const Navbar = ({setGetCategory}) => { 
 
   const { t,i18n } = useTranslation();
+  const [ messageApi, contextHolder ] = message.useMessage();
   const lan = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lan.toLowerCase() === "ar";
   const userId = Cookies.get("userId"); 
@@ -81,11 +82,13 @@ const Navbar = ({setGetCategory}) => {
           { id: 5, title: t('SAR 100,000 - SAR 150,000'), path: '/businesslisting?revenue=100000,150000' },
           { id: 6, title: t('SAR 150,000+'), path: '/businesslisting?revenue=150000,9999999' },
         ]
-  },
+    },
   ]
   const [getUser, { data:me }] = useLazyQuery(NAVUSERDATA);
   const [getNavNotification, { data:navNotificationsData }] = useLazyQuery(NAVNOTIFICATION);
   const [getNotification] = useLazyQuery(NOTIFICATION);
+  const [getUserDetails] = useLazyQuery(ME);
+  const processedVerificationNotificationsRef = useRef(new Set());
   
   const loadNotifications = useCallback(async (reset = false) => {
     if (!userId || loadingNotificationsRef.current) {
@@ -142,19 +145,63 @@ const Navbar = ({setGetCategory}) => {
   const [markNotificationAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
   const [logoutMutation, { loading: logoutLoading }] = useMutation(LOGOUT);
   useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
-    onSubscriptionData: ({ subscriptionData }) => {
+    skip: !userId, // Skip subscription if user is not logged in
+    onSubscriptionData: async ({ subscriptionData }) => {
         const newNotif = subscriptionData.data?.newNotification;
-        if (newNotif) {
+        
+        // Only process notification if it belongs to the current user
+        if (newNotif && newNotif.user?.id === userId) {
             setNotifications((prev) => {
+              // Check if notification already exists
               if (prev.some((item) => item.id === newNotif.id)) {
                 return prev;
               }
+              // Add new notification at the beginning
               notificationOffsetRef.current += 1;
               return [newNotif, ...prev];
             });
+            
+            // Only increment unread count for this user's notifications
             setUnreadCount((prev) => prev + 1);
+            
+            // Reset marked read flag if dropdown is open
             if (dropdownOpen) {
               setHasMarkedRead(false);
+            }
+
+            // Check if this is an account verification notification
+            const isVerificationNotification = 
+              newNotif.message?.toLowerCase().includes('verified successfully') ||
+              newNotif.name?.toLowerCase().includes('account verified');
+
+            // If it's a verification notification and we haven't processed it yet
+            if (isVerificationNotification && !processedVerificationNotificationsRef.current.has(newNotif.id)) {
+              // Mark this notification as processed
+              processedVerificationNotificationsRef.current.add(newNotif.id);
+              
+              try {
+                // Fetch updated user details
+                const { data } = await getUserDetails({
+                  variables: { getUserDetailsId: userId },
+                  fetchPolicy: 'network-only',
+                });
+
+                // Update the userStatus cookie if status is returned
+                if (data?.getUserDetails?.status) {
+                  const newStatus = data.getUserDetails.status;
+                  Cookies.set("userStatus", newStatus, { expires: 7 });
+                  
+                  // Show success message
+                  messageApi.success(t('Your account has been verified successfully!'));
+                  
+                  // Optionally reload the page to reflect changes across all components
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 1500);
+                }
+              } catch (error) {
+                console.error('Failed to fetch updated user status:', error);
+              }
             }
         }
     }
@@ -546,6 +593,7 @@ useEffect(() => {
 
   return (
     <>
+    {contextHolder}
       <div className='gen-navbar-container relative'>
         <div className='w-100'>
           <div className="gen-navbar-small">

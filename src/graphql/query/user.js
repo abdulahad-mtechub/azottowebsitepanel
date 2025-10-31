@@ -9,6 +9,7 @@ const ME = gql`
       phone
       city
       district
+      status
     }
   }
 `

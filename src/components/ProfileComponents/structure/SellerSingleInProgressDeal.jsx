@@ -91,27 +91,39 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     const getStatusBadgeClass = (deal, status) => {
         if (!deal) return 'sendstatus';
         
-        // Cancelled deals
-        if (deal.status === 'CANCEL') {
-            return 'inactive';
-        }
-        
-        // Completed deals
-        if ((deal.isBuyerCompleted && deal.isSellerCompleted) || deal.isBuyerCompleted || deal.isSellerCompleted) {
-            return 'success';
-        }
-        
-        // Verified states (payment or DSA verified)
+        // Check if DSA is pending - Yellow
         if (
+            status === t('Seller & Buyer DSA Pending') ||
+            status === t('Seller DSA Pending') ||
+            status === t('Buyer DSA Pending') ||
+            (!deal.isDsaSeller || !deal.isDsaBuyer)
+        ) {
+            // Only return yellow if commission is verified but DSA is not complete
+            if (deal.isCommissionVerified && (!deal.isDsaSeller || !deal.isDsaBuyer)) {
+                return 'sendstatus';
+            }
+        }
+        
+        // Completed/Successful deals - Green
+        if (
+            deal.status === 'CANCEL' ||
+            (deal.isBuyerCompleted && deal.isSellerCompleted) || 
+            deal.isBuyerCompleted || 
+            deal.isSellerCompleted ||
             status === t('Payment Verified') ||
             status === t('Commission Verified') ||
             status === t('Finalizing Deal') ||
+            status === t('Completed') ||
+            status === t('Verified') ||
+            status === t('Signed') ||
             deal.isPaymentVedifiedSeller ||
             (deal.isDsaSeller && deal.isDsaBuyer) ||
             deal.isCommissionVerified
         ) {
-            return 'received';
+            return 'success';
         }
+        
+        // Pending states - Yellow
         return 'sendstatus';
     };
 

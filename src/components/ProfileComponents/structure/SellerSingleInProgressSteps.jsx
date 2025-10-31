@@ -122,12 +122,12 @@ const SellerSingleInprogressSteps = ({ deal }) => {
                     <span className='collapse-indicator'>
                         {openPanels.includes(item.key) ? (
                             <Flex align='center' gap={5}>
-                                {(item.status.toLowerCase()?.startsWith('pending')) ? (
-                                    <Text className='pending fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
-                                ) : (item.status.toLowerCase()?.includes('verification')) ? (
-                                    <Text className='branded fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
+                                {(item.status.toLowerCase()?.includes('pending') || 
+                                  item.status.toLowerCase()?.includes('verification') ||
+                                  item.status.toLowerCase()?.includes('waiting')) ? (
+                                    <Text className='sendstatus badge-cs fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
                                 ) : (
-                                    <Text className='success fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
+                                    <Text className='success badge-cs fs-10 sm-pill fw-500 fit-content'>{item?.status}</Text>
                                 )}
                                 <UpOutlined style={{ opacity: !item.isEnabled ? 0.5 : 1 }} />
                             </Flex>

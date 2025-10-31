@@ -123,7 +123,7 @@ const ProductCard = ({
                                     <Flex justify='space-between' align='center'>
                                         <Flex gap={4}>
                                             <Button className='fs-13' aria-labelledby={t(pro?.categoryName)}>
-                                                {truncateChars(pro?.categoryName, 20)}
+                                                {truncateChars(pro?.categoryName, 14)}
                                             </Button>
                                             <Button
                                                     aria-labelledby="type"

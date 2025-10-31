@@ -1,6 +1,6 @@
 import { Card, Col, Flex, Image, Row, Typography, message } from 'antd';
 import { SingleFileUpload } from '../../Forms/SingleFileUpload';
-import { GET_BUSINESS, GETDEAL } from '../../../graphql/query';
+import { GETDEAL } from '../../../graphql/query';
 import { useMutation } from '@apollo/client';
 import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 import { useTranslation } from 'react-i18next';
@@ -14,7 +14,7 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
   const bankRecipt = inprogressdeal?.busines?.documents?.find(
     (doc) => doc.title === "Buyer Payment Receipt"
   );
-
+  console.log("bankRecipt", inprogressdeal);
   const [updateOfferStatus] = useMutation(UPDATE_DEAL, {
     onError: (err) => console.error("Error updating offer status:", err),
   });
@@ -32,7 +32,7 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
     { title: t("Seller’s Bank Name"), desc: bank?.bankName },
     { title: t("Seller’s IBAN"), desc: bank?.iban },
     { title: t("Account Holder Name"), desc: bank?.accountTitle },
-    { title: t("Amount to Pay"), desc: inprogressdeal?.offerprice },
+    { title: t("Amount to Pay"), desc: inprogressdeal?.finalizedOffer },
   ];
 
   const handleSingleFileUpload = async (file) => {

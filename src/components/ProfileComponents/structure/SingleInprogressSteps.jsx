@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next';
 const { Text } = Typography;
 
 const SingleInprogressSteps = ({ inprogressdeal }) => {
+    
     const { t } = useTranslation();
     const [form] = Form.useForm();
     
@@ -124,12 +125,12 @@ const SingleInprogressSteps = ({ inprogressdeal }) => {
                     <span className="collapse-indicator">
                         {openPanels.includes(item.key) ? (
                             <Flex align="center" gap={5}>
-                                {item?.status?.toLowerCase() === t('pending').toLowerCase() ||
-                                item?.status?.toLowerCase().includes(t('pending').toLowerCase()) ||
-                                item?.status?.toLowerCase().includes(t('waiting').toLowerCase()) ? (
-                                    <Text className="sendstatus fs-10 badge-cs fw-500 fit-content">{item?.status}</Text>
+                                {item?.status?.toLowerCase().includes(t('pending').toLowerCase()) ||
+                                item?.status?.toLowerCase().includes(t('waiting').toLowerCase()) ||
+                                item?.status?.toLowerCase().includes(t('verification').toLowerCase()) ? (
+                                    <Text className="sendstatus badge-cs fs-10 fw-500 fit-content">{item?.status}</Text>
                                 ) : (
-                                    <Text className="received fs-10 badge-cs fw-500 fit-content">{item?.status}</Text>
+                                    <Text className="success badge-cs fs-10 fw-500 fit-content">{item?.status}</Text>
                                 )}
                                 <UpOutlined style={{ opacity: isDisabled ? 0.5 : 1 }} />
                             </Flex>

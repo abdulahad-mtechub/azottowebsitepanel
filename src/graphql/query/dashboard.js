@@ -9,6 +9,7 @@ query GetNavUser($getNavUserId: ID!) {
     phone
     city
     district
+    status
     documents {
       title
       filePath
