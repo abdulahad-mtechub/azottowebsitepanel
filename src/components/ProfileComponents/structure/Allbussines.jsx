@@ -139,8 +139,10 @@ const Allbussines = () => {
                                         <Divider className='my-1' />
                                         <Flex align='center' justify='space-between'>
                                             <Flex gap={3} align='center'>
-                                                <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
-                                                <Title level={4} className='m-0'>{typeof pro?.price === 'number' ? pro.price.toLocaleString() : pro?.price}</Title>
+                                                <span className='currency-display'>
+                                                    <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
+                                                    <Title level={4} className='m-0' style={{ display: 'inline-block', marginLeft: '12px' }}>{typeof pro?.price === 'number' ? pro.price.toLocaleString() : pro?.price}</Title>
+                                                </span>
                                             </Flex>
                                             <Text className='text-brand fs-14'>{pro.offerCount >= 10 ? `10+` : pro.offerCount} Offers</Text>
                                         </Flex>

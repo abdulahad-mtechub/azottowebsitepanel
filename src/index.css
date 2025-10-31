@@ -71,6 +71,27 @@ body.ltr {
   transform: scaleX(-1);
 }
 
+.currency-display {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* keep symbol left of number even in RTL */
+[dir="rtl"] .currency-display {
+  direction: ltr !important;
+}
+
+/* 🎯 target Ant Design image directly */
+.currency-display :where(.ant-image) {
+  margin-right: 6px;
+}
+
+/* spacing fix for RTL */
+[dir="rtl"] .currency-display :where(.ant-image) {
+  margin-right: 0;
+  margin-left: 6px;
+}
+
 .bg-light-brand {
   background-color: var(--bg-body) !important;
 }

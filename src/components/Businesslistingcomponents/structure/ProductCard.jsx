@@ -178,7 +178,11 @@ const ProductCard = ({
                                                     <Col span={7}>
                                                         <Flex vertical align="center">
                                                             <Title level={5} className='text-brand m-0 fs-13 fw-500'>
-                                                                {c !== 2 && <img src="/assets/icons/reyal-b.png" width={10} alt={t("currency-symbol")} fetchPriority="high" />} {item?.subtitle}
+                                                                <span className={c !== 2 ? 'currency-display' : ''}>
+                                                                    {c !== 2 && 
+                                                                    <Image src='/assets/icons/reyal-b.png' alt={t('currency-symbol')} preview={false} width={10} />}
+                                                                    {item?.subtitle}
+                                                                </span>
                                                             </Title>
                                                             <Text className='text-gray fs-12'>
                                                                 {item?.subdesc}

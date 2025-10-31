@@ -482,7 +482,6 @@ const SellBusinessCreate = () => {
                         </Flex>
                     </Flex>
                 </div>
-
                 <CancelModal visible={iscancel} onClose={() => setIsCancel(false)} />
                 <BusinesslistingReviewModal visible={reviewmodal} onClose={()=>setReviewModal(false)} onCreate={handleCreateListing} />
             </div>
