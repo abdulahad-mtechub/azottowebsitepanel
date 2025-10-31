@@ -464,10 +464,19 @@ const SellBusinessCreate = () => {
                                         {t('Next')}
                                     </Button>
                                 )}
-                                {canPublish && (
-                                    <Button type="primary" disabled={loading || editDataLoading} loading={loading} className='btn bg-brand' onClick={handleCreateListing}>
-                                        {editBusinessId ? t('Update Business') : t('Publish')}
-                                    </Button>
+                                {current === steps.length - 1 && (
+                                    <Tooltip title={!canPublish ? t('Please upload Commercial Registration (CR) and at least one Supporting Document') : ''}>
+                                        <Button 
+                                            type="primary" 
+                                            disabled={!canPublish || loading || editDataLoading} 
+                                            loading={loading} 
+                                            className={`btn ${canPublish ? 'bg-brand' : ''}`}
+                                            style={!canPublish ? { backgroundColor: '#d9d9d9', borderColor: '#d9d9d9', color: 'rgba(0, 0, 0, 0.25)', cursor: 'not-allowed' } : {}}
+                                            onClick={handleCreateListing}
+                                        >
+                                            {editBusinessId ? t('Update Business') : t('Publish')}
+                                        </Button>
+                                    </Tooltip>
                                 )}
                             </Flex>
                         </Flex>
