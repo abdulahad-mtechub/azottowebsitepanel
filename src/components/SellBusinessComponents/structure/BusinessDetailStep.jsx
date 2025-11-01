@@ -5,10 +5,12 @@ import { ModuleTopHeading } from '../../Pagecomponents'
 import { teamsizeOp,useCities, useDistricts  } from '../../../data'
 import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 const { Text } = Typography
 const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
 
+    const { t } = useTranslation();
     const district = useDistricts();
     const cities = useCities();
     const { data: categoryData } = useQuery(GET_CATEGORIES);
@@ -140,12 +142,12 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
       <>
         <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
           <Flex vertical gap={1} >
-              <ModuleTopHeading level={4} name='Tell us about your business' />
-              <Text className='text-gray'>Let’s start with the basic business information</Text>
+              <ModuleTopHeading level={4} name={t('Tell us about your business')} />
+              <Text className='text-gray'>{t("Let's start with the basic business information")}</Text>
           </Flex>
           <Flex className='pill-round' gap={8} align='center'>
-              <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="info icon" />
-              <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+              <Image src="/assets/icons/info-b.png" preview={false} width={16} alt={t('info icon')} />
+              <Text className='fs-12 text-sky'>{t('For any query, contact us on')} +966 543 543 654</Text>
           </Flex>
         </Flex>
   
@@ -161,17 +163,17 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                   >
                     <Radio value={1} className="fs-14">
                       <Flex gap={3} align="center">
-                        Sell business by Acquiring 
-                        <Tooltip title='Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities'>
-                          <img src="/assets/icons/info.png" width={20} alt="acquiring-icon" fetchPriority="high" />
+                        {t('Sell business by Acquiring')}
+                        <Tooltip title={t('Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.')}>
+                          <img src="/assets/icons/info.png" width={20} alt={t('acquiring-icon')} fetchPriority="high" />
                         </Tooltip>
                       </Flex>
                     </Radio>
                     <Radio value={2} className="fs-14">
                       <Flex gap={3} align="center">
-                        Sell business by Takbeel
-                        <Tooltip title='Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.'>
-                          <img src="/assets/icons/info.png" width={20} alt="takbeel-icon" fetchPriority="high" />
+                        {t('Sell business by Takbeel')}
+                        <Tooltip title={t('Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.')}>
+                          <img src="/assets/icons/info.png" width={20} alt={t('takbeel-icon')} fetchPriority="high" />
                         </Tooltip>
                       </Flex>
                     </Radio>
@@ -181,32 +183,32 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
   
               <Col xs={24} sm={24} md={12}>
                 <MyInput
-                  label="Business Title"
+                  label={t('Business Title')}
                   name="title"
                   required
-                  message="Please enter title"
-                  placeholder="Write business name"
+                  message={t('Please enter title')}
+                  placeholder={t('Write business name')}
                 />
               </Col>
   
               <Col xs={24} sm={24} md={12}>
                 <MySelect
-                  label="Business Category"
+                  label={t('Business Category')}
                   name="category"
                   required
-                  message="Choose business category"
+                  message={t('Choose business category')}
                   options={categories}
-                  placeholder="Choose business category"
+                  placeholder={t('Choose business category')}
                 />
               </Col>
   
               <Col xs={24} sm={24} md={12}>
                 <MySelect
-                  label="District"
+                  label={t('District')}
                   name="district"
                   required
-                  message="Choose district"
-                  placeholder="Choose district"
+                  message={t('Choose district')}
+                  placeholder={t('Choose district')}
                   options={district}
                   onChange={(val) => {
                     // Find district by name
@@ -220,13 +222,13 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
   
               <Col xs={24} sm={24} md={12}>
                 <MySelect
-                  label="City"
+                  label={t('City')}
                   name="city"
                   required
-                  message="Choose city"
+                  message={t('Choose city')}
                   disabled={!selectedDistrict}
                   options={selectedDistrict ? cities[selectedDistrict] || [] : []}
-                  placeholder="Choose city"
+                  placeholder={t('Choose city')}
                 />
               </Col>
   
@@ -234,33 +236,33 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
                 <MyDatepicker
                   datePicker
                   picker="year"
-                  label="Foundation Date"
+                  label={t('Foundation Date')}
                   name="dob"
                   required
-                  message="Please enter foundation date"
-                  placeholder="Enter foundation date"
+                  message={t('Please enter foundation date')}
+                  placeholder={t('Enter foundation date')}
                 />
               </Col>
   
               <Col xs={24} sm={24} md={12}>
                 <MySelect
-                  label="Team Size"
+                  label={t('Team Size')}
                   name="teamSize"
                   required
-                  message="Choose team size"
+                  message={t('Choose team size')}
                   options={teamsizeOp}
-                  placeholder="Enter team size"
+                  placeholder={t('Enter team size')}
                 />
               </Col>
   
               <Col span={24}>
                 <MyInput
                   textArea
-                  label="Description"
+                  label={t('Description')}
                   name="description"
-                  placeholder="Write description about your business"
+                  placeholder={t('Write description about your business')}
                   required
-                  message="Please enter description"
+                  message={t('Please enter description')}
                   rows={5}
                   showCount
                   maxLength={200}
@@ -269,9 +271,9 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
   
               <Col span={24}>
                 <MyInput
-                  label="Business Website Url"
+                  label={t('Business Website Url')}
                   name="url"
-                  placeholder="Add website url"
+                  placeholder={t('Add website url')}
                   required={selectedCategory?.isDigital}
                 />
               </Col>

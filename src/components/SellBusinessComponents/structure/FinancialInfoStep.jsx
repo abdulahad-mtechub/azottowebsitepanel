@@ -4,6 +4,7 @@ import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { revenueLookups } from '../../../data'
 import { FormReplicate } from '../../Header'
+import { useTranslation } from 'react-i18next'
 
 const { Text } = Typography
 
@@ -14,7 +15,7 @@ const hasNonEmptyValue = (value) => {
     return value !== undefined && value !== null;
 };
 
-const createRowValidator = (dayKey, fieldKeys, { emptyMessage, invalidMessage, type = 'text' }) => ({ getFieldValue, index }) => ({
+const createRowValidator = (dayKey, fieldKeys, { emptyMessage, invalidMessage, type = 'text' }, t) => ({ getFieldValue, index }) => ({
     validator(_, value) {
         const rows = getFieldValue(dayKey) || [];
         const row = rows?.[index] || {};
@@ -25,13 +26,13 @@ const createRowValidator = (dayKey, fieldKeys, { emptyMessage, invalidMessage, t
         }
 
         if (!hasNonEmptyValue(value)) {
-            return Promise.reject(new Error(emptyMessage));
+            return Promise.reject(new Error(t ? t(emptyMessage) : emptyMessage));
         }
 
         if (type === 'number') {
             const numericValue = typeof value === 'string' ? value : String(value);
             if (!/^\d+(\.\d+)?$/.test(numericValue.trim())) {
-                return Promise.reject(new Error(invalidMessage));
+                return Promise.reject(new Error(t ? t(invalidMessage) : invalidMessage));
             }
         }
 
@@ -53,6 +54,7 @@ const normalizeLookupValue = (value) => {
 };
 
 const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
+    const { t } = useTranslation();
     const [form] = Form.useForm();
 
     useImperativeHandle(ref, () => ({
@@ -186,12 +188,12 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
         <>
             <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
                  <Flex vertical gap={1}>
-                    <ModuleTopHeading level={4} name='Share your business numbers & potential' />
-                    <Text className='text-gray'>These numbers help buyers understand your business value.</Text>
+                    <ModuleTopHeading level={4} name={t('Share your business numbers & potential')} />
+                    <Text className='text-gray'>{t('These numbers help buyers understand your business value.')}</Text>
                 </Flex>
                 <Flex className='pill-round' gap={8} align='center'>
-                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="info icon" />
-                    <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt={t('info icon')} />
+                    <Text className='fs-12 text-sky'>{t('For any query, contact us on')} +966 543 543 654</Text>
                 </Flex>
             </Flex>
             <Form layout="vertical" form={form} requiredMark={false} onValuesChange={handleFormChange}
@@ -199,20 +201,20 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <Row gutter={24}>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                            <Form.Item label="Revenue" className="w-100">
+                            <Form.Item label={t('Revenue')} className="w-100">
                                 <Flex gap={2} className="w-100">
                                 <Form.Item 
                                     name="revenueTime"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please select revenue period',
+                                            message: t('Please select revenue period'),
                                         }
                                     ]}
                                     noStyle
                                 >
                                     <Select
-                                        placeholder="Select period"
+                                        placeholder={t('Select period')}
                                         className="addonselect fs-14 w-180"
                                     >
                                     {revenueLookups?.map((list, index) => (
@@ -228,12 +230,12 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please enter revenue value',
+                                            message: t('Please enter revenue value'),
                                         },
                                         {
                                             validator: (_, value) => {
                                                 if (value && Number(value) <= 0) {
-                                                    return Promise.reject(new Error('Revenue must be greater than 0'));
+                                                    return Promise.reject(new Error(t('Revenue must be greater than 0')));
                                                 }
                                                 return Promise.resolve();
                                             },
@@ -243,7 +245,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 >
                                     <Input
                                         type='number'
-                                        placeholder="Enter revenue"
+                                        placeholder={t('Enter revenue')}
                                         className="w-100 "
                                         prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={15} fetchPriority="high" />}
                                     />
@@ -252,20 +254,20 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                             </Form.Item>
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-                            <Form.Item label="Profit" className="w-100">
+                            <Form.Item label={t('Profit')} className="w-100">
                                 <Flex gap={2} className="w-100">
                                 <Form.Item 
                                     name="profittime"
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please select profit period',
+                                            message: t('Please select profit period'),
                                         }
                                     ]}
                                     noStyle
                                 >
                                     <Select
-                                        placeholder="Select period"
+                                        placeholder={t('Select period')}
                                         className="addonselect fs-14 w-180"
                                     >
                                     {revenueLookups?.map((list, index) => (
@@ -281,12 +283,12 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: 'Please enter profit value',
+                                            message: t('Please enter profit value'),
                                         },
                                         {
                                             validator: (_, value) => {
                                                 if (value && Number(value) <= 0) {
-                                                    return Promise.reject(new Error('Profit must be greater than 0'));
+                                                    return Promise.reject(new Error(t('Profit must be greater than 0')));
                                                 }
                                                 return Promise.resolve();
                                             },
@@ -296,7 +298,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 >
                                     <Input
                                         type='number'
-                                        placeholder="Enter profit"
+                                        placeholder={t('Enter profit')}
                                         className="w-100"
                                         prefix={<img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />}
                                     />
@@ -312,7 +314,10 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                             if (profitPeriod && revenuePeriod && profitPeriod !== revenuePeriod) {
                             return (
                                 <Text type="danger">
-                                Revenue is for {revenuePeriod === 1 ? '6 months' : '12 months'}, but Profit is for {profitPeriod === 1 ? '6 months' : '12 months'}. Profit Margin is adjusted accordingly.
+                                {t('Revenue is for {{revPeriod}}, but Profit is for {{profitPeriod}}. Profit Margin is adjusted accordingly.', {
+                                    revPeriod: revenuePeriod === 1 ? t('6 months') : t('12 months'),
+                                    profitPeriod: profitPeriod === 1 ? t('6 months') : t('12 months')
+                                })}
                                 </Text>
                             );
                             }
@@ -321,11 +326,11 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label='Business Price'
+                                label={t('Business Price')}
                                 name='businessPrice'
                                 required
-                                message="Please enter business price"
-                                placeholder='Enter Business Price'
+                                message={t('Please enter business price')}
+                                placeholder={t('Enter Business Price')}
                                 addonBefore={
                                     <img src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} fetchPriority="high" />
                                 }
@@ -335,7 +340,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                         
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label='Capital Recovery'
+                                label={t('Capital Recovery')}
                                 name='capitalRecovery'
                                 readOnly
                                 addonBefore={
@@ -347,7 +352,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                         <Col  xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
                                 label={<Flex align='center' gap={5}>
-                                    Multiples of Revenue & Profit <Image preview={false} src="/assets/icons/info-outline.png"  width={15} alt="info-icon" />
+                                    {t('Multiples of Revenue & Profit')} <Image preview={false} src="/assets/icons/info-outline.png"  width={15} alt={t('info-icon')} />
                                 </Flex>}
                                 name='multiple'
                                 className='w-100'
@@ -357,7 +362,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label="Profit Margin"
+                                label={t('Profit Margin')}
                                 name="profitMargin"
                                 readOnly
                                 suffix = '%'
@@ -368,27 +373,28 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="keyassets"
-                        title="Key Assets (Optional)"
+                        title={t('Key Assets (Optional)')}
                         form={form}
                         allowEmpty
                         fieldsConfig={[
                             {
                                 name: "assetName",
-                                label: "Asset Name",
-                                placeholder: "Write asset name",
+                                label: t('Asset Name'),
+                                placeholder: t('Write asset name'),
                                 type: "input",
                                                                 validator: createRowValidator(
                                                                         "keyassets",
                                                                         ["assetName", "noItems", "purchaseYear", "price"],
                                                                         {
                                                                                 emptyMessage: "Please enter asset name",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "noItems",
-                                label: "Number of items",
-                                placeholder: "Enter quantity",
+                                label: t('Number of items'),
+                                placeholder: t('Enter quantity'),
                                 type: "input",
                                                                 validator: createRowValidator(
                                                                         "keyassets",
@@ -397,13 +403,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                                 emptyMessage: "Please enter quantity",
                                                                                 invalidMessage: "Please enter a valid quantity (number only)",
                                                                                 type: "number",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "purchaseYear",
-                                label: "Purchase Year",
-                                placeholder: "Choose purchase year",
+                                label: t('Purchase Year'),
+                                placeholder: t('Choose purchase year'),
                                 type: "select",
                                 options: yearOp,
                                                                 validator: createRowValidator(
@@ -411,13 +418,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                         ["assetName", "noItems", "purchaseYear", "price"],
                                                                         {
                                                                                 emptyMessage: "Please choose purchase year",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "price",
-                                label: "Total Price",
-                                placeholder: "Enter price",
+                                label: t('Total Price'),
+                                placeholder: t('Enter price'),
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
@@ -428,7 +436,8 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                                 emptyMessage: "Please enter price",
                                                                                 invalidMessage: "Please enter price (number only)",
                                                                                 type: "number",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                         ]}
@@ -437,27 +446,28 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="liability"
-                        title="Outstanding Liabilities / Debt (Optional)"
+                        title={t('Outstanding Liabilities / Debt (Optional)')}
                         form={form}
                         allowEmpty
                         fieldsConfig={[
                             {
                                 name: "liabilityName",
-                                label: "Liabilities Name",
-                                placeholder: "Write liability name",
+                                label: t('Liabilities Name'),
+                                placeholder: t('Write liability name'),
                                 type: "input",
                                                                 validator: createRowValidator(
                                                                         "liability",
                                                                         ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
                                                                         {
                                                                                 emptyMessage: "Please enter liability name",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "quantity",
-                                label: "Number of items",
-                                placeholder: "Enter quantity",
+                                label: t('Number of items'),
+                                placeholder: t('Enter quantity'),
                                 type: "input",
                                                                 validator: createRowValidator(
                                                                         "liability",
@@ -466,13 +476,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                                 emptyMessage: "Please enter quantity",
                                                                                 invalidMessage: "Please enter a valid quantity (number only)",
                                                                                 type: "number",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "liabilitypurchaseYear",
-                                label: "Purchase Year",
-                                placeholder: "Choose purchase year",
+                                label: t('Purchase Year'),
+                                placeholder: t('Choose purchase year'),
                                 type: "select",
                                 options: yearOp,
                                                                 validator: createRowValidator(
@@ -480,17 +491,18 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                         ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
                                                                         {
                                                                                 emptyMessage: "Please choose purchase year",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "liabilityPrice",
-                                label: "Total Price",
-                                placeholder: "Enter price",
+                                label: t('Total Price'),
+                                placeholder: t('Enter price'),
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
-                                message: "Please enter total price" ,
+                                message: t('Please enter total price'),
                                                                 validator: createRowValidator(
                                                                         "liability",
                                                                         ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
@@ -498,7 +510,8 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                                 emptyMessage: "Please enter price",
                                                                                 invalidMessage: "Please enter price (number only)",
                                                                                 type: "number",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                         ]}
@@ -507,27 +520,28 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 <Card className='shadow-d radius-12 border-gray mb-3'>
                     <FormReplicate
                         dayKey="inventory"
-                        title="Inventory (Optional)"
+                        title={t('Inventory (Optional)')}
                         form={form}
                         allowEmpty
                         fieldsConfig={[
                             {
                                 name: "inventoryName",
-                                label: "Inventory Name",
-                                placeholder: "Write inventory name",
+                                label: t('Inventory Name'),
+                                placeholder: t('Write inventory name'),
                                 type: "input",
                                                                 validator: createRowValidator(
                                                                         "inventory",
                                                                         ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
                                                                         {
                                                                                 emptyMessage: "Please enter inventory name",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "inventoryquantity",
-                                label: "Number of items",
-                                placeholder: "Enter quantity",
+                                label: t('Number of items'),
+                                placeholder: t('Enter quantity'),
                                 type: "input",
                                                                 validator: createRowValidator(
                                                                         "inventory",
@@ -536,13 +550,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                                 emptyMessage: "Please enter quantity",
                                                                                 invalidMessage: "Please enter a valid quantity (number only)",
                                                                                 type: "number",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "inventoryypurchaseYear",
-                                label: "Purchase Year",
-                                placeholder: "Choose purchase year",
+                                label: t('Purchase Year'),
+                                placeholder: t('Choose purchase year'),
                                 type: "select",
                                 options: yearOp,
                                                                 validator: createRowValidator(
@@ -550,13 +565,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                         ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
                                                                         {
                                                                                 emptyMessage: "Please choose purchase year",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                             {
                                 name: "inventoryPrice",
-                                label: "Total Price",
-                                placeholder: "Enter price",
+                                label: t('Total Price'),
+                                placeholder: t('Enter price'),
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
@@ -567,7 +583,8 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                                                                 emptyMessage: "Please enter price",
                                                                                 invalidMessage: "Please enter price (number only)",
                                                                                 type: "number",
-                                                                        }
+                                                                        },
+                                                                        t
                                                                 ),
                             },
                         ]}

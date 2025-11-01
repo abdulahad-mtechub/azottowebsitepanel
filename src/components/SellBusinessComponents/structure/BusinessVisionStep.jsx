@@ -2,9 +2,11 @@ import React, {forwardRef, useEffect,useImperativeHandle } from 'react'
 import { Card, Col, Flex, Form, Image, Row, Typography } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
+import { useTranslation } from 'react-i18next'
 
 const { Text } = Typography
 const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
+    const { t } = useTranslation();
     const [form] = Form.useForm();    
     useImperativeHandle(ref, () => ({
             validate: () => form.validateFields(),
@@ -39,12 +41,12 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
         <>
             <Flex justify='space-between' className='mb-3' gap={10} wrap align='flex-start'>
                 <Flex vertical gap={1} >
-                    <ModuleTopHeading level={4} name='Business Vision & Exit Plans' />
-                    <Text className='text-gray'>Help buyers understand the future potential and your exit strategy</Text>
+                    <ModuleTopHeading level={4} name={t('Business Vision & Exit Plans')} />
+                    <Text className='text-gray'>{t('Help buyers understand the future potential and your exit strategy')}</Text>
                 </Flex>
                 <Flex className='pill-round' gap={8} align='center'>
-                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="info icon" />
-                    <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+                    <Image src="/assets/icons/info-b.png" preview={false} width={16} alt={t('info icon')} />
+                    <Text className='fs-12 text-sky'>{t('For any query, contact us on')} +966 543 543 654</Text>
                 </Flex>
             </Flex>
             <Form
@@ -57,18 +59,18 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                     <Row gutter={24}>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label='Support Duration'
+                                label={t('Support Duration')}
                                 name='supportDuration'
                                 type='number'
-                                placeholder='Enter support duration'
-                                addonAfter={'Month'}
+                                placeholder={t('Enter support duration')}
+                                addonAfter={t('Month')}
                                 className='w-100'
                                 validator={{
                                     validator: (_, value) => {
                                         if (!value) {
-                                            return Promise.reject(new Error('Please enter the support duration'));
+                                            return Promise.reject(new Error(t('Please enter the support duration')));
                                         } else if (Number(value) <= 0) {
-                                            return Promise.reject(new Error('Support duration must be greater than 0'));
+                                            return Promise.reject(new Error(t('Support duration must be greater than 0')));
                                         }
                                         return Promise.resolve();
                                     }
@@ -77,16 +79,16 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                         </Col>
                         <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12}}>
                             <MyInput
-                                label="Number of Support Sessions"
+                                label={t('Number of Support Sessions')}
                                 name="noSession"
                                 type='number'
-                                placeholder='Enter number of sessions'
+                                placeholder={t('Enter number of sessions')}
                                 validator={{
                                     validator: (_, value) => {
                                         if (!value) {
-                                            return Promise.reject(new Error('Please enter the number of support sessions'));
+                                            return Promise.reject(new Error(t('Please enter the number of support sessions')));
                                         } else if (Number(value) <= 0) {
-                                            return Promise.reject(new Error('Number of sessions must be greater than 0'));
+                                            return Promise.reject(new Error(t('Number of sessions must be greater than 0')));
                                         }
                                         return Promise.resolve();
                                     }
@@ -96,9 +98,9 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                         <Col span={24}>
                             <MyInput
                                 textArea
-                                label='Growth Opportunities (Optional)'
+                                label={t('Growth Opportunities (Optional)')}
                                 name='growthOpportunities'
-                                placeholder='Write about future opportunities for the buyer.'
+                                placeholder={t('Write about future opportunities for the buyer.')}
                                 rows={5}
                                 showCount
                                 maxLength={200}
@@ -107,11 +109,11 @@ const BusinessVisionStep = forwardRef(({ data, setData },ref) => {
                         <Col span={24}>
                             <MyInput
                                 textArea
-                                label='Reason for Selling'
+                                label={t('Reason for Selling')}
                                 name='reasonSelling'
                                 required
-                                message='Please enter reason for selling'
-                                placeholder='Briefly explain why you’re selling this business.'
+                                message={t('Please enter reason for selling')}
+                                placeholder={t("Briefly explain why you're selling this business.")}
                                 rows={5}
                                 showCount
                                 maxLength={200}

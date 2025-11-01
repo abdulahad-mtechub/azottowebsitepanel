@@ -3,11 +3,13 @@ import { Card, Flex, Form, Image, message, Tooltip, Typography } from 'antd'
 import { ModuleTopHeading } from '../../Pagecomponents'
 import { SingleFileUpload } from '../../Forms';
 import imageCompression from 'browser-image-compression';
+import { useTranslation } from 'react-i18next'
 
 const { Title, Text } = Typography
 
 const UploadSupportDocStep = ({ data, setData },ref) => {
 
+  const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm();
   const [uploadingCR, setUploadingCR] = useState(false);
@@ -31,13 +33,13 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
       const supportDocs = docs.filter(d => d.title === 'Supporting Document' && d.filePath);
 
       if (!crDoc) {
-        messageApi.error('Please upload Commercial Registration (CR) document');
-        throw new Error('CR document is required');
+        messageApi.error(t('Please upload Commercial Registration (CR) document'));
+        throw new Error(t('CR document is required'));
       }
 
       if (supportDocs.length === 0) {
-        messageApi.error('Please upload at least one Supporting Document');
-        throw new Error('At least one supporting document is required');
+        messageApi.error(t('Please upload at least one Supporting Document'));
+        throw new Error(t('At least one supporting document is required'));
       }
 
       return true;
@@ -137,7 +139,7 @@ const UploadSupportDocStep = ({ data, setData },ref) => {
 const handleSingleFileUpload = async (fileOrFiles) => {
   // Prevent upload if support docs are uploading
   if (uploadingSupport) {
-    messageApi.warning('Please wait for support documents to finish uploading');
+    messageApi.warning(t('Please wait for support documents to finish uploading'));
     return;
   }
   
@@ -165,10 +167,10 @@ const handleSingleFileUpload = async (fileOrFiles) => {
     
     // Update only CR form field, don't touch support docs field
     form.setFieldsValue({ uploadcr: [crDocument] });
-    messageApi.success('Commercial Registration uploaded successfully');
+    messageApi.success(t('Commercial Registration uploaded successfully'));
   } catch (err) {
     console.error('handleSingleFileUpload error:', err);
-    messageApi.error('Failed to upload Commercial Registration');
+    messageApi.error(t('Failed to upload Commercial Registration'));
   } finally {
     setUploadingCR(false);
   }
@@ -177,7 +179,7 @@ const handleSingleFileUpload = async (fileOrFiles) => {
 const handleSingleFileRemove = () => {
   // Prevent removal if support docs are uploading
   if (uploadingSupport) {
-    messageApi.warning('Please wait for support documents to finish uploading');
+    messageApi.warning(t('Please wait for support documents to finish uploading'));
     return;
   }
   
@@ -201,7 +203,7 @@ const handleSingleFileRemove = () => {
 const handleMultipleFileUpload = async (fileOrFiles) => {
   // Prevent upload if CR is uploading
   if (uploadingCR) {
-    messageApi.warning('Please wait for Commercial Registration to finish uploading');
+    messageApi.warning(t('Please wait for Commercial Registration to finish uploading'));
     return;
   }
   
@@ -216,7 +218,7 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
         return await uploadFileToServer(file);
       } catch (err) {
         console.error('One file failed to upload:', file.name, err);
-        messageApi.error(`Failed to upload ${file.name}`);
+        messageApi.error(t('Failed to upload {{fileName}}', { fileName: file.name }));
         return null;
       }
     });
@@ -225,7 +227,7 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
     const successful = uploadedFiles.filter(Boolean);
     
     if (successful.length === 0) {
-      messageApi.warn('No files uploaded successfully');
+      messageApi.warn(t('No files uploaded successfully'));
       return;
     }
 
@@ -257,10 +259,10 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
     // Update only support docs form field, don't touch CR field
     form.setFieldsValue({ uploadmult: allSupportDocs });
     
-    messageApi.success(`${successful.length} file(s) uploaded successfully`);
+    messageApi.success(t('{{count}} file(s) uploaded successfully', { count: successful.length }));
   } catch (err) {
     console.error('handleMultipleFileUpload error:', err);
-    messageApi.error('Failed to upload supporting documents');
+    messageApi.error(t('Failed to upload supporting documents'));
   } finally {
     setUploadingSupport(false);
   }
@@ -269,7 +271,7 @@ const handleMultipleFileUpload = async (fileOrFiles) => {
 const handleMultipleFileRemove = (removedFile) => {
   // Prevent removal if CR is uploading
   if (uploadingCR) {
-    messageApi.warning('Please wait for Commercial Registration to finish uploading');
+    messageApi.warning(t('Please wait for Commercial Registration to finish uploading'));
     return;
   }
   
@@ -307,12 +309,12 @@ const handleMultipleFileRemove = (removedFile) => {
       {contextHolder}
       <Flex justify='space-between' className='mb-3' gap={5} wrap align='flex-start'>
         <Flex vertical gap={1}>
-          <ModuleTopHeading level={4} name='Upload supporting documents' />
-          <Text className='text-gray'>Verified data builds buyer confidence.</Text>
+          <ModuleTopHeading level={4} name={t('Upload supporting documents')} />
+          <Text className='text-gray'>{t('Verified data builds buyer confidence.')}</Text>
         </Flex>
         <Flex className='pill-round' gap={8} align='center'>
-          <Image src="/assets/icons/info-b.png" preview={false} width={16} alt="info icon" />
-          <Text className='fs-12 text-sky'>For any query, contact us on +966 543 543 654</Text>
+          <Image src="/assets/icons/info-b.png" preview={false} width={16} alt={t('info icon')} />
+          <Text className='fs-12 text-sky'>{t('For any query, contact us on +966 543 543 654')}</Text>
         </Flex>
       </Flex>
 
@@ -322,24 +324,24 @@ const handleMultipleFileRemove = (removedFile) => {
             <Flex vertical>
               <Flex align='center' gap={5}>
                 <Title level={5} className="m-0 fw-500">
-                  Commercial Registration (CR)
+                  {t('Commercial Registration (CR)')}
                 </Title>
                 <Text type='danger' className='fw-500'>*</Text>
               </Flex>
               <Text className="text-gray">
-                Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file.
+                {t('Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file.')}
               </Text>
             </Flex>
             <Flex className="w-100">
               <SingleFileUpload
                 name={'uploadcr'}
-                title={'Upload'}
+                title={t('Upload')}
                 onUpload={handleSingleFileUpload}
                 onRemove={handleSingleFileRemove}
                 uploading={uploadingCR}
                 multiple={false}
                 required={true}
-                message={'Please upload Commercial Registration (CR)'}
+                message={t('Please upload Commercial Registration (CR)')}
                 initialFileList={initialCrList}
               />
             </Flex>
@@ -351,27 +353,27 @@ const handleMultipleFileRemove = (removedFile) => {
             <Flex vertical>
               <Flex align='center' gap={5}>
                 <Title level={5} className="m-0 fw-500">
-                  Upload Other Supporting Documents{' '}
-                  <Tooltip title="Please upload at least one supporting document">
-                    <img src="/assets/icons/info-outline.png"  width={14} alt="info-icon" fetchPriority="high" />
+                  {t('Upload Other Supporting Documents')}{' '}
+                  <Tooltip title={t('Please upload at least one supporting document')}>
+                    <img src="/assets/icons/info-outline.png"  width={14} alt={t('info-icon')} fetchPriority="high" />
                   </Tooltip>
                 </Title>
                 <Text type='danger' className='fw-500'>*</Text>
               </Flex>
               <Text className="text-gray">
-                Accepted formats: PDF, JPG, PNG, DOCX, XLSX. Max size: 10MB per file.
+                {t('Accepted formats: PDF, JPG, PNG, DOCX, XLSX. Max size: 10MB per file.')}
               </Text>
             </Flex>
             <Flex className="w-100">
               <SingleFileUpload
                 name={'uploadmult'}
-                title={'Upload'}
+                title={t('Upload')}
                 onUpload={handleMultipleFileUpload}
                 onRemove={handleMultipleFileRemove}
                 uploading={uploadingSupport}
                 multiple={true}
                 required={true}
-                message={'Please upload at least one Supporting Document'}
+                message={t('Please upload at least one Supporting Document')}
                 initialFileList={initialSupportList}
               />
             </Flex>
