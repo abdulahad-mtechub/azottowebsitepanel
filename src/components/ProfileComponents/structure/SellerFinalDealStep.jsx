@@ -57,7 +57,7 @@ const SellerFinalDealsStep = ({ details }) => {
                 <Flex vertical gap={0} className='mb-3'>
                     <Text className='fw-600 fs-14'>{t('Confirmation')}</Text>
                     <Text className='fs-13 text-gray'>
-                        {t("Once you’ve received payment and uploaded all required documents, you can now mark this deal as completed. The Jusoor admin will verify everything before finalizing.")}
+                        {t("Once you’ve verified payment and documents, you can now mark this deal as completed. The Jusoor admin will verify everything before finalizing.")}
                     </Text>
                 </Flex>
             </Col>
@@ -69,7 +69,7 @@ const SellerFinalDealsStep = ({ details }) => {
                             onChange={(e) => setIsConfirmed(e.target.checked)}
                             disabled={details?.isSellerCompleted}
                         >
-                            {t("I confirm that payment is received and documents have been submitted.")}
+                            {t("I confirm that payment is received and documents have been Verified.")}
                         </Checkbox>
                     </Col>
                     <Col span={24}>

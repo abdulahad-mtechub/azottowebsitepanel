@@ -135,8 +135,8 @@ const SingleViewlisting = () => {
                                     <Flex vertical gap={12}>
                                         <Text className='fs-13 text-gray fw-500'>{t('Reference #')}: {business?.reference || t('Not Found')}</Text>
                                         <Flex gap={10} align='center'>
-                                            <Button aria-label="Arrow left" className='p-0' type="text" onClick={() => navigate("/businesslisting")}>
-                                                <Image src="/assets/icons/back-arr.png" alt="Arrow Left" width={26} height={26} preview={false} />
+                                            <Button aria-label={t('Arrow Left')} className='p-0' type="text" onClick={() => navigate("/businesslisting")}>
+                                                <Image src="/assets/icons/back-arr.png" alt={t('Arrow Left')} width={26} height={26} preview={false} />
                                             </Button>
                                             <Title level={3} className='m-0'>{business?.businessTitle}</Title>
                                             <Button
@@ -145,8 +145,8 @@ const SingleViewlisting = () => {
                                             >
                                                 <Space align='center' justify='center' >
                                                     <Text className='fs-12 text-white'>{business.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
-                                                    <Tooltip title={business.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
-                                                        <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
+                                                    <Tooltip title={business.isByTakbeer ? t('Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.') : t('Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.')}>
+                                                        <img src="/assets/icons/info-a.png" width={16} alt={t('takbeel-icon')} fetchPriority="high" className='center' />
                                                     </Tooltip>
                                                 </Space>
                                             </Button>

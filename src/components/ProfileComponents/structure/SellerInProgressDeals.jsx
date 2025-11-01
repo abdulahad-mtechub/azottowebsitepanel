@@ -60,10 +60,14 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
         }
         
         // Step 4: Deal finalized by seller
-        if (deal.isSellerCompleted) {
+        if (deal.isSellerCompleted && deal.isBuyerCompleted) {
             return t('Waiting for Jusoor to complete the deal');
         }
-        
+
+        if(deal.isBuyerCompleted && deal.isDocVedifiedBuyer && !deal.isSellerCompleted){
+            return t('Finalizing Deal');
+        }
+
         // Step 3.5: Document verification
         if (deal.isPaymentVedifiedSeller && !deal.isDocVedifiedBuyer) {
             return t('Document Verification Pending');
@@ -132,6 +136,12 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
                     status === t('Seller & Buyer DSA Pending') ||
                     status === t('Seller DSA Pending') ||
                     status === t('Buyer DSA Pending') ||
+                    status === t('Commission Verification Pending') ||
+                    status === t('Commission Pending') ||
+                    status === t('Payment Verification Pending') ||
+                    status === t('Document Verification Pending') ||
+                    status === t('Waiting for Jusoor to complete the deal') ||
+                    status === t('Finalizing Deal') ||
                     (!record.isDsaSeller || !record.isDsaBuyer)
                 ) {
                     badgeClass = 'sendstatus'; // Yellow

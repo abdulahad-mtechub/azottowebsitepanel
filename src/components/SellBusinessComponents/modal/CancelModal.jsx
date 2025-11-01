@@ -1,8 +1,10 @@
 import { Button, Divider, Flex, Modal, Typography } from 'antd'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 const { Title, Text } = Typography
 const CancelModal = ({visible,onClose}) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   
   const handleCancel = () => {

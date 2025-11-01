@@ -232,10 +232,10 @@ const ProfileDashboard = () => {
                             </Button>
                         </Flex>
                     </Flex>
-                    <Basicinformation buyerDashboardData={buyerDashboardData} title={t('Basic Information')} />
+                    <Basicinformation buyerDashboardData={buyerDashboardData} title={'Basic Information'} />
                     <Profilestatistics 
                         data={profileStatisticsData} 
-                        title={t('Profile Statistics')} 
+                        title={'Profile Statistics'} 
                         dateRange={dateRange}
                         onDateRangeChange={handleDateRangeChange}
                     />
@@ -344,9 +344,9 @@ const ProfileDashboard = () => {
         <div className='padd mb-2'>
             <div className='container'>
                 <Flex className='mt-3' gap={5} align='flex-start' vertical>
-                    <Button aria-labelledby='Profile Sidebar' className='btn border-gray text-black p-2 d-none' type='button' onClick={() => setIsSidebarVisible(true)}>
+                    <Button aria-labelledby={t('Profile Sidebar')} className='btn border-gray text-black p-2 d-none' type='button' onClick={() => setIsSidebarVisible(true)}>
                         <Tooltip
-                            title='Profile Sidebar'
+                            title={t('Profile Sidebar')}
                         >
                             <ArrowLeftOutlined className='fs-16' />
                         </Tooltip>
@@ -406,7 +406,7 @@ const ProfileDashboard = () => {
                     <Col xs={24} sm={24} md={24} lg={16} xl={18}>
                         {
                             tabContent?.[parentTab]?.[activeChildTab[parentTab]] || (
-                            <div>Invalid Tab</div>
+                            <div>{t('Invalid Tab')}</div>
                             )
                         }
                     </Col>

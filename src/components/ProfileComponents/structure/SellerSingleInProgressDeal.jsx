@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
+import { RightOutlined } from '@ant-design/icons';
 import { Breadcrumb, Button, Card, Col, Flex, Row, Typography,Spin, Image } from 'antd';
 import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps';
 import { GETDEAL } from '../../../graphql/query';
@@ -53,7 +53,7 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             return t('Completed');
         }
 
-        if (deal.isSellerCompleted) {
+        if (deal.isSellerCompleted && deal.isBuyerCompleted) {
             return t('Waiting for Jusoor to complete the deal');
         }
         if (deal.isBuyerCompleted && deal.isDocVedifiedBuyer) {
@@ -96,12 +96,19 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             status === t('Seller & Buyer DSA Pending') ||
             status === t('Seller DSA Pending') ||
             status === t('Buyer DSA Pending') ||
+            status === t('Commission Verification Pending') ||
+            status === t('Commission Pending') ||
+            status === t('Payment Verification Pending') ||
+            status === t('Document Verification Pending') ||
+            status === t('Finalizing Deal') ||
+            status === t('Waiting for Jusoor to complete the deal') ||
             (!deal.isDsaSeller || !deal.isDsaBuyer)
         ) {
             // Only return yellow if commission is verified but DSA is not complete
             if (deal.isCommissionVerified && (!deal.isDsaSeller || !deal.isDsaBuyer)) {
                 return 'sendstatus';
             }
+            return 'sendstatus';
         }
         
         // Completed/Successful deals - Green
