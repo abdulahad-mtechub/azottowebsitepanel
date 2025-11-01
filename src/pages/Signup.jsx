@@ -41,7 +41,7 @@ const SignupPage = () => {
   });
 
   const [getCustomerRole] = useLazyQuery(GETCUSTOMERROLE, {fetchPolicy:"cache-first"});
-  const [createUser] = useMutation(CREATE_USER);
+  const [createUser, { loading }] = useMutation(CREATE_USER);
   useEffect(() => {
     let lang = localStorage.getItem("lang") || "en";
     i18n.changeLanguage(lang);
@@ -555,6 +555,8 @@ const SignupPage = () => {
                       type="primary"
                       htmlType="submit"
                       className="btn bg-dark-blue fs-14 my-2"
+                      loading={loading}
+                      disabled={loading}
                       block
                     >
                       {t("Sign Up")}
