@@ -1,5 +1,5 @@
 import { CloseOutlined } from '@ant-design/icons'
-import { Button, Col, Flex, Form, Image, Modal, Row, Tooltip, Typography,message } from 'antd'
+import { Button, Col, Flex, Form, Image, Modal, Row, Typography, message, Popover, Table } from 'antd'
 import { MyInput } from '../../Forms'
 import { useEffect } from 'react'
 import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
@@ -7,7 +7,6 @@ import { useMutation } from '@apollo/client'
 
 const { Title, Text } = Typography
 const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => {
-
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
 
@@ -69,6 +68,89 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
     useEffect(() => {
         form.resetFields();
     }, [visible, form]);
+
+    // Commission bracket table data
+    const commissionBrackets = [
+        {
+            key: '1',
+            bracket: '0 - 100,000 SAR',
+            rate: '4%',
+            description: 'First 100K'
+        },
+        {
+            key: '2',
+            bracket: '100,001 - 500,000 SAR',
+            rate: '3%',
+            description: 'Next 400K'
+        },
+        {
+            key: '3',
+            bracket: '500,001 - 2,000,000 SAR',
+            rate: '2.5%',
+            description: 'Next 1.5M'
+        },
+        {
+            key: '4',
+            bracket: '2,000,001+ SAR',
+            rate: '1.5%',
+            description: 'Above 2M'
+        }
+    ];
+
+    const columns = [
+        {
+            title: 'Price Range',
+            dataIndex: 'bracket',
+            key: 'bracket',
+            width: '45%'
+        },
+        {
+            title: 'Rate',
+            dataIndex: 'rate',
+            key: 'rate',
+            width: '25%'
+        },
+        {
+            title: 'Applied To',
+            dataIndex: 'description',
+            key: 'description',
+            width: '30%'
+        }
+    ];
+
+    const commissionContent = (
+        <div style={{ maxWidth: '400px' }}>
+            <Title level={5} style={{ marginBottom: '12px', color: 'var(--brand-color)' }}>
+                Jusoor Commission Structure
+            </Title>
+            <Text style={{ display: 'block', marginBottom: '16px', fontSize: '13px' }}>
+                <strong>Marginal Commission System:</strong> Each rate applies only to the amount within its bracket.
+            </Text>
+            
+            <Table 
+                dataSource={commissionBrackets}
+                columns={columns}
+                pagination={false}
+                size="small"
+                bordered
+                style={{ marginBottom: '16px' }}
+            />
+
+            <div style={{ 
+                backgroundColor: 'var(--light-orange)', 
+                padding: '8px', 
+                borderRadius: '8px',
+                marginBottom: '12px'
+            }}>
+                <Text strong style={{ fontSize: '13px', color: 'var(--orange)' }}>
+                    Minimum Commission:
+                </Text>
+                <Text style={{ display: 'block', fontSize: '12px', marginTop: '4px' }}>
+                    For deals under 50,000 SAR, a minimum commission of 2,000 SAR applies.
+                </Text>
+            </div>
+        </div>
+    );
 
     return (
         <>
@@ -153,10 +235,32 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                     <Col span={24}>
                         <MyInput
                             label={
-                                <Flex gap={2}>
-                                    Total Amount <Tooltip title='info'>
-                                        <Image preview={false} src="/assets/icons/info-outline.png" width={14} alt="info icon" />
-                                    </Tooltip>
+                                <Flex gap={6} align='center'>
+                                    <Text>Total Amount (Offer + Commission)</Text>
+                                    <Popover 
+                                        content={commissionContent}
+                                        title={null}
+                                        trigger={['hover', 'click']}
+                                        placement="left"
+                                        autoAdjustOverflow={true}
+                                        overlayStyle={{ 
+                                            maxWidth: '450px',
+                                            zIndex: 1060
+                                        }}
+                                        overlayInnerStyle={{ 
+                                            maxHeight: '70vh', 
+                                            overflowY: 'auto',
+                                            overflowX: 'hidden'
+                                        }}
+                                    >
+                                        <Image 
+                                            preview={false} 
+                                            src="/assets/icons/info-outline.png" 
+                                            width={16} 
+                                            alt="Commission info" 
+                                            style={{ cursor: 'pointer' }}
+                                        />
+                                    </Popover>
                                 </Flex>
                             }
                             name='totalamount'
