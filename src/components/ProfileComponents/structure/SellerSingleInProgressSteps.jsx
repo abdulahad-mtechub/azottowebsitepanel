@@ -101,8 +101,8 @@ const SellerSingleInprogressSteps = ({ deal }) => {
             status: deal?.isSellerCompleted ? t("Completed") : t('Pending'),
             emptytitle: t('Deal Pending!'),
             emptydesc: t('Waiting for the buyer & seller to finalize the deal.'),
-            lockedTitle: t('Document Verification Required'),
-            lockedDesc: t('Waiting for seller to upload documents and admin verification.'),
+            lockedTitle: t('Document Verification Pending'),
+            lockedDesc: t('Waiting for buyer to verify the documents.'),
             isCompleted: isStep4Completed,
             isEnabled: isStep3Completed, // Enabled only if Step 3 is completed and admin verified
         },
