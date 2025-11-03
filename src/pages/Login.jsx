@@ -32,6 +32,7 @@ const LoginPage = () => {
         ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
         : { key: "1", label: "EN", icon: "assets/icons/en.webp" }
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   const handleFinish = async (values) => {
     try {
@@ -47,11 +48,11 @@ const LoginPage = () => {
         const userStatus = data.login.user.status;
         Cookies.set("userStatus", userStatus, { expires: 7 });
         
-        messageApi.success("Login successful!");
+        messageApi.success(t("Login successful!"));
         setRedirecting(true); 
         setTimeout(() => navigate("/"), 1000);
       } else {
-        messageApi.error("Login failed: Somthing went Wrong");
+        messageApi.error(t("Login failed: Somthing went Wrong"));
       }
     } catch (error) {
       messageApi.error(`Login failed: ${error?.graphQLErrors[0]?.message}`);
@@ -193,7 +194,7 @@ const LoginPage = () => {
               <Flex vertical justify="space-between" className="h-100">
                 <Flex vertical justify="center" align="center" className="logo-sp">
                   <Image src="/assets/images/logo.webp" alt="jusoor logo" width={200} preview={false} fetchPriority="high"/>
-                  <Title level={5} className="m-0 text-white text-center">Shorten the path</Title>
+                  <Title level={5} className="m-0 text-white text-center">{t("Shorten the path")}</Title>
                 </Flex>
                 <div className="bg-shade">
                   <img src="/assets/images/login.gif" alt="jusoor-gif-image" className="w-100 opacity-7" fetchPriority="high" />

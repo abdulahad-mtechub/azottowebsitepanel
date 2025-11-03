@@ -50,6 +50,7 @@ const SignupPage = () => {
         ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
         : { key: "1", label: "EN", icon: "assets/icons/en.webp" }
     );
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -104,7 +105,7 @@ const SignupPage = () => {
     } catch (err) {
       const msg = err?.graphQLErrors?.[0]?.message || err?.message;
       if (msg?.includes('The email already exists')) {
-        messageApi.error('The email already exists');
+        messageApi.error(t('The email already exists'));
       } else if (err?.networkError) {
         messageApi.error(t('Network error. Please check your connection.'));
       } else {
@@ -331,7 +332,7 @@ const SignupPage = () => {
                             readOnly 
                             value={backFileName} 
                             required
-                            message={'Please upload back side image'}
+                            message={t('Please upload back side image')}
                           />
                       </Col>
                       <Col>
@@ -363,7 +364,7 @@ const SignupPage = () => {
                             readOnly 
                             value={passportFileName} 
                             required
-                            message={'Please upload passport image'}
+                            message={t('Please upload passport image')}
                           />
                       </Col>
                       <Col>
@@ -512,9 +513,9 @@ const SignupPage = () => {
               <Form layout="vertical" form={form} onFinish={handleFinish} requiredMark={false}
                 onFinishFailed={() => {
                 const newErrors = {
-                  front: !frontFileName ? "Please upload front side image." : "",
-                  back: !backFileName ? "Please upload back side image." : "",
-                  passport: !passportFileName ? "Please upload passport image." : "",
+                  front: !frontFileName ? t("Please upload front side image.") : "",
+                  back: !backFileName ? t("Please upload back side image.") : "",
+                  passport: !passportFileName ? t("Please upload passport image.") : "",
                 };
                 setErrors(newErrors);
               }}
