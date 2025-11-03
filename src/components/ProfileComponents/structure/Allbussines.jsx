@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin, Space, Tooltip } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin, Space, Tooltip, Grid } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { GETSELLERBUSINESS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
@@ -8,12 +8,15 @@ import { ModuleTopHeading } from '../../Pagecomponents';
 import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { truncateChars } from '../../../utils';
+import { CustomPagination } from '../../ui';
 
 const { Title, Text, Paragraph } = Typography;
+const { useBreakpoint } = Grid;
 
 const Allbussines = () => {
     
     const navigate = useNavigate();
+    const screens = useBreakpoint();
     const { t, i18n } = useTranslation();
     const isArabic = i18n.language === 'ar';
     const [currentPage, setCurrentPage] = useState(1);
@@ -61,6 +64,26 @@ const Allbussines = () => {
     if (singledetail) {
         return <Singlebusinessview singledetail={singledetail} setSingleDetail={setSingleDetail} />;
     }
+    const buttonGroupGap = screens.xs ? 4 : 12;
+    const buttonGroupFlexDirection = screens.xs ? 'vertical' : 'horizontal';
+
+    const shouldMainFlexWrap = screens.xs || screens.sm || screens.md;
+    const mainFlexGap = screens.xs ? 8 : (screens.sm || screens.md ? 12 : 0);
+
+    const getStatusBadge = (status) => {
+        switch (status) {
+        case 'ACTIVE':
+            return <span className='badge-active rounded-8'>{t('Active')}</span>;
+        case 'INACTIVE':
+            return <span className='badge-inactive rounded-8'>{t('Inactive')}</span>;
+        case 'REJECT':
+            return <span className='badge-inactive rounded-8'>{t('Rejected')}</span>;
+        case 'UNDER_REVIEW':
+            return <span className='badge-review rounded-8'>{t('Under Review')}</span>;
+        default:
+            return null;
+        }
+    };
 
     return (
         <Flex gap={20} vertical>
@@ -83,34 +106,41 @@ const Allbussines = () => {
                         <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }} key={i}>
                             <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={() => setSingleDetail(pro?.id)}>
                                 <Flex vertical gap={20}>
-                                    <Flex justify='space-between' align='center'>
-                                        <Flex gap={4}>
-                                            <Button className='fs-13' aria-labelledby={t(pro?.category?.arabicName)}>
-                                                {truncateChars(isArabic ? pro?.category?.arabicName : pro?.category?.name, 20)}
+                                    <Flex
+                                        justify='space-between'
+                                        align={screens.xs ? 'flex-start' : 'center'}
+                                        wrap={shouldMainFlexWrap ? 'wrap' : 'nowrap'}
+                                        gap={mainFlexGap}
+                                    >
+                                        <Flex
+                                            gap={buttonGroupGap}
+                                            align='center'
+                                            direction={buttonGroupFlexDirection}
+                                            style={{ flexGrow: 1, flexShrink: 1, minWidth: screens.xs ? '100%' : 'auto' }}
+                                        >
+                                            <Button
+                                                className='fs-13' 
+                                                aria-labelledby={t(isArabic ? pro?.category?.arabicName : pro?.category?.name)}
+                                            >
+                                                    {truncateChars(isArabic ? pro?.category?.arabicName : pro?.category?.name, 14)}
                                             </Button>
+
                                             {pro?.isByTakbeer !== undefined && (
-                                                <Button
-                                                    aria-labelledby={t('Type')}
-                                                    className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
-                                                >
-                                                    <Space align='center' justify='center' >
-                                                        <Text className='fs-12 text-white'>{pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
-                                                        <Tooltip title={pro.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
-                                                            <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
-                                                        </Tooltip>
-                                                    </Space>
-                                                </Button>
+                                            <Button
+                                                aria-labelledby={t('Type')}
+                                                className={`fs-12 text-white ${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
+                                            >
+                                                <Space align='center' size={4} wrap={false}>
+                                                
+                                                    {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
+                                                <Tooltip title={pro.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
+                                                    <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
+                                                </Tooltip>
+                                                </Space>
+                                            </Button>
                                             )}
                                         </Flex>
-                                        {pro?.businessStatus === 'ACTIVE' ? (
-                                            <span className='badge-active rounded-8'>{t('Active')}</span>
-                                        ) : pro?.businessStatus === 'INACTIVE' ? (
-                                            <span className='badge-inactive rounded-8'>{t('Inactive')}</span>
-                                        ) : pro?.businessStatus === 'REJECT' ? (
-                                            <span className='badge-inactive rounded-8'>{t('Rejected')}</span>
-                                        ) : pro?.businessStatus === 'UNDER_REVIEW' ? (
-                                            <span className='badge-review rounded-8'>{t('Under Review')}</span>
-                                        ) : null}
+                                        {getStatusBadge(pro?.businessStatus)}
                                     </Flex>
                                     <div>
                                         <div className='w-full card-img mb-2 rounded-12'>
@@ -152,41 +182,13 @@ const Allbussines = () => {
                         </Col>
                     ))}
                     {sellerBusinesses?.getAllSellerBusinesses?.totalCount > 0 ? (
-                        <Col span={24} className='mt-3'>
-                            <Row justify="space-between" align="middle">
-                                <Col span={6}>
-                                    <Flex gap={5} align='center'>
-                                        <Text>{t('Rows Per Page')}:</Text>
-                                        <Select
-                                            className="select-filter"
-                                            value={limit}
-                                            onChange={(value) => {
-                                                setLimit(value);
-                                                setCurrentPage(1); // Reset to first page when limit changes
-                                            }}
-                                            options={[
-                                                { value: 6, label: 6 },
-                                                { value: 10, label: 10 },
-                                                { value: 20, label: 20 },
-                                                { value: 50, label: 50 },
-                                            ]}
-                                        />
-                                    </Flex>
-                                </Col>
-                                <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }}>
-                                    <Pagination
-                                        className='pagination'
-                                        align="end"
-                                        current={currentPage}
-                                        pageSize={limit}
-                                        total={sellerBusinesses?.getAllSellerBusinesses?.totalCount || 0}
-                                        onChange={(page) => setCurrentPage(page)}
-                                        showSizeChanger={false}
-                                        showTotal={(total, range) => `${range[0]}-${range[1]} ${t('of')} ${total} ${t('items')}`}
-                                    />
-                                </Col>
-                            </Row>
-                        </Col>
+                        <CustomPagination   
+                            totalItems={sellerBusinesses?.getAllSellerBusinesses?.totalCount || 0}
+                            currentPage={currentPage}
+                            setCurrentPage={setCurrentPage}
+                            limit={limit}
+                            setLimit={setLimit}
+                        />
                     ) : (
                         <Row>
                             <Col span={24} className='text-center mt-4'>

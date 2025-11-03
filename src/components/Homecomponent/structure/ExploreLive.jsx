@@ -19,7 +19,6 @@ const ExploreLive = () => {
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const userId = Cookies.get("userId");
     
-    // Check if user is inactive
     const userStatus = Cookies.get("userStatus");
     const isUserInactive = userStatus === "pending" || userStatus === "inactive";;
     
@@ -46,7 +45,6 @@ const ExploreLive = () => {
             return;
         }
 
-        // Check if user account is inactive
         if (isUserInactive) {
             messageApi.warning(t("Your account is inactive. Please contact support."));
             return;
@@ -137,7 +135,7 @@ const ExploreLive = () => {
                                     <Flex justify='space-between' align='center'>
                                         <Flex gap={4}>
                                             <Button className='fs-13' aria-labelledby={t(pro?.categoryName)}>
-                                                {truncateChars(pro?.categoryName, 20)}
+                                                {truncateChars(pro?.categoryName, 16)}
                                             </Button>
                                             {typeof pro?.type === "boolean" && (
                                                 <Button
@@ -170,7 +168,8 @@ const ExploreLive = () => {
                                                 }
                                             </Button>
                                         )}
-                                    </Flex>                                    <div>
+                                    </Flex>
+                                    <div>
                                         <div className='w-full card-img mb-2 rounded-12'>
                                             <img src="/assets/images/card-1.webp" width={'100%'} height={'100%'} alt={t('product-image')} fetchPriority="high" />
                                         </div>
