@@ -53,9 +53,9 @@ const FinalDealsStep = ({ inprogressdeal }) => {
                   />
                   <Flex vertical>
                     <Text className="fs-13 text-gray">{t(doc.title)}</Text>
-                    <Text className="fs-13 text-gray">
+                    {/* <Text className="fs-13 text-gray">
                       {(doc.size / 1024 / 1024).toFixed(2)} MB
-                    </Text>
+                    </Text> */}
                   </Flex>
                 </Flex>
 
