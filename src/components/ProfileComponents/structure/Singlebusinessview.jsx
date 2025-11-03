@@ -166,38 +166,42 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
             <Title level={5} className='m-0'>{business?.businessTitle}</Title>
           </Space>
           <Space>
-            <Button 
-              aria-labelledby={t('Edit')} 
-              className='btn bg-brand rounded-8' 
-              type='button'
-              onClick={handleEditBusiness}
-            >
-              {t('Edit')}
-            </Button>
-            {(business?.businessStatus === 'ACTIVE' || business?.businessStatus === 'INACTIVE') && (
+            {business?.businessStatus !== 'REJECT' && (
               <>
-              {
-              (business?.isAbleInActive) ? (
                 <Button 
-                  aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
-                  className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
+                  aria-labelledby={t('Edit')} 
+                  className='btn bg-brand rounded-8' 
                   type='button'
-                  onClick={() => setStatusModalVisible(true)}
+                  onClick={handleEditBusiness}
                 >
-                  {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
+                  {t('Edit')}
                 </Button>
-              ) : (
-                <Tooltip title={t('Cannot inactivate business with active deals')}>
-                  <Button 
-                    aria-labelledby={t('Inactivate Business...')} 
-                    className='btn rounded-8 bg-gray'
-                    type='button'
-                    disabled
-                  >
-                    {t('Inactivate Business')}
-                  </Button>
-                </Tooltip>
-              )}
+                {(business?.businessStatus === 'ACTIVE' || business?.businessStatus === 'INACTIVE') && (
+                  <>
+                  {
+                    (business?.isAbleInActive) ? (
+                      <Button 
+                        aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
+                        className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
+                        type='button'
+                        onClick={() => setStatusModalVisible(true)}
+                      >
+                        {business?.businessDtatys === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
+                      </Button>
+                    ) : (
+                      <Tooltip title={t('Cannot inactivate business with active deals')}>
+                        <Button 
+                          aria-labelledby={t('Inactivate Business...')} 
+                          className='btn rounded-8 bg-gray'
+                          type='button'
+                          disabled
+                        >
+                          {t('Inactivate Business')}
+                        </Button>
+                      </Tooltip>
+                    )}
+                  </>
+                )}
               </>
             )}
           </Space>
