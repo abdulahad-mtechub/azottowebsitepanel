@@ -310,7 +310,7 @@ const SignupPage = () => {
                               maxCount={1} 
                               onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
                           >
-                              <Button aria-labelledby='Upload' className='btn btn-sm text-black bg-gray border-gray'>{t("Upload")}</Button>
+                              <Button aria-labelledby='Upload' className='btn btn-sm text-black border-gray'>{t("Upload")}</Button>
                           </Upload>
                       </Col>
                       {errors.front && 
@@ -342,7 +342,7 @@ const SignupPage = () => {
                               maxCount={1} 
                               onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
                           >
-                              <Button aria-labelledby='Upload' className='btn btn-sm text-black bg-gray border-gray'>{t("Upload")}</Button>
+                              <Button aria-labelledby='Upload' className='btn btn-sm text-black border-gray'>{t("Upload")}</Button>
                           </Upload>
                       </Col>
                       {errors.back && 
@@ -374,7 +374,7 @@ const SignupPage = () => {
                               maxCount={1} 
                               onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
                           >
-                              <Button aria-labelledby='Upload' className='btn text-black bg-gray border-gray'>{t("Upload")}</Button>
+                              <Button aria-labelledby='Upload' className='btn text-black border-gray'>{t("Upload")}</Button>
                           </Upload>
                       </Col>
                       {errors.passport && 

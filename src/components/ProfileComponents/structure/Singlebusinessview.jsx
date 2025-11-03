@@ -192,7 +192,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
                       <Tooltip title={t('Cannot inactivate business with active deals')}>
                         <Button 
                           aria-labelledby={t('Inactivate Business...')} 
-                          className='btn rounded-8 bg-gray'
+                          className='btn rounded-8'
                           type='button'
                           disabled
                         >
