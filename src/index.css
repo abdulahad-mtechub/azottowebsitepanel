@@ -871,6 +871,7 @@ body.ltr {
 .bg-gray {
   background-color: #cccccc !important;
 }
+
 .bg-nafth {
   background-color: var(--color-nafth) !important;
 }
