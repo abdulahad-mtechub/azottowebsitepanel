@@ -8,9 +8,10 @@ import {
     Card,
     Segmented,
     Avatar,
-    Tooltip
+    Tooltip,
+    Grid
 } from 'antd';
-import { MenuOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, MenuOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
 import { useEffect, useState,useMemo } from 'react';
@@ -21,10 +22,15 @@ import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
 
 const { Text, Title } = Typography;
+const { useBreakpoint } = Grid;
 
 const ProfileDashboard = () => {
     
-  const {t}= useTranslation()
+    const userId = Cookies.get("userId"); 
+    const navigate = useNavigate();
+    const {t}= useTranslation()
+    const screens = useBreakpoint(); 
+    
     const profiletabData = {
         Seller: [
           { key: 'sellerdashboard', label: t('Dashboard') },
@@ -54,10 +60,7 @@ const ProfileDashboard = () => {
           { key: 'buyeralert', label: t('Alerts') },
         ],
     };
-    const userId = Cookies.get("userId"); 
-    const navigate = useNavigate();
     
-    // Initialize state from localStorage or use defaults
     const getInitialParentTab = () => {
         const saved = localStorage.getItem('profileParentTab');
         return (saved === 'Seller' || saved === 'Buyer') ? saved : 'Seller';
@@ -68,7 +71,6 @@ const ProfileDashboard = () => {
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                // Validate that saved tabs exist in current structure
                 const isSellerValid = profiletabData.Seller.some(tab => 
                     tab.key === parsed.Seller || tab.children?.some(child => child.key === parsed.Seller)
                 );
@@ -88,7 +90,6 @@ const ProfileDashboard = () => {
             Buyer: profiletabData.Buyer?.[0]?.key || '',
         };
     };
-    
     // Get current month start and end dates
     const getCurrentMonthRange = () => {
         const startDate = dayjs().startOf('month').format('YYYY-MM-DD');
@@ -339,17 +340,34 @@ const ProfileDashboard = () => {
             ),
         },
     };
+    const isMobileOrTablet = !screens.lg;
+    const handleButtonClick = () => {
+        if (isMobileOrTablet) {
+            setIsSidebarVisible(true);
+        } else {
+            navigate(-1);
+        }
+    };
+
+    const buttonTooltipTitle = isMobileOrTablet
+    ? t('Profile Sidebar')
+    : t('Go Back');
+
+    const buttonIcon = isMobileOrTablet
+        ? <MenuOutlined className='fs-16' />
+        : <ArrowLeftOutlined className='fs-16' />;
 
     return (
         <div className='padd mb-2'>
             <div className='container'>
                 <Flex className='mt-3' gap={5} align='flex-start' vertical>
-                    <Button aria-labelledby={t('Profile Sidebar')} className='btn border-gray text-black p-2 d-lg-none' type='button' onClick={() => setIsSidebarVisible(true)}>
-                        <Tooltip
-                            title={t('Profile Sidebar')}
-                        >
-                            <MenuOutlined className='fs-16' />
-                        </Tooltip>
+                    <Button
+                        aria-labelledby={buttonTooltipTitle}
+                        className='btn border-gray text-black p-2 d-lg-none'
+                        type='button'
+                        onClick={handleButtonClick}
+                    >
+                        {buttonIcon}
                     </Button>
                     <Breadcrumb
                         separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
