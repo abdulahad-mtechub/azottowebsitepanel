@@ -1,6 +1,6 @@
 import { CloseOutlined } from '@ant-design/icons'
 import { Avatar, Button, Drawer, Flex, Segmented, Typography } from 'antd'
-import { useEffect, useState,useMemo } from 'react';
+import { useMemo } from 'react';
 import { CustomTabs } from '../../ui';
 import {GETBUYERMEETINGCOUNT,GETSELLERMEETINGCOUNT} from '../..//../graphql/query'
 import { useQuery } from "@apollo/client";
@@ -8,9 +8,8 @@ import { useTranslation } from 'react-i18next';
 
 const { Title } = Typography;
 const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activeChildTab, setActiveChildTab,profiletabData}) => {
+
     const { t } = useTranslation();
-    const [isDesktop, setIsDesktop] = useState(false);
-    // Skip queries when no userId
     const { data: sellerData, loading: sellerLoading } = useQuery(GETSELLERMEETINGCOUNT);
 
     const { data: buyerData, loading: buyerLoading } = useQuery(GETBUYERMEETINGCOUNT);
@@ -30,25 +29,14 @@ const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activ
       const tabs = clone(profiletabData[parentTab] || []);
       return tabs.map(item => {
         if (item.key === 'sellermeeting') {
-          return { ...item, label: `Meetings (${countsLoading ? '...' : sellerCount})` };
+          return { ...item, label: `${t('Meetings')} (${countsLoading ? '...' : sellerCount})` };
         }
         if (item.key === 'buyermeeting') {
-          return { ...item, label: `Meetings (${countsLoading ? '...' : buyerCount})` };
+          return { ...item, label: `${t('Meetings')} (${countsLoading ? '...' : buyerCount})` };
         }
         return item;
       });
-    }, [parentTab, sellerCount, buyerCount, countsLoading]);
-
-    useEffect(() => {
-        const handleResize = () => setIsDesktop(window.innerWidth > 1199);
-
-        handleResize();
-        window.addEventListener('resize', handleResize);
-
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    if (isDesktop) return null;
+    }, [parentTab, profiletabData, sellerCount, buyerCount, countsLoading, t]);
 
     return (
         <Drawer
@@ -75,14 +63,17 @@ const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activ
                     <Flex justify="center">
                         <Segmented
                             className='custom-segment'
-                            options={[t('Seller'), t('Buyer')]}
+                            options={[
+                                { label: t('Seller'), value: 'Seller' },
+                                { label: t('Buyer'), value: 'Buyer' },
+                            ]}
                             value={parentTab}
                             onChange={handleParentChange}
                         />
                     </Flex>
                     <div className="text-center mt-4">
                         <CustomTabs
-                            items={itemsForRender[parentTab]}
+                            items={itemsForRender}
                             activeKey={activeChildTab[parentTab]}
                             onChange={(key) => {
                                 onClose();

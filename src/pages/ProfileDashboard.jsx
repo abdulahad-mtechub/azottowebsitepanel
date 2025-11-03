@@ -10,7 +10,7 @@ import {
     Avatar,
     Tooltip
 } from 'antd';
-import { ArrowLeftOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
+import { MenuOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
 import { useEffect, useState,useMemo } from 'react';
@@ -344,11 +344,11 @@ const ProfileDashboard = () => {
         <div className='padd mb-2'>
             <div className='container'>
                 <Flex className='mt-3' gap={5} align='flex-start' vertical>
-                    <Button aria-labelledby={t('Profile Sidebar')} className='btn border-gray text-black p-2 d-none' type='button' onClick={() => setIsSidebarVisible(true)}>
+                    <Button aria-labelledby={t('Profile Sidebar')} className='btn border-gray text-black p-2 d-lg-none' type='button' onClick={() => setIsSidebarVisible(true)}>
                         <Tooltip
                             title={t('Profile Sidebar')}
                         >
-                            <ArrowLeftOutlined className='fs-16' />
+                            <MenuOutlined className='fs-16' />
                         </Tooltip>
                     </Button>
                     <Breadcrumb

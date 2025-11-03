@@ -148,6 +148,11 @@ const MobileNavbar = ({ visible, onClose }) => {
                     <NavLink to={'/faq'} onClick={onClose} className='text-white fs-14 block mb-2 p-2 pl-2'>
                         <Title level={5} className='text-white m-0'>{t("FAQs")}</Title>
                     </NavLink>
+                    {userId && (
+                        <NavLink to={'/profiledashboard'} onClick={onClose} className='text-white fs-14 block mb-2 p-2 pl-2'>
+                            <Title level={5} className='text-white m-0'>{t("My Profile")}</Title>
+                        </NavLink>
+                    )}
                 </Flex>
                 <Flex vertical gap={10} align='center' justify='center'>
                     {userId ? (
