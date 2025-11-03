@@ -257,7 +257,7 @@ const SingleViewlisting = () => {
                     </Col>
                 </Row>
 
-                <BusinessInfoCardMobile />
+                <BusinessInfoCardMobile data={business} />
             </div>
 
             <ExploreSimilarBusiness id={business?.id} />
