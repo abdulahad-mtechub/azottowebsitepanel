@@ -868,6 +868,9 @@ body.ltr {
   background-color: var(--green) !important;
 }
 
+.bg-gray {
+  background-color: #cccccc !important;
+}
 .bg-nafth {
   background-color: var(--color-nafth) !important;
 }

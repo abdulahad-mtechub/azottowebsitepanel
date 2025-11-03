@@ -315,13 +315,22 @@ const ConfirmationDocsStep = ({ form, details }) => {
             </Col>
             <Col span={24}>
               <Flex vertical gap={10}>
-                <Flex gap={5} className={details?.isPaymentVerifiedSeller ? 'badge-cs success fs-12 fit-content' : 'badge-cs pending fs-12 fit-content'} align="center">
+                {/* <Flex gap={5} className={details?.isPaymentVerifiedSeller ? 'badge-cs success fs-12 fit-content' : 'badge-cs pending fs-12 fit-content'} align="center">
                   <CheckCircleOutlined className="fs-14" />
                   {details?.isPaymentVerifiedSeller ? t('Seller marked "Payment Received"') : t('"Payment Received" Seller Confirmation pending')}
-                </Flex>
+                </Flex> */}
 
                 <Flex>
-                  <Button type="primary" className="btnsave bg-brand text-white" onClick={handleMarkVerified} disabled={details?.isDocVedifiedSeller}>
+                  <Button 
+                    type="primary" 
+                    className={`btnsave ${
+                      details?.isDocVedifiedSeller 
+                        ? 'bg-gray text-white cursor-not-allowed' 
+                        : 'bg-brand text-white'
+                    }`} 
+                    onClick={handleMarkVerified} 
+                    disabled={details?.isDocVedifiedSeller}
+                  >
                     {t('Mark as Verified')}
                   </Button>
                 </Flex>
