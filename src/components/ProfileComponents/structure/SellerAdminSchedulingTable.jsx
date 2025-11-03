@@ -15,7 +15,7 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
   const [fetchMeetings, { data, loading }] = useLazyQuery(READYSCHEDULEDMEETINGS, {
     fetchPolicy: 'network-only',
   });
-  
+  console.log("Data in SellerAdminSchedulingTable", data);
   const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
     setSearchValue(debouncedSearchValue);
     setPagination(prev => ({ ...prev, current: 1 }));
@@ -42,22 +42,19 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
 
   const selleradminsechedulingData =
     data?.getMeetingsReadyForScheduling?.items?.map((meeting) => {
-      const { requestedBy, requestedTo, business } = meeting;
-      const isSellerMeeting = business?.seller?.id === requestedBy?.id;
+      const isSellerMeeting = meeting?.business?.seller?.id === meeting?.requestedBy?.id;
 
       const displayName = isBuyer
         ? isSellerMeeting
-          ? requestedBy?.name || "-"
-          : requestedTo?.name || "-"
+          ? meeting?.requestedBy?.name || "-"
+          : meeting?.requestedTo?.name || "-"
         : isSellerMeeting
-          ? requestedTo?.name || "-" 
-          : requestedBy?.name || "-";
-      const buyerName = isBuyer ? (!isSellerMeeting ? meeting?.requestedTo?.name || "-" : meeting?.requestedBy?.name || "-") : meeting?.requestedBy?.name || "-";
+          ? meeting?.requestedTo?.name || "-"
+          : meeting?.requestedBy?.name || "-"
       const maskedName =
         displayName.length > 3
-          ? buyerName.substring(0, 3) + '*'.repeat(10)
-          : buyerName + '*'.repeat(10 - buyerName.length);
-      console.log(isSellerMeeting, "hello ")
+          ? displayName.substring(0, 3) + '*'.repeat(10)
+          : displayName + '*'.repeat(10 - displayName.length);
       return {
         key: meeting.id,
         title: meeting.business?.businessTitle,

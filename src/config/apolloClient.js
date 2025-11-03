@@ -57,7 +57,7 @@ const errorLink = onError(({ graphQLErrors }) => {
     for (const err of graphQLErrors) {
       console.error("[GraphQL Error]:", err.message);
       if (
-        err.message?.includes("Token is invalid or expired") ||
+        err.message?.includes("Invalid or expired token") ||
         err.message?.includes("Invalid token or authentication failed")
       ) {
         // Clear cookies

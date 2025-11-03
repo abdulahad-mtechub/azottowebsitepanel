@@ -76,6 +76,7 @@ query GetMeetingsReadyForScheduling($search: String, $isBuyer: Boolean, $limit: 
         name
       }
       requestedTo {
+        id
         name
       }
       business {
