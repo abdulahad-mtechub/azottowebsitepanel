@@ -140,7 +140,6 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
                     status === t('Commission Pending') ||
                     status === t('Payment Verification Pending') ||
                     status === t('Document Verification Pending') ||
-                    status === t('Waiting for Jusoor to complete the deal') ||
                     status === t('Finalizing Deal') ||
                     (!record.isDsaSeller || !record.isDsaBuyer)
                 ) {

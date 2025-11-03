@@ -109,12 +109,16 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
       status === t('Seller & Buyer DSA Pending') ||
       status === t('Seller DSA Pending') ||
       status === t('Buyer DSA Pending') ||
+      status === t('Commission Verification Pending') ||
+      status === t('Commission Pending') ||
+      status === t('Payment Verification Pending') ||
       (!deal.isDsaSeller || !deal.isDsaBuyer)
     ) {
       // Only return yellow if commission is verified but DSA is not complete
       if (deal.isCommissionVerified && (!deal.isDsaSeller || !deal.isDsaBuyer)) {
         return 'sendstatus';
       }
+      return 'sendstatus';
     }
     
     // Successful/Completed states - Green

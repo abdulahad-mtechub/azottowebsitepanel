@@ -136,6 +136,9 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
           status === t('Seller & Buyer DSA Pending') ||
           status === t('Seller DSA Pending') ||
           status === t('Buyer DSA Pending') ||
+          status === t('Commission Verification Pending') ||
+          status === t('Commission Pending') ||
+          status === t('Payment Verification Pending') ||
           (!record.isDsaSeller || !record.isDsaBuyer)
         ) {
           badgeClass = 'sendstatus'; // Yellow

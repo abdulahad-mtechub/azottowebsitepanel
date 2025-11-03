@@ -101,7 +101,6 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             status === t('Payment Verification Pending') ||
             status === t('Document Verification Pending') ||
             status === t('Finalizing Deal') ||
-            status === t('Waiting for Jusoor to complete the deal') ||
             (!deal.isDsaSeller || !deal.isDsaBuyer)
         ) {
             // Only return yellow if commission is verified but DSA is not complete
