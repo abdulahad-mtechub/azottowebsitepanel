@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Card, Col, Divider, Flex, Image, Row, Typography, Spin, message, Space, Tooltip } from 'antd'
+import { Button, Card, Col, Divider, Flex, Image, Row, Typography, Spin, message, Space, Tooltip, Grid } from 'antd'
 import { RightOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { GETRANDOMBUSINESS } from '../../../graphql/query/business'
@@ -10,17 +10,19 @@ import { truncateChars } from '../../../utils'
 import Cookies from "js-cookie";
 
 const { Text, Title, Paragraph } = Typography
+const { useBreakpoint } = Grid;
 
 const ExploreLive = () => {
 
     const navigate = useNavigate()
+    const screens = useBreakpoint();
     const { t } = useTranslation()
     const [messageApi, contextHolder] = message.useMessage();
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const userId = Cookies.get("userId");
     
     const userStatus = Cookies.get("userStatus");
-    const isUserInactive = userStatus === "pending" || userStatus === "inactive";;
+    const isUserInactive = userStatus === "pending" || userStatus === "inactive";
     
     const { data, loading, refetch} = useQuery(GETRANDOMBUSINESS);
 
@@ -109,6 +111,13 @@ const ExploreLive = () => {
             </Flex>
         );
     }
+
+    // Responsive layout variables
+    const buttonGroupGap = screens.xs ? 4 : 12;
+    const buttonGroupFlexDirection = screens.xs ? 'vertical' : 'horizontal';
+    const shouldMainFlexWrap = screens.md;
+    const mainFlexGap = screens.xs ? 8 : (screens.sm || screens.md ? 12 : 0);
+
     return (
         <>
             {contextHolder}
@@ -132,8 +141,17 @@ const ExploreLive = () => {
                         <Col xl={{span: 8}} lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>
                             <Card className='h-100 border-gray rounded-12 bg-lightest-gray card-cs cursor' onClick={() => navigate(`/singleviewlisting/${pro?.id}`)} >
                                 <Flex vertical gap={20}>
-                                    <Flex justify='space-between' align='center'>
-                                        <Flex gap={4}>
+                                    <Flex 
+                                        justify='space-between' 
+                                        align={screens.xs ? 'flex-start' : 'center'}
+                                        wrap={shouldMainFlexWrap ? 'wrap' : 'nowrap'}
+                                        gap={mainFlexGap}
+                                    >
+                                        <Flex 
+                                            gap={buttonGroupGap}
+                                            align='center'
+                                            direction={buttonGroupFlexDirection}
+                                        >
                                             <Button className='fs-13' aria-labelledby={t(pro?.categoryName)}>
                                                 {truncateChars(pro?.categoryName, 16)}
                                             </Button>
@@ -142,7 +160,7 @@ const ExploreLive = () => {
                                                     aria-labelledby="type"
                                                     className={`fs-12 text-white ${pro.type ? 'bg-brand' : 'bg-black'}`}
                                                 >
-                                                <Space align='center' justify='center' >
+                                                <Space align='center' justify='center' size={4} wrap={false}>
                                                     <Text className='fs-12 text-white'>{pro.type ? t("Taqbeel") : t("Acquiring")}</Text>
                                                     <Tooltip title={pro.type ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
                                                     <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />

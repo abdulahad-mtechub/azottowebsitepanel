@@ -1,4 +1,4 @@
-import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography, Spin, message, Tooltip, Space } from 'antd';
+import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography, Spin, message, Tooltip, Space, Grid } from 'antd';
 import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';
@@ -9,10 +9,12 @@ import Cookies from "js-cookie";
 import { truncateChars } from '../../../utils';
 
 const { Text, Title, Paragraph } = Typography;
+const { useBreakpoint } = Grid;
 
 const ExploreSimilarBusiness = ({ id }) => {
 
     const { t } = useTranslation();
+    const screens = useBreakpoint();
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
@@ -109,6 +111,12 @@ const ExploreSimilarBusiness = ({ id }) => {
         );
     }
 
+    // Responsive layout variables
+    const buttonGroupGap = screens.xs ? 4 : 12;
+    const buttonGroupFlexDirection = screens.xs ? 'vertical' : 'horizontal';
+    const shouldMainFlexWrap = screens.xs || screens.sm || screens.md;
+    const mainFlexGap = screens.xs ? 8 : (screens.sm || screens.md ? 12 : 0);
+
     return (
         <>
             {contextHolder}
@@ -133,8 +141,17 @@ const ExploreSimilarBusiness = ({ id }) => {
                                 <Col xl={{span: 8}} lg={{span: 8}} md={{span: 12}} sm={{span: 24}} xs={{span: 24}} key={i}>       
                                     <Card className='h-100 border-gray rounded-12 bg-lightest-gray card-cs cursor'  onClick={() => navigate(`/singleviewlisting/${pro?.id}`)}>
                                         <Flex vertical gap={20}>
-                                            <Flex justify='space-between' align='center'>
-                                                <Flex gap={4}>
+                                            <Flex 
+                                                justify='space-between' 
+                                                align={screens.xs ? 'flex-start' : 'center'}
+                                                wrap={shouldMainFlexWrap ? 'wrap' : 'nowrap'}
+                                                gap={mainFlexGap}
+                                            >
+                                                <Flex 
+                                                    gap={buttonGroupGap}
+                                                    align='center'
+                                                    direction={buttonGroupFlexDirection}
+                                                >
                                                     <Button className='fs-13' aria-labelledby={t(pro?.category?.name)}>
                                                         {truncateChars(pro?.category?.name, 18)}
                                                     </Button>
@@ -142,7 +159,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                         aria-labelledby="type"
                                                         className={`${pro.isByTakbeer ? 'bg-brand' : 'bg-black'}`}
                                                     >
-                                                        <Space align='center' justify='center' >
+                                                        <Space align='center' justify='center' size={4} wrap={false}>
                                                             <Text className='fs-12 text-white'>{pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
                                                             <Tooltip title={pro.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
                                                             <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
