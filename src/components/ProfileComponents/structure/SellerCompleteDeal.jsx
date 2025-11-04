@@ -54,7 +54,7 @@ const SellerCompleteDeal = ({ setCompleteDeal }) => {
 
   const columns = [
     { title: t('Business Title'), dataIndex: 'title' },
-    { title: t('Seller Name'), dataIndex: 'sellername' },
+    { title: t('Buyer Name'), dataIndex: 'buyername' },
     { 
       title: t('Finalized Price'), 
       dataIndex: 'finalizedprice',
@@ -84,7 +84,7 @@ const SellerCompleteDeal = ({ setCompleteDeal }) => {
       offerDeals?.getSellerCompletedDeals?.deals?.map((offer) => ({
         key: offer?.id,
         title: offer?.business?.businessTitle,
-        sellername: offer?.buyer?.name,
+        buyername: offer?.buyer?.name,
         finalizedprice: offer?.price,
         date: new Date(offer?.createdAt).toLocaleString(),
       })) || []

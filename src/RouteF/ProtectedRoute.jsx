@@ -1,7 +1,7 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { Result, Button, Typography } from 'antd';
+import { Result, Button, Typography, Flex } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
@@ -41,6 +41,7 @@ const ProtectedRoute = ({ children }) => {
             </Text>
           }
           extra={[
+            <Flex gap={5} justify='center'>
             <Button 
               type="primary" 
               key="home" 
@@ -55,6 +56,7 @@ const ProtectedRoute = ({ children }) => {
             >
               {t("View Business Listings")}
             </Button>
+            </Flex>
           ]}
         />
       </div>
