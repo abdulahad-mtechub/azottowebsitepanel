@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin, message, Space, Tooltip } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { GETFAVORITBUSINESS } from '../../../graphql/query';
@@ -96,8 +96,8 @@ const Favoritbussines = () => {
                         <Col lg={{ span: 12 }} md={{ span: 12 }} sm={{ span: 24 }} xs={{ span: 24 }} key={pro?.id}>
                             <Card className='h-100 border-gray rounded-12 card-cs cursor' onClick={() => navigate('/singleviewlisting/' + pro?.id)}>
                                 <Flex vertical gap={20}>
-                                    <Flex justify='space-between' align='center'>
-                                        <Flex gap={4}>
+                                    <Flex justify='space-between' align='center' gap={10} wrap>
+                                        <Flex gap={10} wrap>
                                             <Button aria-labelledby={t('Category name')} className='fs-13'>
                                                 {truncateChars(pro?.categoryName, 20)}
                                             </Button>
@@ -130,26 +130,25 @@ const Favoritbussines = () => {
                                         </div>
                                         <Title level={5}>{truncateChars(pro?.businessTitle, 42)}</Title>
                                         <div className='h-80'>
-                                            <Paragraph className='fs-14 text-gray justify-clamp'>
+                                            <Paragraph ellipsis={{ rows: 3, expandable: false, symbol: 'more' }} className='fs-14 text-gray'>
                                                 {pro?.description}
                                             </Paragraph>
                                         </div>
                                         <Divider className='my-1' />
-                                        <Row justify={'space-between'}>
+                                        <Space
+                                            split={<Divider type="vertical" className="m-0 h-auto" />}
+                                            align="center"
+                                            style={{ width: '100%', justifyContent: 'space-between' }}
+                                            >
                                             {pro?.child?.map((item, c) => (
-                                                <React.Fragment key={c}>
-                                                    <Col span={7}>
-                                                        <Flex vertical>
-                                                            <Text className='text-brand fw-500 m-0 fs-13'>
-                                                                {item?.id !== 3 && <img src="/assets/icons/reyal-b.png" width={8} alt={t('currency-symbol')} />} {item?.subtitle}
-                                                            </Text>
-                                                            <Text className='text-gray fs-12'>{item?.subdesc}</Text>
-                                                        </Flex>
-                                                    </Col>
-                                                    {c < pro.child.length - 1 && <Divider type='vertical' className='m-0 h-auto' />}
-                                                </React.Fragment>
+                                                <Flex vertical align="center" justify="center" key={c}>
+                                                <Title level={5} className="text-brand m-0 fs-13">
+                                                    {item?.subtitle}
+                                                </Title>
+                                                <Text className="text-gray fs-12">{item?.subdesc}</Text>
+                                                </Flex>
                                             ))}
-                                        </Row>
+                                        </Space>
                                         <Divider className='my-1' />
                                         <Flex gap={3} align='center'>
                                             <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />

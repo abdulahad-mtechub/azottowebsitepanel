@@ -148,7 +148,7 @@ const Allbussines = () => {
                                         </div>
                                         <Title className='' level={5}>{pro?.businessTitle}</Title>
                                         <div className='h-80'>
-                                            <Paragraph className='fs-14 text-gray justify-clamp'>
+                                            <Paragraph ellipsis={{ rows: 3, expandable: false, symbol: 'more' }} className='fs-14 text-gray'>
                                                 {pro?.description}
                                             </Paragraph>
                                         </div>

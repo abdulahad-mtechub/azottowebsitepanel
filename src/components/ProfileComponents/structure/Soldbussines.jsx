@@ -69,8 +69,8 @@ const Soldbussines = () => {
                             }}
                         >
                             <Flex vertical gap={20}>
-                                <Flex justify='space-between' align='center' wrap>
-                                    <Flex gap={4}>
+                                <Flex justify='space-between' align='center' gap={10} wrap>
+                                    <Flex gap={10} wrap>
                                         <Button className='fs-13' aria-labelledby={pro?.category?.name} >
                                             {truncateChars(isArabic ? pro?.category?.arabicName : pro?.category?.name, 20)}
                                         </Button>
@@ -88,6 +88,7 @@ const Soldbussines = () => {
                                             </Button>
                                         )}
                                     </Flex>
+                                    <Flex>
                                     {pro?.businessStatus === 'ACTIVE' ? (
                                         <span className='badge-active rounded-8'>{t('Active')}</span>
                                     ) : pro?.businessStatus === 'INACTIVE' ? (
@@ -97,6 +98,7 @@ const Soldbussines = () => {
                                     ) : pro?.businessStatus === 'SOLD' ? (
                                         <span className='badge-active rounded-8'>{t('Sold')}</span>
                                     ) : null}
+                                    </Flex>
                                 </Flex>
                                 <div>
                                     <div className='w-full card-img mb-2 rounded-12'>
@@ -110,7 +112,7 @@ const Soldbussines = () => {
                                     </div>
                                     <Title level={5}>{pro?.businessTitle}</Title>
                                     <div className='h-80'>
-                                        <Paragraph className='fs-14 text-gray justify-clamp'>
+                                        <Paragraph ellipsis={{ rows: 3, expandable: false, symbol: 'more' }} className='fs-14 text-gray'>
                                             {pro?.description}
                                         </Paragraph>
                                     </div>
