@@ -152,6 +152,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                     align='center'
                                                     direction={buttonGroupFlexDirection}
                                                 >
+                                                    
                                                     <Button className='fs-13' aria-labelledby={t(pro?.category?.name)}>
                                                         {truncateChars(pro?.category?.name, 18)}
                                                     </Button>
