@@ -69,7 +69,7 @@ const Soldbussines = () => {
                             }}
                         >
                             <Flex vertical gap={20}>
-                                <Flex justify='space-between' align='center'>
+                                <Flex justify='space-between' align='center' wrap>
                                     <Flex gap={4}>
                                         <Button className='fs-13' aria-labelledby={pro?.category?.name} >
                                             {truncateChars(isArabic ? pro?.category?.arabicName : pro?.category?.name, 20)}
@@ -98,7 +98,6 @@ const Soldbussines = () => {
                                         <span className='badge-active rounded-8'>{t('Sold')}</span>
                                     ) : null}
                                 </Flex>
-
                                 <div>
                                     <div className='w-full card-img mb-2 rounded-12'>
                                         <img
@@ -116,21 +115,20 @@ const Soldbussines = () => {
                                         </Paragraph>
                                     </div>
                                     <Divider className='my-1' />
-                                    <Row justify={'space-between'}>
+                                    <Space
+                                        split={<Divider type="vertical" className="m-0 h-auto" />}
+                                        align="center"
+                                        style={{ width: '100%', justifyContent: 'space-between' }}
+                                    >
                                         {pro?.child?.map((item, c) => (
-                                            <React.Fragment key={c}>
-                                                <Col span={7}>
-                                                    <Flex vertical>
-                                                        <Title level={5} className='text-brand m-0 fs-13'>
-                                                            {item?.subtitle}
-                                                        </Title>
-                                                        <Text className='text-gray fs-12'>{item?.subdesc}</Text>
-                                                    </Flex>
-                                                </Col>
-                                                {c < pro.child.length - 1 && <Divider type='vertical' className='m-0 h-auto' />}
-                                            </React.Fragment>
+                                            <Flex vertical align="center" justify="center" key={c}>
+                                                <Title level={5} className="text-brand m-0 fs-13">
+                                                    {item?.subtitle}
+                                                </Title>
+                                                <Text className="text-gray fs-12">{item?.subdesc}</Text>
+                                            </Flex>
                                         ))}
-                                    </Row>
+                                    </Space>
                                     <Divider className='my-1' />
                                     <Flex gap={3} align='center'>
                                         <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Button, Card, Col, Divider, Flex, Image, Pagination, Row, Select, Typography, Spin, Tooltip, Space, Grid } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
 import { CREATE_SAVE_BUSINESS } from "../../../graphql";
@@ -188,56 +187,20 @@ const ProductCard = ({
                                         </Paragraph>
                                     </div>
                                     <Divider className='my-1' />
-                                    <Row 
-                                        justify={screens.xs ? 'center' : 'space-between'} 
-                                        align="middle"
-                                        gutter={screens.xs ? [0, 16] : 0}
-                                    >
-                                        {
-                                            pro?.child?.map((item, c) => (
-                                                <React.Fragment key={c}>
-                                                    <Col 
-                                                        xl={6}
-                                                        lg={6}
-                                                        md={8}
-                                                        sm={12}
-                                                        xs={12} 
-                                                    >
-                                                        <Flex vertical align="center">
-                                                            <Title 
-                                                                level={5} 
-                                                                className='text-brand m-0 fs-13 fw-500'
-                                                                style={{ textAlign: 'center' }} 
-                                                            >
-                                                                <span className={c !== 2 ? 'currency-display' : ''}>
-                                                                    {c !== 2 && 
-                                                                    <Image 
-                                                                        src='/assets/icons/reyal-b.png' 
-                                                                        alt={t('currency-symbol')} 
-                                                                        preview={false} 
-                                                                        width={10} 
-                                                                        style={{ marginRight: 4 }}
-                                                                    />}
-                                                                    {item?.subtitle}
-                                                                </span>
-                                                            </Title>
-                                                            <Text 
-                                                                className='text-gray fs-12'
-                                                                style={{ textAlign: 'center' }}
-                                                            >
-                                                                {item?.subdesc}
-                                                            </Text>
-                                                        </Flex>
-                                                    </Col>
-                                                    {
-                                                        c < pro?.child?.length - 1 && !screens.xs && (
-                                                            <Divider type='vertical' className='m-0 h-auto' />
-                                                        )
-                                                    }
-                                                </React.Fragment>
-                                            ))
-                                        }
-                                    </Row>
+                                    <Space
+                                        split={<Divider type="vertical" className="m-0 h-auto" />}
+                                        align="center"
+                                        style={{ width: '100%', justifyContent: 'space-between' }}
+                                        >
+                                        {pro?.child?.map((item, c) => (
+                                            <Flex vertical align="center" justify="center" key={c}>
+                                            <Title level={5} className="text-brand m-0 fs-13">
+                                                {item?.subtitle}
+                                            </Title>
+                                            <Text className="text-gray fs-12">{item?.subdesc}</Text>
+                                            </Flex>
+                                        ))}
+                                    </Space>
                                     <Divider className='my-1' />
                                     <Flex gap={3} align='center'>
                                         <Image src='/assets/icons/reyal.webp' alt={t("currency-symbol")} preview={false} width={20} />

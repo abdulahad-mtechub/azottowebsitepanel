@@ -152,9 +152,8 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                     align='center'
                                                     direction={buttonGroupFlexDirection}
                                                 >
-                                                    
                                                     <Button className='fs-13' aria-labelledby={t(pro?.category?.name)}>
-                                                        {truncateChars(pro?.category?.name, 18)}
+                                                        {truncateChars(pro?.category?.name, 14)}
                                                     </Button>
                                                     <Button
                                                         aria-labelledby="type"
@@ -200,25 +199,20 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                     </Paragraph>
                                                 </div>
                                                 <Divider className='my-1' />
-                                                <Row justify={'space-between'} align="middle">
+                                                <Space
+                                                    split={<Divider type="vertical" className="m-0 h-auto" />}
+                                                    align="center"
+                                                    style={{ width: '100%', justifyContent: 'space-between' }}
+                                                    >
                                                     {pro?.child?.map((item, c) => (
-                                                        <React.Fragment key={c}>
-                                                            <Col span={7}>
-                                                                <Flex vertical align="center">
-                                                                    <Title level={5} className='text-brand m-0 fs-13 fw-500'>
-                                                                        {item?.subtitle}
-                                                                    </Title>
-                                                                    <Text className='text-gray fs-12'>
-                                                                        {item?.subdesc}
-                                                                    </Text>
-                                                                </Flex>
-                                                            </Col>
-                                                            {c < pro.child.length - 1 && (
-                                                                <Divider type='vertical' className='m-0 h-auto' />
-                                                            )}
-                                                        </React.Fragment>
+                                                        <Flex vertical align="center" justify="center" key={c}>
+                                                        <Title level={5} className="text-brand m-0 fs-13">
+                                                            {item?.subtitle}
+                                                        </Title>
+                                                        <Text className="text-gray fs-12">{item?.subdesc}</Text>
+                                                        </Flex>
                                                     ))}
-                                                </Row>
+                                                </Space>
                                                 <Divider className='my-1' />
                                                 <Flex gap={3} align='center'>
                                                     <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
