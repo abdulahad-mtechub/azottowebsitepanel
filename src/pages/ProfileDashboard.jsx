@@ -175,7 +175,7 @@ const ProfileDashboard = () => {
         { title: 'Email',   desc: user?.email || 'N/A' },
         { title: 'Phone Number', desc: user?.phone || 'N/A' },
         { title: 'City', desc: user?.city || 'N/A' },
-        { title: 'District', desc: user?.district || 'N/A' },
+        { title: 'Region', desc: user?.district || 'N/A' },
         { title: 'National ID / Passport', desc: (user?.documents || []).map((doc) => doc.filePath) },
         ] : [];
 

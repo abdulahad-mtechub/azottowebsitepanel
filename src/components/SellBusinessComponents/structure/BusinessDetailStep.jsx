@@ -204,11 +204,11 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
   
               <Col xs={24} sm={24} md={12}>
                 <MySelect
-                  label={t('District')}
+                  label={t('Region')}
                   name="district"
                   required
-                  message={t('Choose district')}
-                  placeholder={t('Choose district')}
+                  message={t('Choose region')}
+                  placeholder={t('Choose region')}
                   options={district}
                   onChange={(val) => {
                     // Find district by name

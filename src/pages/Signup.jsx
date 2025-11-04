@@ -219,11 +219,11 @@ const SignupPage = () => {
           </Col>
           <Col lg={{ span: 12 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
             <MySelect
-              label={t("District")}
+              label={t("Region")}
               name="district"
               required
-              message={t("Please enter district")}
-              placeholder={t("Select district")}
+              message={t("Select region")}
+              placeholder={t("Select region")}
               options={district}
               showKey
               onChange={(val) => setSelectedDistrict(val)}
@@ -235,7 +235,7 @@ const SignupPage = () => {
               name="city"
               required
               showKey
-              message={t("Please enter city")}
+              message={t("Select city")}
               placeholder={t("Select city")}
               options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
             />

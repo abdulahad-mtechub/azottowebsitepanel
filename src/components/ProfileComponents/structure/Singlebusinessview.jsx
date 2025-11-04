@@ -186,7 +186,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
                         type='button'
                         onClick={() => setStatusModalVisible(true)}
                       >
-                        {business?.businessDtatys === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
+                        {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
                       </Button>
                     ) : (
                       <Tooltip title={t('Cannot inactivate business with active deals')}>
