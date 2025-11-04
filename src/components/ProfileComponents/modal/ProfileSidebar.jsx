@@ -43,6 +43,7 @@ const ProfileSidebar = ({visible,onClose,user,parentTab,handleParentChange,activ
             onClose={onClose}
             open={visible}
             title={null}
+            width={260}
             closeIcon={false}
             placement='left'
             className={`drawer-no-p p-2`}

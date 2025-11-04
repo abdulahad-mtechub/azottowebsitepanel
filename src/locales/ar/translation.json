@@ -900,5 +900,9 @@
   "Please upload Commercial Registration (CR) document": "يرجى رفع مستند السجل التجاري (CR)",
   "CR document is required": "مستند السجل التجاري مطلوب",
   "Please upload at least one Supporting Document": "يرجى رفع مستند داعم واحد على الأقل",
-  "At least one supporting document is required": "مستند داعم واحد على الأقل مطلوب"
+  "At least one supporting document is required": "مستند داعم واحد على الأقل مطلوب",
+  "Account Verification Pending": "التحقق من الحساب قيد الانتظار",
+  "Your account is not verified yet. Please contact support to verify your account. Once your account is verified, you will get full access to all features.": "حسابك لم يتم التحقق منه بعد. يرجى الاتصال بالدعم للتحقق من حسابك. بمجرد التحقق من حسابك، ستحصل على وصول كامل إلى جميع الميزات.",
+  "Go to Home": "الذهاب إلى الصفحة الرئيسية",
+  "View Profile": "عرض الملف الشخصي"
 }

@@ -57,7 +57,6 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
       messageApi.error(t('Failed to update business status'));
     }
   };
-
   const items = [
     {
       key: '1',
@@ -179,7 +178,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
                 {(business?.businessStatus === 'ACTIVE' || business?.businessStatus === 'INACTIVE') && (
                   <>
                   {
-                    (business?.isAbleInActive) ? (
+                    (!business?.isAbleInActive) ? (
                       <Button 
                         aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
                         className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
@@ -189,10 +188,10 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
                         {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
                       </Button>
                     ) : (
-                      <Tooltip title={t('Cannot inactivate business with active deals')}>
+                      <Tooltip  title={t('Cannot inactivate business with active deals')}>
                         <Button 
-                          aria-labelledby={t('Inactivate Business...')} 
-                          className='btn rounded-8'
+                          aria-labelledby={t('Cannot inactivate business with active deals')} 
+                          className='btn rounded-8 bg-red'
                           type='button'
                           disabled
                         >

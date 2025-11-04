@@ -333,7 +333,7 @@ const BusinessListingPage = ({getcategory}) => {
                                 <Col lg={{span: 12}} md={{span:12}} sm={{span: 24}} xs={{span: 24}}>
                                     <MySelect
                                         withoutForm
-                                        placeholder={t('Select District')}
+                                        placeholder={t('Select Region')}
                                         options={district}
                                         className='w-100 select'
                                         value={selectedDistrictId}
@@ -474,7 +474,19 @@ const BusinessListingPage = ({getcategory}) => {
                     </Motion.div>
                 </Flex>
             </div>
-            <BusinesslistingFilterDrawer visible={isFilter} onClose={()=>setIsFilter(false)} />
+            <BusinesslistingFilterDrawer 
+                visible={isFilter} 
+                onClose={()=>setIsFilter(false)}
+                setMultipleStep={setMultipleStep}
+                setPriceRange={setPriceRange}
+                setRevenueRange={setRevenueRange}
+                setProfitRange={setProfitRange}
+                setProfitMargenRange={setProfitMargenRange}
+                setEmployeesRange={setEmployeesRange}
+                setOperationalYearRange={setOperationalYearRange}
+                setHasAssets={setHasAssets}
+                setSelectedCategory={setSelectedCategory}
+            />
         </div>
     );
 };

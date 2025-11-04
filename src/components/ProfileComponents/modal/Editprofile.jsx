@@ -276,9 +276,9 @@ const Editprofile = ({ visible, onClose, userData }) => {
             </Col>
             <Col span={24}>
               <MySelect
-                label={t('District')}
+                label={t('Region')}
                 name='district'
-                placeholder={t('Select district')}
+                placeholder={t('Select region')}
                 options={district}
                 showKey={true}
                 onChange={(val) => {

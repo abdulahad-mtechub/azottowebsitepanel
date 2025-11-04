@@ -3,7 +3,19 @@ import { Button, Drawer, Flex } from 'antd'
 import { Filter } from '../structure';
 import { useEffect, useState } from 'react';
 
-const BusinesslistingFilterDrawer = ({visible,onClose}) => {
+const BusinesslistingFilterDrawer = ({
+    visible,
+    onClose,
+    setMultipleStep,
+    setPriceRange,
+    setRevenueRange,
+    setProfitRange,
+    setProfitMargenRange,
+    setEmployeesRange,
+    setOperationalYearRange,
+    setHasAssets,
+    setSelectedCategory
+}) => {
 
     const [isDesktop, setIsDesktop] = useState(false);
 
@@ -32,7 +44,17 @@ const BusinesslistingFilterDrawer = ({visible,onClose}) => {
                     <CloseOutlined className='fs-18' />
                 </Button>
             </Flex>
-            <Filter />
+            <Filter 
+                setMultipleStep={setMultipleStep}
+                setPriceRange={setPriceRange}
+                setRevenueRange={setRevenueRange}
+                setProfitRange={setProfitRange}
+                setProfitMargenRange={setProfitMargenRange}
+                setEmployeesRange={setEmployeesRange}
+                setOperationalYearRange={setOperationalYearRange}
+                setHasAssets={setHasAssets}
+                setSelectedCategory={setSelectedCategory}
+            />
         </Drawer>
     )
 }
