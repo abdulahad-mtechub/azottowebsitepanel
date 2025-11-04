@@ -20,7 +20,13 @@ const ProtectedRoute = ({ children }) => {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 
-  const isProfileDashboard = location.pathname === '/profiledashboard' || location.pathname === '/sellbusinesscreate';
+ const rawPath = location.pathname || '/';
+  const pathname = rawPath.replace(/\/+$/, '') || '/';
+
+  const isProfileDashboard =
+    pathname === '/profiledashboard' ||
+    pathname === '/sellbusinesscreate' ||
+    pathname.startsWith('/businesslisting');
   
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
   
