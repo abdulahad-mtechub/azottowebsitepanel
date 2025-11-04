@@ -25,9 +25,7 @@ const ProtectedRoute = ({ children }) => {
 
   const isProfileDashboard =
     pathname === '/profiledashboard' ||
-    pathname === '/sellbusinesscreate' ||
-    pathname.startsWith('/businesslisting');
-  
+    pathname === '/sellbusinesscreate'  
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
   
   if (isUserInactive && isProfileDashboard) {
