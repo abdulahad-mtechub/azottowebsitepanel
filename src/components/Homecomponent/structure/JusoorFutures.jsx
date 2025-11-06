@@ -1,5 +1,5 @@
 import { Card, Col, Flex, Image, Row, Typography } from 'antd'
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 const { Text, Title } = Typography
 
@@ -37,7 +37,9 @@ const JusoorFutures = () => {
                         <Flex vertical justify="center" align="center" gap={15} className="mx-width">
                             <div className="tag fw-500">{t("Jusoor's Futures")}</div>
                             <Title className="m-0 text-white" level={2}>
-                                {t("Your")} <span className="text-brand">{t("Trusted Saudi Marketplace")}</span> {t("for Buying and Selling Businesses")}
+                                <Trans i18nKey="trustedMarketplace">
+                                    Your <span className="text-brand">Trusted Saudi Marketplace</span> for Buying and Selling Businesses
+                                </Trans>
                             </Title>
                         </Flex>
                     </Col>

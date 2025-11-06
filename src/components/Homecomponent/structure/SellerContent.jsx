@@ -10,7 +10,7 @@ const SellerContent = () => {
   const steps = [
     {
       title: t('Create Your Listing'),
-      description: t('Add your business info, financials, brand documents. It only takes a few minutes.'),
+      description: t('Add your business info, financials, and documents. It only takes a few minute.'),
       image: '/assets/images/2.png',
     },
     {

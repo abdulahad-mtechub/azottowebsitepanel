@@ -1,6 +1,6 @@
 import React from 'react'
 import { Button, Card, Col, Divider, Flex, Image, Row, Typography, Spin, message, Space, Tooltip, Grid } from 'antd'
-import { RightOutlined } from '@ant-design/icons'
+import { LeftOutlined, RightOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import { GETRANDOMBUSINESS } from '../../../graphql/query/business'
 import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations'
@@ -16,10 +16,11 @@ const ExploreLive = () => {
 
     const navigate = useNavigate()
     const screens = useBreakpoint();
-    const { t } = useTranslation()
+    const { t,i18n } = useTranslation()
     const [messageApi, contextHolder] = message.useMessage();
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const userId = Cookies.get("userId");
+    const isArabic = (localStorage.getItem("lang") || "en").toLowerCase() === "ar";
     
     const userStatus = Cookies.get("userStatus");
     const isUserInactive = userStatus === "pending" || userStatus === "inactive";
@@ -73,6 +74,7 @@ const ExploreLive = () => {
     const exploreData = data?.getRandomBusinesses?.map(item => ({
         id: item.id,
         categoryName: item?.category?.name,
+        arabicName: item?.category?.arabicName,
         ref: item.reference,
         title: item.businessTitle,
         description: item.description,
@@ -133,7 +135,7 @@ const ExploreLive = () => {
                                 {t("Businesses Currently")} <span className='text-brand'>{t("Available for Sale")}</span>
                             </Title>
                             <Text className='fs-14 d-inline'>
-                                {t("Discover a created selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more")}
+                                {t("Discover a curated selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more.")}
                             </Text>
                         </Flex>
                     </Col>
@@ -153,7 +155,7 @@ const ExploreLive = () => {
                                             direction={buttonGroupFlexDirection}
                                         >
                                             <Button className='fs-13' aria-labelledby={t(pro?.categoryName)}>
-                                                {truncateChars(pro?.categoryName, 14)}
+                                                {truncateChars(isArabic ? pro?.arabicName : pro?.categoryName, 14)}
                                             </Button>
                                             {typeof pro?.type === "boolean" && (
                                                 <Button
@@ -229,8 +231,15 @@ const ExploreLive = () => {
 
                     <Col span={24}>
                         <Flex justify='center'>
-                            <Button onClick={()=>navigate('/businesslisting')} className='btn bg-brand' aria-labelledby='Browse Businesses'>
-                                {t("Browse Businesses")} <RightOutlined className='fs-10' />
+                            <Button
+                                onClick={()=>navigate('/businesslisting')} className='btn bg-brand' aria-labelledby='Browse Businesses'
+                            >
+                                 {t("Browse Businesses")}
+                                {i18n.language === 'ar' ? (
+                                <LeftOutlined className='fs-10' />
+                                ) : (
+                                <RightOutlined className='fs-10' />
+                                )}
                             </Button>
                         </Flex>
                     </Col>

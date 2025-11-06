@@ -265,3 +265,18 @@ a {
 .ant-popover-hidden {
   display: none !important;
 }
+
+[dir="rtl"] .nav-list li .dropdown {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .sub-dropdown {
+  transform: translateX(-297px);
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .dropdown .drop-item .drop-link .arr {
+  transform: rotate(180deg);
+}

@@ -1,9 +1,16 @@
 import i18n from "i18next";
-import {initReactI18next } from "react-i18next";
-import en from "./locales/en/translation.json"
-import ar from "./locales/ar/translation.json"
+import { initReactI18next } from "react-i18next";
+import en from "./locales/en/translation.json";
+import ar from "./locales/ar/translation.json";
+
+const lang = localStorage.getItem("lang") || "en";
+const dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+document.documentElement.lang = lang;
+document.documentElement.dir = dir;
+
 i18n
-  .use(initReactI18next) // passes i18n down to react-i18next
+  .use(initReactI18next)
   .init({
     resources: {
       en: {
@@ -13,6 +20,8 @@ i18n
         translation: ar
       }
     },
-    lng: "en",
+    lng: lang,
     fallbackLng: "en",
   });
+export { lang, dir };
+export default i18n;

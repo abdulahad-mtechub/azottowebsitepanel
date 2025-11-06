@@ -70,11 +70,11 @@ const BusinessStats = ({data}) => {
                 <Col span={24}>
                     <Flex align='center' gap={3}>
                         <Title level={5} className='m-0'>
-                            Business Stats
+                            {t('Business stat')}
                         </Title>
                         {(data?.isStatsVerified) ?
-                            <Tooltip title={'Verified by Jusoor'}>
-                                <Image src='/assets/icons/verified-user.png' alt='verified icon' preview={false} width={16} />
+                            <Tooltip title={t('Verified by Jusoor')}>
+                                <Image src='/assets/icons/verified-user.png' alt={t('verified icon')} preview={false} width={16} />
                             </Tooltip>
                             : null
                         }

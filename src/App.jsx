@@ -1,16 +1,38 @@
 import { ConfigProvider } from 'antd'
 import { RouteF } from './RouteF'
-import { client } from './config'; 
-import { ApolloProvider } from '@apollo/client';
-import { AuthProvider } from './context/AuthContext';
-import '@ant-design/v5-patch-for-react-19'; 
+import '@ant-design/v5-patch-for-react-19';
+import { useEffect, useState } from 'react';
+import i18n from './i18n';
+
+import enUS from 'antd/locale/en_US';
+import arEG from 'antd/locale/ar_EG';
+const getAntdLocale = (lang) => (lang === 'ar' ? arEG : enUS);
 
 function App() {
 
+  const [dir, setDir] = useState(i18n.language === 'ar' ? 'rtl' : 'ltr');
+  const [antdLocale, setAntdLocale] = useState(getAntdLocale(i18n.language));
+
+  useEffect(() => {
+
+    const handleLanguageChange = (lang) => {
+      const newDir = lang === 'ar' ? 'rtl' : 'ltr';
+      setDir(newDir);
+      setAntdLocale(getAntdLocale(lang));
+      document.documentElement.lang = lang;
+      document.documentElement.dir = newDir;
+    };
+    i18n.on('languageChanged', handleLanguageChange);
+
+    return () => {
+      i18n.off('languageChanged', handleLanguageChange);
+    };
+  }, []);
+
   return (
-    <AuthProvider>
-    <ApolloProvider client={client}>
     <ConfigProvider
+      direction={dir}
+      locale={antdLocale}
       theme={{
         token: {
           colorPrimary: '#1D4ED8',
@@ -25,8 +47,6 @@ function App() {
     >
       <RouteF />
     </ConfigProvider>
-    </ApolloProvider>
-    </AuthProvider>
   )
 }
 

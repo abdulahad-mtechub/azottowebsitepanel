@@ -45,7 +45,7 @@ const MobileNavbar = ({ visible, onClose }) => {
             children: [
                 {
                     id: 1,
-                    name: t('Browse by Categories'),
+                    name: t('Browse Businesses by Categories'),
                     innerchildren: categories.map((cat) => ({
                         id: cat.id,
                         title: isArabic ? cat.arabicTitle : cat.title,
@@ -56,7 +56,7 @@ const MobileNavbar = ({ visible, onClose }) => {
                 },
                 {
                     id: 2,
-                    name: t('Browse by Revenue'),
+                    name: t('Browse Businesses by Revenue'),
                     innerchildren: [
                         { id: 1, title: t('SAR 0 - SAR 10,000'), path: '/businesslisting?revenue=0,10000' },
                         { id: 2, title: t('SAR 10,000 - SAR 30,000'), path: '/businesslisting?revenue=10000,30000' },
@@ -124,7 +124,7 @@ const MobileNavbar = ({ visible, onClose }) => {
             title={null}
             closeIcon={false}
             className={`bg-dark-blue`}
-            placement='left'
+            placement={isArabic ? 'right' : 'left'}
         >
             <Flex justify='space-between' align='center'>
                 <NavLink to={'/'} onClick={onClose}>

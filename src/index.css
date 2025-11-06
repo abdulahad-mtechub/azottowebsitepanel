@@ -48,21 +48,17 @@
 body {
   overflow-x: hidden;
 }
-/* For RTL (Arabic) */
-body.rtl {
-  direction: rtl;
+
+[dir="rtl"] {
   text-align: right;
   font-family: "Tajawal", "Cairo", "Noto Sans Arabic", sans-serif;
 }
 
-/* For LTR (English) */
-body.ltr {
-  direction: ltr;
+[dir="ltr"] body {
   text-align: left;
   font-family: "Inter", sans-serif;
 }
 
-/* Prevent directional icons from being flipped in RTL */
 [dir="rtl"] .ant-breadcrumb-separator,
 [dir="rtl"] img[alt*="Arrow"],
 [dir="rtl"] img[alt*="arrow"],
@@ -1694,3 +1690,207 @@ body.ltr {
   background: var(--brand-color) !important;
   color: white !important;
 }
+/* 
+
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] body {
+  direction: rtl;
+}
+
+[dir="rtl"] .ml-1 {
+  margin-left: 0 !important;
+  margin-right: 0.25rem !important;
+}
+[dir="rtl"] .ml-2 {
+  margin-left: 0 !important;
+  margin-right: 0.5rem !important;
+}
+[dir="rtl"] .ml-3 {
+  margin-left: 0 !important;
+  margin-right: 0.75rem !important;
+}
+[dir="rtl"] .ml-4 {
+  margin-left: 0 !important;
+  margin-right: 1rem !important;
+}
+[dir="rtl"] .ml-5 {
+  margin-left: 0 !important;
+  margin-right: 1.25rem !important;
+}
+
+[dir="rtl"] .mr-1 {
+  margin-right: 0 !important;
+  margin-left: 0.25rem !important;
+}
+[dir="rtl"] .mr-2 {
+  margin-right: 0 !important;
+  margin-left: 0.5rem !important;
+}
+[dir="rtl"] .mr-3 {
+  margin-right: 0 !important;
+  margin-left: 0.75rem !important;
+}
+[dir="rtl"] .mr-4 {
+  margin-right: 0 !important;
+  margin-left: 1rem !important;
+}
+[dir="rtl"] .mr-5 {
+  margin-right: 0 !important;
+  margin-left: 1.25rem !important;
+}
+
+[dir="rtl"] .pl-1 {
+  padding-left: 0 !important;
+  padding-right: 0.25rem !important;
+}
+[dir="rtl"] .pl-2 {
+  padding-left: 0 !important;
+  padding-right: 0.5rem !important;
+}
+[dir="rtl"] .pl-3 {
+  padding-left: 0 !important;
+  padding-right: 0.75rem !important;
+}
+[dir="rtl"] .pl-4 {
+  padding-left: 0 !important;
+  padding-right: 1rem !important;
+}
+[dir="rtl"] .pl-5 {
+  padding-left: 0 !important;
+  padding-right: 1.25rem !important;
+}
+
+[dir="rtl"] .pr-1 {
+  padding-right: 0 !important;
+  padding-left: 0.25rem !important;
+}
+[dir="rtl"] .pr-2 {
+  padding-right: 0 !important;
+  padding-left: 0.5rem !important;
+}
+[dir="rtl"] .pr-3 {
+  padding-right: 0 !important;
+  padding-left: 0.75rem !important;
+}
+[dir="rtl"] .pr-4 {
+  padding-right: 0 !important;
+  padding-left: 1rem !important;
+}
+[dir="rtl"] .pr-5 {
+  padding-right: 0 !important;
+  padding-left: 1.25rem !important;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right !important;
+}
+[dir="rtl"] .text-right {
+  text-align: left !important;
+}
+
+[dir="rtl"] .float-left {
+  float: right !important;
+}
+[dir="rtl"] .float-right {
+  float: left !important;
+}
+
+[dir="rtl"] .ant-btn {
+  text-align: center;
+}
+
+[dir="rtl"] .ant-space {
+  direction: rtl;
+}
+
+[dir="rtl"] .ant-flex {
+  direction: rtl;
+}
+
+[dir="rtl"] .ant-dropdown-menu {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-select-selector {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-input {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-input-number {
+  direction: rtl;
+}
+
+[dir="rtl"] .ant-input-number-input {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-form-item-label {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-modal-header {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-modal-body {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-drawer-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .ant-drawer-body {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-card {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-collapse-header {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .ant-table {
+  direction: rtl;
+}
+
+[dir="rtl"] .ant-table-thead > tr > th {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-table-tbody > tr > td {
+  text-align: right;
+}
+
+[dir="rtl"] .ant-pagination {
+  direction: rtl;
+}
+
+[dir="rtl"] .ant-pagination-item {
+  direction: ltr;
+}
+
+[dir="rtl"] .anticon-arrow-right {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .anticon-arrow-left {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .ant-switch.ant-switch-checked .ant-switch-handle {
+  transform: translateX(calc(-100% + 8px + 2px));
+}
+
+[dir="rtl"] .ant-switch:not(.ant-switch-checked) .ant-switch-handle {
+  inset-inline-start: auto !important;
+  inset-inline-end: 6px !important;
+} */

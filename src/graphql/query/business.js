@@ -314,24 +314,26 @@ const GET_BUYER_OFFER = gql`
 `
 
 const GETRANDOMBUSINESS = gql`
-query GetRandomBusinesses {
-  getRandomBusinesses {
-    id
-    category {
-      name
+  query GetRandomBusinesses {
+    getRandomBusinesses {
+      id
+      category {
+        name
+        arabicName
+      }
+      reference
+      businessTitle
+      description
+      price
+      isSaved
+      isSold
+      isByTakbeer
+      revenue
+      profit
+      capitalRecovery
     }
-    reference
-    businessTitle
-    description
-    price
-    isSaved
-    isSold
-    isByTakbeer
-    revenue
-    profit
-    capitalRecovery
   }
-}`
+`
 
 export {
     GET_CATEGORIES,

@@ -31,7 +31,7 @@ const Sellerwork = () => {
     {
       id: 1,
       title: t('Create Your Listing'),
-      desc: t('Add your business info, financials, and documents. It only takes a few minutes.'),
+      desc: t('Add your business info, financials, and documents. It only takes a few minute.'),
       image: <rive1.RiveComponent />,
     },
     {

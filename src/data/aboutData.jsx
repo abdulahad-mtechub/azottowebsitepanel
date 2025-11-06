@@ -4,30 +4,20 @@ const useAboutData = () => {
   const { t } = useTranslation();
 
   const introData = {
-    title: (
-      <span>
-        {t("A")} <span className="text-brand">{t("Trusted Marketplace")}</span>{" "}
-        {t("for Buying & Selling Businesses")}
-      </span>
-    ),
+    title: t("A Trusted Marketplace for Buying & Selling Businesses"),
     subtitle: t("About Jusoor"),
     desc: t(
-      "Jusoor is a Saudi-born platform built to make buying and selling businesses easier, safer, and more transparent. We connect serious buyers with verified sellers while handling all the sensitive steps in between."
+      "Jusoor is a licensed Saudi-born platform (Unified Number: 7050269450) built to make buying and selling businesses easier, safer, and more transparent. We connect serious buyers with verified sellers while handling all the sensitive steps in between."
     ),
     list: [
-      t("Verified listings backed by commercial and financial documents"),
-      t("Secure, step-by-step deal flow including E-NDA and payment verification"),
-      t("End-to-end support across all major Saudi regions"),
+      t("Verified listings through commercial and identity checks"),
+      t("A secure deal flow that includes signing NDA and a binding electronic sale agreement."),
+      t("End-to-end support across Saudi regions"),
     ],
   };
 
   const missionData = {
-    title: (
-      <span>
-        {t("Our Mission is to Make Buying & Selling Businesses")}{" "}
-        <span className="text-brand">{t("Trusted, and Fast")}</span>
-      </span>
-    ),
+    title: t("Our Mission is to Make Buying & Selling Businesses Trusted, and Fast."),
     subtitle: t("Our Mission"),
     desc: t(
       "We’re on a mission to empower individuals in Saudi Arabia to confidently buy and sell businesses through verified listings, secure payments, and step-by-step support — all in one platform."
@@ -35,15 +25,15 @@ const useAboutData = () => {
     list: [
       {
         title: t("Transparency First"),
-        desc: t("Verified data, real documents no hidden surprises."),
+        desc: t("Verified data, real documents, no hidden surprises."),
       },
       {
         title: t("Seamless Experience"),
-        desc: t("Simple tools, clear steps smooth business transfers."),
+        desc: t("Simple tools, clear steps, smooth business transfers."),
       },
       {
         title: t("Built on Trust"),
-        desc: t("Secure payments and admin support every step of the way."),
+        desc: t("Secure payments, ongoing admin support, legally binding documents."),
       },
     ],
   };
@@ -72,7 +62,7 @@ const useAboutData = () => {
       icon: "/assets/icons/c-1.png",
       title: t("Verified Listings"),
       description: t(
-        "Every business goes through document verification including CR and more ensuring legitimacy."
+        "Every business goes through document verification including CR and more — ensuring legitimacy."
       ),
     },
     {

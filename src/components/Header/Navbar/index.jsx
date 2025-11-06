@@ -26,7 +26,6 @@ const Navbar = ({setGetCategory}) => {
   const userId = Cookies.get("userId"); 
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  // Controls the hover state for the "Browse Businesses" dropdown (desktop)
   const [browseOpen, setBrowseOpen] = useState(false);
   const browseHoverTimeoutRef = useRef(null);
   const [isshow, setIsShow] = useState(!!userId);
@@ -59,7 +58,7 @@ const Navbar = ({setGetCategory}) => {
     {
       id: 1,
       icon: '/assets/icons/m-1.png',
-      title: t("Browse by Categories"),
+      title: t("Browse Businesses by Categories"),
       subtitle: t('Choose from popular business types.'),
       subdropdown: categories.map((cat, index) => ({
         id: cat.id ?? index + 1,
@@ -72,7 +71,7 @@ const Navbar = ({setGetCategory}) => {
     {
       id: 3,
       icon: '/assets/icons/m-3.png',
-      title: t('Browse by Revenue'),
+      title: t('Browse Businesses by Revenue'),
       subtitle: t('Filter by business earnings.'),
       subdropdown: [
           { id: 1, title: t('SAR 0 - SAR 10,000'), path: '/businesslisting?revenue=0,10000' },
@@ -145,56 +144,43 @@ const Navbar = ({setGetCategory}) => {
   const [markNotificationAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
   const [logoutMutation, { loading: logoutLoading }] = useMutation(LOGOUT);
   useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
-    skip: !userId, // Skip subscription if user is not logged in
     onSubscriptionData: async ({ subscriptionData }) => {
         const newNotif = subscriptionData.data?.newNotification;
         
-        // Only process notification if it belongs to the current user
         if (newNotif && newNotif.user?.id === userId) {
             setNotifications((prev) => {
-              // Check if notification already exists
               if (prev.some((item) => item.id === newNotif.id)) {
                 return prev;
               }
-              // Add new notification at the beginning
               notificationOffsetRef.current += 1;
               return [newNotif, ...prev];
             });
             
-            // Only increment unread count for this user's notifications
             setUnreadCount((prev) => prev + 1);
             
-            // Reset marked read flag if dropdown is open
             if (dropdownOpen) {
               setHasMarkedRead(false);
             }
 
-            // Check if this is an account verification notification
             const isVerificationNotification = 
               newNotif.message?.toLowerCase().includes('verified successfully') ||
               newNotif.name?.toLowerCase().includes('account verified');
 
-            // If it's a verification notification and we haven't processed it yet
             if (isVerificationNotification && !processedVerificationNotificationsRef.current.has(newNotif.id)) {
-              // Mark this notification as processed
               processedVerificationNotificationsRef.current.add(newNotif.id);
               
               try {
-                // Fetch updated user details
                 const { data } = await getUserDetails({
                   variables: { getUserDetailsId: userId },
                   fetchPolicy: 'network-only',
                 });
 
-                // Update the userStatus cookie if status is returned
                 if (data?.getUserDetails?.status) {
                   const newStatus = data.getUserDetails.status;
                   Cookies.set("userStatus", newStatus, { expires: 7 });
                   
-                  // Show success message
                   messageApi.success(t('Your account has been verified successfully!'));
                   
-                  // Optionally reload the page to reflect changes across all components
                   setTimeout(() => {
                     window.location.reload();
                   }, 1500);
@@ -331,18 +317,14 @@ const Navbar = ({setGetCategory}) => {
       await logoutMutation();
       message.success(t('Logged out successfully'));
     } catch {
-      // Even if API fails, proceed with local cleanup to guarantee logout UX
       message.warning(t('Network issue. You were logged out locally.'));
     } finally {
-      // Clear cookies
       Cookies.remove('userId');
       Cookies.remove('authToken');
       Cookies.remove('userStatus');
-      // Clear localStorage
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
       localStorage.removeItem('userId');
-      // Reset Apollo cache
       client.resetStore();
       setisLoggedIn(false);
       setIsShow(false);
@@ -402,7 +384,6 @@ const Navbar = ({setGetCategory}) => {
         : { key: "1", label: "EN", icon: "assets/icons/en.webp", alt: "English" }
     );
   
-    // Optional: also update <html dir> for RTL support
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
   };
   const lang = [
@@ -793,7 +774,7 @@ useEffect(() => {
                     {t("Sign Up")}
                   </Button>
                   <Button aria-labelledby='Login' className='btn bg-brand' onClick={()=>navigate('/login')}>
-                   {t(" Sign In")}
+                   {t("Sign In")}
                   </Button>
                 </Flex>
               :

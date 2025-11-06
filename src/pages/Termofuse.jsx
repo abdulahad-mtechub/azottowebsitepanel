@@ -10,7 +10,7 @@ const { Paragraph, Text, Title } = Typography;
 const Termofuse = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
-    const { data, loading, error, refetch } = useQuery(GETTERMS, {
+    const { data, loading } = useQuery(GETTERMS, {
         variables: { search: "" },
     });
 

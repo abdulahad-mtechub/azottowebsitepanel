@@ -81,7 +81,7 @@ const footerlinkData = [
                             </Link>
                         </div>
                         <Text className='fs-13 text-white w-500'>
-                            {t("Jusoor is a Saudi marketplace for buying and selling verified businesses — with secure payments, trusted documents, and smooth ownership transfers.")}
+                            {t("Jusoor is a licensed Saudi platform (7050269450) for buying and selling verified businesses. We offer a secure and seamless experience — with identity and business verification, secure payments, and smooth ownership transfer.")}
                         </Text>
                         <Flex gap={20}>
                             <Link to="#" target="_blank" rel="noopener noreferrer">

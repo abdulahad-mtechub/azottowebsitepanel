@@ -45,7 +45,7 @@ const Aboutus = () => {
                                 {t("About Jusoor")}
                             </Title>
                             <Text className='text-light-gray fs-16'>
-                                {t("Explore expert advice, seller guides, and tips for buying and selling businesses in Saudi Arabia.")}
+                                {t("Start your journey with Jusoor by gaining a clear understanding of our vision, services, and what makes us stand out.")}
                             </Text>
                         </Flex>
                     </div>
