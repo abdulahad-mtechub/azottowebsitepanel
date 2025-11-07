@@ -1,5 +1,4 @@
 import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography, Spin, message, Tooltip, Space, Grid } from 'antd';
-import React from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';
 import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations';
