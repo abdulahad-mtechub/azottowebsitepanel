@@ -28,7 +28,7 @@ const Faqs = () => {
                         <Flex vertical gap={15} className='w-100 search-cs text-center'>
                             <Title level={2} className='text-white m-0'>{t("Frequently Asked Questions")}</Title>
                             <Text className='text-light-gray fs-16'>
-                                {t('Find answers to the most common questions about how Jusoor works, business verification, payments, and more')}
+                                {t('Find answers to the most common questions about how Jusoor works, business verification, payments, and more.')}
                             </Text>
                         </Flex>
                     </div>

@@ -20,7 +20,7 @@ const useAboutData = () => {
     title: t("Our Mission is to Make Buying & Selling Businesses Trusted, and Fast."),
     subtitle: t("Our Mission"),
     desc: t(
-      "We’re on a mission to empower individuals in Saudi Arabia to confidently buy and sell businesses through verified listings, secure payments, and step-by-step support — all in one platform."
+      "We're on a mission to empower individuals in Saudi Arabia to confidently buy and sell businesses through verified listings, secure payments, and step-by-step support — all in one platform."
     ),
     list: [
       {
