@@ -8,12 +8,14 @@ import { useQuery, useMutation } from "@apollo/client";
 import { useTranslation } from 'react-i18next'
 import { truncateChars } from '../../../utils'
 import Cookies from "js-cookie";
+import { useFormatNumber } from '../../../hooks'
 
 const { Text, Title, Paragraph } = Typography
 const { useBreakpoint } = Grid;
 
 const ExploreLive = () => {
 
+    const { formatNumber } = useFormatNumber();
     const navigate = useNavigate()
     const screens = useBreakpoint();
     const { t,i18n } = useTranslation()
@@ -86,21 +88,21 @@ const ExploreLive = () => {
             {
                 id: 1,
                 icon:'/assets/icons/year-p.png',
-                subtitle: typeof item.revenue === 'number' ? item.revenue.toLocaleString() : item.revenue,
+                subtitle: typeof item.revenue === 'number' ? formatNumber(item.revenue) : item.revenue,
                 subdesc:t('Revenue/month'),
             },
             {
                 id: 2,
                 icon:'/assets/icons/revenue.png',
-                subtitle: typeof item.profit === 'number' ? item.profit.toLocaleString() : item.profit,
+                subtitle: typeof item.profit === 'number' ? formatNumber(item.profit) : item.profit,
                 subdesc:t('Profit/month'),
             },
             {
                 id: 3,
                 icon:'/assets/icons/team.png',
                 subtitle: item.capitalRecovery >= 12
-                    ? `${(item.capitalRecovery / 12).toFixed(1)} ${t('years')}`
-                    : `${item.capitalRecovery} ${t('months')}`,
+                    ? `${formatNumber(item.capitalRecovery / 12)} ${t('years')}`
+                    : `${formatNumber(item.capitalRecovery)} ${t('months')}`,
                 subdesc: t('Capital Recovery')
             },
         ]

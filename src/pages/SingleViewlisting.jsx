@@ -8,6 +8,7 @@ import { useQuery } from '@apollo/client';
 import { GET_BUSINESS, SIMILER_BUSINESS_CATEGORY_GRAPH } from '../graphql/query/business';
 import { BusinessStats } from '../components/SellBusinessComponents/structure/BusinessStats';
 import { useTranslation } from 'react-i18next';
+import { useFormatNumber } from '../hooks';
 
 const { Text, Title } = Typography;
 const { Panel } = Collapse;
@@ -15,6 +16,7 @@ const { Panel } = Collapse;
 const SingleViewlisting = () => {
 
     const { t } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const postsaleColumns = usePostsaleColumns();
     const liabColumn = useLiabColumn();
     const keyassetsColumn = useKeyassetsColumn();
@@ -48,8 +50,8 @@ const SingleViewlisting = () => {
     const postSaleData = [
         {
             key: '1',
-            period: business?.supportDuration || t('N/A'),
-            session: business?.supportSession || t('N/A'),
+            period: formatNumber(business?.supportDuration) || t('N/A'),
+            session: formatNumber(business?.supportSession) || t('N/A'),
             verified: business?.isSupportVerified,
         }
     ];
@@ -57,27 +59,27 @@ const SingleViewlisting = () => {
     const liabilitiesData = business?.liabilities?.map((item, index) => ({
         key: item.id || index,
         name: item.name,
-        items: item.quantity,
-        purchaseyear: item.purchaseYear,
-        price: item?.price.toLocaleString(),
+        items: formatNumber(item.quantity),
+        purchaseyear: formatNumber(item.purchaseYear),
+        price: formatNumber(item?.price),
         verified:item.isActive
     }));
 
     const assetsData = business?.assets?.map((item, index) => ({
         key: item.id || index,
         name: item.name,
-        items: item.quantity,
-        purchaseyear: item?.purchaseYear,
-        price: item?.price.toLocaleString(),
+        items: formatNumber(item.quantity),
+        purchaseyear: formatNumber(item?.purchaseYear),
+        price: formatNumber(item?.price),
         verified:item.isActive
     }));
     
     const inventoryData = business?.inventoryItems?.map((item, index) => ({
         key: item.id || index,
         name: item.name,
-        items: item.quantity,
-        purchaseyear: item.purchaseYear,
-        price: item.price?.toLocaleString(),
+        items: formatNumber(item.quantity),
+        purchaseyear: formatNumber(item.purchaseYear),
+        price: formatNumber(item.price),
         verified:item.isActive
     }));
 

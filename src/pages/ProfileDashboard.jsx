@@ -20,6 +20,7 @@ import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 import dayjs from 'dayjs';
+import { useFormatNumber } from '../hooks';
 
 const { Text, Title } = Typography;
 const { useBreakpoint } = Grid;
@@ -28,7 +29,8 @@ const ProfileDashboard = () => {
     
     const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
-    const {t}= useTranslation()
+    const {t}= useTranslation();
+    const { formatNumber } = useFormatNumber();
     const screens = useBreakpoint(); 
     
     const profiletabData = {
@@ -201,10 +203,10 @@ const ProfileDashboard = () => {
         
         return defaultStats.map(item => ({
             ...item,
-            numbers: stats[item.key]?.toLocaleString() || '0',
+            numbers: formatNumber(stats[item.key]) || '0',
         }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userStatsData]);
+    }, [userStatsData, formatNumber]);
     
     const buyerStatisticsData = useMemo(() => {
         if (!buyerStatsData?.getBuyerStatistics) return buyerStats.map(item => ({ ...item, numbers: '0' }));
@@ -213,10 +215,10 @@ const ProfileDashboard = () => {
         
         return buyerStats.map(item => ({
             ...item,
-            numbers: stats[item.key]?.toLocaleString() || '0',
+            numbers: formatNumber(stats[item.key]) || '0',
         }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [buyerStatsData]);
+    }, [buyerStatsData, formatNumber]);
           
       const tabContent = {
         Seller: {

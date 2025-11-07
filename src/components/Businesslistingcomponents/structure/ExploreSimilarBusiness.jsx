@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import { truncateChars } from '../../../utils';
+import { useFormatNumber } from '../../../hooks';
 
 const { Text, Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -14,6 +15,7 @@ const { useBreakpoint } = Grid;
 const ExploreSimilarBusiness = ({ id }) => {
 
     const { t } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const screens = useBreakpoint();
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -83,21 +85,21 @@ const ExploreSimilarBusiness = ({ id }) => {
             {
                 id: 1,
                 icon: '/assets/icons/year-p.png',
-                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt={t("currency-symbol")} fetchPriority="high"/> {b?.revenue?.toLocaleString?.() || '0'}</>,
+                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt={t("currency-symbol")} fetchPriority="high"/> { formatNumber(b?.revenue) || '0'}</>,
                 subdesc: t('Revenue/month'),
             },
             {
                 id: 2,
                 icon: '/assets/icons/revenue.png',
-                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt={t("currency-symbol")} fetchPriority="high" /> {b?.profit?.toLocaleString?.() || '0'}</>,
+                subtitle: <><img src="/assets/icons/reyal-b.png" width={10} alt={t("currency-symbol")} fetchPriority="high" /> { formatNumber(b?.profit) || '0'}</>,
                 subdesc: t('Profit/month'),
             },
             {
                 id: 3,
                 icon: '/assets/icons/team.png',
                 subtitle: <>{b?.capitalRecovery >= 12
-                    ? `${(b.capitalRecovery / 12).toFixed(1)} ${t('years')}`
-                    : `${b.capitalRecovery} ${t('months')}`}</>,
+                    ? `${formatNumber(b.capitalRecovery / 12)} ${t('years')}`
+                    : `${formatNumber(b.capitalRecovery)} ${t('months')}`}</>,
                 subdesc: t('Capital Recovery')
             },
         ],
@@ -216,7 +218,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                                                 <Divider className='my-1' />
                                                 <Flex gap={3} align='center'>
                                                     <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
-                                                    <Title level={4} className='m-0'>{typeof pro?.price === 'number' ? pro.price.toLocaleString() : pro?.price}</Title>
+                                                    <Title level={4} className='m-0'>{formatNumber(pro?.price)}</Title>
                                                 </Flex>
                                             </div>
                                         </Flex>
