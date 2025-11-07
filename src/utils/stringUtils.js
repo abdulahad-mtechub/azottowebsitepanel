@@ -41,3 +41,27 @@ export const formatNumber = (value) => {
 export const formatCurrency = (amount) => {
     return formatNumber(amount);
 };
+
+export const toArabicNumerals = (value) => {
+    if (value === null || value === undefined || value === '') return '';
+    
+    const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+    
+    return String(value).replace(/\d/g, (digit) => arabicNumerals[parseInt(digit)]);
+};
+
+export const formatNumberByLanguage = (value, language = 'en') => {
+    if (value === null || value === undefined || value === '') return '';
+    
+    const formatted = formatNumber(value);
+    
+    if (language === 'ar') {
+        return toArabicNumerals(formatted);
+    }
+    
+    return formatted;
+};
+
+export const formatCurrencyByLanguage = (amount, language = 'en') => {
+    return formatNumberByLanguage(amount, language);
+};

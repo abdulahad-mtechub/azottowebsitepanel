@@ -9,6 +9,7 @@ import { PlusOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { truncateChars } from '../../../utils';
 import { CustomPagination } from '../../ui';
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -18,6 +19,7 @@ const Allbussines = () => {
     const navigate = useNavigate();
     const screens = useBreakpoint();
     const { t, i18n } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const isArabic = i18n.language === 'ar';
     const [currentPage, setCurrentPage] = useState(1);
     const [singledetail, setSingleDetail] = useState(null);
@@ -33,7 +35,7 @@ const Allbussines = () => {
         categoryName: isArabic ? biz.category.arabicName : biz.category.name,
         description: biz.description,
         isSaved: biz.isSaved,
-        amount: `${biz.price?.toLocaleString()}`,
+        amount: formatNumber(biz.price),
         price: biz.price,
         businessTitle: biz.businessTitle,
         category: biz.category,
@@ -42,9 +44,9 @@ const Allbussines = () => {
         offerCount: biz.offerCount,
         save: 'no',
         child: [
-            { subtitle: `${biz.revenue?.toLocaleString()}`, subdesc: t('Revenue/month') },
-            { subtitle: `${biz.profit?.toLocaleString()}`, subdesc: t('Profit/month') },
-            { subtitle: `${biz.capitalRecovery?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
+            { subtitle: formatNumber(biz.revenue), subdesc: t('Revenue/month') },
+            { subtitle: formatNumber(biz.profit), subdesc: t('Profit/month') },
+            { subtitle: `${formatNumber(biz.capitalRecovery)} ${t('months')}`, subdesc: t('Capital Recovery') },
         ]
     })) || [];
 
@@ -172,10 +174,10 @@ const Allbussines = () => {
                                             <Flex gap={3} align='center'>
                                                 <span className='currency-display'>
                                                     <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
-                                                    <Title level={4} className='m-0' style={{ display: 'inline-block', marginLeft: '12px' }}>{typeof pro?.price === 'number' ? pro.price.toLocaleString() : pro?.price}</Title>
+                                                    <Title level={4} className='m-0' style={{ display: 'inline-block', marginLeft: '12px' }}>{formatNumber(pro?.price)}</Title>
                                                 </span>
                                             </Flex>
-                                            <Text className='text-brand fs-14'>{pro.offerCount >= 10 ? `10+` : pro.offerCount} Offers</Text>
+                                            <Text className='text-brand fs-14'>{formatNumber(pro.offerCount >= 10 ? 10 : pro.offerCount)}{pro.offerCount >= 10 ? '+' : ''} {t('Offers')}</Text>
                                         </Flex>
                                     </div>
                                 </Flex>

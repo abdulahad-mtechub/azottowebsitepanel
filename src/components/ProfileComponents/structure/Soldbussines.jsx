@@ -5,11 +5,13 @@ import { useLazyQuery } from '@apollo/client';
 import { GETSELLERSOLDBUSINESS } from '../../../graphql/query';
 import { useTranslation } from 'react-i18next';
 import { truncateChars } from '../../../utils';
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text, Paragraph } = Typography;
 
 const Soldbussines = () => {
     const { t, i18n } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     // const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(10);
@@ -30,7 +32,7 @@ const Soldbussines = () => {
         categoryName: isArabic ? biz.category.arabicName : biz.category.name,
         description: biz.description,
         isSaved: biz.isSaved,
-        amount: `${biz.price?.toLocaleString()}`,
+        amount: formatNumber(biz.price),
         price: biz.price,
         businessTitle: biz.businessTitle,
         category: biz.category,
@@ -38,9 +40,9 @@ const Soldbussines = () => {
         businessStatus: biz.businessStatus,
         save: 'no',
         child: [
-            { subtitle: `${biz.revenue?.toLocaleString()}`, subdesc: t('Revenue/month') },
-            { subtitle: `${biz.profit?.toLocaleString()}`, subdesc: t('Profit/month') },
-            { subtitle: `${biz.capitalRecovery?.toLocaleString()} months`, subdesc: t('Capital Recovery') },
+            { subtitle: formatNumber(biz.revenue), subdesc: t('Revenue/month') },
+            { subtitle: formatNumber(biz.profit), subdesc: t('Profit/month') },
+            { subtitle: `${formatNumber(biz.capitalRecovery)} ${t('months')}`, subdesc: t('Capital Recovery') },
         ]
     })) || [];
 

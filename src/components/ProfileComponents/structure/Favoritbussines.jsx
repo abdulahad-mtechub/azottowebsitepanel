@@ -6,12 +6,14 @@ import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations';
 import { useLazyQuery, useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { truncateChars } from '../../../utils';
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text, Paragraph } = Typography;
 
 const Favoritbussines = () => {
     
     const { t } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(8);
@@ -56,22 +58,22 @@ const Favoritbussines = () => {
             child: [
                 {
                     id: 1,
-                    subtitle: item.revenue?.toLocaleString(),
+                    subtitle: formatNumber(item.revenue),
                     subdesc: t('Revenue/month'),
                 },
                 {
                     id: 2,
-                    subtitle: item.profit?.toLocaleString(),
+                    subtitle: formatNumber(item.profit),
                     subdesc: t('Profit/month'),
                 },
                 {
                     id: 3,
-                    subtitle: `${item?.capitalRecovery} months`,
+                    subtitle: `${formatNumber(item?.capitalRecovery)} ${t('months')}`,
                     subdesc: t('Capital Recovery'),
                 },
             ]
         })) ?? [], 
-    [data, t]);
+    [data, t, formatNumber]);
     
     const totalCount = data?.getFavoritBusiness?.totalCount ?? 0;
 

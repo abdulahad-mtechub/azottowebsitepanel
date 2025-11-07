@@ -1,1 +1,2 @@
-export { useDebounce } from './useDebounce';
+export * from './useDebounce';
+export * from './useFormatNumber';
