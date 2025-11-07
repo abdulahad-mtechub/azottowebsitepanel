@@ -83,6 +83,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
 
     const totalCount = offerDeals?.getBuyerCompletedDeals?.totalCount || 0;
     
+    
     return (
         <>    
             <Row gutter={[24,12]} className='mt-2'>
