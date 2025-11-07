@@ -333,7 +333,7 @@ const BusinessListingPage = ({getcategory}) => {
                                 <Col lg={{span: 12}} md={{span:12}} sm={{span: 24}} xs={{span: 24}}>
                                     <MySelect
                                         withoutForm
-                                        placeholder={t('Select Region')}
+                                        placeholder={t('Select region')}
                                         options={district}
                                         className='w-100 select'
                                         value={selectedDistrictId}

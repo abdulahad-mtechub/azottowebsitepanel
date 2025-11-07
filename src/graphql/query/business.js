@@ -30,7 +30,7 @@ const GET_ALL_BUSINESSES = gql`
       isByTakbeer
       isSaved
       id
-        category {
+      category {
         name
         arabicName
       }
@@ -166,6 +166,7 @@ query GetAllBusinessesByCategory($category: String!, $limit: Int, $offSet: Int) 
       }
       category {
         name
+        arabicName
       }
     }
     totalCount
@@ -191,6 +192,7 @@ query GetAllBusinessesByCity($city: String!, $limit: Int, $offSet: Int) {
       }
       category {
         name
+        arabicName
       }
     }
     totalCount
@@ -241,6 +243,7 @@ query GetAllBusinessesByProfit($profit: [Float]!, $limit: Int, $offSet: Int) {
       }
       category {
         name
+        arabicName
       }
     }
     totalCount
@@ -266,6 +269,7 @@ query GetAllBusinessesByRevenue($revenue: [Float]!, $limit: Int, $offSet: Int) {
       }
       category {
         name
+        arabicName
       }
     }
     totalCount
