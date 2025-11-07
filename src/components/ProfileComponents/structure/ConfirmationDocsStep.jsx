@@ -231,14 +231,14 @@ const ConfirmationDocsStep = ({ form, details }) => {
                 <Card className="card-cs border-gray rounded-12 mt-2">
                   <Flex justify="space-between" align="center">
                     <Flex gap={15}>
-                      <Image src={'/assets/icons/file.png'} alt="file icon" preview={false} width={20} />
+                      <Image src={'/assets/icons/file.png'} alt={t("file icon")} preview={false} width={20} />
                       <Flex vertical>
                         <Text className="fs-13 text-gray">{t(bankRecipt.title)}</Text>
                         {/* <Text className="fs-13 text-gray">{bankRecipt.fileSize || '5.3 MB'}</Text> */}
                       </Flex>
                     </Flex>
                     <a href={bankRecipt.filePath} target="_blank" rel="noopener noreferrer">
-                      <Image src={'/assets/icons/download.png'} alt="download icon" preview={false} width={20} />
+                      <Image src={'/assets/icons/download.png'} alt={t("download icon")} preview={false} width={20} />
                     </a>
                   </Flex>
                 </Card>
@@ -264,7 +264,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                         <Card className="card-cs border-gray rounded-12 mt-2">
                           <Flex justify="space-between" align="center">
                             <Flex gap={15}>
-                              <Image src={'/assets/icons/file.png'} alt="file icon" preview={false} width={20} />
+                              <Image src={'/assets/icons/file.png'} alt={t("file icon")} preview={false} width={20} />
                               <Flex vertical>
                                 <Text className="fs-13 text-gray">{t(existing?.title)}</Text>
                                 {/* <Text className="fs-13 text-gray">{existing?.fileSize || '—'}</Text> */}
@@ -273,7 +273,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
 
                             <Flex gap={8} align="center">
                               <a href={existing.filePath} target="_blank" rel="noopener noreferrer">
-                                <Image src={'/assets/icons/download.png'} alt="download icon" preview={false} width={20} />
+                                <Image src={'/assets/icons/download.png'} alt={t("download icon")} preview={false} width={20} />
                               </a>
                             </Flex>
                           </Flex>

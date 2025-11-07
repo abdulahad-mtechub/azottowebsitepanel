@@ -34,6 +34,8 @@ const LoginPage = () => {
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  console.log("Current language:", language);
   const handleFinish = async (values) => {
     try {
       const email = values.email.toLowerCase();
@@ -102,7 +104,7 @@ const LoginPage = () => {
           <Col  xs={24} sm={24} md={12} lg={16} className="signup-form-container">
               <div className="form-inner">
                   <Button aria-labelledby='Arrow left' shape="circle" onClick={()=>navigate('/')}>
-                    <ArrowLeftOutlined />
+                    <ArrowLeftOutlined style={language === "ar" ? { transform: 'rotate(180deg)' } : undefined} />
                   </Button>
                   <NavLink to={'/'}>
                     <div className="logo">
@@ -162,7 +164,7 @@ const LoginPage = () => {
                   </Form>
 
                   <Paragraph className="text-center mt-3">
-                      {t("Don’t have an account?")} <NavLink to={'/signup'}>{t("Sign Up")}</NavLink>
+                      {t("Don't have an account?")} <NavLink to={'/signup'}>{t("Sign Up")}</NavLink>
                   </Paragraph>
               </div>
           </Col>

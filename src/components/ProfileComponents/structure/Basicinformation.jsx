@@ -25,7 +25,7 @@ const Basicinformation = ({ buyerDashboardData, title }) => {
                                         ))}
                                     </Flex>
                                 ) : (
-                                    <Text className='fs-14 fw-normal'>{t(list?.desc)}</Text>
+                                    <Text className='fs-14 fw-normal'>{list?.desc}</Text>
                                 )}
                             </Flex>
                         </Col>

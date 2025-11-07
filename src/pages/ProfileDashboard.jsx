@@ -172,26 +172,26 @@ const ProfileDashboard = () => {
         }
     }
     const buyerDashboardData = user ? [
-        { title: 'Email',   desc: user?.email || 'N/A' },
-        { title: 'Phone Number', desc: user?.phone || 'N/A' },
-        { title: 'City', desc: user?.city || 'N/A' },
-        { title: 'Region', desc: user?.district || 'N/A' },
-        { title: 'National ID / Passport', desc: (user?.documents || []).map((doc) => doc.filePath) },
+        { title: t('Email'),   desc: user?.email || t('N/A') },
+        { title: t('Phone Number'), desc: user?.phone || t('N/A') },
+        { title: t('City'), desc: user?.city || t('N/A') },
+        { title: t('Region'), desc: user?.district || t('N/A') },
+        { title: t('National ID / Passport'), desc: (user?.documents || []).map((doc) => doc.filePath) },
         ] : [];
 
     const defaultStats = [
-        { id: 1, img: '/assets/icons/total-view.png', title: 'Total Views', key: 'viewedBusinessesCount' },
-        { id: 2, img: '/assets/icons/list-business.png', title: 'Number of Listed Businesses', key: 'listedBusinessesCount' },
-        { id: 3, img: '/assets/icons/offer-recieved.png', title: 'Offers Received', key: 'receivedOffersCount' },
-        { id: 4, img: '/assets/icons/pending-meeting-ic.png', title: 'Pending Meeting Requests', key: 'pendingMeetingsCount' },
-        { id: 5, img: '/assets/icons/schedule-meeting.png', title: 'Schedule Meetings', key: 'scheduledMeetingsCount' },
-        { id: 6, img: '/assets/icons/finalize-deal-ic.png', title: 'Finalized Deals', key: 'finalizedDealsCount' },
+        { id: 1, img: '/assets/icons/total-view.png', title: t('Total Views'), key: 'viewedBusinessesCount' },
+        { id: 2, img: '/assets/icons/list-business.png', title: t('Number of Listed Businesses'), key: 'listedBusinessesCount' },
+        { id: 3, img: '/assets/icons/offer-recieved.png', title: t('Offers Received'), key: 'receivedOffersCount' },
+        { id: 4, img: '/assets/icons/pending-meeting-ic.png', title: t('Pending Meeting Requests'), key: 'pendingMeetingsCount' },
+        { id: 5, img: '/assets/icons/schedule-meeting.png', title: t('Schedule Meetings'), key: 'scheduledMeetingsCount' },
+        { id: 6, img: '/assets/icons/finalize-deal-ic.png', title: t('Finalized Deals'), key: 'finalizedDealsCount' },
     ];
     
     const buyerStats = [
-        { id: 1, img:'/assets/icons/favorite-ic.png', title: 'Favorite Listing', key: 'favouriteBusinessesCount' },
-        { id: 2, img: '/assets/icons/schedule-meeting.png', title: 'Schedule Meetings', key: 'scheduledMeetingsCount' },
-        { id: 3, img: '/assets/icons/finalize-deal-ic.png', title: 'Finalized Deals', key: 'finalizedDealsCount' },
+        { id: 1, img:'/assets/icons/favorite-ic.png', title: t('Favorite Listing'), key: 'favouriteBusinessesCount' },
+        { id: 2, img: '/assets/icons/schedule-meeting.png', title: t('Schedule Meetings'), key: 'scheduledMeetingsCount' },
+        { id: 3, img: '/assets/icons/finalize-deal-ic.png', title: t('Finalized Deals'), key: 'finalizedDealsCount' },
     ];
         
     const profileStatisticsData = useMemo(() => {
@@ -233,10 +233,10 @@ const ProfileDashboard = () => {
                             </Button>
                         </Flex>
                     </Flex>
-                    <Basicinformation buyerDashboardData={buyerDashboardData} title={'Basic Information'} />
+                    <Basicinformation buyerDashboardData={buyerDashboardData} title={t('Basic Information')} />
                     <Profilestatistics 
                         data={profileStatisticsData} 
-                        title={'Profile Statistics'} 
+                        title={t('Profile Statistics')} 
                         dateRange={dateRange}
                         onDateRangeChange={handleDateRangeChange}
                     />
@@ -296,10 +296,10 @@ const ProfileDashboard = () => {
                             </Button>
                         </Flex>
                     </Flex>
-                    <Basicinformation buyerDashboardData={buyerDashboardData} title={'Basic Information'} />
+                    <Basicinformation buyerDashboardData={buyerDashboardData} title={t('Basic Information')} />
                     <Profilestatistics 
                         data={buyerStatisticsData} 
-                        title={'Profile Statistics'} 
+                        title={t('Profile Statistics')} 
                         dateRange={dateRange}
                         onDateRangeChange={handleDateRangeChange}
                     />

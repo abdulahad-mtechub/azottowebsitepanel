@@ -77,7 +77,7 @@ const FinalDealsStep = ({ inprogressdeal }) => {
           <>
             <Col span={24}>
               <Checkbox>
-                {t("I confirm that I’ve received and reviewed the final transfer documents.")}
+                {t("I confirm that I've received and reviewed the final transfer documents.")}
               </Checkbox>
             </Col>
             <Col span={24}>

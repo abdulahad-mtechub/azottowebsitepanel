@@ -20,7 +20,7 @@ const Herosection = () => {
               <div className='tag'>{t("Trusted Marketplace for Saudi Businesses")}</div>
               <Title className='m-0 text-white mbl-font' level={1}>
                 <Trans i18nKey="buyOrSellHeading">
-                  Buy or Sell a Verified <br/> Business with <span className='text-brand'>Confidence</span>
+                    Buy or Sell a Verified Business with <span className='text-brand'>Confidence</span>
                 </Trans>
               </Title>
               <Text className='text-light-gray my-2'>

@@ -172,7 +172,7 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
                     className='p-0 border-0 bg-transparent'
                     onClick={() => setInprogressDeal(null)}
                 >
-                    <Image src="/assets/icons/back-arr.png" alt="Arrow Left" width={22} height={22} preview={false} />
+                    <Image src="/assets/icons/back-arr.png" alt={t("Arrow Left")} width={22} height={22} preview={false} />
                 </Button>
                 <Title level={4} className='m-0'>
                     {deal?.businessTitle}

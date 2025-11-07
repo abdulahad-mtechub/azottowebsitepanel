@@ -438,7 +438,7 @@ const SignupPage = () => {
           </Col>
           <Col span={24}>
             <Checkbox>
-              {t("I agree to")} <NavLink to="/termofuse">{t("Terms of Service ")}</NavLink> {t("and")}{" "}
+              {t("I agree to")} <NavLink to="/termofuse">{t("Terms of Service")}</NavLink> {t("and")}{" "}
               <NavLink to="/privacypolicy">{t("Privacy Policy")}</NavLink>
             </Checkbox>
           </Col>
@@ -493,7 +493,7 @@ const SignupPage = () => {
           <div className="signup-form-container ">
             <div className="form-inner">
               <Button aria-label="Arrow left" shape="circle" onClick={() => navigate("/")}>
-                <ArrowLeftOutlined />
+                <ArrowLeftOutlined style={i18n.language === "ar" ? { transform: 'rotate(180deg)' } : undefined} />
               </Button>
               <NavLink to="/">
                 <div className="logo">

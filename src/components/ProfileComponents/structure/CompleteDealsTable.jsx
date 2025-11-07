@@ -57,7 +57,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
                   <img
                     src="/assets/icons/reyal-b.png"
                     width={16}
-                    alt="currency-symbol"
+                    alt={t("currency-symbol")}
                     fetchPriority="high"
                   />
                   <Text>{offerprice}</Text>
