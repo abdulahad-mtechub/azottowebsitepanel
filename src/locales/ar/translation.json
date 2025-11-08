@@ -1057,5 +1057,10 @@
   "Please enter price": "يرجى إدخال السعر",
   "Please enter a valid price (number only)": "يرجى إدخال سعر صحيح (أرقام فقط)",
   "Business added to favorites successfully": "تمت إضافة المنشأة إلى المفضلة بنجاح",
-  "Business removed from favorites successfully": "تمت إزالة المنشأة من المفضلة بنجاح"
+  "Business removed from favorites successfully": "تمت إزالة المنشأة من المفضلة بنجاح",
+  "Please enter liability name": "يرجى إدخال اسم الالتزام",
+  "Write liability name": "اكتب اسم الالتزام",
+  "Please enter inventory name": "يرجى إدخال اسم المخزون",
+  "Write inventory name": "اكتب اسم المخزون",
+  "Please enter price (number only)": "يرجى إدخال السعر (أرقام فقط)"
 }
