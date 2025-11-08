@@ -2,7 +2,7 @@ import { Button, Card, Col, Divider, Flex, Image, Row, Tag, Typography, Spin, me
 import { useQuery, useMutation } from '@apollo/client';
 import { GET_RANDOM_BUSINESSES } from '../../../graphql';
 import { CREATE_SAVE_BUSINESS } from '../../../graphql/mutation/mutations';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Cookies from "js-cookie";
 import { truncateChars } from '../../../utils';
@@ -128,7 +128,9 @@ const ExploreSimilarBusiness = ({ id }) => {
                         <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
                             <div className='tag fw-500 bg-secondary fw-500 text-brand'>{t('You May Also Like')}</div>
                             <Title className='m-0' level={2}>
-                                {t('Explore Similar')} <span className='text-brand'>{t('Businesses')}</span>
+                                <Trans i18nKey="exploreSimilar">
+                                    Explore Similar <span className="text-brand">Businesses</span>
+                                </Trans>
                             </Title>
                             <Text className='fs-14'>
                                 {t('Discover other verified businesses with similar category tailored to your interests.')}

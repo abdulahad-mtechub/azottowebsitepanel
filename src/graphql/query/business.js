@@ -85,6 +85,7 @@ const GET_BUSINESS = gql`
       category {
         id
         name
+        arabicName
       }
       savedBy {
         id

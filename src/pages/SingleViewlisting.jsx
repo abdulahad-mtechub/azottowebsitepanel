@@ -122,7 +122,7 @@ const SingleViewlisting = () => {
             <div className='bg-img' style={{ backgroundImage:'url(/assets/images/card-1.webp)' }}>
                 <div className='container'>
                     <Flex vertical gap={5} className='text-center'>
-                        <Text className='text-white'>{t('Reference #')}: {business?.reference || t('Not Found')}</Text>
+                        <Text className='text-white'>{t('Reference #')}: {formatNumber(business?.reference) || t('Not Found')}</Text>
                         <Title level={2} className='text-white m-0'>{business?.businessTitle || t('Not Found')}</Title>
                     </Flex>
                 </div>
@@ -135,7 +135,7 @@ const SingleViewlisting = () => {
                             <Flex vertical gap={20}>    
                                 <Flex vertical gap={10}>
                                     <Flex vertical gap={12}>
-                                        <Text className='fs-13 text-gray fw-500'>{t('Reference #')}: {business?.reference || t('Not Found')}</Text>
+                                        <Text className='fs-13 text-gray fw-500'>{t('Reference #')}: {formatNumber(business?.reference) || t('Not Found')}</Text>
                                         <Flex gap={10} align='center'>
                                             <Button aria-label={t('Arrow Left')} className='p-0' type="text" onClick={() => navigate("/businesslisting")}>
                                                 <Image src="/assets/icons/back-arr.png" alt={t('Arrow Left')} width={26} height={26} preview={false} />
@@ -258,7 +258,6 @@ const SingleViewlisting = () => {
                         </div>
                     </Col>
                 </Row>
-
                 <BusinessInfoCardMobile data={business} />
             </div>
 

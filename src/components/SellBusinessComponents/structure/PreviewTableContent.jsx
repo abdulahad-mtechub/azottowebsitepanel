@@ -1,4 +1,4 @@
-import { Card, Col, Flex, Row, Table, Typography } from 'antd'
+import { Col, Row, Table, Typography } from 'antd'
 
 const { Title } = Typography
 const PreviewTableContent = ({title,columns,data}) => {

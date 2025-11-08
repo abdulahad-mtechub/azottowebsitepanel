@@ -10,14 +10,14 @@ const usePostsaleColumns = () => {
             title: t('Support Period'), 
             dataIndex: 'period',
             render: (period) => (
-                <Text>{period ? <>{`${period} Months`}</> : "-"}</Text>
+                <Text>{period ? <>{`${period} ${t('Months')}`}</> : "-"}</Text>
             )
         },
         { 
             title: t('Number of Session'), 
             dataIndex: 'session',
             render: (session) => (
-                <Text>{session ? <>{`${session} Sessions`}</> : "-"}</Text>
+                <Text>{session ? <>{`${session} ${t('Sessions')}`}</> : "-"}</Text>
             )
         },
         { title: null, dataIndex: 'verified',

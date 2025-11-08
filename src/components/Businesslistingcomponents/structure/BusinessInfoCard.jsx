@@ -8,24 +8,27 @@ import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
 import { useMutation, useQuery } from '@apollo/client'
 import { CHECK_OFFER_EXISTS } from '../../../graphql/query/offer'
 import { CHECKMEETINGEXISTS } from '../../../graphql/query/meeting'
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text } = Typography;
 
 const BusinessInfoCard = ({ data }) => {
 
+  const { formatNumber } = useFormatNumber();
   const [messageApi, contextHolder] = message.useMessage();
   const { t } = useTranslation();
   const userId = Cookies.get("userId");
   const isLoggedIn = !!userId;
   const navigate = useNavigate();
   
-  // Check if user is inactive
   const userStatus = Cookies.get("userStatus");
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
   const [createOffer, { loading: createOfferLoading }] = useMutation(CREATE_OFFER);
   const [hasExistingOffer, setHasExistingOffer] = useState(false);
   const [existingMeeting, setExistingMeeting] = useState(false);
   const [existingProceedToPay, setExistingProceedToPay] = useState(false);
+  const isArabic = localStorage.getItem('lang') === "ar";
+  console.log("isArabic",data);
   
   const { data: offerExistsData, refetch: refetchOfferExists } = useQuery(CHECK_OFFER_EXISTS, {
     variables: { 
@@ -33,16 +36,16 @@ const BusinessInfoCard = ({ data }) => {
       buyerId: userId 
     },
     skip: !userId || !data?.id,
-    fetchPolicy: 'cache-and-network', // Changed from 'network-only' to prevent infinite loops
+    fetchPolicy: 'cache-and-network',
   });
-  
+
   const { data: meetingExistsData, refetch: refetchMeetingExists } = useQuery(CHECKMEETINGEXISTS, {
     variables: { 
       businessId: data?.id,
       buyerId: userId
     },
     skip: !userId || !data?.id,
-    fetchPolicy: 'cache-and-network', // Changed from 'network-only' to prevent infinite loops
+    fetchPolicy: 'cache-and-network',
   });
 
   useEffect(() => {
@@ -68,19 +71,19 @@ const BusinessInfoCard = ({ data }) => {
     {
       id: 2,
       icon:'/assets/icons/businessprice.png',
-      title: `${data?.price?.toLocaleString() || '0'}`,
+      title: formatNumber(data?.price || '0'),
       subtitle: t('Business Price')
     },
     {
       id: 3,
       icon:'/assets/icons/businesscate.png',
-      title: data?.category?.name || t('Unknown'),
+      title: isArabic ? data?.category?.arabicName : data?.category?.name || t('Unknown'),
       subtitle: t('Business Category')
     },
     {
       id: 5,
       icon:'/assets/icons/businessloc.png',
-      title: `${data?.district || t('Unknown')}`,
+      title: `${t(data?.district) || t('Unknown')}`,
       subtitle: t('Business Location')
     },
   ];

@@ -33,7 +33,6 @@ const Article = () => {
             desc: isArabic ? item?.arabicBody : item?.body,
             date: item.createdAt,
         })) || [];
-        console.log("articleData", articleData, data);
     const total = data?.getArticles?.totalCount || 0;
 
     const searchTimeout = useRef(null);
