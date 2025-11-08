@@ -113,7 +113,7 @@ const LoginPage = () => {
                   </NavLink>
 
                   <Title level={3}>{t("Sign In to your account")}</Title>
-                  <Paragraph>{t("Enter your credentials to login to your account")}</Paragraph>
+                  <Paragraph>{t("Enter your credentials to login to your account.")}</Paragraph>
 
                   <Button aria-labelledby='Sign In' className="btn bg-nafth fs-16" block>
                      {t("Sign In via Nafath")}

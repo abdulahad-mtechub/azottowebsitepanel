@@ -8,6 +8,8 @@ import { t } from "i18next";
 const { Title, Text, Paragraph } = Typography;
 
 const ForgotPassword = () => {
+
+    const isArabic = localStorage.getItem('lang') === 'ar';
     const [form] = Form.useForm();
     const [requestState, setRequestState] = useState('request');
     const navigate = useNavigate();
@@ -59,7 +61,7 @@ const ForgotPassword = () => {
             <Col xs={24} sm={24} md={14} lg={16} className="signup-form-container">
                 <div className="form-inner">
                     <Button aria-labelledby='Arrow left' shape="circle" onClick={()=>navigate('/')}>
-                      <ArrowLeftOutlined />
+                      <ArrowLeftOutlined style={{ transform: isArabic ? 'scaleX(-1)' : 'none' }} />
                     </Button>
                     <NavLink to={'/'}>
                       <div className="logo">
