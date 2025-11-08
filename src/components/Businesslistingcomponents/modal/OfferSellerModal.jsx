@@ -239,7 +239,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                         <MyInput
                             label={
                                 <Flex gap={6} align='center'>
-                                    <Text>{`Total Amount (Offer + Commission)`}</Text>
+                                    <Text>{t(`Total Amount (Offer + Commission)`)}</Text>
                                     <Popover 
                                         content={
                                             <Text>{t("This is the total amount including the commission.")}</Text>}
