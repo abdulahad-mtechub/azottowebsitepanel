@@ -8,6 +8,7 @@ import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
 import { useMutation, useQuery } from '@apollo/client'
 import { CHECK_OFFER_EXISTS } from '../../../graphql/query/offer'
 import { CHECKMEETINGEXISTS } from '../../../graphql/query/meeting'
+import { useFormatNumber } from '../../../hooks'
 
 const { Title, Text } = Typography;
 
@@ -15,6 +16,7 @@ const BusinessInfoCardMobile = ({ data }) => {
 
   const [messageApi, contextHolder] = message.useMessage();
   const { t } = useTranslation();
+  const { formatNumber } = useFormatNumber();
   const navigate = useNavigate();
   const userId = Cookies.get("userId");
   const isLoggedIn = !!userId;
@@ -73,7 +75,7 @@ const BusinessInfoCardMobile = ({ data }) => {
     {
       id: 2,
       icon:'/assets/icons/businessprice.png',
-      title: `${data?.price?.toLocaleString() || '0'}`,
+      title: formatNumber(data?.price || 0),
       subtitle: t('Business Price')
     },
     { 

@@ -2,12 +2,14 @@ import { CloseOutlined } from '@ant-design/icons';
 import { Button, Flex, Modal, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text } = Typography;
 
 const ProceedToPurchaseModal = ({ visible, onClose, businessPrice, onConfirm, loading }) => {
     const { t } = useTranslation();
 
+    const { formatNumber } = useFormatNumber();
     const computeCommissionMarginal = (amount) => {
         if (!amount || amount <= 0) return 0;
         let remaining = amount;
@@ -108,14 +110,14 @@ const ProceedToPurchaseModal = ({ visible, onClose, businessPrice, onConfirm, lo
                     <Flex justify='space-between' align='center'>
                         <Text className='fs-14'>{t('Business Price')}</Text>
                         <Text className='fw-500 fs-16'>
-                            {t('SAR')} {businessPrice?.toLocaleString() || '0'}
+                            {formatNumber(businessPrice) || '0'}
                         </Text>
                     </Flex>
 
                     <Flex justify='space-between' align='center'>
                         <Text className='fs-14'>{t('Jusoor Commission')}</Text>
                         <Text className='fw-500 fs-16'>
-                            {t('SAR')} {commission?.toLocaleString() || '0'}
+                            {formatNumber(commission) || '0'}
                         </Text>
                     </Flex>
 
@@ -124,7 +126,7 @@ const ProceedToPurchaseModal = ({ visible, onClose, businessPrice, onConfirm, lo
                     <Flex justify='space-between' align='center'>
                         <Text className='fw-600 fs-16'>{t('Total Amount')}</Text>
                         <Text className='fw-600 fs-18 text-brand'>
-                            {t('SAR')} {totalAmount?.toLocaleString() || '0'}
+                            {formatNumber(totalAmount) || '0'}
                         </Text>
                     </Flex>
                 </Flex>

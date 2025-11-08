@@ -98,7 +98,7 @@ const SignJusoorEndaStep = ({ form, onClose, user, onCheckboxChange }) => {
                             </Form.Item>
                             <Form.Item name='termsAgree' valuePropName='checked' className='m-0'>
                                 <Checkbox onChange={onCheckboxChange}>
-                                    {t('I accept Jusoor’s platform')} <Link to='/termofuse'>{t('Terms and Conditions')}</Link>
+                                    {t('I accept Jusoor\'s platform')} <Link to='/termofuse'>{t('Terms and Conditions')}</Link>
                                 </Checkbox>
                             </Form.Item>
                             <Form.Item name='commissionAgree' valuePropName='checked' className='m-0'>

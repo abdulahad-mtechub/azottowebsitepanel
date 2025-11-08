@@ -4,9 +4,12 @@ import { MyInput } from '../../Forms'
 import { useEffect } from 'react'
 import { CREATE_OFFER } from '../../../graphql/mutation/mutations'
 import { useMutation } from '@apollo/client'
+import { useTranslation } from 'react-i18next'
 
 const { Title, Text } = Typography
 const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => {
+
+    const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
 
@@ -121,10 +124,10 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
     const commissionContent = (
         <div style={{ maxWidth: '400px' }}>
             <Title level={5} style={{ marginBottom: '12px', color: 'var(--brand-color)' }}>
-                Jusoor Commission Structure
+                {t("Jusoor Commission Structure")}
             </Title>
             <Text style={{ display: 'block', marginBottom: '16px', fontSize: '13px' }}>
-                <strong>Marginal Commission System:</strong> Each rate applies only to the amount within its bracket.
+                <strong>{t("Marginal Commission System:")}</strong> {t("Each rate applies only to the amount within its bracket.")}
             </Text>
             
             <Table 
@@ -164,7 +167,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
             footer={
                 <Flex justify='end' gap={5}>
                     <Button aria-labelledby='Cancel' className='btn text-black border-gray' onClick={onClose}>
-                        Cancel
+                        {t("Cancel")}
                     </Button>
                     <Button aria-labelledby='Send an Offer' loading={createOfferLoading} disabled={createOfferLoading} className='btn bg-brand' onClick={async () => {
                         try {
@@ -189,7 +192,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                             console.error("Validation or mutation error:", error);
                         }
                     }}>
-                    Send an Offer
+                    {t("Send an Offer")}
                     </Button>
                 </Flex>
             }
@@ -199,7 +202,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
             <Flex vertical className='mb-3' gap={0}>
                 <Flex justify='space-between' gap={6}>
                     <Title level={4} className='m-0'>
-                    {mode === "proceed" ? "Proceed to Purchase" : "Counter Offer to Seller"}
+                    {mode === "proceed" ? t("Proceed to Purchase") : t("Counter Offer to Seller")}
                     </Title>
                     <Button aria-labelledby='Close' onClick={onClose} className='p-0 border-0 bg-transparent'>
                         <CloseOutlined className='fs-18' />
@@ -207,8 +210,8 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                 </Flex>                
                 <Text>
                 {mode === "proceed" 
-                ? "Confirm your purchase by entering the agreed amount."
-                : "Enter your offer amount and terms to send a counter-proposal to the seller."}
+                ? t("Confirm your purchase by entering the agreed amount.")
+                : t("Enter your offer amount and terms to send a counter-proposal to the seller.")}
                 </Text>
             </Flex>
             <Form
@@ -220,11 +223,11 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                     <Col span={24}>
                         <MyInput
                             type={'number'}
-                            label='Offer Amount'
+                            label={t('Offer Amount')}
                             name='offeramount'
                             required
-                            message="Please enter offer amount"
-                            placeholder='e.g. 75000'
+                            message={t("Please enter offer amount")}
+                            placeholder={t('e.g. 75000')}
                             addonBefore={
                                 <img src='/assets/icons/reyal-g.png' width={14} alt='currency-symbol' fetchPriority="high"/>
                             }
@@ -236,9 +239,10 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                         <MyInput
                             label={
                                 <Flex gap={6} align='center'>
-                                    <Text>Total Amount (Offer + Commission)</Text>
+                                    <Text>{`Total Amount (Offer + Commission)`}</Text>
                                     <Popover 
-                                        content={commissionContent}
+                                        content={
+                                            <Text>{t("This is the total amount including the commission.")}</Text>}
                                         title={null}
                                         trigger={['hover', 'click']}
                                         placement="left"
@@ -265,8 +269,8 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                             }
                             name='totalamount'
                             required
-                            message="Please enter total amount"
-                            placeholder='e.g. 80,000'
+                            message={t("Please enter total amount")}
+                            placeholder={t('e.g. 80,000')}
                             addonBefore={
                                 <Image src='/assets/icons/reyal-g.png' alt='currency-symbol' width={14} />
                             }

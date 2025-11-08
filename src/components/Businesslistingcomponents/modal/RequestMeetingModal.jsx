@@ -8,9 +8,11 @@ import { useMutation } from '@apollo/client'
 import { CREATE_ENDA,BUSINESS_MEETING } from '../../../graphql'
 import { UPDATE_OFFER } from '../../../graphql/mutation/mutations';
 import Cookies from "js-cookie";
+import { useTranslation } from 'react-i18next';
 
 const RequestMeetingModal = ({ businessId, visible, onClose, offerId, onlyMeeting, refetch }) => {
     const userId = Cookies.get("userId");
+    const { t } = useTranslation();
     const [messageApi, contextHolder] = message.useMessage();
     const [form] = Form.useForm(); 
     const [current, setCurrent] = useState(0);
@@ -88,7 +90,7 @@ const RequestMeetingModal = ({ businessId, visible, onClose, offerId, onlyMeetin
           <div className="step-content mb-3">{steps[current].content}</div>
           <Flex gap={10} justify='end'>
               <Button aria-labelledby='Cancel' className='btn text-black border-gray' onClick={prev}>
-                Cancel
+                {t('Cancel')}
               </Button>
               {current < steps.length - 1 && (
                   <Button 
@@ -98,7 +100,7 @@ const RequestMeetingModal = ({ businessId, visible, onClose, offerId, onlyMeetin
                       onClick={next}
                       disabled={!allTermsAgreed}
                   >
-                      Next
+                      {t('Next')}
                   </Button>
               )}
               {current === steps.length - 1 && (
@@ -168,7 +170,7 @@ const RequestMeetingModal = ({ businessId, visible, onClose, offerId, onlyMeetin
                     }}
                     loading={loading}
                   >
-                      Send Meeting Request
+                      {t('Send Meeting Request')}
                   </Button>
               )}
           </Flex>
