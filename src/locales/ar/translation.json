@@ -1062,5 +1062,9 @@
   "Write liability name": "اكتب اسم الالتزام",
   "Please enter inventory name": "يرجى إدخال اسم المخزون",
   "Write inventory name": "اكتب اسم المخزون",
-  "Please enter price (number only)": "يرجى إدخال السعر (أرقام فقط)"
+  "Please enter price (number only)": "يرجى إدخال السعر (أرقام فقط)",
+  "Al Ahsa (Hofuf/Mubarraz)": "الأحساء (الهفوف/المبرز)",
+  "Al Taif": "الطائف",
+  "Al Hada": "الهدا",
+  "Alaqeeq": "العقيق"
 }

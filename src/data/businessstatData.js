@@ -122,6 +122,11 @@ const useCities = () => {
       { id: 'abu-arish', name: t('Abu Arish') },
       { id: 'sabya', name: t('Sabya') },
     ],
+    taif: [
+      { id: 'al-taif', name: t('Al Taif') },
+      { id: 'al-hada', name: t('Al Hada') },
+      { id: 'alaqeeq', name: t('Alaqeeq') },
+    ],
     najran: [
       { id: 'najran', name: t('Najran') },
       { id: 'sharurah', name: t('Sharurah') },
