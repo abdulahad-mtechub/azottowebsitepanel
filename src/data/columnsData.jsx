@@ -41,7 +41,7 @@ const useLiabColumn = () => {
 
     const liabColumn = [
         { title: t('Liability name'), dataIndex: 'name' },
-        { title: t('Number of Items'), dataIndex: 'items' },
+        { title: t('Number of items'), dataIndex: 'items' },
         { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
         { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {typeof price === 'number' ? price.toLocaleString() : price}</>},
         { title: null, dataIndex: 'verified',
@@ -65,7 +65,7 @@ const useKeyassetsColumn = () => {
 
     const keyassetsColumn = [
         { title: t('Asset name'), dataIndex: 'name' },
-        { title: t('Number of Items'), dataIndex: 'items' },
+        { title: t('Number of items'), dataIndex: 'items' },
         { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
         { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high"/> {typeof price === 'number' ? price.toLocaleString() : price}</>},
         { title: null, dataIndex: 'verified',
@@ -89,7 +89,7 @@ const useInventColumn = () => {
 
     const inventColumn = [
         { title: t('Inventory name'), dataIndex: 'name' },
-        { title: t('Number of Items'), dataIndex: 'items' },
+        { title: t('Number of items'), dataIndex: 'items' },
         { title: t('Purchase Year'), dataIndex: 'purchaseyear' },
         { title: t('Price'), dataIndex: 'price', render:(price)=><><img src="/assets/icons/reyal.webp" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {typeof price === 'number' ? price.toLocaleString() : price}</>},
         { title: null, dataIndex: 'verified',

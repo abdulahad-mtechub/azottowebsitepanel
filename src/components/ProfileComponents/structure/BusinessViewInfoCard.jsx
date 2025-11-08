@@ -1,9 +1,13 @@
 import { Card, Col, Flex, Image, Row, Typography } from 'antd'
 import { useTranslation } from 'react-i18next'
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text } = Typography
 const BusinessViewInfoCard = ({ data }) => {
+
     const { t } = useTranslation();
+    const isArabic = localStorage.getItem('lang') === 'ar';
+    const { formatNumber } = useFormatNumber();
 
     const businessInfoData = [
         {
@@ -15,19 +19,19 @@ const BusinessViewInfoCard = ({ data }) => {
         {
             id: 2,
             icon:'/assets/icons/businessprice.png',
-            title: <> <img src="/assets/icons/reyal-b.png" width={16} alt={t("currency-symbol")} fetchPriority="high" /> {data?.price?.toLocaleString() || '0'}</>,
+            title: <> <img src="/assets/icons/reyal-b.png" width={16} alt={t("currency-symbol")} fetchPriority="high" /> {formatNumber(data?.price) || '0'}</>,
             subtitle: t('Business Price')
-        },
-        {
+            },
+            {
             id: 3,
             icon:'/assets/icons/businesscate.png',
-            title: data?.category?.name || t('Unknown'),
+            title: isArabic ? data?.category?.arabicName : data?.category?.name || t('Unknown'),
             subtitle: t('Business Category')
         },
         {
             id: 5,
             icon:'/assets/icons/businessloc.png',
-            title: `${data?.district + "" + (data?.city ? `, ${data?.city}` : '') || t('Unknown')}`,
+            title: `${t(data?.district) + "" + (t(data?.city) ? `, ${t(data?.city)}` : '') || t('Unknown')}`,
             subtitle: t('Business Location')
         },
     ]

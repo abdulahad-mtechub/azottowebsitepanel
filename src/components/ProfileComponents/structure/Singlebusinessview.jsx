@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { BusinessStatusModal } from '../modal/BusinessStatusModal';
 import { useState } from 'react';
+import { form } from 'framer-motion/client';
+import { formatNumber } from '../../../utils';
 
 const { Text, Title } = Typography;
 
@@ -29,7 +31,6 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   const business = data?.getBusinessById?.business;
 
   const handleEditBusiness = () => {
-    // Navigate to edit page with business ID
     navigate(`/sellbusinesscreate?edit=${singledetail}`);
   };
 
@@ -51,7 +52,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
       );
       
       setStatusModalVisible(false);
-      refetch(); // Refresh the business data
+      refetch(); 
     } catch (error) {
       console.error('Error updating business status:', error);
       messageApi.error(t('Failed to update business status'));
@@ -73,10 +74,10 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   function mapBusinessPayloadToUI(payload) {
     return {
       id: payload?.id,
-      ref: payload?.reference,
+      ref: formatNumber(payload?.reference),
       title: payload?.businessTitle,
       description: payload?.description,
-      amount: `${t('SAR')} ${payload?.price?.toLocaleString()}`,
+      amount: formatNumber(payload?.price),
       status: payload?.isSupportVerified ? t('Active') : t('Under-review'),
       type: payload?.isByTakbeer ? t('Taqbeel') : t('Acquiring'),
       isAbleToInactive: payload?.isAbleToInactive,
@@ -85,13 +86,13 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
         {
           id: 1,
           icon: '/assets/icons/year-p.png',
-          subtitle: `${t('SAR')} ${payload?.revenue.toLocaleString()}`,
+          subtitle: formatNumber(payload?.revenue),
           subdesc: `${payload?.revenueTime}`,
         },
         {
           id: 2,
           icon: '/assets/icons/revenue.png',
-          subtitle: `${t('SAR')} ${payload?.profit.toLocaleString()}`,
+          subtitle: formatNumber(payload?.profit),
           subdesc: `${payload?.profittime}`,
         },
         {

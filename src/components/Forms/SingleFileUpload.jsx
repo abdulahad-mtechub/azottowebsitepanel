@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PlusOutlined, MinusCircleFilled, LoadingOutlined } from '@ant-design/icons';
 import { Upload, Form, Typography, Flex, Button, Spin } from 'antd';
+import { useTranslation } from 'react-i18next';
 const { Dragger } = Upload;
 
 const SingleFileUpload = ({ 
@@ -14,6 +15,8 @@ const SingleFileUpload = ({
   initialFileList = [], 
   uploading = false 
 }) => {
+
+  const { t } = useTranslation();
   const [fileList, setFileList] = useState([]);
   const [uploadedFileUids, setUploadedFileUids] = useState(new Set());
   const [validationError, setValidationError] = useState(null);
@@ -185,7 +188,7 @@ const SingleFileUpload = ({
                 {uploading ? (
                   <>
                     <Spin indicator={<LoadingOutlined style={{ fontSize: 20 }} spin />} />
-                    <p className="ant-upload p-0 m-0 text-gray mt-2">Uploading...</p>
+                    <p className="ant-upload p-0 m-0 text-gray mt-2">{t('Uploading...')}</p>
                   </>
                 ) : (
                   <>

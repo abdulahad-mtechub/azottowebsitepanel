@@ -5,10 +5,14 @@ import { BusinessStats, PreviewTableContent } from '../../SellBusinessComponents
 import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../../../data';
 import { useTranslation } from 'react-i18next';
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
+import { useFormatNumber } from '../../../hooks';
 
 const { Text, Title } = Typography;
 const { Panel } = Collapse;
 const SellerDealDetails = ({ data }) => {
+
+  const { formatNumber } = useFormatNumber();
+  const isArabic = localStorage.getItem('lang') === 'ar';
   const { t } = useTranslation();
   const postsaleColumns = usePostsaleColumns();
   const liabColumn = useLiabColumn();
@@ -18,8 +22,8 @@ const SellerDealDetails = ({ data }) => {
   const postSaleData = [
     {
       key: '1',
-      period: businessinfo?.supportDuration || t('N/A'),
-      session: businessinfo?.supportSession || t('N/A'),
+      period: formatNumber(businessinfo?.supportDuration) || t('N/A'),
+      session: formatNumber(businessinfo?.supportSession) || t('N/A'),
       verified: businessinfo?.isSupportVerified,
     }
   ];
@@ -27,25 +31,25 @@ const SellerDealDetails = ({ data }) => {
   const liabilitiesData = businessinfo?.liabilities?.map((item, index) => ({
     key: item.id || index,
     name: item.name,
-    items: item.quantity,
-    purchaseyear: item.purchaseYear,
-    price: `SAR ${item?.price.toLocaleString()}`,
+    items: formatNumber(item.quantity),
+    purchaseyear: formatNumber(item.purchaseYear),
+    price: formatNumber(item?.price),
   }));
 
   const assetsData = businessinfo?.assets?.map((item, index) => ({
     key: item.id || index,
     name: item.name,
-    items: item.quantity,
-    purchaseyear: item?.purchaseYear,
-    price: `SAR ${item?.price.toLocaleString()}`,
+    items: formatNumber(item.quantity),
+    purchaseyear: formatNumber(item?.purchaseYear),
+    price: formatNumber(item?.price),
   }));
 
   const inventoryData = businessinfo?.inventoryItems?.map((item, index) => ({
     key: item.id || index,
     name: item.name,
-    items: item.quantity,
-    purchaseyear: item.purchaseYear,
-    price: `SAR ${item.price?.toLocaleString()}`,
+    items: formatNumber(item.quantity),
+    purchaseyear: formatNumber(item.purchaseYear),
+    price: formatNumber(item.price),
   }));
 
   // const { data: graphData } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
