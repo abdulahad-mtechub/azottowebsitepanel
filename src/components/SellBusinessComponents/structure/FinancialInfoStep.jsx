@@ -5,6 +5,7 @@ import { ModuleTopHeading } from '../../Pagecomponents'
 import { revenueLookups } from '../../../data'
 import { FormReplicate } from '../../Header'
 import { useTranslation } from 'react-i18next'
+import { useFormatNumber } from '../../../hooks'
 
 const { Text } = Typography
 
@@ -54,6 +55,8 @@ const normalizeLookupValue = (value) => {
 };
 
 const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
+
+    const { formatPhone } = useFormatNumber();
     const { t } = useTranslation();
     const [form] = Form.useForm();
 
@@ -193,7 +196,7 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 </Flex>
                 <Flex className='pill-round' gap={8} align='center'>
                     <Image src="/assets/icons/info-b.png" preview={false} width={16} alt={t('info icon')} />
-                    <Text className='fs-12 text-sky'>{t('For any query, contact us on')} +966 543 543 654</Text>
+                    <Text className='fs-12 text-sky'>{t('For any query, contact us on')} {formatPhone('+966 543 543 654')}</Text>
                 </Flex>
             </Flex>
             <Form layout="vertical" form={form} requiredMark={false} onValuesChange={handleFormChange}
@@ -382,30 +385,30 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 label: t('Asset Name'),
                                 placeholder: t('Write asset name'),
                                 type: "input",
-                                                                validator: createRowValidator(
-                                                                        "keyassets",
-                                                                        ["assetName", "noItems", "purchaseYear", "price"],
-                                                                        {
-                                                                                emptyMessage: "Please enter asset name",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "keyassets",
+                                        ["assetName", "noItems", "purchaseYear", "price"],
+                                        {
+                                                emptyMessage: t("Please enter asset name"),
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "noItems",
                                 label: t('Number of items'),
                                 placeholder: t('Enter quantity'),
                                 type: "input",
-                                                                validator: createRowValidator(
-                                                                        "keyassets",
-                                                                        ["assetName", "noItems", "purchaseYear", "price"],
-                                                                        {
-                                                                                emptyMessage: "Please enter quantity",
-                                                                                invalidMessage: "Please enter a valid quantity (number only)",
-                                                                                type: "number",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "keyassets",
+                                        ["assetName", "noItems", "purchaseYear", "price"],
+                                        {
+                                                emptyMessage: t("Please enter quantity"),
+                                                invalidMessage: t("Please enter a valid quantity (number only)"),
+                                                type: "number",
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "purchaseYear",
@@ -413,14 +416,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 placeholder: t('Choose purchase year'),
                                 type: "select",
                                 options: yearOp,
-                                                                validator: createRowValidator(
-                                                                        "keyassets",
-                                                                        ["assetName", "noItems", "purchaseYear", "price"],
-                                                                        {
-                                                                                emptyMessage: "Please choose purchase year",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "keyassets",
+                                        ["assetName", "noItems", "purchaseYear", "price"],
+                                        {
+                                                emptyMessage: t("Please choose purchase year"),
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "price",
@@ -429,16 +432,16 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
-                                                                validator: createRowValidator(
-                                                                        "keyassets",
-                                                                        ["assetName", "noItems", "purchaseYear", "price"],
-                                                                        {
-                                                                                emptyMessage: "Please enter price",
-                                                                                invalidMessage: "Please enter price (number only)",
-                                                                                type: "number",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "keyassets",
+                                        ["assetName", "noItems", "purchaseYear", "price"],
+                                        {
+                                                emptyMessage: t("Please enter price"),
+                                                invalidMessage: t("Please enter price (number only)"),
+                                                type: "number",
+                                        },
+                                        t
+                                ),
                             },
                         ]}
                     />
@@ -455,30 +458,30 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 label: t('Liabilities Name'),
                                 placeholder: t('Write liability name'),
                                 type: "input",
-                                                                validator: createRowValidator(
-                                                                        "liability",
-                                                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
-                                                                        {
-                                                                                emptyMessage: "Please enter liability name",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "liability",
+                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
+                                        {
+                                                emptyMessage: t("Please enter liability name"),
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "quantity",
                                 label: t('Number of items'),
                                 placeholder: t('Enter quantity'),
                                 type: "input",
-                                                                validator: createRowValidator(
-                                                                        "liability",
-                                                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
-                                                                        {
-                                                                                emptyMessage: "Please enter quantity",
-                                                                                invalidMessage: "Please enter a valid quantity (number only)",
-                                                                                type: "number",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "liability",
+                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
+                                        {
+                                                emptyMessage: t("Please enter quantity"),
+                                                invalidMessage: t("Please enter a valid quantity (number only)"),
+                                                type: "number",
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "liabilitypurchaseYear",
@@ -486,14 +489,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 placeholder: t('Choose purchase year'),
                                 type: "select",
                                 options: yearOp,
-                                                                validator: createRowValidator(
-                                                                        "liability",
-                                                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
-                                                                        {
-                                                                                emptyMessage: "Please choose purchase year",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "liability",
+                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
+                                        {
+                                                emptyMessage: t("Please choose purchase year"),
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "liabilityPrice",
@@ -503,16 +506,16 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
                                 message: t('Please enter total price'),
-                                                                validator: createRowValidator(
-                                                                        "liability",
-                                                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
-                                                                        {
-                                                                                emptyMessage: "Please enter price",
-                                                                                invalidMessage: "Please enter price (number only)",
-                                                                                type: "number",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "liability",
+                                        ["liabilityName", "quantity", "liabilitypurchaseYear", "liabilityPrice"],
+                                        {
+                                                emptyMessage: t("Please enter price"),
+                                                invalidMessage: t("Please enter price (number only)"),
+                                                type: "number",
+                                        },
+                                        t
+                                ),
                             },
                         ]}
                     />
@@ -529,30 +532,30 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 label: t('Inventory Name'),
                                 placeholder: t('Write inventory name'),
                                 type: "input",
-                                                                validator: createRowValidator(
-                                                                        "inventory",
-                                                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
-                                                                        {
-                                                                                emptyMessage: "Please enter inventory name",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "inventory",
+                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
+                                        {
+                                                emptyMessage: t("Please enter inventory name"),
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "inventoryquantity",
                                 label: t('Number of items'),
                                 placeholder: t('Enter quantity'),
                                 type: "input",
-                                                                validator: createRowValidator(
-                                                                        "inventory",
-                                                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
-                                                                        {
-                                                                                emptyMessage: "Please enter quantity",
-                                                                                invalidMessage: "Please enter a valid quantity (number only)",
-                                                                                type: "number",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "inventory",
+                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
+                                        {
+                                                emptyMessage: t("Please enter quantity"),
+                                                invalidMessage: t("Please enter a valid quantity (number only)"),
+                                                type: "number",
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "inventoryypurchaseYear",
@@ -560,14 +563,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 placeholder: t('Choose purchase year'),
                                 type: "select",
                                 options: yearOp,
-                                                                validator: createRowValidator(
-                                                                        "inventory",
-                                                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
-                                                                        {
-                                                                                emptyMessage: "Please choose purchase year",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "inventory",
+                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
+                                        {
+                                                emptyMessage: t("Please choose purchase year"),
+                                        },
+                                        t
+                                ),
                             },
                             {
                                 name: "inventoryPrice",
@@ -576,16 +579,16 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                 type: "input",
                                 addonBefore: <img src="/assets/icons/reyal-g.png" alt='currency-symbol' width={14} fetchPriority="high" />,
                                 className: "w-100 bg-white",
-                                                                validator: createRowValidator(
-                                                                        "inventory",
-                                                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
-                                                                        {
-                                                                                emptyMessage: "Please enter price",
-                                                                                invalidMessage: "Please enter price (number only)",
-                                                                                type: "number",
-                                                                        },
-                                                                        t
-                                                                ),
+                                validator: createRowValidator(
+                                        "inventory",
+                                        ["inventoryName", "inventoryquantity", "inventoryypurchaseYear", "inventoryPrice"],
+                                        {
+                                                emptyMessage: t("Please enter price"),
+                                                invalidMessage: t("Please enter price (number only)"),
+                                                type: "number",
+                                        },
+                                        t
+                                ),
                             },
                         ]}
                     />

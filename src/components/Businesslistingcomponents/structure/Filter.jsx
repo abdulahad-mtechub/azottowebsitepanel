@@ -41,7 +41,6 @@ const Filter = ({
         arabicTitle: cat.arabicName
     })) || [];
 
-    // Format steps with Arabic numerals when in Arabic mode
     const steps = useMemo(() => {
         const baseSteps = ["1", "2", "3", "4", "5", "5+"];
         return baseSteps.map(step => {
@@ -52,7 +51,6 @@ const Filter = ({
         });
     }, [formatNumber]);
 
-    // Format team size labels with Arabic numerals for display
     const formattedTeamSizeFilter = useMemo(() => {
         return teamsizeFilter.map(item => ({
             ...item,
@@ -65,7 +63,6 @@ const Filter = ({
         }));
     }, [formatNumber]);
 
-    // Format years in operation labels with Arabic numerals for display
     const formattedYearOper = useMemo(() => {
         return yearOper.map(item => ({
             ...item,

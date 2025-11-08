@@ -4,18 +4,20 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GETADMINACTIVEBANK, GETDEAL } from '../../../graphql/query';
 import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
 import { useTranslation } from 'react-i18next';
+import { useFormatNumber } from '../../../hooks';
 
 const { Text } = Typography;
 
 const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
   
   const { t } = useTranslation();
+  const { formatNumber } = useFormatNumber();
   const [messageApi, contextHolder] = message.useMessage();
 
   const { data } = useQuery(GETADMINACTIVEBANK, {fetchPolicy: 'network-only'});
 
   const jasoorCommmission = inprogressdeal?.busines?.documents?.find(
-    (doc) => doc.title === "Jasoor Commission"
+    (doc) => doc.title === t("Jasoor Commission")
   );
   const [updateOfferStatus] = useMutation(UPDATE_DEAL, 
     {
@@ -45,7 +47,7 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
     },
     {
       title: t("Commission Amount to Pay"),
-      desc: inprogressdeal?.commission || 0,
+      desc: `${t('currency-symbol')} ${formatNumber(inprogressdeal?.commission || 0)}`,
     },
   ];
 

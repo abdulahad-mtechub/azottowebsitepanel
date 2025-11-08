@@ -4,11 +4,13 @@ import { SingleInprogressSteps } from './SingleInprogressSteps';
 import { GETDEAL,GETUSERACTIVEBANK } from '../../../graphql';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text } = Typography;
 
 const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
   const { t } = useTranslation();
+  const { formatNumber } = useFormatNumber();
 
   const dealId = inprogressdeal.key;
 
@@ -31,7 +33,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         buyerName: data?.getDeal?.buyer?.name || '-',
         sellerId: data?.getDeal?.business?.seller?.id || null,
         sellerName: data?.getDeal?.business?.seller?.name || '-',
-        finalizedOffer: data?.getDeal?.offer?.price ? `SAR ${data?.getDeal?.offer?.price.toLocaleString()}` : '-',
+        finalizedOffer: data?.getDeal?.offer?.price ? `${t('currency-symbol')} ${formatNumber(data?.getDeal?.offer?.price)}` : '-',
         status: data?.getDeal?.status || 0,
         ndaPdfPath: data?.getDeal?.ndaPdfPath,
         date: data?.getDeal?.createdAt ? new Date(data?.getDeal?.createdAt).toLocaleDateString() : '-',
@@ -48,7 +50,6 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         isCommissionUploaded : data?.getDeal?.isCommissionUploaded,  
     } : null;
   // Determine status based on boolean fields
-  console.log("deal",deal);
   const getStatusLabel = (deal) => {
     if (!deal) return t('Pending');
     

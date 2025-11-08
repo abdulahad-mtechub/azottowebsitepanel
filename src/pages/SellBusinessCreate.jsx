@@ -111,7 +111,6 @@ const SellBusinessCreate = () => {
         if (editData?.getBusinessById?.business && editBusinessId) {
             const business = editData.getBusinessById.business;
 
-            // Normalize period fields that may come as string or number
             const revTime = business.revenueTime;
             const profTime = business.profittime;
             const revenueTimeValue = revTime === '6' || revTime === 6 ? 1 : 2;

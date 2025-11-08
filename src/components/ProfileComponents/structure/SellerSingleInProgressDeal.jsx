@@ -4,11 +4,13 @@ import { SellerSingleInprogressSteps } from './SellerSingleInProgressSteps';
 import { GETDEAL } from '../../../graphql/query';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text } = Typography;
 
 const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
     const { t } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const dealId = inprogressdeal.key;
 
     const { data, loading, error } = useQuery(GETDEAL, {
@@ -25,7 +27,7 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
             buyerId: data.getDeal.buyer?.id || '-',
             buyerName: data.getDeal.buyer?.name || '-',
             sellerName: data.getDeal.business?.seller?.name || '-',
-            finalizedOffer: data.getDeal.offer?.price ? `SAR ${data.getDeal.offer.price.toLocaleString()}` : '-',
+            finalizedOffer: data.getDeal.offer?.price ? `${t('currency-symbol')} ${formatNumber(data.getDeal.offer.price)}` : '-',
             ndaPdfPath: data.getDeal.ndaPdfPath,
             status: data.getDeal.status || 0,
             date: data.getDeal.createdAt ? new Date(data.getDeal.createdAt).toLocaleDateString() : '-',

@@ -65,3 +65,14 @@ export const formatNumberByLanguage = (value, language = 'en') => {
 export const formatCurrencyByLanguage = (amount, language = 'en') => {
     return formatNumberByLanguage(amount, language);
 };
+export const formatPhoneByLanguage = (phone, language = 'en') => {
+    if (phone === null || phone === undefined || phone === '') return '';
+    
+    const phoneStr = String(phone);
+    
+    if (language === 'ar') {
+        return toArabicNumerals(phoneStr);
+    }
+    
+    return phoneStr;
+};

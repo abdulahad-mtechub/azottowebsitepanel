@@ -4,11 +4,13 @@ import { SELLERDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useFormatNumber } from '../../../hooks';
 
 const { Text } = Typography;
 
 const SellerCompleteDeal = ({ setCompleteDeal }) => {
   const { t } = useTranslation();
+  const { formatNumber } = useFormatNumber();
   const [searchValue, setSearchValue] = useState('');
   const [pagination, setPagination] = useState({
     current: 1,
@@ -65,10 +67,10 @@ const SellerCompleteDeal = ({ setCompleteDeal }) => {
                 <img
                 src="/assets/icons/reyal-b.png"
                 width={16}
-                alt="currency-symbol"
+                alt={t("currency-symbol")}
                 fetchPriority="high"
                 />
-                <Text>{finalizedprice}</Text>
+                <Text>{formatNumber(finalizedprice)}</Text>
             </>
             ) : (
             <Text>-</Text>
@@ -137,8 +139,14 @@ const SellerCompleteDeal = ({ setCompleteDeal }) => {
               showSizeChanger: true,
               showQuickJumper: true,
               showTotal: (total, range) => 
-                `${range[0]}-${range[1]} ${t('of')} ${total} ${t('items')}`,
-              pageSizeOptions: ['10', '20', '50', '100']
+                `${formatNumber(range[0])}-${formatNumber(range[1])} ${t('of')} ${formatNumber(total)} ${t('items')}`,
+              pageSizeOptions: ['10', '20', '50', '100'],
+              itemRender: (page, type, originalElement) => {
+                if (type === 'page') {
+                  return <a>{formatNumber(page)}</a>;
+                }
+                return originalElement;
+              }
             }}
             onChange={handleTableChange}
           />

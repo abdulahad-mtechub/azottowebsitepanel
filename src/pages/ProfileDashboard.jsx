@@ -8,7 +8,6 @@ import {
     Card,
     Segmented,
     Avatar,
-    Tooltip,
     Grid
 } from 'antd';
 import { ArrowLeftOutlined, MenuOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';

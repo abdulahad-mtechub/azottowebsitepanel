@@ -80,7 +80,7 @@ const ExploreLive = () => {
         ref: item.reference,
         title: item.businessTitle,
         description: item.description,
-        amount: typeof item.price === 'number' ? item.price.toLocaleString() : item.price,
+        amount: typeof item.price === 'number' ? formatNumber(item.price) : item.price,
         save: item.isSaved,
         status: item.isSold,
         type: item.isByTakbeer,

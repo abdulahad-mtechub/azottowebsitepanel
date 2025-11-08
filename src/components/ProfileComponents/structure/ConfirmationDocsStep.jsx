@@ -18,9 +18,9 @@ const ConfirmationDocsStep = ({ form, details }) => {
   const [documents, setDocuments] = useState({});
   const [crUploaded, setCrUploaded] = useState(false);
 
-  const bankRecipt = details?.busines?.documents?.find(d => d.title === t('Buyer Payment Receipt'));
-  const existingCrDoc = details?.busines?.documents?.find(d => d.title === t('Commercial Registration (CR)'));
-  const existingNotarizedDoc = details?.busines?.documents?.find(d => d.title === t('Notarized Ownership Transfer Letter'));
+  const bankRecipt = details?.busines?.documents?.find(d => d.title === "Buyer Payment Receipt" || d.title === t('Buyer Payment Receipt'));
+  const existingCrDoc = details?.busines?.documents?.find(d => d.title === "Commercial Registration (CR)" || d.title === t('Commercial Registration (CR)'));
+  const existingNotarizedDoc = details?.busines?.documents?.find(d => d.title === "Notarized Ownership Transfer Letter" || d.title === t('Notarized Ownership Transfer Letter'));
 
   // Initialize based on the actual boolean value: null, true, or false
   const initialUploadsAllowed = details?.isPaymentVedifiedSeller === null 
@@ -254,8 +254,8 @@ const ConfirmationDocsStep = ({ form, details }) => {
           <>
             <Col span={24}>
               <Flex vertical gap={16} className="w-100">
-                {['Commercial Registration (CR)', 'Notarized Ownership Transfer Letter'].map((expectedTitle) => {
-                  const existing = details?.busines?.documents?.find((d) => d.title === expectedTitle);
+                {[t('Commercial Registration (CR)'), t('Notarized Ownership Transfer Letter')].map((expectedTitle) => {
+                  const existing = details?.busines?.documents?.find((d) => d.title === expectedTitle || d.title === expectedTitle.replace(t(''), ''));
 
                   if (existing) {
                     return (
@@ -283,25 +283,25 @@ const ConfirmationDocsStep = ({ form, details }) => {
                   }
 
                   const disableUpload =
-                    expectedTitle === 'Notarized Ownership Transfer Letter'
+                    expectedTitle === t('Notarized Ownership Transfer Letter')
                       ? (!crUploaded && !existingCrDoc) || uploadsAllowed !== 'yes'
                       : uploadsAllowed !== 'yes';
 
                   return (
                     <div key={expectedTitle}>
-                      <Text className="fw-600 text-medium-gray fs-13">{t(expectedTitle)}</Text>
+                      <Text className="fw-600 text-medium-gray fs-13">{expectedTitle}</Text>
                       <Card className="card-cs border-gray rounded-12 mt-2">
                         <Flex vertical gap={12}>
                           <SingleFileUpload
                             form={form}
-                            name={expectedTitle === 'Commercial Registration (CR)' ? 'crUpload' : 'notarizedUpload'}
+                            name={expectedTitle === t('Commercial Registration (CR)') ? 'crUpload' : 'notarizedUpload'}
                             title={t('Upload')}
                             onUpload={(file) => handleSingleFileUpload(file, expectedTitle)}
                             multiple={false}
                             message={message}
                             disabled={disableUpload}
                           />
-                          {expectedTitle === 'Notarized Ownership Transfer Letter' && (!crUploaded && !existingCrDoc) && (
+                          {expectedTitle === t('Notarized Ownership Transfer Letter') && (!crUploaded && !existingCrDoc) && (
                             <Text type="secondary" className="fs-12 mt-1">
                               {t('Please upload Commercial Registration first to enable this upload')}
                             </Text>

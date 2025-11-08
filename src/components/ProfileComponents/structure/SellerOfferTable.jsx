@@ -10,6 +10,7 @@ import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 import { RequestMeetingModal } from '../../Businesslistingcomponents';
 import moment from 'moment';
+import { useFormatNumber } from '../../../hooks';
 
 const {Text} =Typography
 
@@ -58,6 +59,7 @@ const OfferActionDropdown = ({ row, t, handleAcceptOffer, handleRequestMeeting, 
 const SellerOfferTable = ({ data }) => {
     
     const { t } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const userId = Cookies.get("userId");
     const [offermodal, setOfferModal] = useState(false);
     const [deletemodal, setDeleteModal] = useState(false);
@@ -147,7 +149,7 @@ const SellerOfferTable = ({ data }) => {
             render: (price) => price ? (
                 <Flex gap={10} align="center">
                     <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> 
-                    {typeof price === 'number' ? price.toLocaleString() : price}
+                    {formatNumber(typeof price === 'number' ? price.toLocaleString() : price)}
                 </Flex>
             ) : "-"
         },
@@ -156,7 +158,7 @@ const SellerOfferTable = ({ data }) => {
             dataIndex: 'price',
             render: (row, record) => (
                 <Flex gap={10} align="center">
-                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {typeof row === 'number' ? row.toLocaleString() : row}
+                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {formatNumber(typeof row === 'number' ? row.toLocaleString() : row)}
                     {record?.isProceedToPay ? (
                         <Tooltip title={t("PP - Proceed to Purchase")}>
                             <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
@@ -321,8 +323,14 @@ const SellerOfferTable = ({ data }) => {
                             pageSize: pagination.pageSize,
                             total: isBusinessInactive ? 0 : totalCount,
                             showSizeChanger: true,
-                            showTotal: (total) => t(`Total ${total} offers`),
+                            showTotal: (total) => t(`Total ${formatNumber(total)} offers`),
                             pageSizeOptions: ['10', '20', '50', '100'],
+                            itemRender: (page, type, originalElement) => {
+                                if (type === 'page') {
+                                    return <a>{formatNumber(page)}</a>;
+                                }
+                                return originalElement;
+                            }
                         }}
                         locale={{
                             emptyText: isBusinessInactive 

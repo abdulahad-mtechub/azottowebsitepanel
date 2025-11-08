@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { formatNumberByLanguage, formatCurrencyByLanguage } from '../utils';
+import { formatNumberByLanguage, formatCurrencyByLanguage, formatPhoneByLanguage } from '../utils';
 
 export const useFormatNumber = () => {
   const { i18n } = useTranslation();
@@ -10,9 +10,13 @@ export const useFormatNumber = () => {
   const formatCurrency = (amount) => {
     return formatCurrencyByLanguage(amount, currentLanguage);
   };
+  const formatPhone = (phone) => {
+    return formatPhoneByLanguage(phone, currentLanguage);
+  };
   return {
     formatNumber,
     formatCurrency,
+    formatPhone,
     isArabic: currentLanguage === 'ar',
   };
 };

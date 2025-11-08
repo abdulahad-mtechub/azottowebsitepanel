@@ -63,7 +63,7 @@ const SellerSingleInprogressSteps = ({ deal }) => {
             emptytitle: t('DSA Pending!'),
             emptydesc: t('Waiting for the seller & buyer to sign the digital sale agreement.'),
             lockedTitle: t('Commission Payment Pending'),
-            lockedDesc: t('Waiting for buyer commission payment verification.'),
+            lockedDesc: t('Waiting for buyer commission payment pending.'),
             isCompleted: isStep1Completed,
             isEnabled: isCommissionVerified,
         },

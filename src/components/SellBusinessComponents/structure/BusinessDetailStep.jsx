@@ -6,11 +6,13 @@ import { teamsizeOp,useCities, useDistricts  } from '../../../data'
 import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { useFormatNumber } from '../../../hooks'
 
 const { Text } = Typography
 const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
 
     const { t } = useTranslation();
+    const { formatPhone } = useFormatNumber();
     const district = useDistricts();
     const cities = useCities();
     const { data: categoryData } = useQuery(GET_CATEGORIES);
@@ -24,7 +26,6 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
       validate: () => form.validateFields(),
     }));
 
-    // Memoize categories to prevent recreation on every render
     const categories = useMemo(() => 
       categoryData?.getAllCategories?.categories?.map(cat => ({
         id: cat.id,
@@ -58,7 +59,6 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
       }));
     };
   
-    // Initial hydration: do not wait for async options; set whatever we have once
     useEffect(() => {
       if (!isInitialized && data) {
         setIsAccess(data.isByTakbeer === true);
@@ -147,7 +147,7 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
           </Flex>
           <Flex className='pill-round' gap={8} align='center'>
               <Image src="/assets/icons/info-b.png" preview={false} width={16} alt={t('info icon')} />
-              <Text className='fs-12 text-sky'>{t('For any query, contact us on')} +966 543 543 654</Text>
+              <Text className='fs-12 text-sky'>{t('For any query, contact us on')} {formatPhone('+966 543 543 654')}</Text>
           </Flex>
         </Flex>
   

@@ -11,8 +11,8 @@ const FinalDealsStep = ({ inprogressdeal }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const uploadDocs = inprogressdeal?.busines?.documents || [];
   const allowedTitles = [
-    "Commercial Registration (CR)",
-    "Notarized Ownership Transfer Letter"
+    t("Commercial Registration (CR)"),
+    t("Notarized Ownership Transfer Letter")
   ];
 
   const documents = uploadDocs.filter(doc =>

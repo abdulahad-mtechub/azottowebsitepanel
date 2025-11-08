@@ -154,7 +154,7 @@ const Favoritbussines = () => {
                                         <Divider className='my-1' />
                                         <Flex gap={3} align='center'>
                                             <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
-                                            <Title level={4} className='m-0'>{pro?.price?.toLocaleString?.() ?? pro?.price}</Title>
+                                            <Title level={4} className='m-0'>{formatNumber(pro?.price)}</Title>
                                         </Flex>
                                     </div>
                                 </Flex>
@@ -203,12 +203,12 @@ const Favoritbussines = () => {
                                         setCurrentPage(1);
                                     }}
                                     options={[
-                                        { value: 8, label: 8 },
-                                        { value: 16, label: 16 },
-                                        { value: 24, label: 24 },
-                                        { value: 40, label: 40 },
-                                        { value: 48, label: 48 },
-                                        { value: 60, label: 60 },
+                                        { value: 8, label: formatNumber(8) },
+                                        { value: 16, label: formatNumber(16) },
+                                        { value: 24, label: formatNumber(24) },
+                                        { value: 40, label: formatNumber(40) },
+                                        { value: 48, label: formatNumber(48) },
+                                        { value: 60, label: formatNumber(60) },
                                     ]}
                                 />
                             </Flex>
@@ -223,6 +223,12 @@ const Favoritbussines = () => {
                                     total={totalCount}
                                     onChange={(page) => setCurrentPage(page)}
                                     showSizeChanger={false}
+                                    itemRender={(page, type, originalElement) => {
+                                        if (type === 'page') {
+                                            return <a>{formatNumber(page)}</a>;
+                                        }
+                                        return originalElement;
+                                    }}
                                 />
                             </Flex>
                         </Col>

@@ -83,7 +83,7 @@ const Soldbussines = () => {
                                             >
                                                 <Space align='center' justify='center' >
                                                     <Text className='fs-12 text-white'>{pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}</Text>
-                                                    <Tooltip title={pro.isByTakbeer ? 'Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.' : 'Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.'}>
+                                                    <Tooltip title={pro.isByTakbeer ? t('Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.') : t('Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.')}>
                                                     <img src="/assets/icons/info-a.png" width={16} alt="takbeel-icon" fetchPriority="high" className='center' />
                                                     </Tooltip>
                                                 </Space>
@@ -135,8 +135,12 @@ const Soldbussines = () => {
                                     </Space>
                                     <Divider className='my-1' />
                                     <Flex gap={3} align='center'>
-                                        <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
-                                        <Title level={4} className='m-0'>{pro?.amount}</Title>
+                                        {/* <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
+                                        <Title level={4} className='m-0'>{pro?.amount}</Title> */}
+                                        <span className='currency-display'>
+                                            <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
+                                            <Title level={4} className='m-0' style={{ display: 'inline-block', marginLeft: '12px' }}>{pro?.amount}</Title>
+                                        </span>
                                     </Flex>
                                 </div>
                             </Flex>
@@ -157,7 +161,7 @@ const Soldbussines = () => {
                                             setLimit(value);
                                             setCurrentPage(1);
                                         }}
-                                        options={[6,10,20,50].map(v => ({ value: v, label: v }))}
+                                        options={[6,10,20,50].map(v => ({ value: v, label: formatNumber(v) }))}
                                     />
                                 </Flex>
                             </Col>
@@ -169,6 +173,12 @@ const Soldbussines = () => {
                                     pageSize={limit}
                                     total={sellerSoldBusinesses?.getAllSellerSoldBusinesses?.totalCount || 0}
                                     onChange={(page) => setCurrentPage(page)}
+                                    itemRender={(page, type, originalElement) => {
+                                        if (type === 'page') {
+                                            return <a>{formatNumber(page)}</a>;
+                                        }
+                                        return originalElement;
+                                    }}
                                 />
                             </Col>
                         </Row>

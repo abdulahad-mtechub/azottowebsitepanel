@@ -12,7 +12,7 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
   const [messageApi, contextHolder] = message.useMessage();
 
   const bankRecipt = inprogressdeal?.busines?.documents?.find(
-    (doc) => doc.title === "Buyer Payment Receipt"
+    (doc) => doc.title === t("Buyer Payment Receipt")
   );
   console.log("bankRecipt", inprogressdeal);
   const [updateOfferStatus] = useMutation(UPDATE_DEAL, {
@@ -119,7 +119,7 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
               <Flex vertical>
                 <Text className='fw-500 fs-14'>{t("Upload a bank statement or screenshot")}</Text>
                 <Text className='text-gray'>
-                  {t("Accepted formats: JPG, PNG, PDF Max size: 5MB per file.")}
+                  {t("Accepted formats: JPG, PNG, PDF. Max size: 5MB per file.")}
                 </Text>
               </Flex>
               <Flex className='w-100'>

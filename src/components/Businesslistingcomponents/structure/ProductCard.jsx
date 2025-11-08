@@ -6,6 +6,7 @@ import { message } from "antd";
 import { useTranslation } from 'react-i18next';
 import { truncateChars } from '../../../utils';
 import Cookies from "js-cookie";
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -23,6 +24,7 @@ const ProductCard = ({
 
     const screens = useBreakpoint();
     const { t } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage();
@@ -226,11 +228,11 @@ const ProductCard = ({
                                     value={limit}
                                     onChange={onLimitChange}
                                     options={[
-                                        { value: 12, label: 12 },
-                                        { value: 24, label: 24 },
-                                        { value: 36, label: 36 },
-                                        { value: 48, label: 48 },
-                                        { value: 60, label: 60 },
+                                        { value: 12, label: formatNumber(12) },
+                                        { value: 24, label: formatNumber(24) },
+                                        { value: 36, label: formatNumber(36) },
+                                        { value: 48, label: formatNumber(48) },
+                                        { value: 60, label: formatNumber(60) },
                                     ]}
                                 />
                             </Flex>
@@ -244,6 +246,12 @@ const ProductCard = ({
                                     pageSize={limit}
                                     onChange={onPageChange}
                                     showSizeChanger={false}
+                                    itemRender={(page, type, originalElement) => {
+                                        if (type === 'page') {
+                                            return <a>{formatNumber(page)}</a>;
+                                        }
+                                        return originalElement;
+                                    }}
                                 />
                             </Flex>
                         </Col>

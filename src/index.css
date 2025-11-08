@@ -129,6 +129,14 @@ body {
   height: auto !important;
 }
 
+[dir="rtl"] .ant-input-data-count {
+  left: 8px !important;
+  right: auto !important;
+  transform: none !important;
+  text-align: left;
+  direction: rtl;
+}
+
 .btn-sm {
   padding: 10px 18px !important;
 }

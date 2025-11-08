@@ -9,11 +9,13 @@ import { GET_BUYER_OFFER } from '../../../graphql/query'
 import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
+import { useFormatNumber } from '../../../hooks';
 
 const { Text } = Typography
 const BuyerOfferContent = () => {
 
     const { t } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const userId = Cookies.get("userId"); 
     const [offermodal, setOfferModal] = useState(false);
     const [requestPop, setRequestPop] = useState(false);
@@ -39,10 +41,8 @@ const BuyerOfferContent = () => {
     }, []);
 
     useEffect(() => {
-        // Convert frontend filter to API status
         let apiStatus = filterstatus;
         
-        // For SENT and RECEIVED, we use PENDING in API and filter client-side
         if (filterstatus === 'SENT' || filterstatus === 'RECEIVED') {
             apiStatus = 'PENDING';
         }
@@ -61,17 +61,14 @@ const BuyerOfferContent = () => {
     const offers = useMemo(() => data?.getOffersByUser?.offers || [], [data]);
     const totalCount = data?.getOffersByUser?.count || 0;
 
-    // Apply client-side filtering for SENT/RECEIVED status
     const filteredOffers = useMemo(() => {
         if (!filterstatus || (filterstatus !== 'SENT' && filterstatus !== 'RECEIVED')) {
             return offers;
         }
         
         if (filterstatus === 'SENT') {
-            // Show only offers created by current user (sent by buyer)
             return offers.filter(offer => offer.createdBy === userId);
         } else if (filterstatus === 'RECEIVED') {
-            // Show only offers NOT created by current user (received from seller)
             return offers.filter(offer => offer.createdBy !== userId);
         }
         
@@ -84,8 +81,8 @@ const BuyerOfferContent = () => {
         sellername: offer.business.seller?.name
             ? `${offer.business.seller.name.slice(0, 3)}*****`
             : null,
-        businessprice: typeof offer.business.price === 'number' ? offer.business.price.toLocaleString() : offer.business.price,
-        offerprice: typeof offer.price === 'number' ? offer.price.toLocaleString() : offer.price,
+        businessprice: typeof offer.business.price === 'number' ? offer.business.price : offer.business.price,
+        offerprice: typeof offer.price === 'number' ? offer.price : offer.price,
         status: offer.status,
         date: new Date(offer.createdAt).toLocaleString(),
         business: offer.business, 
@@ -123,7 +120,7 @@ const BuyerOfferContent = () => {
             dataIndex: 'businessprice',
             render: (row) => (
                 <Flex gap={10} align="center">
-                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {row}
+                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {formatNumber(row)}
                 </Flex>
             )
          },
@@ -132,7 +129,7 @@ const BuyerOfferContent = () => {
             dataIndex: 'offerprice',
             render: (row, record) => (
                 <Flex gap={10} align="center">
-                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {row}
+                    <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" /> {formatNumber(row)}
                     {record?.isProceedToPay ? (
                         <Tooltip title={t("PP - Proceed to Purchase")}>
                             <Text className='bg-brand radius-4 p-1 fs-11 text-white'>PP</Text>
@@ -151,7 +148,7 @@ const BuyerOfferContent = () => {
                 return (
                     <Flex gap={10} align="center">
                         <img src="/assets/icons/reyal-b.png" width={12} alt={t("currency-symbol")} fetchPriority="high" />
-                        <Text className=''>{commission || 0}</Text>
+                        <Text className=''>{formatNumber(commission || 0)}</Text>
                     </Flex>
                 );
             },
@@ -330,8 +327,14 @@ const BuyerOfferContent = () => {
                                     pageSize: pagination.pageSize,
                                     total: totalCount,
                                     showSizeChanger: true,
-                                    showTotal: (total) => t(`Total ${total} offers`),
+                                    showTotal: (total) => t(`Total ${formatNumber(total)} offers`),
                                     pageSizeOptions: ['10', '20', '50', '100'],
+                                    itemRender: (page, type, originalElement) => {
+                                        if (type === 'page') {
+                                            return <a>{formatNumber(page)}</a>;
+                                        }
+                                        return originalElement;
+                                    }
                                 }}
                             />
                         </Col>

@@ -4,12 +4,14 @@ import { ModuleTopHeading } from '../../Pagecomponents'
 import { SingleFileUpload } from '../../Forms';
 import imageCompression from 'browser-image-compression';
 import { useTranslation } from 'react-i18next'
+import { useFormatNumber } from '../../../hooks'
 
 const { Title, Text } = Typography
 
 const UploadSupportDocStep = ({ data, setData },ref) => {
 
   const { t } = useTranslation();
+  const { formatPhone } = useFormatNumber();
   const [messageApi, contextHolder] = message.useMessage()
   const [form] = Form.useForm();
   const [uploadingCR, setUploadingCR] = useState(false);
@@ -314,7 +316,7 @@ const handleMultipleFileRemove = (removedFile) => {
         </Flex>
         <Flex className='pill-round' gap={8} align='center'>
           <Image src="/assets/icons/info-b.png" preview={false} width={16} alt={t('info icon')} />
-          <Text className='fs-12 text-sky'>{t('For any query, contact us on +966 543 543 654')}</Text>
+          <Text className='fs-12 text-sky'>{t('For any query, contact us on')} {formatPhone('+966 543 543 654')}</Text>
         </Flex>
       </Flex>
 
