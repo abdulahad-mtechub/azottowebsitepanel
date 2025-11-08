@@ -48,7 +48,7 @@ const ArticleSingleView = () => {
                                             className='border-0 p-0 bg-transparent'
                                             onClick={() => navigate(-1)}
                                         >
-                                            <ArrowLeftOutlined />
+                                            <ArrowLeftOutlined style={{ transform: isArabic ? 'scaleX(-1)' : 'none' }} />
                                         </Button>
                                         <Title className='m-0' level={2}>
                                             {isArabic ? data?.getArticle?.arabicTitle : data?.getArticle?.title}

@@ -2,11 +2,12 @@ import { Card, Checkbox, Col, Collapse, Flex, Input, Radio, Row, Typography } fr
 import { LineOutlined } from '@ant-design/icons';
 import { teamsizeFilter, yearOper } from '../../../data';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CustomProgressBar } from '../../ui';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client';
 import { GET_CATEGORIES } from '../../../graphql/query';
+import { useFormatNumber } from '../../../hooks';
 
 const { Text, Title } = Typography;
 
@@ -17,6 +18,7 @@ const Filter = ({
     setOperationalYearRange, setHasAssets, setSelectedCategory
 }) => {
     const { t, i18n } = useTranslation();
+    const { formatNumber } = useFormatNumber();
     const isArabic = i18n.language === 'ar';
     const [activeStep, setActiveStep] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
@@ -39,7 +41,43 @@ const Filter = ({
         arabicTitle: cat.arabicName
     })) || [];
 
-    const steps = ["1x", "2x", "3x", "4x", "5x", "5x+"];
+    // Format steps with Arabic numerals when in Arabic mode
+    const steps = useMemo(() => {
+        const baseSteps = ["1", "2", "3", "4", "5", "5+"];
+        return baseSteps.map(step => {
+            if (step === "5+") {
+                return formatNumber(5) + "+";
+            }
+            return formatNumber(step) + "x";
+        });
+    }, [formatNumber]);
+
+    // Format team size labels with Arabic numerals for display
+    const formattedTeamSizeFilter = useMemo(() => {
+        return teamsizeFilter.map(item => ({
+            ...item,
+            displayLabel: item.label.split('-').map(num => {
+                if (num.endsWith('+')) {
+                    return formatNumber(num.replace('+', '')) + '+';
+                }
+                return formatNumber(num);
+            }).join('-')
+        }));
+    }, [formatNumber]);
+
+    // Format years in operation labels with Arabic numerals for display
+    const formattedYearOper = useMemo(() => {
+        return yearOper.map(item => ({
+            ...item,
+            displayLabel: item.label.split('-').map(num => {
+                if (num.endsWith('+')) {
+                    return formatNumber(num.replace('+', '')) + '+';
+                }
+                return formatNumber(num);
+            }).join('-')
+        }));
+    }, [formatNumber]);
+
     const onStepChange = (step) => {
         const isSame = activeStep === step;
         const newStep = isSame ? null : step;
@@ -87,7 +125,6 @@ const Filter = ({
         setProfitMarginMax(val);
     };
 
-    // Debounce updates to parent filters to avoid frequent API calls while typing
     useEffect(() => {
         const timeout = setTimeout(() => {
             setPriceRange([priceMin || null, priceMax || null]);
@@ -213,9 +250,9 @@ const Filter = ({
                 onChange={(checkedValues) => setEmployeesRange(checkedValues?.length > 0 ? checkedValues[0] : null)}
             >
                 <Row gutter={[12,8]}>
-                    {teamsizeFilter.map((item) => (
+                    {formattedTeamSizeFilter.map((item) => (
                         <Col span={24} key={item.value}>
-                            <Checkbox value={item.value}>{t(item.label)}</Checkbox>
+                            <Checkbox value={item.value}>{item.displayLabel}</Checkbox>
                         </Col>
                     ))}
                 </Row>
@@ -228,9 +265,9 @@ const Filter = ({
                 onChange={(checkedValues) => setOperationalYearRange(checkedValues?.length > 0 ? checkedValues[0] : null)}
             >
                 <Row gutter={[12,8]}>
-                    {yearOper.map((item) => (
+                    {formattedYearOper.map((item) => (
                         <Col span={24} key={item.value}>
-                            <Checkbox value={item.value}>{t(item.label)}</Checkbox>
+                            <Checkbox value={item.value}>{item.displayLabel}</Checkbox>
                         </Col>
                     ))}
                 </Row>
