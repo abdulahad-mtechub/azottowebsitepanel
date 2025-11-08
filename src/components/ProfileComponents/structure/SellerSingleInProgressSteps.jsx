@@ -84,7 +84,7 @@ const SellerSingleInprogressSteps = ({ deal }) => {
             label: t('Payment Confirmation & Docs'),
             content: <ConfirmationDocsStep form={form} details={deal} />,
             status: deal?.isPaymentVedifiedSeller && !deal?.isDocVedifiedBuyer
-                ? t('Document verification pending')
+                ? t('Document Verification Pending')
                 : deal?.isDocVedifiedSeller && deal?.isPaymentVedifiedSeller
                 ? t('Verified') : t('Pending'),
             emptytitle: t('Payment Confirmation Pending!'),

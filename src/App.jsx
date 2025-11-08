@@ -9,7 +9,9 @@ import arEG from 'antd/locale/ar_EG';
 const getAntdLocale = (lang) => (lang === 'ar' ? arEG : enUS);
 import 'dayjs/locale/ar';
 import dayjs from 'dayjs';
+dayjs.locale('ar');
 function App() {
+
 
   const [dir, setDir] = useState(i18n.language === 'ar' ? 'rtl' : 'ltr');
   const isArabic = i18n.language === 'ar';

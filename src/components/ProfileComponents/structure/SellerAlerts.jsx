@@ -5,12 +5,16 @@ import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 import moment from 'moment';
+import { useFormatNumber } from '../../../hooks';
+import dayjs from 'dayjs';
 
 const { Text, Title } = Typography;
 
 const PAGE_SIZE = 10;
 
 const SellerAlerts = () => {
+
+  const { formatNumber } = useFormatNumber();
   const { t } = useTranslation();
   const [userId, setUserId] = useState(null);
   const [alerts, setAlerts] = useState([]);
@@ -102,7 +106,7 @@ const SellerAlerts = () => {
                 {t('Alerts')}
               </Title>
               <Badge 
-                count={totalCount} 
+                count={formatNumber(totalCount)} 
                 showZero 
                 style={{ backgroundColor: '#52c41a' }}
                 overflowCount={999}
@@ -167,7 +171,7 @@ const SellerAlerts = () => {
                       </Flex>
                       {alert?.createdAt && (
                         <Text className='text-gray fs-12'>
-                          {moment(alert.createdAt).format('MMM DD, YYYY • hh:mm A')}
+                          {dayjs(alert.createdAt).format('MMM DD, YYYY • hh:mm A')}
                         </Text>
                       )}
                     </Flex>
@@ -194,7 +198,7 @@ const SellerAlerts = () => {
               <Divider className='my-3' />
               <Flex justify='center'>
                 <Text className='text-gray fs-12'>
-                  {t('Showing')} {alerts.length} {t('of')} {totalCount} {t('alerts')}
+                  {t('Showing')} {formatNumber(alerts.length)} {t('of')} {formatNumber(totalCount)} {t('alerts')}
                   {hasMore && ` • ${t('Scroll for more')}`}
                 </Text>
               </Flex>
