@@ -154,7 +154,7 @@ const RequestMeetingModal = ({ businessId, visible, onClose, offerId, onlyMeetin
                           })
                         ]);
 
-                        messageApi.success("Jusoor E-NDA signed & meeting request sent successfully!");
+                        messageApi.success(t("Jusoor E-NDA signed & meeting request sent successfully!"));
                         onClose();
                         refetch && refetch();
                       } catch (error) {

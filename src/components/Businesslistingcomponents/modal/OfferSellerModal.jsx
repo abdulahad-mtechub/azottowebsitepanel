@@ -183,7 +183,7 @@ const OfferSellerModal = ({visible,onClose,businessId,offerId,refetch,mode}) => 
                                     },
                                 },
                             });
-                            messageApi.success("Offer sent successfully!");
+                            messageApi.success(t("Offer sent successfully!"));
                             if (refetch) {
                                 refetch({ limit: 10, offset: 0, search: '' });
                             }

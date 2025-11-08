@@ -842,6 +842,8 @@
   "Failed to change password ❌": "فشل في تغيير كلمة المرور ❌",
   "Send Counter Offer": "إرسال عرض مضاد",
   "Counter offer sent successfully!": "تم إرسال العرض المضاد بنجاح!",
+  "Offer sent successfully!": "تم إرسال العرض بنجاح!",
+  "Jusoor E-NDA signed & meeting request sent successfully!": "تم توقيع اتفاقية عدم الإفشاء الإلكترونية من جسور وإرسال طلب الاجتماع بنجاح!",
   "Failed to send counter offer.": "فشل في إرسال العرض المضاد.",
   "Enter your offer amount to send a counter offer to the Buyer.": "أدخل مبلغ عرضك لإرسال عرض مضاد للمشتري.",
   "Offer Amount": "مبلغ العرض",
