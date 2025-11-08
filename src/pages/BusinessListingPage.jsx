@@ -161,7 +161,6 @@ const BusinessListingPage = ({getcategory}) => {
         const val = params.get('revenue');
         return val ? val.split(',').map(Number) : null;
     }, [params]);
-    console.log(priceRange, "check price")
     const getFilterVariables = () => {
         const sanitizeRange = (range) => {
             if (!Array.isArray(range)) return null;
@@ -200,7 +199,6 @@ const BusinessListingPage = ({getcategory}) => {
           sort: sortOrder !== null ? { price: sortOrder === 'Low to High' ? 'ASC' : 'DESC' } : null,
         };
     };
-    console.log(sortOrder, "check this")
     // 🟩 Fetch correct query based on search params
     useEffect(() => {
         let variables = getFilterVariables();
@@ -397,7 +395,6 @@ const BusinessListingPage = ({getcategory}) => {
                             value={sortOrder}
                             allowClear
                             onChange={(id) => {
-                                console.log("id", id)
                                 setSortOrder(id === 1 ? 'Low to High' : id === 2 ? 'High to Low' : null);
                             }}
                             style={{ minWidth: 120 }}

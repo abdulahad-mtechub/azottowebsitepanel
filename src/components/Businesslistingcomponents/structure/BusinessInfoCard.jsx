@@ -28,7 +28,6 @@ const BusinessInfoCard = ({ data }) => {
   const [existingMeeting, setExistingMeeting] = useState(false);
   const [existingProceedToPay, setExistingProceedToPay] = useState(false);
   const isArabic = localStorage.getItem('lang') === "ar";
-  console.log("isArabic",data);
   
   const { data: offerExistsData, refetch: refetchOfferExists } = useQuery(CHECK_OFFER_EXISTS, {
     variables: { 

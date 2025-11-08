@@ -35,7 +35,6 @@ const LoginPage = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log("Current language:", language);
   const handleFinish = async (values) => {
     try {
       const email = values.email.toLowerCase();

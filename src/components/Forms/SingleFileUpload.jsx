@@ -70,7 +70,6 @@ const SingleFileUpload = ({
     
     // Prevent multiple simultaneous uploads
     if (uploadingRef.current) {
-      console.log('Upload already in progress, skipping...');
       return;
     }
 

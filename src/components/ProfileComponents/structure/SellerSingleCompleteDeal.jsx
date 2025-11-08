@@ -132,7 +132,6 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
         { title: t('Finalized Offer'), desc: deal?.finalizedOffer },
         { title: t('Status'), desc: getStatusLabel(deal) },
     ];
-    console.log("getStatusBadgeClass", getStatusBadgeClass(deal, "completed"), sellerdealsData)
     if (loading) {
         return (
             <Flex justify="center" align="center" className='h-200'>

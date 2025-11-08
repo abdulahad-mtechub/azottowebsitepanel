@@ -17,7 +17,6 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
   const [fetchMeetings, { data, loading }] = useLazyQuery(READYSCHEDULEDMEETINGS, {
     fetchPolicy: 'network-only',
   });
-  console.log("Data in SellerAdminSchedulingTable", data);
   const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
     setSearchValue(debouncedSearchValue);
     setPagination(prev => ({ ...prev, current: 1 }));

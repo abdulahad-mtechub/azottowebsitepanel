@@ -1,13 +1,13 @@
 import { Button, Card, Col, Flex, Row, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 const { Text, Paragraph } = Typography;
 
 const ArtticleCards = ({ data, loadmore = false }) => {
     const navigate = useNavigate();
     const { t } = useTranslation();
-
     return (
         <Row gutter={[24, 24]}>
             {
@@ -18,7 +18,7 @@ const ArtticleCards = ({ data, loadmore = false }) => {
                             onClick={() => navigate('/articlesingleview/' + art?.id)}
                             actions={[
                                 <Text className='fs-13 text-gray mt-2'>
-                                    {art?.date}
+                                    {dayjs(art?.date).format('MMM DD, YYYY • hh:mm A')}
                                 </Text>
                             ]}
                         >

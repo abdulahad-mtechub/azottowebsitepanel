@@ -29,7 +29,6 @@ const SellerSingleInprogressSteps = ({ deal }) => {
 
     const { t } = useTranslation();
     const [form] = Form.useForm();
-    console.log('deal in steps:', deal);
     const isCommissionVerified = deal?.isCommissionVerified || deal?.status === 'COMMISSION_VERIFIED';
     const isStep1Completed = deal?.isDsaSeller && deal?.isDsaBuyer;
     const isStep2Completed = deal?.bankAccountId || deal?.status === 'SELLER_PAYMENT_VERIFICATION_PENDING' || 

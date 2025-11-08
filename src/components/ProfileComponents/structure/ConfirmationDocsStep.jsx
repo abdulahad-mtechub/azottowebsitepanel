@@ -30,7 +30,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
     : "no";
   
   const [uploadsAllowed, setUploadsAllowed] = useState(initialUploadsAllowed);
-  console.log('Uploads Allowed:', details);  
   useEffect(() => {
     if (existingCrDoc) setCrUploaded(true);
   }, [existingCrDoc]);

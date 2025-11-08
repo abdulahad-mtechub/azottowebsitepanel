@@ -14,7 +14,6 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
   const bankRecipt = inprogressdeal?.busines?.documents?.find(
     (doc) => doc.title === t("Buyer Payment Receipt")
   );
-  console.log("bankRecipt", inprogressdeal);
   const [updateOfferStatus] = useMutation(UPDATE_DEAL, {
     onError: (err) => console.error("Error updating offer status:", err),
   });

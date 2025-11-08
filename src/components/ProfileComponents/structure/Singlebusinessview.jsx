@@ -140,7 +140,6 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
 
   const uiBusiness = mapBusinessPayloadToUI(business);
 
-  console.log("business",business);
   return (
     <div className='mb-2'>
       {contextHolder}
