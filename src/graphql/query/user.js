@@ -136,6 +136,7 @@ const GETFAVORITBUSINESS = gql`
         id
         category {
           name
+          arabicName
         }
       businessStatus
       offerCount

@@ -12,8 +12,9 @@ const { Title, Text, Paragraph } = Typography;
 
 const Favoritbussines = () => {
     
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { formatNumber } = useFormatNumber();
+    const isArabic = i18n.language === 'ar';
     const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(1);
     const [limit, setLimit] = useState(8);
@@ -48,7 +49,7 @@ const Favoritbussines = () => {
     const favoriteBusinesses = useMemo(() => 
         data?.getFavoritBusiness?.businesses?.map(item => ({
             id: item.id,
-            categoryName: item?.category?.name,
+            categoryName: isArabic ? item?.category?.arabicName : item?.category?.name,
             businessTitle: item.businessTitle,
             description: item.description,
             price: item.price,
