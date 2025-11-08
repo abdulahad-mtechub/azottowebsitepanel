@@ -5,6 +5,7 @@ import { useLazyQuery } from '@apollo/client';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormatNumber } from '../../../hooks';
+import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
@@ -78,7 +79,13 @@ const SellerCompleteDeal = ({ setCompleteDeal }) => {
         </Space>
       )
     },
-    { title: t('Finalized Date'), dataIndex: 'date' },
+    { 
+      title: t('Finalized Date'), 
+      dataIndex: 'date',
+      render: (text) => {
+        return dayjs(text).format('MMM DD, YYYY • hh:mm A');
+      },
+    }
   ];
 
   const sellercompletedealData = useMemo(() => {
@@ -88,7 +95,7 @@ const SellerCompleteDeal = ({ setCompleteDeal }) => {
         title: offer?.business?.businessTitle,
         buyername: offer?.buyer?.name,
         finalizedprice: offer?.price,
-        date: new Date(offer?.createdAt).toLocaleString(),
+        date: offer?.createdAt,
       })) || []
     );
   }, [offerDeals]);

@@ -5,6 +5,7 @@ import { SELLERINPROGRESSDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useFormatNumber } from '../../../hooks';
+import dayjs from 'dayjs';
 
 const { Text } = Typography;
 const SellerInProgressDeals = ({ setInprogressDeal }) => {
@@ -173,7 +174,12 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
                 return <span className={`${badgeClass} fs-12 badge-cs fw-500 fit-content`}>{status}</span>;
             }
         },
-        { title: t('Finalized Date'), dataIndex: 'date' },
+        { 
+            title: t('Finalized Date'), dataIndex: 'date', 
+            render: (text) => {
+                return dayjs(text).format('MMM DD, YYYY • hh:mm A');
+            },
+        },
     ];
 
     const sellerofferData = useMemo(() => {

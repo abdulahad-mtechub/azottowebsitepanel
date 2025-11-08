@@ -5,6 +5,7 @@ import { useLazyQuery } from '@apollo/client';
 import { useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormatNumber } from '../../../hooks';
+import dayjs from 'dayjs';
 
 const { Text } = Typography;
 
@@ -73,7 +74,13 @@ const SellerScheduledTable = ({ isBuyer }) => {
     const columns = [
         { title: t('Business Title'), dataIndex: 'title' },
         { title: isBuyer ? t('Seller Name') : t('Buyer Name'), dataIndex: 'buyername' },
-        { title: t('Scheduled Date & Time'), dataIndex: 'scheduledatetime' },
+        { 
+            title: t('Scheduled Date & Time'), 
+            dataIndex: 'scheduledatetime' 
+            , render: (text) => {
+                return dayjs(text).format('MMM DD, YYYY • hh:mm A');
+            }
+        },
         { 
             title: t('Business Price'), 
             dataIndex: 'businessprice',

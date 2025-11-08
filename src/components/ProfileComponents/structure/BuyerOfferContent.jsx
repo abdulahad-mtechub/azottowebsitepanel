@@ -10,6 +10,7 @@ import { useLazyQuery } from '@apollo/client';
 import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 import { useFormatNumber } from '../../../hooks';
+import dayjs from 'dayjs';
 
 const { Text } = Typography
 const BuyerOfferContent = () => {
@@ -84,7 +85,7 @@ const BuyerOfferContent = () => {
         businessprice: typeof offer.business.price === 'number' ? offer.business.price : offer.business.price,
         offerprice: typeof offer.price === 'number' ? offer.price : offer.price,
         status: offer.status,
-        date: new Date(offer.createdAt).toLocaleString(),
+        date: new Date(offer.createdAt),
         business: offer.business, 
         buyer: offer.buyer, 
         createdBy: offer.createdBy, 
@@ -166,7 +167,13 @@ const BuyerOfferContent = () => {
                 return <Text className="fs-12 badge-cs fw-500">{status}</Text>;
             },
         },
-        { title: t('Date'), dataIndex: 'date' },
+        { 
+            title: t('Date'), 
+            dataIndex: 'date',
+            render: (date) => {
+                return dayjs(date).format('MMM DD, YYYY • hh:mm A');
+            },
+        },
         {
             title: t('Action'), key: 'action', fixed: 'right', width: 100, align: 'center',
             render: (record) => {

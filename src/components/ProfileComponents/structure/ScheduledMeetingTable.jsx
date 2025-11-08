@@ -3,6 +3,7 @@ import { scheduledData } from '../../../data';
 import { SearchInput } from '../../Forms';
 import { NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import dayjs from 'dayjs';
 
 const ScheduledMeetingTable = () => {
   const { t } = useTranslation();
@@ -11,7 +12,10 @@ const ScheduledMeetingTable = () => {
   const columns = [
     { title: t('Business Title'), dataIndex: 'title' },
     { title: t('Seller Name'), dataIndex: 'sellername' },
-    { title: t('Schedule Date & Time'), dataIndex: 'scheduledatetime' },
+    { 
+      title: t('Schedule Date & Time'), dataIndex: 'scheduledatetime',
+      render: (text) => dayjs(text).format('MMM DD, YYYY • hh:mm A')
+     },
     { title: t('Business Price'), dataIndex: 'businessprice' },
     { title: t('Offer Price'), dataIndex: 'offerprice' },
     {

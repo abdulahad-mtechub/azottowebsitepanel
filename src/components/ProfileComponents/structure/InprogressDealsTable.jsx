@@ -5,6 +5,7 @@ import { useLazyQuery } from '@apollo/client';
 import { useMemo, useEffect, useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useFormatNumber } from '../../../hooks';
+import dayjs from 'dayjs';
 const { Text } = Typography;
 const InprogressDealsTable = ({ setInprogressDeal }) => {
 
@@ -171,7 +172,13 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
         return <span className={`${badgeClass} fs-12 badge-cs fw-500 fit-content`}>{status}</span>;
       }
     },
-    { title: t('Date'), dataIndex: 'date' },
+    { 
+      title: t('Date'), 
+      dataIndex: 'date', 
+      render: (text) => {
+        return dayjs(text).format('MMM DD, YYYY • hh:mm A');
+      }
+    },
   ];
 
   const offerData = useMemo(() => {
@@ -186,7 +193,7 @@ const InprogressDealsTable = ({ setInprogressDeal }) => {
       status: getStatusLabel(deal),
       statusRaw: deal?.status,
       offerprice: deal?.price,
-      date: new Date(deal?.createdAt).toLocaleString(),
+      date: deal?.createdAt,
       isBuyerCompleted: deal?.isBuyerCompleted,
       isSellerCompleted: deal?.isSellerCompleted,
       isCommissionVerified: deal?.isCommissionVerified,
