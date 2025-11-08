@@ -10,7 +10,7 @@ import {
     Avatar,
     Grid
 } from 'antd';
-import { ArrowLeftOutlined, MenuOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, ArrowRightOutlined, MenuOutlined, PlusOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { Allbussines, Basicinformation, BuyerDeals, BuyerOfferContent, Changepassword, CustomTabs, Editprofile, Meetings, ModuleTopHeading, Profilestatistics, SellerAlerts, Soldbussines,Favoritbussines,SellerDeals,SellerWallet, ProfileSidebar } from '../components';
 import { useEffect, useState,useMemo } from 'react';
@@ -29,6 +29,7 @@ const ProfileDashboard = () => {
     const userId = Cookies.get("userId"); 
     const navigate = useNavigate();
     const {t}= useTranslation();
+    const isArabic = localStorage.getItem('lang') === 'ar';
     const { formatNumber } = useFormatNumber();
     const screens = useBreakpoint(); 
     
@@ -356,7 +357,7 @@ const ProfileDashboard = () => {
 
     const buttonIcon = isMobileOrTablet
         ? <MenuOutlined className='fs-16' />
-        : <ArrowLeftOutlined className='fs-16' />;
+        : isArabic ? <ArrowRightOutlined className='fs-16' /> : <ArrowLeftOutlined className='fs-16' />;
 
     return (
         <div className='padd mb-2'>
