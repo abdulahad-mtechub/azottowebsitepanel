@@ -4,8 +4,6 @@ import { RightOutlined } from '@ant-design/icons';
 import { AboutComponent, CounterSection, OurMission, Whatwedo } from '../components';
 import { useTranslation } from "react-i18next";
 
-
-
 const { Text, Title } = Typography;
 
 const Aboutus = () => {

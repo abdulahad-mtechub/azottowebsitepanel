@@ -37,7 +37,7 @@ const ArtticleCards = ({ data, loadmore = false }) => {
                                         ellipsis={{ rows: 2, expandable: true, symbol: t('more') }}
                                         className='fs-14 text-gray'
                                     >
-                                        <span dangerouslySetInnerHTML={{ __html: art?.desc }} />
+                                        <span dangerouslySetInnerHTML={{ __html: art?.desc?.content }} />
                                     </Paragraph>
                                 </div>
                             </Flex>

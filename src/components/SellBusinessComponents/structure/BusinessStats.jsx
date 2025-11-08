@@ -2,13 +2,15 @@ import { Card, Col, Flex, Image, Row, Tooltip, Typography } from 'antd'
 import moment from 'moment';
 import { useState,useEffect } from 'react'
 import { useTranslation } from 'react-i18next';
+import { useFormatNumber } from '../../../hooks';
 
 const { Title, Text } = Typography
 const BusinessStats = ({data}) => {
+
+    const { formatNumber } = useFormatNumber();
     const { t } = useTranslation();
     const [profitTimeValue, setProfitTimeValue] = useState('Last Year');
     const [revenueTimeValue, setRevenueTimeValue] = useState('Last Year');
-
 
     useEffect(() => {
         if (data?.profittime === "6" || data?.profittime === "Last 6 Months") {
@@ -30,38 +32,47 @@ const BusinessStats = ({data}) => {
         {
             id: 1,
             icon:'/assets/icons/rev.png',
-            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.revenue ? (typeof data.revenue === 'number' ? data.revenue.toLocaleString() : data.revenue) : '0'}</>,
+            title: <><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.revenue ? (typeof data.revenue === 'number' ? formatNumber(data.revenue) : formatNumber(data.revenue)) : '0'}</>,
             subtitle:`${t('Revenue')} ${t(revenueTimeValue) || ''}`,
         },
         {
             id: 2,
             icon:'/assets/icons/pro.png',
-            title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.profit ? (typeof data.profit === 'number' ? data.profit.toLocaleString() : data.profit) : '0'}</>,
+            title:<><img src="/assets/icons/reyal-b.png" width={16} alt="currency-symbol" fetchPriority="high" /> {data?.profit ? (typeof data.profit === 'number' ? formatNumber(data.profit) : formatNumber(data.profit)) : '0'}</>,
             subtitle:`${t('Profit')}  ${t(profitTimeValue) || ''}`,
         },
         {
             id: 3,
             icon:'/assets/icons/promar.png',
-            title: `${data?.profitMargen ? data?.profitMargen : '0'}%`,
+            title: `${data?.profitMargen ? formatNumber(data?.profitMargen) : '0'}%`,
             subtitle: `${t('Profit Margin')}`
         },
         {
             id: 4,
-            icon:'/assets/icons/cap-re.png',
-            title:months >= 12 ? `${(months / 12).toFixed(1)} years` : `${months} months`,
-            subtitle:`${t('Capital Recovery')}`
+            icon: '/assets/icons/cap-re.png',
+            title: months >= 12 ?
+            // Build the string manually: "Formatted Number" + " " + "Translated Word"
+            `${formatNumber((months / 12).toFixed(1))} ${t('years')}` :
+                `${formatNumber(months)} ${t('months')}`,
+            subtitle: `${t('Capital Recovery')}`
         },
         {
             id: 5,
-            icon:'/assets/icons/foundationdate.png',
-            title: data?.foundedDate ? moment(data?.foundedDate).format('YYYY') : 'N/A',
-            subtitle:`${t('Foundation Date')}`
+            icon: '/assets/icons/foundationdate.png',
+            // This logic remains the same (and is correct)
+            title: data?.foundedDate ?
+                formatNumber(moment(data.foundedDate).format('YYYY')) :
+                t('N/A'),
+            subtitle: `${t('Foundation Date')}`
         },
         {
             id: 6,
-            icon:'/assets/icons/teamsize.png',
-            title:data?.numberOfEmployees ? data?.numberOfEmployees : 'N/A',
-            subtitle :`${t('Team Size')}`
+            icon: '/assets/icons/teamsize.png',
+            // This logic also remains the same
+            title: data?.numberOfEmployees ?
+                formatNumber(data.numberOfEmployees) :
+                t('N/A'),
+            subtitle: `${t('Team Size')}`
         },
     ]
     return (

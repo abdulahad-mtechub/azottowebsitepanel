@@ -448,7 +448,7 @@ const BusinessListingPage = ({getcategory}) => {
                                     description: biz.description,
                                     isSaved: biz.isSaved,
                                     isByTakbeer: biz.isByTakbeer,
-                                    amount: `${biz.price?.toLocaleString()}`,
+                                    amount: formatNumber(biz.price)?.toLocaleString(),
                                     save: 'no',
                                     child: [
                                         { subtitle: formatNumber(biz.revenue), subdesc: t('Revenue/month') },

@@ -58,7 +58,7 @@ const Navbar = ({setGetCategory}) => {
     {
       id: 1,
       icon: '/assets/icons/m-1.png',
-      title: t("Browse Businesses by Categories"),
+      title: t("Browse by Categories"),
       subtitle: t('Choose from popular business types.'),
       subdropdown: categories.map((cat, index) => ({
         id: cat.id ?? index + 1,
@@ -71,7 +71,7 @@ const Navbar = ({setGetCategory}) => {
     {
       id: 3,
       icon: '/assets/icons/m-3.png',
-      title: t('Browse Businesses by Revenue'),
+      title: t('Browse by Revenue'),
       subtitle: t('Filter by business earnings.'),
       subdropdown: [
           { id: 1, title: t('SAR 0 - SAR 10,000'), path: '/businesslisting?revenue=0,10000' },

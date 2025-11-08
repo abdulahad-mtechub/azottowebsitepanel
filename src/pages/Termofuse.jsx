@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { RightOutlined } from '@ant-design/icons';
 import { GETTERMS } from '../graphql/query/queries';
 import { useQuery } from "@apollo/client";
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -33,14 +33,14 @@ const Termofuse = () => {
                                 title: <Text className='cursor text-gray' onClick={() => navigate('/')}>{t('Home')}</Text>,
                             },
                             {
-                                title: <Text className='fw-500 text-white'>{t('Terms of Use')}</Text>,
+                                title: <Text className='fw-500 text-white'>{t('Terms of use')}</Text>,
                             },
                         ]}
                     />
                     <Flex vertical gap={15} className='w-100 search-cs text-center'>
-                        <Title level={2} className='text-white m-0'>{t('Terms of Use')}</Title>
+                        <Title level={2} className='text-white m-0'>{t('Terms of use')}</Title>
                         <Text className='text-light-gray fs-16'>
-                            {t('Understand the rules that govern how you use Jusoor, your access, rights, and responsibilities on our platform.')}
+                            {t('Understand the rules that govern how you use Jusoor — your access, rights, and responsibilities on our platform.')}
                         </Text>
                     </Flex>
                 </div>
@@ -51,9 +51,11 @@ const Termofuse = () => {
                     <Row gutter={[24, 64]} justify={'center'}>
                         <Col span={24}>
                             <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
-                                <div className='tag bg-secondary fw-500 text-brand'>{t('Terms of Use')}</div>
+                                <div className='tag bg-secondary fw-500 text-brand'>{t('Terms of use')}</div>
                                 <Title className='m-0' level={2}>
-                                    {t('Understand the Rules Before You')} <span className='text-brand'>{t('List or Buy a Business')}</span>
+                                    <Trans i18nKey="understandRulesHeading">
+                                        Understand the Rules Before You <span className='text-brand'>List or Buy a Business</span>
+                                    </Trans>
                                 </Title>
                                 <Text className='fs-14'>
                                     {t('Understand the key legal terms for using Jusoor including listings, confidentiality, commissions, and data protection.')}

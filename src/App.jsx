@@ -7,10 +7,12 @@ import i18n from './i18n';
 import enUS from 'antd/locale/en_US';
 import arEG from 'antd/locale/ar_EG';
 const getAntdLocale = (lang) => (lang === 'ar' ? arEG : enUS);
-
+import 'dayjs/locale/ar';
+import dayjs from 'dayjs';
 function App() {
 
   const [dir, setDir] = useState(i18n.language === 'ar' ? 'rtl' : 'ltr');
+  const isArabic = i18n.language === 'ar';
   const [antdLocale, setAntdLocale] = useState(getAntdLocale(i18n.language));
 
   useEffect(() => {
@@ -28,6 +30,10 @@ function App() {
       i18n.off('languageChanged', handleLanguageChange);
     };
   }, []);
+
+  useEffect(() => {
+     dayjs.locale(isArabic ? 'ar' : 'en');
+  }, [isArabic]);
 
   return (
     <ConfigProvider

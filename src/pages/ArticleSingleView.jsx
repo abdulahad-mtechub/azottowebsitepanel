@@ -1,4 +1,4 @@
-import { Button, Card, Col, Flex, Row, Typography,Spin } from 'antd';
+import { Button, Card, Col, Flex, Row, Typography,Spin, Empty } from 'antd';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { SuggestedArticles } from '../components';
@@ -23,6 +23,14 @@ const ArticleSingleView = () => {
             <Flex justify="center" align="center" className="h-200">
                 <Spin size="large" />
             </Flex>
+        );
+    }
+
+    if (!data?.getArticle?.isArabic && isArabic) {
+        return (
+            <div style={{ minHeight: 400, display: 'flex', alignItems: 'center', justifyContent: 'center' }} className="container padd-1">
+                <Empty description={t('No article found')} />
+            </div>
         );
     }
 
@@ -64,9 +72,9 @@ const ArticleSingleView = () => {
                                         <Paragraph className='fs-14 text-gray'>
                                             {
                                             isArabic? 
-                                            <span dangerouslySetInnerHTML={{ __html: data?.getArticle?.arabicBody.content }} />
+                                            <span dangerouslySetInnerHTML={{ __html: data?.getArticle?.arabicBody?.content }} />
                                             :
-                                            <span dangerouslySetInnerHTML={{ __html: data?.getArticle?.body.content }} />
+                                            <span dangerouslySetInnerHTML={{ __html: data?.getArticle?.body?.content }} />
                                             }
                                         </Paragraph>
                                     </Flex>
