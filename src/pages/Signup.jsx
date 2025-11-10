@@ -9,7 +9,8 @@ import { useDistricts, useCities } from '../data';
 import imageCompression from 'browser-image-compression';
 import { ArrowLeftOutlined, CheckOutlined, DownOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
-import Cookies from "js-cookie";
+import { setAuthTokens } from "../utils/tokenManager";
+import { startAutoRefresh } from "../utils/tokenRefreshService";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -83,26 +84,42 @@ const SignupPage = () => {
         roleId: customerRole?.id,
       };
 
+      console.log('🔑 Creating user account...');
       const { data } = await createUser({ variables: { input } });
+      console.log('📦 Signup response:', data);
 
-      if (data?.createUser?.token) {
-        // Store auth data in cookies
-        Cookies.set("userId", data.createUser.user.id, { expires: 7 });
-        Cookies.set("_at", data.createUser.token, { expires: 7, secure: true });
+      if (data?.createUser?.token && data?.createUser?.refreshToken) {
+        console.log('✅ Account created - tokens received');
         
-        // Store user status in cookies
-        const userStatus = data.createUser.user.status;
-        Cookies.set("userStatus", userStatus, { expires: 7 });
+        // Use the new token manager to store tokens securely
+        const success = setAuthTokens(
+          data.createUser.token,
+          data.createUser.refreshToken,
+          data.createUser.user
+        );
 
-        messageApi.success(t("Account created successfully!"));
-        form.resetFields();
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
+        if (success) {
+          console.log('✅ Tokens stored successfully');
+          
+          // Start automatic token refresh
+          startAutoRefresh();
+
+          messageApi.success(t("Account created successfully!"));
+          form.resetFields();
+          setTimeout(() => {
+            console.log('🚀 Navigating to home...');
+            navigate("/");
+          }, 1000);
+        } else {
+          console.error('❌ Failed to store tokens');
+          messageApi.error(t("Failed to store authentication data"));
+        }
       } else {
+        console.error('❌ Invalid server response:', data);
         messageApi.error(t("Signup failed: Something went wrong"));
       }
     } catch (err) {
+      console.error('❌ Signup error:', err);
       const msg = err?.graphQLErrors?.[0]?.message || err?.message;
       if (msg?.includes('The email already exists')) {
         messageApi.error(t('The email already exists'));
