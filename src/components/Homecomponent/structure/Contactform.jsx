@@ -1,15 +1,35 @@
-import { Button, Col, Divider, Flex, Form, Image, Row, Typography } from 'antd'
+import { Button, Col, Divider, Flex, Form, Image, message, Row, Typography } from 'antd'
 import { WhatsAppOutlined } from '@ant-design/icons'
 import { MyInput } from '../../Forms'
 import { useTranslation } from 'react-i18next'
+import { useMutation } from '@apollo/client'
+import { CREATE_CONTACT } from '../../../graphql'
 
 const { Text, Title } = Typography
 
 const Contactform = () => {
     const [form] = Form.useForm()
     const { t } = useTranslation()
+    const [createContact, { loading }] = useMutation(CREATE_CONTACT);
+    const [messageApi, contextHolder] = message.useMessage();
+
+    const handleSubmit = async (values) => {
+        try {
+            await createContact({
+                variables: {
+                    input: values
+                }
+            });
+            form.resetFields();
+            messageApi.success(t('Your message has been sent successfully!'));
+        } catch (error) {
+            console.error("Error creating contact:", error);
+        }
+    };
 
     return (
+        <>
+        {contextHolder}
         <div className='feature bg-light-brand'>
             <div className='container'>
                 <Row gutter={[24, 24]} align={'middle'}>
@@ -38,6 +58,7 @@ const Contactform = () => {
                             form={form}
                             layout='vertical'
                             requiredMark={false}
+                            onFinish={handleSubmit}
                         >
                             <Row>
                                 <Col span={24}>
@@ -70,7 +91,7 @@ const Contactform = () => {
                                     />
                                 </Col>
                                 <Col span={24}>
-                                    <Button aria-labelledby={t('Submit')} type='button' className='btn btn-bg w-100'>
+                                    <Button aria-labelledby={t('Submit')} type='button' onClick={form.submit} loading={loading} className='btn btn-bg w-100'>
                                         {t('Submit')}
                                     </Button>
                                 </Col>
@@ -91,6 +112,7 @@ const Contactform = () => {
                 </Row>
             </div>
         </div>
+        </>
     )
 }
 

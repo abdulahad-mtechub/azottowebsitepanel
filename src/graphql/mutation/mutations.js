@@ -141,6 +141,14 @@ mutation MarkNotificationAsRead($userId: ID!) {
   markNotificationAsRead(id: $userId)
 }
 `
+const CREATE_CONTACT = gql`
+  mutation CreateContactUs($input: CreateContactInput!) {
+    createContactUs(input: $input) {
+      id
+    }
+  }
+`
+
 export {
   CREATE_OFFER,
   UPDATE_OFFER,
@@ -163,5 +171,6 @@ export {
   DELETEBANK,
   DELETE_DOCUMENTS,
   CREATE_ENDA,
-  MARK_NOTIFICATION_AS_READ
+  MARK_NOTIFICATION_AS_READ,
+  CREATE_CONTACT
 }
