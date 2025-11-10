@@ -6,6 +6,7 @@ import { Footer, Navbar, ScrollTop,Singlebusinessview } from "../components";
 import { Termofuse } from "../pages";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -45,9 +46,33 @@ const AppRoutes = () => {
         <Route path='/article' element={<Article />} />
         <Route path='/articlesingleview/:id' element={<ArticleSingleView />} />
         <Route path='/about' element={<Aboutus />} />
-        <Route path='/login' element={<LoginPage />} />
-        <Route path='/signup' element={<SignupPage />} />
-        <Route path='/forgotpass' element={<ForgotPassword />} />
+        
+        {/* Public routes - redirect to home if already logged in */}
+        <Route 
+          path='/login' 
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          } 
+        />
+        <Route 
+          path='/signup' 
+          element={
+            <PublicRoute>
+              <SignupPage />
+            </PublicRoute>
+          } 
+        />
+        <Route 
+          path='/forgotpass' 
+          element={
+            <PublicRoute>
+              <ForgotPassword />
+            </PublicRoute>
+          } 
+        />
+        
         <Route path='/privacypolicy' element={<PrivacyPolicy />} />
         <Route path='/endapage' element={<EndaPage />} />
 

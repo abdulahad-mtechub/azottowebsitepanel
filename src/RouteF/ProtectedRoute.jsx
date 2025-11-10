@@ -1,26 +1,77 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import Cookies from 'js-cookie';
-import { Result, Button, Typography, Flex } from 'antd';
+import { Result, Button, Typography, Flex, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, LoadingOutlined } from '@ant-design/icons';
+import { isAuthenticated, hasValidSession, getUserStatus } from '../utils/tokenManager';
+import { refreshAccessToken } from '../utils/tokenRefreshService';
 
 const { Text } = Typography;
 
 const ProtectedRoute = ({ children }) => {
-  const authToken = Cookies.get('_at');
-  const userStatus = Cookies.get('userStatus');
+  const [isChecking, setIsChecking] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // If no token, redirect to home
-  if (!authToken) {
+  useEffect(() => {
+    const checkAuth = async () => {
+      const hasAccess = isAuthenticated();
+      const hasSession = hasValidSession();
+
+      // Case 1: Has access token - user is authenticated
+      if (hasAccess) {
+        setIsAuthorized(true);
+        setIsChecking(false);
+        return;
+      }
+
+      // Case 2: No access token but has refresh token - try to recover
+      if (!hasAccess && hasSession) {
+        console.log('🔄 Access token missing - attempting recovery...');
+        const newToken = await refreshAccessToken();
+        if (newToken) {
+          console.log('✅ Token recovered successfully!');
+          setIsAuthorized(true);
+        } else {
+          console.log('❌ Token recovery failed');
+          setIsAuthorized(false);
+        }
+        setIsChecking(false);
+        return;
+      }
+
+      // Case 3: No tokens at all - not authenticated
+      setIsAuthorized(false);
+      setIsChecking(false);
+    };
+
+    checkAuth();
+  }, [location.pathname]);
+
+  // Show loading while checking authentication
+  if (isChecking) {
+    return (
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '100vh' 
+      }}>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+      </div>
+    );
+  }
+
+  // If not authorized, redirect to home
+  if (!isAuthorized) {
     return <Navigate to="/" replace state={{ from: location }} />;
   }
 
- const rawPath = location.pathname || '/';
+  const userStatus = getUserStatus();
+  const rawPath = location.pathname || '/';
   const pathname = rawPath.replace(/\/+$/, '') || '/';
 
   const isProfileDashboard =

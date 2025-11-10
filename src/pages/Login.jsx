@@ -41,9 +41,13 @@ const LoginPage = () => {
       const email = values.email.toLowerCase();
       const password = values.password;
   
+      console.log('🔑 Attempting login for:', email);
       const { data } = await loginUser({ variables: { email, password } });
+      console.log('📦 Login response:', data);
   
       if (data?.login?.token && data?.login?.refreshToken) {
+        console.log('✅ Tokens received from server');
+        
         // Use the new token manager to store tokens securely
         const success = setAuthTokens(
           data.login.token,
@@ -52,20 +56,27 @@ const LoginPage = () => {
         );
 
         if (success) {
+          console.log('✅ Tokens stored successfully');
+          
           // Start automatic token refresh
           startAutoRefresh();
 
           messageApi.success(t("Login successful!"));
           setRedirecting(true); 
-          setTimeout(() => navigate("/"), 1000);
+          setTimeout(() => {
+            console.log('🚀 Navigating to home...');
+            navigate("/");
+          }, 1000);
         } else {
+          console.error('❌ Failed to store tokens');
           messageApi.error(t("Failed to store authentication data"));
         }
       } else {
+        console.error('❌ Invalid server response:', data);
         messageApi.error(t("Login failed: Invalid response from server"));
       }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("❌ Login error:", error);
       messageApi.error(`${t("Login failed")}: ${error?.graphQLErrors?.[0]?.message || error.message}`);
     }
   };

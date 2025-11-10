@@ -22,9 +22,9 @@ const TOKEN_CONFIG = {
   // User data expiry (same as refresh token)
   USER_DATA_EXPIRY: 234 / 24, // 234 hours in days (9.75 days)
   
-  // Cookie options for production
+  // Cookie options - secure only in production (HTTPS)
   SECURE_OPTIONS: {
-    secure: true, // Only send over HTTPS
+    secure: window.location.protocol === 'https:', // Only use secure flag on HTTPS
     sameSite: 'strict', // CSRF protection
   }
 };
@@ -73,6 +73,14 @@ const decryptToken = (encrypted) => {
  */
 export const setAuthTokens = (accessToken, refreshToken, user) => {
   try {
+    console.log('🔐 Setting auth tokens...', {
+      hasAccessToken: !!accessToken,
+      hasRefreshToken: !!refreshToken,
+      hasUser: !!user,
+      protocol: window.location.protocol,
+      willUseSecure: window.location.protocol === 'https:'
+    });
+
     // Encrypt and store access token (short-lived)
     Cookies.set("_at", encryptToken(accessToken), {
       expires: TOKEN_CONFIG.ACCESS_TOKEN_EXPIRY,
@@ -102,9 +110,10 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
       expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
     });
 
+    console.log('✅ Auth tokens set successfully');
     return true;
   } catch (error) {
-    console.error("Error setting auth tokens:", error);
+    console.error("❌ Error setting auth tokens:", error);
     return false;
   }
 };
@@ -149,6 +158,14 @@ export const getUserStatus = () => {
  */
 export const isAuthenticated = () => {
   return !!getAccessToken();
+};
+
+/**
+ * Check if user has valid session (access OR refresh token)
+ * @returns {boolean} True if either token exists
+ */
+export const hasValidSession = () => {
+  return !!getAccessToken() || !!getRefreshToken();
 };
 
 /**

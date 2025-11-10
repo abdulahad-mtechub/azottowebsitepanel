@@ -23,6 +23,7 @@ const BusinessInfoCardMobile = ({ data }) => {
   
   // Check if user is inactive
   const userStatus = Cookies.get("userStatus");
+  const isArabic = localStorage.getItem("lang") === "ar";
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
   const [createOffer, { loading: createOfferLoading }] = useMutation(CREATE_OFFER);
   const [hasExistingOffer, setHasExistingOffer] = useState(false);
@@ -81,7 +82,7 @@ const BusinessInfoCardMobile = ({ data }) => {
     { 
       id: 3, 
       icon:'/assets/icons/businesscate.png', 
-      title: data?.category?.name || t('Unknown'),
+      title: isArabic ? data?.category?.arabicName : data?.category?.name || t('Unknown'),
       subtitle: t('Business Category')
     },
     {

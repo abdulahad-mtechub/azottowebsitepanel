@@ -111,6 +111,51 @@ export const ensureValidToken = async () => {
 };
 
 /**
+ * Initialize authentication on app load
+ * Handles the case where access token expired but refresh token still valid
+ * This fixes the "stay logged in overnight" scenario
+ */
+export const initializeAuth = async () => {
+  const hasAccess = isAuthenticated();
+  const hasRefresh = !!getRefreshToken();
+
+  console.log('🔐 Initializing auth...', { hasAccess, hasRefresh });
+
+  // Case 1: No tokens at all - user not logged in
+  if (!hasAccess && !hasRefresh) {
+    console.log('❌ No tokens found - user not logged in');
+    return false;
+  }
+
+  // Case 2: Has access token - check if needs refresh
+  if (hasAccess) {
+    console.log('✅ Access token found');
+    if (shouldRefreshToken()) {
+      console.log('⚠️ Token is old, refreshing...');
+      const newToken = await refreshAccessToken();
+      return !!newToken;
+    }
+    return true;
+  }
+
+  // Case 3: Access token missing but refresh token exists
+  // This happens when user comes back after access token expired (>10 min)
+  if (!hasAccess && hasRefresh) {
+    console.log('⚠️ Access token missing but refresh token exists - attempting recovery...');
+    const newToken = await refreshAccessToken();
+    if (newToken) {
+      console.log('✅ Token recovered successfully!');
+      return true;
+    } else {
+      console.log('❌ Token recovery failed - logging out');
+      return false;
+    }
+  }
+
+  return false;
+};
+
+/**
  * Auto-refresh setup - checks token validity every 3 minutes
  * Call this on app initialization
  * Backend config: Access token = 10min, Refresh token = 234h
@@ -118,27 +163,35 @@ export const ensureValidToken = async () => {
  */
 let autoRefreshInterval = null;
 
-export const startAutoRefresh = () => {
+export const startAutoRefresh = async () => {
   // Clear any existing interval
   if (autoRefreshInterval) {
     clearInterval(autoRefreshInterval);
   }
 
+  // First, initialize/recover authentication
+  const isAuth = await initializeAuth();
+  
+  if (!isAuth) {
+    console.log('❌ Auth initialization failed - not starting auto-refresh');
+    return false;
+  }
+
+  console.log('✅ Starting auto-refresh service...');
+
   // Check token every 3 minutes (ensures we catch 8-minute threshold)
   autoRefreshInterval = setInterval(async () => {
     if (isAuthenticated()) {
-      console.log("Auto-refreshing token...");
+      console.log("🔄 Auto-refresh check...");
       await ensureValidToken();
     } else {
       // Stop auto-refresh if user is not authenticated
+      console.log('⚠️ No longer authenticated - stopping auto-refresh');
       stopAutoRefresh();
     }
   }, 3 * 60 * 1000); // 3 minutes
 
-  // Also check immediately on start
-  if (isAuthenticated()) {
-    ensureValidToken();
-  }
+  return true;
 };
 
 export const stopAutoRefresh = () => {

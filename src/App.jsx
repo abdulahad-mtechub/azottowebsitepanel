@@ -4,7 +4,7 @@ import '@ant-design/v5-patch-for-react-19';
 import { useEffect, useState } from 'react';
 import i18n from './i18n';
 import { startAutoRefresh, stopAutoRefresh } from './utils/tokenRefreshService';
-import { isAuthenticated } from './utils/tokenManager';
+import { hasValidSession } from './utils/tokenManager';
 
 import enUS from 'antd/locale/en_US';
 import arEG from 'antd/locale/ar_EG';
@@ -20,10 +20,19 @@ function App() {
   const [antdLocale, setAntdLocale] = useState(getAntdLocale(i18n.language));
 
   // Initialize auto token refresh on app mount
+  // This handles token recovery when access token expired but refresh token exists
   useEffect(() => {
-    if (isAuthenticated()) {
-      startAutoRefresh();
-    }
+    const initAuth = async () => {
+      // Check if user has any valid session (access OR refresh token)
+      if (hasValidSession()) {
+        console.log('🔐 Session detected - initializing auth...');
+        await startAutoRefresh();
+      } else {
+        console.log('ℹ️ No session found - user not logged in');
+      }
+    };
+
+    initAuth();
 
     // Cleanup on unmount
     return () => {
