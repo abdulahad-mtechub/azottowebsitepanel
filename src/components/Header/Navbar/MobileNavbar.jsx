@@ -6,6 +6,7 @@ import Cookies from "js-cookie";
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { LOGOUT } from '../../../graphql/mutation';
+import { clearAuthTokens } from '../../../utils/tokenManager';
 import { GET_CATEGORIES } from '../../../graphql/query';
 import { client } from '../../../config/apolloClient';
 
@@ -105,14 +106,10 @@ const MobileNavbar = ({ visible, onClose }) => {
         } catch {
             message.warning(t('Network issue. You were logged out locally.'));
         } finally {
-            Cookies.remove('userId');
-            Cookies.remove('authToken');
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('userId');
+            // Use centralized token manager
+            clearAuthTokens();
             client.resetStore();
-            navigate('/');
-            window.location.reload();
+            navigate('/login');
         }
     };
 

@@ -3,6 +3,8 @@ import { RouteF } from './RouteF'
 import '@ant-design/v5-patch-for-react-19';
 import { useEffect, useState } from 'react';
 import i18n from './i18n';
+import { startAutoRefresh, stopAutoRefresh } from './utils/tokenRefreshService';
+import { isAuthenticated } from './utils/tokenManager';
 
 import enUS from 'antd/locale/en_US';
 import arEG from 'antd/locale/ar_EG';
@@ -16,6 +18,18 @@ function App() {
   const [dir, setDir] = useState(i18n.language === 'ar' ? 'rtl' : 'ltr');
   const isArabic = i18n.language === 'ar';
   const [antdLocale, setAntdLocale] = useState(getAntdLocale(i18n.language));
+
+  // Initialize auto token refresh on app mount
+  useEffect(() => {
+    if (isAuthenticated()) {
+      startAutoRefresh();
+    }
+
+    // Cleanup on unmount
+    return () => {
+      stopAutoRefresh();
+    };
+  }, []);
 
   useEffect(() => {
 

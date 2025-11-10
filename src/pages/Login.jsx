@@ -6,7 +6,8 @@ import { LOGIN } from "../graphql/mutation/login";
 import { useNavigate } from "react-router-dom";
 import { useState,useEffect } from 'react';
 import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
-import Cookies from "js-cookie";
+import { setAuthTokens } from "../utils/tokenManager";
+import { startAutoRefresh } from "../utils/tokenRefreshService";
 import { useTranslation } from "react-i18next";
 
 const { Title, Text, Paragraph } = Typography;
@@ -42,21 +43,30 @@ const LoginPage = () => {
   
       const { data } = await loginUser({ variables: { email, password } });
   
-      if (data?.login?.token) {
-        Cookies.set("userId", data.login.user.id, { expires: 7 }); // expires in 7 days
-        Cookies.set("authToken", data.login.token, { expires: 7, secure: true }); 
-        
-        const userStatus = data.login.user.status;
-        Cookies.set("userStatus", userStatus, { expires: 7 });
-        
-        messageApi.success(t("Login successful!"));
-        setRedirecting(true); 
-        setTimeout(() => navigate("/"), 1000);
+      if (data?.login?.token && data?.login?.refreshToken) {
+        // Use the new token manager to store tokens securely
+        const success = setAuthTokens(
+          data.login.token,
+          data.login.refreshToken,
+          data.login.user
+        );
+
+        if (success) {
+          // Start automatic token refresh
+          startAutoRefresh();
+
+          messageApi.success(t("Login successful!"));
+          setRedirecting(true); 
+          setTimeout(() => navigate("/"), 1000);
+        } else {
+          messageApi.error(t("Failed to store authentication data"));
+        }
       } else {
-        messageApi.error(t("Login failed: Somthing went Wrong"));
+        messageApi.error(t("Login failed: Invalid response from server"));
       }
     } catch (error) {
-      messageApi.error(`Login failed: ${error?.graphQLErrors[0]?.message}`);
+      console.error("Login error:", error);
+      messageApi.error(`${t("Login failed")}: ${error?.graphQLErrors?.[0]?.message || error.message}`);
     }
   };
   const handleChange= (value)=>{

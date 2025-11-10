@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import {NEW_NOTIFICATION_SUBSCRIPTION} from '../../../graphql/subscription'
 import { useQuery } from '@apollo/client';
 import { MARK_NOTIFICATION_AS_READ, LOGOUT } from '../../../graphql/mutation';
+import { clearAuthTokens } from '../../../utils/tokenManager';
 
 
 const { Text, Title } = Typography;
@@ -319,19 +320,15 @@ const Navbar = ({setGetCategory}) => {
     } catch {
       message.warning(t('Network issue. You were logged out locally.'));
     } finally {
-      Cookies.remove('userId');
-      Cookies.remove('authToken');
-      Cookies.remove('userStatus');
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('userId');
+      // Use the centralized token manager to clear all auth data
+      clearAuthTokens();
       client.resetStore();
       setisLoggedIn(false);
       setIsShow(false);
-      navigate('/');
-      window.location.reload();
+      navigate('/login');
     }
   };
+
   // Check if user is inactive
   const userStatus = Cookies.get("userStatus");
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";

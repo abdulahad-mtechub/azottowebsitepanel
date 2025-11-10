@@ -88,7 +88,7 @@ const SignupPage = () => {
       if (data?.createUser?.token) {
         // Store auth data in cookies
         Cookies.set("userId", data.createUser.user.id, { expires: 7 });
-        Cookies.set("authToken", data.createUser.token, { expires: 7, secure: true });
+        Cookies.set("_at", data.createUser.token, { expires: 7, secure: true });
         
         // Store user status in cookies
         const userStatus = data.createUser.user.status;

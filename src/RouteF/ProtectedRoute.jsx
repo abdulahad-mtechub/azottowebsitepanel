@@ -9,7 +9,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 const { Text } = Typography;
 
 const ProtectedRoute = ({ children }) => {
-  const authToken = Cookies.get('authToken');
+  const authToken = Cookies.get('_at');
   const userStatus = Cookies.get('userStatus');
   const location = useLocation();
   const navigate = useNavigate();
