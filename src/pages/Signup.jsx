@@ -68,7 +68,6 @@ const SignupPage = () => {
 
     fetchCustomerRole();
   }, [getCustomerRole]);
-
   const handleFinish = async () => {
     try {
 
