@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Col, Collapse, Flex, Row, Typography, Spin } from 'antd'
+import { useEffect, useMemo, useState } from 'react'
+import { Col, Collapse, Row, Typography, Spin, Flex } from 'antd'
 import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
 import { GETFAQ } from '../../../graphql/query/queries'
 import { useLazyQuery } from "@apollo/client";
@@ -8,16 +8,53 @@ import { useTranslation } from 'react-i18next';
 const { Text, Title } = Typography;
 
 const FaqsComponent = () => {
-    const { t } = useTranslation();
-    const [currentPanel, setCurrentPanel] = useState(['0']);
-    const { data, loading } = useLazyQuery(GETFAQ, {
-        variables: { search: "" },
-    });
-    const faqsData = data?.getFAQs?.faqs?.map(item => ({
+  const { t, i18n } = useTranslation();
+  const [currentPanel, setCurrentPanel] = useState([]);
+  const [isArabic, setIsArabic] = useState(() => {
+    const stored = (localStorage.getItem('lang') || '').toLowerCase();
+    return i18n?.language === 'ar' || stored === 'ar';
+  });
+
+  const [loadData, { data, loading }] = useLazyQuery(GETFAQ, {
+    variables: { search: "" },
+    fetchPolicy: 'network-only',
+  });
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  useEffect(() => {
+    const langFromStorage = () => (localStorage.getItem('lang') || '').toLowerCase();
+    const update = () => {
+      setIsArabic(i18n?.language === 'ar' || langFromStorage() === 'ar');
+      setCurrentPanel([]);
+    };
+    update(); 
+    const onStorage = (e) => {
+      if (e.key === 'lang') update();
+    };
+    window.addEventListener('storage', onStorage);
+    if (i18n && i18n.on) {
+      i18n.on('languageChanged', update);
+    }
+    return () => {
+      window.removeEventListener('storage', onStorage);
+      if (i18n && i18n.off) {
+        i18n.off('languageChanged', update);
+      }
+    };
+  }, [i18n]);
+
+  const filteredFaqs = useMemo(() => {
+    const faqs = data?.getFAQs?.faqs || [];
+    return faqs
+      .filter(item => Boolean(item.isArabic) === Boolean(isArabic))
+      .map((item) => ({
         id: item.id,
-        title: t(item.question),
-        description: t(item.answer),
-    })) || [];
+        title: isArabic ? (item.arabicQuestion || item.question) : (item.question || item.arabicQuestion),
+        description: isArabic ? (item.arabicAnswer || item.answer) : (item.answer || item.arabicAnswer),
+      }));
+  }, [data, isArabic]);
 
     if (loading) {
         return (
@@ -28,7 +65,7 @@ const FaqsComponent = () => {
     }
 
     return (
-        <div className='feature'>
+        <div className='feature' dir={isArabic ? 'rtl' : 'ltr'}>
             <div className='container'>
                 <Row gutter={[24, 64]} justify={'center'}>
                     <Col span={24}>
@@ -45,36 +82,42 @@ const FaqsComponent = () => {
                     <Col lg={{ span: 20 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
                         <Collapse
                             className="collapse-fq"
-                            defaultActiveKey={['0']}
-                            onChange={(keys) => setCurrentPanel(keys)}
+                            activeKey={currentPanel}
+                            onChange={(keys) => setCurrentPanel(Array.isArray(keys) ? keys : [String(keys)])}
                             ghost
-                            items={faqsData?.map((faq, f) => ({
-                                key: String(f),
-                                className: currentPanel.includes(String(f)) ? 'panel-active panel' : 'panel',
-                                label: (
+                        >
+                            {filteredFaqs.length === 0 ? (
+                                <div style={{ padding: 16 }}>
+                                <Text>{isArabic ? 'لا توجد أسئلة متاحة حالياً' : 'No FAQs available right now.'}</Text>
+                                </div>
+                            ) : filteredFaqs.map((faq, index) => {
+                                const key = String(index);
+                                const isOpen = currentPanel.includes(key);
+                                return (
+                                <Collapse.Panel
+                                    header={
                                     <Title
                                         level={3}
-                                        className={`m-0 fw-500 fs-17 ${currentPanel.includes(String(f)) ? 'text-brand' : 'text-gray'}`}
+                                        className={`m-0 fw-500 fs-17 ${isOpen ? 'text-brand' : 'text-gray'}`}
                                     >
-                                        <span className="mr-15">0{f + 1}</span>
-                                        {faq?.title}
+                                        <span className='mr-15'>{isArabic ? `${index + 1}.` : `0${index + 1}`}</span>
+                                        {faq.title}
                                     </Title>
-                                ),
-                                extra: currentPanel?.findIndex((x) => x == f) > -1 ? (
-                                    <MinusOutlined className="fs-18" />
-                                ) : (
-                                    <PlusOutlined className="fs-18" />
-                                ),
-                                children: (
-                                    <Text className="fs-16">{faq?.description}</Text>
-                                ),
-                            }))}
-                        />
+                                    }
+                                    key={key}
+                                    extra={isOpen ? <MinusOutlined className="fs-18" /> : <PlusOutlined className="fs-18" />}
+                                    className={isOpen ? 'panel-active panel' : 'panel'}
+                                >
+                                    <Text className="fs-16">{faq.description}</Text>
+                                </Collapse.Panel>
+                                );
+                            })}
+                        </Collapse>
                     </Col>
                 </Row>
             </div>
         </div>
-    )
+    );
 }
 
 export { FaqsComponent }
