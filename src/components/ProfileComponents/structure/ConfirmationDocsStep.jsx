@@ -45,7 +45,8 @@ const ConfirmationDocsStep = ({ form, details }) => {
   const existingNotarizedDoc = details?.busines?.documents?.find(
     (d) =>
       d.title === "Notarized Ownership Transfer Letter" ||
-      d.title === "خطاب نقل الملكية الموثق"
+      d.title === "خطاب نقل الملكية الموثق" ||
+      d.title === "خطاب نقل الملكية موثق"
   );
 
   // Initialize based on the actual boolean value: null, true, or false
