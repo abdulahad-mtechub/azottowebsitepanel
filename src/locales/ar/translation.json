@@ -535,6 +535,7 @@
   "Seller & Buyer DSA Pending": "انتظار توقيع اتفاقية البيع من البائع والمشتري",
   "Seller DSA Pending": "انتظار توقيع اتفاقية البيع من البائع",
   "Buyer DSA Pending": "انتظار توقيع اتفاقية البيع من المشتري",
+  "Finalizing Deal": "جارٍ إتمام الصفقة",
   "DSA Pending!": "انتظار توقيع اتفاقية البيع!",
   "Waiting for the seller & buyer to sign the digital sale agreement.": "انتظار توقيع البائع والمشتري على اتفاقية البيع الرقمية.",
   "Bank Details Pending!": "انتظار تفاصيل البنك!",
