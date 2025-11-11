@@ -30,8 +30,8 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
   });
 
   const paybusinessData = [
-    { title: t("Seller’s Bank Name"), desc: bank?.bankName },
-    { title: t("Seller’s IBAN"), desc: bank?.iban },
+    { title: t("Seller's Bank Name"), desc: bank?.bankName },
+    { title: t("Seller's IBAN"), desc: bank?.iban },
     { title: t("Account Holder Name"), desc: bank?.accountTitle },
     { title: t("Amount to Pay"), desc: inprogressdeal?.finalizedOffer },
   ];
