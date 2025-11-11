@@ -12,7 +12,6 @@ import {
   Modal,
   Radio,
 } from "antd";
-import { CheckCircleOutlined } from "@ant-design/icons";
 import {
   UPDATE_DEAL,
   UPLOAD_DOCUMENT,
@@ -29,27 +28,33 @@ const ConfirmationDocsStep = ({ form, details }) => {
   const { t } = useTranslation();
   const [modal, modalContextHolder] = Modal.useModal();
   const [messageApi, contextHolder] = message.useMessage();
-  // eslint-disable-next-line no-unused-vars
+
   const [documents, setDocuments] = useState({});
   const [crUploaded, setCrUploaded] = useState(false);
 
-  const bankRecipt = details?.busines?.documents?.find(
-    (d) =>
-      d.title === "Buyer Payment Receipt" || d.title === "إيصال دفع المشتري"
-  );
+  const DOCUMENT_TITLES = {
+    CR: ["Commercial Registration (CR)", "السجل التجاري"],
+    NOTARIZED_TRANSFER: [
+      "Notarized Ownership Transfer Letter",
+      "خطاب نقل الملكية الموثق",
+      "خطاب نقل الملكية موثق",
+    ],
+    BUYER_RECEIPT: ["Buyer Payment Receipt", "إيصال دفع المشتري"],
+  };
 
-  const existingCrDoc = details?.busines?.documents?.find(
-    (d) =>
-      d.title === "Commercial Registration (CR)" || d.title === "السجل التجاري"
-  );
-  const existingNotarizedDoc = details?.busines?.documents?.find(
-    (d) =>
-      d.title === "Notarized Ownership Transfer Letter" ||
-      d.title === "خطاب نقل الملكية الموثق" ||
-      d.title === "خطاب نقل الملكية موثق"
-  );
+  const findDocument = (key) =>
+    details?.busines?.documents?.find((d) =>
+      DOCUMENT_TITLES[key].includes(d.title)
+    );
 
-  // Initialize based on the actual boolean value: null, true, or false
+  const bankRecipt = findDocument("BUYER_RECEIPT");
+  const existingCrDoc = findDocument("CR");
+  const existingNotarizedDoc = findDocument("NOTARIZED_TRANSFER");
+
+  useEffect(() => {
+    if (existingCrDoc) setCrUploaded(true);
+  }, [existingCrDoc]);
+
   const initialUploadsAllowed =
     details?.isPaymentVedifiedSeller === null
       ? undefined
@@ -58,9 +63,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
       : "no";
 
   const [uploadsAllowed, setUploadsAllowed] = useState(initialUploadsAllowed);
-  useEffect(() => {
-    if (existingCrDoc) setCrUploaded(true);
-  }, [existingCrDoc]);
 
   const [updateDeals, { loading: updating }] = useMutation(UPDATE_DEAL, {
     refetchQueries: [
@@ -127,7 +129,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
         },
       }));
 
-      if (title === t("Commercial Registration (CR)")) setCrUploaded(true);
+      if (DOCUMENT_TITLES.CR.includes(title)) setCrUploaded(true);
 
       await uploadDocument({
         variables: {
@@ -155,6 +157,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
       variables: { input: { id: details.key, isDocVedifiedSeller: true } },
     });
   };
+
   const handleNoSelected = () => {
     const anyDocsExist = Boolean(
       existingCrDoc || existingNotarizedDoc || bankRecipt
@@ -172,13 +175,15 @@ const ConfirmationDocsStep = ({ form, details }) => {
         onOk: async () => {
           try {
             const titlesToDelete = [];
-            if (bankRecipt) titlesToDelete.push(t("Buyer Payment Receipt"));
+            if (bankRecipt)
+              titlesToDelete.push(DOCUMENT_TITLES.BUYER_RECEIPT[0]);
 
             if (titlesToDelete.length === 0) {
               messageApi.info(t("No documents to delete."));
               setUploadsAllowed("no");
               return;
             }
+
             await deleteDocuments({
               variables: { deleteDocumentId: bankRecipt?.id },
             });
@@ -197,7 +202,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
         },
       });
     } else {
-      // No documents exist, just update payment verification to false
       modal.confirm({
         centered: true,
         title: t("Confirm No Payment"),
@@ -290,7 +294,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
             </Radio.Group>
           </Flex>
 
-          {/* Show payment receipt when: null (undefined) or yes. Hide when no */}
           {uploadsAllowed !== "no" &&
             (bankRecipt ? (
               <>
@@ -310,7 +313,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
                         <Text className="fs-13 text-gray">
                           {t(bankRecipt.title)}
                         </Text>
-                        {/* <Text className="fs-13 text-gray">{bankRecipt.fileSize || '5.3 MB'}</Text> */}
                       </Flex>
                     </Flex>
                     <a
@@ -335,24 +337,22 @@ const ConfirmationDocsStep = ({ form, details }) => {
             ))}
         </Col>
 
-        {/* Only show upload sections when YES is selected */}
         {uploadsAllowed === "yes" && (
           <>
             <Col span={24}>
               <Flex vertical gap={16} className="w-100">
                 {[
-                  t("Commercial Registration (CR)"),
-                  t("Notarized Ownership Transfer Letter"),
-                ].map((expectedTitle) => {
-                  const existing = details?.busines?.documents?.find(
-                    (d) =>
-                      d.title === expectedTitle ||
-                      d.title === expectedTitle.replace(t(""), "")
-                  );
+                  { key: "CR", label: t("Commercial Registration (CR)") },
+                  {
+                    key: "NOTARIZED_TRANSFER",
+                    label: t("Notarized Ownership Transfer Letter"),
+                  },
+                ].map(({ key, label }) => {
+                  const existing = findDocument(key);
 
                   if (existing) {
                     return (
-                      <div key={expectedTitle}>
+                      <div key={key}>
                         <Text className="fw-600 text-medium-gray fs-13">
                           {t(existing.title)}
                         </Text>
@@ -369,7 +369,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
                                 <Text className="fs-13 text-gray">
                                   {t(existing?.title)}
                                 </Text>
-                                {/* <Text className="fs-13 text-gray">{existing?.fileSize || '—'}</Text> */}
                               </Flex>
                             </Flex>
 
@@ -394,44 +393,36 @@ const ConfirmationDocsStep = ({ form, details }) => {
                   }
 
                   const disableUpload =
-                    expectedTitle === t("Notarized Ownership Transfer Letter")
-                      ? (!crUploaded && !existingCrDoc) ||
-                        uploadsAllowed !== "yes"
-                      : uploadsAllowed !== "yes";
+                    key === "NOTARIZED_TRANSFER" && !crUploaded;
 
                   return (
-                    <div key={expectedTitle}>
+                    <div key={key}>
                       <Text className="fw-600 text-medium-gray fs-13">
-                        {expectedTitle}
+                        {label}
                       </Text>
                       <Card className="card-cs border-gray rounded-12 mt-2">
                         <Flex vertical gap={12}>
                           <SingleFileUpload
                             form={form}
-                            name={
-                              expectedTitle ===
-                              t("Commercial Registration (CR)")
-                                ? "crUpload"
-                                : "notarizedUpload"
-                            }
+                            name={key === "CR" ? "crUpload" : "notarizedUpload"}
                             title={t("Upload")}
                             onUpload={(file) =>
-                              handleSingleFileUpload(file, expectedTitle)
+                              handleSingleFileUpload(
+                                file,
+                                DOCUMENT_TITLES[key][0]
+                              )
                             }
                             multiple={false}
                             message={message}
                             disabled={disableUpload}
                           />
-                          {expectedTitle ===
-                            t("Notarized Ownership Transfer Letter") &&
-                            !crUploaded &&
-                            !existingCrDoc && (
-                              <Text type="secondary" className="fs-12 mt-1">
-                                {t(
-                                  "Please upload Commercial Registration first to enable this upload"
-                                )}
-                              </Text>
-                            )}
+                          {key === "NOTARIZED_TRANSFER" && !crUploaded && (
+                            <Text type="secondary" className="fs-12 mt-1">
+                              {t(
+                                "Please upload Commercial Registration first to enable this upload"
+                              )}
+                            </Text>
+                          )}
                         </Flex>
                       </Card>
                     </div>
@@ -441,11 +432,6 @@ const ConfirmationDocsStep = ({ form, details }) => {
             </Col>
             <Col span={24}>
               <Flex vertical gap={10}>
-                {/* <Flex gap={5} className={details?.isPaymentVerifiedSeller ? 'badge-cs success fs-12 fit-content' : 'badge-cs pending fs-12 fit-content'} align="center">
-                  <CheckCircleOutlined className="fs-14" />
-                  {details?.isPaymentVerifiedSeller ? t('Seller marked "Payment Received"') : t('"Payment Received" Seller Confirmation pending')}
-                </Flex> */}
-
                 <Flex>
                   <Button
                     type="primary"
