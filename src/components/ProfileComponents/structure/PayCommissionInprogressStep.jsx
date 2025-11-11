@@ -1,31 +1,33 @@
-import { Card, Col, Flex, Image, Row, Typography, message } from 'antd';
-import { SingleFileUpload } from '../../Forms/SingleFileUpload';
-import { useQuery, useMutation } from '@apollo/client';
-import { GETADMINACTIVEBANK, GETDEAL } from '../../../graphql/query';
-import { UPDATE_DEAL, UPLOAD_DOCUMENT } from '../../../graphql/mutation';
-import { useTranslation } from 'react-i18next';
-import { useFormatNumber } from '../../../hooks';
+import { Card, Col, Flex, Image, Row, Typography, message } from "antd";
+import { SingleFileUpload } from "../../Forms/SingleFileUpload";
+import { useQuery, useMutation } from "@apollo/client";
+import { GETADMINACTIVEBANK, GETDEAL } from "../../../graphql/query";
+import { UPDATE_DEAL, UPLOAD_DOCUMENT } from "../../../graphql/mutation";
+import { useTranslation } from "react-i18next";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
 
 const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
-  
   const { t } = useTranslation();
   const { formatNumber } = useFormatNumber();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const { data } = useQuery(GETADMINACTIVEBANK, {fetchPolicy: 'network-only'});
+  const { data } = useQuery(GETADMINACTIVEBANK, {
+    fetchPolicy: "network-only",
+  });
 
   const jasoorCommmission = inprogressdeal?.busines?.documents?.find(
-    (doc) => doc.title === t("Jasoor Commission")
+    (doc) =>
+      doc.title === "Jasoor Commission" ||
+      doc.title === "جسور العمولة" ||
+      doc.title === "عمولة جسور"
   );
-  const [updateOfferStatus] = useMutation(UPDATE_DEAL, 
-    {
-      refetchQueries: [
-        { query: GETDEAL, variables: { getDealId: inprogressdeal?.key } },
-      ],
-    } 
-  );
+  const [updateOfferStatus] = useMutation(UPDATE_DEAL, {
+    refetchQueries: [
+      { query: GETDEAL, variables: { getDealId: inprogressdeal?.key } },
+    ],
+  });
 
   const [uploadDocument] = useMutation(UPLOAD_DOCUMENT, {
     refetchQueries: [
@@ -47,7 +49,9 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
     },
     {
       title: t("Commission Amount to Pay"),
-      desc: `${t('currency-symbol')} ${formatNumber(inprogressdeal?.commission || 0)}`,
+      desc: `${t("currency-symbol")} ${formatNumber(
+        inprogressdeal?.commission || 0
+      )}`,
     },
   ];
 
@@ -113,9 +117,16 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
             <Card className="card-cs border-gray rounded-12">
               <Flex justify="space-between" align="center">
                 <Flex gap={15}>
-                  <Image src="/assets/icons/file.png" alt='file icon' preview={false} width={20} />
+                  <Image
+                    src="/assets/icons/file.png"
+                    alt="file icon"
+                    preview={false}
+                    width={20}
+                  />
                   <Flex vertical>
-                    <Text className="fs-13 text-gray">{t(jasoorCommmission?.title)}</Text>
+                    <Text className="fs-13 text-gray">
+                      {t(jasoorCommmission?.title)}
+                    </Text>
                   </Flex>
                 </Flex>
                 <a
@@ -128,8 +139,8 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
                     src={"/assets/icons/download.png"}
                     preview={false}
                     width={16}
-                    alt='download icon'
-                    className='cursor'
+                    alt="download icon"
+                    className="cursor"
                   />
                 </a>
               </Flex>
@@ -137,9 +148,13 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
           ) : (
             <Flex vertical gap={5} className="w-100">
               <Flex vertical>
-                <Text className="fw-500 fs-14">{t("Upload a bank statement or screenshot")}</Text>
+                <Text className="fw-500 fs-14">
+                  {t("Upload a bank statement or screenshot")}
+                </Text>
                 <Text className="text-gray">
-                  {t("Accepted formats: JPG, PNG, PDF. Max size: 5MB per file.")}
+                  {t(
+                    "Accepted formats: JPG, PNG, PDF. Max size: 5MB per file."
+                  )}
                 </Text>
               </Flex>
               <Flex className="w-100">
