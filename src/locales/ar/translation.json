@@ -850,7 +850,7 @@
   "Enter your current password": "أدخل كلمة المرور الحالية",
   "Enter your new password": "أدخل كلمة المرور الجديدة",
   "Password should contain at least 8 characters, one uppercase letter, one number and one special character": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل، حرف كبير واحد، رقم واحد، وحرف خاص واحد",
-  "Enter your confirm new password": "أدخل تأكيد كلمة المرور الجديدة",
+  "Enter your confirm password": "أدخل تأكيد كلمة المرور",
   "Please confirm your new password": "يرجى تأكيد كلمة المرور الجديدة",
   "The password that you entered do not match!": "كلمة المرور المدخلة غير متطابقة!",
   "Password changed successfully ✅": "تم تغيير كلمة المرور بنجاح ✅",

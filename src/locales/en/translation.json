@@ -728,7 +728,7 @@
   "Enter your current password": "Enter your current password",
   "Enter your new password": "Enter your new password",
   "Password should contain at least 8 characters, one uppercase letter, one number and one special character": "Password should contain at least 8 characters, one uppercase letter, one number and one special character",
-  "Enter your confirm new password": "Enter your confirm new password",
+  "Enter your confirm password": "Enter your confirm password",
   "Please confirm your new password": "Please confirm your new password",
   "The password that you entered do not match!": "The password that you entered do not match!",
   "Password changed successfully ✅": "Password changed successfully ✅",
