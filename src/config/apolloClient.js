@@ -1,4 +1,10 @@
-import { ApolloClient, InMemoryCache, createHttpLink, from, split } from "@apollo/client";
+import {
+  ApolloClient,
+  InMemoryCache,
+  createHttpLink,
+  from,
+  split,
+} from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { onError } from "@apollo/client/link/error";
 import { WebSocketLink } from "apollo-link-ws";
@@ -86,7 +92,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
                 // Refresh failed, clear auth and redirect
                 clearAuthTokens();
                 if (window.location.pathname !== "/login") {
-                  window.location.href = "/login";
+                  window.location.href = "/";
                 }
                 resolve();
               }
@@ -95,7 +101,7 @@ const errorLink = onError(({ graphQLErrors, operation, forward }) => {
               // Refresh failed, clear auth and redirect
               clearAuthTokens();
               if (window.location.pathname !== "/login") {
-                window.location.href = "/login";
+                window.location.href = "/";
               }
               resolve();
             });
@@ -115,15 +121,15 @@ export const client = new ApolloClient({
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {
-      fetchPolicy: 'cache-and-network',
-      errorPolicy: 'all',
+      fetchPolicy: "cache-and-network",
+      errorPolicy: "all",
     },
     query: {
-      fetchPolicy: 'network-only',
-      errorPolicy: 'all',
+      fetchPolicy: "network-only",
+      errorPolicy: "all",
     },
     mutate: {
-      errorPolicy: 'all',
+      errorPolicy: "all",
     },
   },
 });
