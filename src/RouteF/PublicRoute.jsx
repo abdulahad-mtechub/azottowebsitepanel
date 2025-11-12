@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { Spin } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
-import { isAuthenticated, hasValidSession } from '../utils/tokenManager';
-import { refreshAccessToken } from '../utils/tokenRefreshService';
+import React, { useEffect, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import { isAuthenticated, hasValidSession } from "../utils/tokenManager";
+import { refreshAccessToken } from "../utils/tokenRefreshService";
 
 /**
  * PublicRoute Component
@@ -22,7 +22,6 @@ const PublicRoute = ({ children }) => {
 
       // Case 1: Has access token - user is authenticated
       if (hasAccess) {
-        console.log('✅ User authenticated - redirecting from auth page');
         setUserIsAuthenticated(true);
         setIsChecking(false);
         return;
@@ -30,13 +29,10 @@ const PublicRoute = ({ children }) => {
 
       // Case 2: No access token but has refresh token - try to recover
       if (!hasAccess && hasSession) {
-        console.log('🔄 Checking session validity...');
         const newToken = await refreshAccessToken();
         if (newToken) {
-          console.log('✅ Session recovered - redirecting from auth page');
           setUserIsAuthenticated(true);
         } else {
-          console.log('ℹ️ No valid session - allowing access to auth page');
           setUserIsAuthenticated(false);
         }
         setIsChecking(false);
@@ -44,7 +40,6 @@ const PublicRoute = ({ children }) => {
       }
 
       // Case 3: No tokens at all - not authenticated, allow access
-      console.log('ℹ️ User not authenticated - showing auth page');
       setUserIsAuthenticated(false);
       setIsChecking(false);
     };
@@ -55,13 +50,15 @@ const PublicRoute = ({ children }) => {
   // Show loading while checking authentication
   if (isChecking) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh',
-        background: '#fff'
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+          background: "#fff",
+        }}
+      >
         <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
       </div>
     );
@@ -70,9 +67,8 @@ const PublicRoute = ({ children }) => {
   // If user is authenticated, redirect to home (or intended destination)
   if (userIsAuthenticated) {
     // Check if there's a redirect location from previous navigation
-    const from = location.state?.from?.pathname || '/';
-    
-    console.log(`🔀 Authenticated user tried to access ${location.pathname}, redirecting to ${from}`);
+    const from = location.state?.from?.pathname || "/";
+
     return <Navigate to={from} replace />;
   }
 

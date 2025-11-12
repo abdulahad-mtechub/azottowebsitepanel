@@ -7,7 +7,7 @@ import Cookies from "js-cookie";
  * 1. Stored in httpOnly cookies (set by backend)
  * 2. Never accessible via JavaScript
  * 3. Automatically sent with requests via browser
- * 
+ *
  * Current implementation uses encrypted storage as a compromise for SPAs
  * where backend doesn't set httpOnly cookies.
  */
@@ -15,18 +15,18 @@ import Cookies from "js-cookie";
 const TOKEN_CONFIG = {
   // Access token expires in 10 minutes (backend: '10m')
   ACCESS_TOKEN_EXPIRY: 10 / (24 * 60), // 10 minutes in days
-  
+
   // Refresh token expires in 234 hours ≈ 9.75 days (backend: '234h')
   REFRESH_TOKEN_EXPIRY: 234 / 24, // 234 hours in days (9.75 days)
-  
+
   // User data expiry (same as refresh token)
   USER_DATA_EXPIRY: 234 / 24, // 234 hours in days (9.75 days)
-  
+
   // Cookie options - secure only in production (HTTPS)
   SECURE_OPTIONS: {
-    secure: window.location.protocol === 'https:', // Only use secure flag on HTTPS
-    sameSite: 'strict', // CSRF protection
-  }
+    secure: window.location.protocol === "https:", // Only use secure flag on HTTPS
+    sameSite: "strict", // CSRF protection
+  },
 };
 
 /**
@@ -35,9 +35,9 @@ const TOKEN_CONFIG = {
  * Better than plaintext, but httpOnly cookies from backend are ideal
  */
 const encryptToken = (token) => {
-  if (!token) return '';
-  const key = 'J@$00r-S3cur3-K3y-2025'; // Should be in env variable
-  let encrypted = '';
+  if (!token) return "";
+  const key = "J@$00r-S3cur3-K3y-2025"; // Should be in env variable
+  let encrypted = "";
   for (let i = 0; i < token.length; i++) {
     encrypted += String.fromCharCode(
       token.charCodeAt(i) ^ key.charCodeAt(i % key.length)
@@ -47,11 +47,11 @@ const encryptToken = (token) => {
 };
 
 const decryptToken = (encrypted) => {
-  if (!encrypted) return '';
+  if (!encrypted) return "";
   try {
-    const key = 'J@$00r-S3cur3-K3y-2025';
+    const key = "J@$00r-S3cur3-K3y-2025";
     const decoded = atob(encrypted);
-    let decrypted = '';
+    let decrypted = "";
     for (let i = 0; i < decoded.length; i++) {
       decrypted += String.fromCharCode(
         decoded.charCodeAt(i) ^ key.charCodeAt(i % key.length)
@@ -59,8 +59,8 @@ const decryptToken = (encrypted) => {
     }
     return decrypted;
   } catch (error) {
-    console.error('Token decryption failed:', error);
-    return '';
+    console.error("Token decryption failed:", error);
+    return "";
   }
 };
 
@@ -73,14 +73,6 @@ const decryptToken = (encrypted) => {
  */
 export const setAuthTokens = (accessToken, refreshToken, user) => {
   try {
-    console.log('🔐 Setting auth tokens...', {
-      hasAccessToken: !!accessToken,
-      hasRefreshToken: !!refreshToken,
-      hasUser: !!user,
-      protocol: window.location.protocol,
-      willUseSecure: window.location.protocol === 'https:'
-    });
-
     // Encrypt and store access token (short-lived)
     Cookies.set("_at", encryptToken(accessToken), {
       expires: TOKEN_CONFIG.ACCESS_TOKEN_EXPIRY,
@@ -99,7 +91,7 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
       Cookies.set("userId", user.id, {
         expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
       });
-      
+
       Cookies.set("userStatus", user.status, {
         expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
       });
@@ -110,7 +102,6 @@ export const setAuthTokens = (accessToken, refreshToken, user) => {
       expires: TOKEN_CONFIG.USER_DATA_EXPIRY,
     });
 
-    console.log('✅ Auth tokens set successfully');
     return true;
   } catch (error) {
     console.error("❌ Error setting auth tokens:", error);
@@ -187,15 +178,15 @@ export const clearAuthTokens = () => {
     Cookies.remove("userId");
     Cookies.remove("userStatus");
     Cookies.remove("tokenRefreshedAt");
-    
+
     // Also remove old cookie names for backward compatibility
     Cookies.remove("_at");
     Cookies.remove("_rt");
-    
+
     // Clear localStorage as fallback
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
-    
+
     return true;
   } catch (error) {
     console.error("Error clearing auth tokens:", error);
@@ -211,7 +202,7 @@ export const clearAuthTokens = () => {
  */
 export const shouldRefreshToken = () => {
   const lastRefresh = Cookies.get("tokenRefreshedAt");
-  
+
   if (!lastRefresh) {
     return true; // No refresh timestamp, should refresh
   }

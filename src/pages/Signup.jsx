@@ -1,13 +1,34 @@
 import { useState, useEffect } from "react";
-import { Form, Button, Typography, Row, Col, Radio, Space, Select, Divider, Checkbox, Image, Flex, Steps, Dropdown,Upload,message } from "antd";
+import {
+  Form,
+  Button,
+  Typography,
+  Row,
+  Col,
+  Radio,
+  Space,
+  Select,
+  Divider,
+  Checkbox,
+  Image,
+  Flex,
+  Steps,
+  Dropdown,
+  Upload,
+  message,
+} from "antd";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { CREATE_USER } from "../graphql/mutation/login";
 import { GETCUSTOMERROLE } from "../graphql/query";
 import { useNavigate, NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
-import { useDistricts, useCities } from '../data';
-import imageCompression from 'browser-image-compression';
-import { ArrowLeftOutlined, CheckOutlined, DownOutlined } from "@ant-design/icons";
+import { useDistricts, useCities } from "../data";
+import imageCompression from "browser-image-compression";
+import {
+  ArrowLeftOutlined,
+  CheckOutlined,
+  DownOutlined,
+} from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { setAuthTokens } from "../utils/tokenManager";
 import { startAutoRefresh } from "../utils/tokenRefreshService";
@@ -15,7 +36,7 @@ import { startAutoRefresh } from "../utils/tokenRefreshService";
 const { Title, Text, Paragraph } = Typography;
 
 const SignupPage = () => {
-  const { t,i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const district = useDistricts();
   const cities = useCities();
@@ -29,7 +50,7 @@ const SignupPage = () => {
   const [passportFileName, setPassportFileName] = useState("");
   const [documents, setDocuments] = useState([]);
   const [customerRole, setCustomerRole] = useState(null);
-  
+
   const [errors, setErrors] = useState({
     front: "",
     back: "",
@@ -41,7 +62,9 @@ const SignupPage = () => {
     icon: "assets/icons/en.webp",
   });
 
-  const [getCustomerRole] = useLazyQuery(GETCUSTOMERROLE, {fetchPolicy:"cache-first"});
+  const [getCustomerRole] = useLazyQuery(GETCUSTOMERROLE, {
+    fetchPolicy: "cache-first",
+  });
   const [createUser, { loading }] = useMutation(CREATE_USER);
   useEffect(() => {
     let lang = localStorage.getItem("lang") || "en";
@@ -51,7 +74,7 @@ const SignupPage = () => {
         ? { key: "2", label: "AR", icon: "assets/icons/ar.png" }
         : { key: "1", label: "EN", icon: "assets/icons/en.webp" }
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -62,7 +85,7 @@ const SignupPage = () => {
           setCustomerRole(data.getCustomerRole);
         }
       } catch (error) {
-        console.error('Error fetching customer role:', error);
+        console.error("Error fetching customer role:", error);
       }
     };
 
@@ -70,7 +93,6 @@ const SignupPage = () => {
   }, [getCustomerRole]);
   const handleFinish = async () => {
     try {
-
       const formData = form.getFieldsValue(true);
       const input = {
         name: formData.fullName,
@@ -83,14 +105,9 @@ const SignupPage = () => {
         roleId: customerRole?.id,
       };
 
-      console.log('🔑 Creating user account...');
       const { data } = await createUser({ variables: { input } });
-      console.log('📦 Signup response:', data);
 
       if (data?.createUser?.token && data?.createUser?.refreshToken) {
-        console.log('✅ Account created - tokens received');
-        
-        // Use the new token manager to store tokens securely
         const success = setAuthTokens(
           data.createUser.token,
           data.createUser.refreshToken,
@@ -98,40 +115,32 @@ const SignupPage = () => {
         );
 
         if (success) {
-          console.log('✅ Tokens stored successfully');
-          
-          // Start automatic token refresh
           startAutoRefresh();
 
           messageApi.success(t("Account created successfully!"));
           form.resetFields();
           setTimeout(() => {
-            console.log('🚀 Navigating to home...');
             navigate("/");
           }, 1000);
         } else {
-          console.error('❌ Failed to store tokens');
-          messageApi.error(t("Failed to store authentication data"));
+          console.error("❌ Failed to store tokens");
         }
       } else {
-        console.error('❌ Invalid server response:', data);
-        messageApi.error(t("Signup failed: Something went wrong"));
+        console.error("❌ Invalid server response:", data);
       }
     } catch (err) {
-      console.error('❌ Signup error:', err);
       const msg = err?.graphQLErrors?.[0]?.message || err?.message;
-      if (msg?.includes('The email already exists')) {
-        messageApi.error(t('The email already exists'));
+      if (msg?.includes("The email already exists")) {
+        messageApi.error(t("The email already exists"));
       } else if (err?.networkError) {
-        messageApi.error(t('Network error. Please check your connection.'));
+        messageApi.error(t("Network error. Please check your connection."));
       } else {
-        messageApi.error(t(msg || 'Something went wrong. Please try again.'));
+        messageApi.error(t(msg || "Something went wrong. Please try again."));
       }
     }
   };
 
   const handleUpload = async ({ file, title }) => {
-    
     try {
       if (file.type.startsWith("image/")) {
         await imageCompression(file, {
@@ -185,7 +194,9 @@ const SignupPage = () => {
         setCurrent(value);
       } catch {
         // Validation failed, don't move
-        messageApi.warning(t("Please complete the current step before proceeding"));
+        messageApi.warning(
+          t("Please complete the current step before proceeding")
+        );
       }
     }
   };
@@ -196,12 +207,12 @@ const SignupPage = () => {
       setCurrent(current + 1);
     }
   };
-  const handleChange= (value)=>{
-    localStorage.setItem("lang", value)
-    i18n?.changeLanguage(value)
-  }
+  const handleChange = (value) => {
+    localStorage.setItem("lang", value);
+    i18n?.changeLanguage(value);
+  };
   const prev = () => setCurrent(current - 1);
-  
+
   const steps = [
     {
       title: t("Basic Information"),
@@ -216,7 +227,9 @@ const SignupPage = () => {
               placeholder={t("Enter full name")}
               validator={{
                 pattern: /^[A-Za-z\u0600-\u06FF\s]+$/,
-                message: t("Name should only contain letters (English or Arabic) and spaces")
+                message: t(
+                  "Name should only contain letters (English or Arabic) and spaces"
+                ),
               }}
             />
           </Col>
@@ -229,11 +242,16 @@ const SignupPage = () => {
               placeholder={t("Enter email address")}
               validator={{
                 pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: t("Please enter a valid email address")
+                message: t("Please enter a valid email address"),
               }}
             />
           </Col>
-          <Col lg={{ span: 12 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+          <Col
+            lg={{ span: 12 }}
+            md={{ span: 24 }}
+            sm={{ span: 24 }}
+            xs={{ span: 24 }}
+          >
             <MySelect
               label={t("Region")}
               name="district"
@@ -245,7 +263,12 @@ const SignupPage = () => {
               onChange={(val) => setSelectedDistrict(val)}
             />
           </Col>
-          <Col lg={{ span: 12 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
+          <Col
+            lg={{ span: 12 }}
+            md={{ span: 24 }}
+            sm={{ span: 24 }}
+            xs={{ span: 24 }}
+          >
             <MySelect
               label={t("City")}
               name="city"
@@ -253,7 +276,11 @@ const SignupPage = () => {
               showKey
               message={t("Select city")}
               placeholder={t("Select city")}
-              options={selectedDistrict ? cities[selectedDistrict.toLowerCase()] || [] : []}
+              options={
+                selectedDistrict
+                  ? cities[selectedDistrict.toLowerCase()] || []
+                  : []
+              }
             />
           </Col>
           <Col span={24}>
@@ -266,7 +293,9 @@ const SignupPage = () => {
                 <Select
                   defaultValue="SA"
                   className="w-80px"
-                  onChange={(value) => form.setFieldsValue({ countryCode: value })}
+                  onChange={(value) =>
+                    form.setFieldsValue({ countryCode: value })
+                  }
                 >
                   <Select.Option value="sa">SA</Select.Option>
                   <Select.Option value="ae">AE</Select.Option>
@@ -277,7 +306,9 @@ const SignupPage = () => {
               className="w-100"
               validator={{
                 pattern: /^[0-9\u0660-\u0669]{8,15}$/,
-                message: t("Please enter a valid phone number (8–15 digits, Arabic or English)")
+                message: t(
+                  "Please enter a valid phone number (8–15 digits, Arabic or English)"
+                ),
               }}
             />
           </Col>
@@ -309,97 +340,119 @@ const SignupPage = () => {
           {idType === "national_id" ? (
             <>
               <Col span={24}>
-                  <Row gutter={8} className="mb-2">
-                      <Col flex="auto">
-                          <MyInput 
-                            withoutForm 
-                            size={'large'} 
-                            placeholder={t("Upload Front Side" )}
-                            readOnly 
-                            value={frontFileName} 
-                          />
-                      </Col>
-                      <Col>
-                          <Upload 
-                              beforeUpload={() => false} 
-                              showUploadList={false} 
-                              maxCount={1} 
-                              onChange={(info) => handleUpload({ file: info.file, title: 'front' })}
-                          >
-                              <Button aria-labelledby='Upload' className='btn btn-sm text-black border-gray'>{t("Upload")}</Button>
-                          </Upload>
-                      </Col>
-                      {errors.front && 
-                      <Col span={24} className="mb-1">
-                         <Text className="text-error text-12">{errors.front}</Text>
-                      </Col>
+                <Row gutter={8} className="mb-2">
+                  <Col flex="auto">
+                    <MyInput
+                      withoutForm
+                      size={"large"}
+                      placeholder={t("Upload Front Side")}
+                      readOnly
+                      value={frontFileName}
+                    />
+                  </Col>
+                  <Col>
+                    <Upload
+                      beforeUpload={() => false}
+                      showUploadList={false}
+                      maxCount={1}
+                      onChange={(info) =>
+                        handleUpload({ file: info.file, title: "front" })
                       }
-                      
-                  </Row>
+                    >
+                      <Button
+                        aria-labelledby="Upload"
+                        className="btn btn-sm text-black border-gray"
+                      >
+                        {t("Upload")}
+                      </Button>
+                    </Upload>
+                  </Col>
+                  {errors.front && (
+                    <Col span={24} className="mb-1">
+                      <Text className="text-error text-12">{errors.front}</Text>
+                    </Col>
+                  )}
+                </Row>
               </Col>
               <Col span={24}>
-                  <Row gutter={8} className="mb-2">
-                      <Col flex="auto">
-                          <MyInput 
-                            withoutForm 
-                            size={'large'} 
-                            className='m-0' 
-                            placeholder={t("Upload Back Side")}
-                            readOnly 
-                            value={backFileName} 
-                            required
-                            message={t('Please upload back side image')}
-                          />
-                      </Col>
-                      <Col>
-                          <Upload 
-                              beforeUpload={() => false} 
-                              showUploadList={false} 
-                              maxCount={1} 
-                              onChange={(info) => handleUpload({ file: info.file, title: 'back' })}
-                          >
-                              <Button aria-labelledby='Upload' className='btn btn-sm text-black border-gray'>{t("Upload")}</Button>
-                          </Upload>
-                      </Col>
-                      {errors.back && 
-                      <Col span={24} className="mb-1">
-                         <Text className="text-error text-12">{errors.back}</Text>
-                      </Col>
+                <Row gutter={8} className="mb-2">
+                  <Col flex="auto">
+                    <MyInput
+                      withoutForm
+                      size={"large"}
+                      className="m-0"
+                      placeholder={t("Upload Back Side")}
+                      readOnly
+                      value={backFileName}
+                      required
+                      message={t("Please upload back side image")}
+                    />
+                  </Col>
+                  <Col>
+                    <Upload
+                      beforeUpload={() => false}
+                      showUploadList={false}
+                      maxCount={1}
+                      onChange={(info) =>
+                        handleUpload({ file: info.file, title: "back" })
                       }
-                  </Row>
+                    >
+                      <Button
+                        aria-labelledby="Upload"
+                        className="btn btn-sm text-black border-gray"
+                      >
+                        {t("Upload")}
+                      </Button>
+                    </Upload>
+                  </Col>
+                  {errors.back && (
+                    <Col span={24} className="mb-1">
+                      <Text className="text-error text-12">{errors.back}</Text>
+                    </Col>
+                  )}
+                </Row>
               </Col>
             </>
           ) : (
-              <Col span={24}>
-                  <Row gutter={8} className="mb-2">
-                      <Col flex="auto">
-                          <MyInput 
-                            withoutForm 
-                            size={'large'} 
-                            placeholder={t("Upload Passport" )}
-                            readOnly 
-                            value={passportFileName} 
-                            required
-                            message={t('Please upload passport image')}
-                          />
-                      </Col>
-                      <Col>
-                          <Upload 
-                              beforeUpload={() => false} 
-                              showUploadList={false} 
-                              maxCount={1} 
-                              onChange={(info) => handleUpload({ file: info.file, title: 'passport' })}
-                          >
-                              <Button aria-labelledby='Upload' className='btn text-black border-gray'>{t("Upload")}</Button>
-                          </Upload>
-                      </Col>
-                      {errors.passport && 
-                        <Col span={24} className="mb-1">
-                          <Text className="text-error text-12">{errors.passport}</Text>
-                        </Col>
-                      }
-                  </Row>
-              </Col>
+            <Col span={24}>
+              <Row gutter={8} className="mb-2">
+                <Col flex="auto">
+                  <MyInput
+                    withoutForm
+                    size={"large"}
+                    placeholder={t("Upload Passport")}
+                    readOnly
+                    value={passportFileName}
+                    required
+                    message={t("Please upload passport image")}
+                  />
+                </Col>
+                <Col>
+                  <Upload
+                    beforeUpload={() => false}
+                    showUploadList={false}
+                    maxCount={1}
+                    onChange={(info) =>
+                      handleUpload({ file: info.file, title: "passport" })
+                    }
+                  >
+                    <Button
+                      aria-labelledby="Upload"
+                      className="btn text-black border-gray"
+                    >
+                      {t("Upload")}
+                    </Button>
+                  </Upload>
+                </Col>
+                {errors.passport && (
+                  <Col span={24} className="mb-1">
+                    <Text className="text-error text-12">
+                      {errors.passport}
+                    </Text>
+                  </Col>
+                )}
+              </Row>
+            </Col>
           )}
           <Col span={24}>
             <MyInput
@@ -411,14 +464,20 @@ const SignupPage = () => {
               placeholder={t("Enter password")}
               message={() => {}}
               validator={() => ({
-                  validator: (_, value) => {
-                      const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
-                      if (!reg.test(value)) {
-                          return Promise.reject(new Error(t('Password should contain at least 8 characters, one uppercase letter, one number, one special character')));
-                      } else {
-                          return Promise.resolve();
-                      }
+                validator: (_, value) => {
+                  const reg = /^(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.*\d).{8,}$/;
+                  if (!reg.test(value)) {
+                    return Promise.reject(
+                      new Error(
+                        t(
+                          "Password should contain at least 8 characters, one uppercase letter, one number, one special character"
+                        )
+                      )
+                    );
+                  } else {
+                    return Promise.resolve();
                   }
+                },
               })}
             />
           </Col>
@@ -431,30 +490,38 @@ const SignupPage = () => {
               required
               placeholder={t("Enter confirm password")}
               dependencies={["password"]}
-              message={t('Please enter confirm password')}
+              message={t("Please enter confirm password")}
               rules={[
-                  ({ getFieldValue }) => ({
-                      validator(_, value) {
-                          if (!value || getFieldValue('password') === value) {
-                              return Promise.resolve();
-                          }
-                          return Promise.reject(new Error(t('The password that you entered do not match!')));
-                      },
-                  }),
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        t("The password that you entered do not match!")
+                      )
+                    );
+                  },
+                }),
               ]}
               validator={({ getFieldValue }) => ({
-                  validator(_, value) {
-                      if (!value || getFieldValue('password') === value) {
-                          return Promise.resolve();
-                      }
-                      return Promise.reject(new Error(t('The password that you entered do not match!')));
-                  },
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(t("The password that you entered do not match!"))
+                  );
+                },
               })}
             />
           </Col>
           <Col span={24}>
             <Checkbox>
-              {t("I agree to")} <NavLink to="/termofuse">{t("Terms of Service")}</NavLink> {t("and")}{" "}
+              {t("I agree to")}{" "}
+              <NavLink to="/termofuse">{t("Terms of Service")}</NavLink>{" "}
+              {t("and")}{" "}
               <NavLink to="/privacypolicy">{t("Privacy Policy")}</NavLink>
             </Checkbox>
           </Col>
@@ -466,7 +533,9 @@ const SignupPage = () => {
   const items = steps.map((item, index) => ({
     key: item.title,
     title: (
-      <span className={`custom-step-title ${current >= index ? "completed" : ""}`}>
+      <span
+        className={`custom-step-title ${current >= index ? "completed" : ""}`}
+      >
         {item.title}
       </span>
     ),
@@ -478,29 +547,44 @@ const SignupPage = () => {
       key: "1",
       label: (
         <Space>
-          <Image src="assets/icons/en.webp" width={20} alt="English" preview={false} />
+          <Image
+            src="assets/icons/en.webp"
+            width={20}
+            alt="English"
+            preview={false}
+          />
           <Text className="fs-13">EN</Text>
         </Space>
       ),
       onClick: () => {
-        setSelectedLang({ key: "1", label: "EN", icon: "assets/icons/en.webp" }),
-        handleChange("en")
-      }
+        setSelectedLang({
+          key: "1",
+          label: "EN",
+          icon: "assets/icons/en.webp",
+        }),
+          handleChange("en");
+      },
     },
     {
       key: "2",
       label: (
         <Space>
-          <Image src="assets/icons/ar.png" width={20} alt="Arabic" preview={false} />
+          <Image
+            src="assets/icons/ar.png"
+            width={20}
+            alt="Arabic"
+            preview={false}
+          />
           <Text className="fs-13">AR</Text>
         </Space>
       ),
-      onClick: () => {setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
-        handleChange("ar")  
-    }
+      onClick: () => {
+        setSelectedLang({ key: "2", label: "AR", icon: "assets/icons/ar.png" }),
+          handleChange("ar");
+      },
     },
   ];
-  
+
   return (
     <>
       {contextHolder}
@@ -508,41 +592,75 @@ const SignupPage = () => {
         <Col xs={24} sm={24} md={12} lg={16}>
           <div className="signup-form-container ">
             <div className="form-inner">
-              <Button aria-label="Arrow left" shape="circle" onClick={() => navigate("/")}>
-                <ArrowLeftOutlined style={i18n.language === "ar" ? { transform: 'rotate(180deg)' } : undefined} />
+              <Button
+                aria-label="Arrow left"
+                shape="circle"
+                onClick={() => navigate("/")}
+              >
+                <ArrowLeftOutlined
+                  style={
+                    i18n.language === "ar"
+                      ? { transform: "rotate(180deg)" }
+                      : undefined
+                  }
+                />
               </Button>
               <NavLink to="/">
                 <div className="logo">
-                  <img src="/assets/images/logo-1.png" alt="jusoor-logo" height={70} fetchPriority="high" />
+                  <img
+                    src="/assets/images/logo-1.png"
+                    alt="jusoor-logo"
+                    height={70}
+                    fetchPriority="high"
+                  />
                 </div>
               </NavLink>
               <Title level={3}>{t("Verify Your Identity")}</Title>
               <Paragraph>
-                {t("To ensure the safety of all users, we require identity verification before creating a seller account.")}
+                {t(
+                  "To ensure the safety of all users, we require identity verification before creating a seller account."
+                )}
               </Paragraph>
 
-              <Button aria-label="Sign Up via Nafath" className="btn bg-nafth fs-16" block>
+              <Button
+                aria-label="Sign Up via Nafath"
+                className="btn bg-nafth fs-16"
+                block
+              >
                 {t("Sign Up via Nafath")}
               </Button>
               <Divider className="text-gray">{t("Or")}</Divider>
 
-              <Form layout="vertical" form={form} onFinish={handleFinish} requiredMark={false}
+              <Form
+                layout="vertical"
+                form={form}
+                onFinish={handleFinish}
+                requiredMark={false}
                 onFinishFailed={() => {
-                const newErrors = {
-                  front: !frontFileName ? t("Please upload front side image.") : "",
-                  back: !backFileName ? t("Please upload back side image.") : "",
-                  passport: !passportFileName ? t("Please upload passport image.") : "",
-                };
-                setErrors(newErrors);
-              }}
-              
+                  const newErrors = {
+                    front: !frontFileName
+                      ? t("Please upload front side image.")
+                      : "",
+                    back: !backFileName
+                      ? t("Please upload back side image.")
+                      : "",
+                    passport: !passportFileName
+                      ? t("Please upload passport image.")
+                      : "",
+                  };
+                  setErrors(newErrors);
+                }}
               >
                 <Steps
                   current={current}
                   onChange={onChange}
                   items={items}
                   progressDot={(dot, { index }) => (
-                    <span className={`custom-dot ${current > index ? "completed" : ""} ${current === index ? "active" : ""}`}>
+                    <span
+                      className={`custom-dot ${
+                        current > index ? "completed" : ""
+                      } ${current === index ? "active" : ""}`}
+                    >
                       {current > index ? <CheckOutlined /> : dot}
                     </span>
                   )}
@@ -562,7 +680,12 @@ const SignupPage = () => {
                     </Button>
                   )}
                   {current < steps.length - 1 && (
-                    <Button aria-label="Next" className="btn bg-dark-blue fs-14 my-2" block onClick={next}>
+                    <Button
+                      aria-label="Next"
+                      className="btn bg-dark-blue fs-14 my-2"
+                      block
+                      onClick={next}
+                    >
                       {t("Next")}
                     </Button>
                   )}
@@ -581,7 +704,8 @@ const SignupPage = () => {
                   )}
                 </Flex>
                 <Paragraph className="text-center">
-                  {t("Don't have an account?")} <NavLink to="/login">{t("Sign In")}</NavLink>
+                  {t("Don't have an account?")}{" "}
+                  <NavLink to="/login">{t("Sign In")}</NavLink>
                 </Paragraph>
               </Form>
             </div>
@@ -590,10 +714,22 @@ const SignupPage = () => {
 
         {/* Right visual part */}
         <Col xs={0} sm={0} md={12} lg={8} className="signup-visual-container">
-          <Dropdown menu={{ items: lang }} trigger={["click"]} className="lang-dropdown">
-            <Button onClick={(e) => e.preventDefault()} className="bg-transparent btn-outline btn p-2 border-white">
+          <Dropdown
+            menu={{ items: lang }}
+            trigger={["click"]}
+            className="lang-dropdown"
+          >
+            <Button
+              onClick={(e) => e.preventDefault()}
+              className="bg-transparent btn-outline btn p-2 border-white"
+            >
               <Space align="center">
-                <Image src={selectedLang.icon} width={20} alt={selectedLang.label} preview={false} />
+                <Image
+                  src={selectedLang.icon}
+                  width={20}
+                  alt={selectedLang.label}
+                  preview={false}
+                />
                 <Text className="text-white fs-13">{selectedLang.label}</Text>
                 <DownOutlined className="text-white" />
               </Space>
@@ -601,13 +737,24 @@ const SignupPage = () => {
           </Dropdown>
           <Flex vertical justify="space-between" className="h-100">
             <Flex vertical justify="center" align="center" className="logo-sp">
-              <Image src="/assets/images/logo.webp" alt="jusoor logo" width={200} preview={false} fetchPriority="high"/>
+              <Image
+                src="/assets/images/logo.webp"
+                alt="jusoor logo"
+                width={200}
+                preview={false}
+                fetchPriority="high"
+              />
               <Title level={5} className="m-0 text-white text-center">
                 {t("Shorten the path")}
               </Title>
             </Flex>
             <div className="bg-shade">
-              <img src="/assets/images/login.gif" alt="jusoor-gif-image" className="w-100 opacity-7" fetchPriority="high" />
+              <img
+                src="/assets/images/login.gif"
+                alt="jusoor-gif-image"
+                className="w-100 opacity-7"
+                fetchPriority="high"
+              />
             </div>
           </Flex>
         </Col>

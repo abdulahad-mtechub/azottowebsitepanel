@@ -1,11 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { Result, Button, Typography, Flex, Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { ExclamationCircleOutlined, LoadingOutlined } from '@ant-design/icons';
-import { isAuthenticated, hasValidSession, getUserStatus } from '../utils/tokenManager';
-import { refreshAccessToken } from '../utils/tokenRefreshService';
+import React, { useEffect, useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { Result, Button, Typography, Flex, Spin } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { ExclamationCircleOutlined, LoadingOutlined } from "@ant-design/icons";
+import {
+  isAuthenticated,
+  hasValidSession,
+  getUserStatus,
+} from "../utils/tokenManager";
+import { refreshAccessToken } from "../utils/tokenRefreshService";
 
 const { Text } = Typography;
 
@@ -30,20 +34,16 @@ const ProtectedRoute = ({ children }) => {
 
       // Case 2: No access token but has refresh token - try to recover
       if (!hasAccess && hasSession) {
-        console.log('🔄 Access token missing - attempting recovery...');
         const newToken = await refreshAccessToken();
         if (newToken) {
-          console.log('✅ Token recovered successfully!');
           setIsAuthorized(true);
         } else {
-          console.log('❌ Token recovery failed');
           setIsAuthorized(false);
         }
         setIsChecking(false);
         return;
       }
 
-      // Case 3: No tokens at all - not authenticated
       setIsAuthorized(false);
       setIsChecking(false);
     };
@@ -54,12 +54,14 @@ const ProtectedRoute = ({ children }) => {
   // Show loading while checking authentication
   if (isChecking) {
     return (
-      <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        height: '100vh' 
-      }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
         <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
       </div>
     );
@@ -71,46 +73,48 @@ const ProtectedRoute = ({ children }) => {
   }
 
   const userStatus = getUserStatus();
-  const rawPath = location.pathname || '/';
-  const pathname = rawPath.replace(/\/+$/, '') || '/';
+  const rawPath = location.pathname || "/";
+  const pathname = rawPath.replace(/\/+$/, "") || "/";
 
   const isProfileDashboard =
-    pathname === '/profiledashboard' ||
-    pathname === '/sellbusinesscreate'  
+    pathname === "/profiledashboard" || pathname === "/sellbusinesscreate";
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
-  
+
   if (isUserInactive && isProfileDashboard) {
     return (
-      <div className='padd-1 relative'>
-        <div className='container'>
-        <Result
-          icon={<ExclamationCircleOutlined style={{ color: '#faad14' }} />}
-          title={t("Account Verification Pending")}
-          subTitle={
-            <Text style={{ fontSize: '16px' }}>
-              {t("Your account is not verified yet. Please contact support to verify your account. Once your account is verified, you will get full access to all features.")}
-            </Text>
-          }
-          extra={[
-            <Flex gap={5} justify='center'>
-            <Button 
-              type="primary" 
-              key="home" 
-              onClick={() => navigate('/')}
-              className='bg-brand'
-            >
-              {t("Go to Home")}
-            </Button>,
-            <Button 
-              key="profile" 
-              onClick={() => navigate('/businesslisting')}
-            >
-              {t("View Business Listings")}
-            </Button>
-            </Flex>
-          ]}
-        />
-      </div>
+      <div className="padd-1 relative">
+        <div className="container">
+          <Result
+            icon={<ExclamationCircleOutlined style={{ color: "#faad14" }} />}
+            title={t("Account Verification Pending")}
+            subTitle={
+              <Text style={{ fontSize: "16px" }}>
+                {t(
+                  "Your account is not verified yet. Please contact support to verify your account. Once your account is verified, you will get full access to all features."
+                )}
+              </Text>
+            }
+            extra={[
+              <Flex gap={5} justify="center">
+                <Button
+                  type="primary"
+                  key="home"
+                  onClick={() => navigate("/")}
+                  className="bg-brand"
+                >
+                  {t("Go to Home")}
+                </Button>
+                ,
+                <Button
+                  key="profile"
+                  onClick={() => navigate("/businesslisting")}
+                >
+                  {t("View Business Listings")}
+                </Button>
+              </Flex>,
+            ]}
+          />
+        </div>
       </div>
     );
   }
