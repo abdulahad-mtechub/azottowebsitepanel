@@ -54,7 +54,9 @@ const LoginPage = () => {
       const email = values.email.toLowerCase();
       const password = values.password;
 
-      const { data } = await loginUser({ variables: { email, password } });
+      const { data, errors } = await loginUser({
+        variables: { email, password },
+      });
 
       if (data?.login?.token && data?.login?.refreshToken) {
         // Use the new token manager to store tokens securely
@@ -72,19 +74,16 @@ const LoginPage = () => {
           setTimeout(() => {
             navigate("/");
           }, 1000);
-        } else {
-          console.error("❌ Failed to store tokens");
         }
       } else {
-        console.error("❌ Invalid server response:", data);
+        throw new Error(errors?.[0].message);
       }
     } catch (error) {
-      console.error("❌ Login error:", error);
-      messageApi.error(
-        `${t("Login failed")}: ${
-          error?.graphQLErrors?.[0]?.message || error.message
-        }`
-      );
+      const errorMessage =
+        error?.graphQLErrors?.[0]?.message ||
+        error?.message ||
+        t("Login failed");
+      messageApi.error(`${t("Login failed")}: ${errorMessage}`);
     }
   };
   const handleChange = (value) => {
