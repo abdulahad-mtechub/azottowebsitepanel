@@ -1,9 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
-import { Col, Collapse, Row, Typography, Spin, Flex } from 'antd'
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { GETFAQ } from '../../../graphql/query/queries'
+import { useEffect, useMemo, useState } from "react";
+import { Col, Collapse, Row, Typography, Spin, Flex } from "antd";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { GETFAQ } from "../../../graphql/query/queries";
 import { useLazyQuery } from "@apollo/client";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const { Text, Title } = Typography;
 
@@ -11,36 +11,37 @@ const FaqsComponent = () => {
   const { t, i18n } = useTranslation();
   const [currentPanel, setCurrentPanel] = useState([]);
   const [isArabic, setIsArabic] = useState(() => {
-    const stored = (localStorage.getItem('lang') || '').toLowerCase();
-    return i18n?.language === 'ar' || stored === 'ar';
+    const stored = (localStorage.getItem("lang") || "").toLowerCase();
+    return i18n?.language === "ar" || stored === "ar";
   });
 
   const [loadData, { data, loading }] = useLazyQuery(GETFAQ, {
     variables: { search: "" },
-    fetchPolicy: 'network-only',
+    fetchPolicy: "network-only",
   });
   useEffect(() => {
     loadData();
   }, [loadData]);
 
   useEffect(() => {
-    const langFromStorage = () => (localStorage.getItem('lang') || '').toLowerCase();
+    const langFromStorage = () =>
+      (localStorage.getItem("lang") || "").toLowerCase();
     const update = () => {
-      setIsArabic(i18n?.language === 'ar' || langFromStorage() === 'ar');
+      setIsArabic(i18n?.language === "ar" || langFromStorage() === "ar");
       setCurrentPanel([]);
     };
-    update(); 
+    update();
     const onStorage = (e) => {
-      if (e.key === 'lang') update();
+      if (e.key === "lang") update();
     };
-    window.addEventListener('storage', onStorage);
+    window.addEventListener("storage", onStorage);
     if (i18n && i18n.on) {
-      i18n.on('languageChanged', update);
+      i18n.on("languageChanged", update);
     }
     return () => {
-      window.removeEventListener('storage', onStorage);
+      window.removeEventListener("storage", onStorage);
       if (i18n && i18n.off) {
-        i18n.off('languageChanged', update);
+        i18n.off("languageChanged", update);
       }
     };
   }, [i18n]);
@@ -48,76 +49,116 @@ const FaqsComponent = () => {
   const filteredFaqs = useMemo(() => {
     const faqs = data?.getFAQs?.faqs || [];
     return faqs
-      .filter(item => Boolean(item.isArabic) === Boolean(isArabic))
+      .filter((item) => Boolean(item.isArabic) === Boolean(isArabic))
       .map((item) => ({
         id: item.id,
-        title: isArabic ? (item.arabicQuestion || item.question) : (item.question || item.arabicQuestion),
-        description: isArabic ? (item.arabicAnswer || item.answer) : (item.answer || item.arabicAnswer),
+        title: isArabic
+          ? item.arabicQuestion || item.question
+          : item.question || item.arabicQuestion,
+        description: isArabic
+          ? item.arabicAnswer || item.answer
+          : item.answer || item.arabicAnswer,
       }));
   }, [data, isArabic]);
 
-    if (loading) {
-        return (
-            <Flex justify="center" align="center" className='h-200'>
-                <Spin size="large" />
-            </Flex>
-        );
-    }
-
+  if (loading) {
     return (
-        <div className='feature' dir={isArabic ? 'rtl' : 'ltr'}>
-            <div className='container'>
-                <Row gutter={[24, 64]} justify={'center'}>
-                    <Col span={24}>
-                        <Flex vertical justify='center' align='center' gap={15} className='mx-width'>
-                            <div className='tag bg-secondary fw-500 text-brand'>{t("FAQs")}</div>
-                            <Title className='m-0' level={2}>
-                                {t("Everything You Need to")} <span className='text-brand'>{t("Know About Jusoor")}</span>
-                            </Title>
-                            <Text className='fs-14'>
-                                {t("Learn how Jusoor works, how we verify businesses, and what to expect during the buying or selling process.")}
-                            </Text>
-                        </Flex>
-                    </Col>
-                    <Col lg={{ span: 20 }} md={{ span: 24 }} sm={{ span: 24 }} xs={{ span: 24 }}>
-                        <Collapse
-                            className="collapse-fq"
-                            activeKey={currentPanel}
-                            onChange={(keys) => setCurrentPanel(Array.isArray(keys) ? keys : [String(keys)])}
-                            ghost
-                        >
-                            {filteredFaqs.length === 0 ? (
-                                <div style={{ padding: 16 }}>
-                                <Text>{isArabic ? 'لا توجد أسئلة متاحة حالياً' : 'No FAQs available right now.'}</Text>
-                                </div>
-                            ) : filteredFaqs.map((faq, index) => {
-                                const key = String(index);
-                                const isOpen = currentPanel.includes(key);
-                                return (
-                                <Collapse.Panel
-                                    header={
-                                    <Title
-                                        level={3}
-                                        className={`m-0 fw-500 fs-17 ${isOpen ? 'text-brand' : 'text-gray'}`}
-                                    >
-                                        <span className='mr-15'>{isArabic ? `${index + 1}.` : `0${index + 1}`}</span>
-                                        {faq.title}
-                                    </Title>
-                                    }
-                                    key={key}
-                                    extra={isOpen ? <MinusOutlined className="fs-18" /> : <PlusOutlined className="fs-18" />}
-                                    className={isOpen ? 'panel-active panel' : 'panel'}
-                                >
-                                    <Text className="fs-16">{faq.description}</Text>
-                                </Collapse.Panel>
-                                );
-                            })}
-                        </Collapse>
-                    </Col>
-                </Row>
-            </div>
-        </div>
+      <Flex justify="center" align="center" className="h-200">
+        <Spin size="large" />
+      </Flex>
     );
-}
+  }
 
-export { FaqsComponent }
+  return (
+    <div className="feature" dir={isArabic ? "rtl" : "ltr"}>
+      <div className="container">
+        <Row gutter={[24, 64]} justify={"center"}>
+          <Col span={24}>
+            <Flex
+              vertical
+              justify="center"
+              align="center"
+              gap={15}
+              className="mx-width"
+            >
+              <div className="tag bg-secondary fw-500 text-brand">
+                {t("FAQs")}
+              </div>
+              <Title className="m-0" level={2}>
+                {t("Everything You Need to")}{" "}
+                <span className="text-brand">{t("Know About Jusoor")}</span>
+              </Title>
+              <Text className="fs-14">
+                {t(
+                  "Learn how Jusoor works, how we verify businesses, and what to expect during the buying or selling process."
+                )}
+              </Text>
+            </Flex>
+          </Col>
+          <Col
+            lg={{ span: 20 }}
+            md={{ span: 24 }}
+            sm={{ span: 24 }}
+            xs={{ span: 24 }}
+          >
+            <Collapse
+              className="collapse-fq"
+              activeKey={currentPanel}
+              onChange={(keys) =>
+                setCurrentPanel(Array.isArray(keys) ? keys : [String(keys)])
+              }
+              ghost
+            >
+              {filteredFaqs.length === 0 ? (
+                <div style={{ padding: 16 }}>
+                  <Text>
+                    {isArabic
+                      ? "لا توجد أسئلة متاحة حالياً"
+                      : "No FAQs available right now."}
+                  </Text>
+                </div>
+              ) : (
+                filteredFaqs.map((faq, index) => {
+                  const key = String(index);
+                  const isOpen = currentPanel.includes(key);
+                  return (
+                    <Collapse.Panel
+                      header={
+                        <Title
+                          level={3}
+                          className={`m-0 fw-500 fs-17 ${
+                            isOpen ? "text-brand" : "text-gray"
+                          }`}
+                        >
+                          <span className="mr-15">
+                            {isArabic
+                              ? `${index + 1}.`
+                              : `${index + 1 < 10 ? "0" : ""}${index + 1}`}
+                          </span>
+                          {faq.title}
+                        </Title>
+                      }
+                      key={key}
+                      extra={
+                        isOpen ? (
+                          <MinusOutlined className="fs-18" />
+                        ) : (
+                          <PlusOutlined className="fs-18" />
+                        )
+                      }
+                      className={isOpen ? "panel-active panel" : "panel"}
+                    >
+                      <Text className="fs-16">{faq.description}</Text>
+                    </Collapse.Panel>
+                  );
+                })
+              )}
+            </Collapse>
+          </Col>
+        </Row>
+      </div>
+    </div>
+  );
+};
+
+export { FaqsComponent };
