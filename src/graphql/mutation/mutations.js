@@ -2,152 +2,152 @@ import { gql } from "@apollo/client";
 
 const CREATE_OFFER = gql`
   mutation CreateOffer($input: CreateOfferInput!) {
-  createOffer(input: $input) {
-    id
+    createOffer(input: $input) {
+      id
+    }
   }
-}
-`
-const UPDATE_OFFER = gql `
-mutation UpdateOfferStatus($input: UpdateOfferStatusInput!) {
-  updateOfferStatus(input: $input) {
-    id
+`;
+const UPDATE_OFFER = gql`
+  mutation UpdateOfferStatus($input: UpdateOfferStatusInput!) {
+    updateOfferStatus(input: $input) {
+      id
+    }
   }
-}
-`
-const CREATE_BUSINESS = gql `
+`;
+const CREATE_BUSINESS = gql`
   mutation CreateBusiness($input: CreateBusinessInput!) {
     createBusiness(input: $input) {
       id
     }
-  } 
-`
-const UPDATE_BUSINESS = gql `
+  }
+`;
+const UPDATE_BUSINESS = gql`
   mutation UpdateBusiness($input: UpdateBusinessInput!) {
     updateBusiness(input: $input) {
       id
     }
-  } 
-`
-const CREATE_SAVE_BUSINESS = gql `
+  }
+`;
+const CREATE_SAVE_BUSINESS = gql`
   mutation SaveBusiness($saveBusinessId: ID!) {
     saveBusiness(id: $saveBusinessId)
   }
-`
-const CREATE_VIEW_BUSINESS = gql `
+`;
+const CREATE_VIEW_BUSINESS = gql`
   mutation ViewBusiness($viewBusinessId: ID!) {
     viewBusiness(id: $viewBusinessId)
   }
-`
-const ACCEPT_ENDA = gql `
+`;
+const ACCEPT_ENDA = gql`
   mutation AcceptEnda($input: AcceptEndaInput!) {
-  acceptEnda(input: $input) {
-    id
+    acceptEnda(input: $input) {
+      id
+    }
   }
-}
-`
-const CREATE_ENDA = gql `
-mutation CreateEnda($input: AcceptEndaInput!) {
-  createEnda(input: $input) {
-    id
+`;
+const CREATE_ENDA = gql`
+  mutation CreateEnda($input: AcceptEndaInput!) {
+    createEnda(input: $input) {
+      id
+    }
   }
-}
-`
-const BUSINESS_MEETING = gql `
+`;
+const BUSINESS_MEETING = gql`
   mutation RequestMeeting($input: CreateMeetingInput!) {
-  requestMeeting(input: $input) {
-    id
+    requestMeeting(input: $input) {
+      id
+    }
   }
-}
-`
-const UPDATE_MEETING = gql `
-mutation UpdateMeeting($input: UpdateMeetingInput!) {
-  updateMeeting(input: $input) {
-    id
+`;
+const UPDATE_MEETING = gql`
+  mutation UpdateMeeting($input: UpdateMeetingInput!) {
+    updateMeeting(input: $input) {
+      id
+    }
   }
-}
-`
-const APPROVE_MEETING = gql `
-mutation ApproveMeeting($meetingId: ID!, $offerId: ID) {
-  approveMeeting(meetingId: $meetingId, offerId: $offerId)
-}
-`
-const UPLOAD_DOC = gql `
-mutation CreateDocument($input: CreateDocumentInput!) {
-  createDocument(input: $input) {
-    id
+`;
+const APPROVE_MEETING = gql`
+  mutation ApproveMeeting($meetingId: ID!, $offerId: ID) {
+    approveMeeting(meetingId: $meetingId, offerId: $offerId)
   }
-}
-`
-const FINALIZE_DEAL = gql `
-mutation UpdateDeal($input: UpdateDealInput!) {
-  updateDeal(input: $input) {
-    id
+`;
+const UPLOAD_DOC = gql`
+  mutation CreateDocument($input: CreateDocumentInput!) {
+    createDocument(input: $input) {
+      id
+    }
   }
-}
-`
+`;
+const FINALIZE_DEAL = gql`
+  mutation UpdateDeal($input: UpdateDealInput!) {
+    updateDeal(input: $input) {
+      id
+    }
+  }
+`;
 const UPDATE_DEAL = gql`
   mutation UpdateDeal($input: UpdateDealInput!) {
     updateDeal(input: $input) {
       id
     }
   }
-`
-const COUNTER_OFFER = gql `
-mutation CounterOffer($input: CounterOfferInput!) {
-  counterOffer(input: $input) {
-    id
+`;
+const COUNTER_OFFER = gql`
+  mutation CounterOffer($input: CounterOfferInput!) {
+    counterOffer(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 const SEND_BANK = gql`
-mutation SendBankToBuyer($sendBankToBuyerId: ID) {
-  sendBankToBuyer(id: $sendBankToBuyerId) {
-    iban
+  mutation SendBankToBuyer($sendBankToBuyerId: ID) {
+    sendBankToBuyer(id: $sendBankToBuyerId) {
+      iban
+    }
   }
-}
-`
+`;
 const UPLOAD_DOCUMENT = gql`
-mutation UploadDocument($input: UpdateDocumentInput!) {
-  uploadDocument(input: $input) {
-    id
+  mutation UploadDocument($input: UpdateDocumentInput!) {
+    uploadDocument(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 
 const DELETE_DOCUMENTS = gql`
-mutation DeleteDocument($deleteDocumentId: ID!) {
-  deleteDocument(id: $deleteDocumentId)
-}
-`
-const ADD_BANK = gql`
-mutation AddBank($input: BankInput!) {
-  addBank(input: $input) {
-    id
+  mutation DeleteDocument($deleteDocumentId: ID!) {
+    deleteDocument(id: $deleteDocumentId)
   }
-}
-`
+`;
+const ADD_BANK = gql`
+  mutation AddBank($input: BankInput!) {
+    addBank(input: $input) {
+      id
+    }
+  }
+`;
 const ACTIVEBANK = gql`
-mutation SetActiveBank($setActiveBankId: ID!) {
-  setActiveBank(id: $setActiveBankId)
-}
-`
+  mutation SetActiveBank($setActiveBankId: ID!) {
+    setActiveBank(id: $setActiveBankId)
+  }
+`;
 const DELETEBANK = gql`
-mutation DeleteBank($deleteBankId: ID!) {
-  deleteBank(id: $deleteBankId)
-}
-`
+  mutation DeleteBank($deleteBankId: ID!) {
+    deleteBank(id: $deleteBankId)
+  }
+`;
 const MARK_NOTIFICATION_AS_READ = gql`
-mutation MarkNotificationAsRead($userId: ID!) {
-  markNotificationAsRead(id: $userId)
-}
-`
+  mutation MarkNotificationAsRead($userId: ID!) {
+    markNotificationAsRead(id: $userId)
+  }
+`;
 const CREATE_CONTACT = gql`
   mutation CreateContact($input: CreateContactInput!) {
     createContact(input: $input) {
       id
     }
   }
-`
+`;
 
 const REQUEST_PASSWORD_RESET = gql`
   mutation RequestPasswordReset($email: String!) {
@@ -156,16 +156,24 @@ const REQUEST_PASSWORD_RESET = gql`
       message
     }
   }
-`
+`;
 
 const RESET_PASSWORD_WITH_OTP = gql`
-  mutation ResetPasswordWithEmailOTP($email: String!, $otp: String!, $newPassword: String!) {
-    resetPasswordWithEmailOTP(email: $email, otp: $otp, newPassword: $newPassword) {
+  mutation ResetPasswordWithEmailOTP(
+    $email: String!
+    $otp: String!
+    $newPassword: String!
+  ) {
+    resetPasswordWithEmailOTP(
+      email: $email
+      otp: $otp
+      newPassword: $newPassword
+    ) {
       success
       message
     }
   }
-`
+`;
 
 export {
   CREATE_OFFER,
@@ -192,5 +200,5 @@ export {
   MARK_NOTIFICATION_AS_READ,
   CREATE_CONTACT,
   REQUEST_PASSWORD_RESET,
-  RESET_PASSWORD_WITH_OTP
-}
+  RESET_PASSWORD_WITH_OTP,
+};
