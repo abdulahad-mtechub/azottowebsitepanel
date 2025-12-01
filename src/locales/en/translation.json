@@ -825,6 +825,8 @@
   "Enter the 6 digit OTP code sent to your email": "Enter the 6 digit OTP code sent to your email",
   "OTP has been sent to your email address.": "OTP has been sent to your email address.",
   "OTP has been resent to your email address.": "OTP has been resent to your email address.",
+  "OTP verified successfully. You may now reset your password.": "OTP verified successfully. You may now reset your password.",
+  "Invalid or expired OTP. Please try again.": "Invalid or expired OTP. Please try again.",
   "Password has been reset successfully.": "Password has been reset successfully.",
   "Failed to send OTP. Please try again.": "Failed to send OTP. Please try again.",
   "Failed to resend OTP. Please try again.": "Failed to resend OTP. Please try again.",

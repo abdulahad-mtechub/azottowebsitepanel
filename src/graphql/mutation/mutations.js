@@ -158,17 +158,19 @@ const REQUEST_PASSWORD_RESET = gql`
   }
 `;
 
-const RESET_PASSWORD_WITH_OTP = gql`
-  mutation ResetPasswordWithEmailOTP(
-    $email: String!
-    $otp: String!
-    $newPassword: String!
-  ) {
-    resetPasswordWithEmailOTP(
-      email: $email
-      otp: $otp
-      newPassword: $newPassword
-    ) {
+const VERIFY_PASSWORD_RESET_OTP = gql`
+  mutation VerifyPasswordResetOTP($email: String!, $otp: String!) {
+    verifyPasswordResetOTP(email: $email, otp: $otp) {
+      success
+      message
+      resetToken
+    }
+  }
+`;
+
+const RESET_PASSWORD_WITH_TOKEN = gql`
+  mutation ResetPasswordWithToken($resetToken: String!, $newPassword: String!) {
+    resetPasswordWithToken(resetToken: $resetToken, newPassword: $newPassword) {
       success
       message
     }
@@ -200,5 +202,6 @@ export {
   MARK_NOTIFICATION_AS_READ,
   CREATE_CONTACT,
   REQUEST_PASSWORD_RESET,
-  RESET_PASSWORD_WITH_OTP,
+  VERIFY_PASSWORD_RESET_OTP,
+  RESET_PASSWORD_WITH_TOKEN,
 };

@@ -1106,8 +1106,11 @@
   "Enter the 6 digit OTP code sent to your email": "أدخل رمز التحقق المكون من 6 أرقام المرسل إلى بريدك الإلكتروني",
   "OTP has been sent to your email address.": "تم إرسال رمز التحقق إلى بريدك الإلكتروني.",
   "OTP has been resent to your email address.": "تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني.",
+  "OTP verified successfully. You may now reset your password.": "تم التحقق من رمز OTP بنجاح. يمكنك الآن إعادة تعيين كلمة المرور.",
+  "Invalid or expired OTP. Please try again.": "رمز OTP غير صالح أو منتهي الصلاحية. يرجى المحاولة مرة أخرى.",
   "Password has been reset successfully.": "تم إعادة تعيين كلمة المرور بنجاح.",
   "Failed to send OTP. Please try again.": "فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى.",
   "Failed to resend OTP. Please try again.": "فشل إعادة إرسال رمز التحقق. يرجى المحاولة مرة أخرى.",
-  "Failed to reset password. Please try again.": "فشل إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى."
+  "Failed to reset password. Please try again.": "فشل إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.",
+  "Enter the 4 digit OTP code sent to your email": "أدخل رمز التحقق المكون من 4 أرقام المرسل إلى بريدك الإلكتروني"
 }

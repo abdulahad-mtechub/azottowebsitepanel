@@ -18,7 +18,8 @@ import { t } from "i18next";
 import { useMutation } from "@apollo/client";
 import {
   REQUEST_PASSWORD_RESET,
-  RESET_PASSWORD_WITH_OTP,
+  VERIFY_PASSWORD_RESET_OTP,
+  RESET_PASSWORD_WITH_TOKEN,
 } from "../graphql/mutation";
 
 const { Title, Text, Paragraph } = Typography;
@@ -29,7 +30,7 @@ const ForgotPassword = () => {
   const [requestState, setRequestState] = useState("request");
   const [emailValue, setEmailValue] = useState("");
   const [maskedEmail, setMaskedEmail] = useState("");
-  const [otpValue, setOtpValue] = useState("");
+  const [resetToken, setResetToken] = useState("");
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const [selectedLang, setSelectedLang] = useState({
@@ -41,8 +42,11 @@ const ForgotPassword = () => {
   const [requestPasswordReset, { loading: requestLoading }] = useMutation(
     REQUEST_PASSWORD_RESET
   );
-  const [resetPasswordWithOTP, { loading: resetLoading }] = useMutation(
-    RESET_PASSWORD_WITH_OTP
+  const [verifyPasswordResetOTP, { loading: verifyLoading }] = useMutation(
+    VERIFY_PASSWORD_RESET_OTP
+  );
+  const [resetPasswordWithToken, { loading: resetLoading }] = useMutation(
+    RESET_PASSWORD_WITH_TOKEN
   );
 
   // Helper function to mask email
@@ -76,21 +80,44 @@ const ForgotPassword = () => {
   };
 
   const handleVerifyOTP = async (values) => {
-    setOtpValue(values.otp);
-    setRequestState("reset");
+    try {
+      const { data } = await verifyPasswordResetOTP({
+        variables: {
+          email: emailValue,
+          otp: values.otp,
+        },
+      });
+
+      if (data?.verifyPasswordResetOTP?.success) {
+        // Store the reset token
+        setResetToken(data.verifyPasswordResetOTP.resetToken);
+        setRequestState("reset");
+        messageApi.success(
+          t("OTP verified successfully. You may now reset your password.")
+        );
+      } else {
+        messageApi.error(
+          data?.verifyPasswordResetOTP?.message ||
+            t("Invalid or expired OTP. Please try again.")
+        );
+      }
+    } catch (error) {
+      messageApi.error(
+        error.message || t("Invalid or expired OTP. Please try again.")
+      );
+    }
   };
 
   const handleResetPassword = async (values) => {
     try {
-      const { data } = await resetPasswordWithOTP({
+      const { data } = await resetPasswordWithToken({
         variables: {
-          email: emailValue,
-          otp: otpValue,
+          resetToken: resetToken,
           newPassword: values.password,
         },
       });
 
-      if (data?.resetPasswordWithEmailOTP?.success) {
+      if (data?.resetPasswordWithToken?.success) {
         messageApi.success(t("Password has been reset successfully."));
         setTimeout(() => {
           navigate("/login");
@@ -101,10 +128,11 @@ const ForgotPassword = () => {
         error.message || t("Failed to reset password. Please try again.");
       messageApi.error(errorMessage);
 
-      // If OTP is invalid, go back to OTP step
-      if (error.message?.toLowerCase().includes("otp")) {
+      // If token is expired, go back to email step
+      if (error.message?.toLowerCase().includes("token")) {
         setTimeout(() => {
-          setRequestState("otp");
+          setRequestState("request");
+          form.resetFields();
         }, 2000);
       }
     }
@@ -233,7 +261,7 @@ const ForgotPassword = () => {
             {requestState === "request" &&
               t("Enter the email address to send you the OTP code.")}
             {requestState === "otp" &&
-              t("Enter the 6 digit OTP code sent to your email") +
+              t("Enter the 4 digit OTP code sent to your email") +
                 " " +
                 maskedEmail}
             {requestState === "reset" && null}
@@ -261,9 +289,11 @@ const ForgotPassword = () => {
                 </Col>
               )}
               {requestState === "otp" && (
-                <Col span={24}>
+                <Col span={24} className="mb-4">
                   <MyInput
                     oTp
+                    length={4}
+                    size="large"
                     label={t("OTP")}
                     name="otp"
                     type="number"
@@ -277,6 +307,7 @@ const ForgotPassword = () => {
                     }}
                     className="w-100"
                     id="otpcs"
+                    style={{ justifyContent: "center" }}
                   />
                 </Col>
               )}
@@ -354,7 +385,7 @@ const ForgotPassword = () => {
                   htmlType="submit"
                   className="btn bg-dark-blue fs-16"
                   block
-                  loading={requestLoading || resetLoading}
+                  loading={requestLoading || verifyLoading || resetLoading}
                 >
                   {requestState === "request" && t("Send OTP")}
                   {requestState === "otp" && t("Verify OTP")}
