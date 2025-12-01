@@ -1,7 +1,7 @@
 import { Button, Flex, Form, Modal } from "antd";
 import { ScheduleMeetingStep, SignJusoorEndaStep } from "../structure";
-import { use, useEffect, useState } from "react";
-import { useLazyQuery, useQuery } from "@apollo/client";
+import { useEffect, useState } from "react";
+import { useLazyQuery } from "@apollo/client";
 import { ME } from "../../../graphql/query";
 import { message } from "antd";
 import { useMutation } from "@apollo/client";

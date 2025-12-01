@@ -1099,5 +1099,15 @@
   "Al Ahsa (Hofuf/Mubarraz)": "الأحساء (الهفوف/المبرز)",
   "Al Taif": "الطائف",
   "Al Hada": "الهدا",
-  "Alaqeeq": "العقيق"
+  "Alaqeeq": "العقيق",
+  "Reset Password": "إعادة تعيين كلمة المرور",
+  "Verify OTP": "التحقق من رمز OTP",
+  "Send OTP": "إرسال رمز OTP",
+  "Enter the 6 digit OTP code sent to your email": "أدخل رمز التحقق المكون من 6 أرقام المرسل إلى بريدك الإلكتروني",
+  "OTP has been sent to your email address.": "تم إرسال رمز التحقق إلى بريدك الإلكتروني.",
+  "OTP has been resent to your email address.": "تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني.",
+  "Password has been reset successfully.": "تم إعادة تعيين كلمة المرور بنجاح.",
+  "Failed to send OTP. Please try again.": "فشل إرسال رمز التحقق. يرجى المحاولة مرة أخرى.",
+  "Failed to resend OTP. Please try again.": "فشل إعادة إرسال رمز التحقق. يرجى المحاولة مرة أخرى.",
+  "Failed to reset password. Please try again.": "فشل إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى."
 }

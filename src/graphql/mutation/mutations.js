@@ -142,9 +142,27 @@ mutation MarkNotificationAsRead($userId: ID!) {
 }
 `
 const CREATE_CONTACT = gql`
-  mutation CreateContactUs($input: CreateContactInput!) {
-    createContactUs(input: $input) {
+  mutation CreateContact($input: CreateContactInput!) {
+    createContact(input: $input) {
       id
+    }
+  }
+`
+
+const REQUEST_PASSWORD_RESET = gql`
+  mutation RequestPasswordReset($email: String!) {
+    requestPasswordReset(email: $email) {
+      success
+      message
+    }
+  }
+`
+
+const RESET_PASSWORD_WITH_OTP = gql`
+  mutation ResetPasswordWithEmailOTP($email: String!, $otp: String!, $newPassword: String!) {
+    resetPasswordWithEmailOTP(email: $email, otp: $otp, newPassword: $newPassword) {
+      success
+      message
     }
   }
 `
@@ -172,5 +190,7 @@ export {
   DELETE_DOCUMENTS,
   CREATE_ENDA,
   MARK_NOTIFICATION_AS_READ,
-  CREATE_CONTACT
+  CREATE_CONTACT,
+  REQUEST_PASSWORD_RESET,
+  RESET_PASSWORD_WITH_OTP
 }

@@ -50,7 +50,7 @@ const Navbar = ({ setGetCategory }) => {
   const [messageApi, contextHolder] = message.useMessage();
   const lan = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lan.toLowerCase() === "ar";
-  const userId = Cookies.get("userId");
+  const [userId, setUserId] = useState(Cookies.get("userId"));
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [browseOpen, setBrowseOpen] = useState(false);
@@ -206,7 +206,10 @@ const Navbar = ({ setGetCategory }) => {
     onSubscriptionData: async ({ subscriptionData }) => {
       const newNotif = subscriptionData.data?.newNotification;
 
-      if (newNotif && newNotif.user?.id === userId) {
+      // Read current userId from cookies to avoid using a stale closure
+      const currentUserId = Cookies.get("userId");
+
+      if (newNotif && newNotif.user?.id === currentUserId) {
         setNotifications((prev) => {
           if (prev.some((item) => item.id === newNotif.id)) {
             return prev;
@@ -233,7 +236,7 @@ const Navbar = ({ setGetCategory }) => {
 
           try {
             const { data } = await getUserDetails({
-              variables: { getUserDetailsId: userId },
+              variables: { getUserDetailsId: currentUserId },
               fetchPolicy: "network-only",
             });
 
@@ -276,12 +279,34 @@ const Navbar = ({ setGetCategory }) => {
     );
   }, [i18n]);
 
+  // Sync userId state with cookies - critical for logout detection
   useEffect(() => {
-    if (userId) {
+    const cookieUserId = Cookies.get("userId");
+
+    // If cookies are cleared but state still has userId, clear state immediately
+    if (!cookieUserId && userId) {
+      setUserId(null);
+      setisLoggedIn(false);
+      setIsShow(false);
+      setUser(null);
+      setNotifications([]);
+      setUnreadCount(0);
+    }
+    // If cookies have userId but state doesn't, sync it (e.g., page refresh)
+    else if (cookieUserId && !userId) {
+      setUserId(cookieUserId);
+      setisLoggedIn(true);
+      setIsShow(true);
+    }
+  }, [userId, location.pathname]); // Check on userId changes and route changes
+
+  useEffect(() => {
+    // Only fetch user data if userId exists AND user is logged in
+    if (userId && isLoggedIn) {
       getUser({ variables: { getNavUserId: userId } });
       getNavNotification();
     }
-  }, [userId, getNavNotification, getUser]);
+  }, [userId, isLoggedIn, getNavNotification, getUser]);
 
   useEffect(() => {
     if (me?.getNavUser) {
@@ -290,11 +315,13 @@ const Navbar = ({ setGetCategory }) => {
   }, [me]);
 
   useEffect(() => {
-    const navCount = navNotificationsData?.getNotificationCount;
-    if (typeof navCount === "number") {
-      setUnreadCount(navCount);
+    if (userId) {
+      const navCount = navNotificationsData?.getNotificationCount;
+      if (typeof navCount === "number") {
+        setUnreadCount(navCount);
+      }
     }
-  }, [navNotificationsData]);
+  }, [navNotificationsData, userId]);
 
   useEffect(() => {
     if (!dropdownOpen) {
@@ -400,9 +427,25 @@ const Navbar = ({ setGetCategory }) => {
     } finally {
       // Use the centralized token manager to clear all auth data
       clearAuthTokens();
-      client.resetStore();
+      try {
+        await client.clearStore();
+      } catch (storeError) {
+        console.error(
+          "Failed to clear Apollo cache during logout:",
+          storeError
+        );
+      }
+
+      // Clear ALL local UI state to prevent any API calls
+      setUserId(null);
       setisLoggedIn(false);
       setIsShow(false);
+      setDropdownOpen(false);
+      setBrowseOpen(false);
+      setUser(null);
+      setNotifications([]);
+      setUnreadCount(0);
+
       navigate("/");
     }
   };
