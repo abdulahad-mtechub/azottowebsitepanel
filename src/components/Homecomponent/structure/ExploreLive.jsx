@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Button,
   Card,
@@ -18,11 +18,12 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { GETRANDOMBUSINESS } from "../../../graphql/query/business";
 import { CREATE_SAVE_BUSINESS } from "../../../graphql/mutation/mutations";
-import { useQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { truncateChars } from "../../../utils";
 import Cookies from "js-cookie";
 import { useFormatNumber } from "../../../hooks";
+import { isAuthenticated } from "../../../utils/tokenManager";
 
 const { Text, Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -40,8 +41,23 @@ const ExploreLive = () => {
 
   const userStatus = Cookies.get("userStatus");
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
+  const userIsLoggedIn = isAuthenticated();
 
-  const { data, loading, refetch } = useQuery(GETRANDOMBUSINESS);
+  const [getRandomBusinesses, { data, loading, refetch }] = useLazyQuery(
+    GETRANDOMBUSINESS,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+
+  // Execute query on component mount with proper userId handling
+  useEffect(() => {
+    getRandomBusinesses({
+      variables: {
+        ...(userIsLoggedIn && userId ? { userId } : {}),
+      },
+    });
+  }, [userIsLoggedIn, userId, getRandomBusinesses]);
 
   const saveBusinessHandler = async (businessId, currentSaveState, e) => {
     e.stopPropagation();

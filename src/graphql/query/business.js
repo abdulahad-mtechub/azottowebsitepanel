@@ -140,8 +140,8 @@ const GET_BUSINESS = gql`
   }
 `;
 const GET_RANDOM_BUSINESSES = gql`
-  query GetRandomBusinesses($getRandomBusinessesId: ID!) {
-    getRandomBusinesses(id: $getRandomBusinessesId) {
+  query GetRandomBusinesses($getRandomBusinessesId: ID!, $userId: ID) {
+    getRandomBusinesses(id: $getRandomBusinessesId, userId: $userId) {
       id
       category {
         name
@@ -366,8 +366,8 @@ const GET_BUYER_OFFER = gql`
 `;
 
 const GETRANDOMBUSINESS = gql`
-  query GetRandomBusinesses {
-    getRandomBusinesses {
+  query GetRandomBusinesses($userId: ID) {
+    getRandomBusinesses(userId: $userId) {
       id
       category {
         name

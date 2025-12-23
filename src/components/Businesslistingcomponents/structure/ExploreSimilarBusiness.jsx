@@ -14,7 +14,7 @@ import {
   Space,
   Grid,
 } from "antd";
-import { useQuery, useMutation } from "@apollo/client";
+import { useLazyQuery, useMutation } from "@apollo/client";
 import { GET_RANDOM_BUSINESSES } from "../../../graphql";
 import { CREATE_SAVE_BUSINESS } from "../../../graphql/mutation/mutations";
 import { Trans, useTranslation } from "react-i18next";
@@ -22,6 +22,8 @@ import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { truncateChars } from "../../../utils";
 import { useFormatNumber } from "../../../hooks";
+import { isAuthenticated } from "../../../utils/tokenManager";
+import { useEffect } from "react";
 
 const { Text, Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -39,12 +41,24 @@ const ExploreSimilarBusiness = ({ id }) => {
   // Check if user is inactive
   const userStatus = Cookies.get("userStatus");
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
+  const userIsLoggedIn = isAuthenticated();
 
-  const { data, loading, refetch } = useQuery(GET_RANDOM_BUSINESSES, {
-    variables: { getRandomBusinessesId: id },
-    skip: !id,
-    fetchPolicy: "network-only",
-  });
+  const [getRandomBusinesses, { data, loading, refetch }] = useLazyQuery(
+    GET_RANDOM_BUSINESSES,
+    {
+      fetchPolicy: "network-only",
+    }
+  );
+  useEffect(() => {
+    if (id) {
+      getRandomBusinesses({
+        variables: {
+          getRandomBusinessesId: id,
+          ...(userIsLoggedIn && userId ? { userId } : {}),
+        },
+      });
+    }
+  }, [id, userIsLoggedIn, userId, getRandomBusinesses]);
 
   const randomBusiness = data?.getRandomBusinesses;
 
