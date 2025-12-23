@@ -61,13 +61,13 @@ const BuyerOfferContent = () => {
     if (filterstatus === "SENT" || filterstatus === "RECEIVED") {
       apiStatus = "PENDING";
     }
-
+    console.log("Fetching offers with:", pagination);
     fetchOffers({
       variables: {
         status: apiStatus || null,
         search: debouncedSearchValue || null,
         limit: pagination.pageSize,
-        offSet: (pagination.current - 1) * pagination.pageSize,
+        offSet: pagination.current - 1,
         isProceedToPay: filtertype !== null ? filtertype : null,
       },
     });

@@ -7,14 +7,12 @@ import {
   Row,
   Typography,
   message,
-  Spin,
 } from "antd";
 import { MyInput, MySelect } from "../../Forms";
 import { CloseOutlined } from "@ant-design/icons";
 import { ADD_BANK } from "../../../graphql/mutation";
 import { useMutation } from "@apollo/client";
 import { GETUSERBANK } from "../../../graphql/query";
-import Cookies from "js-cookie";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
