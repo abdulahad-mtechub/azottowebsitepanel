@@ -1,12 +1,12 @@
 // AuthContext.js
-import React, { createContext, useState, useEffect } from 'react';
-import { 
-  isAuthenticated, 
-  getUserData, 
+import React, { createContext, useState, useEffect } from "react";
+import {
+  isAuthenticated,
+  getUserData,
   clearAuthTokens,
-  setAuthTokens 
-} from '../utils/tokenManager';
-import { stopAutoRefresh } from '../utils/tokenRefreshService';
+  setAuthTokens,
+} from "../utils/tokenManager";
+import { stopAutoRefresh } from "../utils/tokenRefreshService";
 
 export const AuthContext = createContext();
 
@@ -41,13 +41,15 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      isLoggedIn, 
-      user, 
-      login, 
-      logout, 
-      updateUser 
-    }}>
+    <AuthContext.Provider
+      value={{
+        isLoggedIn,
+        user,
+        login,
+        logout,
+        updateUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
