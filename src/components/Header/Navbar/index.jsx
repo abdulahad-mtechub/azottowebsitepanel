@@ -72,7 +72,7 @@ const Navbar = ({ setGetCategory }) => {
   const [selectedLang, setSelectedLang] = useState({
     key: "1",
     label: "EN",
-    icon: "assets/icons/en.webp",
+    icon: "/assets/icons/en.webp",
     alt: "Language logo",
   });
   const { data: categoryData } = useQuery(GET_CATEGORIES);
@@ -267,13 +267,13 @@ const Navbar = ({ setGetCategory }) => {
         ? {
             key: "2",
             label: "AR",
-            icon: "assets/icons/ar.png",
+            icon: "/assets/icons/ar.png",
             alt: "Arabic Language logo",
           }
         : {
             key: "1",
             label: "EN",
-            icon: "assets/icons/en.webp",
+            icon: "/assets/icons/en.webp",
             alt: "English Language logo",
           }
     );
@@ -498,11 +498,11 @@ const Navbar = ({ setGetCategory }) => {
 
     setSelectedLang(
       lang === "ar"
-        ? { key: "2", label: "AR", icon: "assets/icons/ar.png", alt: "Arabic" }
+        ? { key: "2", label: "AR", icon: "/assets/icons/ar.png", alt: "Arabic" }
         : {
             key: "1",
             label: "EN",
-            icon: "assets/icons/en.webp",
+            icon: "/assets/icons/en.webp",
             alt: "English",
           }
     );
@@ -515,7 +515,7 @@ const Navbar = ({ setGetCategory }) => {
       label: (
         <Space>
           <Image
-            src="assets/icons/en.webp"
+            src="/assets/icons/en.webp"
             width={20}
             alt="English"
             preview={false}
@@ -530,7 +530,7 @@ const Navbar = ({ setGetCategory }) => {
       label: (
         <Space>
           <Image
-            src="assets/icons/ar.png"
+            src="/assets/icons/ar.png"
             width={20}
             alt="Arabic"
             preview={false}
@@ -541,7 +541,7 @@ const Navbar = ({ setGetCategory }) => {
       onClick: () => handleChange("ar"),
     },
   ];
-
+  console.log("Selected Language:", selectedLang, items, lang);
   const handleDropdownChange = (open) => {
     setDropdownOpen(open);
     if (open) {
