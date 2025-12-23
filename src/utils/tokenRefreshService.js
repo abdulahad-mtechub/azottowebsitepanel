@@ -10,6 +10,7 @@ import {
 
 let isRefreshing = false;
 let refreshSubscribers = [];
+let wsReconnectCallback = null;
 
 const subscribeTokenRefresh = (callback) => {
   refreshSubscribers.push(callback);
@@ -18,6 +19,14 @@ const subscribeTokenRefresh = (callback) => {
 const onTokenRefreshed = (token) => {
   refreshSubscribers.forEach((callback) => callback(token));
   refreshSubscribers = [];
+  // Reconnect WebSocket to use new token
+  if (wsReconnectCallback) {
+    wsReconnectCallback();
+  }
+};
+
+export const registerWSReconnect = (callback) => {
+  wsReconnectCallback = callback;
 };
 
 export const refreshAccessToken = async () => {

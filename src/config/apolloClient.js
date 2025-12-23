@@ -10,7 +10,10 @@ import { onError } from "@apollo/client/link/error";
 import { WebSocketLink } from "apollo-link-ws";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { getAccessToken, clearAuthTokens } from "../utils/tokenManager";
-import { refreshAccessToken } from "../utils/tokenRefreshService";
+import {
+  refreshAccessToken,
+  registerWSReconnect,
+} from "../utils/tokenRefreshService";
 
 const API_URL = "https://verify.jusoor-sa.co/graphql";
 
@@ -37,16 +40,38 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
-// WebSocket link for subscriptions
-const wsLink = new WebSocketLink({
-  uri: "wss://verify.jusoor-sa.co/subscriptions",
-  options: {
-    reconnect: true,
-    connectionParams: () => ({
-      authorization: `Bearer ${getAccessToken() || ""}`,
-    }),
-  },
-});
+let wsLink;
+
+const createWebSocketLink = () => {
+  return new WebSocketLink({
+    uri: "wss://verify.jusoor-sa.co/subscriptions",
+    options: {
+      reconnect: true,
+      connectionParams: () => ({
+        authorization: `Bearer ${getAccessToken() || ""}`,
+      }),
+    },
+  });
+};
+
+wsLink = createWebSocketLink();
+const reconnectWebSocket = () => {
+  try {
+    // Close current connection
+    if (wsLink?.subscriptionManager?.client) {
+      wsLink.subscriptionManager.client.close(true);
+    }
+
+    // Create new connection with fresh token
+    wsLink = createWebSocketLink();
+    console.log("✅ WebSocket reconnected with new token");
+  } catch (error) {
+    console.error("⚠️ Error reconnecting WebSocket:", error);
+  }
+};
+
+// Register the reconnect callback with token refresh service
+registerWSReconnect(reconnectWebSocket);
 
 // Split links: send subscriptions to wsLink, others to httpLink
 const splitLink = split(

@@ -1,4 +1,4 @@
-import { ConfigProvider } from "antd";
+import { ConfigProvider, Spin } from "antd";
 import { RouteF } from "./RouteF";
 import "@ant-design/v5-patch-for-react-19";
 import { useEffect, useState } from "react";
@@ -12,22 +12,39 @@ const getAntdLocale = (lang) => (lang === "ar" ? arEG : enUS);
 import "dayjs/locale/ar";
 import dayjs from "dayjs";
 dayjs.locale("ar");
+
 function App() {
   const [dir, setDir] = useState(i18n.language === "ar" ? "rtl" : "ltr");
   const isArabic = i18n.language === "ar";
   const [antdLocale, setAntdLocale] = useState(getAntdLocale(i18n.language));
+  const [authInitialized, setAuthInitialized] = useState(false);
 
   // Initialize auto token refresh on app mount
   // This handles token recovery when access token expired but refresh token exists
   useEffect(() => {
     const initAuth = async () => {
-      if (hasValidSession()) {
-        await startAutoRefresh();
-      } else {
-        console.log("ℹ️ No session found - user not logged in");
+      try {
+        if (hasValidSession()) {
+          const refreshStarted = await startAutoRefresh();
+          if (refreshStarted) {
+            console.log("✅ Auto-refresh started successfully");
+          } else {
+            console.log("ℹ️ Session expired - user needs to login");
+          }
+        } else {
+          console.log("ℹ️ No session found - user not logged in");
+        }
+      } catch (error) {
+        console.error("Error initializing auth:", error);
+      } finally {
+        // Mark auth as initialized, ready to render routes
+        // This prevents requests from firing before token refresh completes
+        setAuthInitialized(true);
       }
     };
+
     initAuth();
+
     // Cleanup on unmount
     return () => {
       stopAutoRefresh();
@@ -52,6 +69,34 @@ function App() {
   useEffect(() => {
     dayjs.locale(isArabic ? "ar" : "en");
   }, [isArabic]);
+
+  // Show loading spinner while auth is being initialized
+  if (!authInitialized) {
+    return (
+      <ConfigProvider
+        direction={dir}
+        locale={antdLocale}
+        theme={{
+          token: {
+            colorPrimary: "#1D4ED8",
+            colorError: "#BC302F",
+          },
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            width: "100%",
+          }}
+        >
+          <Spin size="large" tip="Initializing..." />
+        </div>
+      </ConfigProvider>
+    );
+  }
 
   return (
     <ConfigProvider
