@@ -27,7 +27,7 @@ const Herosection = () => {
               </div>
               <Title className="m-0 text-white mbl-font" level={1}>
                 <Trans i18nKey="buyOrSellHeading">
-                  Buy or Sell a Verified Business with{" "}
+                  Buy or Sell a Verified Business with
                   <span className="text-brand">Confidence</span>
                 </Trans>
               </Title>
