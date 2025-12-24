@@ -51,7 +51,6 @@ const MobileNavbar = ({ visible, onClose }) => {
     {
       id: 1,
       name: t("Browse Businesses"),
-      path: "/businesslisting", // Add path for Browse Businesses
       children: [
         {
           id: 1,
