@@ -541,7 +541,6 @@ const Navbar = ({ setGetCategory }) => {
       onClick: () => handleChange("ar"),
     },
   ];
-  console.log("Selected Language:", selectedLang, items, lang);
   const handleDropdownChange = (open) => {
     setDropdownOpen(open);
     if (open) {

@@ -25,13 +25,7 @@ const httpLink = createHttpLink({
 
 // Auth Link (Attaches token with auto-refresh)
 const authLink = setContext(async (_, { headers }) => {
-  let token = getAccessToken();
-
-  // If no token, try to get it (could be in cookies)
-  if (!token) {
-    token = getAccessToken();
-  }
-
+  const token = getAccessToken();
   return {
     headers: {
       ...headers,
@@ -87,59 +81,75 @@ const splitLink = split(
 );
 
 // Enhanced Error Handling Link with Token Refresh
-const errorLink = onError(({ graphQLErrors, operation, forward }) => {
-  if (graphQLErrors) {
-    for (const err of graphQLErrors) {
-      console.error("[GraphQL Error]:", err.message);
+const errorLink = onError(
+  ({ graphQLErrors, networkError, operation, forward }) => {
+    if (graphQLErrors) {
+      for (const err of graphQLErrors) {
+        console.error("[GraphQL Error]:", err.message);
 
-      // Handle authentication errors
-      if (
-        err.message?.includes("Invalid or expired token") ||
-        err.message?.includes("Invalid token or authentication failed") ||
-        err.message?.includes("jwt expired") ||
-        err.extensions?.code === "UNAUTHENTICATED"
-      ) {
-        // Attempt to refresh the token
-        return new Promise((resolve) => {
-          refreshAccessToken()
-            .then((newToken) => {
-              if (newToken) {
-                // Retry the failed request with new token
-                const oldHeaders = operation.getContext().headers;
-                operation.setContext({
-                  headers: {
-                    ...oldHeaders,
-                    authorization: `Bearer ${newToken}`,
-                  },
-                });
-                resolve(forward(operation));
-              } else {
+        // Handle authentication errors - including context creation failures
+        const isAuthError =
+          err.message?.includes("Invalid or expired token") ||
+          err.message?.includes("Invalid token or authentication failed") ||
+          err.message?.includes("jwt expired") ||
+          err.message?.includes("Context creation failed") ||
+          err.message?.includes("Authentication required") ||
+          err.message?.includes("Please provide a valid token") ||
+          err.extensions?.code === "UNAUTHENTICATED";
+
+        if (isAuthError) {
+          console.log("🔄 Auth error detected, attempting token refresh...");
+
+          // Attempt to refresh the token
+          return new Promise((resolve) => {
+            refreshAccessToken()
+              .then((newToken) => {
+                if (newToken) {
+                  console.log("✅ Token refreshed, retrying request");
+                  // Retry the failed request with new token
+                  const oldHeaders = operation.getContext().headers;
+                  operation.setContext({
+                    headers: {
+                      ...oldHeaders,
+                      authorization: `Bearer ${newToken}`,
+                    },
+                  });
+                  resolve(forward(operation));
+                } else {
+                  // Refresh failed, clear auth and redirect
+                  console.log("❌ Token refresh failed, logging out");
+                  clearAuthTokens();
+                  if (window.location.pathname !== "/login") {
+                    window.location.href = "/login";
+                  }
+                  resolve();
+                }
+              })
+              .catch(() => {
                 // Refresh failed, clear auth and redirect
+                console.log("❌ Token refresh error, logging out");
                 clearAuthTokens();
                 if (window.location.pathname !== "/login") {
-                  window.location.href = "/";
+                  window.location.href = "/login";
                 }
                 resolve();
-              }
-            })
-            .catch(() => {
-              // Refresh failed, clear auth and redirect
-              clearAuthTokens();
-              if (window.location.pathname !== "/login") {
-                window.location.href = "/";
-              }
-              resolve();
-            });
-        });
-      }
+              });
+          });
+        }
 
-      // Handle other authorization errors
-      if (err.extensions?.code === "FORBIDDEN") {
-        console.error("Access forbidden:", err.message);
+        // Handle other authorization errors
+        if (err.extensions?.code === "FORBIDDEN") {
+          console.error("Access forbidden:", err.message);
+        }
       }
     }
+
+    // Handle network errors that might be auth-related
+    if (networkError) {
+      console.error("[Network Error]:", networkError);
+    }
   }
-});
+);
 
 export const client = new ApolloClient({
   link: from([errorLink, splitLink]),

@@ -1,20 +1,32 @@
-import { Card, Row, Col, Flex, Typography, Breadcrumb, Space, Button, Image, Tabs, message, Tooltip } from 'antd';
-import { ArrowLeftOutlined, RightOutlined } from '@ant-design/icons';
-import { SellerOfferTable } from './SellerOfferTable';
-import { SellerDealDetails } from './SellerDealDetails';
-import { useQuery, useMutation } from '@apollo/client';
-import { GET_BUSINESS } from '../../../graphql/query/business';
-import { UPDATE_BUSINESS } from '../../../graphql/mutation/mutations';
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { BusinessStatusModal } from '../modal/BusinessStatusModal';
-import { useState } from 'react';
-import { formatNumber } from '../../../utils';
+import {
+  Card,
+  Row,
+  Col,
+  Flex,
+  Typography,
+  Breadcrumb,
+  Space,
+  Button,
+  Image,
+  Tabs,
+  message,
+  Tooltip,
+} from "antd";
+import { RightOutlined } from "@ant-design/icons";
+import { SellerOfferTable } from "./SellerOfferTable";
+import { SellerDealDetails } from "./SellerDealDetails";
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_BUSINESS } from "../../../graphql/query/business";
+import { UPDATE_BUSINESS } from "../../../graphql/mutation/mutations";
+import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import { BusinessStatusModal } from "../modal/BusinessStatusModal";
+import { useState } from "react";
+import { formatNumber } from "../../../utils";
 
 const { Text, Title } = Typography;
 
 const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
-  
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
@@ -25,7 +37,8 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
     skip: !singledetail,
   });
 
-  const [updateBusiness, { loading: updateLoading }] = useMutation(UPDATE_BUSINESS);
+  const [updateBusiness, { loading: updateLoading }] =
+    useMutation(UPDATE_BUSINESS);
 
   const business = data?.getBusinessById?.business;
 
@@ -45,27 +58,27 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
       });
 
       messageApi.success(
-        newStatus === 'ACTIVE' 
-          ? t('Business activated successfully!') 
-          : t('Business inactivated successfully!')
+        newStatus === "ACTIVE"
+          ? t("Business activated successfully!")
+          : t("Business inactivated successfully!")
       );
-      
+
       setStatusModalVisible(false);
-      refetch(); 
+      refetch();
     } catch (error) {
-      console.error('Error updating business status:', error);
-      messageApi.error(t('Failed to update business status'));
+      console.error("Error updating business status:", error);
+      messageApi.error(t("Failed to update business status"));
     }
   };
   const items = [
     {
-      key: '1',
-      label: t('Details'),
+      key: "1",
+      label: t("Details"),
       children: <SellerDealDetails data={business} />,
     },
     {
-      key: '2',
-      label: t('Offer'),
+      key: "2",
+      label: t("Offer"),
       children: <SellerOfferTable data={business} />,
     },
   ];
@@ -77,60 +90,60 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
       title: payload?.businessTitle,
       description: payload?.description,
       amount: formatNumber(payload?.price),
-      status: payload?.isSupportVerified ? t('Active') : t('Under-review'),
-      type: payload?.isByTakbeer ? t('Taqbeel') : t('Acquiring'),
+      status: payload?.isSupportVerified ? t("Active") : t("Under-review"),
+      type: payload?.isByTakbeer ? t("Taqbeel") : t("Acquiring"),
       isAbleToInactive: payload?.isAbleToInactive,
 
       child: [
         {
           id: 1,
-          icon: '/assets/icons/year-p.png',
+          icon: "/assets/icons/year-p.png",
           subtitle: formatNumber(payload?.revenue),
           subdesc: `${payload?.revenueTime}`,
         },
         {
           id: 2,
-          icon: '/assets/icons/revenue.png',
+          icon: "/assets/icons/revenue.png",
           subtitle: formatNumber(payload?.profit),
           subdesc: `${payload?.profittime}`,
         },
         {
           id: 3,
-          icon: '/assets/icons/team.png',
-          subtitle: `${payload?.capitalRecovery} ${t('months')}`,
-          subdesc: t('Capital Recovery'),
+          icon: "/assets/icons/team.png",
+          subtitle: `${payload?.capitalRecovery} ${t("months")}`,
+          subdesc: t("Capital Recovery"),
         },
       ],
 
       detailinfo: [
         {
           id: 1,
-          img: '/assets/icons/total-view.png',
-          title: t('Total Views'),
-          numbers: data?.getBusinessById?.totalViews ?? '0',
+          img: "/assets/icons/total-view.png",
+          title: t("Total Views"),
+          numbers: data?.getBusinessById?.totalViews ?? "0",
         },
         {
           id: 2,
-          img: '/assets/icons/noofoffer.png',
-          title: t('Number of Offers'),
-          numbers: data?.getBusinessById?.numberOfOffers ?? '0',
+          img: "/assets/icons/noofoffer.png",
+          title: t("Number of Offers"),
+          numbers: data?.getBusinessById?.numberOfOffers ?? "0",
         },
         {
           id: 3,
-          img: '/assets/icons/favorite-ic.png',
-          title: t('Number of Favorites'),
-          numbers: data?.getBusinessById?.numberOfFavorites ?? '0',
+          img: "/assets/icons/favorite-ic.png",
+          title: t("Number of Favorites"),
+          numbers: data?.getBusinessById?.numberOfFavorites ?? "0",
         },
       ],
 
       offerData:
         payload?.offers?.map((offer, i) => ({
           key: String(i + 1),
-          buyername: offer?.buyer?.name ?? t('N/A'),
+          buyername: offer?.buyer?.name ?? t("N/A"),
           businessprice: `SAR ${payload?.price?.toLocaleString()}`,
           offerprice: {
             amount: offer?.price,
-            type: offer?.type ?? 'PP',
+            type: offer?.type ?? "PP",
           },
           status: offer?.status,
           date: new Date(offer?.createdAt).toLocaleString(),
@@ -141,60 +154,104 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   const uiBusiness = mapBusinessPayloadToUI(business);
 
   return (
-    <div className='mb-2'>
+    <div className="mb-2">
       {contextHolder}
       <Flex vertical gap={20}>
         <Breadcrumb
-          separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
+          separator={
+            <Text className="text-gray">
+              <RightOutlined className="fs-10" />
+            </Text>
+          }
           items={[
-            { title: <Text className='fs-13 text-gray cursor' onClick={() => setSingleDetail(null)} italic>{t('Business Listing')}</Text> },
-            { title: <Text className='fw-500 fs-13 text-black' italic>{business?.businessTitle}</Text> },
+            {
+              title: (
+                <Text
+                  className="fs-13 text-gray cursor"
+                  onClick={() => setSingleDetail(null)}
+                  italic
+                >
+                  {t("Business Listing")}
+                </Text>
+              ),
+            },
+            {
+              title: (
+                <Text className="fw-500 fs-13 text-black" italic>
+                  {business?.businessTitle}
+                </Text>
+              ),
+            },
           ]}
         />
-        <Flex justify='space-between'>
+        <Flex justify="space-between">
           <Space>
             <Button
-              aria-labelledby={t('Arrow left')}
-              type='button'
-              className='p-0 border-0 bg-transparent'
+              aria-labelledby={t("Arrow left")}
+              type="button"
+              className="p-0 border-0 bg-transparent"
               onClick={() => setSingleDetail(null)}
             >
-              <Image src="/assets/icons/back-arr.png" alt={t("Arrow Left")} width={22} height={22} preview={false} />
+              <Image
+                src="/assets/icons/back-arr.png"
+                alt={t("Arrow Left")}
+                width={22}
+                height={22}
+                preview={false}
+              />
             </Button>
-            <Title level={5} className='m-0'>{business?.businessTitle}</Title>
+            <Title level={5} className="m-0">
+              {business?.businessTitle}
+            </Title>
           </Space>
           <Space>
-            {business?.businessStatus !== 'REJECT' && (
+            {business?.businessStatus !== "REJECT" && (
               <>
-                <Button 
-                  aria-labelledby={t('Edit')} 
-                  className='btn bg-brand rounded-8' 
-                  type='button'
+                <Button
+                  aria-labelledby={t("Edit")}
+                  className="btn bg-brand rounded-8"
+                  type="button"
                   onClick={handleEditBusiness}
                 >
-                  {t('Edit')}
+                  {t("Edit")}
                 </Button>
-                {(business?.businessStatus === 'ACTIVE' || business?.businessStatus === 'INACTIVE') && (
+                {(business?.businessStatus === "ACTIVE" ||
+                  business?.businessStatus === "INACTIVE") && (
                   <>
-                  {
-                    (!business?.isAbleInActive) ? (
-                      <Button 
-                        aria-labelledby={business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')} 
-                        className={`btn rounded-8 ${business?.businessStatus === 'ACTIVE' ? 'bg-red' : 'bg-brand'}`}
-                        type='button'
+                    {business?.isAbleInActive ? (
+                      <Button
+                        aria-labelledby={
+                          business?.businessStatus === "ACTIVE"
+                            ? t("Inactivate Business")
+                            : t("Activate Business")
+                        }
+                        className={`btn rounded-8 ${
+                          business?.businessStatus === "ACTIVE"
+                            ? "bg-red"
+                            : "bg-brand"
+                        }`}
+                        type="button"
                         onClick={() => setStatusModalVisible(true)}
                       >
-                        {business?.businessStatus === 'ACTIVE' ? t('Inactivate Business') : t('Activate Business')}
+                        {business?.businessStatus === "ACTIVE"
+                          ? t("Inactivate Business")
+                          : t("Activate Business")}
                       </Button>
                     ) : (
-                      <Tooltip  title={t('Cannot inactivate business with active deals')}>
-                        <Button 
-                          aria-labelledby={t('Cannot inactivate business with active deals')} 
-                          className='btn rounded-8 bg-red'
-                          type='button'
+                      <Tooltip
+                        title={t(
+                          "Cannot inactivate business with active deals"
+                        )}
+                      >
+                        <Button
+                          aria-labelledby={t(
+                            "Cannot inactivate business with active deals"
+                          )}
+                          className="btn rounded-8 bg-red"
+                          type="button"
                           disabled
                         >
-                          {t('Inactivate Business')}
+                          {t("Inactivate Business")}
                         </Button>
                       </Tooltip>
                     )}
@@ -204,16 +261,29 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
             )}
           </Space>
         </Flex>
-        <Card className='radius-12 border-gray card-cs'>
+        <Card className="radius-12 border-gray card-cs">
           <Row gutter={[16, 16]}>
             {uiBusiness.detailinfo.map((data, i) => (
-              <Col lg={{ span: 8 }} md={{ span: 12 }} sm={{ span: 12 }} xs={{ span: 12 }} key={i}>
-                <Card className='h-100 border-gray rounded-12'>
+              <Col
+                lg={{ span: 8 }}
+                md={{ span: 12 }}
+                sm={{ span: 12 }}
+                xs={{ span: 12 }}
+                key={i}
+              >
+                <Card className="h-100 border-gray rounded-12">
                   <Flex vertical gap={15}>
-                    <Image src={data?.img} alt='image' preview={false} width={40} />
+                    <Image
+                      src={data?.img}
+                      alt="image"
+                      preview={false}
+                      width={40}
+                    />
                     <div>
-                      <Text className='fs-14 text-gray'>{data?.title}</Text>
-                      <Title className='m-0' level={5}>{data?.numbers}</Title>
+                      <Text className="fs-14 text-gray">{data?.title}</Text>
+                      <Title className="m-0" level={5}>
+                        {data?.numbers}
+                      </Title>
                     </div>
                   </Flex>
                 </Card>
@@ -221,7 +291,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
             ))}
 
             <Col span={24}>
-              <Tabs className='tabs-fill' defaultActiveKey="1" items={items} />
+              <Tabs className="tabs-fill" defaultActiveKey="1" items={items} />
             </Col>
           </Row>
         </Card>
