@@ -217,11 +217,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
                     {t("Edit")}
                   </Button>
                 ) : (
-                  <Tooltip
-                    title={t(
-                      "Cannot edit business with active deals"
-                    )}
-                  >
+                  <Tooltip title={t("Cannot edit business with active deals")}>
                     <Button
                       aria-labelledby={t(
                         "Cannot edit business with active deals"
