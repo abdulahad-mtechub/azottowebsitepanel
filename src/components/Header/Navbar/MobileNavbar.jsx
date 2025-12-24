@@ -51,6 +51,7 @@ const MobileNavbar = ({ visible, onClose }) => {
     {
       id: 1,
       name: t("Browse Businesses"),
+      path: "/businesslisting", // Add path for Browse Businesses
       children: [
         {
           id: 1,
@@ -190,9 +191,24 @@ const MobileNavbar = ({ visible, onClose }) => {
                 }
                 showArrow={false}
                 header={
-                  <Title level={5} className="text-white m-0">
-                    {menu?.name}
-                  </Title>
+                  menu?.path ? (
+                    <NavLink
+                      to={menu.path}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onClose();
+                      }}
+                      className="text-white"
+                    >
+                      <Title level={5} className="text-white m-0">
+                        {menu?.name}
+                      </Title>
+                    </NavLink>
+                  ) : (
+                    <Title level={5} className="text-white m-0">
+                      {menu?.name}
+                    </Title>
+                  )
                 }
                 key={f}
                 extra={
@@ -206,7 +222,7 @@ const MobileNavbar = ({ visible, onClose }) => {
                 <div>
                   {f === 0 && (
                     <NavLink
-                      to={"/"}
+                      to={"/businesslisting"}
                       className="text-white fs-14 block p-2 pl-2"
                     >
                       <Title level={5} className="text-white m-0">
