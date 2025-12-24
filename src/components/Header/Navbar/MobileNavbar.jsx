@@ -223,6 +223,7 @@ const MobileNavbar = ({ visible, onClose }) => {
                     <NavLink
                       to={"/businesslisting"}
                       className="text-white fs-14 block p-2 pl-2"
+                      onClick={() => onClose()}
                     >
                       <Title level={5} className="text-white m-0">
                         {t("Browse All")}
