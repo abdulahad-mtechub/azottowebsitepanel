@@ -1,4 +1,4 @@
-import { Card, Col, Flex, Image, Row, Typography, message } from "antd";
+import { Card, Col, Flex, Image, Row, Space, Typography, message } from "antd";
 import { SingleFileUpload } from "../../Forms/SingleFileUpload";
 import { useQuery, useMutation } from "@apollo/client";
 import { GETADMINACTIVEBANK, GETDEAL } from "../../../graphql/query";
@@ -49,9 +49,18 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
     },
     {
       title: t("Commission Amount to Pay"),
-      desc: `${t("currency-symbol")} ${formatNumber(
-        inprogressdeal?.commission || 0
-      )}`,
+      desc: (
+        <Space size={5}>
+          <Image
+            src="/assets/icons/reyal-b.png"
+            alt="Reyal"
+            width={16}
+            height={16}
+            preview={false}
+          />
+          <Text>{formatNumber(inprogressdeal?.commission || 0)}</Text>
+        </Space>
+      ),
     },
   ];
 
