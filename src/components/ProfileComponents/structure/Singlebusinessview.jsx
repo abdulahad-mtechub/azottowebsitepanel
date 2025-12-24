@@ -207,14 +207,33 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
           <Space>
             {business?.businessStatus !== "REJECT" && (
               <>
-                <Button
-                  aria-labelledby={t("Edit")}
-                  className="btn bg-brand rounded-8"
-                  type="button"
-                  onClick={handleEditBusiness}
-                >
-                  {t("Edit")}
-                </Button>
+                {business?.isAbleInActive ? (
+                  <Button
+                    aria-labelledby={t("Edit")}
+                    className="btn bg-brand rounded-8"
+                    type="button"
+                    onClick={handleEditBusiness}
+                  >
+                    {t("Edit")}
+                  </Button>
+                ) : (
+                  <Tooltip
+                    title={t(
+                      "Cannot edit business with active deals"
+                    )}
+                  >
+                    <Button
+                      aria-labelledby={t(
+                        "Cannot edit business with active deals"
+                      )}
+                      className="btn bg-brand rounded-8"
+                      type="button"
+                      disabled
+                    >
+                      {t("Edit")}
+                    </Button>
+                  </Tooltip>
+                )}
                 {(business?.businessStatus === "ACTIVE" ||
                   business?.businessStatus === "INACTIVE") && (
                   <>
@@ -240,12 +259,12 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
                     ) : (
                       <Tooltip
                         title={t(
-                          "Cannot inactivate business with active deals"
+                          "Cannot change status of business with active deals"
                         )}
                       >
                         <Button
                           aria-labelledby={t(
-                            "Cannot inactivate business with active deals"
+                            "Cannot change status of business with active deals"
                           )}
                           className="btn rounded-8 bg-red"
                           type="button"
