@@ -127,7 +127,10 @@ const errorLink = onError(
               })
               .catch((refreshError) => {
                 // Refresh failed, clear auth and redirect
-                console.log("❌ Token refresh error, logging out:", refreshError);
+                console.log(
+                  "❌ Token refresh error, logging out:",
+                  refreshError
+                );
                 clearAuthTokens();
                 if (window.location.pathname !== "/login") {
                   window.location.href = "/login";
@@ -147,10 +150,12 @@ const errorLink = onError(
     // Handle network errors
     if (networkError) {
       console.error("[Network Error]:", networkError);
-      
+
       // Check if it's an authentication-related network error
       if (networkError.statusCode === 401 || networkError.statusCode === 403) {
-        console.log("🔄 Network auth error detected, attempting token refresh...");
+        console.log(
+          "🔄 Network auth error detected, attempting token refresh..."
+        );
         return new Promise((resolve) => {
           refreshAccessToken()
             .then((newToken) => {
