@@ -61,7 +61,6 @@ const BuyerOfferContent = () => {
     if (filterstatus === "SENT" || filterstatus === "RECEIVED") {
       apiStatus = "PENDING";
     }
-    console.log("Fetching offers with:", pagination);
     fetchOffers({
       variables: {
         status: apiStatus || null,
