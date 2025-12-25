@@ -125,9 +125,9 @@ const errorLink = onError(
                   resolve();
                 }
               })
-              .catch(() => {
+              .catch((refreshError) => {
                 // Refresh failed, clear auth and redirect
-                console.log("❌ Token refresh error, logging out");
+                console.log("❌ Token refresh error, logging out:", refreshError);
                 clearAuthTokens();
                 if (window.location.pathname !== "/login") {
                   window.location.href = "/login";
@@ -144,9 +144,38 @@ const errorLink = onError(
       }
     }
 
-    // Handle network errors that might be auth-related
+    // Handle network errors
     if (networkError) {
       console.error("[Network Error]:", networkError);
+      
+      // Check if it's an authentication-related network error
+      if (networkError.statusCode === 401 || networkError.statusCode === 403) {
+        console.log("🔄 Network auth error detected, attempting token refresh...");
+        return new Promise((resolve) => {
+          refreshAccessToken()
+            .then((newToken) => {
+              if (newToken) {
+                console.log("✅ Token refreshed, retrying request");
+                resolve(forward(operation));
+              } else {
+                console.log("❌ Token refresh failed, logging out");
+                clearAuthTokens();
+                if (window.location.pathname !== "/login") {
+                  window.location.href = "/login";
+                }
+                resolve();
+              }
+            })
+            .catch((refreshError) => {
+              console.log("❌ Token refresh error:", refreshError);
+              clearAuthTokens();
+              if (window.location.pathname !== "/login") {
+                window.location.href = "/login";
+              }
+              resolve();
+            });
+        });
+      }
     }
   }
 );
