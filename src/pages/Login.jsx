@@ -83,7 +83,7 @@ const LoginPage = () => {
         error?.graphQLErrors?.[0]?.message ||
         error?.message ||
         t("Login failed");
-      messageApi.error(`${t("Login failed")}: ${errorMessage}`);
+      messageApi.error(`${t("Login failed")}: ${t(errorMessage)}`);
     }
   };
   const handleChange = (value) => {
