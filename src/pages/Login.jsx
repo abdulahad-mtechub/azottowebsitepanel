@@ -177,7 +177,7 @@ const LoginPage = () => {
               className="btn bg-nafth fs-16"
               block
             >
-              {t("Sign In via Nafath")}
+              {t("Sign In via Nafath (Coming Soon)")}
             </Button>
             <Divider className="text-gray">{t("Or")}</Divider>
 

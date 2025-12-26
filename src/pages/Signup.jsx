@@ -650,7 +650,7 @@ const SignupPage = () => {
                 className="btn bg-nafth fs-16"
                 block
               >
-                {t("Sign Up via Nafath")}
+                {t("Sign Up via Nafath (Coming Soon)")}
               </Button>
               <Divider className="text-gray">{t("Or")}</Divider>
 
