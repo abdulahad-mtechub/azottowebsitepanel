@@ -142,8 +142,8 @@ const MARK_NOTIFICATION_AS_READ = gql`
   }
 `;
 const CREATE_CONTACT = gql`
-  mutation CreateContact($input: CreateContactInput!) {
-    createContact(input: $input) {
+  mutation CreateContactUs($input: CreateContactInput!) {
+    createContactUs(input: $input) {
       id
     }
   }
