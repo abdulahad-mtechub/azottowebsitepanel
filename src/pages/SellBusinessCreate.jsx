@@ -296,7 +296,7 @@ const SellBusinessCreate = () => {
     ),
   }));
 
-  // Check if CR document and support documents are uploaded for last step
+  // Check if CR document is uploaded for last step
   const isCRDocumentUploaded = () => {
     const docs = Array.isArray(businessData?.documents)
       ? businessData.documents
@@ -307,23 +307,9 @@ const SellBusinessCreate = () => {
     return !!crDoc;
   };
 
-  const isSupportDocumentUploaded = () => {
-    const docs = Array.isArray(businessData?.documents)
-      ? businessData.documents
-      : [];
-    const supportDocs = docs.filter(
-      (d) => d.title === "Supporting Document" && d.filePath
-    );
-    return supportDocs.length > 0;
-  };
-
-  const areRequiredDocumentsUploaded = () => {
-    return isCRDocumentUploaded() && isSupportDocumentUploaded();
-  };
-
-  // Determine if user can publish (on last step with all required documents uploaded)
+  // Determine if user can publish (on last step with CR document uploaded)
   const canPublish =
-    current === steps.length - 1 && areRequiredDocumentsUploaded();
+    current === steps.length - 1 && isCRDocumentUploaded();
   // Remove showNextButton - validation now happens in component itself
 
   const handleCreateListing = async () => {
@@ -642,7 +628,7 @@ const SellBusinessCreate = () => {
                     title={
                       !canPublish
                         ? t(
-                            "Please upload Commercial Registration (CR) and at least one Supporting Document"
+                            "Please upload Commercial Registration (CR)"
                           )
                         : ""
                     }

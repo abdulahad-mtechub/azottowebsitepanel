@@ -285,7 +285,17 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
         <Card className="shadow-d radius-12 border-gray mb-3">
           <Row gutter={24}>
             <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-              <Form.Item label={t("Revenue")} className="w-100">
+              <Form.Item
+                label={
+                  <Flex align="center" gap={5}>
+                    {t("Revenue")}
+                    <Text type="danger" className="fw-500">
+                      *
+                    </Text>
+                  </Flex>
+                }
+                className="w-100"
+              >
                 <Flex gap={2} className="w-100">
                   <Form.Item
                     name="revenueTime"
@@ -347,7 +357,17 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
               </Form.Item>
             </Col>
             <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
-              <Form.Item label={t("Profit")} className="w-100">
+              <Form.Item
+                label={
+                  <Flex align="center" gap={5}>
+                    {t("Profit")}
+                    <Text type="danger" className="fw-500">
+                      *
+                    </Text>
+                  </Flex>
+                }
+                className="w-100"
+              >
                 <Flex gap={2} className="w-100">
                   <Form.Item
                     name="profittime"
@@ -439,7 +459,14 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
             </Col>
             <Col xs={{ span: 24 }} sm={{ span: 24 }} md={{ span: 12 }}>
               <MyInput
-                label={t("Business Price")}
+                label={
+                  <Flex align="center" gap={5}>
+                    {t("Business Price")}
+                    <Text type="danger" className="fw-500">
+                      *
+                    </Text>
+                  </Flex>
+                }
                 name="businessPrice"
                 required
                 message={t("Please enter business price")}
