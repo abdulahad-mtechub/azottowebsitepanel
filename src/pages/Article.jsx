@@ -15,7 +15,6 @@ const Article = () => {
   const [selectfilter, setSelectFilter] = useState(t("Sorting"));
   const [searchQuery, setSearchQuery] = useState("");
   const [current, setCurrent] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
 
   const lang = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lang.toLowerCase() === "ar";
