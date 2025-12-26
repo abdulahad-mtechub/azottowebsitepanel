@@ -105,7 +105,22 @@ const SignupPage = () => {
         roleId: customerRole?.id,
       };
 
-      const { data } = await createUser({ variables: { input } });
+      const { data, errors } = await createUser({ variables: { input } });
+
+      // Handle GraphQL errors from the response
+      if (errors && errors.length > 0) {
+        const msg = errors[0]?.message || "Something went wrong. Please try again.";
+        console.error("❌ GraphQL Errors:", msg);
+        
+        if (msg.includes("The email already exists")) {
+          messageApi.error(t("The email already exists"));
+        } else if (msg) {
+          messageApi.error(msg);
+        } else {
+          messageApi.error(t("Something went wrong. Please try again."));
+        }
+        return;
+      }
 
       if (data?.createUser?.token && data?.createUser?.refreshToken) {
         const success = setAuthTokens(
@@ -116,7 +131,6 @@ const SignupPage = () => {
 
         if (success) {
           startAutoRefresh();
-
           messageApi.success(t("Account created successfully!"));
           form.resetFields();
           setTimeout(() => {
@@ -129,13 +143,21 @@ const SignupPage = () => {
         console.error("❌ Invalid server response:", data);
       }
     } catch (err) {
-      const msg = err?.graphQLErrors?.[0]?.message || err?.message;
+      const msg = err?.graphQLErrors?.[0]?.message || err?.message || "";
+      console.error("❌ Signup Error:", msg);
+
       if (msg?.includes("The email already exists")) {
+        console.log("✅ Email exists error detected");
         messageApi.error(t("The email already exists"));
       } else if (err?.networkError) {
+        console.log("✅ Network error detected");
         messageApi.error(t("Network error. Please check your connection."));
+      } else if (msg) {
+        console.log("✅ Other error:", msg);
+        messageApi.error(msg);
       } else {
-        messageApi.error(t(msg || "Something went wrong. Please try again."));
+        console.log("✅ Fallback generic error");
+        messageApi.error(t("Something went wrong. Please try again."));
       }
     }
   };

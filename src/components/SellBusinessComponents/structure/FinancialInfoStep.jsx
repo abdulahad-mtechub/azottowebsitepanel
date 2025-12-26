@@ -1,4 +1,4 @@
-import {forwardRef, useEffect,useImperativeHandle } from 'react'
+import {forwardRef, useEffect,useImperativeHandle, useMemo, useRef } from 'react'
 import { Card, Col, Flex, Form, Row, Select, Typography,Input, Image } from 'antd'
 import { MyInput } from '../../Forms'
 import { ModuleTopHeading } from '../../Pagecomponents'
@@ -72,6 +72,14 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
         yearOp.push({ id: String(y), name: y });
     }
 
+    const revenueOptions = useMemo(
+        () => revenueLookups.map((item) => ({
+            ...item,
+            label: item.id === 1 ? t('Last 6 Months') : t('Last Year'),
+        })),
+        [t],
+    );
+
     const handleFormChange = (_, allValues) => {
         setData(prev => ({
             ...prev,
@@ -102,9 +110,10 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
         }));
     };
 
-    // Sync form with incoming data (edit mode or draft load)
+    // Sync form with incoming data (edit mode or draft load) without causing update loops
+    const initializedRef = useRef(false);
     useEffect(() => {
-        form.setFieldsValue({
+        const hydrated = {
             revenueTime: normalizeLookupValue(data.revenueTime),
             revenue: data.revenue || undefined,
             profittime: normalizeLookupValue(data.profittime),
@@ -129,7 +138,27 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                 inventoryypurchaseYear: item.purchaseYear,
                 inventoryPrice: item.price,
             })),
-        });
+        };
+
+        form.setFieldsValue(hydrated);
+
+        // Only push hydrated values to parent once on mount to avoid infinite loops
+        if (!initializedRef.current) {
+            initializedRef.current = true;
+            setData(prev => ({
+                ...prev,
+                revenueTime: hydrated.revenueTime,
+                revenue: hydrated.revenue,
+                profittime: hydrated.profittime,
+                profit: hydrated.profit,
+                price: hydrated.businessPrice,
+                profitMargen: hydrated.profitMargin,
+                assets: data.assets || [],
+                liabilities: data.liabilities || [],
+                inventoryItems: data.inventoryItems || [],
+            }));
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [data, form]);
 
     useEffect(() => {
@@ -220,9 +249,9 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                         placeholder={t('Select period')}
                                         className="addonselect fs-14 w-180"
                                     >
-                                    {revenueLookups?.map((list, index) => (
-                                        <Select.Option value={list?.id} key={index}>
-                                        {list?.name}
+                                    {revenueOptions?.map((list) => (
+                                        <Select.Option value={list.id} key={list.id}>
+                                        {list.label}
                                         </Select.Option>
                                     ))}
                                     </Select>
@@ -273,9 +302,9 @@ const FinancialInfoStep = forwardRef(({ data, setData },ref) => {
                                         placeholder={t('Select period')}
                                         className="addonselect fs-14 w-180"
                                     >
-                                    {revenueLookups?.map((list, index) => (
-                                        <Select.Option value={list?.id} key={index}>
-                                        {list?.name}
+                                    {revenueOptions?.map((list) => (
+                                        <Select.Option value={list.id} key={list.id}>
+                                        {list.label}
                                         </Select.Option>
                                     ))}
                                     </Select>
