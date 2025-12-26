@@ -22,6 +22,9 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [isInitialized, setIsInitialized] = useState(false);
 
+    // Get language from localStorage
+    const isArabic = localStorage.getItem('lang') === 'ar';
+
     useImperativeHandle(ref, () => ({
       validate: () => form.validateFields(),
     }));
@@ -29,11 +32,11 @@ const BusinessDetailStep = forwardRef(({ data, setData },ref) => {
     const categories = useMemo(() => 
       categoryData?.getAllCategories?.categories?.map(cat => ({
         id: cat.id,
-        name: cat.name,
-        arabicName: cat.name,
+        name: isArabic ? cat.arabicName : cat.name,
+        arabicName: cat.arabicName,
         isDigital: cat.isDigital,
       })) || []
-    , [categoryData]);
+    , [categoryData, isArabic]);
   
     const handleRadioChange = (e) => {
       setIsAccess(e.target.value === 2);
