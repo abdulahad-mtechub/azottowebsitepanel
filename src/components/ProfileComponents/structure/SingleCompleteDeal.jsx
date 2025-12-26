@@ -49,7 +49,7 @@ const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
         sellerId: data?.getDeal?.business?.seller?.id || null,
         sellerName: data?.getDeal?.business?.seller?.name || "-",
         finalizedOffer: data?.getDeal?.offer?.price
-          ? `SAR ${data?.getDeal?.offer?.price.toLocaleString()}`
+          ? `${data?.getDeal?.offer?.price.toLocaleString()}`
           : "-",
         status: data?.getDeal?.status || 0,
         date: data?.getDeal?.createdAt
