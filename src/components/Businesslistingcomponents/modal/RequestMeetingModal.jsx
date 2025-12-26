@@ -17,6 +17,7 @@ const RequestMeetingModal = ({
   offerId,
   onlyMeeting,
   refetch,
+  onSuccess,
 }) => {
   const userId = Cookies.get("userId");
   const { t } = useTranslation();
@@ -188,6 +189,12 @@ const RequestMeetingModal = ({
                 messageApi.success(
                   t("Jusoor E-NDA signed & meeting request sent successfully!")
                 );
+                
+                // Call onSuccess callback if provided
+                if (onSuccess) {
+                  await onSuccess();
+                }
+                
                 onClose();
                 refetch && refetch();
               } catch (error) {
