@@ -24,11 +24,12 @@ const PrivacyPolicy = () => {
     );
   }
 
-  const privacyPolicy = data?.getPrivacyPolicy?.[0];
+  const privacyPolicy = data?.getPrivacyPolicy?.find(
+    (policy) => policy.isArabic === isArabic
+  );
   const policyContent = isArabic
     ? privacyPolicy?.arabicPolicy
     : privacyPolicy?.policy;
-
   return (
     <>
       <div className="padd-1">
