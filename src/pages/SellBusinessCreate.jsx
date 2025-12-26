@@ -308,8 +308,7 @@ const SellBusinessCreate = () => {
   };
 
   // Determine if user can publish (on last step with CR document uploaded)
-  const canPublish =
-    current === steps.length - 1 && isCRDocumentUploaded();
+  const canPublish = current === steps.length - 1 && isCRDocumentUploaded();
   // Remove showNextButton - validation now happens in component itself
 
   const handleCreateListing = async () => {
@@ -627,9 +626,7 @@ const SellBusinessCreate = () => {
                   <Tooltip
                     title={
                       !canPublish
-                        ? t(
-                            "Please upload Commercial Registration (CR)"
-                          )
+                        ? t("Please upload Commercial Registration (CR)")
                         : ""
                     }
                   >
