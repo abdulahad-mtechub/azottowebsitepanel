@@ -176,6 +176,7 @@ const LoginPage = () => {
               aria-labelledby="Sign In"
               className="btn bg-nafth fs-16"
               block
+              disabled
             >
               {t("Sign In via Nafath (Coming Soon)")}
             </Button>

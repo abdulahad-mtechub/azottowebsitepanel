@@ -649,6 +649,7 @@ const SignupPage = () => {
                 aria-label="Sign Up via Nafath"
                 className="btn bg-nafth fs-16"
                 block
+                disabled
               >
                 {t("Sign Up via Nafath (Coming Soon)")}
               </Button>
