@@ -10,9 +10,11 @@ const { Paragraph, Text, Title } = Typography;
 const Termofuse = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data, loading } = useQuery(GETTERMS, {
-    variables: { search: "" },
-  });
+  const { data, loading } = useQuery(GETTERMS);
+
+  const lang = localStorage.getItem("lang") || "en";
+  const isArabic = lang === "ar";
+
   if (loading) {
     return (
       <Flex justify="center" align="center" className="h-200">
@@ -20,6 +22,10 @@ const Termofuse = () => {
       </Flex>
     );
   }
+  console.log("terms data", data);
+  const terms = data?.getTerms[0];
+  console.log("terms", terms);
+  const termContent = isArabic ? terms?.arabicTerm : terms?.term;
 
   return (
     <div className="padd-1">
@@ -102,7 +108,7 @@ const Termofuse = () => {
                     <Paragraph className="fs-14 text-gray">
                       <span
                         dangerouslySetInnerHTML={{
-                          __html: data?.getTerms[0]?.term?.content,
+                          __html: termContent,
                         }}
                       />
                     </Paragraph>

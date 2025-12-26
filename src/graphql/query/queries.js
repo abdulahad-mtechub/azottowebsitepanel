@@ -52,6 +52,7 @@ const GETTERMS = gql`
       id
       term
       arabicTerm
+      isArabic
     }
   }
 `;
