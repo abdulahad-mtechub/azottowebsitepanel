@@ -1,4 +1,4 @@
-import { Card, Col, Flex, Image, Row, Typography, message } from "antd";
+import { Card, Col, Flex, Image, Row, Space, Typography, message } from "antd";
 import { SingleFileUpload } from "../../Forms/SingleFileUpload";
 import { GETDEAL } from "../../../graphql/query";
 import { useMutation } from "@apollo/client";
@@ -33,7 +33,21 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
     { title: t("Seller's Bank Name"), desc: bank?.bankName },
     { title: t("Seller's IBAN"), desc: bank?.iban },
     { title: t("Account Holder Name"), desc: bank?.accountTitle },
-    { title: t("Amount to Pay"), desc: inprogressdeal?.finalizedOffer },
+    {
+      title: t("Amount to Pay"),
+      desc: (
+        <Space>
+          <Image
+            src="/assets/icons/reyal-b.png"
+            alt="Reyal"
+            width={16}
+            height={16}
+            preview={false}
+          />
+          <Text>{inprogressdeal?.finalizedOffer}</Text>
+        </Space>
+      ),
+    },
   ];
 
   const handleSingleFileUpload = async (file) => {
