@@ -62,6 +62,7 @@ const GETENDATERMS = gql`
       id
       ndaTerm
       arabicNdaTerm
+      isArabic
     }
   }
 `;
