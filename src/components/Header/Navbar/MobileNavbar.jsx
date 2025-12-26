@@ -356,14 +356,14 @@ const MobileNavbar = ({ visible, onClose }) => {
                   className="btn btn-outline w-100"
                   onClick={() => navigate("/signup")}
                 >
-                  {t(" Sign Up")}
+                  {t("Sign Up")}
                 </Button>
                 <Button
                   aria-labelledby="Login"
                   className="btn bg-brand w-100"
                   onClick={() => navigate("/login")}
                 >
-                  {t(" Sign In")}
+                  {t("Sign In")}
                 </Button>
               </>
             )}
