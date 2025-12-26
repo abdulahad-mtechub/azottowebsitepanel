@@ -109,9 +109,10 @@ const SignupPage = () => {
 
       // Handle GraphQL errors from the response
       if (errors && errors.length > 0) {
-        const msg = errors[0]?.message || "Something went wrong. Please try again.";
+        const msg =
+          errors[0]?.message || "Something went wrong. Please try again.";
         console.error("❌ GraphQL Errors:", msg);
-        
+
         if (msg.includes("The email already exists")) {
           messageApi.error(t("The email already exists"));
         } else if (msg) {
