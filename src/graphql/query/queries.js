@@ -70,6 +70,7 @@ const GETPRIVACYPOLICY = gql`
       id
       policy
       arabicPolicy
+      isArabic
     }
   }
 `;
