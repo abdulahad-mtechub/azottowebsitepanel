@@ -54,11 +54,11 @@ const SingleFileUpload = ({
     ];
 
     if (file.size > maxSize) {
-      return { valid: false, message: `File ${file.name} exceeds 10MB limit` };
+      return { valid: false, message: t('File {{fileName}} exceeds 10MB limit', { fileName: file.name }) };
     }
 
     if (!allowedTypes.includes(file.type)) {
-      return { valid: false, message: `File ${file.name} has unsupported format` };
+      return { valid: false, message: t('File {{fileName}} has unsupported format', { fileName: file.name }) };
     }
 
     return { valid: true };

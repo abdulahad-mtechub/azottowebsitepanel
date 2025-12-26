@@ -20,6 +20,8 @@
   "Passport": "Passport",
   "Upload Front Page": "Upload Front Page",
   "Upload": "Upload",
+  "File {{fileName}} exceeds 10MB limit": "File {{fileName}} exceeds 10MB limit",
+  "File {{fileName}} has unsupported format": "File {{fileName}} has unsupported format",
   "Enter Your Password Again": "Enter Your Password Again",
   "Sign up": "Sign up",
   "Sign In to your account": "Sign in to your account",

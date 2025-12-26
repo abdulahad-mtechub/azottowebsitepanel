@@ -17,6 +17,8 @@
   "Passport": "جواز السفر",
   "Upload Front Page": "إرفاق الصفحة الأمامية",
   "Upload": "إرفاق",
+  "File {{fileName}} exceeds 10MB limit": "الملف {{fileName}} يتجاوز حد 10 ميجابايت",
+  "File {{fileName}} has unsupported format": "الملف {{fileName}} بتنسيق غير مدعوم",
   "Enter Your Password Again": "أدخل تأكيد كلمة المرور",
   "Sign up": "إنشاء حساب",
   "Sign Up": "إنشاء حساب",
