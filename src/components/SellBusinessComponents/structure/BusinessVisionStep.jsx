@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle } from "react";
 import { Card, Col, Flex, Form, Image, Row, Typography } from "antd";
 import { MyInput } from "../../Forms";
 import { ModuleTopHeading } from "../../Pagecomponents";

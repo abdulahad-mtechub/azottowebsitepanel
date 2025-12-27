@@ -1,18 +1,23 @@
-import { Row, Col, Card, Flex, Typography, Button, Collapse } from 'antd';
-import { MarketAreaChart } from '../../Businesslistingcomponents';
-import { BusinessViewInfoCard } from './BusinessViewInfoCard';
-import { BusinessStats, PreviewTableContent } from '../../SellBusinessComponents';
-import { useInventColumn, useKeyassetsColumn, useLiabColumn, usePostsaleColumns } from '../../../data';
-import { useTranslation } from 'react-i18next';
-import { MinusOutlined, PlusOutlined } from '@ant-design/icons';
-import { useFormatNumber } from '../../../hooks';
+import { Row, Col, Card, Flex, Typography, Button, Collapse } from "antd";
+import { BusinessViewInfoCard } from "./BusinessViewInfoCard";
+import {
+  BusinessStats,
+  PreviewTableContent,
+} from "../../SellBusinessComponents";
+import {
+  useInventColumn,
+  useKeyassetsColumn,
+  useLiabColumn,
+  usePostsaleColumns,
+} from "../../../data";
+import { useTranslation } from "react-i18next";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { useFormatNumber } from "../../../hooks";
 
 const { Text, Title } = Typography;
 const { Panel } = Collapse;
 const SellerDealDetails = ({ data }) => {
-
   const { formatNumber } = useFormatNumber();
-  const isArabic = localStorage.getItem('lang') === 'ar';
   const { t } = useTranslation();
   const postsaleColumns = usePostsaleColumns();
   const liabColumn = useLiabColumn();
@@ -21,11 +26,11 @@ const SellerDealDetails = ({ data }) => {
   const businessinfo = data;
   const postSaleData = [
     {
-      key: '1',
-      period: formatNumber(businessinfo?.supportDuration) || t('N/A'),
-      session: formatNumber(businessinfo?.supportSession) || t('N/A'),
+      key: "1",
+      period: formatNumber(businessinfo?.supportDuration) || t("N/A"),
+      session: formatNumber(businessinfo?.supportSession) || t("N/A"),
       verified: businessinfo?.isSupportVerified,
-    }
+    },
   ];
 
   const liabilitiesData = businessinfo?.liabilities?.map((item, index) => ({
@@ -52,30 +57,40 @@ const SellerDealDetails = ({ data }) => {
     price: formatNumber(item.price),
   }));
 
-  // const { data: graphData } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
-  //   variables: { getBusinessByIdId: businessinfo?.id },
-  // });
-
   return (
     <Row gutter={[24, 24]}>
       <Col span={24}>
-        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-          <Flex vertical gap={20}>    
+        <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+          <Flex vertical gap={20}>
             <Flex vertical gap={10}>
-                <Flex vertical gap={12}>
-                    <Text className='fs-13 text-gray fw-500'>{t('Reference #')}: {businessinfo?.reference || t('Not Found')}</Text>
-                    <Title level={4} className='m-0'>{businessinfo?.businessTitle}</Title>
-                    <Flex align='center' gap={5}>
-                        <Title level={5} className='m-0'>{businessinfo?.title}</Title>
-                        {businessinfo?.type && (
-                            <Button className={`fs-12 border-0 text-white ${businessinfo.type === 'Taqbeel' ? 'bg-brand' : 'bg-black'}`}>
-                                {businessinfo?.type}
-                            </Button>
-                        )
-                        }
-                    </Flex>
+              <Flex vertical gap={12}>
+                <Text className="fs-13 text-gray fw-500">
+                  {t("Reference #")}:{" "}
+                  {businessinfo?.reference || t("Not Found")}
+                </Text>
+                <Title level={4} className="m-0">
+                  {businessinfo?.businessTitle}
+                </Title>
+                <Flex align="center" gap={5}>
+                  <Title level={5} className="m-0">
+                    {businessinfo?.title}
+                  </Title>
+                  {businessinfo?.type && (
+                    <Button
+                      className={`fs-12 border-0 text-white ${
+                        businessinfo.type === "Taqbeel"
+                          ? "bg-brand"
+                          : "bg-black"
+                      }`}
+                    >
+                      {businessinfo?.type}
+                    </Button>
+                  )}
                 </Flex>
-                <Text className='text-justify'>{businessinfo?.description || t('No description available.')}</Text>
+              </Flex>
+              <Text className="text-justify">
+                {businessinfo?.description || t("No description available.")}
+              </Text>
             </Flex>
           </Flex>
         </Card>
@@ -83,85 +98,112 @@ const SellerDealDetails = ({ data }) => {
         <BusinessStats data={businessinfo} />
         {/* <MarketAreaChart data={businessinfo} /> */}
         {/* <AnnualProfitBarChart graphData={graphData} /> */}
-        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+        <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
           <Flex vertical gap={0}>
-            <Title level={5}>{t('Growth Opportunity')}</Title>
-            <Text className='text-justify'>{businessinfo?.growthOpportunities || t('No growth opportunity details available.')}</Text>
+            <Title level={5}>{t("Growth Opportunity")}</Title>
+            <Text className="text-justify">
+              {businessinfo?.growthOpportunities ||
+                t("No growth opportunity details available.")}
+            </Text>
           </Flex>
         </Card>
-        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
+        <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
           <Flex vertical gap={0}>
-              <Title level={5}>{t('Reason for Selling')}</Title>
-              <Text className='text-justify'>{businessinfo?.reason || t('No reason for selling provided.')}</Text>
+            <Title level={5}>{t("Reason for Selling")}</Title>
+            <Text className="text-justify">
+              {businessinfo?.reason || t("No reason for selling provided.")}
+            </Text>
           </Flex>
         </Card>
-        <Card className='shadow-d radius-12 border-gray bg-lightest-gray mb-3'>
-          <PreviewTableContent title={t('Post - Sale Support')} columns={postsaleColumns} data={postSaleData} />
+        <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+          <PreviewTableContent
+            title={t("Post - Sale Support")}
+            columns={postsaleColumns}
+            data={postSaleData}
+          />
         </Card>
         {liabilitiesData?.length > 0 && (
           <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-              <Collapse
-                  defaultActiveKey={['1']}
-                  expandIcon={({ isActive }) => isActive ? <MinusOutlined /> : <PlusOutlined />}
-                  expandIconPosition="end"
-                  className='custom-collapse'
+            <Collapse
+              defaultActiveKey={["1"]}
+              expandIcon={({ isActive }) =>
+                isActive ? <MinusOutlined /> : <PlusOutlined />
+              }
+              expandIconPosition="end"
+              className="custom-collapse"
+            >
+              <Panel
+                header={
+                  <Title level={5} className="m-0">
+                    {t("Outstanding Liabilities / Debt")}
+                  </Title>
+                }
+                key="1"
+                className="shadow-d radius-12 bg-lightest-gray"
               >
-                  <Panel 
-                      header={<Title level={5} className='m-0'>{t('Outstanding Liabilities / Debt')}</Title>} 
-                      key="1"
-                      className='shadow-d radius-12 bg-lightest-gray'
-                  >
-                      <PreviewTableContent
-                          title={null}
-                          columns={liabColumn}
-                          data={liabilitiesData}
-                      />
-                  </Panel>
-              </Collapse>
+                <PreviewTableContent
+                  title={null}
+                  columns={liabColumn}
+                  data={liabilitiesData}
+                />
+              </Panel>
+            </Collapse>
           </Card>
         )}
         {assetsData?.length > 0 && (
           <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-              <Collapse
-                  defaultActiveKey={['1']}
-                  expandIcon={({ isActive }) => isActive ? <MinusOutlined /> : <PlusOutlined />}
-                  expandIconPosition="end"
-                  className='custom-collapse'
+            <Collapse
+              defaultActiveKey={["1"]}
+              expandIcon={({ isActive }) =>
+                isActive ? <MinusOutlined /> : <PlusOutlined />
+              }
+              expandIconPosition="end"
+              className="custom-collapse"
+            >
+              <Panel
+                header={
+                  <Title level={5} className="m-0">
+                    {t("Key Asset")}
+                  </Title>
+                }
+                key="1"
+                className="shadow-d radius-12 bg-lightest-gray"
               >
-                  <Panel 
-                      header={<Title level={5} className='m-0'>{t('Key Asset')}</Title>} 
-                      key="1"
-                      className='shadow-d radius-12 bg-lightest-gray'
-                  >
-                      <PreviewTableContent
-                          title={null}
-                          columns={keyassetsColumn}
-                          data={assetsData}
-                      />
-                  </Panel>
-              </Collapse>
+                <PreviewTableContent
+                  title={null}
+                  columns={keyassetsColumn}
+                  data={assetsData}
+                />
+              </Panel>
+            </Collapse>
           </Card>
         )}
         {inventoryData?.length > 0 && (
           <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-              <Collapse
-                  defaultActiveKey={['1']}
-                  expandIcon={({ isActive }) => isActive ? <MinusOutlined /> : <PlusOutlined />}
-                  expandIconPosition="end"
-                  className='custom-collapse'
+            <Collapse
+              defaultActiveKey={["1"]}
+              expandIcon={({ isActive }) =>
+                isActive ? <MinusOutlined /> : <PlusOutlined />
+              }
+              expandIconPosition="end"
+              className="custom-collapse"
+            >
+              <Panel
+                header={
+                  <Title level={5} className="m-0">
+                    {t("Inventory")}
+                  </Title>
+                }
+                key="1"
+                className="shadow-d radius-12 bg-lightest-gray"
               >
-                  <Panel 
-                      header={<Title level={5} className='m-0'>{t('Inventory')}</Title>} 
-                      key="1"
-                      className='shadow-d radius-12 bg-lightest-gray'
-                  >
-                      <PreviewTableContent
-                          title={null}
-                          columns={inventColumn}
-                          data={inventoryData}
-                      />
-                  </Panel>
-              </Collapse>
+                <PreviewTableContent
+                  title={null}
+                  columns={inventColumn}
+                  data={inventoryData}
+                />
+              </Panel>
+            </Collapse>
           </Card>
         )}
       </Col>

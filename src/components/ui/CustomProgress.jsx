@@ -1,5 +1,3 @@
-import React from "react";
-
 const CustomProgressBar = ({
   steps = [],
   activeStep = 0,
@@ -47,4 +45,4 @@ const CustomProgressBar = ({
   );
 };
 
-export {CustomProgressBar};
+export { CustomProgressBar };

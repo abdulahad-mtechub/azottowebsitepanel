@@ -1,4 +1,4 @@
-import { Col, Flex, Form, Row, Space, Table, Typography } from "antd";
+import { Col, Row, Space, Table, Typography } from "antd";
 import { SearchInput } from "../../Forms";
 import { SENTMEETINGS } from "../../../graphql/query";
 import { useLazyQuery } from "@apollo/client";

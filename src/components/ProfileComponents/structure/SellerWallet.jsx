@@ -1,15 +1,26 @@
-import { useState } from 'react';
-import { Card, Row, Col, Typography, Button, Image, message, Modal, Badge, Switch, Flex, Spin } from 'antd';
-import { GETUSERBANK } from '../../../graphql/query';
-import { useQuery, useMutation } from '@apollo/client';
-import { AddWalletModal } from '../modal';
-import { ACTIVEBANK, DELETEBANK } from '../../../graphql/mutation/mutations';
-import { useTranslation } from 'react-i18next';
+import { useState } from "react";
+import {
+  Card,
+  Row,
+  Col,
+  Typography,
+  Button,
+  Image,
+  message,
+  Modal,
+  Switch,
+  Flex,
+  Spin,
+} from "antd";
+import { GETUSERBANK } from "../../../graphql/query";
+import { useQuery, useMutation } from "@apollo/client";
+import { AddWalletModal } from "../modal";
+import { ACTIVEBANK, DELETEBANK } from "../../../graphql/mutation/mutations";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text } = Typography;
 
 const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
-
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [deletemodal, setDeleteModal] = useState(false);
@@ -22,7 +33,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
     refetchQueries: [{ query: GETUSERBANK }],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success(t('Bank status updated successfully'));
+      messageApi.success(t("Bank status updated successfully"));
       setActivatingBankId(null);
     },
     onError: (err) => {
@@ -35,7 +46,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
     refetchQueries: [{ query: GETUSERBANK }],
     awaitRefetchQueries: true,
     onCompleted: () => {
-      messageApi.success(t('Bank deleted successfully'));
+      messageApi.success(t("Bank deleted successfully"));
       setDeleteModal(false);
       setSelectedBankId(null);
     },
@@ -45,7 +56,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
   const data = (bankData?.getUserBanks || []).map((bank, index) => ({
     key: bank?.id || index,
     bankname: bank?.bankName,
-    title: bank?.accountTitle || t('N/A'),
+    title: bank?.accountTitle || t("N/A"),
     accountnumber: bank?.accountNumber,
     iban: bank?.iban,
     isActive: Boolean(bank?.isActive),
@@ -55,10 +66,10 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
     setActivatingBankId(bankId);
     activateBankMutate({ variables: { setActiveBankId: bankId } });
   };
-  
+
   const handleDeleteBank = (bankId) => {
     if (!bankId) {
-      messageApi.error(t('No bank selected for deletion'));
+      messageApi.error(t("No bank selected for deletion"));
       return;
     }
     deleteBankMutate({ variables: { deleteBankId: bankId } });
@@ -70,46 +81,69 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Title level={5} className="m-0">
-              {t('Saved Accounts')}
+              {t("Saved Accounts")}
             </Title>
           </Col>
 
           {data?.map((wallet) => {
             const isLoading = activatingBankId === wallet.key;
-            
+
             return (
               <Col xs={24} sm={24} md={12} lg={12} key={wallet.key}>
-                <Card 
+                <Card
                   className="walletCard"
                   style={{
-                    position: 'relative',
+                    position: "relative",
                     opacity: isLoading ? 0.6 : 1,
-                    pointerEvents: isLoading ? 'none' : 'auto',
+                    pointerEvents: isLoading ? "none" : "auto",
                   }}
                 >
                   {isLoading && (
                     <div
                       style={{
-                        position: 'absolute',
+                        position: "absolute",
                         top: 0,
                         left: 0,
                         right: 0,
                         bottom: 0,
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        backgroundColor: 'rgba(16, 23, 40, 0.5)',
-                        borderRadius: '12px',
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "rgba(16, 23, 40, 0.5)",
+                        borderRadius: "12px",
                         zIndex: 10,
                       }}
                     >
                       <Spin size="large" />
                     </div>
                   )}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 30 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <Image src="/assets/icons/home.png" width={35} preview={false} alt="bank-icon" />
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 30,
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 8,
+                        }}
+                      >
+                        <Image
+                          src="/assets/icons/home.png"
+                          width={35}
+                          preview={false}
+                          alt="bank-icon"
+                        />
                         <Title level={5} className="m-0 text-white fw-normal">
                           {wallet?.bankname}
                         </Title>
@@ -126,8 +160,8 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
                             backgroundColor: "#101728",
                           }}
                         />
-                        <Button 
-                          aria-label="delete bank account" 
+                        <Button
+                          aria-label="delete bank account"
                           className="bg-transparent border-0 p-0"
                           disabled={isLoading}
                           onClick={() => {
@@ -135,19 +169,32 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
                             setDeleteModal(true);
                           }}
                         >
-                          <Image 
-                            src="/assets/icons/delete.png" 
-                            alt="delete-icon" 
-                            width={30} 
+                          <Image
+                            src="/assets/icons/delete.png"
+                            alt="delete-icon"
+                            width={30}
                             preview={false}
-                            style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}
+                            style={{
+                              cursor: isLoading ? "not-allowed" : "pointer",
+                            }}
                           />
                         </Button>
                       </Flex>
                     </div>
 
-                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 5,
+                        }}
+                      >
                         <Title level={5} className="m-0 text-white fw-500">
                           {wallet.title}
                         </Title>
@@ -162,10 +209,13 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
         </Row>
       </Card>
 
-      <AddWalletModal visible={addwalletvisible} onClose={() => setAddWalletVisible(false)} />
+      <AddWalletModal
+        visible={addwalletvisible}
+        onClose={() => setAddWalletVisible(false)}
+      />
 
       <Modal
-        title={t('Remove Bank Account?')}
+        title={t("Remove Bank Account?")}
         visible={deletemodal}
         centered
         onCancel={() => {
@@ -173,11 +223,15 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
           setSelectedBankId(null);
         }}
         onOk={() => handleDeleteBank(selectedBankId)}
-        okText={t('Yes, Remove Account')}
+        okText={t("Yes, Remove Account")}
         okButtonProps={{ danger: true, loading: deleting }}
-        cancelText={t('Cancel')}
+        cancelText={t("Cancel")}
       >
-        <p>{t('Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account.')}</p>
+        <p>
+          {t(
+            "Are you sure you want to delete this bank account? This action cannot be undone, and any active deals won’t be able to send payments to this account."
+          )}
+        </p>
       </Modal>
     </>
   );

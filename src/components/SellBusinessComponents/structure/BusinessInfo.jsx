@@ -6,7 +6,7 @@ const { Title, Text } = Typography;
 const BusinessInfo = ({ data }) => {
   const { data: categoryData } = useQuery(GET_CATEGORY, {
     variables: { getCategoryByIdId: data.categoryId },
-    skip: !data.categoryId, // Skip query if categoryId is null or undefined
+    skip: !data.categoryId,
   });
 
   if (!data.categoryId) {

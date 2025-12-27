@@ -7,12 +7,11 @@ import {
   Table,
   Tooltip,
   Typography,
-  Alert,
 } from "antd";
 import { useState, useMemo, useEffect } from "react";
 import { DeleteModal } from "../../ui";
 import { SearchInput, MySelect } from "../../Forms";
-import { CounterOffer, ScheduleMeeting } from "../modal";
+import { CounterOffer } from "../modal";
 import { useLazyQuery, useQuery, useMutation } from "@apollo/client";
 import { GET_BUSINESS_OFFERS } from "../../../graphql/query/offer";
 import { CHECKMEETINGEXISTS } from "../../../graphql/query/meeting";

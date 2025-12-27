@@ -6,7 +6,7 @@ import { GETARTICLE } from "../graphql/query";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 
-const { Text, Title, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 
 const ArticleSingleView = () => {
   const { t, i18n } = useTranslation();

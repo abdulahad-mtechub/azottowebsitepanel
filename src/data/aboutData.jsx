@@ -11,13 +11,17 @@ const useAboutData = () => {
     ),
     list: [
       t("Verified listings through commercial and identity checks"),
-      t("A secure deal flow that includes signing NDA and a binding electronic sale agreement."),
+      t(
+        "A secure deal flow that includes signing NDA and a binding electronic sale agreement."
+      ),
       t("End-to-end support across Saudi regions"),
     ],
   };
 
   const missionData = {
-    title: t("Our Mission is to Make Buying & Selling Businesses Trusted, and Fast."),
+    title: t(
+      "Our Mission is to Make Buying & Selling Businesses Trusted, and Fast."
+    ),
     subtitle: t("Our Mission"),
     desc: t(
       "We're on a mission to empower individuals in Saudi Arabia to confidently buy and sell businesses through verified listings, secure payments, and step-by-step support — all in one platform."
@@ -33,7 +37,9 @@ const useAboutData = () => {
       },
       {
         title: t("Built on Trust"),
-        desc: t("Secure payments, ongoing admin support, legally binding documents."),
+        desc: t(
+          "Secure payments, ongoing admin support, legally binding documents."
+        ),
       },
     ],
   };

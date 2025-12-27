@@ -1,4 +1,4 @@
-import { ArrowLeftOutlined, RightOutlined } from "@ant-design/icons";
+import { RightOutlined } from "@ant-design/icons";
 import {
   Breadcrumb,
   Button,
