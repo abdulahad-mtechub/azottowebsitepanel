@@ -86,9 +86,7 @@ const BusinessVisionStep = forwardRef(({ data, setData }, ref) => {
                 label={
                   <Flex align="center" gap={5}>
                     {t("Support Duration")}
-                    <Text className="fw-500">
-                      *
-                    </Text>
+                    <Text className="fw-500">*</Text>
                   </Flex>
                 }
                 name="supportDuration"
@@ -117,9 +115,7 @@ const BusinessVisionStep = forwardRef(({ data, setData }, ref) => {
                 label={
                   <Flex align="center" gap={5}>
                     {t("Number of Support Sessions")}
-                    <Text className="fw-500">
-                      *
-                    </Text>
+                    <Text className="fw-500">*</Text>
                   </Flex>
                 }
                 name="noSession"
@@ -164,9 +160,7 @@ const BusinessVisionStep = forwardRef(({ data, setData }, ref) => {
                 label={
                   <Flex align="center" gap={5}>
                     {t("Reason for Selling")}
-                    <Text className="fw-500">
-                      *
-                    </Text>
+                    <Text className="fw-500">*</Text>
                   </Flex>
                 }
                 name="reasonSelling"

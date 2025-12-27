@@ -289,9 +289,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label={
                   <Flex align="center" gap={5}>
                     {t("Revenue")}
-                    <Text className="fw-500">
-                      *
-                    </Text>
+                    <Text className="fw-500">*</Text>
                   </Flex>
                 }
                 className="w-100"
@@ -361,9 +359,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label={
                   <Flex align="center" gap={5}>
                     {t("Profit")}
-                    <Text className="fw-500">
-                      *
-                    </Text>
+                    <Text className="fw-500">*</Text>
                   </Flex>
                 }
                 className="w-100"
@@ -462,9 +458,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label={
                   <Flex align="center" gap={5}>
                     {t("Business Price")}
-                    <Text className="fw-500">
-                      *
-                    </Text>
+                    <Text className="fw-500">*</Text>
                   </Flex>
                 }
                 name="businessPrice"
