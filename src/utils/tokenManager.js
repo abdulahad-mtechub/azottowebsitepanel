@@ -152,14 +152,6 @@ export const shouldRefreshToken = () => {
     // This gives 3 minutes buffer before actual expiration
     const shouldRefresh = minutesSinceRefresh > 7;
 
-    if (shouldRefresh) {
-      console.log(
-        `⏱️ Token age: ${minutesSinceRefresh.toFixed(
-          1
-        )} minutes - refresh needed`
-      );
-    }
-
     return shouldRefresh;
   } catch (error) {
     console.error("Error checking token refresh time:", error);

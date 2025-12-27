@@ -25,20 +25,11 @@ function App() {
     const initAuth = async () => {
       try {
         if (hasValidSession()) {
-          const refreshStarted = await startAutoRefresh();
-          if (refreshStarted) {
-            console.log("✅ Auto-refresh started successfully");
-          } else {
-            console.log("ℹ️ Session expired - user needs to login");
-          }
-        } else {
-          console.log("ℹ️ No session found - user not logged in");
+          await startAutoRefresh();
         }
       } catch (error) {
         console.error("Error initializing auth:", error);
       } finally {
-        // Mark auth as initialized, ready to render routes
-        // This prevents requests from firing before token refresh completes
         setAuthInitialized(true);
       }
     };

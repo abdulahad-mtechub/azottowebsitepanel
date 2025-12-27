@@ -32,7 +32,6 @@ export const registerWSReconnect = (callback) => {
 export const refreshAccessToken = async () => {
   // If already refreshing, wait for that to complete
   if (isRefreshing) {
-    console.log("⏳ Refresh already in progress, queuing request...");
     return new Promise((resolve) => {
       subscribeTokenRefresh((token) => {
         resolve(token);
@@ -49,7 +48,6 @@ export const refreshAccessToken = async () => {
   }
 
   isRefreshing = true;
-  console.log("🔄 Starting token refresh...");
 
   try {
     const { data } = await client.mutate({
@@ -71,7 +69,6 @@ export const refreshAccessToken = async () => {
       onTokenRefreshed(newAccessToken);
 
       isRefreshing = false;
-      console.log("✅ Token refreshed successfully");
       return newAccessToken;
     } else {
       throw new Error("Invalid refresh token response");
@@ -85,7 +82,6 @@ export const refreshAccessToken = async () => {
 
     // Only redirect if we're not already on login page
     if (window.location.pathname !== "/login") {
-      console.log("🚪 Redirecting to login...");
       window.location.href = "/login";
     }
 
@@ -163,19 +159,15 @@ export const startAutoRefresh = async () => {
     return false;
   }
 
-  console.log("✅ Auto-refresh started - checking token every 2 minutes");
-
   // Check token every 2 minutes (3-4 checks before 7-minute threshold)
   // Good balance between responsiveness and performance
   autoRefreshInterval = setInterval(async () => {
     if (isAuthenticated()) {
       if (shouldRefreshToken()) {
-        console.log("⏰ Token approaching expiry, proactively refreshing...");
         await ensureValidToken();
       }
     } else {
       // Stop auto-refresh if user is not authenticated
-      console.log("🛑 User not authenticated, stopping auto-refresh");
       stopAutoRefresh();
     }
   }, 2 * 60 * 1000); // 2 minutes - optimal balance

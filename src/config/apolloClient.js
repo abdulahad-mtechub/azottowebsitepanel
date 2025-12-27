@@ -16,8 +16,6 @@ import {
 } from "../utils/tokenRefreshService";
 
 const API_URL = "https://verify.jusoor-sa.co/graphql";
-
-// HTTP Link
 const httpLink = createHttpLink({
   uri: API_URL,
   credentials: "include",
@@ -55,15 +53,11 @@ const reconnectWebSocket = () => {
     if (wsLink?.subscriptionManager?.client) {
       wsLink.subscriptionManager.client.close(true);
     }
-
-    // Create new connection with fresh token
     wsLink = createWebSocketLink();
-    console.log("✅ WebSocket reconnected with new token");
   } catch (error) {
     console.error("⚠️ Error reconnecting WebSocket:", error);
   }
 };
-
 // Register the reconnect callback with token refresh service
 registerWSReconnect(reconnectWebSocket);
 
@@ -98,14 +92,11 @@ const errorLink = onError(
           err.extensions?.code === "UNAUTHENTICATED";
 
         if (isAuthError) {
-          console.log("🔄 Auth error detected, attempting token refresh...");
-
           // Attempt to refresh the token
           return new Promise((resolve) => {
             refreshAccessToken()
               .then((newToken) => {
                 if (newToken) {
-                  console.log("✅ Token refreshed, retrying request");
                   // Retry the failed request with new token
                   const oldHeaders = operation.getContext().headers;
                   operation.setContext({
@@ -117,7 +108,6 @@ const errorLink = onError(
                   resolve(forward(operation));
                 } else {
                   // Refresh failed, clear auth and redirect
-                  console.log("❌ Token refresh failed, logging out");
                   clearAuthTokens();
                   if (window.location.pathname !== "/login") {
                     window.location.href = "/login";
@@ -125,12 +115,7 @@ const errorLink = onError(
                   resolve();
                 }
               })
-              .catch((refreshError) => {
-                // Refresh failed, clear auth and redirect
-                console.log(
-                  "❌ Token refresh error, logging out:",
-                  refreshError
-                );
+              .catch(() => {
                 clearAuthTokens();
                 if (window.location.pathname !== "/login") {
                   window.location.href = "/login";
@@ -150,20 +135,13 @@ const errorLink = onError(
     // Handle network errors
     if (networkError) {
       console.error("[Network Error]:", networkError);
-
-      // Check if it's an authentication-related network error
       if (networkError.statusCode === 401 || networkError.statusCode === 403) {
-        console.log(
-          "🔄 Network auth error detected, attempting token refresh..."
-        );
         return new Promise((resolve) => {
           refreshAccessToken()
             .then((newToken) => {
               if (newToken) {
-                console.log("✅ Token refreshed, retrying request");
                 resolve(forward(operation));
               } else {
-                console.log("❌ Token refresh failed, logging out");
                 clearAuthTokens();
                 if (window.location.pathname !== "/login") {
                   window.location.href = "/login";
@@ -171,8 +149,7 @@ const errorLink = onError(
                 resolve();
               }
             })
-            .catch((refreshError) => {
-              console.log("❌ Token refresh error:", refreshError);
+            .catch(() => {
               clearAuthTokens();
               if (window.location.pathname !== "/login") {
                 window.location.href = "/login";

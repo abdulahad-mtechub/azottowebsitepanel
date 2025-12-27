@@ -148,16 +148,12 @@ const SignupPage = () => {
       console.error("❌ Signup Error:", msg);
 
       if (msg?.includes("The email already exists")) {
-        console.log("✅ Email exists error detected");
         messageApi.error(t("The email already exists"));
       } else if (err?.networkError) {
-        console.log("✅ Network error detected");
         messageApi.error(t("Network error. Please check your connection."));
       } else if (msg) {
-        console.log("✅ Other error:", msg);
         messageApi.error(msg);
       } else {
-        console.log("✅ Fallback generic error");
         messageApi.error(t("Something went wrong. Please try again."));
       }
     }

@@ -22,9 +22,7 @@ const Termofuse = () => {
       </Flex>
     );
   }
-  console.log("terms data", data);
   const terms = data?.getTerms[0];
-  console.log("terms", terms);
   const termContent = isArabic ? terms?.arabicTerm : terms?.term;
 
   return (

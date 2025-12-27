@@ -51,11 +51,6 @@ const OfferActionDropdown = ({
 
   const meetingExists = meetingExistsData?.checkMeetingExists || false;
   const isChild = row?.isProceedToPay ? true : false;
-  console.log(
-    "OfferActionDropdown - meetingExists:",
-    meetingExists,
-    row?.status
-  );
   const isMeetingStatus = row?.status === "MEETING";
 
   const items = [
