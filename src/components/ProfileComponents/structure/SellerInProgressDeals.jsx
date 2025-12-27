@@ -5,6 +5,7 @@ import { SELLERINPROGRESSDEALS } from '../../../graphql/query';
 import { useLazyQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useFormatNumber } from '../../../hooks';
+import { getNamePreview } from '../../../utils';
 import dayjs from 'dayjs';
 
 const { Text } = Typography;
@@ -186,7 +187,7 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
         return offerDeals?.getSellerInprogressDeals?.deals?.map((deal) => ({
             key: deal.id,
             title: deal.business.businessTitle,
-            buyername: deal.buyer.name,
+            buyername: getNamePreview(deal.buyer.name),
             businessprice: deal.price,
             date: new Date(deal.createdAt).toLocaleString(),
             status: getStatusLabel(deal),

@@ -15,6 +15,7 @@ import { SellerSingleInprogressSteps } from "./SellerSingleInProgressSteps";
 import { GETDEAL, GETUSERACTIVEBANK } from "../../../graphql";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
+import { getNamePreview } from "../../../utils";
 
 const { Title, Text } = Typography;
 
@@ -44,9 +45,10 @@ const SellerSingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
         key: data?.getDeal?.id,
         businessTitle: data?.getDeal?.business?.businessTitle || "-",
         buyerId: data?.getDeal?.buyer?.id || null,
-        buyerName: data?.getDeal?.buyer?.name || "-",
+        buyerName: getNamePreview(data?.getDeal?.buyer?.name) || "-",
         sellerId: data?.getDeal?.business?.seller?.id || null,
-        sellerName: data?.getDeal?.business?.seller?.name || "-",
+        sellerName:
+          getNamePreview(data?.getDeal?.business?.seller?.name) || "-",
         finalizedOffer: data?.getDeal?.offer?.price
           ? `${data?.getDeal?.offer?.price.toLocaleString()}`
           : "-",

@@ -16,6 +16,7 @@ import { GETDEAL } from "../../../graphql/query";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../../../hooks";
+import { getNamePreview } from "../../../utils";
 
 const { Title, Text } = Typography;
 
@@ -41,8 +42,8 @@ const SellerSingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
         key: data.getDeal.id,
         businessTitle: data.getDeal.business?.businessTitle || "-",
         buyerId: data.getDeal.buyer?.id || "-",
-        buyerName: data.getDeal.buyer?.name || "-",
-        sellerName: data.getDeal.business?.seller?.name || "-",
+        buyerName: getNamePreview(data.getDeal.buyer?.name) || "-",
+        sellerName: getNamePreview(data.getDeal.business?.seller?.name) || "-",
         finalizedOffer: data.getDeal.offer?.price
           ? `${formatNumber(data.getDeal.offer.price)}`
           : "-",

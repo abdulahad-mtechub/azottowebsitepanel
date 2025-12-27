@@ -24,6 +24,7 @@ import { useLazyQuery } from "@apollo/client";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../../../hooks";
+import { getNamePreview } from "../../../utils";
 import dayjs from "dayjs";
 
 const { Text } = Typography;
@@ -102,9 +103,7 @@ const BuyerOfferContent = () => {
   const tableData = filteredOffers?.map((offer) => ({
     key: offer.id,
     title: offer.business.businessTitle,
-    sellername: offer.business.seller?.name
-      ? `${offer.business.seller.name.slice(0, 3)}*****`
-      : null,
+    sellername: getNamePreview(offer.business.seller?.name),
     businessprice:
       typeof offer.business.price === "number"
         ? offer.business.price

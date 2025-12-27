@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { BusinessStatusModal } from "../modal/BusinessStatusModal";
 import { useState } from "react";
-import { formatNumber } from "../../../utils";
+import { formatNumber, getNamePreview } from "../../../utils";
 
 const { Text, Title } = Typography;
 
@@ -139,7 +139,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
       offerData:
         payload?.offers?.map((offer, i) => ({
           key: String(i + 1),
-          buyername: offer?.buyer?.name ?? t("N/A"),
+          buyername: getNamePreview(offer?.buyer?.name) || t("N/A"),
           businessprice: `SAR ${payload?.price?.toLocaleString()}`,
           offerprice: {
             amount: offer?.price,
