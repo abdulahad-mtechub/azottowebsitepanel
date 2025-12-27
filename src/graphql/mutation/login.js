@@ -13,6 +13,21 @@ export const CREATE_USER = gql`
   }
 `
 
+export const VERIFY_EMAIL = gql`
+  mutation VerifyEmail($email: String!) {
+    verifyEmail(email: $email)
+  }
+`
+
+export const VERIFY_EMAIL_OTP = gql`
+  mutation VerifyEmailOTP($email: String!, $otp: String!) {
+    verifyEmailOTP(email: $email, otp: $otp) {
+      message
+      success
+    }
+  }
+`
+
 export const UPDATE_USER = gql`
 mutation UpdateUser($input: UpdateUserInput!) {
   updateUser(input: $input) {

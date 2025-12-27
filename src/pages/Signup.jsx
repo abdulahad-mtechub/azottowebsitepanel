@@ -18,7 +18,11 @@ import {
   message,
 } from "antd";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { CREATE_USER } from "../graphql/mutation/login";
+import {
+  CREATE_USER,
+  VERIFY_EMAIL,
+  VERIFY_EMAIL_OTP,
+} from "../graphql/mutation/login";
 import { GETCUSTOMERROLE } from "../graphql/query";
 import { useNavigate, NavLink } from "react-router-dom";
 import { MyInput, MySelect } from "../components";
@@ -50,6 +54,13 @@ const SignupPage = () => {
   const [passportFileName, setPassportFileName] = useState("");
   const [documents, setDocuments] = useState([]);
   const [customerRole, setCustomerRole] = useState(null);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpValue, setOtpValue] = useState("");
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [verifiedEmail, setVerifiedEmail] = useState("");
+  const [otpTimer, setOtpTimer] = useState(0);
 
   const [errors, setErrors] = useState({
     front: "",
@@ -66,6 +77,9 @@ const SignupPage = () => {
     fetchPolicy: "cache-first",
   });
   const [createUser, { loading }] = useMutation(CREATE_USER);
+  const [verifyEmail] = useMutation(VERIFY_EMAIL);
+  const [verifyEmailOTP] = useMutation(VERIFY_EMAIL_OTP);
+
   useEffect(() => {
     let lang = localStorage.getItem("lang") || "en";
     i18n.changeLanguage(lang);
@@ -91,9 +105,125 @@ const SignupPage = () => {
 
     fetchCustomerRole();
   }, [getCustomerRole]);
+
+  // OTP countdown timer
+  useEffect(() => {
+    let interval;
+    if (otpTimer > 0) {
+      interval = setInterval(() => {
+        setOtpTimer((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [otpTimer]);
+
+  const handleSendOtp = async () => {
+    try {
+      // Check if timer is still running
+      if (otpTimer > 0) {
+        messageApi.warning(t("Please wait {{seconds}} seconds before requesting again", { seconds: otpTimer }));
+        return;
+      }
+
+      const email = form.getFieldValue("email")?.toLowerCase();
+      if (!email) {
+        messageApi.error(t("Please enter email address"));
+        return;
+      }
+
+      // Validate email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        messageApi.error(t("Please enter a valid email address"));
+        return;
+      }
+
+      setSendingOtp(true);
+      const { data } = await verifyEmail({ variables: { email } });
+
+      if (data?.verifyEmail) {
+        // Check if email already exists
+        if (
+          data.verifyEmail.includes("exists") ||
+          data.verifyEmail.includes("already")
+        ) {
+          messageApi.warning(t("An account with that email already exists"));
+          return;
+        }
+
+        setOtpSent(true);
+        setVerifiedEmail(email);
+        setOtpTimer(60); // Start 60 second countdown
+        messageApi.success(t("OTP sent to your email"));
+      }
+    } catch (err) {
+      const msg = err?.graphQLErrors?.[0]?.message || err?.message || "";
+      console.error("❌ Send OTP Error:", msg);
+
+      if (
+        msg?.includes("email already exists") ||
+        msg?.includes("already registered")
+      ) {
+        messageApi.error(t("The email already exists"));
+      } else if (msg) {
+        messageApi.error(msg);
+      } else {
+        messageApi.error(t("Failed to send OTP. Please try again."));
+      }
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOtp = async () => {
+    try {
+      if (!otpValue || otpValue.length < 4) {
+        messageApi.error(t("Please enter a valid OTP"));
+        return;
+      }
+
+      setVerifyingOtp(true);
+      const { data } = await verifyEmailOTP({
+        variables: {
+          email: verifiedEmail,
+          otp: otpValue,
+        },
+      });
+
+      if (data?.verifyEmailOTP?.success) {
+        setOtpVerified(true);
+        messageApi.success(t("Email verified successfully"));
+      } else {
+        messageApi.error(data?.verifyEmailOTP?.message || t("Invalid OTP"));
+      }
+    } catch (err) {
+      const msg = err?.graphQLErrors?.[0]?.message || err?.message || "";
+      console.error("❌ Verify OTP Error:", msg);
+      messageApi.error(msg || t("Failed to verify OTP. Please try again."));
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
+
   const handleFinish = async () => {
     try {
+      // Check if email is verified
+      if (!otpVerified) {
+        messageApi.error(t("Please verify your email first"));
+        return;
+      }
+
       const formData = form.getFieldsValue(true);
+
+      // Check if the verified email matches the form email
+      if (formData.email.toLowerCase() !== verifiedEmail) {
+        messageApi.error(t("Email has been changed. Please verify again."));
+        setOtpSent(false);
+        setOtpVerified(false);
+        setOtpValue("");
+        return;
+      }
+
       const input = {
         name: formData.fullName,
         email: formData.email.toLowerCase(),
@@ -223,6 +353,13 @@ const SignupPage = () => {
   const next = async () => {
     if (current < steps.length - 1) {
       await form.validateFields();
+
+      // Check email verification on first step
+      if (current === 0 && !otpVerified) {
+        messageApi.warning(t("Please verify your email before proceeding"));
+        return;
+      }
+
       setCurrent(current + 1);
     }
   };
@@ -253,18 +390,74 @@ const SignupPage = () => {
             />
           </Col>
           <Col span={24}>
-            <MyInput
-              label={t("Email Address")}
-              name="email"
-              required
-              message={t("Please enter email address")}
-              placeholder={t("Enter email address")}
-              validator={{
-                pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-                message: t("Please enter a valid email address"),
-              }}
-            />
+            <Row gutter={8} align="middle">
+              <Col flex="auto">
+                <MyInput
+                  label={t("Email Address")}
+                  name="email"
+                  required
+                  message={t("Please enter email address")}
+                  placeholder={t("Enter email address")}
+                  disabled={otpVerified}
+                  validator={{
+                    pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                    message: t("Please enter a valid email address"),
+                  }}
+                  onChange={() => {
+                    // Reset OTP state if email changes
+                    if (otpSent || otpVerified) {
+                      setOtpSent(false);
+                      setOtpVerified(false);
+                      setOtpValue("");
+                    }
+                  }}
+                />
+              </Col>
+              <Col>
+                <Button
+                  className={`btn ${
+                    otpVerified ? "bg-green" : "bg-dark-blue"
+                  } mt-1`}
+                  onClick={handleSendOtp}
+                  loading={sendingOtp}
+                  disabled={otpVerified || sendingOtp || otpTimer > 0}
+                >
+                  {otpVerified
+                    ? t("Verified")
+                    : otpTimer > 0
+                    ? `${t("Resend in")} ${otpTimer}s`
+                    : otpSent
+                    ? t("Resend OTP")
+                    : t("Send OTP")}
+                </Button>
+              </Col>
+            </Row>
           </Col>
+          {otpSent && !otpVerified && (
+            <Col span={24}>
+              <Row gutter={8} align="middle">
+                <Col flex="auto">
+                  <MyInput
+                    label={t("Enter OTP")}
+                    placeholder={t("Enter OTP sent to your email")}
+                    value={otpValue}
+                    onChange={(e) => setOtpValue(e.target.value)}
+                    maxLength={6}
+                  />
+                </Col>
+                <Col>
+                  <Button
+                    className="btn bg-dark-blue mt-1"
+                    onClick={handleVerifyOtp}
+                    loading={verifyingOtp}
+                    disabled={verifyingOtp || !otpValue}
+                  >
+                    {t("Verify")}
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          )}
           <Col
             lg={{ span: 12 }}
             md={{ span: 24 }}
