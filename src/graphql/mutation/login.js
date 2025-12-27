@@ -11,13 +11,13 @@ export const CREATE_USER = gql`
       }
     }
   }
-`
+`;
 
 export const VERIFY_EMAIL = gql`
   mutation VerifyEmail($email: String!) {
     verifyEmail(email: $email)
   }
-`
+`;
 
 export const VERIFY_EMAIL_OTP = gql`
   mutation VerifyEmailOTP($email: String!, $otp: String!) {
@@ -26,15 +26,15 @@ export const VERIFY_EMAIL_OTP = gql`
       success
     }
   }
-`
+`;
 
 export const UPDATE_USER = gql`
-mutation UpdateUser($input: UpdateUserInput!) {
-  updateUser(input: $input) {
-    id
+  mutation UpdateUser($input: UpdateUserInput!) {
+    updateUser(input: $input) {
+      id
+    }
   }
-}
-`
+`;
 
 export const LOGIN = gql`
   mutation Login($password: String!, $email: String) {
@@ -47,7 +47,7 @@ export const LOGIN = gql`
       }
     }
   }
-`
+`;
 
 export const REFRESH_TOKEN = gql`
   mutation RefreshToken($token: String!) {
@@ -60,18 +60,26 @@ export const REFRESH_TOKEN = gql`
       }
     }
   }
-`
+`;
 
 export const LOGOUT = gql`
-    mutation Logout {
-  logout {
-    message
+  mutation Logout {
+    logout {
+      message
+    }
   }
-}
-`
+`;
 
 export const CHANGE_PASSWORD = gql`
-mutation AdminChangePassword($adminChangePasswordId: ID, $oldPassword: String, $newPassword: String) {
-  adminChangePassword(id: $adminChangePasswordId, oldPassword: $oldPassword, newPassword: $newPassword)
-}
-`
+  mutation AdminChangePassword(
+    $adminChangePasswordId: ID
+    $oldPassword: String
+    $newPassword: String
+  ) {
+    adminChangePassword(
+      id: $adminChangePasswordId
+      oldPassword: $oldPassword
+      newPassword: $newPassword
+    )
+  }
+`;

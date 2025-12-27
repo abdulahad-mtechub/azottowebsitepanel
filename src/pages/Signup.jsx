@@ -121,7 +121,11 @@ const SignupPage = () => {
     try {
       // Check if timer is still running
       if (otpTimer > 0) {
-        messageApi.warning(t("Please wait {{seconds}} seconds before requesting again", { seconds: otpTimer }));
+        messageApi.warning(
+          t("Please wait {{seconds}} seconds before requesting again", {
+            seconds: otpTimer,
+          })
+        );
         return;
       }
 
