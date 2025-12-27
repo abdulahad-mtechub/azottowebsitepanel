@@ -400,7 +400,7 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
                 <Title level={5} className="m-0 fw-500">
                   {t("Commercial Registration (CR)")}
                 </Title>
-                <Text type="danger" className="fw-500">
+                <Text className="fw-500">
                   *
                 </Text>
               </Flex>
