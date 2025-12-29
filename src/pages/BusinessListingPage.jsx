@@ -1,513 +1,674 @@
-import { useState,useEffect,useMemo, useRef, useCallback } from 'react';
-import { Breadcrumb, Button, Card, Col, Flex, Row, Typography, Image } from 'antd';
-import { useDistricts, useCities } from '../data/';
-import { BusinesslistingFilterDrawer, Filter, MySelect, ProductCard } from '../components';
-import { useNavigate } from 'react-router-dom';
-import { RightOutlined } from '@ant-design/icons';
-import { useApolloClient } from '@apollo/client';
-import { motion as Motion, AnimatePresence } from 'framer-motion';
-import { useSearchParams } from 'react-router-dom';
-import {GET_ALL_BUSINESSES, GET_BUSINESS_BY_CATEGORY, GET_BUSINESS_BY_CITY, GET_BUSINESS_BY_REVENUE, GET_BUSINESS_BY_PROFIT,GET_BUSINESS_BY_DISTRICT } from '../graphql/query/business';
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import {
+  Breadcrumb,
+  Button,
+  Card,
+  Col,
+  Flex,
+  Row,
+  Typography,
+  Image,
+} from "antd";
+import { useDistricts, useCities } from "../data/";
+import {
+  BusinesslistingFilterDrawer,
+  Filter,
+  MySelect,
+  ProductCard,
+} from "../components";
+import { useNavigate } from "react-router-dom";
+import { RightOutlined } from "@ant-design/icons";
+import { useApolloClient } from "@apollo/client";
+import { motion as Motion, AnimatePresence } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
+import {
+  GET_ALL_BUSINESSES,
+  GET_BUSINESS_BY_CATEGORY,
+  GET_BUSINESS_BY_CITY,
+  GET_BUSINESS_BY_REVENUE,
+  GET_BUSINESS_BY_PROFIT,
+  GET_BUSINESS_BY_DISTRICT,
+} from "../graphql/query/business";
 import { useTranslation } from "react-i18next";
-import { useFormatNumber } from '../hooks';
+import { useFormatNumber } from "../hooks";
 
 const { Text, Title } = Typography;
 
-const BusinessListingPage = ({getcategory}) => {
+const BusinessListingPage = ({ getcategory }) => {
+  const { t, i18n } = useTranslation();
+  const { formatNumber } = useFormatNumber();
+  const lang = localStorage.getItem("lang") || i18n.language || "en";
+  const isArabic = lang.toLowerCase() === "ar";
+  const district = useDistricts();
+  const cities = useCities();
+  const [params] = useSearchParams();
+  const rawCategoryParam = params.get("category");
+  const categoryParam =
+    rawCategoryParam && rawCategoryParam !== "undefined"
+      ? rawCategoryParam
+      : null;
+  const cityParam = params.get("city");
+  const [limit, setLimit] = useState(12);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isShow, setIsShow] = useState(false);
 
-    const {t,i18n}= useTranslation()
-    const { formatNumber } = useFormatNumber();
-    const lang = localStorage.getItem("lang") || i18n.language || "en";
-    const isArabic = lang.toLowerCase() === "ar";
-    const district = useDistricts();
-    const cities = useCities();
-    const [params] = useSearchParams();
-    const rawCategoryParam = params.get('category');
-    const categoryParam = rawCategoryParam && rawCategoryParam !== 'undefined' ? rawCategoryParam : null;
-    const cityParam = params.get('city');
-    const [limit, setLimit] = useState(12);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [ isShow, setIsShow ] = useState(false);
+  const apolloClient = useApolloClient();
+  const [businesses, setBusinesses] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const lastQueryRef = useRef(null);
+  const lastVarsRef = useRef(null);
 
-    const apolloClient = useApolloClient();
-    const [businesses, setBusinesses] = useState(null);
-    const [isLoading, setIsLoading] = useState(false);
-    const lastQueryRef = useRef(null);
-    const lastVarsRef = useRef(null);
+  const runQuery = useCallback(
+    async (queryDoc, variables) => {
+      setIsLoading(true);
+      lastQueryRef.current = queryDoc;
+      lastVarsRef.current = variables;
+      try {
+        const res = await apolloClient.query({
+          query: queryDoc,
+          variables,
+          fetchPolicy: "network-only",
+        });
+        setBusinesses(res.data);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [apolloClient]
+  );
 
-    const runQuery = useCallback(async (queryDoc, variables) => {
-        setIsLoading(true);
-        lastQueryRef.current = queryDoc;
-        lastVarsRef.current = variables;
-        try {
-            const res = await apolloClient.query({ query: queryDoc, variables, fetchPolicy: 'network-only' });
-            setBusinesses(res.data);
-        } finally {
-            setIsLoading(false);
-        }
-    }, [apolloClient]);
+  const refetch = useCallback(async () => {
+    if (!lastQueryRef.current) return;
+    // Silent refetch: read from cache first (instant), then update from network in background
+    try {
+      const res = await apolloClient.query({
+        query: lastQueryRef.current,
+        variables: lastVarsRef.current,
+        fetchPolicy: "cache-first",
+      });
+      setBusinesses(res.data);
+      // Then silently fetch fresh data from network
+      apolloClient
+        .query({
+          query: lastQueryRef.current,
+          variables: lastVarsRef.current,
+          fetchPolicy: "network-only",
+        })
+        .then((freshRes) => {
+          setBusinesses(freshRes.data);
+        })
+        .catch((err) => {
+          console.error("Background refetch failed:", err);
+        });
+    } catch (error) {
+      console.error("Refetch failed:", error);
+    }
+  }, [apolloClient]);
+  const options = [
+    { id: 1, key: t("Low to High") },
+    { id: 2, key: t("High to Low") },
+  ];
+  const [selectedDistrict, setSelectedDistrict] = useState(null);
+  const [selectedDistrictId, setSelectedDistrictId] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
+  const [searchSelectedCity, setsearchSelectedCity] = useState(null);
+  const [cityOptions, setCityOptions] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [sortOrder, setSortOrder] = useState(null); // null by default
 
-    const refetch = useCallback(async () => {
-        if (!lastQueryRef.current) return;
-        // Silent refetch: read from cache first (instant), then update from network in background
-        try {
-            const res = await apolloClient.query({
-                query: lastQueryRef.current,
-                variables: lastVarsRef.current,
-                fetchPolicy: 'cache-first'
-            });
-            setBusinesses(res.data);
-            // Then silently fetch fresh data from network
-            apolloClient.query({
-                query: lastQueryRef.current,
-                variables: lastVarsRef.current,
-                fetchPolicy: 'network-only'
-            }).then(freshRes => {
-                setBusinesses(freshRes.data);
-            }).catch(err => {
-                console.error('Background refetch failed:', err);
-            });
-        } catch (error) {
-            console.error('Refetch failed:', error);
-        }
-    }, [apolloClient]);
-    const options = [
-        { id: 1, key: t('Low to High')},
-        { id: 2, key: t('High to Low') },
-      ];
-    const [selectedDistrict, setSelectedDistrict] = useState(null);
-    const [selectedDistrictId, setSelectedDistrictId] = useState(null);
-    const [selectedCity, setSelectedCity] = useState(null);
-    const [searchSelectedCity, setsearchSelectedCity] = useState(null);
-    const [cityOptions, setCityOptions] = useState([]);
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [sortOrder, setSortOrder] = useState(null); // null by default
+  // Clear selectedCategory when URL params change to Browse All
+  useEffect(() => {
+    if (!categoryParam && !getcategory) {
+      setSelectedCategory("");
+    }
+  }, [categoryParam, getcategory]);
 
-    // Clear selectedCategory when URL params change to Browse All
-    useEffect(() => {
-        if (!categoryParam && !getcategory) {
-            setSelectedCategory('');
-        }
-    }, [categoryParam, getcategory]);
+  const categoryParamLabel = categoryParam
+    ? decodeURIComponent(categoryParam)
+    : null;
+  const activeCategoryLabel =
+    getcategory || categoryParamLabel || selectedCategory || null;
 
-    const categoryParamLabel = categoryParam ? decodeURIComponent(categoryParam) : null;
-    const activeCategoryLabel = getcategory || categoryParamLabel || (selectedCategory || null);
+  // Determine breadcrumb path based on URL params
+  const getBreadcrumbItems = () => {
+    const items = [
+      {
+        title: (
+          <Text className="cursor text-gray" onClick={() => navigate("/")}>
+            {t("Home")}
+          </Text>
+        ),
+      },
+    ];
 
-    // Determine breadcrumb path based on URL params
-    const getBreadcrumbItems = () => {
-        const items = [
-            { title: <Text className='cursor text-gray' onClick={() => navigate('/')}>{t('Home')}</Text> }
-        ];
+    if (revenue) {
+      // Browse by Revenue
+      items.push({
+        title: <Text className="text-gray">{t("Browse by Revenue")}</Text>,
+      });
+      const [min, max] = revenue;
+      items.push({
+        title: (
+          <Text className="fw-500 text-white">
+            {max >= 9999999
+              ? t("SAR {{min}}+", { min: min?.toLocaleString() })
+              : t("SAR {{min}} - SAR {{max}}", {
+                  min: min?.toLocaleString(),
+                  max: max?.toLocaleString(),
+                })}
+          </Text>
+        ),
+      });
+    } else if (profit) {
+      // Browse by Profit
+      items.push({
+        title: <Text className="text-gray">{t("Browse by Profit")}</Text>,
+      });
+      const [min, max] = profit;
+      items.push({
+        title: (
+          <Text className="fw-500 text-white">
+            {t("SAR {{min}} - SAR {{max}}", {
+              min: min?.toLocaleString(),
+              max: max?.toLocaleString(),
+            })}
+          </Text>
+        ),
+      });
+    } else if (activeCategoryLabel) {
+      // Browse by Category
+      items.push({
+        title: <Text className="text-gray">{t("Browse by Categories")}</Text>,
+      });
+      items.push({
+        title: <Text className="fw-500 text-white">{activeCategoryLabel}</Text>,
+      });
+    } else if (cityParam) {
+      // Browse by City
+      items.push({
+        title: <Text className="text-gray">{t("Browse by City")}</Text>,
+      });
+      items.push({
+        title: (
+          <Text className="fw-500 text-white">
+            {decodeURIComponent(cityParam)}
+          </Text>
+        ),
+      });
+    } else {
+      // Browse All
+      items.push({
+        title: <Text className="fw-500 text-white">{t("Browse All")}</Text>,
+      });
+    }
 
-        if (revenue) {
-            // Browse by Revenue
-            items.push({ title: <Text className='text-gray'>{t('Browse by Revenue')}</Text> });
-            const [min, max] = revenue;
-            items.push({
-                title: <Text className='fw-500 text-white'>
-                    {max >= 9999999
-                        ? t('SAR {{min}}+', { min: min?.toLocaleString() })
-                        : t('SAR {{min}} - SAR {{max}}', { min: min?.toLocaleString(), max: max?.toLocaleString() })
-                    }
-                </Text>
-            });
-        } else if (profit) {
-            // Browse by Profit
-            items.push({ title: <Text className='text-gray'>{t('Browse by Profit')}</Text> });
-            const [min, max] = profit;
-            items.push({
-                title: <Text className='fw-500 text-white'>
-                    {t('SAR {{min}} - SAR {{max}}', { min: min?.toLocaleString(), max: max?.toLocaleString() })}
-                </Text>
-            });
-        } else if (activeCategoryLabel) {
-            // Browse by Category
-            items.push({ title: <Text className='text-gray'>{t('Browse by Categories')}</Text> });
-            items.push({ title: <Text className='fw-500 text-white'>{activeCategoryLabel}</Text> });
-        } else if (cityParam) {
-            // Browse by City
-            items.push({ title: <Text className='text-gray'>{t('Browse by City')}</Text> });
-            items.push({ title: <Text className='fw-500 text-white'>{decodeURIComponent(cityParam)}</Text> });
-        } else {
-            // Browse All
-            items.push({ title: <Text className='fw-500 text-white'>{t('Browse All')}</Text> });
-        }
+    return items;
+  };
 
-        return items;
+  const listingHeading = activeCategoryLabel || t("All Businesses");
+
+  const [multipleStep, setMultipleStep] = useState(null);
+  const [priceRange, setPriceRange] = useState([null, null]);
+  const [revenueRange, setRevenueRange] = useState([null, null]);
+  const [profitRange, setProfitRange] = useState([null, null]);
+  const [profitMargenRange, setProfitMargenRange] = useState([null, null]);
+  const [employeesRange, setEmployeesRange] = useState(null);
+  const [operationalYearRange, setOperationalYearRange] = useState(null);
+  const [hasAssets, setHasAssets] = useState(null);
+  const [isFilter, setIsFilter] = useState(false);
+
+  const navigate = useNavigate();
+  // Extracted deps to satisfy lint rule for complex expressions in dependency arrays
+  const priceMinDep = priceRange?.[0];
+  const priceMaxDep = priceRange?.[1];
+  const profit = useMemo(() => {
+    const val = params.get("profit");
+    return val ? val.split(",").map(Number) : null;
+  }, [params]);
+
+  const revenue = useMemo(() => {
+    const val = params.get("revenue");
+    return val ? val.split(",").map(Number) : null;
+  }, [params]);
+  const getFilterVariables = () => {
+    const sanitizeRange = (range) => {
+      if (!Array.isArray(range)) return null;
+
+      const [min, max] = range;
+      const hasMin = min !== null && min !== "" && min !== undefined;
+      const hasMax = max !== null && max !== "" && max !== undefined;
+
+      // If both are empty, return null
+      if (!hasMin && !hasMax) return null;
+
+      // Return array with proper null handling
+      return [hasMin ? Number(min) : null, hasMax ? Number(max) : null];
     };
 
-    const listingHeading = activeCategoryLabel || t('All Businesses');
+    const sanitizeSingle = (val) =>
+      val != null &&
+      val !== "" &&
+      val !== t("Select City") &&
+      val !== t("Select District")
+        ? val
+        : null;
 
-    const [multipleStep, setMultipleStep] = useState(null);
-    const [priceRange, setPriceRange] = useState([null, null]);
-    const [revenueRange, setRevenueRange] = useState([null, null]);
-    const [profitRange, setProfitRange] = useState([null, null]);
-    const [profitMargenRange, setProfitMargenRange] = useState([null, null]);
-    const [employeesRange, setEmployeesRange] = useState(null);
-    const [operationalYearRange, setOperationalYearRange] = useState(null);
-    const [hasAssets, setHasAssets] = useState(null);
-    const [isFilter, setIsFilter] = useState(false);
-
-    const navigate = useNavigate();
-    // Extracted deps to satisfy lint rule for complex expressions in dependency arrays
-    const priceMinDep = priceRange?.[0];
-    const priceMaxDep = priceRange?.[1];
-    const profit = useMemo(() => {
-        const val = params.get('profit');
-        return val ? val.split(',').map(Number) : null;
-    }, [params]);
-
-    const revenue = useMemo(() => {
-        const val = params.get('revenue');
-        return val ? val.split(',').map(Number) : null;
-    }, [params]);
-    const getFilterVariables = () => {
-        const sanitizeRange = (range) => {
-            if (!Array.isArray(range)) return null;
-
-            const [min, max] = range;
-            const hasMin = min !== null && min !== '' && min !== undefined;
-            const hasMax = max !== null && max !== '' && max !== undefined;
-
-            // If both are empty, return null
-            if (!hasMin && !hasMax) return null;
-
-            // Return array with proper null handling
-            return [
-                hasMin ? Number(min) : null,
-                hasMax ? Number(max) : null
-            ];
-        };
-
-        const sanitizeSingle = (val) => val != null && val !== '' && val !== t('Select City') && val !== t('Select District') ? val : null;
-
-        return {
-          limit,
-          offSet: (currentPage - 1) * limit,
-          filter: {
-            city: sanitizeSingle(selectedCity),
-            district: sanitizeSingle(selectedDistrict),
-            employeesRange: sanitizeRange(employeesRange),
-            operationalYearRange: sanitizeRange(operationalYearRange),
-            hasAssets: hasAssets !== null ? hasAssets : null,
-            priceRange: sanitizeRange(priceRange),
-            profitMargenRange: sanitizeRange(profitMargenRange),
-            profitRange: profit || sanitizeRange(profitRange),
-            revenueRange: revenue || sanitizeRange(revenueRange),
-            multiple: multipleStep !== null ? Number(multipleStep) : null,
-          },
-          sort: sortOrder !== null ? { price: sortOrder === 'Low to High' ? 'ASC' : 'DESC' } : null,
-        };
+    return {
+      limit,
+      offSet: (currentPage - 1) * limit,
+      filter: {
+        city: sanitizeSingle(selectedCity),
+        district: sanitizeSingle(selectedDistrict),
+        employeesRange: sanitizeRange(employeesRange),
+        operationalYearRange: sanitizeRange(operationalYearRange),
+        hasAssets: hasAssets !== null ? hasAssets : null,
+        priceRange: sanitizeRange(priceRange),
+        profitMargenRange: sanitizeRange(profitMargenRange),
+        profitRange: profit || sanitizeRange(profitRange),
+        revenueRange: revenue || sanitizeRange(revenueRange),
+        multiple: multipleStep !== null ? Number(multipleStep) : null,
+      },
+      sort:
+        sortOrder !== null
+          ? { price: sortOrder === "Low to High" ? "ASC" : "DESC" }
+          : null,
     };
-    // 🟩 Fetch correct query based on search params
-    useEffect(() => {
-        let variables = getFilterVariables();
-        let query = GET_ALL_BUSINESSES;
-        if (categoryParam || selectedCategory) {
-            query = GET_BUSINESS_BY_CATEGORY;
-            variables = { 
-              category: selectedCategory || categoryParam, 
-              limit, 
-              offSet: 0,
-              sort: getFilterVariables().sort
-            };
-        } else if (cityParam) {
-            query = GET_BUSINESS_BY_CITY;
-            variables = { 
-              city: cityParam, 
-              limit, 
-              offSet: 0,
-              sort: getFilterVariables().sort
-            };
-        } else if (revenue) {
-            query = GET_BUSINESS_BY_REVENUE;
-            variables = { 
-              revenue, 
-              limit, 
-              offSet: 0,
-              sort: getFilterVariables().sort
-            };
-        } else if (profit) {
-            query = GET_BUSINESS_BY_PROFIT;
-            variables = { 
-              profit, 
-              limit, 
-              offSet: 0,
-              sort: getFilterVariables().sort
-            };
-        } else if(employeesRange || operationalYearRange) {
-            query = GET_ALL_BUSINESSES;
-        }
-        runQuery(query, variables);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        categoryParam, cityParam, profit, revenue, limit, currentPage,
-        employeesRange, operationalYearRange, hasAssets,
-        priceMinDep, priceMaxDep, profitRange, profitMargenRange, revenueRange,
-        multipleStep, sortOrder, selectedCategory
-    ]);
+  };
+  // 🟩 Fetch correct query based on search params
+  useEffect(() => {
+    let variables = getFilterVariables();
+    let query = GET_ALL_BUSINESSES;
+    if (categoryParam || selectedCategory) {
+      query = GET_BUSINESS_BY_CATEGORY;
+      variables = {
+        category: selectedCategory || categoryParam,
+        limit,
+        offSet: 0,
+        sort: getFilterVariables().sort,
+      };
+    } else if (cityParam) {
+      query = GET_BUSINESS_BY_CITY;
+      variables = {
+        city: cityParam,
+        limit,
+        offSet: 0,
+        sort: getFilterVariables().sort,
+      };
+    } else if (revenue) {
+      query = GET_BUSINESS_BY_REVENUE;
+      variables = {
+        revenue,
+        limit,
+        offSet: 0,
+        sort: getFilterVariables().sort,
+      };
+    } else if (profit) {
+      query = GET_BUSINESS_BY_PROFIT;
+      variables = {
+        profit,
+        limit,
+        offSet: 0,
+        sort: getFilterVariables().sort,
+      };
+    } else if (employeesRange || operationalYearRange) {
+      query = GET_ALL_BUSINESSES;
+    }
+    runQuery(query, variables);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    categoryParam,
+    cityParam,
+    profit,
+    revenue,
+    limit,
+    currentPage,
+    employeesRange,
+    operationalYearRange,
+    hasAssets,
+    priceMinDep,
+    priceMaxDep,
+    profitRange,
+    profitMargenRange,
+    revenueRange,
+    multipleStep,
+    sortOrder,
+    selectedCategory,
+  ]);
 
-    const businessList =
-        businesses?.getAllBusinesses?.businesses ||
-        businesses?.getAllBusinessesByCategory?.businesses ||
-        businesses?.getAllBusinessesByDistrict?.businesses ||
-        businesses?.getAllBusinessesByCity?.businesses ||
-        businesses?.getAllBusinessesByProfit?.businesses ||
-        businesses?.getAllBusinessesByRevenue?.businesses ||
-        [];
+  const businessList =
+    businesses?.getAllBusinesses?.businesses ||
+    businesses?.getAllBusinessesByCategory?.businesses ||
+    businesses?.getAllBusinessesByDistrict?.businesses ||
+    businesses?.getAllBusinessesByCity?.businesses ||
+    businesses?.getAllBusinessesByProfit?.businesses ||
+    businesses?.getAllBusinessesByRevenue?.businesses ||
+    [];
 
-    const totalCount =
-        businesses?.getAllBusinesses?.totalCount ||
-        businesses?.getAllBusinessesByDistrict?.totalCount ||
-        businesses?.getAllBusinessesByCategory?.totalCount ||
-        businesses?.getAllBusinessesByCity?.totalCount ||
-        businesses?.getAllBusinessesByProfit?.totalCount ||
-        businesses?.getAllBusinessesByRevenue?.totalCount ||
-        0;
+  const totalCount =
+    businesses?.getAllBusinesses?.totalCount ||
+    businesses?.getAllBusinessesByDistrict?.totalCount ||
+    businesses?.getAllBusinessesByCategory?.totalCount ||
+    businesses?.getAllBusinessesByCity?.totalCount ||
+    businesses?.getAllBusinessesByProfit?.totalCount ||
+    businesses?.getAllBusinessesByRevenue?.totalCount ||
+    0;
 
-    const handleDistrictChange = (value) => {
-        if (!value) {
-            setSelectedDistrict(null);
-            setSelectedDistrictId(null);
-            setsearchSelectedCity(null);
-            setSelectedCity(null);
-            setCityOptions([]);
-            return;
-        }
+  const handleDistrictChange = (value) => {
+    if (!value) {
+      setSelectedDistrict(null);
+      setSelectedDistrictId(null);
+      setsearchSelectedCity(null);
+      setSelectedCity(null);
+      setCityOptions([]);
+      return;
+    }
 
-        const selectedDistObj = district.find(d => d.id === value);
-        if (selectedDistObj) {
-            setSelectedDistrict(selectedDistObj.name);
-            setSelectedDistrictId(selectedDistObj.id);
-            // Update city options based on selected district
-            setCityOptions(cities[selectedDistObj.id] || []);
-            // Clear city selection when district changes
-            setsearchSelectedCity(null);
-            setSelectedCity(null);
-        }
-    };
+    const selectedDistObj = district.find((d) => d.id === value);
+    if (selectedDistObj) {
+      setSelectedDistrict(selectedDistObj.name);
+      setSelectedDistrictId(selectedDistObj.id);
+      // Update city options based on selected district
+      setCityOptions(cities[selectedDistObj.id] || []);
+      // Clear city selection when district changes
+      setsearchSelectedCity(null);
+      setSelectedCity(null);
+    }
+  };
 
-    const handleCityChange = (value) => {
-        if (!value) {
-            setsearchSelectedCity(null);
-            setSelectedCity(null);
-            return;
-        }
+  const handleCityChange = (value) => {
+    if (!value) {
+      setsearchSelectedCity(null);
+      setSelectedCity(null);
+      return;
+    }
 
-        setsearchSelectedCity(value);
+    setsearchSelectedCity(value);
 
-        // Find city from current district's cities or all cities
-        const cityList = selectedDistrictId ? (cities[selectedDistrictId] || []) : Object.values(cities).flat();
-        const selectedCityObj = cityList.find(city => city.id === Number(value));
-        setSelectedCity(selectedCityObj?.name || null);
-    };
+    // Find city from current district's cities or all cities
+    const cityList = selectedDistrictId
+      ? cities[selectedDistrictId] || []
+      : Object.values(cities).flat();
+    const selectedCityObj = cityList.find((city) => city.id === Number(value));
+    setSelectedCity(selectedCityObj?.name || null);
+  };
 
-    const handleSearch = () => {
-        setCurrentPage(1); // Reset to first page
+  const handleSearch = () => {
+    setCurrentPage(1); // Reset to first page
 
-        if (searchSelectedCity && selectedCity) {
-            // Search by city
-            const query = GET_BUSINESS_BY_CITY;
-            const variables = {
-                city: selectedCity,
-                limit,
-                offSet: 0,
-                filter: getFilterVariables().filter,
-                sort: getFilterVariables().sort
-            };
-            runQuery(query, variables);
-        } else if (selectedDistrict && !searchSelectedCity) {
-            // Search by district only
-            const query = GET_BUSINESS_BY_DISTRICT;
-            const variables = {
-                district: selectedDistrict,
-                limit,
-                offSet: 0,
-                filter: getFilterVariables().filter,
-                sort: getFilterVariables().sort
-            };
-            runQuery(query, variables);
-        } else {
-            // No district/city selected, fetch all
-            const variables = getFilterVariables();
-            runQuery(GET_ALL_BUSINESSES, variables);
-        }
-    };
+    if (searchSelectedCity && selectedCity) {
+      // Search by city
+      const query = GET_BUSINESS_BY_CITY;
+      const variables = {
+        city: selectedCity,
+        limit,
+        offSet: 0,
+        filter: getFilterVariables().filter,
+        sort: getFilterVariables().sort,
+      };
+      runQuery(query, variables);
+    } else if (selectedDistrict && !searchSelectedCity) {
+      // Search by district only
+      const query = GET_BUSINESS_BY_DISTRICT;
+      const variables = {
+        district: selectedDistrict,
+        limit,
+        offSet: 0,
+        filter: getFilterVariables().filter,
+        sort: getFilterVariables().sort,
+      };
+      runQuery(query, variables);
+    } else {
+      // No district/city selected, fetch all
+      const variables = getFilterVariables();
+      runQuery(GET_ALL_BUSINESSES, variables);
+    }
+  };
 
-
-    return (
-        <div className='padd-1 mb-3'>
-            <div className='bg-dark-blue bread-cs mb-3'>
-                <div className='container'>
-                    <Breadcrumb
-                        separator={<Text className='text-gray'><RightOutlined className='fs-10' /></Text>}
-                        items={getBreadcrumbItems()}
-                    />
-                    <Flex vertical gap={30} className='w-100 search-cs'>
-                        <Flex vertical gap={5} className='text-center'>
-                            <Title level={2} className='text-white m-0'>{t('Find the Right Business for You')}</Title>
-                            {/* <Text className='text-light-gray fs-16'>{t('Search by city or business type and explore verified listings that match your goals.')}</Text> */}
-                        </Flex>
-                        <Card className='shadow-c rounded'>
-                            <Row gutter={[24,24]} align={'middle'}>
-                                <Col lg={{span: 12}} md={{span:12}} sm={{span: 24}} xs={{span: 24}}>
-                                    <MySelect
-                                        withoutForm
-                                        placeholder={t('Select region')}
-                                        options={district}
-                                        className='w-100 select'
-                                        value={selectedDistrictId}
-                                        onChange={handleDistrictChange}
-                                        allowClear
-                                    />
-                                </Col>
-                                <Col xl={{span: 9}} lg={{span: 8}} md={{span:12}} sm={{span: 24}} xs={{span: 24}}>
-                                    <MySelect
-                                        withoutForm
-                                        placeholder={t('Select City')}
-                                        options={cityOptions}
-                                        className='w-100 select'
-                                        value={searchSelectedCity}
-                                        onChange={handleCityChange}
-                                        allowClear
-                                    />
-                                </Col>
-                                <Col xl={{span: 3}} lg={{span: 4}} md={{span:24}} sm={{span: 24}} xs={{span: 24}}>
-                                    <Button
-                                        aria-labelledby={t('Search')}
-                                        className='btn bg-brand fs-14 fw-400 w-100'
-                                        onClick={handleSearch}
-                                    >
-                                        <Image src="/assets/icons/search-w.png" preview={false} width={16} alt={t('search icon')} /> {t('Search')}
-                                    </Button>
-                                </Col>
-                            </Row>
-                        </Card>
-                    </Flex>
-                </div>
-            </div>
-            <div className='container'>
-                <Flex gap={10} justify='space-between' wrap align='center' className='mb-3'>
-                    <Flex gap={5} align='center'>
-                        <Title level={4} className='m-0'>{listingHeading}</Title>
-                        <Button aria-labelledby={t('Filter icon')} type='button' onClick={()=>setIsFilter(true)} className='border-0 bg-transparent p-0 filter-btn'>
-                            <img src='/assets/icons/filter.png' alt={t('filter-icon')} width={20} fetchPriority="high" />
-                        </Button>
-                    </Flex>
-                    <Flex gap={5} align='center'>
-                        <Text className='text-gray fs-13'>
-                            {t('Showing {{start}}–{{end}} of {{total}} Businesses', {
-                                start: ((currentPage - 1) * limit) + 1,
-                                end: Math.min(currentPage * limit, totalCount || 0),
-                                total: totalCount || 0
-                            })}
-                        </Text>
-                        <Button aria-labelledby={t('Filter')} type='button' onClick={()=>setIsShow(!isShow)} className='btn btn-sm rounded-8 border-gray text-black sm-hide'>
-                            <Flex align='center' gap={5}>
-                                <img src='/assets/icons/filter-bar.png' alt={t('filter-icon')} width={20} fetchPriority="high"/> {t('Filter')}
-                            </Flex>
-                        </Button>
-                        <MySelect
-                            withoutForm
-                            placeholder={t('Sort By')}
-                            options={options.map(opt => ({ ...opt, name: t(opt.key) }))}
-                            className='select'
-                            value={sortOrder}
-                            allowClear
-                            onChange={(id) => {
-                                setSortOrder(id === 1 ? 'Low to High' : id === 2 ? 'High to Low' : null);
-                            }}
-                            style={{ minWidth: 120 }}
-                        />
-                    </Flex>
-                </Flex>
-                <Flex gap={isShow ?24:0} align="stretch" className="mb-4">
-                    <div className='sm-hide'>
-                        <AnimatePresence>
-                            {isShow && (
-                                <Motion.div
-                                    key="filter"
-                                    initial={{ width: 0, opacity: 0 }}
-                                    animate={{ width: 250, opacity: 1 }}
-                                    exit={{ width: 0, opacity: 0 }}
-                                    transition={{ duration: 0.4 }}
-                                    style={{ overflow: 'hidden', flexShrink: 0 }}
-                                >
-                                    <Filter
-                                        multipleStep={multipleStep}
-                                        setMultipleStep={setMultipleStep}
-                                        setPriceRange={setPriceRange}
-                                        setRevenueRange={setRevenueRange}
-                                        setProfitRange={setProfitRange}
-                                        setProfitMargenRange={setProfitMargenRange}
-                                        setEmployeesRange={setEmployeesRange}
-                                        setOperationalYearRange={setOperationalYearRange}
-                                        setHasAssets={setHasAssets}
-                                        setSelectedCategory={setSelectedCategory}
-                                    />
-                                </Motion.div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-                    <Motion.div
-                        key="product"
-                        animate={{ width: isShow ? 'calc(100% - 250px)' : '100%' }}
-                        transition={{ duration: 0.4 }}
-                        style={{ minWidth: 0, position: 'relative', width: '100%' }}
-                        className='mobile-100'
-                    >
-                        <div style={{ position: 'relative', width: '100%' }}>
-                            <ProductCard
-                                exploreData={businessList?.map((biz) => ({
-                                    id: biz.id,
-                                    title: biz.businessTitle,
-                                    categoryName: isArabic? biz.category.arabicName:biz.category.name,
-                                    description: biz.description,
-                                    isSaved: biz.isSaved,
-                                    isByTakbeer: biz.isByTakbeer,
-                                    amount: formatNumber(biz.price)?.toLocaleString(),
-                                    save: 'no',
-                                    child: [
-                                        { subtitle: formatNumber(biz.revenue), subdesc: t('Revenue/month') },
-                                        { subtitle: formatNumber(biz.profit), subdesc: t('Profit/month') },
-                                        {
-                                            subtitle: biz.capitalRecovery >= 12
-                                                ? `${formatNumber(biz.capitalRecovery / 12)} ${t('years')}`
-                                                : `${formatNumber(biz.capitalRecovery)} ${t('months')}`,
-                                            subdesc: t('Capital Recovery')
-                                        },
-                                    ]
-                                }))}
-                                refetchBusinesses={refetch}
-                                totalCount={totalCount || 0}
-                                currentPage={currentPage}
-                                onPageChange={(page) => setCurrentPage(page)}
-                                limit={limit}
-                                onLimitChange={(value) => {
-                                    setLimit(value);
-                                    setCurrentPage(1);
-                                }}
-                                isLoading={isLoading}
-                            />
-                        </div>
-                    </Motion.div>
-                </Flex>
-            </div>
-            <BusinesslistingFilterDrawer
-                visible={isFilter}
-                onClose={()=>setIsFilter(false)}
-                setMultipleStep={setMultipleStep}
-                setPriceRange={setPriceRange}
-                setRevenueRange={setRevenueRange}
-                setProfitRange={setProfitRange}
-                setProfitMargenRange={setProfitMargenRange}
-                setEmployeesRange={setEmployeesRange}
-                setOperationalYearRange={setOperationalYearRange}
-                setHasAssets={setHasAssets}
-                setSelectedCategory={setSelectedCategory}
-            />
+  return (
+    <div className="padd-1 mb-3">
+      <div className="bg-dark-blue bread-cs mb-3">
+        <div className="container">
+          <Breadcrumb
+            separator={
+              <Text className="text-gray">
+                <RightOutlined className="fs-10" />
+              </Text>
+            }
+            items={getBreadcrumbItems()}
+          />
+          <Flex vertical gap={30} className="w-100 search-cs">
+            <Flex vertical gap={5} className="text-center">
+              <Title level={2} className="text-white m-0">
+                {t("Find the Right Business for You")}
+              </Title>
+            </Flex>
+            <Card className="shadow-c rounded">
+              <Row gutter={[24, 24]} align={"middle"}>
+                <Col
+                  lg={{ span: 12 }}
+                  md={{ span: 12 }}
+                  sm={{ span: 24 }}
+                  xs={{ span: 24 }}
+                >
+                  <MySelect
+                    withoutForm
+                    placeholder={t("Select region")}
+                    options={district}
+                    className="w-100 select"
+                    value={selectedDistrictId}
+                    onChange={handleDistrictChange}
+                    allowClear
+                  />
+                </Col>
+                <Col
+                  xl={{ span: 9 }}
+                  lg={{ span: 8 }}
+                  md={{ span: 12 }}
+                  sm={{ span: 24 }}
+                  xs={{ span: 24 }}
+                >
+                  <MySelect
+                    withoutForm
+                    placeholder={t("Select City")}
+                    options={cityOptions}
+                    className="w-100 select"
+                    value={searchSelectedCity}
+                    onChange={handleCityChange}
+                    allowClear
+                  />
+                </Col>
+                <Col
+                  xl={{ span: 3 }}
+                  lg={{ span: 4 }}
+                  md={{ span: 24 }}
+                  sm={{ span: 24 }}
+                  xs={{ span: 24 }}
+                >
+                  <Button
+                    aria-labelledby={t("Search")}
+                    className="btn bg-brand fs-14 fw-400 w-100"
+                    onClick={handleSearch}
+                  >
+                    <Image
+                      src="/assets/icons/search-w.png"
+                      preview={false}
+                      width={16}
+                      alt={t("search icon")}
+                    />{" "}
+                    {t("Search")}
+                  </Button>
+                </Col>
+              </Row>
+            </Card>
+          </Flex>
         </div>
-    );
+      </div>
+      <div className="container">
+        <Flex
+          gap={10}
+          justify="space-between"
+          wrap
+          align="center"
+          className="mb-3"
+        >
+          <Flex gap={5} align="center">
+            <Title level={4} className="m-0">
+              {listingHeading}
+            </Title>
+            <Button
+              aria-labelledby={t("Filter icon")}
+              type="button"
+              onClick={() => setIsFilter(true)}
+              className="border-0 bg-transparent p-0 filter-btn"
+            >
+              <img
+                src="/assets/icons/filter.png"
+                alt={t("filter-icon")}
+                width={20}
+                fetchPriority="high"
+              />
+            </Button>
+          </Flex>
+          <Flex gap={5} align="center">
+            <Text className="text-gray fs-13">
+              {t("Showing {{start}}–{{end}} of {{total}} Businesses", {
+                start: (currentPage - 1) * limit + 1,
+                end: Math.min(currentPage * limit, totalCount || 0),
+                total: totalCount || 0,
+              })}
+            </Text>
+            <Button
+              aria-labelledby={t("Filter")}
+              type="button"
+              onClick={() => setIsShow(!isShow)}
+              className="btn btn-sm rounded-8 border-gray text-black sm-hide"
+            >
+              <Flex align="center" gap={5}>
+                <img
+                  src="/assets/icons/filter-bar.png"
+                  alt={t("filter-icon")}
+                  width={20}
+                  fetchPriority="high"
+                />{" "}
+                {t("Filter")}
+              </Flex>
+            </Button>
+            <MySelect
+              withoutForm
+              placeholder={t("Sort By")}
+              options={options.map((opt) => ({ ...opt, name: t(opt.key) }))}
+              className="select"
+              value={sortOrder}
+              allowClear
+              onChange={(id) => {
+                setSortOrder(
+                  id === 1 ? "Low to High" : id === 2 ? "High to Low" : null
+                );
+              }}
+              style={{ minWidth: 120 }}
+            />
+          </Flex>
+        </Flex>
+        <Flex gap={isShow ? 24 : 0} align="stretch" className="mb-4">
+          <div className="sm-hide">
+            <AnimatePresence>
+              {isShow && (
+                <Motion.div
+                  key="filter"
+                  initial={{ width: 0, opacity: 0 }}
+                  animate={{ width: 250, opacity: 1 }}
+                  exit={{ width: 0, opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  style={{ overflow: "hidden", flexShrink: 0 }}
+                >
+                  <Filter
+                    multipleStep={multipleStep}
+                    setMultipleStep={setMultipleStep}
+                    setPriceRange={setPriceRange}
+                    setRevenueRange={setRevenueRange}
+                    setProfitRange={setProfitRange}
+                    setProfitMargenRange={setProfitMargenRange}
+                    setEmployeesRange={setEmployeesRange}
+                    setOperationalYearRange={setOperationalYearRange}
+                    setHasAssets={setHasAssets}
+                    setSelectedCategory={setSelectedCategory}
+                  />
+                </Motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+          <Motion.div
+            key="product"
+            animate={{ width: isShow ? "calc(100% - 250px)" : "100%" }}
+            transition={{ duration: 0.4 }}
+            style={{ minWidth: 0, position: "relative", width: "100%" }}
+            className="mobile-100"
+          >
+            <div style={{ position: "relative", width: "100%" }}>
+              <ProductCard
+                exploreData={businessList?.map((biz) => ({
+                  id: biz.id,
+                  title: biz.businessTitle,
+                  categoryName: isArabic
+                    ? biz.category.arabicName
+                    : biz.category.name,
+                  description: biz.description,
+                  isSaved: biz.isSaved,
+                  isByTakbeer: biz.isByTakbeer,
+                  amount: formatNumber(biz.price)?.toLocaleString(),
+                  save: "no",
+                  child: [
+                    {
+                      subtitle: formatNumber(biz.revenue),
+                      subdesc: t("Revenue/month"),
+                    },
+                    {
+                      subtitle: formatNumber(biz.profit),
+                      subdesc: t("Profit/month"),
+                    },
+                    {
+                      subtitle:
+                        biz.capitalRecovery >= 12
+                          ? `${formatNumber(biz.capitalRecovery / 12)} ${t(
+                              "years"
+                            )}`
+                          : `${formatNumber(biz.capitalRecovery)} ${t(
+                              "months"
+                            )}`,
+                      subdesc: t("Capital Recovery"),
+                    },
+                  ],
+                }))}
+                refetchBusinesses={refetch}
+                totalCount={totalCount || 0}
+                currentPage={currentPage}
+                onPageChange={(page) => setCurrentPage(page)}
+                limit={limit}
+                onLimitChange={(value) => {
+                  setLimit(value);
+                  setCurrentPage(1);
+                }}
+                isLoading={isLoading}
+              />
+            </div>
+          </Motion.div>
+        </Flex>
+      </div>
+      <BusinesslistingFilterDrawer
+        visible={isFilter}
+        onClose={() => setIsFilter(false)}
+        setMultipleStep={setMultipleStep}
+        setPriceRange={setPriceRange}
+        setRevenueRange={setRevenueRange}
+        setProfitRange={setProfitRange}
+        setProfitMargenRange={setProfitMargenRange}
+        setEmployeesRange={setEmployeesRange}
+        setOperationalYearRange={setOperationalYearRange}
+        setHasAssets={setHasAssets}
+        setSelectedCategory={setSelectedCategory}
+      />
+    </div>
+  );
 };
 
 export { BusinessListingPage };
