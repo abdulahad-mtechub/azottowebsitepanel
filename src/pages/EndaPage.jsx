@@ -10,7 +10,7 @@ const { Text, Title } = Typography;
 const EndaPage = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { data, loading, error } = useQuery(GETENDATERMS);
+  const { data, loading } = useQuery(GETENDATERMS);
 
   const lang = localStorage.getItem("lang") || "en";
   const isArabic = lang === "ar";
