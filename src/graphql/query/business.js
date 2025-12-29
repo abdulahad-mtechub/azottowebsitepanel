@@ -164,11 +164,13 @@ const GET_BUSINESS_BY_CATEGORY = gql`
     $category: String!
     $limit: Int
     $offSet: Int
+    $sort: BusinessSortInput
   ) {
     getAllBusinessesByCategory(
       category: $category
       limit: $limit
       offSet: $offSet
+      sort: $sort
     ) {
       businesses {
         id
@@ -194,8 +196,18 @@ const GET_BUSINESS_BY_CATEGORY = gql`
   }
 `;
 const GET_BUSINESS_BY_CITY = gql`
-  query GetAllBusinessesByCity($city: String!, $limit: Int, $offSet: Int) {
-    getAllBusinessesByCity(city: $city, limit: $limit, offSet: $offSet) {
+  query GetAllBusinessesByCity(
+    $city: String!
+    $limit: Int
+    $offSet: Int
+    $sort: BusinessSortInput
+  ) {
+    getAllBusinessesByCity(
+      city: $city
+      limit: $limit
+      offSet: $offSet
+      sort: $sort
+    ) {
       businesses {
         id
         businessTitle
@@ -224,11 +236,13 @@ const GET_BUSINESS_BY_DISTRICT = gql`
     $district: String!
     $limit: Int
     $offSet: Int
+    $sort: BusinessSortInput
   ) {
     getAllBusinessesByDistrict(
       district: $district
       limit: $limit
       offSet: $offSet
+      sort: $sort
     ) {
       businesses {
         id
@@ -253,8 +267,18 @@ const GET_BUSINESS_BY_DISTRICT = gql`
   }
 `;
 const GET_BUSINESS_BY_PROFIT = gql`
-  query GetAllBusinessesByProfit($profit: [Float]!, $limit: Int, $offSet: Int) {
-    getAllBusinessesByProfit(profit: $profit, limit: $limit, offSet: $offSet) {
+  query GetAllBusinessesByProfit(
+    $profit: [Float]!
+    $limit: Int
+    $offSet: Int
+    $sort: BusinessSortInput
+  ) {
+    getAllBusinessesByProfit(
+      profit: $profit
+      limit: $limit
+      offSet: $offSet
+      sort: $sort
+    ) {
       businesses {
         id
         businessTitle
@@ -283,11 +307,13 @@ const GET_BUSINESS_BY_REVENUE = gql`
     $revenue: [Float]!
     $limit: Int
     $offSet: Int
+    $sort: BusinessSortInput
   ) {
     getAllBusinessesByRevenue(
       revenue: $revenue
       limit: $limit
       offSet: $offSet
+      sort: $sort
     ) {
       businesses {
         id

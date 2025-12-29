@@ -205,16 +205,36 @@ const BusinessListingPage = ({getcategory}) => {
         let query = GET_ALL_BUSINESSES;
         if (categoryParam || selectedCategory) {
             query = GET_BUSINESS_BY_CATEGORY;
-            variables = { category: selectedCategory || categoryParam, limit, offSet: 0 };
+            variables = { 
+              category: selectedCategory || categoryParam, 
+              limit, 
+              offSet: 0,
+              sort: getFilterVariables().sort
+            };
         } else if (cityParam) {
             query = GET_BUSINESS_BY_CITY;
-            variables = { city: cityParam, limit, offSet: 0 };
+            variables = { 
+              city: cityParam, 
+              limit, 
+              offSet: 0,
+              sort: getFilterVariables().sort
+            };
         } else if (revenue) {
             query = GET_BUSINESS_BY_REVENUE;
-            variables = { revenue, limit, offSet: 0 };
+            variables = { 
+              revenue, 
+              limit, 
+              offSet: 0,
+              sort: getFilterVariables().sort
+            };
         } else if (profit) {
             query = GET_BUSINESS_BY_PROFIT;
-            variables = { profit, limit, offSet: 0 };
+            variables = { 
+              profit, 
+              limit, 
+              offSet: 0,
+              sort: getFilterVariables().sort
+            };
         } else if(employeesRange || operationalYearRange) {
             query = GET_ALL_BUSINESSES;
         }
