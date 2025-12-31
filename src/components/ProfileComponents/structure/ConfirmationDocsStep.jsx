@@ -11,6 +11,7 @@ import {
   Spin,
   Modal,
   Radio,
+  Input,
 } from "antd";
 import {
   UPDATE_DEAL,
@@ -29,8 +30,9 @@ const ConfirmationDocsStep = ({ form, details }) => {
   const [modal, modalContextHolder] = Modal.useModal();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const [documents, setDocuments] = useState({});
+  const [_documents, setDocuments] = useState({});
   const [crUploaded, setCrUploaded] = useState(false);
+  const [sellerNote, setSellerNote] = useState("");
 
   const DOCUMENT_TITLES = {
     CR: ["Commercial Registration (CR)", "السجل التجاري"],
@@ -164,16 +166,40 @@ const ConfirmationDocsStep = ({ form, details }) => {
     );
 
     if (anyDocsExist) {
+      let noteValue = "";
       modal.confirm({
         centered: true,
-        content: t(
-          "Are you sure you have not receiving your payment? This action cannot be undone."
+        title: t("Confirm No Payment"),
+        content: (
+          <Flex vertical gap={12}>
+            <Text>
+              {t(
+                "Are you sure you have not received your payment? This action cannot be undone."
+              )}
+            </Text>
+            <Input.TextArea
+              placeholder={t("Add a note for the buyer") + " *"}
+              rows={4}
+              maxLength={500}
+              showCount
+              onChange={(e) => {
+                noteValue = e.target.value;
+                setSellerNote(e.target.value);
+              }}
+              defaultValue={sellerNote}
+            />
+          </Flex>
         ),
         okText: t("Yes"),
         okType: "danger",
         cancelText: t("Cancel"),
         onOk: async () => {
           try {
+            if (!noteValue || noteValue.trim() === "") {
+              messageApi.error(t("Please add a note for the buyer"));
+              throw new Error("Note is required");
+            }
+
             const titlesToDelete = [];
             if (bankRecipt)
               titlesToDelete.push(DOCUMENT_TITLES.BUYER_RECEIPT[0]);
@@ -190,42 +216,80 @@ const ConfirmationDocsStep = ({ form, details }) => {
 
             await updateDeals({
               variables: {
-                input: { id: details.key, isPaymentVedifiedSeller: false },
+                input: { 
+                  id: details.key, 
+                  isPaymentVedifiedSeller: false,
+                  sellerNote: noteValue.trim(),
+                },
               },
             });
+            
+            setSellerNote("");
           } catch (err) {
             console.error("delete error", err);
+            throw err;
           }
         },
         onCancel: () => {
           setUploadsAllowed(undefined);
+          setSellerNote("");
         },
       });
     } else {
+      let noteValue = "";
       modal.confirm({
         centered: true,
         title: t("Confirm No Payment"),
-        content: t(
-          "Are you sure you have not received payment from the buyer?"
+        content: (
+          <Flex vertical gap={12}>
+            <Text>
+              {t(
+                "Are you sure you have not received payment from the buyer?"
+              )}
+            </Text>
+            <Input.TextArea
+              placeholder={t("Add a note for the buyer") + " *"}
+              rows={4}
+              maxLength={500}
+              showCount
+              onChange={(e) => {
+                noteValue = e.target.value;
+                setSellerNote(e.target.value);
+              }}
+              defaultValue={sellerNote}
+            />
+          </Flex>
         ),
         okText: t("Yes"),
         okType: "danger",
         cancelText: t("Cancel"),
         onOk: async () => {
           try {
+            if (!noteValue || noteValue.trim() === "") {
+              messageApi.error(t("Please add a note for the buyer"));
+              throw new Error("Note is required");
+            }
+
             await updateDeals({
               variables: {
-                input: { id: details.key, isPaymentVedifiedSeller: false },
+                input: { 
+                  id: details.key, 
+                  isPaymentVedifiedSeller: false,
+                  sellerNote: noteValue.trim(),
+                },
               },
             });
             setUploadsAllowed("no");
+            setSellerNote("");
           } catch (err) {
             console.error("Error updating payment verified:", err);
             messageApi.error(err?.message || t("Failed to update deal"));
+            throw err;
           }
         },
         onCancel: () => {
           setUploadsAllowed(undefined);
+          setSellerNote("");
         },
       });
     }
