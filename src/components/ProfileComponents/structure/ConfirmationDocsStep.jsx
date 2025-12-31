@@ -216,14 +216,14 @@ const ConfirmationDocsStep = ({ form, details }) => {
 
             await updateDeals({
               variables: {
-                input: { 
-                  id: details.key, 
+                input: {
+                  id: details.key,
                   isPaymentVedifiedSeller: false,
                   sellerNote: noteValue.trim(),
                 },
               },
             });
-            
+
             setSellerNote("");
           } catch (err) {
             console.error("delete error", err);
@@ -243,9 +243,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
         content: (
           <Flex vertical gap={12}>
             <Text>
-              {t(
-                "Are you sure you have not received payment from the buyer?"
-              )}
+              {t("Are you sure you have not received payment from the buyer?")}
             </Text>
             <Input.TextArea
               placeholder={t("Add a note for the buyer") + " *"}
@@ -272,8 +270,8 @@ const ConfirmationDocsStep = ({ form, details }) => {
 
             await updateDeals({
               variables: {
-                input: { 
-                  id: details.key, 
+                input: {
+                  id: details.key,
                   isPaymentVedifiedSeller: false,
                   sellerNote: noteValue.trim(),
                 },
