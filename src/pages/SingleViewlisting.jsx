@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Breadcrumb,
   Button,
@@ -27,8 +27,9 @@ import {
   PreviewTableContent,
 } from "../components";
 import { RightOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { GET_BUSINESS } from "../graphql/query/business";
+import { CREATE_VIEW_BUSINESS } from "../graphql/mutation";
 import { BusinessStats } from "../components/SellBusinessComponents/structure/BusinessStats";
 import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../hooks";
@@ -45,6 +46,9 @@ const SingleViewlisting = () => {
   const inventColumn = useInventColumn();
   const { id } = useParams();
   const navigate = useNavigate();
+  const viewTrackedRef = useRef(false);
+
+  const [viewBusiness] = useMutation(CREATE_VIEW_BUSINESS);
 
   useEffect(() => {
     const footer = document.getElementById("footer");
@@ -71,6 +75,18 @@ const SingleViewlisting = () => {
   );
 
   const business = businessData?.getBusinessById?.business;
+
+  // Track business view once when business data is loaded
+  useEffect(() => {
+    if (business?.id && !viewTrackedRef.current) {
+      viewTrackedRef.current = true;
+      viewBusiness({
+        variables: { viewBusinessId: business.id },
+      }).catch((error) => {
+        console.error("Error tracking business view:", error);
+      });
+    }
+  }, [business?.id, viewBusiness]);
 
   const postSaleData = [
     {
@@ -226,18 +242,18 @@ const SingleViewlisting = () => {
                       <Button
                         aria-labelledby="type"
                         className={`${
-                          business.isByTakbeer ? "bg-brand" : "bg-black"
+                          business?.isByTakbeer ? "bg-brand" : "bg-black"
                         }`}
                       >
                         <Space align="center" justify="center">
                           <Text className="fs-12 text-white">
-                            {business.isByTakbeer
+                            {business?.isByTakbeer
                               ? t("Taqbeel")
                               : t("Acquiring")}
                           </Text>
                           <Tooltip
                             title={
-                              business.isByTakbeer
+                              business?.isByTakbeer
                                 ? t(
                                     "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
                                   )
@@ -264,7 +280,7 @@ const SingleViewlisting = () => {
                       {businessData?.type && (
                         <Button
                           className={`fs-12 border-0 text-white ${
-                            businessData.type === "Taqbeel"
+                            businessData?.type === "Taqbeel"
                               ? "bg-brand"
                               : "bg-black"
                           }`}
