@@ -235,13 +235,23 @@ const Navbar = ({ setGetCategory }) => {
           processedVerificationNotificationsRef.current.add(newNotif.id);
 
           try {
-            const { data } = await getUserDetails({
-              variables: { getUserDetailsId: currentUserId },
-              fetchPolicy: "network-only",
-            });
+            // Refetch both user queries to get updated status
+            const [userDetailsResult, navUserResult] = await Promise.all([
+              getUserDetails({
+                variables: { getUserDetailsId: currentUserId },
+                fetchPolicy: "network-only",
+              }),
+              getUser({
+                variables: { getNavUserId: currentUserId },
+                fetchPolicy: "network-only",
+              }),
+            ]);
 
-            if (data?.getUserDetails?.status) {
-              const newStatus = data.getUserDetails.status;
+            const newStatus =
+              userDetailsResult.data?.getUserDetails?.status ||
+              navUserResult.data?.getNavUser?.status;
+
+            if (newStatus) {
               Cookies.set("userStatus", newStatus, { expires: 7 });
 
               messageApi.success(
@@ -311,6 +321,14 @@ const Navbar = ({ setGetCategory }) => {
   useEffect(() => {
     if (me?.getNavUser) {
       setUser(me.getNavUser);
+
+      // Update cookies with the latest user status
+      if (me.getNavUser.status) {
+        const currentStatus = Cookies.get("userStatus");
+        if (currentStatus !== me.getNavUser.status) {
+          Cookies.set("userStatus", me.getNavUser.status, { expires: 7 });
+        }
+      }
     }
   }, [me]);
 
