@@ -14,7 +14,12 @@ const CustomPagination = ({
 }) => {
   const screens = useBreakpoint();
   const { t } = useTranslation();
-  const { formatNumber } = useFormatNumber(); 
+  const { formatNumber } = useFormatNumber();
+  
+  // Hide pagination if total items fit in one page
+  if (totalItems <= limit) {
+    return null;
+  }
 
   return (
     <Col span={24} className='mt-3'>
