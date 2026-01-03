@@ -66,10 +66,7 @@ const Allbussines = () => {
         },
       ],
     })) || [];
-  console.log(
-    "allBusinessesData",
-    sellerBusinesses.getAllSellerBusinesses.totalCount
-  );
+
   useEffect(() => {
     const offSet = (currentPage - 1) * limit;
     getSellerBusinesses({ variables: { limit, offSet } });
