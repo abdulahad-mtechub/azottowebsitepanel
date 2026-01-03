@@ -184,7 +184,7 @@ const Allbussines = () => {
                             </Card>
                         </Col>
                     ))}
-                    {sellerBusinesses?.getAllSellerBusinesses?.totalCount > 0 ? (
+                    {sellerBusinesses?.getAllSellerBusinesses?.totalCount > 0 && (
                         <CustomPagination   
                             totalItems={sellerBusinesses?.getAllSellerBusinesses?.totalCount || 0}
                             currentPage={currentPage}
@@ -192,7 +192,8 @@ const Allbussines = () => {
                             limit={limit}
                             setLimit={setLimit}
                         />
-                    ) : (
+                    )}
+                    {sellerBusinesses?.getAllSellerBusinesses?.totalCount === 0 && (
                         <Row>
                             <Col span={24} className='text-center mt-4'>
                                 <Text>{t('No Business Found')}</Text>
