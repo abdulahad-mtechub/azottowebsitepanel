@@ -34,7 +34,7 @@ const BuyerOfferContent = () => {
   const userId = Cookies.get("userId");
   const [offermodal, setOfferModal] = useState(false);
   const [requestPop, setRequestPop] = useState(false);
-  const [onlyMeeting, setOnlyMeeting] = useState(false);
+  const [offerStatus, setOfferStatus] = useState(null);
   const [deletemodal, setDeleteModal] = useState(false);
   const [filterstatus, setFilterStatus] = useState(null);
   const [filtertype, setFilterType] = useState(null);
@@ -330,8 +330,9 @@ const BuyerOfferContent = () => {
               <NavLink
                 onClick={() => {
                   setSelectedBusinessId(record.business.id);
-                  setOnlyMeeting(true);
                   setRequestPop(true);
+                  setSelectedOfferId(record.key);
+                  setOfferStatus("MEETING");
                 }}
               >
                 {t("Request For Virtual Meeting")}
@@ -504,8 +505,8 @@ const BuyerOfferContent = () => {
         offerId={selectedOfferId}
         businessId={selectedBusinessId}
         visible={requestPop}
-        onlyMeeting={onlyMeeting}
         onClose={() => setRequestPop(false)}
+        offerStatus={offerStatus}
       />
       <DeleteModal
         refetch={refetch}

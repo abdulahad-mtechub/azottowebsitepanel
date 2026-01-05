@@ -18,6 +18,7 @@ const RequestMeetingModal = ({
   onlyMeeting,
   refetch,
   onSuccess,
+  offerStatus,
 }) => {
   const userId = Cookies.get("userId");
   const { t } = useTranslation();
@@ -180,7 +181,7 @@ const RequestMeetingModal = ({
                       variables: {
                         input: {
                           id: offerId,
-                          status: "ACCEPTED",
+                          status: offerStatus ?? "ACCEPTED",
                         },
                       },
                     }),
