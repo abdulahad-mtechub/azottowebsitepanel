@@ -9,9 +9,13 @@ import "./i18n";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 createRoot(document.getElementById("root")).render(
   <ApolloProvider client={client}>
