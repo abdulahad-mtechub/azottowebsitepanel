@@ -233,6 +233,12 @@ const BuyerOfferContent = () => {
               {t("Approved")}
             </Text>
           );
+        else if (status === "MEETING")
+          return (
+            <Text className="sendstatus fs-12 badge-cs fw-500">
+              {t("Meeting")}
+            </Text>
+          );
         return <Text className="fs-12 badge-cs fw-500">{status}</Text>;
       },
     },
@@ -256,8 +262,12 @@ const BuyerOfferContent = () => {
         // Hide action button if user created the offer (sent by buyer)
         if (record.createdBy === userId) return null;
 
-        // Hide action button if status is ACCEPTED or REJECTED
-        if (record.status === "ACCEPTED" || record.status === "REJECTED")
+        // Hide action button if status is ACCEPTED, REJECTED, or MEETING
+        if (
+          record.status === "ACCEPTED" ||
+          record.status === "REJECTED" ||
+          record.status === "MEETING"
+        )
           return null;
 
         // Check if this is a "Received" offer (created by seller, not by current user)
