@@ -24,10 +24,7 @@ import { useSearchParams } from "react-router-dom";
 import {
   GET_ALL_BUSINESSES,
   GET_BUSINESS_BY_CATEGORY,
-  GET_BUSINESS_BY_CITY,
   GET_BUSINESS_BY_REVENUE,
-  GET_BUSINESS_BY_PROFIT,
-  GET_BUSINESS_BY_DISTRICT,
 } from "../graphql/query/business";
 import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../hooks";
@@ -47,7 +44,6 @@ const BusinessListingPage = ({ getcategory }) => {
     rawCategoryParam && rawCategoryParam !== "undefined"
       ? rawCategoryParam
       : null;
-  const cityParam = params.get("city");
   const [limit, setLimit] = useState(12);
   const [currentPage, setCurrentPage] = useState(1);
   const [isShow, setIsShow] = useState(false);
@@ -183,18 +179,6 @@ const BusinessListingPage = ({ getcategory }) => {
       items.push({
         title: <Text className="fw-500 text-white">{activeCategoryLabel}</Text>,
       });
-    } else if (cityParam) {
-      // Browse by City
-      items.push({
-        title: <Text className="text-gray">{t("Browse by City")}</Text>,
-      });
-      items.push({
-        title: (
-          <Text className="fw-500 text-white">
-            {decodeURIComponent(cityParam)}
-          </Text>
-        ),
-      });
     } else {
       // Browse All
       items.push({
@@ -274,11 +258,14 @@ const BusinessListingPage = ({ getcategory }) => {
           : null,
     };
   };
-  // 🟩 Fetch correct query based on search params
+  // 🟩 Main effect: Fetch query based on category/revenue/pagination changes
+  // This runs automatically when category, revenue, pagination, or other filters change
   useEffect(() => {
     const filterVars = getFilterVariables();
     let variables = filterVars;
     let query = GET_ALL_BUSINESSES;
+
+    // Use GET_BUSINESS_BY_CATEGORY when category is specified
     if (categoryParam || selectedCategory) {
       query = GET_BUSINESS_BY_CATEGORY;
       variables = {
@@ -288,15 +275,9 @@ const BusinessListingPage = ({ getcategory }) => {
         sort: filterVars.sort,
         filter: filterVars.filter,
       };
-    } else if (cityParam) {
-      query = GET_BUSINESS_BY_CITY;
-      variables = {
-        city: cityParam,
-        limit,
-        offSet: (currentPage - 1) * limit,
-        sort: filterVars.sort,
-      };
-    } else if (revenue) {
+    }
+    // For revenue, use the dedicated query with filters
+    else if (revenue) {
       query = GET_BUSINESS_BY_REVENUE;
       variables = {
         revenue,
@@ -305,22 +286,16 @@ const BusinessListingPage = ({ getcategory }) => {
         sort: filterVars.sort,
         filter: filterVars.filter,
       };
-    } else if (profit) {
-      query = GET_BUSINESS_BY_PROFIT;
-      variables = {
-        profit,
-        limit,
-        offSet: (currentPage - 1) * limit,
-        sort: filterVars.sort,
-      };
-    } else if (employeesRange || operationalYearRange) {
+    }
+    // All other cases use GET_ALL_BUSINESSES with filters
+    else {
       query = GET_ALL_BUSINESSES;
     }
+
     runQuery(query, variables);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     categoryParam,
-    cityParam,
     profit,
     revenue,
     limit,
@@ -341,18 +316,12 @@ const BusinessListingPage = ({ getcategory }) => {
   const businessList =
     businesses?.getAllBusinesses?.businesses ||
     businesses?.getAllBusinessesByCategory?.businesses ||
-    businesses?.getAllBusinessesByDistrict?.businesses ||
-    businesses?.getAllBusinessesByCity?.businesses ||
-    businesses?.getAllBusinessesByProfit?.businesses ||
     businesses?.getAllBusinessesByRevenue?.businesses ||
     [];
 
   const totalCount =
     businesses?.getAllBusinesses?.totalCount ||
-    businesses?.getAllBusinessesByDistrict?.totalCount ||
     businesses?.getAllBusinessesByCategory?.totalCount ||
-    businesses?.getAllBusinessesByCity?.totalCount ||
-    businesses?.getAllBusinessesByProfit?.totalCount ||
     businesses?.getAllBusinessesByRevenue?.totalCount ||
     0;
 
@@ -386,45 +355,69 @@ const BusinessListingPage = ({ getcategory }) => {
     }
 
     setsearchSelectedCity(value);
-
-    // Find city from current district's cities or all cities
     const cityList = selectedDistrictId
       ? cities[selectedDistrictId] || []
       : Object.values(cities).flat();
-    const selectedCityObj = cityList.find((city) => city.id === Number(value));
+    // City ID is a string, not a number
+    const selectedCityObj = cityList.find((city) => city.id === value);
     setSelectedCity(selectedCityObj?.name || null);
   };
 
   const handleSearch = () => {
-    setCurrentPage(1); // Reset to first page
+    // Resolve city name from searchSelectedCity ID
+    const cityList = selectedDistrictId
+      ? cities[selectedDistrictId] || []
+      : Object.values(cities).flat();
+    // City ID is a string, not a number
+    const selectedCityObj = cityList.find(
+      (city) => city.id === searchSelectedCity
+    );
+    const cityName = selectedCityObj?.name || null;
 
-    if (searchSelectedCity && selectedCity) {
-      // Search by city
-      const query = GET_BUSINESS_BY_CITY;
-      const variables = {
-        city: selectedCity,
-        limit,
-        offSet: 0,
-        filter: getFilterVariables().filter,
-        sort: getFilterVariables().sort,
-      };
-      runQuery(query, variables);
-    } else if (selectedDistrict && !searchSelectedCity) {
-      // Search by district only
-      const query = GET_BUSINESS_BY_DISTRICT;
-      const variables = {
-        district: selectedDistrict,
-        limit,
-        offSet: 0,
-        filter: getFilterVariables().filter,
-        sort: getFilterVariables().sort,
-      };
-      runQuery(query, variables);
-    } else {
-      // No district/city selected, fetch all
-      const variables = getFilterVariables();
-      runQuery(GET_ALL_BUSINESSES, variables);
-    }
+    // Reset to first page
+    setCurrentPage(1);
+
+    // Build filter variables with the resolved city name
+    const sanitizeRange = (range) => {
+      if (!Array.isArray(range)) return null;
+      const [min, max] = range;
+      const hasMin = min !== null && min !== "" && min !== undefined;
+      const hasMax = max !== null && max !== "" && max !== undefined;
+      if (!hasMin && !hasMax) return null;
+      return [hasMin ? Number(min) : null, hasMax ? Number(max) : null];
+    };
+
+    const sanitizeSingle = (val) =>
+      val != null &&
+      val !== "" &&
+      val !== t("Select City") &&
+      val !== t("Select District")
+        ? val
+        : null;
+
+    const filterVars = {
+      limit,
+      offSet: 0,
+      filter: {
+        city: cityName, // Use resolved city name
+        district: sanitizeSingle(selectedDistrict),
+        employeesRange: sanitizeRange(employeesRange),
+        operationalYearRange: sanitizeRange(operationalYearRange),
+        hasAssets: hasAssets !== null ? hasAssets : null,
+        priceRange: sanitizeRange(priceRange),
+        profitMargenRange: sanitizeRange(profitMargenRange),
+        profitRange: profit || sanitizeRange(profitRange),
+        revenueRange: revenue || sanitizeRange(revenueRange),
+        multiple: multipleStep !== null ? Number(multipleStep) : null,
+      },
+      sort:
+        sortOrder !== null
+          ? { price: sortOrder === "Low to High" ? "ASC" : "DESC" }
+          : null,
+    };
+
+    // Run the query immediately with resolved city
+    runQuery(GET_ALL_BUSINESSES, filterVars);
   };
 
   return (
