@@ -9,7 +9,11 @@ import {
   Button,
 } from "antd";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { WhatsAppOutlined } from "@ant-design/icons";
+import {
+  PhoneFilled,
+  PhoneOutlined,
+  WhatsAppOutlined,
+} from "@ant-design/icons";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
@@ -90,7 +94,11 @@ const Footer = () => {
                 )}
               </Text>
               <Flex gap={20}>
-                <Link to="#" target="_blank" rel="noopener noreferrer">
+                <Link
+                  to="https://telegram.org"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Image
                     src="/assets/icons/telegram.png"
                     width={"23px"}
@@ -98,7 +106,11 @@ const Footer = () => {
                     preview={false}
                   />
                 </Link>
-                <Link to="#" target="_blank" rel="noopener noreferrer">
+                <Link
+                  to="https://instagram.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <Image
                     src="/assets/icons/instagram.png"
                     width={"23px"}
@@ -106,7 +118,11 @@ const Footer = () => {
                     preview={false}
                   />
                 </Link>
-                <Link to="#" target="_blank" className="text-white">
+                <Link
+                  to="https://wa.me/+966507710632"
+                  target="_blank"
+                  className="text-white"
+                >
                   <WhatsAppOutlined className="fs-23" />
                 </Link>
               </Flex>
@@ -155,10 +171,10 @@ const Footer = () => {
               </Text>
               <Flex>
                 {userId ? (
-                  <NavLink to={"tel:1233242442"} className="text-white">
+                  <NavLink to={"tel:+966507710632"} className="text-white">
                     <Flex gap={5} align="center">
-                      <WhatsAppOutlined className="fs-18" />
-                      12345667775
+                      <PhoneOutlined className="fs-18" />
+                      +966 50 771 0632
                     </Flex>
                   </NavLink>
                 ) : (
