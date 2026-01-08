@@ -34,7 +34,6 @@ import {
   NAVNOTIFICATION,
   NOTIFICATION,
   GET_CATEGORIES,
-  ME,
 } from "../../../graphql/query";
 import { client } from "../../../config/apolloClient";
 import { useTranslation } from "react-i18next";
@@ -139,7 +138,6 @@ const Navbar = ({ setGetCategory }) => {
   const [getNavNotification, { data: navNotificationsData }] =
     useLazyQuery(NAVNOTIFICATION);
   const [getNotification] = useLazyQuery(NOTIFICATION);
-  const [getUserDetails] = useLazyQuery(ME);
   const processedVerificationNotificationsRef = useRef(new Set());
 
   const loadNotifications = useCallback(
@@ -202,8 +200,9 @@ const Navbar = ({ setGetCategory }) => {
 
   const [markNotificationAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
   const [logoutMutation, { loading: logoutLoading }] = useMutation(LOGOUT);
+
   useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
-    onSubscriptionData: async ({ subscriptionData }) => {
+    onSubscriptionData: ({ subscriptionData }) => {
       const newNotif = subscriptionData.data?.newNotification;
 
       // Read current userId from cookies to avoid using a stale closure
@@ -234,37 +233,8 @@ const Navbar = ({ setGetCategory }) => {
         ) {
           processedVerificationNotificationsRef.current.add(newNotif.id);
 
-          try {
-            // Refetch both user queries to get updated status
-            const [userDetailsResult, navUserResult] = await Promise.all([
-              getUserDetails({
-                variables: { getUserDetailsId: currentUserId },
-                fetchPolicy: "network-only",
-              }),
-              getUser({
-                variables: { getNavUserId: currentUserId },
-                fetchPolicy: "network-only",
-              }),
-            ]);
-
-            const newStatus =
-              userDetailsResult.data?.getUserDetails?.status ||
-              navUserResult.data?.getNavUser?.status;
-
-            if (newStatus) {
-              Cookies.set("userStatus", newStatus, { expires: 7 });
-
-              messageApi.success(
-                t("Your account has been verified successfully!")
-              );
-
-              setTimeout(() => {
-                window.location.reload();
-              }, 1500);
-            }
-          } catch (error) {
-            console.error("Failed to fetch updated user status:", error);
-          }
+          messageApi.success(t("Your account has been verified successfully!"));
+          Cookies.set("userStatus", "verified", { expires: 7, path: "/" });
         }
       }
     },
@@ -320,15 +290,9 @@ const Navbar = ({ setGetCategory }) => {
 
   useEffect(() => {
     if (me?.getNavUser) {
+      // Only update user state, NOT the cookie
+      // Cookie updates are handled ONLY via subscription when account is verified
       setUser(me.getNavUser);
-
-      // Update cookies with the latest user status
-      if (me.getNavUser.status) {
-        const currentStatus = Cookies.get("userStatus");
-        if (currentStatus !== me.getNavUser.status) {
-          Cookies.set("userStatus", me.getNavUser.status, { expires: 7 });
-        }
-      }
     }
   }, [me]);
 
