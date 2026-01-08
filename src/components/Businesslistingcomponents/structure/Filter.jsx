@@ -1,7 +1,7 @@
 import { Card, Checkbox, Col, Collapse, Flex, Input, Radio, Row, Typography } from 'antd';
 import { LineOutlined } from '@ant-design/icons';
 import { teamsizeFilter, yearOper } from '../../../data';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect, useMemo } from 'react';
 import { CustomProgressBar } from '../../ui';
 import { useTranslation } from 'react-i18next';
@@ -19,6 +19,7 @@ const Filter = ({
 }) => {
     const { t, i18n } = useTranslation();
     const { formatNumber } = useFormatNumber();
+    const navigate = useNavigate();
     const isArabic = i18n.language === 'ar';
     const [activeStep, setActiveStep] = useState(null);
     const [isMobile, setIsMobile] = useState(false);
@@ -295,23 +296,27 @@ const Filter = ({
         },
     ];
 
+    const handleCategoryClick = (cat) => {
+        setSelectedCategory(cat.title);
+        setActiveCategoryId(cat.id);
+        // Use replace to avoid duplicate history entries when already on a category URL
+        navigate(`/businesslisting?category=${encodeURIComponent(cat.title)}`, { replace: true });
+    };
+
     const categoryItems = [
         {
             key: '1',
             label: <Title level={5} className='m-0 py-2 fw-500'>{t('Categories')}</Title>,
             children: <Flex vertical>
                 {categories?.map((cat) => (
-                    <Link 
-                        to={`/businesslisting?category=${encodeURIComponent(cat.title)}`} 
+                    <div 
                         className={`cate-filter ${activeCategoryId === cat.id ? 'active' : ''}`}
                         key={cat.id} 
-                        onClick={() => {
-                            setSelectedCategory(cat.title);
-                            setActiveCategoryId(cat.id);
-                        }}
+                        onClick={() => handleCategoryClick(cat)}
+                        style={{ cursor: 'pointer' }}
                     >
                         {isArabic ? cat.arabicTitle : cat.title}
-                    </Link>
+                    </div>
                 ))}
             </Flex>
         }

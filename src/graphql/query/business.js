@@ -165,12 +165,16 @@ const GET_BUSINESS_BY_CATEGORY = gql`
     $limit: Int
     $offSet: Int
     $sort: BusinessSortInput
+    $filter: BusinessFilterInput
+    $search: String
   ) {
     getAllBusinessesByCategory(
       category: $category
       limit: $limit
       offSet: $offSet
       sort: $sort
+      filter: $filter
+      search: $search
     ) {
       businesses {
         id
@@ -308,12 +312,16 @@ const GET_BUSINESS_BY_REVENUE = gql`
     $limit: Int
     $offSet: Int
     $sort: BusinessSortInput
+    $filter: BusinessFilterInput
+    $search: String
   ) {
     getAllBusinessesByRevenue(
       revenue: $revenue
       limit: $limit
       offSet: $offSet
       sort: $sort
+      filter: $filter
+      search: $search
     ) {
       businesses {
         id

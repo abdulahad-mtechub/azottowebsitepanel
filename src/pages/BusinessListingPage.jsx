@@ -276,39 +276,42 @@ const BusinessListingPage = ({ getcategory }) => {
   };
   // 🟩 Fetch correct query based on search params
   useEffect(() => {
-    let variables = getFilterVariables();
+    const filterVars = getFilterVariables();
+    let variables = filterVars;
     let query = GET_ALL_BUSINESSES;
     if (categoryParam || selectedCategory) {
       query = GET_BUSINESS_BY_CATEGORY;
       variables = {
         category: selectedCategory || categoryParam,
         limit,
-        offSet: 0,
-        sort: getFilterVariables().sort,
+        offSet: (currentPage - 1) * limit,
+        sort: filterVars.sort,
+        filter: filterVars.filter,
       };
     } else if (cityParam) {
       query = GET_BUSINESS_BY_CITY;
       variables = {
         city: cityParam,
         limit,
-        offSet: 0,
-        sort: getFilterVariables().sort,
+        offSet: (currentPage - 1) * limit,
+        sort: filterVars.sort,
       };
     } else if (revenue) {
       query = GET_BUSINESS_BY_REVENUE;
       variables = {
         revenue,
         limit,
-        offSet: 0,
-        sort: getFilterVariables().sort,
+        offSet: (currentPage - 1) * limit,
+        sort: filterVars.sort,
+        filter: filterVars.filter,
       };
     } else if (profit) {
       query = GET_BUSINESS_BY_PROFIT;
       variables = {
         profit,
         limit,
-        offSet: 0,
-        sort: getFilterVariables().sort,
+        offSet: (currentPage - 1) * limit,
+        sort: filterVars.sort,
       };
     } else if (employeesRange || operationalYearRange) {
       query = GET_ALL_BUSINESSES;
