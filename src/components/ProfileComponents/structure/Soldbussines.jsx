@@ -6,9 +6,7 @@ import {
   Divider,
   Flex,
   Image,
-  Pagination,
   Row,
-  Select,
   Typography,
   Spin,
   Space,
@@ -19,6 +17,7 @@ import { GETSELLERSOLDBUSINESS } from "../../../graphql/query";
 import { useTranslation } from "react-i18next";
 import { truncateChars } from "../../../utils";
 import { useFormatNumber } from "../../../hooks";
+import { CustomPagination } from "../../ui";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -236,53 +235,20 @@ const Soldbussines = () => {
             </Col>
           ))}
 
-          {sellerSoldBusinesses?.getAllSellerSoldBusinesses?.totalCount > 0 ? (
-            <Col span={24} className="mt-3">
-              <Row justify="space-between" align="middle">
-                <Col span={6}>
-                  <Flex gap={5} align="center">
-                    <Text>{t("Rows Per Page")}:</Text>
-                    <Select
-                      className="select-filter"
-                      value={limit}
-                      onChange={(value) => {
-                        setLimit(value);
-                        setCurrentPage(1);
-                      }}
-                      options={[6, 10, 20, 50].map((v) => ({
-                        value: v,
-                        label: formatNumber(v),
-                      }))}
-                    />
-                  </Flex>
-                </Col>
-                <Col
-                  lg={{ span: 12 }}
-                  md={{ span: 12 }}
-                  sm={{ span: 24 }}
-                  xs={{ span: 24 }}
-                >
-                  <Pagination
-                    className="pagination"
-                    align="end"
-                    current={currentPage}
-                    pageSize={limit}
-                    total={
-                      sellerSoldBusinesses?.getAllSellerSoldBusinesses
-                        ?.totalCount || 0
-                    }
-                    onChange={(page) => setCurrentPage(page)}
-                    itemRender={(page, type, originalElement) => {
-                      if (type === "page") {
-                        return <a>{formatNumber(page)}</a>;
-                      }
-                      return originalElement;
-                    }}
-                  />
-                </Col>
-              </Row>
-            </Col>
-          ) : (
+          {sellerSoldBusinesses?.getAllSellerSoldBusinesses?.totalCount > 0 && (
+            <CustomPagination
+              totalItems={
+                sellerSoldBusinesses?.getAllSellerSoldBusinesses?.totalCount ||
+                0
+              }
+              currentPage={currentPage}
+              setCurrentPage={setCurrentPage}
+              limit={limit}
+              setLimit={setLimit}
+            />
+          )}
+          {sellerSoldBusinesses?.getAllSellerSoldBusinesses?.totalCount ===
+            0 && (
             <Col span={24} className="text-center mt-4">
               <Text>{t("No Business Found")}</Text>
             </Col>
