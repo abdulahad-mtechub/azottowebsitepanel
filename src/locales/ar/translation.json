@@ -1176,5 +1176,7 @@
   "Failed to reset password. Please try again.": "فشل إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى.",
   "Enter the 4 digit OTP code sent to your email": "أدخل رمز التحقق المكون من 4 أرقام المرسل إلى بريدك الإلكتروني",
   "Jusoor's Futures": "مستقبل جسور",
-  "Old password is incorrect": "كلمة المرور القديمة غير صحيحة"
+  "Old password is incorrect": "كلمة المرور القديمة غير صحيحة",
+  "No Data Found": "لم يتم العثور على بيانات",
+  "No businesses match your search criteria. Try adjusting your filters.": "لا توجد أعمال تطابق معايير البحث الخاصة بك. حاول تعديل عوامل التصفية الخاصة بك."
 }
