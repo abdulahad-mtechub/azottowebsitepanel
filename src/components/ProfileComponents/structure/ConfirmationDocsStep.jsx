@@ -187,6 +187,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                 setSellerNote(e.target.value);
               }}
               defaultValue={sellerNote}
+              style={{ marginBottom: "8px" }}
             />
           </Flex>
         ),
@@ -255,6 +256,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
                 setSellerNote(e.target.value);
               }}
               defaultValue={sellerNote}
+              style={{ marginBottom: "8px" }}
             />
           </Flex>
         ),
