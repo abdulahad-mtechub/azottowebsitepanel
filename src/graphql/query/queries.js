@@ -84,6 +84,15 @@ const GETCUSTOMERROLE = gql`
     }
   }
 `;
+
+const GET_SETTING = gql`
+  query GetSetting {
+    getSetting {
+      commissionRate
+    }
+  }
+`;
+
 export {
   GETARTICLES,
   GETARTICLE,
@@ -92,4 +101,5 @@ export {
   GETENDATERMS,
   GETPRIVACYPOLICY,
   GETCUSTOMERROLE,
+  GET_SETTING,
 };
