@@ -83,6 +83,7 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
             id: inprogressdeal?.key,
             isPaymentVedifiedSeller: null,
             status: "SELLER_PAYMENT_VERIFICATION_PENDING",
+            documentUploaded: true,
           },
         },
       });
