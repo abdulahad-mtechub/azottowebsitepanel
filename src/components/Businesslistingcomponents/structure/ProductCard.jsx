@@ -5,9 +5,7 @@ import {
   Divider,
   Flex,
   Image,
-  Pagination,
   Row,
-  Select,
   Typography,
   Spin,
   Tooltip,
@@ -96,27 +94,23 @@ const ProductCard = ({
   };
   if (isLoading) {
     return (
-      <div
-        style={{
-          width: "100%",
-          minHeight: "300px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
-        }}
+      <Flex
+        justify="center"
+        align="center"
+        style={{ width: "100%", minHeight: "400px" }}
       >
         <Spin size="large" />
-      </div>
+      </Flex>
     );
   }
-  if (!isLoading && (!exploreData || exploreData.length === 0)) {
+
+  if (!exploreData || exploreData.length === 0) {
     return (
       <Flex
         vertical
         justify="center"
         align="center"
-        style={{ minHeight: "250px" }}
+        style={{ width: "100%", minHeight: "400px", padding: "40px 0" }}
       >
         <img
           src="/assets/icons/info-outline.png"
