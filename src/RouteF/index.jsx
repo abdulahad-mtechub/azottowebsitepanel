@@ -28,7 +28,7 @@ const AppRoutes = () => {
   const [showButton, setShowButton] = useState(false);
   const [getcategory, setGetCategory] = useState(null);
 
-  const hideNavbarFooterOn = ["/login", "/signup"]; // Add more paths here if needed
+  const hideNavbarFooterOn = ["/login", "/signup", "/forgotpass"]; // Add more paths here if needed
   const shouldHideNavbarFooter = hideNavbarFooterOn.includes(location.pathname);
   const hidescrolltotop = location.pathname.startsWith("/singleviewlisting/");
 
@@ -46,73 +46,83 @@ const AppRoutes = () => {
   }, []);
 
   return (
-    <>
+    <div
+      style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+    >
       <ScrollTop />
       {!shouldHideNavbarFooter && <Navbar setGetCategory={setGetCategory} />}
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route
-          path="/businesslisting"
-          element={<BusinessListingPage getcategory={getcategory} />}
-        />
-        <Route path="/singleviewlisting/:id" element={<SingleViewlisting />} />
-        <Route
-          path="/singlebusinessview/:id"
-          element={<Singlebusinessview />}
-        />
-        <Route path="/faq" element={<Faqs />} />
-        <Route path="/termofuse" element={<Termofuse />} />
-        <Route path="/article" element={<Article />} />
-        <Route path="/articlesingleview/:id" element={<ArticleSingleView />} />
-        <Route path="/about" element={<Aboutus />} />
+      <div style={{ flex: 1 }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route
+            path="/businesslisting"
+            element={<BusinessListingPage getcategory={getcategory} />}
+          />
+          <Route
+            path="/singleviewlisting/:id"
+            element={<SingleViewlisting />}
+          />
+          <Route
+            path="/singlebusinessview/:id"
+            element={<Singlebusinessview />}
+          />
+          <Route path="/faq" element={<Faqs />} />
+          <Route path="/termofuse" element={<Termofuse />} />
+          <Route path="/article" element={<Article />} />
+          <Route
+            path="/articlesingleview/:id"
+            element={<ArticleSingleView />}
+          />
+          <Route path="/about" element={<Aboutus />} />
 
-        {/* Public routes - redirect to home if already logged in */}
-        <Route
-          path="/login"
-          element={
-            <PublicRoute>
-              <LoginPage />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/signup"
-          element={
-            <PublicRoute>
-              <SignupPage />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/forgotpass"
-          element={
-            <PublicRoute>
-              <ForgotPassword />
-            </PublicRoute>
-          }
-        />
+          {/* Public routes - redirect to home if already logged in */}
+          <Route
+            path="/login"
+            element={
+              <PublicRoute>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/signup"
+            element={
+              <PublicRoute>
+                <SignupPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/forgotpass"
+            element={
+              <PublicRoute>
+                <ForgotPassword />
+              </PublicRoute>
+            }
+          />
 
-        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-        <Route path="/endapage" element={<EndaPage />} />
+          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+          <Route path="/endapage" element={<EndaPage />} />
 
-        <Route
-          path="/profiledashboard"
-          element={
-            <ProtectedRoute>
-              <ProfileDashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/sellbusinesscreate"
-          element={
-            <ProtectedRoute>
-              <SellBusinessCreate />
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+          <Route
+            path="/profiledashboard"
+            element={
+              <ProtectedRoute>
+                <ProfileDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sellbusinesscreate"
+            element={
+              <ProtectedRoute>
+                <SellBusinessCreate />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </div>
 
       {!shouldHideNavbarFooter && <Footer />}
       {showButton && !shouldHideNavbarFooter && !hidescrolltotop && (
@@ -122,7 +132,7 @@ const AppRoutes = () => {
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -14,17 +14,18 @@ import { MyInput } from "../components";
 import { NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined, DownOutlined } from "@ant-design/icons";
 import { useState } from "react";
-import { t } from "i18next";
 import { useMutation } from "@apollo/client";
 import {
   REQUEST_PASSWORD_RESET,
   VERIFY_PASSWORD_RESET_OTP,
   RESET_PASSWORD_WITH_TOKEN,
 } from "../graphql/mutation";
+import { useTranslation } from "react-i18next";
 
 const { Title, Text, Paragraph } = Typography;
 
 const ForgotPassword = () => {
+  const { t } = useTranslation();
   const isArabic = localStorage.getItem("lang") === "ar";
   const [form] = Form.useForm();
   const [requestState, setRequestState] = useState("request");
@@ -96,15 +97,20 @@ const ForgotPassword = () => {
           t("OTP verified successfully. You may now reset your password.")
         );
       } else {
-        messageApi.error(
-          data?.verifyPasswordResetOTP?.message ||
-            t("Invalid or expired OTP. Please try again.")
-        );
+        const errorMsg = data?.verifyPasswordResetOTP?.message;
+        if (errorMsg) {
+          messageApi.error(t(errorMsg));
+        } else {
+          messageApi.error(t("Invalid or expired OTP. Please try again."));
+        }
       }
     } catch (error) {
-      messageApi.error(
-        error.message || t("Invalid or expired OTP. Please try again.")
-      );
+      const errorMsg = error?.graphQLErrors?.[0]?.message || error?.message;
+      if (errorMsg) {
+        messageApi.error(t(errorMsg));
+      } else {
+        messageApi.error(t("Invalid or expired OTP. Please try again."));
+      }
     }
   };
 
