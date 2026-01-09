@@ -198,12 +198,21 @@ const SignupPage = () => {
         setOtpVerified(true);
         messageApi.success(t("Email verified successfully"));
       } else {
-        messageApi.error(data?.verifyEmailOTP?.message || t("Invalid OTP"));
+        const errorMsg = data?.verifyEmailOTP?.message;
+        if (errorMsg) {
+          messageApi.error(t(errorMsg));
+        } else {
+          messageApi.error(t("Invalid OTP"));
+        }
       }
     } catch (err) {
       const msg = err?.graphQLErrors?.[0]?.message || err?.message || "";
       console.error("❌ Verify OTP Error:", msg);
-      messageApi.error(msg || t("Failed to verify OTP. Please try again."));
+      if (msg) {
+        messageApi.error(t(msg));
+      } else {
+        messageApi.error(t("Failed to verify OTP. Please try again."));
+      }
     } finally {
       setVerifyingOtp(false);
     }
