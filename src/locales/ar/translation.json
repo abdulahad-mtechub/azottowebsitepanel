@@ -39,7 +39,6 @@
   "Please complete the current step before proceeding": "يرجى إكمال الخطوة الحالية قبل المتابعة",
   "Invalid email or password": "بريد إلكتروني أو كلمة مرور غير صحيحة",
   "Login failed. Please try again.": "فشل تسجيل الدخول. يرجى المحاولة مرة أخرى",
-  "Login successful!": "تم تسجيل الدخول بنجاح!",
   "Last 6 Months": "آخر 6 أشهر",
   "Last Year": "آخر 12 شهر",
   "6 months": "6 أشهر",
@@ -1046,7 +1045,6 @@
   "Login failed": "فشل تسجيل الدخول",
   "Invalid password": "كلمة مرور غير صالحة",
   "User not found": "المستخدم غير موجود",
-  "Something went wrong. Please try again.": "حدث خطأ ما. يرجى المحاولة مرة أخرى.",
   "Your account has been activated!": "تم تفعيل حسابك!",
   "Business Details": "بيانات الشركة",
   "Financial & Growth Information": "البيانات المالية",
@@ -1155,14 +1153,12 @@
   "Alaqeeq": "العقيق",
   "Reset Password": "إعادة تعيين كلمة المرور",
   "Verify OTP": "التحقق من رمز OTP",
-  "Send OTP": "إرسال رمز OTP",
   "Enter the 6 digit OTP code sent to your email": "أدخل رمز التحقق المكون من 6 أرقام المرسل إلى بريدك الإلكتروني",
   "Verify": "التحقق",
   "OTP sent to your email": "تم إرسال رمز التحقق إلى بريدك",
   "OTP has been sent to your email address.": "تم إرسال رمز التحقق إلى بريدك الإلكتروني.",
   "OTP has been resent to your email address.": "تم إعادة إرسال رمز التحقق إلى بريدك الإلكتروني.",
   "OTP verified successfully. You may now reset your password.": "تم التحقق من رمز OTP بنجاح. يمكنك الآن إعادة تعيين كلمة المرور.",
-  "Invalid OTP": "رمز OTP غير صحيح",
   "Invalid OTP.": "رمز OTP غير صحيح.",
   "Please enter a valid OTP": "يرجى إدخال رمز OTP صحيح",
   "Invalid OTP": "رمز OTP غير صحيح",
@@ -1179,5 +1175,6 @@
   "Old password is incorrect": "كلمة المرور القديمة غير صحيحة",
   "No Data Found": "لم يتم العثور على بيانات",
   "No businesses match your search criteria. Try adjusting your filters.": "لا توجد أعمال تطابق معايير البحث الخاصة بك. حاول تعديل عوامل التصفية الخاصة بك.",
-  "View Business Listings": "عرض قوائم الأعمال"
+  "View Business Listings": "عرض قوائم الأعمال",
+  "No notifications yet.": "لا توجد إشعارات حتى الآن."
 }
