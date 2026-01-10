@@ -17,7 +17,7 @@ import {
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
-import { GET_CATEGORIES } from "../../../graphql";
+import { GET_CATEGORIES, GET_SETTING } from "../../../graphql";
 
 const { Title, Text } = Typography;
 const Footer = () => {
@@ -27,6 +27,9 @@ const Footer = () => {
   const isArabic = i18n.language === "ar";
 
   const { data: categoryData } = useQuery(GET_CATEGORIES);
+  const { data: settingData } = useQuery(GET_SETTING);
+  const settings = settingData?.getSetting;
+
   const categories =
     categoryData?.getAllCategories?.categories?.slice(0, 5)?.map((cat) => ({
       id: cat.id,
@@ -95,7 +98,7 @@ const Footer = () => {
               </Text>
               <Flex gap={20}>
                 <Link
-                  to="https://telegram.org"
+                  to={settings?.faceBook || "https://telegram.org"}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -107,7 +110,7 @@ const Footer = () => {
                   />
                 </Link>
                 <Link
-                  to="https://instagram.com"
+                  to={settings?.instagram || "https://instagram.com"}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -119,7 +122,13 @@ const Footer = () => {
                   />
                 </Link>
                 <Link
-                  to="https://wa.me/+966507710632"
+                  to={
+                    settings?.whatsApp
+                      ? settings.whatsApp.startsWith("http")
+                        ? settings.whatsApp
+                        : `https://wa.me/${settings.whatsApp}`
+                      : "https://wa.me/+966507710632"
+                  }
                   target="_blank"
                   className="text-white"
                 >
