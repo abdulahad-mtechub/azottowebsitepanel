@@ -53,6 +53,17 @@ const Navbar = ({ setGetCategory }) => {
   const [isLoggedIn, setisLoggedIn] = useState(!!userId);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [browseOpen, setBrowseOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1200);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const browseHoverTimeoutRef = useRef(null);
   const [isshow, setIsShow] = useState(!!userId);
   const [user, setUser] = useState(null);
@@ -662,7 +673,7 @@ const Navbar = ({ setGetCategory }) => {
             )}
           </div>
         ) : (
-          <Text className="fs-13 text-gray">No notifications yet.</Text>
+          <Text className="fs-13 text-gray">{t("No notifications yet.")}</Text>
         )}
       </Card>
     );
@@ -733,161 +744,133 @@ const Navbar = ({ setGetCategory }) => {
     <>
       {contextHolder}
       <div className="gen-navbar-container relative">
-        <div className="w-100">
-          <div className="gen-navbar-small">
-            <div className="gen-navbar-inner">
-              <div className="gen-navbar-left">
-                <Link to={"/"}>
-                  <img
-                    src={"/assets/images/logo.webp"}
-                    width={"100%"}
-                    alt="jusoor-logo"
-                    fetchPriority="high"
-                  />
-                </Link>
-              </div>
-              <div className="gen-navbar-right">
-                <Flex align="center" gap={10}>
-                  <Dropdown menu={{ items: lang }} trigger={["click"]}>
-                    <Button
-                      onClick={(e) => e.preventDefault()}
-                      className="bg-transparent btn-outline btn p-2 border-white"
-                      aria-labelledby="Arrow down icon"
-                    >
-                      <Space align="center">
-                        <Image
-                          src={selectedLang.icon}
-                          width={20}
-                          preview={false}
-                          // alt="notification icon"
-                          alt={selectedLang.alt}
-                          className="up"
-                        />
-                        <Text className="text-white fs-13">
-                          {selectedLang?.label}
-                        </Text>
-                        <DownOutlined className="text-white" />
-                      </Space>
-                    </Button>
-                  </Dropdown>
-                  <Button
-                    className="bg-transparent border-0 p-0"
-                    onClick={() => setVisible(true)}
-                  >
+        {isMobile ? (
+          <div className="w-100">
+            <div className="gen-navbar-small">
+              <div className="gen-navbar-inner">
+                <div className="gen-navbar-left">
+                  <Link to={"/"}>
                     <img
-                      src="/assets/icons/menu-icon.png"
-                      alt="hamburger icon"
-                      width={30}
+                      src={"/assets/images/logo.webp"}
+                      width={"100%"}
+                      alt="jusoor-logo"
                       fetchPriority="high"
                     />
-                  </Button>
-                  {isshow && (
-                    <Popover
-                      content={dropdownContent}
-                      trigger="click"
-                      placement="bottomRight"
-                      open={dropdownOpen}
-                      onOpenChange={handleDropdownChange}
-                      getPopupContainer={() => document.body}
-                    >
-                      <Badge
-                        size="small"
-                        count={unreadCount}
-                        overflowCount={99}
+                  </Link>
+                </div>
+                <div className="gen-navbar-right">
+                  <Flex align="center" gap={10}>
+                    <Dropdown menu={{ items: lang }} trigger={["click"]}>
+                      <Button
+                        onClick={(e) => e.preventDefault()}
+                        className="bg-transparent btn-outline btn p-2 border-white"
+                        aria-labelledby="Arrow down icon"
                       >
-                        <Button
-                          aria-labelledby="Notification"
-                          className="bg-transparent border-0 p-0"
-                        >
+                        <Space align="center">
                           <Image
-                            src="/assets/icons/notification.png"
-                            width={"28px"}
+                            src={selectedLang.icon}
+                            width={20}
                             preview={false}
-                            alt="notification icon"
+                            // alt="notification icon"
+                            alt={selectedLang.alt}
                             className="up"
                           />
-                        </Button>
-                      </Badge>
-                    </Popover>
-                  )}
-                </Flex>
+                          <Text className="text-white fs-13">
+                            {selectedLang?.label}
+                          </Text>
+                          <DownOutlined className="text-white" />
+                        </Space>
+                      </Button>
+                    </Dropdown>
+                    <Button
+                      className="bg-transparent border-0 p-0"
+                      onClick={() => setVisible(true)}
+                    >
+                      <img
+                        src="/assets/icons/menu-icon.png"
+                        alt="hamburger icon"
+                        width={30}
+                        fetchPriority="high"
+                      />
+                    </Button>
+                    {isshow && isMobile && (
+                      <Popover
+                        content={dropdownContent}
+                        trigger="click"
+                        placement="bottomRight"
+                        open={dropdownOpen}
+                        onOpenChange={handleDropdownChange}
+                        getPopupContainer={() => document.body}
+                      >
+                        <Badge
+                          size="small"
+                          count={unreadCount}
+                          overflowCount={99}
+                        >
+                          <Button
+                            aria-labelledby="Notification"
+                            className="bg-transparent border-0 p-0"
+                          >
+                            <Image
+                              src="/assets/icons/notification.png"
+                              width={"28px"}
+                              preview={false}
+                              alt="notification icon"
+                              className="up"
+                            />
+                          </Button>
+                        </Badge>
+                      </Popover>
+                    )}
+                  </Flex>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className={"gen-navbar"}>
-          <div className="gen-navbar-inner container">
-            <Flex gap={20} align="center">
-              <div className="gen-navbar-left">
-                <Link to={"/"}>
-                  <img
-                    src="/assets/images/logo.webp"
-                    width={"100%"}
-                    className="one"
-                    alt="jusoor-logo"
-                    fetchPriority="high"
-                  />
-                </Link>
-              </div>
-              <ul className="nav-list">
-                <li
-                  onMouseEnter={handleBrowseEnter}
-                  onMouseLeave={handleBrowseLeave}
-                  className={browseOpen ? "open" : ""}
-                >
-                  <NavLink to={""}>
-                    <Flex gap={10}>
-                      <Text className="text-white nav-item">
-                        {t("Browse Businesses")}
-                      </Text>
-                      <DownOutlined className="fs-12 text-white" />
-                    </Flex>
-                  </NavLink>
-
-                  <ul
-                    className="dropdown"
-                    style={{ display: browseOpen ? "block" : undefined }}
+        ) : (
+          <div className={"gen-navbar"}>
+            <div className="gen-navbar-inner container">
+              <Flex gap={20} align="center">
+                <div className="gen-navbar-left">
+                  <Link to={"/"}>
+                    <img
+                      src="/assets/images/logo.webp"
+                      width={"100%"}
+                      className="one"
+                      alt="jusoor-logo"
+                      fetchPriority="high"
+                    />
+                  </Link>
+                </div>
+                <ul className="nav-list">
+                  <li
+                    onMouseEnter={handleBrowseEnter}
+                    onMouseLeave={handleBrowseLeave}
+                    className={browseOpen ? "open" : ""}
                   >
-                    <li className="drop-item">
-                      <NavLink
-                        to={"/businesslisting"}
-                        className="drop-link"
-                        onClick={() => setGetCategory(null)}
-                      >
-                        <Flex gap={10} align="center">
-                          <Image
-                            src={"/assets/icons/browseall.png"}
-                            alt="browse all icon"
-                            width={30}
-                            className="pt-1s"
-                            preview={false}
-                          />
-                          <Flex
-                            justify="space-between"
-                            gap={50}
-                            align="flex-start"
-                            className="w-100"
-                          >
-                            <Title level={5} className="m-0 fw-500">
-                              {t("Browse All")}
-                            </Title>
-                            <ArrowRightOutlined className="arr text-brand pt-1s" />
-                          </Flex>
-                        </Flex>
-                      </NavLink>
-                    </li>
-                    {businessmenuData?.map((list, index) => (
-                      <li className="drop-item" key={index}>
+                    <NavLink to={""}>
+                      <Flex gap={10}>
+                        <Text className="text-white nav-item">
+                          {t("Browse Businesses")}
+                        </Text>
+                        <DownOutlined className="fs-12 text-white" />
+                      </Flex>
+                    </NavLink>
+
+                    <ul
+                      className="dropdown"
+                      style={{ display: browseOpen ? "block" : undefined }}
+                    >
+                      <li className="drop-item">
                         <NavLink
-                          onClick={(e) => {
-                            e.preventDefault();
-                          }}
+                          to={"/businesslisting"}
                           className="drop-link"
+                          onClick={() => setGetCategory(null)}
                         >
                           <Flex gap={10} align="center">
                             <Image
-                              src={list?.icon}
-                              alt="icon menu item"
+                              src={"/assets/icons/browseall.png"}
+                              alt="browse all icon"
                               width={30}
                               className="pt-1s"
                               preview={false}
@@ -899,22 +882,52 @@ const Navbar = ({ setGetCategory }) => {
                               className="w-100"
                             >
                               <Title level={5} className="m-0 fw-500">
-                                {list?.title}
+                                {t("Browse All")}
                               </Title>
                               <ArrowRightOutlined className="arr text-brand pt-1s" />
                             </Flex>
                           </Flex>
                         </NavLink>
-                        <div className="sub-dropdown">
-                          <Row gutter={[32, 32]}>
-                            {renderSubdropdownItems(list.subdropdown)}
-                          </Row>
-                        </div>
                       </li>
-                    ))}
-                  </ul>
-                </li>
-                {/* <li>
+                      {businessmenuData?.map((list, index) => (
+                        <li className="drop-item" key={index}>
+                          <NavLink
+                            onClick={(e) => {
+                              e.preventDefault();
+                            }}
+                            className="drop-link"
+                          >
+                            <Flex gap={10} align="center">
+                              <Image
+                                src={list?.icon}
+                                alt="icon menu item"
+                                width={30}
+                                className="pt-1s"
+                                preview={false}
+                              />
+                              <Flex
+                                justify="space-between"
+                                gap={50}
+                                align="flex-start"
+                                className="w-100"
+                              >
+                                <Title level={5} className="m-0 fw-500">
+                                  {list?.title}
+                                </Title>
+                                <ArrowRightOutlined className="arr text-brand pt-1s" />
+                              </Flex>
+                            </Flex>
+                          </NavLink>
+                          <div className="sub-dropdown">
+                            <Row gutter={[32, 32]}>
+                              {renderSubdropdownItems(list.subdropdown)}
+                            </Row>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+                  {/* <li>
                   <NavLink to={''}>
                     <Flex gap={10}>
                       <Text className={`nav-item
@@ -955,144 +968,149 @@ const Navbar = ({ setGetCategory }) => {
                     </Text>
                   </NavLink>
                 </li> */}
-                <li>
-                  <NavLink to="/about">
-                    <Text
-                      className={`nav-item ${
-                        location.pathname === "/about"
-                          ? "text-brand"
-                          : "text-white"
-                      }`}
-                    >
-                      {t("About Jusoor")}
-                    </Text>
-                  </NavLink>
-                </li>
-                <li>
-                  <NavLink to="/faq">
-                    <Text
-                      className={`nav-item ${
-                        location.pathname === "/faq"
-                          ? "text-brand"
-                          : "text-white"
-                      }`}
-                    >
-                      {t("FAQs")}
-                    </Text>
-                  </NavLink>
-                </li>
-              </ul>
-            </Flex>
-            <Flex gap={10} align="center">
-              <Dropdown menu={{ items: lang }} trigger={["click"]}>
-                <Button
-                  onClick={(e) => e.preventDefault()}
-                  className="bg-transparent btn-outline btn p-2 border-white"
-                  aria-label="language button"
-                >
-                  <Space align="center">
-                    <Image
-                      src={selectedLang.icon}
-                      width={20}
-                      preview={false}
-                      // alt="notification icon"
-                      alt={selectedLang.alt}
-                      className="up"
-                    />
-                    <Text className="text-white fs-13">
-                      {selectedLang?.label}
-                    </Text>
-                    <DownOutlined className="text-white" />
-                  </Space>
-                </Button>
-              </Dropdown>
-              {!isshow ? (
-                <Flex gap={5} justify="end">
+                  <li>
+                    <NavLink to="/about">
+                      <Text
+                        className={`nav-item ${
+                          location.pathname === "/about"
+                            ? "text-brand"
+                            : "text-white"
+                        }`}
+                      >
+                        {t("About Jusoor")}
+                      </Text>
+                    </NavLink>
+                  </li>
+                  <li>
+                    <NavLink to="/faq">
+                      <Text
+                        className={`nav-item ${
+                          location.pathname === "/faq"
+                            ? "text-brand"
+                            : "text-white"
+                        }`}
+                      >
+                        {t("FAQs")}
+                      </Text>
+                    </NavLink>
+                  </li>
+                </ul>
+              </Flex>
+              <Flex gap={10} align="center">
+                <Dropdown menu={{ items: lang }} trigger={["click"]}>
                   <Button
-                    aria-labelledby="Sign Up"
-                    className="btn btn-outline"
-                    onClick={() => navigate("/signup")}
+                    onClick={(e) => e.preventDefault()}
+                    className="bg-transparent btn-outline btn p-2 border-white"
+                    aria-label="language button"
                   >
-                    {t("Sign Up")}
+                    <Space align="center">
+                      <Image
+                        src={selectedLang.icon}
+                        width={20}
+                        preview={false}
+                        // alt="notification icon"
+                        alt={selectedLang.alt}
+                        className="up"
+                      />
+                      <Text className="text-white fs-13">
+                        {selectedLang?.label}
+                      </Text>
+                      <DownOutlined className="text-white" />
+                    </Space>
                   </Button>
-                  <Button
-                    aria-labelledby="Login"
-                    className="btn bg-brand"
-                    onClick={() => navigate("/login")}
-                  >
-                    {t("Sign In")}
-                  </Button>
-                </Flex>
-              ) : (
-                <Flex gap={10} align="center">
-                  <Tooltip
-                    title={
-                      isUserInactive
-                        ? t(
-                            "Account Verification Pending. Please contact support."
-                          )
-                        : ""
-                    }
-                    trigger={["hover", "click"]}
-                    placement="bottom"
-                  >
+                </Dropdown>
+                {!isshow ? (
+                  <Flex gap={5} justify="end">
                     <Button
-                      aria-labelledby="Sell a Business"
-                      className="btn bg-brand"
-                      onClick={() =>
-                        !isUserInactive && navigate("/sellbusinesscreate")
-                      }
-                      disabled={isUserInactive}
-                      style={{
-                        opacity: isUserInactive ? 0.6 : 1,
-                        cursor: isUserInactive ? "not-allowed" : "pointer",
-                      }}
+                      aria-labelledby="Sign Up"
+                      className="btn btn-outline"
+                      onClick={() => navigate("/signup")}
                     >
-                      <PlusOutlined /> {t("Sell a Business")}
+                      {t("Sign Up")}
                     </Button>
-                  </Tooltip>
-
-                  <Popover
-                    content={dropdownContent}
-                    trigger="click"
-                    placement="bottomRight"
-                    open={dropdownOpen}
-                    onOpenChange={handleDropdownChange}
-                    overlayClassName="notification-popover"
-                    getPopupContainer={() => document.body}
-                  >
-                    <Badge size="small" count={unreadCount} overflowCount={99}>
+                    <Button
+                      aria-labelledby="Login"
+                      className="btn bg-brand"
+                      onClick={() => navigate("/login")}
+                    >
+                      {t("Sign In")}
+                    </Button>
+                  </Flex>
+                ) : (
+                  <Flex gap={10} align="center">
+                    <Tooltip
+                      title={
+                        isUserInactive
+                          ? t(
+                              "Account Verification Pending. Please contact support."
+                            )
+                          : ""
+                      }
+                      trigger={["hover", "click"]}
+                      placement="bottom"
+                    >
                       <Button
-                        aria-labelledby="Notification"
-                        className="bg-transparent border-0 p-0"
+                        aria-labelledby="Sell a Business"
+                        className="btn bg-brand"
+                        onClick={() =>
+                          !isUserInactive && navigate("/sellbusinesscreate")
+                        }
+                        disabled={isUserInactive}
+                        style={{
+                          opacity: isUserInactive ? 0.6 : 1,
+                          cursor: isUserInactive ? "not-allowed" : "pointer",
+                        }}
                       >
-                        <Image
-                          src="/assets/icons/notification.png"
-                          width={"28px"}
-                          preview={false}
-                          alt="notification icon"
-                          className="up"
-                        />
+                        <PlusOutlined /> {t("Sell a Business")}
                       </Button>
-                    </Badge>
-                  </Popover>
+                    </Tooltip>
 
-                  <Dropdown menu={{ items }} trigger={["click"]}>
-                    <Flex align="center" gap={10}>
-                      <Avatar
-                        size={40}
-                        className="fs-16 text-brand fw-bold bg-light-brand textuppercase"
+                    <Popover
+                      content={dropdownContent}
+                      trigger="click"
+                      placement="bottomRight"
+                      open={dropdownOpen}
+                      onOpenChange={handleDropdownChange}
+                      overlayClassName="notification-popover"
+                      getPopupContainer={() => document.body}
+                    >
+                      <Badge
+                        size="small"
+                        count={unreadCount}
+                        overflowCount={99}
                       >
-                        {user?.name?.charAt(0)}
-                      </Avatar>
-                      <DownOutlined className="text-white fs-13" />
-                    </Flex>
-                  </Dropdown>
-                </Flex>
-              )}
-            </Flex>
+                        <Button
+                          aria-labelledby="Notification"
+                          className="bg-transparent border-0 p-0"
+                        >
+                          <Image
+                            src="/assets/icons/notification.png"
+                            width={"28px"}
+                            preview={false}
+                            alt="notification icon"
+                            className="up"
+                          />
+                        </Button>
+                      </Badge>
+                    </Popover>
+
+                    <Dropdown menu={{ items }} trigger={["click"]}>
+                      <Flex align="center" gap={10}>
+                        <Avatar
+                          size={40}
+                          className="fs-16 text-brand fw-bold bg-light-brand textuppercase"
+                        >
+                          {user?.name?.charAt(0)}
+                        </Avatar>
+                        <DownOutlined className="text-white fs-13" />
+                      </Flex>
+                    </Dropdown>
+                  </Flex>
+                )}
+              </Flex>
+            </div>
           </div>
-        </div>
+        )}
       </div>
       <MobileNavbar visible={visible} onClose={() => setVisible(false)} />
     </>
