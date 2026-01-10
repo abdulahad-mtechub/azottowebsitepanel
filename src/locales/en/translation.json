@@ -256,6 +256,8 @@
   "Offer Already Submitted": "Offer Already Submitted",
   "Meeting Already Requested": "Meeting Already Requested",
   "Purchase Request Sent": "Purchase Request Sent",
+  "Sent": "Sent",
+  "Meeting": "Meeting",
   "Total Amount (Offer + Commission)": "Total Amount (Offer + Commission)",
   "I agree to the": "I agree to the",
   "e.g. 75000": "e.g. 75000",
@@ -1070,5 +1072,7 @@
   "No Data Found": "No Data Found",
   "No businesses match your search criteria. Try adjusting your filters.": "No businesses match your search criteria. Try adjusting your filters.",
   "View Business Listings": "View Business Listings",
-  "No notifications yet.": "No notifications yet."
+  "No notifications yet.": "No notifications yet.",
+  "Please select meeting date": "Please select meeting date",
+  "Please select meeting time": "Please select meeting time"
 }
