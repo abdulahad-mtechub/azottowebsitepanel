@@ -372,6 +372,7 @@ const BuyerOfferContent = () => {
 
   const statusOptions = [
     { id: "SENT", name: t("Sent") },
+    { id: "MEETING", name: t("Meeting") },
     { id: "RECEIVED", name: t("Received") },
     { id: "ACCEPTED", name: t("Accepted") },
     { id: "REJECTED", name: t("Rejected") },
