@@ -64,6 +64,22 @@ const Navbar = ({ setGetCategory }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (dropdownOpen) {
+        setDropdownOpen(false);
+      }
+    };
+
+    if (dropdownOpen) {
+      window.addEventListener("scroll", handleScroll, { passive: true });
+    }
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [dropdownOpen]);
+
   const browseHoverTimeoutRef = useRef(null);
   const [isshow, setIsShow] = useState(!!userId);
   const [user, setUser] = useState(null);
@@ -591,9 +607,8 @@ const Navbar = ({ setGetCategory }) => {
             ref={listContainerRef}
             onScroll={handleListScroll}
             style={{
-              maxHeight: isScrollable ? 320 : "auto",
-              overflowY: isScrollable ? "auto" : "visible",
-              paddingRight: isScrollable ? 4 : 0,
+              maxHeight: 400,
+              overflowY: "auto",
             }}
             className="overflowstyle"
           >
@@ -800,7 +815,6 @@ const Navbar = ({ setGetCategory }) => {
                         placement="bottomRight"
                         open={dropdownOpen}
                         onOpenChange={handleDropdownChange}
-                        getPopupContainer={() => document.body}
                       >
                         <Badge
                           size="small"
@@ -1072,7 +1086,6 @@ const Navbar = ({ setGetCategory }) => {
                       open={dropdownOpen}
                       onOpenChange={handleDropdownChange}
                       overlayClassName="notification-popover"
-                      getPopupContainer={() => document.body}
                     >
                       <Badge
                         size="small"
