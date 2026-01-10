@@ -89,6 +89,9 @@ const GET_SETTING = gql`
   query GetSetting {
     getSetting {
       commissionRate
+      faceBook
+      instagram
+      whatsApp
     }
   }
 `;
