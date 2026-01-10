@@ -82,7 +82,15 @@ const ProtectedRoute = ({ children }) => {
 
   if (isUserInactive && isProfileDashboard) {
     return (
-      <div className="padd-1 relative">
+      <div
+        className="padd-1 relative"
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          minHeight: "70vh",
+        }}
+      >
         <div className="container">
           <Result
             icon={<ExclamationCircleOutlined style={{ color: "#faad14" }} />}
@@ -95,7 +103,7 @@ const ProtectedRoute = ({ children }) => {
               </Text>
             }
             extra={[
-              <Flex gap={5} justify="center">
+              <Flex gap={10} justify="center" key="actions">
                 <Button
                   type="primary"
                   key="home"
@@ -104,9 +112,8 @@ const ProtectedRoute = ({ children }) => {
                 >
                   {t("Go to Home")}
                 </Button>
-                ,
                 <Button
-                  key="profile"
+                  key="listings"
                   onClick={() => navigate("/businesslisting")}
                 >
                   {t("View Business Listings")}
