@@ -17,7 +17,7 @@ const CustomPagination = ({
   const { formatNumber } = useFormatNumber();
 
   // Hide pagination if total items fit in one page
-  if (totalItems <= limit) {
+  if (totalItems <= limit && currentPage === 1) {
     return null;
   }
 
@@ -43,13 +43,8 @@ const CustomPagination = ({
               setLimit(value);
               setCurrentPage(1);
             }}
-            options={[
-              { value: 6, label: formatNumber(6) },
-              { value: 10, label: formatNumber(10) },
-              { value: 20, label: formatNumber(20) },
-              { value: 50, label: formatNumber(50) },
-            ]}
-            style={{ width: 70 }}
+            options={selectOptions}
+            style={{ width: 80 }}
           />
         </Flex>
 
