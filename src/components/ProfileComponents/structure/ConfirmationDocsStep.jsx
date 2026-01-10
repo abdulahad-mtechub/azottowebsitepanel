@@ -247,7 +247,7 @@ const ConfirmationDocsStep = ({ form, details }) => {
               {t("Are you sure you have not received payment from the buyer?")}
             </Text>
             <Input.TextArea
-              placeholder={t("Add a note for the buyer") + " *"}
+              placeholder={t("Add a note for the buyer")}
               rows={4}
               maxLength={500}
               showCount
