@@ -410,6 +410,7 @@ const SellBusinessCreate = () => {
       // Add ID for update
       if (editBusinessId) {
         inputData.id = editBusinessId;
+        inputData.businessStatus = "UNDER_REVIEW";
       }
 
       const variables = { input: inputData };
