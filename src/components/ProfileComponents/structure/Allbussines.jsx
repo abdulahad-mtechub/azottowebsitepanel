@@ -72,14 +72,6 @@ const Allbussines = () => {
     getSellerBusinesses({ variables: { limit, offSet } });
   }, [currentPage, limit, getSellerBusinesses]);
 
-  if (loading) {
-    return (
-      <Flex justify="center" align="center" className="h-200">
-        <Spin size="large" />
-      </Flex>
-    );
-  }
-
   if (singledetail) {
     return (
       <Singlebusinessview
@@ -131,181 +123,195 @@ const Allbussines = () => {
         </Flex>
       </Flex>
       <Card className="border-gray">
-        <Row gutter={[16, 16]}>
-          {allBusinessesData?.map((pro, i) => (
-            <Col
-              lg={{ span: 12 }}
-              md={{ span: 12 }}
-              sm={{ span: 24 }}
-              xs={{ span: 24 }}
-              key={i}
-            >
-              <Card
-                className="h-100 border-gray rounded-12 card-cs cursor"
-                onClick={() => setSingleDetail(pro?.id)}
+        {loading ? (
+          <Flex justify="center" align="center" style={{ minHeight: "300px" }}>
+            <Spin size="large" />
+          </Flex>
+        ) : (
+          <Row gutter={[16, 16]}>
+            {allBusinessesData?.map((pro, i) => (
+              <Col
+                lg={{ span: 12 }}
+                md={{ span: 12 }}
+                sm={{ span: 24 }}
+                xs={{ span: 24 }}
+                key={i}
               >
-                <Flex vertical gap={20}>
-                  <Flex
-                    justify="space-between"
-                    align={screens.xs ? "flex-start" : "center"}
-                    wrap={shouldMainFlexWrap ? "wrap" : "nowrap"}
-                    gap={mainFlexGap}
-                  >
+                <Card
+                  className="h-100 border-gray rounded-12 card-cs cursor"
+                  onClick={() => setSingleDetail(pro?.id)}
+                >
+                  <Flex vertical gap={20}>
                     <Flex
-                      gap={buttonGroupGap}
-                      align="center"
-                      direction={buttonGroupFlexDirection}
-                      style={{
-                        flexGrow: 1,
-                        flexShrink: 1,
-                        minWidth: screens.xs ? "100%" : "auto",
-                      }}
+                      justify="space-between"
+                      align={screens.xs ? "flex-start" : "center"}
+                      wrap={shouldMainFlexWrap ? "wrap" : "nowrap"}
+                      gap={mainFlexGap}
                     >
-                      <Button
-                        className="fs-13"
-                        aria-labelledby={t(
-                          isArabic
-                            ? pro?.category?.arabicName
-                            : pro?.category?.name
-                        )}
-                      >
-                        {truncateChars(
-                          isArabic
-                            ? pro?.category?.arabicName
-                            : pro?.category?.name,
-                          14
-                        )}
-                      </Button>
-
-                      {pro?.isByTakbeer !== undefined && (
-                        <Button
-                          aria-labelledby={t("Type")}
-                          className={`fs-12 text-white ${
-                            pro.isByTakbeer ? "bg-brand" : "bg-black"
-                          }`}
-                        >
-                          <Space align="center" size={4} wrap={false}>
-                            {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
-                            <Tooltip
-                              title={
-                                pro.isByTakbeer
-                                  ? t(
-                                      "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
-                                    )
-                                  : t(
-                                      "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
-                                    )
-                              }
-                            >
-                              <img
-                                src="/assets/icons/info-a.png"
-                                width={16}
-                                alt="takbeel-icon"
-                                fetchPriority="high"
-                                className="center"
-                              />
-                            </Tooltip>
-                          </Space>
-                        </Button>
-                      )}
-                    </Flex>
-                    {getStatusBadge(pro?.businessStatus)}
-                  </Flex>
-                  <div>
-                    <div className="w-full card-img mb-2 rounded-12">
-                      <img
-                        src="/assets/images/card-1.webp"
-                        width={"100%"}
-                        height={"100%"}
-                        alt={t("product-image")}
-                        fetchPriority="high"
-                      />
-                    </div>
-                    <Title className="" level={5}>
-                      {pro?.businessTitle}
-                    </Title>
-                    <div className="h-80">
-                      <Paragraph
-                        ellipsis={{
-                          rows: 3,
-                          expandable: false,
-                          symbol: "more",
+                      <Flex
+                        gap={buttonGroupGap}
+                        align="center"
+                        direction={buttonGroupFlexDirection}
+                        style={{
+                          flexGrow: 1,
+                          flexShrink: 1,
+                          minWidth: screens.xs ? "100%" : "auto",
                         }}
-                        className="fs-14 text-gray"
                       >
-                        {pro?.description}
-                      </Paragraph>
-                    </div>
-                    <Divider className="my-1" />
-                    <Space
-                      split={<Divider type="vertical" className="m-0 h-auto" />}
-                      align="center"
-                      style={{ width: "100%", justifyContent: "space-between" }}
-                    >
-                      {pro?.child?.map((item, c) => (
-                        <Flex vertical align="center" justify="center" key={c}>
-                          <Title level={5} className="text-brand m-0 fs-13">
-                            {item?.subtitle}
-                          </Title>
-                          <Text className="text-gray fs-12">
-                            {item?.subdesc}
-                          </Text>
-                        </Flex>
-                      ))}
-                    </Space>
-                    <Divider className="my-1" />
-                    <Flex align="center" justify="space-between">
-                      <Flex gap={3} align="center">
-                        <span className="currency-display">
-                          <Image
-                            src="/assets/icons/reyal.webp"
-                            alt={t("currency-symbol")}
-                            preview={false}
-                            width={20}
-                          />
-                          <Title
-                            level={4}
-                            className="m-0"
-                            style={{
-                              display: "inline-block",
-                              marginLeft: "12px",
-                            }}
+                        <Button
+                          className="fs-13"
+                          aria-labelledby={t(
+                            isArabic
+                              ? pro?.category?.arabicName
+                              : pro?.category?.name
+                          )}
+                        >
+                          {truncateChars(
+                            isArabic
+                              ? pro?.category?.arabicName
+                              : pro?.category?.name,
+                            14
+                          )}
+                        </Button>
+
+                        {pro?.isByTakbeer !== undefined && (
+                          <Button
+                            aria-labelledby={t("Type")}
+                            className={`fs-12 text-white ${
+                              pro.isByTakbeer ? "bg-brand" : "bg-black"
+                            }`}
                           >
-                            {formatNumber(pro?.price)}
-                          </Title>
-                        </span>
-                      </Flex>
-                      <Text className="text-brand fs-14">
-                        {formatNumber(
-                          pro.offerCount >= 10 ? 10 : pro.offerCount
+                            <Space align="center" size={4} wrap={false}>
+                              {pro.isByTakbeer ? t("Taqbeel") : t("Acquiring")}
+                              <Tooltip
+                                title={
+                                  pro.isByTakbeer
+                                    ? t(
+                                        "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
+                                      )
+                                    : t(
+                                        "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
+                                      )
+                                }
+                              >
+                                <img
+                                  src="/assets/icons/info-a.png"
+                                  width={16}
+                                  alt="takbeel-icon"
+                                  fetchPriority="high"
+                                  className="center"
+                                />
+                              </Tooltip>
+                            </Space>
+                          </Button>
                         )}
-                        {pro.offerCount >= 10 ? "+" : ""} {t("Offers")}
-                      </Text>
+                      </Flex>
+                      {getStatusBadge(pro?.businessStatus)}
                     </Flex>
-                  </div>
-                </Flex>
-              </Card>
-            </Col>
-          ))}
-          {sellerBusinesses?.getAllSellerBusinesses?.totalCount > 0 && (
-            <CustomPagination
-              totalItems={
-                sellerBusinesses?.getAllSellerBusinesses?.totalCount || 0
-              }
-              currentPage={currentPage}
-              setCurrentPage={setCurrentPage}
-              limit={limit}
-              setLimit={setLimit}
-            />
-          )}
-          {sellerBusinesses?.getAllSellerBusinesses?.totalCount === 0 && (
-            <Row>
+                    <div>
+                      <div className="w-full card-img mb-2 rounded-12">
+                        <img
+                          src="/assets/images/card-1.webp"
+                          width={"100%"}
+                          height={"100%"}
+                          alt={t("product-image")}
+                          fetchPriority="high"
+                        />
+                      </div>
+                      <Title className="" level={5}>
+                        {pro?.businessTitle}
+                      </Title>
+                      <div className="h-80">
+                        <Paragraph
+                          ellipsis={{
+                            rows: 3,
+                            expandable: false,
+                            symbol: "more",
+                          }}
+                          className="fs-14 text-gray"
+                        >
+                          {pro?.description}
+                        </Paragraph>
+                      </div>
+                      <Divider className="my-1" />
+                      <Space
+                        split={
+                          <Divider type="vertical" className="m-0 h-auto" />
+                        }
+                        align="center"
+                        style={{
+                          width: "100%",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        {pro?.child?.map((item, c) => (
+                          <Flex
+                            vertical
+                            align="center"
+                            justify="center"
+                            key={c}
+                          >
+                            <Title level={5} className="text-brand m-0 fs-13">
+                              {item?.subtitle}
+                            </Title>
+                            <Text className="text-gray fs-12">
+                              {item?.subdesc}
+                            </Text>
+                          </Flex>
+                        ))}
+                      </Space>
+                      <Divider className="my-1" />
+                      <Flex align="center" justify="space-between">
+                        <Flex gap={3} align="center">
+                          <span className="currency-display">
+                            <Image
+                              src="/assets/icons/reyal.webp"
+                              alt={t("currency-symbol")}
+                              preview={false}
+                              width={20}
+                            />
+                            <Title
+                              level={4}
+                              className="m-0"
+                              style={{
+                                display: "inline-block",
+                                marginLeft: "12px",
+                              }}
+                            >
+                              {formatNumber(pro?.price)}
+                            </Title>
+                          </span>
+                        </Flex>
+                        <Text className="text-brand fs-14">
+                          {formatNumber(
+                            pro.offerCount >= 10 ? 10 : pro.offerCount
+                          )}
+                          {pro.offerCount >= 10 ? "+" : ""} {t("Offers")}
+                        </Text>
+                      </Flex>
+                    </div>
+                  </Flex>
+                </Card>
+              </Col>
+            ))}
+            {sellerBusinesses?.getAllSellerBusinesses?.totalCount > 0 && (
+              <CustomPagination
+                totalItems={
+                  sellerBusinesses?.getAllSellerBusinesses?.totalCount || 0
+                }
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                limit={limit}
+                setLimit={setLimit}
+              />
+            )}
+            {sellerBusinesses?.getAllSellerBusinesses?.totalCount === 0 && (
               <Col span={24} className="text-center mt-4">
                 <Text>{t("No Business Found")}</Text>
               </Col>
-            </Row>
-          )}
-        </Row>
+            )}
+          </Row>
+        )}
       </Card>
     </Flex>
   );
