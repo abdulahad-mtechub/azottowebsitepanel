@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState, useCallback } from "react";
+import { useMemo, useEffect, useState, memo } from "react";
 import { Col, Row, Space, Table, Typography } from "antd";
 import { SearchInput } from "../../Forms";
 import { BUYERDEALS } from "../../../graphql/query";
@@ -8,20 +8,15 @@ import { useFormatNumber } from "../../../hooks";
 import { getNamePreview } from "../../../utils";
 
 const { Text } = Typography;
-const CompleteDealsTable = ({ setCompleteDeal }) => {
+
+const CompleteDealsTable = memo(({ setCompleteDeal, searchValue }) => {
   const { t } = useTranslation();
   const { formatNumber } = useFormatNumber();
-  const [searchValue, setSearchValue] = useState("");
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
   const [fetchDeals, { data: offerDeals, loading }] = useLazyQuery(BUYERDEALS, {
     fetchPolicy: "network-only",
   });
-
-  const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
-    setSearchValue(debouncedSearchValue);
-    setPagination((prev) => ({ ...prev, current: 1 }));
-  }, []);
 
   const handleTableChange = (paginationInfo) => {
     const newPagination = {
@@ -95,28 +90,6 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
   return (
     <>
       <Row gutter={[24, 12]} className="mt-2">
-        <Col
-          xs={{ span: 24 }}
-          sm={{ span: 24 }}
-          md={{ span: 12 }}
-          lg={{ span: 8 }}
-        >
-          <SearchInput
-            withoutForm={true}
-            placeholder={t("Search")}
-            onDebouncedChange={handleDebouncedSearch}
-            debounceDelay={500}
-            prefix={
-              <img
-                src="/assets/icons/search.png"
-                alt="search-icon"
-                className="mx-3-inline"
-                width={12}
-                fetchPriority="high"
-              />
-            }
-          />
-        </Col>
         <Col span={24}>
           <Table
             size="large"
@@ -156,6 +129,7 @@ const CompleteDealsTable = ({ setCompleteDeal }) => {
       </Row>
     </>
   );
-};
+});
 
-export { CompleteDealsTable };
+CompleteDealsTable.displayName = "CompleteDealsTable";
+export default CompleteDealsTable;

@@ -1,6 +1,7 @@
-import { Card, Flex, Spin, Tabs } from "antd";
+import { Card, Flex, Spin, Row, Col } from "antd";
 import { ModuleTopHeading } from "../../Pagecomponents";
-import { lazy, Suspense, useMemo, useState } from "react";
+import { MySelect, SearchInput } from "../../Forms";
+import { lazy, Suspense, useMemo, useState, useCallback } from "react";
 import { LoadingOutlined } from "@ant-design/icons";
 import { SellerSingleCompleteDeal } from "./SellerSingleCompleteDeal";
 import { useTranslation } from "react-i18next";
@@ -25,29 +26,57 @@ const SellerDeals = () => {
   const { t } = useTranslation();
   const [inprogressdeal, setInprogressDeal] = useState();
   const [completedeal, setCompleteDeal] = useState();
+  const [activeKey, setActiveKey] = useState("1");
+  const [searchValue, setSearchValue] = useState("");
 
-  const singleTab = useMemo(
+  const items = useMemo(
     () => [
       {
         key: "1",
         label: t("In-Progress Deals"),
-        children: (
-          <SellerInProgressDeals setInprogressDeal={setInprogressDeal} />
-        ),
+        component: SellerInProgressDeals,
       },
       {
         key: "2",
         label: t("Completed Deals"),
-        children: (
-          <SellerCompleteDeal
-            setCompleteDeal={setCompleteDeal}
-            completedeal={completedeal}
-          />
-        ),
+        component: SellerCompleteDeal,
       },
     ],
-    [setCompleteDeal, setInprogressDeal, completedeal, t]
+    [t]
   );
+
+  const selectOptions = useMemo(
+    () =>
+      items.map((item) => ({
+        id: item.key,
+        name: item.label,
+      })),
+    [items]
+  );
+
+  const renderContent = useCallback(() => {
+    const selectedItem = items.find((item) => item.key === activeKey);
+    if (!selectedItem) return null;
+
+    const Component = selectedItem.component;
+    return (
+      <Component
+        setInprogressDeal={setInprogressDeal}
+        setCompleteDeal={setCompleteDeal}
+        completedeal={completedeal}
+        searchValue={searchValue}
+      />
+    );
+  }, [activeKey, searchValue, items, completedeal]);
+
+  const handleTabChange = useCallback((value) => {
+    setActiveKey(value);
+    setSearchValue("");
+  }, []);
+
+  const handleSearchChange = useCallback((debouncedSearchValue) => {
+    setSearchValue(debouncedSearchValue);
+  }, []);
 
   if (inprogressdeal && !completedeal) {
     return (
@@ -86,7 +115,47 @@ const SellerDeals = () => {
       <Flex vertical gap={20}>
         <ModuleTopHeading level={4} name={t("Deals")} />
         <Card className="radius-12 border-gray">
-          <Tabs className="tabs-fill" defaultActiveKey="1" items={singleTab} />
+          <Row gutter={[16, 16]}>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 12 }}
+              lg={{ span: 8 }}
+            >
+              <SearchInput
+                value={searchValue}
+                placeholder={t("Search")}
+                onDebouncedChange={handleSearchChange}
+                debounceDelay={500}
+                prefix={
+                  <img
+                    src="/assets/icons/search.png"
+                    alt={t("search-icon")}
+                    className="mx-3-inline"
+                    width={12}
+                    fetchPriority="high"
+                  />
+                }
+              />
+            </Col>
+            <Col
+              xs={{ span: 24 }}
+              sm={{ span: 24 }}
+              md={{ span: 12 }}
+              lg={{ span: 8 }}
+            >
+              <MySelect
+                withoutForm
+                value={activeKey}
+                onChange={handleTabChange}
+                options={selectOptions}
+                className="border-light-gray radius-8"
+              />
+            </Col>
+          </Row>
+          <Row gutter={[16, 16]}>
+            <Col span={24}>{renderContent()}</Col>
+          </Row>
         </Card>
       </Flex>
     );

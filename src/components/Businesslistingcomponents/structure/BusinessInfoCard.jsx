@@ -7,6 +7,8 @@ import {
   Image,
   message,
   Row,
+  Space,
+  Tooltip,
   Typography,
 } from "antd";
 import {
@@ -84,7 +86,7 @@ const BusinessInfoCard = ({ data }) => {
     {
       id: 1,
       icon: "/assets/icons/verification.png",
-      title: t("Verified"),
+      title: t("Verified By Jusoor"),
       subtitle: t("Identity Verification"),
     },
     {
@@ -192,7 +194,26 @@ const BusinessInfoCard = ({ data }) => {
                         fetchPriority="high"
                       />
                     )}{" "}
-                    {stat?.title}
+                    {stat.id === 1 ? (
+                      <Space>
+                        {stat?.title}
+                        <Tooltip
+                          title={t(
+                            "The Jusoor has verified the identity of the business owner."
+                          )}
+                        >
+                          <img
+                            src="/assets/icons/info.png"
+                            width={18}
+                            alt={t("info-icon")}
+                            fetchPriority="high"
+                            className="center"
+                          />
+                        </Tooltip>
+                      </Space>
+                    ) : (
+                      stat?.title
+                    )}
                   </Title>
                   <Text className="text-gray fs-12 fw-500">
                     {stat?.subtitle}

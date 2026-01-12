@@ -468,21 +468,6 @@ const Navbar = ({ setGetCategory }) => {
       key: "1",
       label: (
         <a
-          href="#logout"
-          onClick={(e) => {
-            e.preventDefault(); // Prevent default link behavior
-            setIsShow(false);
-            handleLogout();
-          }}
-        >
-          {logoutLoading ? t("Logging out...") : t("Logout")}
-        </a>
-      ),
-    },
-    {
-      key: "2",
-      label: (
-        <a
           href=""
           onClick={(e) => {
             e.preventDefault();
@@ -499,6 +484,21 @@ const Navbar = ({ setGetCategory }) => {
         </a>
       ),
       disabled: isUserInactive,
+    },
+    {
+      key: "2",
+      label: (
+        <a
+          href="#logout"
+          onClick={(e) => {
+            e.preventDefault(); // Prevent default link behavior
+            setIsShow(false);
+            handleLogout();
+          }}
+        >
+          {logoutLoading ? t("Logging out...") : t("Logout")}
+        </a>
+      ),
     },
   ];
   const handleChange = (lang) => {

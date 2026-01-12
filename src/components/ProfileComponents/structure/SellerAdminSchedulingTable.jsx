@@ -1,8 +1,7 @@
 import { Col, Row, Space, Table, Typography } from "antd";
-import { SearchInput } from "../../Forms";
 import { READYSCHEDULEDMEETINGS } from "../../../graphql/query";
 import { useLazyQuery } from "@apollo/client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { useFormatNumber } from "../../../hooks";
@@ -10,10 +9,9 @@ import { getNamePreview } from "../../../utils";
 
 const { Text } = Typography;
 
-const SellerAdminSchedulingTable = ({ isBuyer }) => {
+const SellerAdminSchedulingTable = memo(({ isBuyer, searchValue }) => {
   const { t } = useTranslation();
   const { formatNumber } = useFormatNumber();
-  const [searchValue, setSearchValue] = useState("");
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [fetchMeetings, { data, loading }] = useLazyQuery(
     READYSCHEDULEDMEETINGS,
@@ -21,10 +19,6 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
       fetchPolicy: "network-only",
     }
   );
-  const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
-    setSearchValue(debouncedSearchValue);
-    setPagination((prev) => ({ ...prev, current: 1 }));
-  }, []);
 
   const getStatusBadgeClass = (status) => {
     const statusUpper = status?.toUpperCase();
@@ -199,28 +193,6 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
   return (
     <>
       <Row gutter={[24, 12]} className="mt-2">
-        <Col
-          xs={{ span: 24 }}
-          sm={{ span: 24 }}
-          md={{ span: 12 }}
-          lg={{ span: 8 }}
-        >
-          <SearchInput
-            withoutForm={true}
-            placeholder={t("Search")}
-            onDebouncedChange={handleDebouncedSearch}
-            debounceDelay={500}
-            prefix={
-              <img
-                src="/assets/icons/search.png"
-                alt={t("search-icon")}
-                className="mx-3-inline"
-                width={12}
-                fetchPriority="high"
-              />
-            }
-          />
-        </Col>
         <Col span={24}>
           <Table
             size="large"
@@ -255,6 +227,8 @@ const SellerAdminSchedulingTable = ({ isBuyer }) => {
       </Row>
     </>
   );
-};
+});
+
+SellerAdminSchedulingTable.displayName = "SellerAdminSchedulingTable";
 
 export { SellerAdminSchedulingTable };

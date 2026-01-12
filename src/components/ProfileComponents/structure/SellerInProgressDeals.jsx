@@ -1,4 +1,4 @@
-import { useMemo, useEffect, useState, useCallback } from "react";
+import { useMemo, useEffect, useState, useCallback, memo } from "react";
 import { Col, Row, Space, Table, Typography } from "antd";
 import { SearchInput } from "../../Forms";
 import { SELLERINPROGRESSDEALS } from "../../../graphql/query";
@@ -9,10 +9,9 @@ import { getNamePreview } from "../../../utils";
 import dayjs from "dayjs";
 
 const { Text } = Typography;
-const SellerInProgressDeals = ({ setInprogressDeal }) => {
+const SellerInProgressDeals = memo(({ setInprogressDeal, searchValue }) => {
   const { t } = useTranslation();
   const { formatNumber } = useFormatNumber();
-  const [searchValue, setSearchValue] = useState("");
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -22,11 +21,6 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
     useLazyQuery(SELLERINPROGRESSDEALS, {
       fetchPolicy: "network-only",
     });
-
-  const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
-    setSearchValue(debouncedSearchValue);
-    setPagination((prev) => ({ ...prev, current: 1 }));
-  }, []);
 
   const handleTableChange = (paginationInfo) => {
     const newPagination = {
@@ -223,28 +217,6 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
   return (
     <>
       <Row gutter={[24, 12]} className="mt-2">
-        <Col
-          xs={{ span: 24 }}
-          sm={{ span: 24 }}
-          md={{ span: 12 }}
-          lg={{ span: 8 }}
-        >
-          <SearchInput
-            withoutForm={true}
-            placeholder={t("Search")}
-            onDebouncedChange={handleDebouncedSearch}
-            debounceDelay={500}
-            prefix={
-              <img
-                src="/assets/icons/search.png"
-                alt={t("search-icon")}
-                className="mx-3-inline"
-                width={12}
-                fetchPriority="high"
-              />
-            }
-          />
-        </Col>
         <Col span={24}>
           <Table
             size="large"
@@ -284,6 +256,8 @@ const SellerInProgressDeals = ({ setInprogressDeal }) => {
       </Row>
     </>
   );
-};
+});
+
+SellerInProgressDeals.displayName = "SellerInProgressDeals";
 
 export { SellerInProgressDeals };

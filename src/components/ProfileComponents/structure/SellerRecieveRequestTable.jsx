@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, memo } from "react";
 import {
   Button,
   Col,
@@ -23,10 +23,9 @@ import { getNamePreview } from "../../../utils";
 
 const { Text } = Typography;
 
-const SellerRecieveRequestTable = ({ isBuyer }) => {
+const SellerRecieveRequestTable = memo(({ isBuyer, searchValue }) => {
   const { t } = useTranslation();
   const { formatNumber } = useFormatNumber();
-  const [searchValue, setSearchValue] = useState("");
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [isaccept, setIsAccept] = useState(false);
   const [deletemodal, setDeleteModal] = useState(false);
@@ -37,11 +36,6 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
   const [refetchMeetings, { data, loading }] = useLazyQuery(RECEIVEDMEETINGS, {
     fetchPolicy: "network-only",
   });
-
-  const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
-    setSearchValue(debouncedSearchValue);
-    setPagination((prev) => ({ ...prev, current: 1 }));
-  }, []);
 
   const getStatusBadgeClass = (status) => {
     const statusUpper = status?.toUpperCase();
@@ -284,28 +278,6 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
   return (
     <>
       <Row gutter={[24, 12]} className="mt-2">
-        <Col
-          xs={{ span: 24 }}
-          sm={{ span: 24 }}
-          md={{ span: 12 }}
-          lg={{ span: 8 }}
-        >
-          <SearchInput
-            withoutForm={true}
-            placeholder={t("Search")}
-            onDebouncedChange={handleDebouncedSearch}
-            debounceDelay={500}
-            prefix={
-              <img
-                src="/assets/icons/search.png"
-                alt={t("search-icon")}
-                className="mx-3-inline"
-                width={12}
-                fetchPriority="high"
-              />
-            }
-          />
-        </Col>
         <Col span={24}>
           <Table
             size="large"
@@ -313,7 +285,7 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
             dataSource={sellerrecievedrequestData}
             className="pagination table table-cs"
             showSorterTooltip={false}
-            scroll={{ x: 1500 }}
+            scroll={{ x: 830 }}
             loading={loading}
             pagination={{
               hideOnSinglePage: true,
@@ -380,6 +352,8 @@ const SellerRecieveRequestTable = ({ isBuyer }) => {
       />
     </>
   );
-};
+});
+
+SellerRecieveRequestTable.displayName = "SellerRecieveRequestTable";
 
 export { SellerRecieveRequestTable };

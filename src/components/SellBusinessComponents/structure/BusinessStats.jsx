@@ -89,7 +89,7 @@ const BusinessStats = ({ data }) => {
       icon: "/assets/icons/foundationdate.png",
       // This logic remains the same (and is correct)
       title: data?.foundedDate
-        ? formatNumber(moment(data.foundedDate).format("YYYY"))
+        ? moment(data.foundedDate).format("YYYY")
         : t("N/A"),
       subtitle: `${t("Foundation Date")}`,
     },

@@ -2,7 +2,7 @@ import { Col, Row, Space, Table, Typography } from "antd";
 import { SearchInput } from "../../Forms";
 import { SENTMEETINGS } from "../../../graphql/query";
 import { useLazyQuery } from "@apollo/client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { useFormatNumber } from "../../../hooks";
@@ -10,10 +10,9 @@ import { getNamePreview } from "../../../utils";
 
 const { Text } = Typography;
 
-const SellerSendRequestTable = ({ isBuyer }) => {
+const SellerSendRequestTable = memo(({ isBuyer, searchValue }) => {
   const { t } = useTranslation();
   const { formatNumber } = useFormatNumber();
-  const [searchValue, setSearchValue] = useState("");
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [fetchMeetings, { data, loading }] = useLazyQuery(SENTMEETINGS, {
     fetchPolicy: "network-only",
@@ -146,7 +145,6 @@ const SellerSendRequestTable = ({ isBuyer }) => {
   const totalCount = data?.getMySentMeetingRequests?.totalCount || 0;
 
   const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
-    setSearchValue(debouncedSearchValue);
     setPagination((prev) => ({ ...prev, current: 1 }));
   }, []);
 
@@ -183,28 +181,6 @@ const SellerSendRequestTable = ({ isBuyer }) => {
   return (
     <>
       <Row gutter={[24, 12]} className="mt-2">
-        <Col
-          xs={{ span: 24 }}
-          sm={{ span: 24 }}
-          md={{ span: 12 }}
-          lg={{ span: 8 }}
-        >
-          <SearchInput
-            withoutForm={true}
-            placeholder={t("Search")}
-            onDebouncedChange={handleDebouncedSearch}
-            debounceDelay={500}
-            prefix={
-              <img
-                src="/assets/icons/search.png"
-                alt={t("search-icon")}
-                className="mx-3-inline"
-                width={12}
-                fetchPriority="high"
-              />
-            }
-          />
-        </Col>
         <Col span={24}>
           <Table
             size="large"
@@ -212,7 +188,7 @@ const SellerSendRequestTable = ({ isBuyer }) => {
             dataSource={sendrequestData}
             className="pagination table table-cs"
             showSorterTooltip={false}
-            scroll={{ x: 950 }}
+            scroll={{ x: 830 }}
             loading={loading}
             pagination={{
               hideOnSinglePage: true,
@@ -239,6 +215,8 @@ const SellerSendRequestTable = ({ isBuyer }) => {
       </Row>
     </>
   );
-};
+});
+
+SellerSendRequestTable.displayName = "SellerSendRequestTable";
 
 export { SellerSendRequestTable };

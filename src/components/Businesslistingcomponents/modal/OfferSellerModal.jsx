@@ -37,14 +37,6 @@ const OfferSellerModal = ({
     const raw = e?.target?.value;
     const offerAmount = parseFloat(String(raw).replace(/,/g, "")) || 0;
     const commission = offerAmount * commissionRate;
-    console.log(
-      "Commission Rate:",
-      commissionRate,
-      "Offer Amount:",
-      offerAmount,
-      "Commission:",
-      commission
-    );
     const commissionRounded = Number(commission.toFixed(2));
     const totalAmount = Number((offerAmount + commissionRounded).toFixed(2));
 
@@ -240,6 +232,7 @@ const OfferSellerModal = ({
                 label={t("Offer Amount")}
                 name="offeramount"
                 required
+                isNumber
                 message={t("Please enter offer amount")}
                 placeholder={t("e.g. 75000")}
                 addonBefore={

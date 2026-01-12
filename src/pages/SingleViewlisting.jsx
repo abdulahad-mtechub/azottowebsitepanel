@@ -299,15 +299,16 @@ const SingleViewlisting = () => {
             <BusinessStats data={business} />
             {/* <MarketAreaChart />  */}
             {/* <AnnualProfitBarChart graphData={graphData} />  */}
-            <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-              <Flex vertical gap={0}>
-                <Title level={5}>{t("Growth Opportunity")}</Title>
-                <Text className="text-justify">
-                  {business?.growthOpportunities ||
-                    t("No growth opportunity details available.")}
-                </Text>
-              </Flex>
-            </Card>
+            {business?.growthOpportunities && (
+              <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+                <Flex vertical gap={0}>
+                  <Title level={5}>{t("Growth Opportunity")}</Title>
+                  <Text className="text-justify">
+                    {business?.growthOpportunities}
+                  </Text>
+                </Flex>
+              </Card>
+            )}
             <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
               <Flex vertical gap={0}>
                 <Title level={5}>{t("Reason for Selling")}</Title>

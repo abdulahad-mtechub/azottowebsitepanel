@@ -98,15 +98,16 @@ const SellerDealDetails = ({ data }) => {
         <BusinessStats data={businessinfo} />
         {/* <MarketAreaChart data={businessinfo} /> */}
         {/* <AnnualProfitBarChart graphData={graphData} /> */}
-        <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-          <Flex vertical gap={0}>
-            <Title level={5}>{t("Growth Opportunity")}</Title>
-            <Text className="text-justify">
-              {businessinfo?.growthOpportunities ||
-                t("No growth opportunity details available.")}
-            </Text>
-          </Flex>
-        </Card>
+        {businessinfo?.growthOpportunities && (
+          <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
+            <Flex vertical gap={0}>
+              <Title level={5}>{t("Growth Opportunity")}</Title>
+              <Text className="text-justify">
+                {businessinfo?.growthOpportunities}
+              </Text>
+            </Flex>
+          </Card>
+        )}
         <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
           <Flex vertical gap={0}>
             <Title level={5}>{t("Reason for Selling")}</Title>
