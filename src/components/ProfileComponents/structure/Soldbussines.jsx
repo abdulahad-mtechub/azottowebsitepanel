@@ -17,7 +17,7 @@ import { GETSELLERSOLDBUSINESS } from "../../../graphql/query";
 import { useTranslation } from "react-i18next";
 import { truncateChars } from "../../../utils";
 import { useFormatNumber } from "../../../hooks";
-import { CustomPagination } from "../../ui";
+import { CustomPagination, LoadingCard } from "../../ui";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -68,16 +68,22 @@ const Soldbussines = () => {
 
   return (
     <Card className="border-gray">
-      {loading ? (
-        <Flex justify="center" align="center" style={{ minHeight: "300px" }}>
-          <Spin size="large" />
-        </Flex>
-      ) : error ? (
-        <Flex justify="center" align="center" style={{ minHeight: "300px" }}>
-          <Text type="danger">
-            {t("Error loading sold businesses")}: {error.message}
-          </Text>
-        </Flex>
+      {error ? (
+        <LoadingCard
+          isEmpty={true}
+          emptyText={`${t("Error loading sold businesses")}: ${error.message}`}
+          height={470}
+          minHeight={470}
+        />
+      ) : loading ? (
+        <LoadingCard loading={true} height={470} minHeight={470} />
+      ) : soldBusinessesData?.length === 0 ? (
+        <LoadingCard
+          isEmpty={true}
+          emptyText={t("No Sold Business Found")}
+          height={470}
+          minHeight={470}
+        />
       ) : (
         <Row gutter={[16, 16]}>
           {soldBusinessesData?.map((pro, i) => (
@@ -208,8 +214,6 @@ const Soldbussines = () => {
                     </Space>
                     <Divider className="my-1" />
                     <Flex gap={3} align="center">
-                      {/* <Image src='/assets/icons/reyal.webp' alt={t('currency-symbol')} preview={false} width={20} />
-                                        <Title level={4} className='m-0'>{pro?.amount}</Title> */}
                       <span className="currency-display">
                         <Image
                           src="/assets/icons/reyal.webp"
@@ -246,12 +250,6 @@ const Soldbussines = () => {
               limit={limit}
               setLimit={setLimit}
             />
-          )}
-          {sellerSoldBusinesses?.getAllSellerSoldBusinesses?.totalCount ===
-            0 && (
-            <Col span={24} className="text-center mt-4">
-              <Text>{t("No Business Found")}</Text>
-            </Col>
           )}
         </Row>
       )}

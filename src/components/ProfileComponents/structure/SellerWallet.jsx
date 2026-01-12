@@ -17,6 +17,7 @@ import { useQuery, useMutation } from "@apollo/client";
 import { AddWalletModal } from "../modal";
 import { ACTIVEBANK, DELETEBANK } from "../../../graphql/mutation/mutations";
 import { useTranslation } from "react-i18next";
+import { LoadingCard } from "../../ui";
 
 const { Title, Text } = Typography;
 
@@ -27,7 +28,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
   const [selectedBankId, setSelectedBankId] = useState(null);
   const [activatingBankId, setActivatingBankId] = useState(null);
 
-  const { data: bankData } = useQuery(GETUSERBANK);
+  const { data: bankData, loading: bankLoading } = useQuery(GETUSERBANK);
 
   const [activateBankMutate] = useMutation(ACTIVEBANK, {
     refetchQueries: [{ query: GETUSERBANK }],
@@ -212,12 +213,14 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
               );
             })
           ) : (
-            <Col
-              span={24}
-              className="text-center"
-              style={{ paddingTop: "20px" }}
-            >
-              <Text>{t("No Bank Added")}</Text>
+            <Col span={24}>
+              <LoadingCard
+                loading={bankLoading}
+                isEmpty={true}
+                emptyText={t("No Bank Added")}
+                height={385}
+                minHeight={300}
+              />
             </Col>
           )}
         </Row>

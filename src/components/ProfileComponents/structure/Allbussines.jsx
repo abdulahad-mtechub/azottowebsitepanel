@@ -8,7 +8,6 @@ import {
   Image,
   Row,
   Typography,
-  Spin,
   Space,
   Tooltip,
   Grid,
@@ -21,7 +20,7 @@ import { ModuleTopHeading } from "../../Pagecomponents";
 import { PlusOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { truncateChars } from "../../../utils";
-import { CustomPagination } from "../../ui";
+import { CustomPagination, LoadingCard } from "../../ui";
 import { useFormatNumber } from "../../../hooks";
 
 const { Title, Text, Paragraph } = Typography;
@@ -124,9 +123,14 @@ const Allbussines = () => {
       </Flex>
       <Card className="border-gray">
         {loading ? (
-          <Flex justify="center" align="center" style={{ minHeight: "300px" }}>
-            <Spin size="large" />
-          </Flex>
+          <LoadingCard loading={true} height={460} minHeight={460} />
+        ) : allBusinessesData?.length === 0 ? (
+          <LoadingCard
+            isEmpty={true}
+            emptyText={t("No Business Found")}
+            height={460}
+            minHeight={460}
+          />
         ) : (
           <Row gutter={[16, 16]}>
             {allBusinessesData?.map((pro, i) => (
@@ -304,11 +308,6 @@ const Allbussines = () => {
                 limit={limit}
                 setLimit={setLimit}
               />
-            )}
-            {sellerBusinesses?.getAllSellerBusinesses?.totalCount === 0 && (
-              <Col span={24} className="text-center mt-4">
-                <Text>{t("No Business Found")}</Text>
-              </Col>
             )}
           </Row>
         )}
