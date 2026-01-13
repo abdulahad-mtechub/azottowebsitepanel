@@ -112,7 +112,7 @@ const BusinessStats = ({ data }) => {
               {t("Business stat")}
             </Title>
             {data?.isStatsVerified ? (
-              <Tooltip title={t("Verified by Jusoor")}>
+              <Tooltip title={t("Verified By Jusoor")}>
                 <Image
                   src="/assets/icons/verified-user.png"
                   alt={t("verified icon")}

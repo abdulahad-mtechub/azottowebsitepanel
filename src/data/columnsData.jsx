@@ -26,7 +26,7 @@ const usePostsaleColumns = () => {
       render: (verified) => {
         if (verified === true || verified === 1) {
           return (
-            <Tooltip title={t("Verified by Jusoor")}>
+            <Tooltip title={t("Verified By Jusoor")}>
               <Image
                 src="/assets/icons/verified-user.png"
                 preview={false}
@@ -73,7 +73,7 @@ const useLiabColumn = () => {
       render: (verified) => {
         if (verified === true || verified === 1) {
           return (
-            <Tooltip title={t("Verified by Jusoor")}>
+            <Tooltip title={t("Verified By Jusoor")}>
               <Image
                 src="/assets/icons/verified-user.png"
                 preview={false}
@@ -120,7 +120,7 @@ const useKeyassetsColumn = () => {
       render: (verified) => {
         if (verified === true || verified === 1) {
           return (
-            <Tooltip title={t("Verified by Jusoor")}>
+            <Tooltip title={t("Verified By Jusoor")}>
               <Image
                 src="/assets/icons/verified-user.png"
                 preview={false}
@@ -167,7 +167,7 @@ const useInventColumn = () => {
       render: (verified) => {
         if (verified === true || verified === 1) {
           return (
-            <Tooltip title={t("Verified by Jusoor")}>
+            <Tooltip title={t("Verified By Jusoor")}>
               <Image
                 src="/assets/icons/verified-user.png"
                 preview={false}
