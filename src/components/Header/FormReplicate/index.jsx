@@ -97,7 +97,13 @@ import { MyInput, MySelect } from "../../Forms";
 import { MinusCircleFilled } from "@ant-design/icons";
 import { ModuleTopHeading } from "../../Pagecomponents";
 
-const FormReplicate = ({ dayKey, title, form, fieldsConfig = [], allowEmpty = false }) => {
+const FormReplicate = ({
+  dayKey,
+  title,
+  form,
+  fieldsConfig = [],
+  allowEmpty = false,
+}) => {
   useEffect(() => {
     const fields = form.getFieldValue(dayKey) || [];
     // Only auto-insert a default row when empty if allowEmpty is false
@@ -128,7 +134,10 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [], allowEmpty = fa
                 >
                   <Col span={24}>
                     <Flex justify="end">
-                      <MinusCircleFilled className="text-red" onClick={() => remove(name)} />
+                      <MinusCircleFilled
+                        className="text-red"
+                        onClick={() => remove(name)}
+                      />
                     </Flex>
                   </Col>
 
@@ -144,7 +153,13 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [], allowEmpty = fa
                         : field.validator;
 
                     return (
-                      <Col key={index} xs={24} sm={24} md={24} lg={field.col || 6}>
+                      <Col
+                        key={index}
+                        xs={24}
+                        sm={24}
+                        md={24}
+                        lg={field.col || 6}
+                      >
                         {field.type === "input" ? (
                           <MyInput
                             label={field.label}
@@ -155,6 +170,7 @@ const FormReplicate = ({ dayKey, title, form, fieldsConfig = [], allowEmpty = fa
                             addonBefore={field.addonBefore}
                             className={field.className || ""}
                             validator={evaluatedValidator}
+                            type={field.inputType || "text"}
                           />
                         ) : field.type === "select" ? (
                           <MySelect

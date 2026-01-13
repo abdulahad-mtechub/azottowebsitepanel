@@ -56,6 +56,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
           : "-",
         status: data?.getDeal?.status || 0,
         ndaPdfPath: data?.getDeal?.ndaPdfPath,
+        arabicNdaPdfPath: data?.getDeal?.arabicNdaPdfPath,
         date: data?.getDeal?.createdAt
           ? new Date(data?.getDeal?.createdAt).toLocaleDateString()
           : "-",
