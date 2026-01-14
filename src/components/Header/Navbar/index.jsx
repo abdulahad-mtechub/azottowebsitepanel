@@ -889,14 +889,15 @@ const Navbar = ({ setGetCategory }) => {
                           onClick={() => setGetCategory(null)}
                         >
                           <Flex gap={10} align="center">
-                            {/* <Image
+                            <Image
                               src={"/assets/icons/browseall.png"}
                               alt="browse all icon"
                               width={30}
+                              height={30}
                               className="pt-1s"
                               preview={false}
                               fetchPriority="high"
-                            /> */}
+                            />
                             <Flex
                               justify="space-between"
                               gap={50}
