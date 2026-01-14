@@ -116,10 +116,11 @@ const Footer = () => {
                   rel="noopener noreferrer"
                 >
                   <Image
-                    src="/assets/icons/instagram.png"
+                    src="/assets/icons/instagram.webp"
                     width={"23px"}
                     alt="facebook-icon"
                     preview={false}
+                    fetchPriority="high"
                   />
                 </Link>
                 <Link
@@ -133,7 +134,7 @@ const Footer = () => {
                   target="_blank"
                   className="text-white"
                 >
-                  <WhatsAppOutlined className="fs-23" />
+                  <WhatsAppOutlined className="fs-23" fetchPriority="high" />
                 </Link>
               </Flex>
             </Space>
@@ -216,7 +217,11 @@ const Footer = () => {
                 })}
               </Typography.Text>
               <span className="text-brand"> | </span>
-              <NavLink to={""} className="fs-12 text-white">
+              <NavLink
+                to={""}
+                className="fs-12 text-white"
+                fetchPriority="high"
+              >
                 {t("Developed and maintained by REPLA Technologies PVT Ltd")}
               </NavLink>
             </Flex>
@@ -228,7 +233,11 @@ const Footer = () => {
             xs={{ span: 24 }}
           >
             <Flex align="center" className="w-100 lastlink" gap={20}>
-              <NavLink to={"/termofuse"} className="fs-12 text-white">
+              <NavLink
+                to={"/termofuse"}
+                className="fs-12 text-white"
+                fetchPriority="high"
+              >
                 {t("Term of use")}
               </NavLink>
               <span className="text-brand"> | </span>
