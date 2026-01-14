@@ -124,11 +124,6 @@ const SingleViewlisting = () => {
     verified: item.isActive,
   }));
 
-  // const { data: _graphData, loading: graphLoading } = useQuery(SIMILER_BUSINESS_CATEGORY_GRAPH, {
-  //     variables: { getBusinessByIdId: id },
-  //     skip: !id,
-  // });
-
   if (businessLoading) {
     return (
       <div
@@ -297,8 +292,6 @@ const SingleViewlisting = () => {
               </Flex>
             </Card>
             <BusinessStats data={business} />
-            {/* <MarketAreaChart />  */}
-            {/* <AnnualProfitBarChart graphData={graphData} />  */}
             {business?.growthOpportunities && (
               <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
                 <Flex vertical gap={0}>

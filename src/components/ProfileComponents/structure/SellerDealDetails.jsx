@@ -96,8 +96,6 @@ const SellerDealDetails = ({ data }) => {
         </Card>
         <BusinessViewInfoCard data={businessinfo} />
         <BusinessStats data={businessinfo} />
-        {/* <MarketAreaChart data={businessinfo} /> */}
-        {/* <AnnualProfitBarChart graphData={graphData} /> */}
         {businessinfo?.growthOpportunities && (
           <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
             <Flex vertical gap={0}>
