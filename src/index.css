@@ -388,33 +388,33 @@ body {
 .hero .div {
   padding: 80px 0 140px 50px;
 }
+
 .heroimginner {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100%;
   width: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
-.heroimginner .web-vw {
+.hero-img {
   width: 100%;
+  height: auto;
+  display: block;
   object-fit: cover;
-  position: absolute;
-  bottom: -24px;
-  z-index: 1;
-  min-width: 100%;
-  right: 0px;
 }
 
-.heroimginner .mbl-vw {
-  display: none;
-}
-
-.heroimginner .shap {
-  position: absolute;
-  width: 380px;
-  margin: auto;
-  transform: translate(20px, -102px);
+/* Desktop Specific Adjustments */
+@media (min-width: 996px) {
+  .hero-img {
+    position: absolute;
+    bottom: -24px;
+    right: 0;
+    z-index: 1;
+    min-width: 100%;
+  }
 }
 
 /* segemented css */

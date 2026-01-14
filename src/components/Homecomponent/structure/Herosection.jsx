@@ -18,7 +18,7 @@ const Herosection = () => {
           sm={{ span: 24 }}
           md={{ span: 24 }}
           lg={{ span: 12 }}
-          xl={{ span: 10 }}
+          xl={{ span: 12 }}
         >
           <div className="container">
             <Flex vertical gap={10} className="div center-mbl">
@@ -70,21 +70,29 @@ const Herosection = () => {
           xl={{ span: 10 }}
         >
           <div className="heroimginner">
-            <img
-              src={`assets/images/${
-                i18n.language === "ar" ? "banner-web-ar.png" : "banner-web.webp"
-              }`}
-              alt={t("Hero Banner Web")}
-              className="web-vw"
-              fetchPriority="high"
-            />
-            <img
-              src="assets/images/homebanner.png"
-              width={"100%"}
-              className="mbl-vw"
-              alt={t("Hero Banner Mobile")}
-              fetchPriority="high"
-            />
+            <picture>
+              {/* 1. Mobile Version: Shown when screen is less than 768px */}
+              <source
+                media="(max-width: 996px)"
+                srcSet={`assets/images/${
+                  i18n.language === "ar"
+                    ? "banner-web-ar.png"
+                    : "homebanner.png"
+                }`}
+              />
+              <img
+                src={`assets/images/${
+                  i18n.language === "ar"
+                    ? "banner-web-ar.png"
+                    : "banner-web.webp"
+                }`}
+                alt={t("Hero Banner")}
+                className="hero-img" // Use one class for both; handle sizing in CSS
+                fetchPriority="high"
+                loading="eager"
+                decoding="async"
+              />
+            </picture>
           </div>
         </Col>
       </Row>

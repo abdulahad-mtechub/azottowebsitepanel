@@ -19,8 +19,6 @@ function App() {
   const [antdLocale, setAntdLocale] = useState(getAntdLocale(i18n.language));
   const [authInitialized, setAuthInitialized] = useState(false);
 
-  // Initialize auto token refresh on app mount
-  // This handles token recovery when access token expired but refresh token exists
   useEffect(() => {
     const initAuth = async () => {
       try {

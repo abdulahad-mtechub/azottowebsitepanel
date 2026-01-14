@@ -583,7 +583,6 @@ const Navbar = ({ setGetCategory }) => {
 
   const dropdownContent = useMemo(() => {
     const data = notifications;
-    const isScrollable = data.length >= NOTIFICATIONS_PAGE_SIZE;
     const showInitialLoader =
       dropdownOpen && data.length === 0 && isLoadingNotifications;
     const showLoadMoreSpinner =
