@@ -528,6 +528,7 @@ const Navbar = ({ setGetCategory }) => {
             width={20}
             alt="English"
             preview={false}
+            fetchPriority="high"
           />
           <Text className="fs-13">EN</Text>
         </Space>
@@ -543,6 +544,7 @@ const Navbar = ({ setGetCategory }) => {
             width={20}
             alt="Arabic"
             preview={false}
+            fetchPriority="high"
           />
           <Text className="fs-13">AR</Text>
         </Space>
@@ -788,6 +790,7 @@ const Navbar = ({ setGetCategory }) => {
                             // alt="notification icon"
                             alt={selectedLang.alt}
                             className="up"
+                            fetchPriority="high"
                           />
                           <Text className="text-white fs-13">
                             {selectedLang?.label}
@@ -830,6 +833,7 @@ const Navbar = ({ setGetCategory }) => {
                               preview={false}
                               alt="notification icon"
                               className="up"
+                              fetchPriority="high"
                             />
                           </Button>
                         </Badge>
@@ -887,6 +891,7 @@ const Navbar = ({ setGetCategory }) => {
                               width={30}
                               className="pt-1s"
                               preview={false}
+                              fetchPriority="high"
                             />
                             <Flex
                               justify="space-between"
@@ -917,6 +922,7 @@ const Navbar = ({ setGetCategory }) => {
                                 width={30}
                                 className="pt-1s"
                                 preview={false}
+                                fetchPriority="high"
                               />
                               <Flex
                                 justify="space-between"
@@ -963,7 +969,7 @@ const Navbar = ({ setGetCategory }) => {
                       <li className='drop-item' key={index}>
                         <NavLink to={list?.path} className='drop-link'>
                           <Flex gap={10} align='center'>
-                            <Image src={list?.icon} width={30} className='pt-1s' preview={false} />
+                            <Image src={list?.icon} width={30} className='pt-1s' preview={false} fetchPriority="high" />
                             <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
                               <Title level={5} className='m-0 fw-500'>{list?.title}</Title>
                               <ArrowRightOutlined className='arr text-brand pt-1s' />
@@ -1024,6 +1030,7 @@ const Navbar = ({ setGetCategory }) => {
                         // alt="notification icon"
                         alt={selectedLang.alt}
                         className="up"
+                        fetchPriority="high"
                       />
                       <Text className="text-white fs-13">
                         {selectedLang?.label}
@@ -1101,6 +1108,7 @@ const Navbar = ({ setGetCategory }) => {
                             preview={false}
                             alt="notification icon"
                             className="up"
+                            fetchPriority="high"
                           />
                         </Button>
                       </Badge>

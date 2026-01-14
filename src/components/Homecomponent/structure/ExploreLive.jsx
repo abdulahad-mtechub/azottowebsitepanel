@@ -351,6 +351,7 @@ const ExploreLive = () => {
                           alt={t("currency-symbol")}
                           preview={false}
                           width={20}
+                          fetchPriority="high"
                         />
                         <Title level={4} className="m-0">
                           {pro?.amount}
