@@ -1,60 +1,71 @@
-import { useState, useMemo } from 'react'
-import { Col, Flex, Row, Typography } from 'antd'
-import { Segmented } from 'antd'
-import { Sellerwork } from './Sellerwork'
-import { Buyework } from './Buyework'
-import { Trans, useTranslation } from 'react-i18next'
+import { useState, useMemo } from "react";
+import { Col, Flex, Row, Typography } from "antd";
+import { Segmented } from "antd";
+import { Sellerwork } from "./Sellerwork";
+import { Buyework } from "./Buyework";
+import { Trans, useTranslation } from "react-i18next";
 
-const { Title } = Typography
+const { Title } = Typography;
 
 const HowWork = () => {
-  const { t, i18n } = useTranslation()
-  const KEYS = { SELLER: 'Seller', BUYER: 'Buyer' }
+  const { t, i18n } = useTranslation();
+  const KEYS = { SELLER: "Seller", BUYER: "Buyer" };
 
-  const labelToKey = useMemo(() => ({
-    [t('Seller')]: KEYS.SELLER,
-    [t('Buyer')]: KEYS.BUYER,
-    [KEYS.SELLER]: KEYS.SELLER,
-    [KEYS.BUYER]: KEYS.BUYER
-  }), [t, i18n.language])
+  const labelToKey = useMemo(
+    () => ({
+      [t("Seller")]: KEYS.SELLER,
+      [t("Buyer")]: KEYS.BUYER,
+      [KEYS.SELLER]: KEYS.SELLER,
+      [KEYS.BUYER]: KEYS.BUYER,
+    }),
+    [t, i18n.language]
+  );
 
-  const [activeTab, setActiveTab] = useState(KEYS.SELLER)
+  const [activeTab, setActiveTab] = useState(KEYS.SELLER);
 
   const segmentedOptions = [
-    { label: t('Seller'), value: KEYS.SELLER },
-    { label: t('Buyer'), value: KEYS.BUYER }
-  ]
+    { label: t("Seller"), value: KEYS.SELLER },
+    { label: t("Buyer"), value: KEYS.BUYER },
+  ];
 
   const handleSegmentChange = (val) => {
-    const normalized = labelToKey[val] || KEYS.SELLER
-    setActiveTab(normalized)
-  }
+    const normalized = labelToKey[val] || KEYS.SELLER;
+    setActiveTab(normalized);
+  };
 
   return (
-    <div className='feature bg-light-brand'>
-      <div className='container'>
+    <div className="feature bg-light-brand">
+      <div className="container">
         <Row gutter={[24, 24]}>
           <Col span={24}>
-            <Flex vertical justify='center' align='center' gap={15} className='max-width'>
-              <div className='tag bg-secondary fw-500 text-brand'>
-                {t('How Jusoor Works?')}
+            <Flex
+              vertical
+              justify="center"
+              align="center"
+              gap={15}
+              className="max-width"
+            >
+              <div className="tag bg-secondary fw-500 text-brand">
+                {t("How Jusoor Works?")}
               </div>
 
-              <Title className='m-0' level={2}>
+              <Title className="m-0" level={2}>
                 <Trans i18nKey="simpleWayToBuyOrSell">
-                  A Simple Way to <span className='text-brand'>Buy or Sell a Business</span>
+                  A Simple Way to{" "}
+                  <span className="text-brand">Buy or Sell a Business</span>
                 </Trans>
               </Title>
             </Flex>
           </Col>
 
           <Col span={24}>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
               <Segmented
-                className='custom-segment'
+                className="custom-segment"
                 options={segmentedOptions}
                 value={activeTab}
                 onChange={handleSegmentChange}
+                aria-label="Content filter"
               />
             </div>
 
@@ -66,7 +77,7 @@ const HowWork = () => {
         </Row>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export { HowWork }
+export { HowWork };
