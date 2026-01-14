@@ -4,7 +4,6 @@ import "./index.css";
 import App from "./App.jsx";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./config/apolloClient";
-import { AuthProvider } from "./context/AuthContext";
 import "./i18n";
 import dayjs from "dayjs";
 import weekday from "dayjs/plugin/weekday";
@@ -19,10 +18,8 @@ dayjs.extend(timezone);
 
 createRoot(document.getElementById("root")).render(
   <ApolloProvider client={client}>
-    <AuthProvider>
-      <StrictMode>
-        <App />
-      </StrictMode>
-    </AuthProvider>
+    <StrictMode>
+      <App />
+    </StrictMode>
   </ApolloProvider>
 );
