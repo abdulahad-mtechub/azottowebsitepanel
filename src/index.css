@@ -63,8 +63,7 @@ body {
 [dir="rtl"] .ant-breadcrumb-separator,
 [dir="rtl"] img[alt*="Arrow"],
 [dir="rtl"] img[alt*="arrow"],
-[dir="rtl"] img[src*="back-arr"],
-[dir="rtl"] img[src*="back-btn"] {
+[dir="rtl"] img[src*="back-arr"] {
   transform: scaleX(-1);
 }
 

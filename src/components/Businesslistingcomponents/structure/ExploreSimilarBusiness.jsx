@@ -301,7 +301,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                             >
                               {pro?.isSaved ? (
                                 <img
-                                  src="/assets/icons/bk-bl-d.png"
+                                  src="/assets/icons/bk-bl-d.webp"
                                   alt={t("bookmarked-image")}
                                   width={22}
                                 />
