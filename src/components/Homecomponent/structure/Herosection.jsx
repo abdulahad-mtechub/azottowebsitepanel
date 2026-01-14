@@ -77,7 +77,7 @@ const Herosection = () => {
                 srcSet={`assets/images/${
                   i18n.language === "ar"
                     ? "banner-web-ar.png"
-                    : "homebanner.png"
+                    : "homebanner.webp"
                 }`}
               />
               <img
