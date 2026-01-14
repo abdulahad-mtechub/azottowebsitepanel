@@ -10,7 +10,6 @@ import {
   Typography,
   message,
   Popover,
-  Table,
 } from "antd";
 import { MyInput } from "../../Forms";
 import { useEffect } from "react";
@@ -56,97 +55,6 @@ const OfferSellerModal = ({
   useEffect(() => {
     form.resetFields();
   }, [visible, form]);
-
-  // Commission bracket table data
-  const commissionBrackets = [
-    {
-      key: "1",
-      bracket: "0 - 100,000 SAR",
-      rate: "4%",
-      description: "First 100K",
-    },
-    {
-      key: "2",
-      bracket: "100,001 - 500,000 SAR",
-      rate: "3%",
-      description: "Next 400K",
-    },
-    {
-      key: "3",
-      bracket: "500,001 - 2,000,000 SAR",
-      rate: "2.5%",
-      description: "Next 1.5M",
-    },
-    {
-      key: "4",
-      bracket: "2,000,001+ SAR",
-      rate: "1.5%",
-      description: "Above 2M",
-    },
-  ];
-
-  const columns = [
-    {
-      title: "Price Range",
-      dataIndex: "bracket",
-      key: "bracket",
-      width: "45%",
-    },
-    {
-      title: "Rate",
-      dataIndex: "rate",
-      key: "rate",
-      width: "25%",
-    },
-    {
-      title: "Applied To",
-      dataIndex: "description",
-      key: "description",
-      width: "30%",
-    },
-  ];
-
-  const commissionContent = (
-    <div style={{ maxWidth: "400px" }}>
-      <Title
-        level={5}
-        style={{ marginBottom: "12px", color: "var(--brand-color)" }}
-      >
-        {t("Jusoor Commission Structure")}
-      </Title>
-      <Text
-        style={{ display: "block", marginBottom: "16px", fontSize: "13px" }}
-      >
-        <strong>{t("Marginal Commission System:")}</strong>{" "}
-        {t("Each rate applies only to the amount within its bracket.")}
-      </Text>
-
-      <Table
-        dataSource={commissionBrackets}
-        columns={columns}
-        pagination={false}
-        size="small"
-        bordered
-        style={{ marginBottom: "16px" }}
-      />
-
-      <div
-        style={{
-          backgroundColor: "var(--light-orange)",
-          padding: "8px",
-          borderRadius: "8px",
-          marginBottom: "12px",
-        }}
-      >
-        <Text strong style={{ fontSize: "13px", color: "var(--orange)" }}>
-          Minimum Commission:
-        </Text>
-        <Text style={{ display: "block", fontSize: "12px", marginTop: "4px" }}>
-          For deals under 50,000 SAR, a minimum commission of 2,000 SAR applies.
-        </Text>
-      </div>
-    </div>
-  );
 
   return (
     <>
