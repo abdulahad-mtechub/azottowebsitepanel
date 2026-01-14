@@ -9,11 +9,7 @@ import {
   Button,
 } from "antd";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import {
-  PhoneFilled,
-  PhoneOutlined,
-  WhatsAppOutlined,
-} from "@ant-design/icons";
+import { PhoneOutlined, WhatsAppOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
