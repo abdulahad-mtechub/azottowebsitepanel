@@ -82,7 +82,7 @@ const JusoorFutures = () => {
                     align="center"
                     className="maxwidth-400"
                   >
-                    <Title strong className="fs-17 m-0 text-white">
+                    <Title level={4} strong className="fs-17 m-0 text-white">
                       {list?.title}
                     </Title>
                     <Text className="fs-15 text-white">
