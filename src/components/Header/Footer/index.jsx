@@ -103,10 +103,11 @@ const Footer = () => {
                   rel="noopener noreferrer"
                 >
                   <Image
-                    src="/assets/icons/telegram.png"
+                    src="/assets/icons/telegram.webp"
                     width={"23px"}
                     alt="telegram-icon"
                     preview={false}
+                    fetchPriority="high"
                   />
                 </Link>
                 <Link
