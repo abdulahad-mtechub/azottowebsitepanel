@@ -19,7 +19,7 @@ import { UPDATE_OFFER } from "../../../graphql";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { RequestMeetingModal } from "../../Businesslistingcomponents";
-import moment from "moment";
+import dayjs from "dayjs";
 import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
@@ -329,7 +329,7 @@ const SellerOfferTable = ({ data }) => {
     {
       title: t("Offer Date"),
       dataIndex: "createdAt",
-      render: (createdAt) => moment(createdAt).format("DD-MM-YYYY"),
+      render: (createdAt) => dayjs(createdAt).format("DD-MM-YYYY"),
     },
     {
       title: t("Action"),

@@ -25,7 +25,8 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
-import moment from "moment";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import { MobileNavbar } from "./MobileNavbar";
 import Cookies from "js-cookie";
 import { useLazyQuery, useSubscription, useMutation } from "@apollo/client";
@@ -43,6 +44,9 @@ import { MARK_NOTIFICATION_AS_READ, LOGOUT } from "../../../graphql/mutation";
 import { clearAuthTokens } from "../../../utils/tokenManager";
 
 const { Text, Title } = Typography;
+
+// Enable dayjs plugins
+dayjs.extend(relativeTime);
 
 const Navbar = ({ setGetCategory }) => {
   const { t, i18n } = useTranslation();
@@ -619,7 +623,7 @@ const Navbar = ({ setGetCategory }) => {
               className="overflow-scroll"
               renderItem={(item, index) => {
                 const createdAtMoment = item?.createdAt
-                  ? moment(item.createdAt)
+                  ? dayjs(item.createdAt)
                   : null;
                 const relativeTime = createdAtMoment
                   ? createdAtMoment.fromNow()

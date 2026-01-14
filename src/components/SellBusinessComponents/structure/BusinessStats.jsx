@@ -1,5 +1,5 @@
 import { Card, Col, Flex, Image, Row, Tooltip, Typography } from "antd";
-import moment from "moment";
+import dayjs from "dayjs";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../../../hooks";
@@ -89,7 +89,7 @@ const BusinessStats = ({ data }) => {
       icon: "/assets/icons/foundationdate.png",
       // This logic remains the same (and is correct)
       title: data?.foundedDate
-        ? moment(data.foundedDate).format("YYYY")
+        ? dayjs(data.foundedDate).format("YYYY")
         : t("N/A"),
       subtitle: `${t("Foundation Date")}`,
     },
