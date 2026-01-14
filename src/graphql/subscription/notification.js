@@ -1,4 +1,4 @@
-import { useSubscription, gql } from "@apollo/client";
+import { gql } from "@apollo/client";
 
 const NEW_NOTIFICATION_SUBSCRIPTION = gql`
   subscription OnNewNotification {
@@ -16,6 +16,4 @@ const NEW_NOTIFICATION_SUBSCRIPTION = gql`
   }
 `;
 
-export {
-    NEW_NOTIFICATION_SUBSCRIPTION
-}
+export { NEW_NOTIFICATION_SUBSCRIPTION };

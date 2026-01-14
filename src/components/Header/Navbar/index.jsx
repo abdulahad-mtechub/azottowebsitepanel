@@ -44,7 +44,6 @@ import { MARK_NOTIFICATION_AS_READ, LOGOUT } from "../../../graphql/mutation";
 import { clearAuthTokens } from "../../../utils/tokenManager";
 
 const { Text, Title } = Typography;
-
 // Enable dayjs plugins
 dayjs.extend(relativeTime);
 
