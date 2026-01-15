@@ -98,7 +98,11 @@ const PrivacyPolicy = () => {
               >
                 <Card className="bg-light-white border-gray" minHeight={300}>
                   {loading ? (
-                    <Flex justify="center" align="center" style={{ minHeight: 200 }}>
+                    <Flex
+                      justify="center"
+                      align="center"
+                      style={{ minHeight: 200 }}
+                    >
                       <Spin size="large" />
                     </Flex>
                   ) : (
