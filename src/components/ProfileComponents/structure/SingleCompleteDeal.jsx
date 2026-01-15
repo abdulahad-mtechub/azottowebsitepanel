@@ -24,7 +24,7 @@ const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
 
   const dealId = completedeal.key;
 
-  const { data, loading, error } = useQuery(GETDEAL, {
+  const { data, loading } = useQuery(GETDEAL, {
     variables: { getDealId: dealId },
     fetchPolicy: "network-only",
   });
@@ -32,13 +32,6 @@ const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
     variables: { getUserActiveBanksId: data?.getDeal?.buyer?.id },
     fetchPolicy: "network-only",
   });
-
-  if (error)
-    return (
-      <Text type="danger">
-        {t("Error loading deal")}: {error.message}
-      </Text>
-    );
 
   const banks = userBank?.getUserActiveBanks;
   const deal = data?.getDeal
@@ -179,7 +172,7 @@ const SingleCompleteDeal = ({ completedeal, setCompleteDeal }) => {
 
   if (loading) {
     return (
-      <Flex justify="center" align="center" className="h-200">
+      <Flex justify="center" align="center" style={{ minHeight: 490 }}>
         <Spin size="large" />
       </Flex>
     );
