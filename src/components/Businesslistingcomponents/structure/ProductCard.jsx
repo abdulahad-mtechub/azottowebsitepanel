@@ -97,7 +97,7 @@ const ProductCard = ({
       <Flex
         justify="center"
         align="center"
-        style={{ width: "100%", height: "100vh" }}
+        style={{ width: "100%", height: "50vh" }}
       >
         <Spin size="large" />
       </Flex>
