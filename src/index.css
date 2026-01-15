@@ -1000,6 +1000,7 @@ body {
   /* margin-top: 50px; */
   padding: 20px;
   position: relative;
+  min-height: 100vh;
 }
 
 .form-inner {

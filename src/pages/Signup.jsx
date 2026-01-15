@@ -813,128 +813,126 @@ const SignupPage = () => {
   return (
     <>
       {contextHolder}
-      <Row className="signup-page">
-        <Col xs={24} sm={24} md={12} lg={16}>
-          <div className="signup-form-container ">
-            <div className="form-inner">
-              <Button
-                aria-label="Arrow left"
-                shape="circle"
-                onClick={() => navigate("/")}
-              >
-                <ArrowLeftOutlined
-                  style={
-                    i18n.language === "ar"
-                      ? { transform: "rotate(180deg)" }
-                      : undefined
-                  }
+      <Row className="signup-page" align="middle">
+        <Col xs={24} sm={24} md={12} lg={16} className="signup-form-container">
+          <div className="form-inner">
+            <Button
+              aria-label="Arrow left"
+              shape="circle"
+              onClick={() => navigate("/")}
+            >
+              <ArrowLeftOutlined
+                style={
+                  i18n.language === "ar"
+                    ? { transform: "rotate(180deg)" }
+                    : undefined
+                }
+              />
+            </Button>
+            <NavLink to="/">
+              <div className="logo">
+                <img
+                  src="/assets/images/logo-1.png"
+                  alt="jusoor-logo"
+                  height={70}
+                  fetchPriority="high"
                 />
-              </Button>
-              <NavLink to="/">
-                <div className="logo">
-                  <img
-                    src="/assets/images/logo-1.png"
-                    alt="jusoor-logo"
-                    height={70}
-                    fetchPriority="high"
-                  />
-                </div>
-              </NavLink>
-              <Title level={3}>{t("Verify Your Identity")}</Title>
-              <Paragraph>
-                {t(
-                  "To ensure the safety of all users, we require identity verification before creating a seller account."
+              </div>
+            </NavLink>
+            <Title level={3}>{t("Verify Your Identity")}</Title>
+            <Paragraph>
+              {t(
+                "To ensure the safety of all users, we require identity verification before creating a seller account."
+              )}
+            </Paragraph>
+
+            <Button
+              aria-label="Sign Up via Nafath"
+              className="btn bg-nafth fs-16"
+              block
+              disabled
+            >
+              {t("Sign Up via Nafath (Coming Soon)")}
+            </Button>
+            <Divider className="text-gray">{t("Or")}</Divider>
+
+            <Form
+              layout="vertical"
+              form={form}
+              onFinish={handleFinish}
+              requiredMark={false}
+              onFinishFailed={() => {
+                const newErrors = {
+                  front: !frontFileName
+                    ? t("Please upload front side image.")
+                    : "",
+                  back: !backFileName
+                    ? t("Please upload back side image.")
+                    : "",
+                  passport: !passportFileName
+                    ? t("Please upload passport image.")
+                    : "",
+                };
+                setErrors(newErrors);
+              }}
+            >
+              <Steps
+                current={current}
+                onChange={onChange}
+                items={items}
+                progressDot={(dot, { index }) => (
+                  <span
+                    className={`custom-dot ${
+                      current > index ? "completed" : ""
+                    } ${current === index ? "active" : ""}`}
+                  >
+                    {current > index ? <CheckOutlined /> : dot}
+                  </span>
                 )}
+                className="mt-2 mb-2"
+              />
+              <div className="step-content">{steps[current].content}</div>
+              <Flex gap={10} justify="end">
+                {current > 0 && (
+                  <Button
+                    aria-label="Back"
+                    type="button"
+                    className="btn bg-transparent border-gray text-black fs-14 my-2"
+                    onClick={prev}
+                    block
+                  >
+                    {t("Back")}
+                  </Button>
+                )}
+                {current < steps.length - 1 && (
+                  <Button
+                    aria-label="Next"
+                    className="btn bg-dark-blue fs-14 my-2"
+                    block
+                    onClick={next}
+                  >
+                    {t("Next")}
+                  </Button>
+                )}
+                {current === steps.length - 1 && (
+                  <Button
+                    aria-label="Signup"
+                    type="primary"
+                    htmlType="submit"
+                    className="btn bg-dark-blue fs-14 my-2"
+                    loading={loading}
+                    disabled={loading}
+                    block
+                  >
+                    {t("Sign Up")}
+                  </Button>
+                )}
+              </Flex>
+              <Paragraph className="text-center">
+                {t("Don't have an account?")}{" "}
+                <NavLink to="/login">{t("Sign In")}</NavLink>
               </Paragraph>
-
-              <Button
-                aria-label="Sign Up via Nafath"
-                className="btn bg-nafth fs-16"
-                block
-                disabled
-              >
-                {t("Sign Up via Nafath (Coming Soon)")}
-              </Button>
-              <Divider className="text-gray">{t("Or")}</Divider>
-
-              <Form
-                layout="vertical"
-                form={form}
-                onFinish={handleFinish}
-                requiredMark={false}
-                onFinishFailed={() => {
-                  const newErrors = {
-                    front: !frontFileName
-                      ? t("Please upload front side image.")
-                      : "",
-                    back: !backFileName
-                      ? t("Please upload back side image.")
-                      : "",
-                    passport: !passportFileName
-                      ? t("Please upload passport image.")
-                      : "",
-                  };
-                  setErrors(newErrors);
-                }}
-              >
-                <Steps
-                  current={current}
-                  onChange={onChange}
-                  items={items}
-                  progressDot={(dot, { index }) => (
-                    <span
-                      className={`custom-dot ${
-                        current > index ? "completed" : ""
-                      } ${current === index ? "active" : ""}`}
-                    >
-                      {current > index ? <CheckOutlined /> : dot}
-                    </span>
-                  )}
-                  className="mt-2 mb-2"
-                />
-                <div className="step-content">{steps[current].content}</div>
-                <Flex gap={10} justify="end">
-                  {current > 0 && (
-                    <Button
-                      aria-label="Back"
-                      type="button"
-                      className="btn bg-transparent border-gray text-black fs-14 my-2"
-                      onClick={prev}
-                      block
-                    >
-                      {t("Back")}
-                    </Button>
-                  )}
-                  {current < steps.length - 1 && (
-                    <Button
-                      aria-label="Next"
-                      className="btn bg-dark-blue fs-14 my-2"
-                      block
-                      onClick={next}
-                    >
-                      {t("Next")}
-                    </Button>
-                  )}
-                  {current === steps.length - 1 && (
-                    <Button
-                      aria-label="Signup"
-                      type="primary"
-                      htmlType="submit"
-                      className="btn bg-dark-blue fs-14 my-2"
-                      loading={loading}
-                      disabled={loading}
-                      block
-                    >
-                      {t("Sign Up")}
-                    </Button>
-                  )}
-                </Flex>
-                <Paragraph className="text-center">
-                  {t("Don't have an account?")}{" "}
-                  <NavLink to="/login">{t("Sign In")}</NavLink>
-                </Paragraph>
-              </Form>
-            </div>
+            </Form>
           </div>
         </Col>
 
