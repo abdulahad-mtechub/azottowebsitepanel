@@ -13,8 +13,8 @@ import {
   Row,
   Select,
   Typography,
-  Input,
   Image,
+  Input,
 } from "antd";
 import { MyInput } from "../../Forms";
 import { ModuleTopHeading } from "../../Pagecomponents";
@@ -340,7 +340,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                     <Input
                       type="number"
                       placeholder={t("Enter revenue")}
-                      className="w-100 "
+                      className="w-100"
                       prefix={
                         <img
                           src="/assets/icons/reyal-g.png"
@@ -482,14 +482,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label={t("Capital Recovery")}
                 name="capitalRecovery"
                 readOnly
-                addonBefore={
-                  <img
-                    src="/assets/icons/reyal-g.png"
-                    alt="currency-symbol"
-                    width={14}
-                    fetchPriority="high"
-                  />
-                }
+                addonBefore="Months"
                 className="w-100"
               />
             </Col>
@@ -497,13 +490,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
               <MyInput
                 label={
                   <Flex align="center" gap={5}>
-                    {t("Multiples of Revenue & Profit")}{" "}
-                    <Image
-                      preview={false}
-                      src="/assets/icons/info-outline.png"
-                      width={15}
-                      alt={t("info-icon")}
-                    />
+                    {t("Multiples of Revenue")}
                   </Flex>
                 }
                 name="multiple"
@@ -548,6 +535,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label: t("Number of items"),
                 placeholder: t("Enter quantity"),
                 type: "input",
+                inputType: "number",
                 validator: createRowValidator(
                   "keyassets",
                   ["assetName", "noItems", "purchaseYear", "price"],
@@ -581,6 +569,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label: t("Total Price"),
                 placeholder: t("Enter price"),
                 type: "input",
+                inputType: "number",
                 addonBefore: (
                   <img
                     src="/assets/icons/reyal-g.png"
@@ -635,6 +624,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label: t("Number of items"),
                 placeholder: t("Enter quantity"),
                 type: "input",
+                inputType: "number",
                 validator: createRowValidator(
                   "liability",
                   [
@@ -678,6 +668,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label: t("Total Price"),
                 placeholder: t("Enter price"),
                 type: "input",
+                inputType: "number",
                 addonBefore: (
                   <img
                     src="/assets/icons/reyal-g.png"
@@ -738,6 +729,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label: t("Number of items"),
                 placeholder: t("Enter quantity"),
                 type: "input",
+                inputType: "number",
                 validator: createRowValidator(
                   "inventory",
                   [
@@ -781,6 +773,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                 label: t("Total Price"),
                 placeholder: t("Enter price"),
                 type: "input",
+                inputType: "number",
                 addonBefore: (
                   <img
                     src="/assets/icons/reyal-g.png"

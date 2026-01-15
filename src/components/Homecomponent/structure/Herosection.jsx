@@ -74,14 +74,14 @@ const Herosection = () => {
               {/* 1. Mobile Version: Shown when screen is less than 768px */}
               <source
                 media="(max-width: 996px)"
-                srcSet={`assets/images/${
+                srcSet={`/assets/images/${
                   i18n.language === "ar"
                     ? "banner-web-ar.png"
                     : "homebanner.webp"
                 }`}
               />
               <img
-                src={`assets/images/${
+                src={`/assets/images/${
                   i18n.language === "ar"
                     ? "banner-web-ar.png"
                     : "banner-web.webp"
