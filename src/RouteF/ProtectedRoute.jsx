@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Navigate, useLocation } from "react-router-dom";
-import { Result, Button, Typography, Flex, Spin } from "antd";
+import { Result, Button, Typography, Flex } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { ExclamationCircleOutlined, LoadingOutlined } from "@ant-design/icons";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 import {
   isAuthenticated,
   hasValidSession,
@@ -14,7 +14,6 @@ import { refreshAccessToken } from "../utils/tokenRefreshService";
 const { Text } = Typography;
 
 const ProtectedRoute = ({ children }) => {
-  const [isChecking, setIsChecking] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
@@ -28,7 +27,6 @@ const ProtectedRoute = ({ children }) => {
       // Case 1: Has access token - user is authenticated
       if (hasAccess) {
         setIsAuthorized(true);
-        setIsChecking(false);
         return;
       }
 
@@ -40,33 +38,14 @@ const ProtectedRoute = ({ children }) => {
         } else {
           setIsAuthorized(false);
         }
-        setIsChecking(false);
         return;
       }
 
       setIsAuthorized(false);
-      setIsChecking(false);
     };
 
     checkAuth();
   }, [location.pathname]);
-
-  // // Show loading while checking authentication
-  // if (isChecking) {
-  //   return (
-  //     <div
-  //       style={{
-  //         display: "flex",
-  //         justifyContent: "center",
-  //         alignItems: "center",
-  //         height: "100vh",
-  //       }}
-  //     >
-  //       <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-  //     </div>
-  //   );
-  // }
-
   // If not authorized, redirect to home
   if (!isAuthorized) {
     return <Navigate to="/" replace state={{ from: location }} />;
