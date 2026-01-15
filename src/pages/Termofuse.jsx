@@ -101,7 +101,7 @@ const Termofuse = () => {
                   <Flex
                     justify="center"
                     align="center"
-                    style={{ minHeight: 200 }}
+                    style={{ minHeight: 300 }}
                   >
                     <Spin size="large" />
                   </Flex>

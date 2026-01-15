@@ -15,14 +15,6 @@ const EndaPage = () => {
   const lang = localStorage.getItem("lang") || "en";
   const isArabic = lang === "ar";
 
-  if (loading) {
-    return (
-      <Flex justify="center" align="center" className="h-200">
-        <Spin size="large" />
-      </Flex>
-    );
-  }
-
   const endaTerms = data?.getNDATerms?.find(
     (term) => term.isArabic === isArabic
   );
@@ -101,14 +93,27 @@ const EndaPage = () => {
               sm={{ span: 24 }}
               xs={{ span: 24 }}
             >
-              <Card className="bg-light-white border-gray">
-                <div className="mx-width">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: endaContent.content,
-                    }}
-                  />
-                </div>
+              <Card
+                className="bg-light-white border-gray"
+                style={{ minHeight: 300 }}
+              >
+                {loading ? (
+                  <Flex
+                    justify="center"
+                    align="center"
+                    style={{ minHeight: 300 }}
+                  >
+                    <Spin size="large" />
+                  </Flex>
+                ) : (
+                  <div className="mx-width">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: endaContent.content,
+                      }}
+                    />
+                  </div>
+                )}
               </Card>
             </Col>
           </Row>
