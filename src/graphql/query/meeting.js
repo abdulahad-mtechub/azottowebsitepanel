@@ -187,17 +187,6 @@ const GETMEETINGS = gql`
   }
 `;
 
-const GETBUYERMEETINGCOUNT = gql`
-  query Query {
-    getBuyerCount
-  }
-`;
-
-const GETSELLERMEETINGCOUNT = gql`
-  query Query {
-    getSellerCount
-  }
-`;
 const CHECKMEETINGEXISTS = gql`
   query Query($businessId: ID!, $buyerId: ID!) {
     checkMeetingExists(businessId: $businessId, buyerId: $buyerId)
@@ -216,8 +205,6 @@ export {
   READYSCHEDULEDMEETINGS,
   SCHEDULEDMEETINGS,
   GETMEETINGS,
-  GETBUYERMEETINGCOUNT,
-  GETSELLERMEETINGCOUNT,
   CHECKMEETINGEXISTS,
   REJECT_MEETING,
 };
