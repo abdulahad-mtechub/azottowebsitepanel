@@ -24,6 +24,7 @@ import { truncateChars } from "../../../utils";
 import Cookies from "js-cookie";
 import { useFormatNumber } from "../../../hooks";
 import { isAuthenticated } from "../../../utils/tokenManager";
+import { LoadingCard } from "../../ui";
 
 const { Text, Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -153,14 +154,6 @@ const ExploreLive = () => {
       ],
     })) || [];
 
-  if (loading) {
-    return (
-      <Flex justify="center" align="center" className="h-200">
-        <Spin size="large" />
-      </Flex>
-    );
-  }
-
   // Responsive layout variables
   const buttonGroupGap = screens.xs ? 4 : 12;
   const buttonGroupFlexDirection = screens.xs ? "vertical" : "horizontal";
@@ -195,173 +188,189 @@ const ExploreLive = () => {
                 </Text>
               </Flex>
             </Col>
-            {exploreData?.slice(0, 3)?.map((pro, i) => (
-              <Col
-                xl={{ span: 8 }}
-                lg={{ span: 8 }}
-                md={{ span: 12 }}
-                sm={{ span: 24 }}
-                xs={{ span: 24 }}
-                key={i}
-              >
-                <Card
-                  className="h-100 border-gray rounded-12 bg-lightest-gray card-cs cursor"
-                  onClick={() => navigate(`/singleviewlisting/${pro?.id}`)}
+            {loading || exploreData.length === 0 ? (
+              <Col span={24}>
+                <Card className="rounded-12 border-gray">
+                  <LoadingCard
+                    loading={loading}
+                    isEmpty={!loading && exploreData.length === 0}
+                    emptyText={t("No businesses available right now.")}
+                    height={300}
+                    minHeight={300}
+                  />
+                </Card>
+              </Col>
+            ) : (
+              exploreData?.slice(0, 3)?.map((pro, i) => (
+                <Col
+                  xl={{ span: 8 }}
+                  lg={{ span: 8 }}
+                  md={{ span: 12 }}
+                  sm={{ span: 24 }}
+                  xs={{ span: 24 }}
+                  key={i}
                 >
-                  <Flex vertical gap={20}>
-                    <Flex
-                      justify="space-between"
-                      align={screens.xs ? "flex-start" : "center"}
-                      wrap={shouldMainFlexWrap ? "wrap" : "nowrap"}
-                      gap={mainFlexGap}
-                    >
+                  <Card
+                    className="h-100 border-gray rounded-12 bg-lightest-gray card-cs cursor"
+                    onClick={() => navigate(`/singleviewlisting/${pro?.id}`)}
+                  >
+                    <Flex vertical gap={20}>
                       <Flex
-                        gap={buttonGroupGap}
-                        align="center"
-                        direction={buttonGroupFlexDirection}
+                        justify="space-between"
+                        align={screens.xs ? "flex-start" : "center"}
+                        wrap={shouldMainFlexWrap ? "wrap" : "nowrap"}
+                        gap={mainFlexGap}
                       >
-                        <Button
-                          className="fs-13"
-                          aria-labelledby={t(pro?.categoryName)}
+                        <Flex
+                          gap={buttonGroupGap}
+                          align="center"
+                          direction={buttonGroupFlexDirection}
                         >
-                          {truncateChars(
-                            isArabic ? pro?.arabicName : pro?.categoryName,
-                            14
-                          )}
-                        </Button>
-                        {typeof pro?.type === "boolean" && (
                           <Button
-                            aria-labelledby="type"
-                            className={`fs-12 text-white ${
-                              pro.type ? "bg-brand" : "bg-black"
-                            }`}
+                            className="fs-13"
+                            aria-labelledby={t(pro?.categoryName)}
                           >
-                            <Space
-                              align="center"
-                              justify="center"
-                              size={4}
-                              wrap={false}
+                            {truncateChars(
+                              isArabic ? pro?.arabicName : pro?.categoryName,
+                              14
+                            )}
+                          </Button>
+                          {typeof pro?.type === "boolean" && (
+                            <Button
+                              aria-labelledby="type"
+                              className={`fs-12 text-white ${
+                                pro.type ? "bg-brand" : "bg-black"
+                              }`}
                             >
-                              <Text className="fs-12 text-white">
-                                {pro.type ? t("Taqbeel") : t("Acquiring")}
-                              </Text>
-                              <Tooltip
-                                title={
-                                  pro.type
-                                    ? t(
-                                        "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
-                                      )
-                                    : t(
-                                        "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
-                                      )
-                                }
+                              <Space
+                                align="center"
+                                justify="center"
+                                size={4}
+                                wrap={false}
                               >
-                                <img
-                                  src="/assets/icons/info-a.png"
-                                  width={16}
-                                  alt="takbeel-icon"
-                                  fetchPriority="high"
-                                  className="center"
-                                />
-                              </Tooltip>
-                            </Space>
+                                <Text className="fs-12 text-white">
+                                  {pro.type ? t("Taqbeel") : t("Acquiring")}
+                                </Text>
+                                <Tooltip
+                                  title={
+                                    pro.type
+                                      ? t(
+                                          "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
+                                        )
+                                      : t(
+                                          "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
+                                        )
+                                  }
+                                >
+                                  <img
+                                    src="/assets/icons/info-a.png"
+                                    width={16}
+                                    alt="takbeel-icon"
+                                    fetchPriority="high"
+                                    className="center"
+                                  />
+                                </Tooltip>
+                              </Space>
+                            </Button>
+                          )}
+                        </Flex>
+                        {userId && (
+                          <Button
+                            className="border-0 bg-transparent p-0"
+                            aria-labelledby="bookmarked button"
+                            onClick={(e) =>
+                              saveBusinessHandler(pro?.id, pro?.save, e)
+                            }
+                            disabled={isUserInactive}
+                            style={{
+                              opacity: isUserInactive ? 0.5 : 1,
+                              cursor: isUserInactive
+                                ? "not-allowed"
+                                : "pointer",
+                            }}
+                          >
+                            {pro?.save === true ? (
+                              <img
+                                src="/assets/icons/bk-bl-d.webp"
+                                alt={t("bookmarked-image")}
+                                width={22}
+                                fetchPriority="high"
+                              />
+                            ) : (
+                              <img
+                                src="/assets/icons/bk-bl.png"
+                                alt={t("un-bookmarked-image")}
+                                width={22}
+                                fetchPriority="high"
+                              />
+                            )}
                           </Button>
                         )}
                       </Flex>
-                      {userId && (
-                        <Button
-                          className="border-0 bg-transparent p-0"
-                          aria-labelledby="bookmarked button"
-                          onClick={(e) =>
-                            saveBusinessHandler(pro?.id, pro?.save, e)
+                      <div>
+                        <div className="w-full card-img mb-2 rounded-12">
+                          <img
+                            src="/assets/images/card-1.webp"
+                            width={"100%"}
+                            height={"100%"}
+                            alt={t("product-image")}
+                            fetchPriority="high"
+                          />
+                        </div>
+                        <Title className="" level={5}>
+                          {truncateChars(pro?.title, 42)}
+                        </Title>
+                        <div className="h-80">
+                          <Paragraph className="fs-14 text-gray justify-clamp">
+                            {pro?.description}
+                          </Paragraph>
+                        </div>
+                        <Divider className="my-1" />
+                        <Space
+                          split={
+                            <Divider type="vertical" className="m-0 h-auto" />
                           }
-                          disabled={isUserInactive}
+                          align="center"
                           style={{
-                            opacity: isUserInactive ? 0.5 : 1,
-                            cursor: isUserInactive ? "not-allowed" : "pointer",
+                            width: "100%",
+                            justifyContent: "space-between",
                           }}
                         >
-                          {pro?.save === true ? (
-                            <img
-                              src="/assets/icons/bk-bl-d.webp"
-                              alt={t("bookmarked-image")}
-                              width={22}
-                              fetchPriority="high"
-                            />
-                          ) : (
-                            <img
-                              src="/assets/icons/bk-bl.png"
-                              alt={t("un-bookmarked-image")}
-                              width={22}
-                              fetchPriority="high"
-                            />
-                          )}
-                        </Button>
-                      )}
+                          {pro?.child?.map((item, c) => (
+                            <Flex
+                              vertical
+                              align="center"
+                              justify="center"
+                              key={c}
+                            >
+                              <Title level={5} className="text-brand m-0 fs-13">
+                                {item?.subtitle}
+                              </Title>
+                              <Text className="text-gray fs-12">
+                                {item?.subdesc}
+                              </Text>
+                            </Flex>
+                          ))}
+                        </Space>
+                        <Divider className="my-1" />
+                        <Flex gap={3} align="center">
+                          <Image
+                            src="/assets/icons/reyal.webp"
+                            alt={t("currency-symbol")}
+                            preview={false}
+                            width={20}
+                            fetchPriority="high"
+                          />
+                          <Title level={4} className="m-0">
+                            {pro?.amount}
+                          </Title>
+                        </Flex>
+                      </div>
                     </Flex>
-                    <div>
-                      <div className="w-full card-img mb-2 rounded-12">
-                        <img
-                          src="/assets/images/card-1.webp"
-                          width={"100%"}
-                          height={"100%"}
-                          alt={t("product-image")}
-                          fetchPriority="high"
-                        />
-                      </div>
-                      <Title className="" level={5}>
-                        {truncateChars(pro?.title, 42)}
-                      </Title>
-                      <div className="h-80">
-                        <Paragraph className="fs-14 text-gray justify-clamp">
-                          {pro?.description}
-                        </Paragraph>
-                      </div>
-                      <Divider className="my-1" />
-                      <Space
-                        split={
-                          <Divider type="vertical" className="m-0 h-auto" />
-                        }
-                        align="center"
-                        style={{
-                          width: "100%",
-                          justifyContent: "space-between",
-                        }}
-                      >
-                        {pro?.child?.map((item, c) => (
-                          <Flex
-                            vertical
-                            align="center"
-                            justify="center"
-                            key={c}
-                          >
-                            <Title level={5} className="text-brand m-0 fs-13">
-                              {item?.subtitle}
-                            </Title>
-                            <Text className="text-gray fs-12">
-                              {item?.subdesc}
-                            </Text>
-                          </Flex>
-                        ))}
-                      </Space>
-                      <Divider className="my-1" />
-                      <Flex gap={3} align="center">
-                        <Image
-                          src="/assets/icons/reyal.webp"
-                          alt={t("currency-symbol")}
-                          preview={false}
-                          width={20}
-                          fetchPriority="high"
-                        />
-                        <Title level={4} className="m-0">
-                          {pro?.amount}
-                        </Title>
-                      </Flex>
-                    </div>
-                  </Flex>
-                </Card>
-              </Col>
-            ))}
+                  </Card>
+                </Col>
+              ))
+            )}
 
             <Col span={24}>
               <Flex justify="center">

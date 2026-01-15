@@ -1,9 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Col, Collapse, Row, Typography, Spin, Flex } from "antd";
+import { Col, Collapse, Row, Typography, Spin, Flex, Card } from "antd";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { GETFAQ } from "../../../graphql/query/queries";
 import { useLazyQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
+import { LoadingCard } from "../../ui";
 
 const { Text, Title } = Typography;
 
@@ -61,14 +62,6 @@ const FaqsComponent = () => {
       }));
   }, [data, isArabic]);
 
-  if (loading) {
-    return (
-      <Flex justify="center" align="center" className="h-200">
-        <Spin size="large" />
-      </Flex>
-    );
-  }
-
   return (
     <div className="feature" dir={isArabic ? "rtl" : "ltr"}>
       <div className="container">
@@ -101,24 +94,31 @@ const FaqsComponent = () => {
             sm={{ span: 24 }}
             xs={{ span: 24 }}
           >
-            <Collapse
-              className="collapse-fq"
-              activeKey={currentPanel}
-              onChange={(keys) =>
-                setCurrentPanel(Array.isArray(keys) ? keys : [String(keys)])
-              }
-              ghost
-            >
-              {filteredFaqs.length === 0 ? (
-                <div style={{ padding: 16 }}>
-                  <Text>
-                    {isArabic
+            {loading || filteredFaqs.length === 0 ? (
+              <Card className="rounded-12 border-gray">
+                <LoadingCard
+                  loading={loading}
+                  isEmpty={!loading && filteredFaqs.length === 0}
+                  emptyText={
+                    isArabic
                       ? "لا توجد أسئلة متاحة حالياً"
-                      : "No FAQs available right now."}
-                  </Text>
-                </div>
-              ) : (
-                filteredFaqs.map((faq, index) => {
+                      : "No FAQs available right now."
+                  }
+                  height={200}
+                  minHeight={200}
+                  className="text-gray"
+                />
+              </Card>
+            ) : (
+              <Collapse
+                className="collapse-fq"
+                activeKey={currentPanel}
+                onChange={(keys) =>
+                  setCurrentPanel(Array.isArray(keys) ? keys : [String(keys)])
+                }
+                ghost
+              >
+                {filteredFaqs.map((faq, index) => {
                   const key = String(index);
                   const isOpen = currentPanel.includes(key);
                   return (
@@ -151,9 +151,9 @@ const FaqsComponent = () => {
                       <Text className="fs-16">{faq.description}</Text>
                     </Collapse.Panel>
                   );
-                })
-              )}
-            </Collapse>
+                })}
+              </Collapse>
+            )}
           </Col>
         </Row>
       </div>

@@ -8,6 +8,7 @@ const LoadingCard = ({
   loading = false,
   isEmpty = false,
   emptyText = "No Data Available",
+  className = "",
 }) => {
   if (isEmpty) {
     return (
@@ -19,7 +20,7 @@ const LoadingCard = ({
           minHeight: minHeight,
         }}
       >
-        <Text>{emptyText}</Text>
+        <Text className={className}>{emptyText}</Text>
       </Flex>
     );
   }
