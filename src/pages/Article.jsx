@@ -1,4 +1,4 @@
-import { Breadcrumb, Col, Flex, Row, Typography, Spin } from "antd";
+import { Breadcrumb, Col, Flex, Row, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ArtticleCards, SearchInput, MySelect } from "../components";
 import { useState, useCallback, useEffect } from "react";
@@ -14,7 +14,6 @@ const Article = () => {
   const { t, i18n } = useTranslation();
   const [selectfilter, setSelectFilter] = useState(t("Sorting"));
   const [searchQuery, setSearchQuery] = useState("");
-  const [current, setCurrent] = useState(1);
 
   const lang = localStorage.getItem("lang") || i18n.language || "en";
   const isArabic = lang.toLowerCase() === "ar";
@@ -40,11 +39,9 @@ const Article = () => {
         desc: isArabic ? item?.arabicBody : item?.body,
         date: item.createdAt,
       })) || [];
-  const total = data?.getArticles?.totalCount || 0;
 
   const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
     setSearchQuery(debouncedSearchValue);
-    setCurrent(1); // reset pagination
   }, []);
 
   return (

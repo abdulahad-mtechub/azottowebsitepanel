@@ -129,7 +129,7 @@ const SingleViewlisting = () => {
       <div
         style={{
           width: "100%",
-          minHeight: "550px",
+          height: "100vh",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",

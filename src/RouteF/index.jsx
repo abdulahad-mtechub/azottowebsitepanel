@@ -28,7 +28,7 @@ const AppRoutes = () => {
   const [showButton, setShowButton] = useState(false);
   const [getcategory, setGetCategory] = useState(null);
 
-  const hideNavbarFooterOn = ["/login", "/signup", "/forgotpass"]; // Add more paths here if needed
+  const hideNavbarFooterOn = ["/login", "/signup", "/forgotpass"];
   const shouldHideNavbarFooter = hideNavbarFooterOn.includes(location.pathname);
   const hidescrolltotop = location.pathname.startsWith("/singleviewlisting/");
 
