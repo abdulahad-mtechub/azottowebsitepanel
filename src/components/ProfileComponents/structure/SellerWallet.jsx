@@ -80,7 +80,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
       {contextHolder}
       <Card className="border-gray">
         <Row gutter={[16, 16]}>
-          {data?.length > 0 && (
+          {(data?.length > 0 || bankLoading) && (
             <Col span={24}>
               <Title level={5} className="m-0">
                 {t("Saved Accounts")}
@@ -88,7 +88,11 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
             </Col>
           )}
 
-          {data?.length > 0 ? (
+          {bankLoading ? (
+            <Col span={24}>
+              <LoadingCard loading={true} height={340} minHeight={340} />
+            </Col>
+          ) : data?.length > 0 ? (
             data?.map((wallet) => {
               const isLoading = activatingBankId === wallet.key;
 
@@ -215,7 +219,7 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
           ) : (
             <Col span={24}>
               <LoadingCard
-                loading={bankLoading}
+                loading={false}
                 isEmpty={true}
                 emptyText={t("No Bank Added")}
                 height={385}
