@@ -16,14 +16,6 @@ const PrivacyPolicy = () => {
   const lang = localStorage.getItem("lang") || "en";
   const isArabic = lang === "ar";
 
-  if (loading) {
-    return (
-      <Flex justify="center" align="center" style={{ height: "90vh" }}>
-        <Spin size="large" />
-      </Flex>
-    );
-  }
-
   const privacyPolicy = data?.getPrivacyPolicy?.find(
     (policy) => policy.isArabic === isArabic
   );
@@ -104,18 +96,24 @@ const PrivacyPolicy = () => {
                 sm={{ span: 24 }}
                 xs={{ span: 24 }}
               >
-                <Card className="bg-light-white border-gray">
-                  <Flex vertical gap={20}>
-                    <div>
-                      <Paragraph className="fs-14 text-gray">
-                        <span
-                          dangerouslySetInnerHTML={{
-                            __html: policyContent?.content,
-                          }}
-                        />
-                      </Paragraph>
-                    </div>
-                  </Flex>
+                <Card className="bg-light-white border-gray" minHeight={300}>
+                  {loading ? (
+                    <Flex justify="center" align="center" style={{ minHeight: 200 }}>
+                      <Spin size="large" />
+                    </Flex>
+                  ) : (
+                    <Flex vertical gap={20}>
+                      <div>
+                        <Paragraph className="fs-14 text-gray">
+                          <span
+                            dangerouslySetInnerHTML={{
+                              __html: policyContent?.content,
+                            }}
+                          />
+                        </Paragraph>
+                      </div>
+                    </Flex>
+                  )}
                 </Card>
               </Col>
             </Row>
