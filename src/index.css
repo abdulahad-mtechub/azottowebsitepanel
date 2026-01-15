@@ -1019,15 +1019,42 @@ body {
 
 .signup-visual-container {
   background-color: #05052d;
-  /* background-image: url('../assets/images/login-sh.svg'); */
   min-height: 100vh;
-  height: -webkit-fill-available;
+  /* height: -webkit-fill-available; removed this as it causes issues in Safari/Chrome differences */
+  height: 100vh;
   position: relative;
   z-index: 1;
+  overflow: hidden; /* Added to contain overlapping children */
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-visual-container .lang-dropdown {
+  position: absolute;
+  top: 20px;
+  right: 20px; /* Adjust as needed */
+  z-index: 10;
+}
+
+.logo-sp {
+  /* transform: translateY(200px); replaced with flex layout */
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: auto;
 }
 
 .bg-shade {
   position: relative;
+  width: 100%;
+  margin-top: auto; /* Push to bottom */
+}
+
+.bg-shade img {
+  display: block; /* Remove bottom space */
+  width: 100%;
 }
 
 .bg-shade::after {
@@ -1037,15 +1064,11 @@ body {
   left: 0;
   background-image: url("../assets/images/shade.svg");
   width: 100%;
-  height: -webkit-fill-available;
+  height: 100%;
   background-size: cover;
   z-index: -1;
-  background-position-y: bottom;
+  background-position: bottom;
   transform: rotate(180deg);
-}
-
-.logo-sp {
-  transform: translateY(200px);
 }
 
 .object-cover {

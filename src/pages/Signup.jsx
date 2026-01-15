@@ -968,7 +968,7 @@ const SignupPage = () => {
                 preview={false}
                 fetchPriority="high"
               />
-              <Title level={5} className="m-0 text-white text-center">
+              <Title level={4} className="m-0 text-white text-center">
                 {t("Shorten the path")}
               </Title>
             </Flex>
