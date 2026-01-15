@@ -110,7 +110,7 @@ const ProductCard = ({
         vertical
         justify="center"
         align="center"
-        style={{ width: "100%", height: "50vh", padding: "40px 0" }}
+        style={{ width: "100%", height: "50vh" }}
       >
         <img
           src="/assets/icons/info-outline.png"
