@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Col, Collapse, Row, Typography, Spin, Flex, Card } from "antd";
+import { Col, Collapse, Row, Typography, Flex, Card } from "antd";
 import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { GETFAQ } from "../../../graphql/query/queries";
 import { useLazyQuery } from "@apollo/client";
@@ -95,7 +95,7 @@ const FaqsComponent = () => {
             xs={{ span: 24 }}
           >
             {loading || filteredFaqs.length === 0 ? (
-              <Card className="rounded-12 border-gray">
+              <Card className="rounded-12 border-gray bg-lightest-gray">
                 <LoadingCard
                   loading={loading}
                   isEmpty={!loading && filteredFaqs.length === 0}

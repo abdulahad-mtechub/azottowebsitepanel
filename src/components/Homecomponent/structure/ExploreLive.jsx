@@ -190,13 +190,14 @@ const ExploreLive = () => {
             </Col>
             {loading || exploreData.length === 0 ? (
               <Col span={24}>
-                <Card className="rounded-12 border-gray">
+                <Card className="rounded-12 border-gray bg-lightest-gray">
                   <LoadingCard
                     loading={loading}
                     isEmpty={!loading && exploreData.length === 0}
                     emptyText={t("No businesses available right now.")}
                     height={300}
                     minHeight={300}
+                    className="text-gray"
                   />
                 </Card>
               </Col>
