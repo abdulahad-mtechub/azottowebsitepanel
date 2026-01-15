@@ -18,7 +18,7 @@ const PrivacyPolicy = () => {
 
   if (loading) {
     return (
-      <Flex justify="center" align="center" className="h-200">
+      <Flex justify="center" align="center" style={{ height: "90vh" }}>
         <Spin size="large" />
       </Flex>
     );
