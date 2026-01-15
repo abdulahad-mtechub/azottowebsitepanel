@@ -14,10 +14,10 @@ import dayjs from "dayjs";
 dayjs.locale("ar");
 
 function App() {
-  const [dir, setDir] = useState(i18n.language === "ar" ? "rtl" : "ltr");
+  const [dir, setDir] = useState(() => (i18n.language === "ar" ? "rtl" : "ltr"));
   const isArabic = i18n.language === "ar";
   const [antdLocale, setAntdLocale] = useState(getAntdLocale(i18n.language));
-  const [authInitialized, setAuthInitialized] = useState(false);
+  const [authInitialized, setAuthInitialized] = useState(!hasValidSession());
 
   useEffect(() => {
     const initAuth = async () => {
@@ -31,9 +31,7 @@ function App() {
         setAuthInitialized(true);
       }
     };
-
     initAuth();
-
     // Cleanup on unmount
     return () => {
       stopAutoRefresh();
@@ -59,34 +57,6 @@ function App() {
     dayjs.locale(isArabic ? "ar" : "en");
   }, [isArabic]);
 
-  // Show loading spinner while auth is being initialized
-  if (!authInitialized) {
-    return (
-      <ConfigProvider
-        direction={dir}
-        locale={antdLocale}
-        theme={{
-          token: {
-            colorPrimary: "#1D4ED8",
-            colorError: "#BC302F",
-          },
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100vh",
-            width: "100%",
-          }}
-        >
-          <Spin size="large" tip="Initializing..." />
-        </div>
-      </ConfigProvider>
-    );
-  }
-
   return (
     <ConfigProvider
       direction={dir}
@@ -103,7 +73,21 @@ function App() {
         },
       }}
     >
-      <RouteF />
+      {!authInitialized ? (
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            width: "100%",
+          }}
+        >
+          <Spin size="large" tip="Initializing..." />
+        </div>
+      ) : (
+        <RouteF />
+      )}
     </ConfigProvider>
   );
 }
