@@ -4,18 +4,23 @@ import { isAuthenticated, hasValidSession } from "../utils/tokenManager";
 import { refreshAccessToken } from "../utils/tokenRefreshService";
 
 const PublicRoute = ({ children }) => {
-  const [userIsAuthenticated, setUserIsAuthenticated] = useState(false);
+  const [userIsAuthenticated, setUserIsAuthenticated] = useState(null); // null = checking, true/false = determined
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const location = useLocation();
 
   useEffect(() => {
     const checkAuth = async () => {
+      setIsCheckingAuth(true);
       const hasAccess = isAuthenticated();
       const hasSession = hasValidSession();
+
       // Case 1: Has access token - user is authenticated
       if (hasAccess) {
         setUserIsAuthenticated(true);
+        setIsCheckingAuth(false);
         return;
       }
+
       // Case 2: No access token but has refresh token - try to recover
       if (!hasAccess && hasSession) {
         const newToken = await refreshAccessToken();
@@ -24,13 +29,22 @@ const PublicRoute = ({ children }) => {
         } else {
           setUserIsAuthenticated(false);
         }
+        setIsCheckingAuth(false);
         return;
       }
+
       // Case 3: No tokens at all - not authenticated, allow access
       setUserIsAuthenticated(false);
+      setIsCheckingAuth(false);
     };
+
     checkAuth();
   }, [location.pathname]);
+
+  // While checking authentication, don't render anything
+  if (isCheckingAuth) {
+    return null;
+  }
 
   // If user is authenticated, redirect to home (or intended destination)
   if (userIsAuthenticated) {
@@ -39,6 +53,7 @@ const PublicRoute = ({ children }) => {
 
     return <Navigate to={from} replace />;
   }
+
   // User is not authenticated, show the auth page (login/signup/forgot password)
   return children;
 };

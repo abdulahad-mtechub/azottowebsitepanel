@@ -14,19 +14,22 @@ import { refreshAccessToken } from "../utils/tokenRefreshService";
 const { Text } = Typography;
 
 const ProtectedRoute = ({ children }) => {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(null); // null = checking, true = authorized, false = not authorized
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useTranslation();
 
   useEffect(() => {
     const checkAuth = async () => {
+      setIsCheckingAuth(true);
       const hasAccess = isAuthenticated();
       const hasSession = hasValidSession();
 
       // Case 1: Has access token - user is authenticated
       if (hasAccess) {
         setIsAuthorized(true);
+        setIsCheckingAuth(false);
         return;
       }
 
@@ -38,14 +41,22 @@ const ProtectedRoute = ({ children }) => {
         } else {
           setIsAuthorized(false);
         }
+        setIsCheckingAuth(false);
         return;
       }
 
       setIsAuthorized(false);
+      setIsCheckingAuth(false);
     };
 
     checkAuth();
   }, [location.pathname]);
+
+  // While checking authentication, don't render anything
+  if (isCheckingAuth) {
+    return null;
+  }
+
   // If not authorized, redirect to home
   if (!isAuthorized) {
     return <Navigate to="/" replace state={{ from: location }} />;
