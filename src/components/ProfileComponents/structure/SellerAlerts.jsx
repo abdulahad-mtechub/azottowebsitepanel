@@ -124,14 +124,14 @@ const SellerAlerts = () => {
           )}
 
           {isInitialLoading ? (
-            <Flex align="center" justify="center" style={{ minHeight: 300 }}>
+            <Flex align="center" justify="center" style={{ height: 400 }}>
               <Spin size="default" tip={t("Loading alerts...")} />
             </Flex>
           ) : alerts.length === 0 ? (
             <Flex
               align="center"
               justify="center"
-              style={{ minHeight: 200 }}
+              style={{ height: 400 }}
               vertical
               gap={10}
             >

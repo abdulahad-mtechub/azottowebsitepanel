@@ -217,7 +217,9 @@ const ExploreSimilarBusiness = ({ id }) => {
                     >
                       <Card
                         className="h-100 border-gray rounded-12 bg-lightest-gray card-cs cursor"
-                        onClick={() => navigate(`/singleviewlisting/${pro?.id}`)}
+                        onClick={() =>
+                          navigate(`/singleviewlisting/${pro?.id}`)
+                        }
                       >
                         <Flex vertical gap={20}>
                           <Flex
@@ -337,7 +339,10 @@ const ExploreSimilarBusiness = ({ id }) => {
                             <Divider className="my-1" />
                             <Space
                               split={
-                                <Divider type="vertical" className="m-0 h-auto" />
+                                <Divider
+                                  type="vertical"
+                                  className="m-0 h-auto"
+                                />
                               }
                               align="center"
                               style={{
