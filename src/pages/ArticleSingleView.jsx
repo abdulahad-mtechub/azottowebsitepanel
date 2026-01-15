@@ -20,7 +20,11 @@ const ArticleSingleView = () => {
 
   if (loading) {
     return (
-      <Flex justify="center" align="center" className="h-200">
+      <Flex
+        justify="center"
+        align="center"
+        style={{ width: "100%", height: "100vh" }}
+      >
         <Spin size="large" />
       </Flex>
     );
