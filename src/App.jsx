@@ -14,7 +14,9 @@ import dayjs from "dayjs";
 dayjs.locale("ar");
 
 function App() {
-  const [dir, setDir] = useState(() => (i18n.language === "ar" ? "rtl" : "ltr"));
+  const [dir, setDir] = useState(() =>
+    i18n.language === "ar" ? "rtl" : "ltr"
+  );
   const isArabic = i18n.language === "ar";
   const [antdLocale, setAntdLocale] = useState(getAntdLocale(i18n.language));
   const [authInitialized, setAuthInitialized] = useState(!hasValidSession());
