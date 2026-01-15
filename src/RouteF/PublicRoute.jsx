@@ -29,7 +29,6 @@ const PublicRoute = ({ children }) => {
       // Case 3: No tokens at all - not authenticated, allow access
       setUserIsAuthenticated(false);
     };
-
     checkAuth();
   }, [location.pathname]);
 
