@@ -51,21 +51,21 @@ const ProtectedRoute = ({ children }) => {
     checkAuth();
   }, [location.pathname]);
 
-  // Show loading while checking authentication
-  if (isChecking) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-      </div>
-    );
-  }
+  // // Show loading while checking authentication
+  // if (isChecking) {
+  //   return (
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         height: "100vh",
+  //       }}
+  //     >
+  //       <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+  //     </div>
+  //   );
+  // }
 
   // If not authorized, redirect to home
   if (!isAuthorized) {

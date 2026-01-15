@@ -47,22 +47,22 @@ const PublicRoute = ({ children }) => {
     checkAuth();
   }, [location.pathname]);
 
-  // Show loading while checking authentication
-  if (isChecking) {
-    return (
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          background: "#fff",
-        }}
-      >
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
-      </div>
-    );
-  }
+  // // Show loading while checking authentication
+  // if (isChecking) {
+  //   return (
+  //     <div
+  //       style={{
+  //         display: "flex",
+  //         justifyContent: "center",
+  //         alignItems: "center",
+  //         height: "100vh",
+  //         background: "#fff",
+  //       }}
+  //     >
+  //       <Spin indicator={<LoadingOutlined style={{ fontSize: 48 }} spin />} />
+  //     </div>
+  //   );
+  // }
 
   // If user is authenticated, redirect to home (or intended destination)
   if (userIsAuthenticated) {

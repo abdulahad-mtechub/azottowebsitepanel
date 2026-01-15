@@ -504,18 +504,6 @@ const SellerOfferTable = ({ data }) => {
         title={t("Counter Offer to Buyer")}
         refetch={refetch}
       />
-      {/* <ScheduleMeeting
-                visible={meeting}
-                onClose={() => setMeeting(false)}
-                offerId={selectedOfferId}
-                businessId={selectedBusinessId}
-                refetchMeetings={() => {
-                    refetch();
-                    if (meetingRefetch) {
-                        meetingRefetch();
-                    }
-                }}
-            /> */}
       <DeleteModal
         visible={deletemodal}
         offerId={selectedOfferId}
