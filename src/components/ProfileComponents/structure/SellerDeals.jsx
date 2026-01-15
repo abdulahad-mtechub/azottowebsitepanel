@@ -1,8 +1,7 @@
-import { Card, Flex, Spin, Row, Col } from "antd";
+import { Card, Flex, Row, Col } from "antd";
 import { ModuleTopHeading } from "../../Pagecomponents";
 import { MySelect, SearchInput } from "../../Forms";
 import { lazy, Suspense, useMemo, useState, useCallback } from "react";
-import { LoadingOutlined } from "@ant-design/icons";
 import { SellerSingleCompleteDeal } from "./SellerSingleCompleteDeal";
 import { useTranslation } from "react-i18next";
 
@@ -80,13 +79,7 @@ const SellerDeals = () => {
 
   if (inprogressdeal && !completedeal) {
     return (
-      <Suspense
-        fallback={
-          <div>
-            <Spin indicator={<LoadingOutlined spin />} size="large" />
-          </div>
-        }
-      >
+      <Suspense>
         <SellerSingleInProgressDeals
           inprogressdeal={inprogressdeal}
           setInprogressDeal={setInprogressDeal}
@@ -97,13 +90,7 @@ const SellerDeals = () => {
 
   if (completedeal && !inprogressdeal) {
     return (
-      <Suspense
-        fallback={
-          <div>
-            <Spin indicator={<LoadingOutlined spin />} size="large" />
-          </div>
-        }
-      >
+      <Suspense>
         <SellerSingleCompleteDeal
           completedeal={completedeal}
           setCompleteDeal={setCompleteDeal}
