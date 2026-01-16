@@ -227,8 +227,6 @@ const SellerAlerts = () => {
                   </Flex>
                 )}
               </div>
-
-              {/* Footer showing loaded count */}
               <Divider className="my-3" />
               <Flex justify="center">
                 <Text className="text-gray fs-12">

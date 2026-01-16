@@ -77,10 +77,10 @@ const Termofuse = () => {
                   {t("Terms of use")}
                 </div>
                 <Title className="m-0" level={2}>
-                  <Trans i18nKey="understandRulesHeading">
-                    Understand the Rules Before You{" "}
-                    <span className="text-brand">List or Buy a Business</span>
-                  </Trans>
+                  <Trans
+                    i18nKey="understandRulesHeading"
+                    components={{ 1: <span className="text-brand" /> }}
+                  />
                 </Title>
                 <Text className="fs-14">
                   {t(
