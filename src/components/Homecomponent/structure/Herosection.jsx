@@ -66,7 +66,7 @@ const Herosection = () => {
         <Col
           sm={{ span: 24 }}
           md={{ span: 24 }}
-          lg={{ span: 10 }}
+          lg={{ span: 12 }}
           xl={{ span: 10 }}
         >
           <div className="heroimginner">
