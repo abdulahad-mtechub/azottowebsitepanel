@@ -38,7 +38,8 @@ const Allbussines = () => {
 
   const [getSellerBusinesses, { data: sellerBusinesses, loading }] =
     useLazyQuery(GETSELLERBUSINESS, {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-first",
+      nextFetchPolicy: "cache-and-network",
     });
 
   const allBusinessesData =
