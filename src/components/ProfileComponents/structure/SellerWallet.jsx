@@ -28,7 +28,10 @@ const SellerWallet = ({ addwalletvisible, setAddWalletVisible }) => {
   const [selectedBankId, setSelectedBankId] = useState(null);
   const [activatingBankId, setActivatingBankId] = useState(null);
 
-  const { data: bankData, loading: bankLoading } = useQuery(GETUSERBANK);
+  const { data: bankData, loading: bankLoading } = useQuery(GETUSERBANK, {
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
+  });
 
   const [activateBankMutate] = useMutation(ACTIVEBANK, {
     refetchQueries: [{ query: GETUSERBANK }],

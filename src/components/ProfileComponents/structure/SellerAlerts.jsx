@@ -24,7 +24,8 @@ const SellerAlerts = () => {
   const isFetchingRef = useRef(false);
 
   const [loadNotifications] = useLazyQuery(NOTIFICATION, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {

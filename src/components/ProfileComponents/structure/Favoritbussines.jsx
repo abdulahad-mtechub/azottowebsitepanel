@@ -37,7 +37,8 @@ const Favoritbussines = () => {
   const [loadFavorites, { data, loading, refetch }] = useLazyQuery(
     GETFAVORITBUSINESS,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-first",
+      nextFetchPolicy: "cache-and-network",
     }
   );
 
