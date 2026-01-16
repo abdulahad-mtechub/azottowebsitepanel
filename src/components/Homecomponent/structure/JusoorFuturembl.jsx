@@ -1,5 +1,5 @@
 import { Col, Flex, Image, Row, Typography } from "antd";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 const { Text, Title } = Typography;
 
@@ -51,11 +51,10 @@ const JusoorFuturembl = () => {
             >
               <div className="tag fw-500">{t("Jusoor's Features")}</div>
               <Title className="m-0 text-white" level={2}>
-                {t("Your")}{" "}
-                <span className="text-brand">
-                  {t("Trusted Saudi Marketplace")}
-                </span>{" "}
-                {t("for Buying and Selling Businesses")}
+                <Trans
+                  i18nKey="trustedMarketplace"
+                  components={{ 1: <span className="text-brand" /> }}
+                />
               </Title>
             </Flex>
           </Col>

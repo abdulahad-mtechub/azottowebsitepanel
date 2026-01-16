@@ -50,10 +50,10 @@ const HowWork = () => {
               </div>
 
               <Title className="m-0" level={2}>
-                <Trans i18nKey="simpleWayToBuyOrSell">
-                  A Simple Way to{" "}
-                  <span className="text-brand">Buy or Sell a Business</span>
-                </Trans>
+                <Trans
+                  i18nKey="simpleWayToBuyOrSell"
+                  components={{ 1: <span className="text-brand" /> }}
+                />
               </Title>
             </Flex>
           </Col>

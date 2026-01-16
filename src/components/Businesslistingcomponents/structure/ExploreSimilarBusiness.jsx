@@ -188,10 +188,10 @@ const ExploreSimilarBusiness = ({ id }) => {
                   {t("You May Also Like")}
                 </div>
                 <Title className="m-0" level={2}>
-                  <Trans i18nKey="exploreSimilar">
-                    Explore Similar{" "}
-                    <span className="text-brand">Businesses</span>
-                  </Trans>
+                  <Trans
+                    i18nKey="exploreSimilar"
+                    components={{ 1: <span className="text-brand" /> }}
+                  />
                 </Title>
                 <Text className="fs-14">
                   {t(

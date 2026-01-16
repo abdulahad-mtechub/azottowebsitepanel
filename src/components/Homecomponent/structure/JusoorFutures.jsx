@@ -51,11 +51,10 @@ const JusoorFutures = () => {
             >
               <div className="tag fw-500">{t("Jusoor's Futures")}</div>
               <Title className="m-0 text-white" level={2}>
-                <Trans i18nKey="trustedMarketplace">
-                  Your{" "}
-                  <span className="text-brand">Trusted Saudi Marketplace</span>{" "}
-                  for Buying and Selling Businesses
-                </Trans>
+                <Trans
+                  i18nKey="trustedMarketplace"
+                  components={{ 1: <span className="text-brand" /> }}
+                />
               </Title>
             </Flex>
           </Col>
