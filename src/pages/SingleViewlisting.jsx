@@ -190,8 +190,7 @@ const SingleViewlisting = () => {
         <div className="container">
           <Flex vertical gap={5} className="text-center">
             <Text className="text-white">
-              {t("Reference #")}:{" "}
-              {formatNumber(business?.reference) || t("Not Found")}
+              {t("Reference #")}: {business?.reference || t("Not Found")}
             </Text>
             <Title level={2} className="text-white m-0">
               {business?.businessTitle || t("Not Found")}
@@ -214,7 +213,7 @@ const SingleViewlisting = () => {
                   <Flex vertical gap={12}>
                     <Text className="fs-13 text-gray fw-500">
                       {t("Reference #")}:{" "}
-                      {formatNumber(business?.reference) || t("Not Found")}
+                      {business?.reference || t("Not Found")}
                     </Text>
                     <Flex gap={10} align="center">
                       <Button

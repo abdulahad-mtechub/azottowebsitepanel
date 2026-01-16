@@ -86,7 +86,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   function mapBusinessPayloadToUI(payload) {
     return {
       id: payload?.id,
-      ref: formatNumber(payload?.reference),
+      ref: payload?.reference,
       title: payload?.businessTitle,
       description: payload?.description,
       amount: formatNumber(payload?.price),
