@@ -10,7 +10,10 @@ const { Paragraph, Text, Title } = Typography;
 const Termofuse = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { data, loading } = useQuery(GETTERMS);
+  const { data, loading } = useQuery(GETTERMS, {
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
+  });
 
   const lang = localStorage.getItem("lang") || "en";
   const isArabic = lang === "ar";

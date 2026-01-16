@@ -11,7 +11,10 @@ const PrivacyPolicy = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const { data, loading } = useQuery(GETPRIVACYPOLICY);
+  const { data, loading } = useQuery(GETPRIVACYPOLICY, {
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
+  });
 
   const lang = localStorage.getItem("lang") || "en";
   const isArabic = lang === "ar";

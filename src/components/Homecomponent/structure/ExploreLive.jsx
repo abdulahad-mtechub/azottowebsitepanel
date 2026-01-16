@@ -47,7 +47,8 @@ const ExploreLive = () => {
   const [getRandomBusinesses, { data, loading, refetch }] = useLazyQuery(
     GETRANDOMBUSINESS,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-first",
+      nextFetchPolicy: "cache-first",
     }
   );
 

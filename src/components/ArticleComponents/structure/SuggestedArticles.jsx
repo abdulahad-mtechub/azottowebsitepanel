@@ -9,6 +9,8 @@ const SuggestedArticles = ({ excludeId }) => {
   const { t, i18n } = useTranslation();
   const { data: articlesData, loading } = useQuery(GETARTICLES, {
     variables: { search: null },
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
   });
 
   const lang = localStorage.getItem("lang") || i18n.language || "en";

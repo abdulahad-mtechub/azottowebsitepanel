@@ -18,7 +18,8 @@ const FaqsComponent = () => {
 
   const [loadData, { data, loading }] = useLazyQuery(GETFAQ, {
     variables: { search: "" },
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
   });
   useEffect(() => {
     loadData();

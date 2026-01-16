@@ -1,4 +1,4 @@
-import { Card, Col, Flex, Row, Typography, Spin } from "antd";
+import { Card, Col, Flex, Row, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";

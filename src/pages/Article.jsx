@@ -19,7 +19,8 @@ const Article = () => {
   const isArabic = lang.toLowerCase() === "ar";
 
   const [fetchArticles, { data, loading }] = useLazyQuery(GETARTICLES, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
