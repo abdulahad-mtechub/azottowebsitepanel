@@ -33,8 +33,7 @@ const OfferSellerModal = ({
   const [form] = Form.useForm();
 
   const handleOfferAmountChange = (e) => {
-    const raw = e?.target?.value;
-    const offerAmount = parseFloat(String(raw).replace(/,/g, "")) || 0;
+    const offerAmount = parseFloat(String(e).replace(/,/g, "")) || 0;
     const commission = offerAmount * commissionRate;
     const commissionRounded = Number(commission.toFixed(2));
     const totalAmount = Number((offerAmount + commissionRounded).toFixed(2));
