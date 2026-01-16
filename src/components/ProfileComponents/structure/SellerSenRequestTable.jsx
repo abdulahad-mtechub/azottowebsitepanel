@@ -14,8 +14,7 @@ const SellerSendRequestTable = memo(({ isBuyer, searchValue }) => {
   const { formatNumber } = useFormatNumber();
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [fetchMeetings, { data, loading }] = useLazyQuery(SENTMEETINGS, {
-    fetchPolicy: "cache-first",
-    nextFetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-and-network",
   });
 
   const getStatusBadgeClass = (status) => {

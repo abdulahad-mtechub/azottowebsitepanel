@@ -16,8 +16,7 @@ const SellerAdminSchedulingTable = memo(({ isBuyer, searchValue }) => {
   const [fetchMeetings, { data, loading }] = useLazyQuery(
     READYSCHEDULEDMEETINGS,
     {
-      fetchPolicy: "cache-first",
-      nextFetchPolicy: "cache-and-network",
+      fetchPolicy: "cache-and-network",
     }
   );
 

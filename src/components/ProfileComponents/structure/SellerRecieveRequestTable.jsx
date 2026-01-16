@@ -33,8 +33,7 @@ const SellerRecieveRequestTable = memo(({ isBuyer, searchValue }) => {
   const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
   const [refetchMeetings, { data, loading }] = useLazyQuery(RECEIVEDMEETINGS, {
-    fetchPolicy: "cache-first",
-    nextFetchPolicy: "cache-and-network",
+    fetchPolicy: "cache-and-network",
   });
 
   const getStatusBadgeClass = (status) => {
