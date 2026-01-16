@@ -10,7 +10,6 @@ import {
   Typography,
   Space,
 } from "antd";
-import { SearchInput } from "../../Forms";
 import { NavLink } from "react-router-dom";
 import { ScheduleMeeting } from "../modal";
 import { DeleteModal } from "../../ui";
@@ -34,7 +33,8 @@ const SellerRecieveRequestTable = memo(({ isBuyer, searchValue }) => {
   const [selectedBusinessId, setSelectedBusinessId] = useState(null);
 
   const [refetchMeetings, { data, loading }] = useLazyQuery(RECEIVEDMEETINGS, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
   });
 
   const getStatusBadgeClass = (status) => {

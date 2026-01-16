@@ -1,8 +1,7 @@
 import { Col, Row, Space, Table, Typography } from "antd";
-import { SearchInput } from "../../Forms";
 import { SENTMEETINGS } from "../../../graphql/query";
 import { useLazyQuery } from "@apollo/client";
-import { useEffect, useState, useCallback, memo } from "react";
+import { useEffect, useState, memo } from "react";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { useFormatNumber } from "../../../hooks";
@@ -15,7 +14,8 @@ const SellerSendRequestTable = memo(({ isBuyer, searchValue }) => {
   const { formatNumber } = useFormatNumber();
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [fetchMeetings, { data, loading }] = useLazyQuery(SENTMEETINGS, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
   });
 
   const getStatusBadgeClass = (status) => {
@@ -143,10 +143,6 @@ const SellerSendRequestTable = memo(({ isBuyer, searchValue }) => {
     }) || [];
 
   const totalCount = data?.getMySentMeetingRequests?.totalCount || 0;
-
-  const handleDebouncedSearch = useCallback((debouncedSearchValue) => {
-    setPagination((prev) => ({ ...prev, current: 1 }));
-  }, []);
 
   const handleTableChange = (paginationInfo) => {
     const newPagination = {

@@ -1,5 +1,4 @@
 import { Col, Row, Space, Table, Typography } from "antd";
-import { SearchInput } from "../../Forms";
 import { SCHEDULEDMEETINGS } from "../../../graphql/query";
 import { useLazyQuery } from "@apollo/client";
 import { useEffect, useState, memo } from "react";
@@ -15,7 +14,8 @@ const SellerScheduledTable = memo(({ isBuyer, searchValue }) => {
   const { formatNumber } = useFormatNumber();
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
   const [fetchMeetings, { data, loading }] = useLazyQuery(SCHEDULEDMEETINGS, {
-    fetchPolicy: "network-only",
+    fetchPolicy: "cache-first",
+    nextFetchPolicy: "cache-and-network",
   });
 
   const getStatusBadgeClass = (status) => {
