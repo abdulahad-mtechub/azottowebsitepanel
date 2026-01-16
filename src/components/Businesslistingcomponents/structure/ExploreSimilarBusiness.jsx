@@ -46,7 +46,8 @@ const ExploreSimilarBusiness = ({ id }) => {
   const [getRandomBusinesses, { data, loading, refetch }] = useLazyQuery(
     GET_RANDOM_BUSINESSES,
     {
-      fetchPolicy: "network-only",
+      fetchPolicy: "cache-first",
+      nextFetchPolicy: "cache-and-network",
     }
   );
   useEffect(() => {
