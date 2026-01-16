@@ -9,7 +9,7 @@ import {
   Row,
   Typography,
   message,
-  Popover,
+  Tooltip,
 } from "antd";
 import { MyInput } from "../../Forms";
 import { useEffect } from "react";
@@ -159,27 +159,10 @@ const OfferSellerModal = ({
                 label={
                   <Flex gap={6} align="center">
                     <Text>{t(`Total Amount (Offer + Commission)`)}</Text>
-                    <Popover
-                      content={
-                        <Text>
-                          {t(
-                            "This is the total amount including the commission."
-                          )}
-                        </Text>
-                      }
-                      title={null}
-                      trigger={["hover", "click"]}
-                      placement="left"
-                      autoAdjustOverflow={true}
-                      overlayStyle={{
-                        maxWidth: "450px",
-                        zIndex: 1060,
-                      }}
-                      overlayInnerStyle={{
-                        maxHeight: "70vh",
-                        overflowY: "auto",
-                        overflowX: "hidden",
-                      }}
+                    <Tooltip
+                      title={t(
+                        "This is the total amount including the commission."
+                      )}
                     >
                       <Image
                         preview={false}
@@ -188,7 +171,7 @@ const OfferSellerModal = ({
                         alt="Commission info"
                         style={{ cursor: "pointer" }}
                       />
-                    </Popover>
+                    </Tooltip>
                   </Flex>
                 }
                 name="totalamount"
