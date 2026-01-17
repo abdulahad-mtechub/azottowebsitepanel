@@ -102,11 +102,6 @@ export const ensureValidToken = async () => {
   return true; // Token is still valid
 };
 
-/**
- * Initialize authentication on app load
- * Handles the case where access token expired but refresh token still valid
- * This fixes the "stay logged in overnight" scenario
- */
 export const initializeAuth = async () => {
   const hasAccess = isAuthenticated();
   const hasRefresh = !!getRefreshToken();
@@ -137,13 +132,6 @@ export const initializeAuth = async () => {
   return false;
 };
 
-/**
- * Auto-refresh setup - checks token validity every 2 minutes for proactive refresh
- * Call this on app initialization
- * Backend config: Access token = 10min, Refresh token = 234h
- * Auto-refresh triggers at 7 minutes (3 min before expiry)
- * Checks every 2 minutes - optimal balance between responsiveness and performance
- */
 let autoRefreshInterval = null;
 
 export const startAutoRefresh = async () => {
@@ -161,16 +149,19 @@ export const startAutoRefresh = async () => {
 
   // Check token every 2 minutes (3-4 checks before 7-minute threshold)
   // Good balance between responsiveness and performance
-  autoRefreshInterval = setInterval(async () => {
-    if (isAuthenticated()) {
-      if (shouldRefreshToken()) {
-        await ensureValidToken();
+  autoRefreshInterval = setInterval(
+    async () => {
+      if (isAuthenticated()) {
+        if (shouldRefreshToken()) {
+          await ensureValidToken();
+        }
+      } else {
+        // Stop auto-refresh if user is not authenticated
+        stopAutoRefresh();
       }
-    } else {
-      // Stop auto-refresh if user is not authenticated
-      stopAutoRefresh();
-    }
-  }, 2 * 60 * 1000); // 2 minutes - optimal balance
+    },
+    2 * 60 * 1000
+  ); // 2 minutes - optimal balance
 
   return true;
 };
@@ -182,9 +173,6 @@ export const stopAutoRefresh = () => {
   }
 };
 
-/**
- * Handle logout - clear tokens and stop auto-refresh
- */
 export const handleLogout = () => {
   stopAutoRefresh();
   clearAuthTokens();
