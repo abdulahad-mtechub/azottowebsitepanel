@@ -1,7 +1,6 @@
 export * from "./Herosection";
 export * from "./HowWork";
 export * from "./ExploreLive";
-export * from "./WhyJusoor";
 export * from "./Sellerwork";
 export * from "./Buyework";
 export * from "./Contactform";

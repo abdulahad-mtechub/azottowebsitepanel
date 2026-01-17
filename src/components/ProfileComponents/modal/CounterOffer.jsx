@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { useMutation } from "@apollo/client";
 import { COUNTER_OFFER } from "../../../graphql/mutation";
 import { useTranslation } from "react-i18next";
-import { useCommissionRate } from "../../../hooks";
 
 const { Title, Text } = Typography;
 
@@ -17,32 +16,9 @@ const CounterOffer = ({
   refetch,
 }) => {
   const { t } = useTranslation();
-  const { commissionRate } = useCommissionRate();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
   const [counterOffer, { loading }] = useMutation(COUNTER_OFFER);
-
-  // const handleOfferAmountChange = (e) => {
-  //   const raw = e?.target?.value;
-  //   const offerAmount = parseFloat(String(raw).replace(/,/g, "")) || 0;
-  //   let commission = 0;
-
-  //   if (offerAmount === 0) {
-  //     commission = 0;
-  //   } else if (offerAmount < 50_000) {
-  //     commission = 2000;
-  //   } else {
-  //     commission = computeCommissionMarginal(offerAmount);
-  //   }
-
-  //   const commissionRounded = Number(commission.toFixed(2));
-  //   const totalAmount = Number((offerAmount + commissionRounded).toFixed(2));
-
-  //   form.setFieldsValue({
-  //     commission: commissionRounded,
-  //     totalamount: totalAmount,
-  //   });
-  // };
 
   useEffect(() => {
     form.resetFields();
@@ -137,7 +113,6 @@ const CounterOffer = ({
                 />
               }
               className="w-100"
-              // onChange={handleOfferAmountChange}
             />
           </Col>
         </Row>

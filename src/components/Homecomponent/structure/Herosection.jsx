@@ -71,7 +71,6 @@ const Herosection = () => {
         >
           <div className="heroimginner">
             <picture>
-              {/* 1. Mobile Version: Shown when screen is less than 768px */}
               <source
                 media="(max-width: 996px)"
                 srcSet={`/assets/images/${
