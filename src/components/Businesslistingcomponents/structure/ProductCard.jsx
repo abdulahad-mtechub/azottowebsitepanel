@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { truncateChars } from "../../../utils";
 import Cookies from "js-cookie";
 import { useFormatNumber } from "../../../hooks";
+import { clearQueryCache } from "../../../config";
 
 const { Title, Text, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -70,7 +71,7 @@ const ProductCard = ({
 
     if (isUserInactive) {
       messageApi.warning(
-        t("Your account is inactive. Please contact support.")
+        t("Your account is inactive. Please contact support."),
       );
       return;
     }
@@ -82,8 +83,10 @@ const ProductCard = ({
         },
       });
       if (currentSaveState) {
+        clearQueryCache("getFavoritBusiness");
         messageApi.success(t("Business removed from favorites successfully"));
       } else {
+        clearQueryCache("getFavoritBusiness");
         messageApi.success(t("Business added to favorites successfully"));
       }
       refetchBusinesses();
@@ -123,7 +126,7 @@ const ProductCard = ({
         </Title>
         <Text className="text-gray fs-14">
           {t(
-            "No businesses match your search criteria. Try adjusting your filters."
+            "No businesses match your search criteria. Try adjusting your filters.",
           )}
         </Text>
       </Flex>
@@ -144,8 +147,8 @@ const ProductCard = ({
           const mainFlexGap = screens.xs
             ? 8
             : screens.sm || screens.md
-            ? 12
-            : 0;
+              ? 12
+              : 0;
 
           return (
             <Col
@@ -202,10 +205,10 @@ const ProductCard = ({
                               title={
                                 pro.isByTakbeer
                                   ? t(
-                                      "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
+                                      "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
                                     )
                                   : t(
-                                      "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
+                                      "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.",
                                     )
                               }
                             >

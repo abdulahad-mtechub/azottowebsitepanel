@@ -5,6 +5,13 @@ import { useFormatNumber } from "../../hooks";
 const { Text } = Typography;
 const { useBreakpoint } = Grid;
 
+const selectOptions = [
+  { value: 10, label: "10" },
+  { value: 20, label: "20" },
+  { value: 50, label: "50" },
+  { value: 100, label: "100" },
+];
+
 const CustomPagination = ({
   totalItems,
   limit,
@@ -61,7 +68,7 @@ const CustomPagination = ({
             showSizeChanger={false}
             showTotal={(total, range) =>
               `${formatNumber(range[0])}-${formatNumber(range[1])} ${t(
-                "of"
+                "of",
               )} ${formatNumber(total)} ${t("items")}`
             }
             simple={screens.xs}

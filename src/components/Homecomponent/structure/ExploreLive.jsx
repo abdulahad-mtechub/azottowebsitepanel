@@ -24,6 +24,7 @@ import Cookies from "js-cookie";
 import { useFormatNumber } from "../../../hooks";
 import { isAuthenticated } from "../../../utils/tokenManager";
 import { LoadingCard } from "../../ui";
+import { clearQueryCache } from "../../../config";
 
 const { Text, Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -48,7 +49,7 @@ const ExploreLive = () => {
     {
       fetchPolicy: "cache-first",
       nextFetchPolicy: "cache-first",
-    }
+    },
   );
 
   // Execute query on component mount with proper userId handling
@@ -87,7 +88,7 @@ const ExploreLive = () => {
 
     if (isUserInactive) {
       messageApi.warning(
-        t("Your account is inactive. Please contact support.")
+        t("Your account is inactive. Please contact support."),
       );
       return;
     }
@@ -99,8 +100,10 @@ const ExploreLive = () => {
         },
       });
       if (currentSaveState) {
+        clearQueryCache("getFavoritBusiness");
         messageApi.success(t("Business removed from favorites successfully"));
       } else {
+        clearQueryCache("getFavoritBusiness");
         messageApi.success(t("Business added to favorites successfully"));
       }
       refetch();
@@ -183,7 +186,7 @@ const ExploreLive = () => {
                 </Title>
                 <Text className="fs-14 d-inline">
                   {t(
-                    "Discover a curated selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more."
+                    "Discover a curated selection of verified businesses across various categories and cities in Saudi Arabia. Use filters to narrow down by industry, location, price, and more.",
                   )}
                 </Text>
               </Flex>
@@ -233,7 +236,7 @@ const ExploreLive = () => {
                           >
                             {truncateChars(
                               isArabic ? pro?.arabicName : pro?.categoryName,
-                              14
+                              14,
                             )}
                           </Button>
                           {typeof pro?.type === "boolean" && (
@@ -256,10 +259,10 @@ const ExploreLive = () => {
                                   title={
                                     pro.type
                                       ? t(
-                                          "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
+                                          "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
                                         )
                                       : t(
-                                          "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
+                                          "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.",
                                         )
                                   }
                                 >

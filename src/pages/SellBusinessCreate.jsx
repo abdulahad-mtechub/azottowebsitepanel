@@ -26,6 +26,7 @@ import { useMutation, useLazyQuery } from "@apollo/client";
 import { GET_BUSINESS } from "../graphql/query/business";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { clearQueryCache } from "../config/clearQueryCache";
 
 const { Text } = Typography;
 const LOCAL_STORAGE_KEY = "sellBusinessDraft";
@@ -302,7 +303,7 @@ const SellBusinessCreate = () => {
       ? businessData.documents
       : [];
     const crDoc = docs.find(
-      (d) => d.title === "Commercial Registration (CR)" && d.filePath
+      (d) => d.title === "Commercial Registration (CR)" && d.filePath,
     );
     return !!crDoc;
   };
@@ -342,8 +343,8 @@ const SellBusinessCreate = () => {
             (asset) =>
               asset &&
               Object.values(asset).some(
-                (val) => val !== null && val !== "" && val !== undefined
-              )
+                (val) => val !== null && val !== "" && val !== undefined,
+              ),
           )
           .map((asset) => ({
             name: asset.name,
@@ -357,8 +358,8 @@ const SellBusinessCreate = () => {
             (liability) =>
               liability &&
               Object.values(liability).some(
-                (val) => val !== null && val !== "" && val !== undefined
-              )
+                (val) => val !== null && val !== "" && val !== undefined,
+              ),
           )
           .map((liability) => ({
             name: liability.name,
@@ -373,8 +374,8 @@ const SellBusinessCreate = () => {
             (item) =>
               item &&
               Object.values(item).some(
-                (val) => val !== null && val !== "" && val !== undefined
-              )
+                (val) => val !== null && val !== "" && val !== undefined,
+              ),
           )
           .map((item) => ({
             name: item.name,
@@ -394,8 +395,8 @@ const SellBusinessCreate = () => {
             (doc) =>
               doc &&
               Object.values(doc).some(
-                (val) => val !== null && val !== "" && val !== undefined
-              )
+                (val) => val !== null && val !== "" && val !== undefined,
+              ),
           )
           .map((doc) => {
             // Remove fields not accepted by CreateDocumentInput
@@ -429,6 +430,8 @@ const SellBusinessCreate = () => {
         } else {
           setReviewModal(true);
         }
+        // Clear relevant caches
+        clearQueryCache("getAllSellerBusinesses");
         localStorage.removeItem(LOCAL_STORAGE_KEY);
 
         setBusinessData({
@@ -475,7 +478,7 @@ const SellBusinessCreate = () => {
         setCurrent(0);
       } else {
         messageApi.error(
-          t("Failed to create business listing: No ID returned")
+          t("Failed to create business listing: No ID returned"),
         );
       }
     } catch (err) {
@@ -492,8 +495,8 @@ const SellBusinessCreate = () => {
           (doc) =>
             doc &&
             Object.values(doc).some(
-              (val) => val !== null && val !== "" && val !== undefined
-            )
+              (val) => val !== null && val !== "" && val !== undefined,
+            ),
         )
         .map((doc) => {
           const cleaned = { ...doc };
@@ -506,28 +509,28 @@ const SellBusinessCreate = () => {
         (asset) =>
           asset &&
           Object.values(asset).some(
-            (val) => val !== null && val !== "" && val !== undefined
-          )
+            (val) => val !== null && val !== "" && val !== undefined,
+          ),
       ),
       liabilities: businessData.liabilities.filter(
         (liability) =>
           liability &&
           Object.values(liability).some(
-            (val) => val !== null && val !== "" && val !== undefined
-          )
+            (val) => val !== null && val !== "" && val !== undefined,
+          ),
       ),
       inventoryItems: businessData.inventoryItems.filter(
         (item) =>
           item &&
           Object.values(item).some(
-            (val) => val !== null && val !== "" && val !== undefined
-          )
+            (val) => val !== null && val !== "" && val !== undefined,
+          ),
       ),
     };
 
     localStorage.setItem(
       LOCAL_STORAGE_KEY,
-      JSON.stringify(cleanedBusinessData)
+      JSON.stringify(cleanedBusinessData),
     );
     messageApi.success(t("Draft saved locally!"));
   };

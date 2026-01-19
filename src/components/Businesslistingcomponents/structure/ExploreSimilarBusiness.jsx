@@ -6,7 +6,6 @@ import {
   Flex,
   Image,
   Row,
-  Tag,
   Typography,
   Spin,
   message,
@@ -24,6 +23,7 @@ import { truncateChars } from "../../../utils";
 import { useFormatNumber } from "../../../hooks";
 import { isAuthenticated } from "../../../utils/tokenManager";
 import { useEffect } from "react";
+import { clearQueryCache } from "../../../config";
 
 const { Text, Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
@@ -48,7 +48,7 @@ const ExploreSimilarBusiness = ({ id }) => {
     {
       fetchPolicy: "cache-first",
       nextFetchPolicy: "cache-and-network",
-    }
+    },
   );
   useEffect(() => {
     if (id) {
@@ -91,7 +91,7 @@ const ExploreSimilarBusiness = ({ id }) => {
     // Check if user account is inactive
     if (isUserInactive) {
       messageApi.warning(
-        t("Your account is inactive. Please contact support.")
+        t("Your account is inactive. Please contact support."),
       );
       return;
     }
@@ -103,8 +103,10 @@ const ExploreSimilarBusiness = ({ id }) => {
         },
       });
       if (currentSaveState) {
+        clearQueryCache("getFavoritBusiness");
         messageApi.success(t("Business removed from favorites successfully"));
       } else {
+        clearQueryCache("getFavoritBusiness");
         messageApi.success(t("Business added to favorites successfully"));
       }
       refetch();
@@ -195,7 +197,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                 </Title>
                 <Text className="fs-14">
                   {t(
-                    "Discover other verified businesses with similar category tailored to your interests."
+                    "Discover other verified businesses with similar category tailored to your interests.",
                   )}
                 </Text>
               </Flex>
@@ -242,7 +244,7 @@ const ExploreSimilarBusiness = ({ id }) => {
                                   isArabic
                                     ? pro?.category?.arabicName
                                     : pro?.category?.name,
-                                  14
+                                  14,
                                 )}
                               </Button>
                               <Button
@@ -266,10 +268,10 @@ const ExploreSimilarBusiness = ({ id }) => {
                                     title={
                                       pro.isByTakbeer
                                         ? t(
-                                            "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
+                                            "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
                                           )
                                         : t(
-                                            "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
+                                            "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.",
                                           )
                                     }
                                   >

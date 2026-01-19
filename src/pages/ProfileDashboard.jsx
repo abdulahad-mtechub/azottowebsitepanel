@@ -47,6 +47,7 @@ import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { useFormatNumber } from "../hooks";
+import { client } from "../config/apolloClient";
 
 const { Text, Title } = Typography;
 const { useBreakpoint } = Grid;
@@ -59,6 +60,7 @@ const ProfileDashboard = () => {
   const { formatNumber } = useFormatNumber();
   const screens = useBreakpoint();
 
+  console.log("fixed issues here.....", client.cache.extract());
   const profiletabData = {
     Seller: [
       { key: "sellerdashboard", label: t("Dashboard") },
@@ -102,12 +104,12 @@ const ProfileDashboard = () => {
         const isSellerValid = profiletabData.Seller.some(
           (tab) =>
             tab.key === parsed.Seller ||
-            tab.children?.some((child) => child.key === parsed.Seller)
+            tab.children?.some((child) => child.key === parsed.Seller),
         );
         const isBuyerValid = profiletabData.Buyer.some(
           (tab) =>
             tab.key === parsed.Buyer ||
-            tab.children?.some((child) => child.key === parsed.Buyer)
+            tab.children?.some((child) => child.key === parsed.Buyer),
         );
 
         if (isSellerValid && isBuyerValid) {
@@ -135,7 +137,7 @@ const ProfileDashboard = () => {
   const [dateRange, setDateRange] = useState(getCurrentMonthRange);
   const [getUser, { data: me }] = useLazyQuery(NAVUSERDATA);
   const [getSellerStats, { data: userStatsData }] = useLazyQuery(
-    PROFESSIONALSTATISTICS
+    PROFESSIONALSTATISTICS,
   );
   const [getBuyerUser, { data: buyerStatsData }] =
     useLazyQuery(GETBUYERSTATISTICS);
