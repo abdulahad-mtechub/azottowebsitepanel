@@ -48,7 +48,7 @@ const OfferSellerModal = ({
     CREATE_OFFER,
     {
       onCompleted: () => refetch && refetch(),
-    }
+    },
   );
 
   useEffect(() => {
@@ -127,7 +127,7 @@ const OfferSellerModal = ({
             {mode === "proceed"
               ? t("Confirm your purchase by entering the agreed amount.")
               : t(
-                  "Enter your offer amount and terms to send a counter-proposal to the seller."
+                  "Enter your offer amount and terms to send a counter-proposal to the seller.",
                 )}
           </Text>
         </Flex>
@@ -161,7 +161,7 @@ const OfferSellerModal = ({
                     <Text>{t(`Total Amount (Offer + Commission)`)}</Text>
                     <Tooltip
                       title={t(
-                        "This is the total amount including the commission."
+                        "This is the total amount including the commission.",
                       )}
                     >
                       <Image
@@ -176,6 +176,8 @@ const OfferSellerModal = ({
                 }
                 name="totalamount"
                 required
+                isNumber
+                type={"number"}
                 message={t("Please enter total amount")}
                 placeholder={t("e.g. 80,000")}
                 addonBefore={

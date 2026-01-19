@@ -7,9 +7,7 @@ import {
   JusoorFuturembl,
   JusoorFutures,
 } from "../components";
-import { client } from "../config/apolloClient";
 const Home = () => {
-  console.log("here.....", client.cache.extract());
   return (
     <div>
       <Herosection />

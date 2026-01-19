@@ -47,7 +47,6 @@ import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { useFormatNumber } from "../hooks";
-import { client } from "../config/apolloClient";
 
 const { Text, Title } = Typography;
 const { useBreakpoint } = Grid;
@@ -60,7 +59,6 @@ const ProfileDashboard = () => {
   const { formatNumber } = useFormatNumber();
   const screens = useBreakpoint();
 
-  console.log("fixed issues here.....", client.cache.extract());
   const profiletabData = {
     Seller: [
       { key: "sellerdashboard", label: t("Dashboard") },
@@ -520,7 +518,6 @@ const ProfileDashboard = () => {
         </Flex>
 
         <Row gutter={[24, 24]} className="mt-3">
-          {/* Left side - sidebar */}
           <Col xs={0} sm={0} md={0} lg={8} xl={6}>
             <Card className="radius-12 border-gray">
               <Flex vertical gap={30}>

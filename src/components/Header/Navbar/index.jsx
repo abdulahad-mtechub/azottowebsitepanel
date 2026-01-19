@@ -42,6 +42,7 @@ import { NEW_NOTIFICATION_SUBSCRIPTION } from "../../../graphql/subscription";
 import { useQuery } from "@apollo/client";
 import { MARK_NOTIFICATION_AS_READ, LOGOUT } from "../../../graphql/mutation";
 import { clearAuthTokens } from "../../../utils/tokenManager";
+import { clearQueryCache } from "../../../config";
 
 const { Text, Title } = Typography;
 // Enable dayjs plugins
@@ -212,7 +213,7 @@ const Navbar = ({ setGetCategory }) => {
         notificationOffsetRef.current =
           nextOffset + fetchedNotifications.length;
         setHasMoreNotifications(
-          fetchedNotifications.length === NOTIFICATIONS_PAGE_SIZE
+          fetchedNotifications.length === NOTIFICATIONS_PAGE_SIZE,
         );
 
         if (reset && listContainerRef.current) {
@@ -225,7 +226,7 @@ const Navbar = ({ setGetCategory }) => {
         setIsLoadingNotifications(false);
       }
     },
-    [userId, getNotification, NOTIFICATIONS_PAGE_SIZE]
+    [userId, getNotification, NOTIFICATIONS_PAGE_SIZE],
   );
 
   const [markNotificationAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
@@ -237,6 +238,14 @@ const Navbar = ({ setGetCategory }) => {
 
       // Read current userId from cookies to avoid using a stale closure
       const currentUserId = Cookies.get("userId");
+      // handle other notification types for removed the caching like new offers etc.
+      if (
+        newNotif?.name === "New Offer Received" &&
+        currentUserId === newNotif.user?.id
+      ) {
+        clearQueryCache("getAllSellerBusinesses");
+        clearQueryCache("getNotifications");
+      }
 
       if (newNotif && newNotif.user?.id === currentUserId) {
         setNotifications((prev) => {
@@ -285,7 +294,7 @@ const Navbar = ({ setGetCategory }) => {
             label: "EN",
             icon: "/assets/icons/en.webp",
             alt: "English Language logo",
-          }
+          },
     );
   }, [i18n]);
 
@@ -358,7 +367,7 @@ const Navbar = ({ setGetCategory }) => {
           prev.map((notification) => ({
             ...notification,
             isRead: true,
-          }))
+          })),
         );
         getNavNotification();
       })
@@ -444,7 +453,7 @@ const Navbar = ({ setGetCategory }) => {
       } catch (storeError) {
         console.error(
           "Failed to clear Apollo cache during logout:",
-          storeError
+          storeError,
         );
       }
 
@@ -516,7 +525,7 @@ const Navbar = ({ setGetCategory }) => {
             label: "EN",
             icon: "/assets/icons/en.webp",
             alt: "English",
-          }
+          },
     );
 
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
@@ -583,7 +592,7 @@ const Navbar = ({ setGetCategory }) => {
         loadNotifications();
       }
     },
-    [hasMoreNotifications, loadNotifications]
+    [hasMoreNotifications, loadNotifications],
   );
 
   const dropdownContent = useMemo(() => {
@@ -1066,7 +1075,7 @@ const Navbar = ({ setGetCategory }) => {
                       title={
                         isUserInactive
                           ? t(
-                              "Account Verification Pending. Please contact support."
+                              "Account Verification Pending. Please contact support.",
                             )
                           : ""
                       }
