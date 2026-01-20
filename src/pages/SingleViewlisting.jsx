@@ -71,7 +71,7 @@ const SingleViewlisting = () => {
     {
       variables: { getBusinessByIdId: id },
       skip: !id,
-    }
+    },
   );
 
   const business = businessData?.getBusinessById?.business;
@@ -101,7 +101,7 @@ const SingleViewlisting = () => {
     key: item.id || index,
     name: item.name,
     items: formatNumber(item.quantity),
-    purchaseyear: formatNumber(item.purchaseYear),
+    purchaseyear: item.purchaseYear,
     price: formatNumber(item?.price),
     verified: item.isActive,
   }));
@@ -110,7 +110,7 @@ const SingleViewlisting = () => {
     key: item.id || index,
     name: item.name,
     items: formatNumber(item.quantity),
-    purchaseyear: formatNumber(item?.purchaseYear),
+    purchaseyear: item?.purchaseYear,
     price: formatNumber(item?.price),
     verified: item.isActive,
   }));
@@ -119,7 +119,7 @@ const SingleViewlisting = () => {
     key: item.id || index,
     name: item.name,
     items: formatNumber(item.quantity),
-    purchaseyear: formatNumber(item.purchaseYear),
+    purchaseyear: item.purchaseYear,
     price: formatNumber(item.price),
     verified: item.isActive,
   }));
@@ -249,10 +249,10 @@ const SingleViewlisting = () => {
                             title={
                               business?.isByTakbeer
                                 ? t(
-                                    "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
+                                    "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
                                   )
                                 : t(
-                                    "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
+                                    "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.",
                                   )
                             }
                           >
