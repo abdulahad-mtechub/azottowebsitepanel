@@ -27,11 +27,23 @@
   height: 35px !important;
 }
 
+.ant-select-single1 {
+  height: 42px !important;
+}
+
 .custom-select .ant-select-single {
   height: 40px !important;
 }
 
 .select {
+  height: 40px !important;
+}
+
+.ant-input-number-wrapper.ant-input-number-group {
+  height: 40px !important;
+}
+
+.ant-input-number-input-wrap input {
   height: 40px !important;
 }
 

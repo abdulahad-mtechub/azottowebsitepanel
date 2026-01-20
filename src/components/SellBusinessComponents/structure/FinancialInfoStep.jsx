@@ -14,7 +14,7 @@ import {
   Select,
   Typography,
   Image,
-  Input,
+  InputNumber,
 } from "antd";
 import { MyInput } from "../../Forms";
 import { ModuleTopHeading } from "../../Pagecomponents";
@@ -24,6 +24,11 @@ import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
+
+const parseNumberValue = (value) => {
+  if (!value) return value;
+  return String(value).replace(/,/g, "");
+};
 
 const hasNonEmptyValue = (value) => {
   if (value === 0) return true;
@@ -39,7 +44,7 @@ const createRowValidator =
       const rows = getFieldValue(dayKey) || [];
       const row = rows?.[index] || {};
       const rowHasAnyValue = fieldKeys.some((key) =>
-        hasNonEmptyValue(row?.[key])
+        hasNonEmptyValue(row?.[key]),
       );
 
       if (!rowHasAnyValue) {
@@ -51,10 +56,12 @@ const createRowValidator =
       }
 
       if (type === "number") {
-        const numericValue = typeof value === "string" ? value : String(value);
-        if (!/^\d+(\.\d+)?$/.test(numericValue.trim())) {
+        const cleanValue = parseNumberValue(
+          typeof value === "string" ? value : String(value),
+        );
+        if (!/^\d+(\.\d+)?$/.test(cleanValue.trim())) {
           return Promise.reject(
-            new Error(t ? t(invalidMessage) : invalidMessage)
+            new Error(t ? t(invalidMessage) : invalidMessage),
           );
         }
       }
@@ -101,7 +108,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
         ...item,
         label: item.id === 1 ? t("Last 6 Months") : t("Last Year"),
       })),
-    [t]
+    [t],
   );
 
   const handleFormChange = (_, allValues) => {
@@ -307,7 +314,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   >
                     <Select
                       placeholder={t("Select period")}
-                      className="addonselect fs-14 w-180"
+                      className="addonselect fs-14 w-180 ant-select-single1"
                     >
                       {revenueOptions?.map((list) => (
                         <Select.Option value={list.id} key={list.id}>
@@ -328,7 +335,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                         validator: (_, value) => {
                           if (value && Number(value) <= 0) {
                             return Promise.reject(
-                              new Error(t("Revenue must be greater than 0"))
+                              new Error(t("Revenue must be greater than 0")),
                             );
                           }
                           return Promise.resolve();
@@ -337,10 +344,14 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                     ]}
                     noStyle
                   >
-                    <Input
-                      type="number"
+                    <InputNumber
                       placeholder={t("Enter revenue")}
                       className="w-100"
+                      formatter={(value) =>
+                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      parser={(value) => value.replace(/,/g, "")}
+                      controls={false}
                       prefix={
                         <img
                           src="/assets/icons/reyal-g.png"
@@ -377,7 +388,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   >
                     <Select
                       placeholder={t("Select period")}
-                      className="addonselect fs-14 w-180"
+                      className="addonselect fs-14 w-180 ant-select-single1"
                     >
                       {revenueOptions?.map((list) => (
                         <Select.Option value={list.id} key={list.id}>
@@ -398,7 +409,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                         validator: (_, value) => {
                           if (value && Number(value) <= 0) {
                             return Promise.reject(
-                              new Error(t("Profit must be greater than 0"))
+                              new Error(t("Profit must be greater than 0")),
                             );
                           }
                           return Promise.resolve();
@@ -407,10 +418,14 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                     ]}
                     noStyle
                   >
-                    <Input
-                      type="number"
+                    <InputNumber
                       placeholder={t("Enter profit")}
                       className="w-100"
+                      formatter={(value) =>
+                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                      }
+                      parser={(value) => value.replace(/,/g, "")}
+                      controls={false}
                       prefix={
                         <img
                           src="/assets/icons/reyal-g.png"
@@ -445,7 +460,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                               : t("12 months"),
                           profitPeriod:
                             profitPeriod === 1 ? t("6 months") : t("12 months"),
-                        }
+                        },
                       )}
                     </Text>
                   );
@@ -462,6 +477,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   </Flex>
                 }
                 name="businessPrice"
+                type="number"
                 required
                 message={t("Please enter business price")}
                 placeholder={t("Enter Business Price")}
@@ -527,7 +543,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please enter asset name"),
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -542,11 +558,11 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please enter quantity"),
                     invalidMessage: t(
-                      "Please enter a valid quantity (number only)"
+                      "Please enter a valid quantity (number only)",
                     ),
                     type: "number",
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -561,7 +577,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please choose purchase year"),
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -587,7 +603,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                     invalidMessage: t("Please enter price (number only)"),
                     type: "number",
                   },
-                  t
+                  t,
                 ),
               },
             ]}
@@ -616,7 +632,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please enter liability name"),
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -636,11 +652,11 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please enter quantity"),
                     invalidMessage: t(
-                      "Please enter a valid quantity (number only)"
+                      "Please enter a valid quantity (number only)",
                     ),
                     type: "number",
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -660,7 +676,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please choose purchase year"),
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -692,7 +708,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                     invalidMessage: t("Please enter price (number only)"),
                     type: "number",
                   },
-                  t
+                  t,
                 ),
               },
             ]}
@@ -721,7 +737,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please enter inventory name"),
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -741,11 +757,11 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please enter quantity"),
                     invalidMessage: t(
-                      "Please enter a valid quantity (number only)"
+                      "Please enter a valid quantity (number only)",
                     ),
                     type: "number",
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -765,7 +781,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                   {
                     emptyMessage: t("Please choose purchase year"),
                   },
-                  t
+                  t,
                 ),
               },
               {
@@ -796,7 +812,7 @@ const FinancialInfoStep = forwardRef(({ data, setData }, ref) => {
                     invalidMessage: t("Please enter price (number only)"),
                     type: "number",
                   },
-                  t
+                  t,
                 ),
               },
             ]}
