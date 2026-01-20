@@ -180,6 +180,7 @@ const MobileNavbar = ({ visible, onClose }) => {
               setCurrentPanel(keys);
             }}
             ghost
+            className={isArabic ? "collapse-ar" : "collapse-en"}
           >
             {mobilemenuData?.map((menu, f) => (
               <Panel
@@ -236,6 +237,7 @@ const MobileNavbar = ({ visible, onClose }) => {
                       setCurrentPanels(keys);
                     }}
                     ghost
+                    className={isArabic ? "collapse-ar" : "collapse-en"}
                   >
                     {menu?.children?.map((menuchild, f) =>
                       menuchild?.innerchildren ? (

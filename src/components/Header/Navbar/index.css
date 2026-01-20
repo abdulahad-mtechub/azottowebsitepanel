@@ -280,3 +280,12 @@ a {
 [dir="rtl"] .dropdown .drop-item .drop-link .arr {
   transform: rotate(180deg);
 }
+
+/* Collapse padding based on language */
+.collapse-en > .ant-collapse-item > .ant-collapse-header {
+  padding: 13px 16px !important;
+}
+
+.collapse-ar > .ant-collapse-item > .ant-collapse-header {
+  padding: 13px 8px !important;
+}
