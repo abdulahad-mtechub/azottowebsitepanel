@@ -211,7 +211,9 @@ a {
 
 .notification-item {
   border-radius: 8px;
-  transition: background-color 0.3s ease, border-left 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-left 0.3s ease;
   padding-inline: 12px !important;
 }
 
@@ -253,8 +255,10 @@ a {
 }
 
 .notification-popover .ant-popover-inner {
-  box-shadow: 0 6px 16px 0 rgba(0, 0, 0, 0.08),
-    0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  box-shadow:
+    0 6px 16px 0 rgba(0, 0, 0, 0.08),
+    0 3px 6px -4px rgba(0, 0, 0, 0.12),
+    0 9px 28px 8px rgba(0, 0, 0, 0.05);
 }
 
 /* Prevent multiple popovers from rendering */

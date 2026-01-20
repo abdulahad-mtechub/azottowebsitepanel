@@ -283,7 +283,7 @@ const MobileNavbar = ({ visible, onClose }) => {
                         >
                           {menuchild?.name}
                         </NavLink>
-                      )
+                      ),
                     )}
                   </Collapse>
                 </div>
