@@ -37,7 +37,7 @@ const SellerDealDetails = ({ data }) => {
     key: item.id || index,
     name: item.name,
     items: formatNumber(item.quantity),
-    purchaseyear: formatNumber(item.purchaseYear),
+    purchaseyear: item.purchaseYear,
     price: formatNumber(item?.price),
   }));
 
@@ -45,7 +45,7 @@ const SellerDealDetails = ({ data }) => {
     key: item.id || index,
     name: item.name,
     items: formatNumber(item.quantity),
-    purchaseyear: formatNumber(item?.purchaseYear),
+    purchaseyear: item?.purchaseYear,
     price: formatNumber(item?.price),
   }));
 
@@ -53,7 +53,7 @@ const SellerDealDetails = ({ data }) => {
     key: item.id || index,
     name: item.name,
     items: formatNumber(item.quantity),
-    purchaseyear: formatNumber(item.purchaseYear),
+    purchaseyear: item.purchaseYear,
     price: formatNumber(item.price),
   }));
 
