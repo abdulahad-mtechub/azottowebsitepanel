@@ -86,7 +86,7 @@ const SingleInProgressDeals = ({ inprogressdeal, setInprogressDeal }) => {
       return t("Completed");
     }
     if (deal.isBuyerCompleted) {
-      return t("Waiting for Jusoor to complete the deal");
+      return t("Waiting for Azottoto complete the deal");
     }
 
     // Step 4: Document verification

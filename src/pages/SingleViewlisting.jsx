@@ -168,7 +168,7 @@ const SingleViewlisting = () => {
                   className="cursor text-gray"
                   onClick={() => navigate("/businesslisting")}
                 >
-                  {t("Browse Businesses")}
+                  {t("Browse Vehicles")}
                 </Text>
               ),
             },
@@ -249,10 +249,10 @@ const SingleViewlisting = () => {
                             title={
                               business?.isByTakbeer
                                 ? t(
-                                    "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
+                                    "Taqbeel refers to transferring a vehicle by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
                                   )
                                 : t(
-                                    "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.",
+                                    "Acquisition means a full purchase of the vehicle, including its brand, trade name, CR, assets, and even liabilities.",
                                   )
                             }
                           >

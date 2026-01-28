@@ -40,7 +40,7 @@ const SellerFinalDealsStep = ({ details }) => {
       });
 
       messageApi.success(
-        t("Deal marked as completed from your end. Jusoor will verify shortly.")
+        t("Deal marked as completed from your end. Azottowill verify shortly.")
       );
     } catch (err) {
       console.error(err);
@@ -61,7 +61,7 @@ const SellerFinalDealsStep = ({ details }) => {
           <Text className="fw-600 fs-14">{t("Confirmation")}</Text>
           <Text className="fs-13 text-gray">
             {t(
-              "Once the buyer has verified the documents, you can now mark this deal as completed. The Jusoor admin will verify everything before finalizing."
+              "Once the buyer has verified the documents, you can now mark this deal as completed. The Azottoadmin will verify everything before finalizing."
             )}
           </Text>
         </Flex>
@@ -82,14 +82,14 @@ const SellerFinalDealsStep = ({ details }) => {
           <Col span={24}>
             <Flex>
               <Button
-                aria-labelledby={t("Notify Jusoor to Finalize")}
+                aria-labelledby={t("Notify Azottoto Finalize")}
                 type="primary"
                 className="btn bg-brand"
                 onClick={handleSubmit}
                 disabled={details?.isSellerCompleted}
                 loading={loading}
               >
-                {t("Notify Jusoor to Finalize")}
+                {t("Notify Azottoto Finalize")}
               </Button>
             </Flex>
           </Col>

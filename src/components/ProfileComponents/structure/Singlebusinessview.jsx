@@ -43,7 +43,7 @@ const Singlebusinessview = ({ setSingleDetail, singledetail }) => {
   const business = data?.getBusinessById?.business;
 
   const handleEditBusiness = () => {
-    navigate(`/sellbusinesscreate?edit=${singledetail}`);
+    navigate(`/sellvincreate?edit=${singledetail}`);
   };
 
   const handleStatusToggle = async (newStatus) => {

@@ -10,7 +10,7 @@ const JusoorFutures = () => {
     {
       title: t("Verified Listings"),
       description: t(
-        "Every business on Jusoor is verified for identity and commercial registration. ensuring you make decisions with confidence."
+        "Every business on Azottois verified for identity and commercial registration. ensuring you make decisions with confidence."
       ),
       img: "/assets/images/ver.gif",
     },
@@ -49,13 +49,10 @@ const JusoorFutures = () => {
               gap={15}
               className="mx-width"
             >
-              <div className="tag fw-500">{t("Jusoor's Futures")}</div>
+              <div className="tag fw-500">{t("Azotto's Futures")}</div>
               <Title className="m-0 text-white" level={2}>
-                <Trans
-                  i18nKey="trustedMarketplace"
-                  components={{ 1: <span className="text-brand" /> }}
-                />
-              </Title>
+              Your Trusted Crypte Marketplace for Buying and Selling Businesses
+                </Title>
             </Flex>
           </Col>
           {steps?.map((list, i) => (

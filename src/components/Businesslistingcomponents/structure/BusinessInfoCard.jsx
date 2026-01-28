@@ -199,7 +199,7 @@ const BusinessInfoCard = ({ data }) => {
                         {stat?.title}
                         <Tooltip
                           title={t(
-                            "The Jusoor has verified the identity of the business owner."
+                            "The Azottohas verified the identity of the business owner."
                           )}
                         >
                           <img

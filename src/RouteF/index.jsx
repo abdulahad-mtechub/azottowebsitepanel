@@ -2,23 +2,16 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { FloatButton } from "antd";
 import { UpOutlined } from "@ant-design/icons";
 import {
-  Aboutus,
-  Article,
-  ArticleSingleView,
   BusinessListingPage,
-  EndaPage,
-  Faqs,
   ForgotPassword,
   Home,
   LoginPage,
-  PrivacyPolicy,
   ProfileDashboard,
-  SellBusinessCreate,
+  SellVinCreate,
   SignupPage,
   SingleViewlisting,
 } from "../pages";
 import { Footer, Navbar, ScrollTop, Singlebusinessview } from "../components";
-import { Termofuse } from "../pages";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
@@ -67,15 +60,6 @@ const AppRoutes = () => {
             path="/singlebusinessview/:id"
             element={<Singlebusinessview />}
           />
-          <Route path="/faq" element={<Faqs />} />
-          <Route path="/termofuse" element={<Termofuse />} />
-          <Route path="/article" element={<Article />} />
-          <Route
-            path="/articlesingleview/:id"
-            element={<ArticleSingleView />}
-          />
-          <Route path="/about" element={<Aboutus />} />
-
           {/* Public routes - redirect to home if already logged in */}
           <Route
             path="/login"
@@ -101,10 +85,6 @@ const AppRoutes = () => {
               </PublicRoute>
             }
           />
-
-          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/endapage" element={<EndaPage />} />
-
           <Route
             path="/profiledashboard"
             element={
@@ -114,10 +94,10 @@ const AppRoutes = () => {
             }
           />
           <Route
-            path="/sellbusinesscreate"
+            path="/sellvincreate"
             element={
               <ProtectedRoute>
-                <SellBusinessCreate />
+                <SellVinCreate />
               </ProtectedRoute>
             }
           />

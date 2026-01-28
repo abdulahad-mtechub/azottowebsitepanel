@@ -34,7 +34,7 @@ const FinalDealsStep = ({ inprogressdeal }) => {
   const [updatedeal] = useMutation(UPDATE_DEAL, {
     onCompleted: () => {
       messageApi.success(
-        t("Deal marked as completed from your end. Jusoor will verify shortly.")
+        t("Deal marked as completed from your end. Azottowill verify shortly.")
       );
     },
     onError: (err) => {
@@ -110,7 +110,7 @@ const FinalDealsStep = ({ inprogressdeal }) => {
             <Col span={24}>
               <Flex>
                 <Button
-                  aria-labelledby={t("Notify Jusoor to Finalize")}
+                  aria-labelledby={t("Notify Azottoto Finalize")}
                   type="primary"
                   className="btn bg-brand"
                   onClick={async () => {
@@ -130,7 +130,7 @@ const FinalDealsStep = ({ inprogressdeal }) => {
                     }
                   }}
                 >
-                  {t("Notify Jusoor to Finalize")}
+                  {t("Notify Azottoto Finalize")}
                 </Button>
               </Flex>
             </Col>

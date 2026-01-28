@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Flex, Form, Image, message, Tooltip, Typography } from "antd";
+import { Card, Flex, Form, Image, message, Tooltip, Typography,Col,Row } from "antd";
 import { ModuleTopHeading } from "../../Pagecomponents";
 import { SingleFileUpload } from "../../Forms";
 import imageCompression from "browser-image-compression";
@@ -31,12 +31,12 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
       // Then validate required documents
       const docs = Array.isArray(data?.documents) ? data.documents : [];
       const crDoc = docs.find(
-        (d) => d.title === "Commercial Registration (CR)" && d.filePath
+        (d) => d.title === "Vehicle Registration" && d.filePath
       );
 
       if (!crDoc) {
         messageApi.error(
-          t("Please upload Commercial Registration (CR) document")
+          t("Please upload Vehicle Registration document")
         );
         throw new Error(t("CR document is required"));
       }
@@ -74,7 +74,7 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
 
     // Only find documents that are explicitly titled as CR or Supporting Document
     const crDoc =
-      docs.find((d) => d.title === "Commercial Registration (CR)") || null;
+      docs.find((d) => d.title === "Vehicle Registration") || null;
     const supportDocs = docs.filter((d) => d.title === "Supporting Document");
 
     const crList = crDoc ? [docToUploadItem(crDoc, 0)] : [];
@@ -166,7 +166,7 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
       const fileInfo = await uploadFileToServer(file);
 
       const crDocument = {
-        title: "Commercial Registration (CR)",
+        title: "Vehicle Registration)",
         ...fileInfo,
       };
 
@@ -188,10 +188,10 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
 
       // Update only CR form field, don't touch support docs field
       form.setFieldsValue({ uploadcr: [crDocument] });
-      messageApi.success(t("Commercial Registration uploaded successfully"));
+      messageApi.success(t("Vehicle Registration uploaded successfully"));
     } catch (err) {
       console.error("handleSingleFileUpload error:", err);
-      messageApi.error(t("Failed to upload Commercial Registration"));
+      messageApi.error(t("Failed to upload Vehicle Registration"));
     } finally {
       setUploadingCR(false);
     }
@@ -276,7 +276,7 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
         ? [...data.documents]
         : [];
       const crDoc = existingDocs.find(
-        (d) => d.title === "Commercial Registration (CR)"
+        (d) => d.title === "Vehicle Registration"
       );
       const existingSupportDocs = existingDocs.filter(
         (d) => d.title === "Supporting Document"
@@ -327,7 +327,7 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
         ? [...data.documents]
         : [];
       const crDoc = updatedDocs.find(
-        (d) => d.title === "Commercial Registration (CR)"
+        (d) => d.title === "Vehicle Registration"
       );
       const existingSupportDocs = updatedDocs.filter(
         (d) => d.title === "Supporting Document"
@@ -393,12 +393,14 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
       </Flex>
 
       <Form layout="vertical" form={form} requiredMark={false}>
+      <Row gutter={24}>
+      <Col xs={24} sm={24} md={12}>
         <Card className="shadow-d radius-12 border-gray mb-3">
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
               <Flex align="center" gap={5}>
                 <Title level={5} className="m-0 fw-500">
-                  {t("Commercial Registration (CR)")}
+                  {t("Vehicle Registration")}
                 </Title>
                 <Text className="fw-500">*</Text>
               </Flex>
@@ -417,13 +419,110 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
                 uploading={uploadingCR}
                 multiple={false}
                 required={true}
-                message={t("Please upload Commercial Registration (CR)")}
+                message={t("Please upload Vehicle Registration")}
                 initialFileList={initialCrList}
               />
             </Flex>
           </Flex>
         </Card>
-
+        </Col>
+        <Col xs={24} sm={24} md={12}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+                <Title level={5} className="m-0 fw-500">
+                  {t("Ownership Proof")}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                  "Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadcr"}
+                title={t("Upload")}
+                onUpload={handleSingleFileUpload}
+                onRemove={handleSingleFileRemove}
+                uploading={uploadingCR}
+                multiple={false}
+                required={true}
+                message={t("Please upload Ownership Proof")}
+                initialFileList={initialCrList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        <Col xs={24} sm={24} md={12}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+                <Title level={5} className="m-0 fw-500">
+                  {t("Insurance Certificate")}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                  "Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadcr"}
+                title={t("Upload")}
+                onUpload={handleSingleFileUpload}
+                onRemove={handleSingleFileRemove}
+                uploading={uploadingCR}
+                multiple={false}
+                required={true}
+                message={t("Please upload Ownership Proof")}
+                initialFileList={initialCrList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        <Col xs={24} sm={24} md={12}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+                <Title level={5} className="m-0 fw-500">
+                  {t("Invoice / Purchase Bill")}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                  "Accepted formats: PDF, JPG, PNG, DOCX. Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadcr"}
+                title={t("Upload")}
+                onUpload={handleSingleFileUpload}
+                onRemove={handleSingleFileRemove}
+                uploading={uploadingCR}
+                multiple={false}
+                required={true}
+                message={t("Please upload Invoice / Purchase Bill")}
+                initialFileList={initialCrList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        <Col xs={24} sm={24} md={24}>
         <Card className="shadow-d radius-12 border-gray mb-3">
           <Flex vertical gap={5} className="w-100">
             <Flex vertical>
@@ -464,6 +563,198 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
             </Flex>
           </Flex>
         </Card>
+        </Col>
+        </Row>
+        {/* upload images */}
+        <Title>Image Uploads</Title>
+        <Row gutter={24}>
+        <Col xs={24} sm={24} md={8}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+                <Title level={5} className="m-0 fw-500">
+                  {t("Front View")}{" "}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                   "Accepted formats: JPG, PNG. Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadmult"}
+                title={t("Upload")}
+                onUpload={handleMultipleFileUpload}
+                onRemove={handleMultipleFileRemove}
+                uploading={uploadingSupport}
+                multiple={true}
+                required={false}
+                initialFileList={initialSupportList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        <Col xs={24} sm={24} md={8}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+                <Title level={5} className="m-0 fw-500">
+                  {t("Back View")}{" "}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                  "Accepted formats: JPG, PNG. Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadmult"}
+                title={t("Upload")}
+                onUpload={handleMultipleFileUpload}
+                onRemove={handleMultipleFileRemove}
+                uploading={uploadingSupport}
+                multiple={true}
+                required={false}
+                initialFileList={initialSupportList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        <Col xs={24} sm={24} md={8}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+              <Title level={5} className="m-0 fw-500">
+                  {t("Side Views")}{" "}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                  "Accepted formats: JPG, PNG Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadmult"}
+                title={t("Upload")}
+                onUpload={handleMultipleFileUpload}
+                onRemove={handleMultipleFileRemove}
+                uploading={uploadingSupport}
+                multiple={true}
+                required={false}
+                initialFileList={initialSupportList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        <Col xs={24} sm={24} md={8}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+                <Title level={5} className="m-0 fw-500">
+                  {t("Interior View")}{" "}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                   "Accepted formats: JPG, PNG. Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadmult"}
+                title={t("Upload")}
+                onUpload={handleMultipleFileUpload}
+                onRemove={handleMultipleFileRemove}
+                uploading={uploadingSupport}
+                multiple={true}
+                required={false}
+                initialFileList={initialSupportList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        <Col xs={24} sm={24} md={8}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+              <Title level={5} className="m-0 fw-500">
+                  {t("Engine / Odometer")}{" "}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                   "Accepted formats: JPG, PNG. Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadmult"}
+                title={t("Upload")}
+                onUpload={handleMultipleFileUpload}
+                onRemove={handleMultipleFileRemove}
+                uploading={uploadingSupport}
+                multiple={true}
+                required={false}
+                initialFileList={initialSupportList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        <Col xs={24} sm={24} md={8}>
+        <Card className="shadow-d radius-12 border-gray mb-3">
+          <Flex vertical gap={5} className="w-100">
+            <Flex vertical>
+              <Flex align="center" gap={5}>
+              <Title level={5} className="m-0 fw-500">
+                  {t("Additional Images")}{" "}
+                </Title>
+                <Text className="fw-500">*</Text>
+              </Flex>
+              <Text className="text-gray">
+                {t(
+                   "Accepted formats: JPG, PNG. Max size: 10MB per file."
+                )}
+              </Text>
+            </Flex>
+            <Flex className="w-100">
+              <SingleFileUpload
+                name={"uploadmult"}
+                title={t("Upload")}
+                onUpload={handleMultipleFileUpload}
+                onRemove={handleMultipleFileRemove}
+                uploading={uploadingSupport}
+                multiple={true}
+                required={false}
+                initialFileList={initialSupportList}
+              />
+            </Flex>
+          </Flex>
+        </Card>
+        </Col>
+        </Row>
       </Form>
     </>
   );

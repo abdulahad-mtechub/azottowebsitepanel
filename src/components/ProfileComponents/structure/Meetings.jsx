@@ -1,9 +1,5 @@
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row,Table } from "antd";
 import { MySelect, SearchInput } from "../../Forms";
-import { SellerSendRequestTable } from "./SellerSenRequestTable";
-import { SellerRecieveRequestTable } from "./SellerRecieveRequestTable";
-import { SellerAdminSchedulingTable } from "./SellerAdminSchedulingTable";
-import { SellerScheduledTable } from "./SellerScheduledTable";
 import { useTranslation } from "react-i18next";
 import { useState, useCallback, useMemo } from "react";
 
@@ -12,53 +8,103 @@ const Meetings = ({ isBuyer }) => {
   const [activeKey, setActiveKey] = useState("1");
   const [searchValue, setSearchValue] = useState("");
 
-  const items = useMemo(
-    () => [
-      {
-        key: "1",
-        label: t("Send Requests"),
-        component: SellerSendRequestTable,
+  const columns = [
+    { title: t("Vin Number"), dataIndex: "title" },
+    {
+      title: isBuyer ? t("Seller Name") : t("Buyer Name"),
+      dataIndex: "buyername",
+    },
+    {
+      title: t("Condition Score"),
+      dataIndex: "businessprice",
+      render: (businessprice) => (
+        <Space size={5} align="center">
+          {businessprice != null && businessprice !== "" ? (
+            <>
+              <img
+                src="/assets/icons/reyal-b.png"
+                width={16}
+                alt={t("currency-symbol")}
+                fetchPriority="high"
+              />
+              <Text>{formatNumber(businessprice)}</Text>
+            </>
+          ) : (
+            <Text>-</Text>
+          )}
+        </Space>
+      ),
+    },
+    {
+      title: t("Document Complete"),
+      dataIndex: "offerprice",
+      render: (businessprice) => (
+        <Space size={5} align="center">
+          {businessprice != null && businessprice !== "" ? (
+            <>
+              <img
+                src="/assets/icons/reyal-b.png"
+                width={16}
+                alt={t("currency-symbol")}
+                fetchPriority="high"
+              />
+              <Text>{formatNumber(businessprice)}</Text>
+            </>
+          ) : (
+            <Text>-</Text>
+          )}
+        </Space>
+      ),
+    },
+    {
+      title: t("Status"),
+      dataIndex: "status",
+      render: (status) => {
+        return (
+          <Text
+            className={`${getStatusBadgeClass(status)} fs-12 badge-cs fw-500`}
+          >
+            {status === "REJECTED"
+              ? t("Rejected")
+              : status === "REQUESTED"
+              ? t("Requested")
+              : status === "CANCELLED"
+              ? t("Cancelled")
+              : status === "SCHEDULED"
+              ? t("Scheduled")
+              : status === "ACCEPTED"
+              ? t("Accepted")
+              : status === "COMPLETED"
+              ? t("Completed")
+              : status === "PENDING"
+              ? t("Pending")
+              : status === "PENDING_APPROVAL"
+              ? t("Pending Approval")
+              : status === "READY_FOR_SCHEDULING"
+              ? t("Ready for Scheduling")
+              : t(status)}
+          </Text>
+        );
       },
-      {
-        key: "2",
-        label: t("Receive Requests"),
-        component: SellerRecieveRequestTable,
+    },
+    {
+      title: t("Last Verified On "),
+      render: (record) => {
+        return (
+          <Text>{`${dayjs(record?.requestedDate)?.format(
+            "DD MMM YYYY, hh:mm A"
+          )} - ${dayjs(record?.requestedEndDate)?.format("hh:mm A")}`}</Text>
+        );
       },
-      {
-        key: "3",
-        label: t("Admin Scheduling"),
-        component: SellerAdminSchedulingTable,
-      },
-      {
-        key: "4",
-        label: t("Scheduled Meetings"),
-        component: SellerScheduledTable,
-      },
-    ],
-    [t]
-  );
-
-  const selectOptions = useMemo(
-    () =>
-      items.map((item) => ({
-        id: item.key,
-        name: item.label,
-      })),
-    [items]
-  );
-
-  const renderContent = useCallback(() => {
-    const selectedItem = items.find((item) => item.key === activeKey);
-    if (!selectedItem) return null;
-
-    const Component = selectedItem.component;
-    return <Component isBuyer={isBuyer} searchValue={searchValue} />;
-  }, [activeKey, isBuyer, searchValue, items]);
-
-  const handleTabChange = useCallback((value) => {
-    setActiveKey(value);
-    setSearchValue("");
-  }, []);
+    },
+    {
+      title: t("Action"),
+      key: "action",
+      fixed: "right",
+      width: 100,
+      align: "center",
+    },
+  ];
 
   const handleSearchChange = useCallback((debouncedSearchValue) => {
     setSearchValue(debouncedSearchValue);
@@ -98,14 +144,28 @@ const Meetings = ({ isBuyer }) => {
           <MySelect
             withoutForm
             value={activeKey}
-            onChange={handleTabChange}
-            options={selectOptions}
             className="border-light-gray radius-8"
           />
         </Col>
       </Row>
       <Row gutter={[16, 16]}>
-        <Col span={24}>{renderContent()}</Col>
+      <Col span={24}>
+          <Table
+            size="large"
+            columns={columns}
+            className="pagination table table-cs"
+            showSorterTooltip={false}
+            scroll={{ x: 830 }}
+            pagination={{
+              hideOnSinglePage: true,
+              current: 1,
+              pageSize:10,
+              total: 10,
+              showSizeChanger: true,
+              showQuickJumper: true,
+            }}
+          />
+        </Col>
       </Row>
     </Card>
   );

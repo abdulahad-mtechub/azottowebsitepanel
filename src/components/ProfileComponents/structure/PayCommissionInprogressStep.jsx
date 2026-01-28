@@ -40,7 +40,7 @@ const PayCommissionInprogressStep = ({ form, inprogressdeal }) => {
 
   const paycommissionData = [
     {
-      title: t("Jusoor Bank Name"),
+      title: t("AzottoBank Name"),
       desc: data?.getActiveAdminBank?.accountTitle || t("N/A"),
     },
     {

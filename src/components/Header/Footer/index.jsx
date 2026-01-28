@@ -45,23 +45,8 @@ const Footer = () => {
       links: [
         {
           id: 1,
-          name: t("About Jusoor"),
+          name: t("About Us"),
           path: "/about",
-        },
-        {
-          id: 2,
-          name: t("FAQs"),
-          path: "/faq",
-        },
-        {
-          id: 3,
-          name: t("Term of Use"),
-          path: "/termofuse",
-        },
-        {
-          id: 4,
-          name: t("Articles"),
-          path: "/article",
         },
       ],
     },
@@ -80,7 +65,7 @@ const Footer = () => {
               <div className="mb-1">
                 <Link to={"/"}>
                   <img
-                    src="/assets/images/logo.webp"
+                    src="/assets/images/logo.svg"
                     alt="jusoor-logo"
                     width={180}
                     fetchPriority="high"
@@ -89,7 +74,7 @@ const Footer = () => {
               </div>
               <Text className="fs-13 text-white w-500">
                 {t(
-                  "Jusoor is a licensed Saudi platform (7050269450) for buying and selling verified businesses. We offer a secure and seamless experience — with identity and business verification, secure payments, and smooth ownership transfer."
+                  "Azottois a licensed platform (7050269450) for buying and selling verified Vin. We offer a secure and seamless experience — with identity and vin verification, secure payments, and smooth ownership transfer."
                 )}
               </Text>
               <Flex gap={20}>
@@ -208,7 +193,7 @@ const Footer = () => {
           >
             <Flex align="center" className="w-100 quote" gap={20}>
               <Typography.Text className="fs-12 text-white">
-                {t("Copyright © {{year}} Jusoor", {
+                {t("Copyright © {{year}} Azotto", {
                   year: new Date().getFullYear(),
                 })}
               </Typography.Text>
@@ -218,7 +203,7 @@ const Footer = () => {
                 className="fs-12 text-white"
                 fetchPriority="high"
               >
-                {t("Developed and maintained by REPLA Technologies PVT Ltd")}
+                {t("Developed and maintained by MtechHub LLC")}
               </NavLink>
             </Flex>
           </Col>
@@ -228,19 +213,6 @@ const Footer = () => {
             sm={{ span: 24 }}
             xs={{ span: 24 }}
           >
-            <Flex align="center" className="w-100 lastlink" gap={20}>
-              <NavLink
-                to={"/termofuse"}
-                className="fs-12 text-white"
-                fetchPriority="high"
-              >
-                {t("Term of use")}
-              </NavLink>
-              <span className="text-brand"> | </span>
-              <NavLink to={"/privacypolicy"} className="fs-12 text-white">
-                {t("Privacy Policy")}
-              </NavLink>
-            </Flex>
           </Col>
         </Row>
       </div>

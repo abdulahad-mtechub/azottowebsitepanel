@@ -25,7 +25,7 @@ import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../../../hooks";
 
 const { Text } = Typography;
-const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
+const VinDetailStep = forwardRef(({ data, setData }, ref) => {
   const { t } = useTranslation();
   const { formatPhone } = useFormatNumber();
   const district = useDistricts();
@@ -179,9 +179,9 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
         align="flex-start"
       >
         <Flex vertical gap={1}>
-          <ModuleTopHeading level={4} name={t("Tell us about your business")} />
+          <ModuleTopHeading level={4} name={t("Tell us about your vehicle")} />
           <Text className="text-gray">
-            {t("Let's start with the basic business information")}
+            {t("Let's start with the basic vehicle information")}
           </Text>
         </Flex>
         <Flex className="pill-round" gap={8} align="center">
@@ -193,7 +193,7 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
           />
           <Text className="fs-12 text-sky">
             {t("For any query, contact us on")}{" "}
-            {formatPhone("+966 543 543 654")}
+            {formatPhone("+090078601")}
           </Text>
         </Flex>
       </Flex>
@@ -201,101 +201,37 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
       <Card className="shadow-d radius-12 border-gray">
         <Form layout="vertical" form={form} onValuesChange={handleFormChange}>
           <Row gutter={24}>
-            <Col span={24}>
-              <Flex>
-                <Radio.Group
-                  onChange={handleRadioChange}
-                  value={isAccess ? 2 : 1}
-                  className="mb-3 margintop-5"
-                >
-                  <Radio value={1} className="fs-14">
-                    <Flex gap={3} align="center">
-                      {t("Sell business by Acquiring")}
-                      <Tooltip
-                        title={t(
-                          "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
-                        )}
-                      >
-                        <img
-                          src="/assets/icons/info.png"
-                          width={20}
-                          alt={t("acquiring-icon")}
-                          fetchPriority="high"
-                        />
-                      </Tooltip>
-                    </Flex>
-                  </Radio>
-                  <Radio value={2} className="fs-14">
-                    <Flex gap={3} align="center">
-                      {t("Sell business by Takbeel")}
-                      <Tooltip
-                        title={t(
-                          "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
-                        )}
-                      >
-                        <img
-                          src="/assets/icons/info.png"
-                          width={20}
-                          alt={t("takbeel-icon")}
-                          fetchPriority="high"
-                        />
-                      </Tooltip>
-                    </Flex>
-                  </Radio>
-                </Radio.Group>
-              </Flex>
-            </Col>
-
             <Col xs={24} sm={24} md={12}>
               <MyInput
-                label={t("Business Title")}
-                name="title"
+                label={t("VIN Number")}
+                name="vinNumber"
                 required
-                message={t("Please enter title")}
-                placeholder={t("Write business name")}
+                message={t("Please enter vin number")}
+                placeholder={t("Write vin number")}
+                rules={[
+                  { required: true, message: t("VIN is required") },
+                  { min: 17, message: t("VIN must be 17 characters") },
+                ]}
               />
             </Col>
 
             <Col xs={24} sm={24} md={12}>
-              <MySelect
-                label={t("Business Category")}
-                name="category"
+            <MyInput
+                label={t("Vehicle Make")}
+                name="vehiclemake"
                 required
-                message={t("Choose business category")}
-                options={categories}
-                placeholder={t("Choose business category")}
+                message={t("Please enter vehicle make")}
+                placeholder={t("Write vehicle make")}
               />
             </Col>
 
             <Col xs={24} sm={24} md={12}>
-              <MySelect
-                label={t("Region")}
-                name="district"
+            <MyInput
+                label={t("Vehicle Model")}
+                name="model"
                 required
-                message={t("Choose region")}
-                placeholder={t("Choose region")}
-                options={district}
-                onChange={(val) => {
-                  // Find district by name
-                  const selectedDistrictObj = district.find(
-                    (d) => d.name === val
-                  );
-                  // Store the district ID for cities lookup
-                  setSelectedDistrict(selectedDistrictObj?.id || null);
-                  form.setFieldValue("city", undefined);
-                }}
-              />
-            </Col>
-
-            <Col xs={24} sm={24} md={12}>
-              <MySelect
-                label={t("City")}
-                name="city"
-                required
-                message={t("Choose city")}
-                disabled={!selectedDistrict}
-                options={selectedDistrict ? cities[selectedDistrict] || [] : []}
-                placeholder={t("Choose city")}
+                message={t("Please enter vehicle model")}
+                placeholder={t("Write vehicle model")}
               />
             </Col>
 
@@ -303,44 +239,39 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
               <MyDatepicker
                 datePicker
                 picker="year"
-                label={t("Foundation Date")}
+                label={t("Model Year")}
                 name="dob"
                 required
-                message={t("Please enter foundation date")}
-                placeholder={t("Enter foundation date")}
+                message={t("Please enter model year")}
+                placeholder={t("Enter model year")}
               />
             </Col>
 
             <Col xs={24} sm={24} md={12}>
-              <MySelect
-                label={t("Team Size")}
-                name="teamSize"
+            <MyInput
+                label={t("Engine Number")}
+                name="engineNumber"
                 required
-                message={t("Choose team size")}
-                options={teamsizeOp}
-                placeholder={t("Enter team size")}
+                message={t("Please enter engine number")}
+                placeholder={t("Write engine number")}
+              />
+            </Col>
+
+            <Col xs={24} sm={24} md={12}>
+            <MyInput
+                label={t("Chassis Number")}
+                name="chassisNumber"
+                required
+                message={t("Please enter chassis number")}
+                placeholder={t("Write chassis number")}
               />
             </Col>
 
             <Col span={24}>
               <MyInput
-                textArea
-                label={t("Description")}
-                name="description"
-                placeholder={t("Write description about your business")}
-                required
-                message={t("Please enter description")}
-                rows={5}
-                showCount
-                maxLength={200}
-              />
-            </Col>
-
-            <Col span={24}>
-              <MyInput
-                label={t("Business Website Url")}
-                name="url"
-                placeholder={t("Add website url")}
+                label={t("Current Mileage")}
+                name="mileage"
+                placeholder={t("Add current milage")}
                 required={selectedCategory?.isDigital}
               />
             </Col>
@@ -351,4 +282,4 @@ const BusinessDetailStep = forwardRef(({ data, setData }, ref) => {
   );
 });
 
-export { BusinessDetailStep };
+export { VinDetailStep };

@@ -188,7 +188,7 @@ const RequestMeetingModal = ({
                 ]);
 
                 messageApi.success(
-                  t("Jusoor E-NDA signed & meeting request sent successfully!")
+                  t("AzottoE-NDA signed & meeting request sent successfully!")
                 );
 
                 // Call onSuccess callback if provided

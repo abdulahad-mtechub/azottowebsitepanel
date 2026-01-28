@@ -67,7 +67,7 @@ const ProtectedRoute = ({ children }) => {
   const pathname = rawPath.replace(/\/+$/, "") || "/";
 
   const isProfileDashboard =
-    pathname === "/profiledashboard" || pathname === "/sellbusinesscreate";
+    pathname === "/profiledashboard" || pathname === "/sellvincreate";
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
 
   if (isUserInactive && isProfileDashboard) {

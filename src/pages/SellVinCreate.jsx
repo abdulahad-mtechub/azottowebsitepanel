@@ -11,11 +11,11 @@ import {
 import { CheckOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import {
-  BusinessDetailStep,
+  VinDetailStep,
   BusinesslistingReviewModal,
-  BusinessVisionStep,
+  ConditionMatrix,
   CancelModal,
-  FinancialInfoStep,
+  VinVerificationStep,
   UploadSupportDocStep,
 } from "../components";
 import {
@@ -31,7 +31,7 @@ import { clearQueryCache } from "../config/clearQueryCache";
 const { Text } = Typography;
 const LOCAL_STORAGE_KEY = "sellBusinessDraft";
 
-const SellBusinessCreate = () => {
+const SellVinCreate = () => {
   const { t } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
   const [searchParams] = useSearchParams();
@@ -218,9 +218,9 @@ const SellBusinessCreate = () => {
 
   const steps = [
     {
-      title: t("Business Details"),
+      title: t("Vehicle Details"),
       content: (
-        <BusinessDetailStep
+        <VinDetailStep
           ref={businessDetailFormRef}
           data={businessData}
           setData={setBusinessData}
@@ -228,33 +228,33 @@ const SellBusinessCreate = () => {
       ),
     },
     {
-      title: t("Financial & Growth Information"),
-      content: (
-        <FinancialInfoStep
-          ref={businessDetailFormRef}
-          data={businessData}
-          setData={setBusinessData}
-        />
-      ),
-    },
-    {
-      title: t("Business Vision"),
-      content: (
-        <BusinessVisionStep
-          ref={businessDetailFormRef}
-          data={businessData}
-          setData={setBusinessData}
-        />
-      ),
-    },
-    {
-      title: t("Document Uploads"),
+      title: t("Vehicle Documents & Image Uploads"),
       content: (
         <UploadSupportDocStep
+        ref={businessDetailFormRef}
+        data={businessData}
+        setData={setBusinessData}
+      />
+      ),
+    },
+    {
+      title: t("Condition Matrix"),
+      content: (
+        <ConditionMatrix
           ref={businessDetailFormRef}
           data={businessData}
           setData={setBusinessData}
         />
+      ),
+    },
+    {
+      title: t("VIN Verification"),
+      content: (
+        <VinVerificationStep
+        ref={businessDetailFormRef}
+        data={businessData}
+        setData={setBusinessData}
+      />
       ),
     },
   ];
@@ -670,4 +670,4 @@ const SellBusinessCreate = () => {
   );
 };
 
-export { SellBusinessCreate };
+export { SellVinCreate };

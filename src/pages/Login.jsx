@@ -110,7 +110,7 @@ const LoginPage = () => {
           key: "1",
           label: "EN",
           icon: "assets/icons/en.webp",
-          alt: "Jusoor language logo",
+          alt: "Azottolanguage logo",
         }),
           setLanguage("en");
         handleChange("en");
@@ -147,41 +147,33 @@ const LoginPage = () => {
               aria-labelledby="Arrow left"
               shape="circle"
               onClick={() => navigate("/")}
+              style={{
+                backgroundColor: "#1B1F41",
+                borderColor: "#1B1F41",
+              }}
             >
               <ArrowLeftOutlined
-                style={
-                  language === "ar"
-                    ? { transform: "rotate(180deg)" }
-                    : undefined
-                }
+                style={{
+                  color: "#0000FF",
+                  transform: language === "ar" ? "rotate(180deg)" : undefined,
+                }}
               />
             </Button>
             <NavLink to={"/"}>
               <div className="logo">
                 <img
-                  src="/assets/images/logo-1.png"
-                  alt="jusoor-logo"
+                  src="/logo.png"
+                  alt="azotto-logo"
                   height={70}
                   fetchPriority="high"
                 />
               </div>
             </NavLink>
 
-            <Title level={3}>{t("Sign In to your account")}</Title>
-            <Paragraph>
+            <Title level={3} className="text-white">{t("Sign In to your account")}</Title>
+            <Paragraph className="text-white">
               {t("Enter your credentials to login to your account.")}
             </Paragraph>
-
-            <Button
-              aria-labelledby="Sign In"
-              className="btn bg-nafth fs-16"
-              block
-              disabled
-            >
-              {t("Sign In via Nafath (Coming Soon)")}
-            </Button>
-            <Divider className="text-gray">{t("Or")}</Divider>
-
             <Form
               layout="vertical"
               form={form}
@@ -225,7 +217,7 @@ const LoginPage = () => {
               </Button>
             </Form>
 
-            <Paragraph className="text-center mt-3">
+            <Paragraph className="text-center mt-3 text-white">
               {t("Don't have an account?")}{" "}
               <NavLink to={"/signup"}>{t("Sign Up")}</NavLink>
             </Paragraph>
@@ -239,48 +231,16 @@ const LoginPage = () => {
           onChange={handleChange}
           value={language}
         >
-          <Dropdown
-            menu={{ items: lang }}
-            trigger={["click"]}
-            className="lang-dropdown"
-          >
-            <Button
-              onClick={(e) => e.preventDefault()}
-              className="bg-transparent btn-outline btn p-2 border-white"
-            >
-              <Space align="center">
-                <Image
-                  src={selectedLang.icon}
-                  width={20}
-                  alt={selectedLang.label}
-                  preview={false}
-                />
-                <Text className="text-white fs-13">{selectedLang.label}</Text>
-                <DownOutlined className="text-white" />
-              </Space>
-            </Button>
-          </Dropdown>
           <Flex vertical justify="space-between" className="h-100">
             <Flex vertical justify="center" align="center" className="logo-sp">
               <Image
-                src="/assets/images/logo.webp"
-                alt="jusoor logo"
+               src="/assets/images/logo.svg"
+                alt="azotto-logo"
                 width={200}
                 preview={false}
                 fetchPriority="high"
               />
-              <Title level={5} className="m-0 text-white text-center">
-                {t("Shorten the path")}
-              </Title>
             </Flex>
-            <div className="bg-shade">
-              <img
-                src="/assets/images/login.gif"
-                alt="jusoor-gif-image"
-                className="w-100 opacity-7"
-                fetchPriority="high"
-              />
-            </div>
           </Flex>
         </Col>
       </Row>

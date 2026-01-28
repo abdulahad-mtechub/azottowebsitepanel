@@ -70,7 +70,7 @@ const Contactform = () => {
                 </div>
                 <Title className="m-0" level={2}>
                   {t("Reach Out to")}{" "}
-                  <span className="text-brand">{t("Jusoor Team")}</span>
+                  <span className="text-brand">{t("AzottoTeam")}</span>
                 </Title>
                 <Text className="fs-14">
                   {t(

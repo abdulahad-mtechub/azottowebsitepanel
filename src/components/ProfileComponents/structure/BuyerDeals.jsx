@@ -3,7 +3,6 @@ import { ModuleTopHeading } from "../../Pagecomponents";
 import { MySelect, SearchInput } from "../../Forms";
 import { useState, useMemo, useCallback } from "react";
 import { lazy, Suspense } from "react";
-import { SingleCompleteDeal } from "./SingleCompleteDeal";
 import { useTranslation } from "react-i18next";
 
 const InprogressDealsTable = lazy(() =>

@@ -113,57 +113,57 @@ const Navbar = ({ setGetCategory }) => {
       arabicTitle: cat.arabicName,
     })) || [];
   const businessmenuData = [
-    {
-      id: 1,
-      icon: "/assets/icons/m-1.png",
-      title: t("Browse by Categories"),
-      subtitle: t("Choose from popular business types."),
-      subdropdown: categories.map((cat, index) => ({
-        id: cat.id ?? index + 1,
-        title: isArabic ? cat.arabicTitle : cat.title,
-        path: cat.title
-          ? `/businesslisting?category=${encodeURIComponent(cat.title)}`
-          : "/businesslisting",
-      })),
-    },
-    {
-      id: 3,
-      icon: "/assets/icons/m-3.png",
-      title: t("Browse by Revenue"),
-      subtitle: t("Filter by business earnings."),
-      subdropdown: [
-        {
-          id: 1,
-          title: t("SAR 0 - SAR 10,000"),
-          path: "/businesslisting?revenue=0,10000",
-        },
-        {
-          id: 2,
-          title: t("SAR 10,000 - SAR 30,000"),
-          path: "/businesslisting?revenue=10000,30000",
-        },
-        {
-          id: 3,
-          title: t("SAR 30,000 - SAR 60,000"),
-          path: "/businesslisting?revenue=30000,60000",
-        },
-        {
-          id: 4,
-          title: t("SAR 60,000 - SAR 100,000"),
-          path: "/businesslisting?revenue=60000,100000",
-        },
-        {
-          id: 5,
-          title: t("SAR 100,000 - SAR 150,000"),
-          path: "/businesslisting?revenue=100000,150000",
-        },
-        {
-          id: 6,
-          title: t("SAR 150,000+"),
-          path: "/businesslisting?revenue=150000,9999999",
-        },
-      ],
-    },
+    // {
+    //   id: 1,
+    //   icon: "/assets/icons/m-1.png",
+    //   title: t("Browse by Categories"),
+    //   subtitle: t("Choose from popular business types."),
+    //   subdropdown: categories.map((cat, index) => ({
+    //     id: cat.id ?? index + 1,
+    //     title: isArabic ? cat.arabicTitle : cat.title,
+    //     path: cat.title
+    //       ? `/businesslisting?category=${encodeURIComponent(cat.title)}`
+    //       : "/businesslisting",
+    //   })),
+    // },
+    // {
+    //   id: 3,
+    //   icon: "/assets/icons/m-3.png",
+    //   title: t("Browse by Revenue"),
+    //   subtitle: t("Filter by business earnings."),
+    //   subdropdown: [
+    //     {
+    //       id: 1,
+    //       title: t("SAR 0 - SAR 10,000"),
+    //       path: "/businesslisting?revenue=0,10000",
+    //     },
+    //     {
+    //       id: 2,
+    //       title: t("SAR 10,000 - SAR 30,000"),
+    //       path: "/businesslisting?revenue=10000,30000",
+    //     },
+    //     {
+    //       id: 3,
+    //       title: t("SAR 30,000 - SAR 60,000"),
+    //       path: "/businesslisting?revenue=30000,60000",
+    //     },
+    //     {
+    //       id: 4,
+    //       title: t("SAR 60,000 - SAR 100,000"),
+    //       path: "/businesslisting?revenue=60000,100000",
+    //     },
+    //     {
+    //       id: 5,
+    //       title: t("SAR 100,000 - SAR 150,000"),
+    //       path: "/businesslisting?revenue=100000,150000",
+    //     },
+    //     {
+    //       id: 6,
+    //       title: t("SAR 150,000+"),
+    //       path: "/businesslisting?revenue=150000,9999999",
+    //     },
+    //   ],
+    // },
   ];
   const [getUser, { data: me }] = useLazyQuery(NAVUSERDATA);
   const [getNavNotification, { data: navNotificationsData }] =
@@ -863,10 +863,10 @@ const Navbar = ({ setGetCategory }) => {
                 <div className="gen-navbar-left">
                   <Link to={"/"}>
                     <img
-                      src="/assets/images/logo.webp"
+                      src="/assets/images/logo.svg"
                       width={"100%"}
                       className="one"
-                      alt="jusoor-logo"
+                      alt="azotto-logo"
                       fetchPriority="high"
                     />
                   </Link>
@@ -880,7 +880,7 @@ const Navbar = ({ setGetCategory }) => {
                     <NavLink to={""}>
                       <Flex gap={10}>
                         <Text className="text-white nav-item">
-                          {t("Browse Businesses")}
+                          {t("Browse Vehicles")}
                         </Text>
                         <DownOutlined className="fs-12 text-white" />
                       </Flex>
@@ -929,14 +929,6 @@ const Navbar = ({ setGetCategory }) => {
                             className="drop-link"
                           >
                             <Flex gap={10} align="center">
-                              <Image
-                                src={list?.icon}
-                                alt="icon menu item"
-                                width={30}
-                                className="pt-1s"
-                                preview={false}
-                                fetchPriority="high"
-                              />
                               <Flex
                                 justify="space-between"
                                 gap={50}
@@ -959,99 +951,9 @@ const Navbar = ({ setGetCategory }) => {
                       ))}
                     </ul>
                   </li>
-                  {/* <li>
-                  <NavLink to={''}>
-                    <Flex gap={10}>
-                      <Text className={`nav-item
-                          ${
-                            others ? 'text-brand':'text-white'
-                          }
-                        `}>
-                        {t("Others")}
-                      </Text>
-                      <DownOutlined className={`fs-12
-                          ${
-                            others ? 'text-brand':'text-white'
-                          }
-                        `}/>
-                    </Flex>
-                  </NavLink>
-                  
-                  <ul className='dropdown' >
-                    {othersmenu?.map((list, index) => (
-                      <li className='drop-item' key={index}>
-                        <NavLink to={list?.path} className='drop-link'>
-                          <Flex gap={10} align='center'>
-                            <Image src={list?.icon} width={30} className='pt-1s' preview={false} fetchPriority="high" />
-                            <Flex justify='space-between' gap={50} align='flex-start' className='w-100'>
-                              <Title level={5} className='m-0 fw-500'>{list?.title}</Title>
-                              <ArrowRightOutlined className='arr text-brand pt-1s' />
-                            </Flex>
-                          </Flex>
-                        </NavLink>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
-                <li>
-                  <NavLink to="/article">
-                    <Text className={`nav-item ${location.pathname === '/article' || location.pathname.startsWith('/articlesingleview/') ? 'text-brand' : 'text-white'}`}>
-                      {t("Articles")}
-                    </Text>
-                  </NavLink>
-                </li> */}
-                  <li>
-                    <NavLink to="/about">
-                      <Text
-                        className={`nav-item ${
-                          location.pathname === "/about"
-                            ? "text-brand"
-                            : "text-white"
-                        }`}
-                      >
-                        {t("About Jusoor")}
-                      </Text>
-                    </NavLink>
-                  </li>
-                  <li>
-                    <NavLink to="/faq">
-                      <Text
-                        className={`nav-item ${
-                          location.pathname === "/faq"
-                            ? "text-brand"
-                            : "text-white"
-                        }`}
-                      >
-                        {t("FAQs")}
-                      </Text>
-                    </NavLink>
-                  </li>
                 </ul>
               </Flex>
               <Flex gap={10} align="center">
-                <Dropdown menu={{ items: lang }} trigger={["click"]}>
-                  <Button
-                    onClick={(e) => e.preventDefault()}
-                    className="bg-transparent btn-outline btn p-2 border-white"
-                    aria-label="language button"
-                  >
-                    <Space align="center">
-                      <Image
-                        src={selectedLang.icon}
-                        width={20}
-                        preview={false}
-                        // alt="notification icon"
-                        alt={selectedLang.alt}
-                        className="up"
-                        fetchPriority="high"
-                      />
-                      <Text className="text-white fs-13">
-                        {selectedLang?.label}
-                      </Text>
-                      <DownOutlined className="text-white" />
-                    </Space>
-                  </Button>
-                </Dropdown>
                 {!isshow ? (
                   <Flex gap={5} justify="end">
                     <Button
@@ -1083,10 +985,10 @@ const Navbar = ({ setGetCategory }) => {
                       placement="bottom"
                     >
                       <Button
-                        aria-labelledby="Sell a Business"
+                        aria-labelledby="Sell a Vehicle"
                         className="btn bg-brand"
                         onClick={() =>
-                          !isUserInactive && navigate("/sellbusinesscreate")
+                          !isUserInactive && navigate("/sellvincreate")
                         }
                         disabled={isUserInactive}
                         style={{
@@ -1094,7 +996,7 @@ const Navbar = ({ setGetCategory }) => {
                           cursor: isUserInactive ? "not-allowed" : "pointer",
                         }}
                       >
-                        <PlusOutlined /> {t("Sell a Business")}
+                        <PlusOutlined /> {t("Sell a Vehicle")}
                       </Button>
                     </Tooltip>
 

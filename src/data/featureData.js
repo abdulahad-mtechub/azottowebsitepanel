@@ -206,22 +206,6 @@ const mobilemenuData = [
       },
     ],
   },
-  {
-    id: 1,
-    name: "Others",
-    children: [
-      {
-        id: 1,
-        name: "About Jusoor",
-        Path: "/about",
-      },
-      {
-        id: 2,
-        name: "Term of Use",
-        Path: "/termofuse",
-      },
-    ],
-  },
 ];
 
 export { businessmenuData, mobilemenuData };

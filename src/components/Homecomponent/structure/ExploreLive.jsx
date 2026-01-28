@@ -259,10 +259,10 @@ const ExploreLive = () => {
                                   title={
                                     pro.type
                                       ? t(
-                                          "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
+                                          "Taqbeel refers to transferring a vehicle by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
                                         )
                                       : t(
-                                          "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities.",
+                                          "Acquisition means a full purchase of the vehicle, including its brand, trade name, CR, assets, and even liabilities.",
                                         )
                                   }
                                 >
@@ -381,9 +381,9 @@ const ExploreLive = () => {
                 <Button
                   onClick={() => navigate("/businesslisting")}
                   className="btn bg-brand"
-                  aria-labelledby="Browse Businesses"
+                  aria-labelledby="Browse Vehicles"
                 >
-                  {t("Browse Businesses")}
+                  {t("Browse Vehicles")}
                   {i18n.language === "ar" ? (
                     <LeftOutlined className="fs-10" />
                   ) : (

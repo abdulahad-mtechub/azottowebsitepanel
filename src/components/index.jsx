@@ -5,8 +5,6 @@ export * from "./Pagecomponents";
 export * from "./ScrollTop";
 export * from "./SellBusinessComponents";
 export * from "./Businesslistingcomponents";
-export * from "./ArticleComponents";
-export * from "./AboutComponents";
 export * from "./ScrollTop";
 export * from "./ui";
 export * from "./ProfileComponents";

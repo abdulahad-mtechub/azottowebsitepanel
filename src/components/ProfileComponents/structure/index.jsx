@@ -18,20 +18,12 @@ export * from "./SingleInProgressDeals";
 export * from "./Favoritbussines";
 
 // Seller
-export * from "./SellerSenRequestTable";
-export * from "./SellerRecieveRequestTable";
-export * from "./SellerAdminSchedulingTable";
-export * from "./SellerScheduledTable";
 export * from "./SellerAlerts";
 export * from "./SellerOfferTable";
-export * from "./SellerDeals";
-export * from "./SellerInProgressDeals";
-export * from "./SellerCompleteDeal";
-export * from "./SellerSingleInProgressDeal";
+export * from "./SellerInvoiceAndDoc";
 export * from "./BankAccountDetailsStep";
 export * from "./ConfirmationDocsStep";
 export * from "./SellerFinalDealStep";
-export * from "./SellerSingleCompleteDeal";
 export * from "./SellerWallet";
 export * from "./SellerDealDetails";
 export * from "./BusinessViewInfoCard";

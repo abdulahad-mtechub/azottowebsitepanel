@@ -10,7 +10,7 @@ const JusoorFuturembl = () => {
     {
       title: t("Verified Listings"),
       description: t(
-        "Every business on Jusoor is verified for identity and commercial registration. ensuring you make decisions with confidence."
+        "Every business on Azottois verified for identity and commercial registration. ensuring you make decisions with confidence."
       ),
       img: "/assets/images/ver.gif",
     },

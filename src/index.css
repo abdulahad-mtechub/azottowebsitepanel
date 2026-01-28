@@ -994,8 +994,52 @@ body {
 
 /* sigin and signup css */
 
+/* ===== MyInput base input styles ===== */
+.signup-page .ant-input,
+.signup-page .ant-input-password,
+.signup-page .ant-input-password input,
+.signup-page .ant-input-affix-wrapper,
+.signup-page .ant-input-number,
+.signup-page .ant-input-number-input,
+.signup-page textarea.ant-input {
+  background-color: #191D4B !important;
+  color: #ffffff !important;
+  border-color: #0000FF !important;
+}
+
+/* Placeholder color */
+.signup-page .ant-input::placeholder,
+.signup-page textarea.ant-input::placeholder,
+.signup-page .ant-input-password input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Focus state */
+.signup-page .ant-input:focus,
+.signup-page .ant-input-focused,
+.signup-page .ant-input-affix-wrapper-focused,
+.signup-page .ant-input-password-focused,
+.signup-page .ant-input-number-focused,
+.signup-page textarea.ant-input:focus {
+  border-color: #0000FF !important;
+  box-shadow: 0 0 0 2px rgba(0, 0, 255, 0.25);
+}
+
+/* Password eye icon */
+.signup-page .ant-input-password .ant-input-suffix .anticon {
+  color: #ffffff;
+}
+
+/* Disabled state */
+.signup-page .ant-input[disabled],
+.signup-page .ant-input-number-disabled {
+  background-color: #14183a !important;
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+
 .signup-form-container {
-  background: #fff;
+  background: #000;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1003,6 +1047,12 @@ body {
   padding: 20px;
   position: relative;
   min-height: 100vh;
+}
+.vin-form-wrapper {
+  max-width: 720px;          /* prevents full-width inputs */
+  margin: 0 auto;            /* center horizontally */
+  padding: 100px 50px 50px 50px;      /* inner spacing */
+  background-color: #fff;
 }
 
 .form-inner {

@@ -50,7 +50,7 @@ const MobileNavbar = ({ visible, onClose }) => {
   const mobilemenuData = [
     {
       id: 1,
-      name: t("Browse Businesses"),
+      name: t("Browse Vehicles"),
       children: [
         {
           id: 1,
@@ -101,22 +101,6 @@ const MobileNavbar = ({ visible, onClose }) => {
         },
       ],
     },
-    {
-      id: 2,
-      name: t("Others"),
-      children: [
-        {
-          id: 1,
-          name: t("About Jusoor"),
-          Path: "/about",
-        },
-        {
-          id: 2,
-          name: t("Term of Use"),
-          Path: "/termofuse",
-        },
-      ],
-    },
   ];
 
   useEffect(() => {
@@ -159,7 +143,7 @@ const MobileNavbar = ({ visible, onClose }) => {
           <NavLink to={"/"} onClick={onClose}>
             <Image
               src="/assets/images/logo.webp"
-              alt="jusoor logo"
+              alt="Azottologo"
               width={120}
               preview={false}
               fetchPriority="high"
@@ -325,11 +309,11 @@ const MobileNavbar = ({ visible, onClose }) => {
             {userId ? (
               <>
                 <Button
-                  aria-labelledby="Sell a Business"
+                  aria-labelledby="Sell a Vehicle"
                   className="btn bg-brand mt-3 w-100"
                   onClick={() => {
                     if (!isUserInactive) {
-                      navigate("/sellbusinesscreate");
+                      navigate("/sellvincreate");
                       onClose();
                     }
                   }}
@@ -339,7 +323,7 @@ const MobileNavbar = ({ visible, onClose }) => {
                     cursor: isUserInactive ? "not-allowed" : "pointer",
                   }}
                 >
-                  <PlusOutlined /> {t("Sell a Business")}
+                  <PlusOutlined /> {t("Sell a Vehicle")}
                 </Button>
                 <Button
                   aria-labelledby="Logout"

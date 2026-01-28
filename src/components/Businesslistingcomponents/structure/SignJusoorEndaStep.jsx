@@ -28,7 +28,7 @@ const SignJusoorEndaStep = ({ form, onClose, user, onCheckboxChange }) => {
       <Flex vertical className="mb-3" gap={0}>
         <Flex justify="space-between" gap={6}>
           <Title level={5} className="m-0">
-            {t("Submit Jusoor E-NDA")}
+            {t("Submit AzottoE-NDA")}
           </Title>
           <Button
             type="button"
@@ -58,7 +58,7 @@ const SignJusoorEndaStep = ({ form, onClose, user, onCheckboxChange }) => {
               )}
             </li>
             <li className="text-brown">
-              {t("Acceptance of Jusoor Terms & Conditions")}
+              {t("Acceptance of AzottoTerms & Conditions")}
             </li>
           </ul>
         </Flex>
@@ -107,9 +107,6 @@ const SignJusoorEndaStep = ({ form, onClose, user, onCheckboxChange }) => {
               >
                 <Checkbox onChange={onCheckboxChange}>
                   {t("I agree to the")}{" "}
-                  <Link to="/endapage" target="_blank">
-                    {t("Jusoor E-NDA Terms")}
-                  </Link>
                 </Checkbox>
               </Form.Item>
               <Form.Item
@@ -117,12 +114,6 @@ const SignJusoorEndaStep = ({ form, onClose, user, onCheckboxChange }) => {
                 valuePropName="checked"
                 className="m-0"
               >
-                <Checkbox onChange={onCheckboxChange}>
-                  {t("I accept Jusoor's platform")}{" "}
-                  <Link to="/termofuse" target="_blank">
-                    {t("Terms and Conditions")}
-                  </Link>
-                </Checkbox>
               </Form.Item>
               <Form.Item
                 name="commissionAgree"

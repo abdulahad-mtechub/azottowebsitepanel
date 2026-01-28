@@ -23,35 +23,35 @@ const Herosection = () => {
           <div className="container">
             <Flex vertical gap={10} className="div center-mbl">
               <div className="tag">
-                {t("Trusted Marketplace for Saudi Businesses")}
+                {"Trusted Vehicle Marketplace Powered by Blockchain"}
               </div>
               <Title className="m-0 text-white mbl-font" level={1}>
                 <Trans i18nKey="buyOrSellHeading">
-                  Buy or Sell a Verified Business with
+                Buy, Sell & Verify Vehicles with Absolute
                   <span className="text-brand">Confidence</span>
                 </Trans>
               </Title>
               <Text className="text-light-gray my-2">
-                {t(
-                  "Explore real, revenue-generating businesses across Saudi Arabia. Whether you're an investor or an owner, Jusoor makes the process safe, simple, and secure."
-                )}
+                {
+                  "Explore verified vehicles with tamper-proof history records on Azotto. Whether you’re a buyer, seller, or dealer, Azotto ensures transparency, security, and trust through blockchain-backed verification."
+                }
               </Text>
               <Flex gap={10} className="mt-2 center-mbl">
                 <Button
-                  aria-labelledby="Explore Businesses"
+                  aria-labelledby="Explore Vehicles"
                   className="btn bg-brand"
                   onClick={() => navigate("/businesslisting")}
                 >
-                  {t("Explore Businesses")}
+                  {t("Explore Vehicles")}
                 </Button>
                 <Button
-                  aria-labelledby="Sell Your Business"
+                  aria-labelledby="Sell Your Vehicles"
                   className="btn bg-white text-dark"
                   onClick={() =>
-                    navigate(userId ? "/sellbusinesscreate" : "/login")
+                    navigate(userId ? "/sellvincreate" : "/login")
                   }
                 >
-                  {t("Sell Your Business")}
+                  {"Sell Your Vehicles"}
                   {i18n.language === "ar" ? (
                     <LeftOutlined className="fs-10" />
                   ) : (
@@ -80,11 +80,7 @@ const Herosection = () => {
                 }`}
               />
               <img
-                src={`/assets/images/${
-                  i18n.language === "ar"
-                    ? "banner-web-ar.png"
-                    : "banner-web.webp"
-                }`}
+                src="/assets/images/banner.png"
                 alt={t("Hero Banner")}
                 className="hero-img" // Use one class for both; handle sizing in CSS
                 fetchPriority="high"

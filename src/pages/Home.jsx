@@ -1,7 +1,6 @@
 import { Col, Row } from "antd";
 import {
   ExploreLive,
-  FaqsComponent,
   Herosection,
   HowWork,
   JusoorFuturembl,
@@ -21,9 +20,6 @@ const Home = () => {
         </Col>
         <Col span={24}>
           <ExploreLive />
-        </Col>
-        <Col xs={0} sm={0} md={24} lg={24} xl={24}>
-          <FaqsComponent />
         </Col>
       </Row>
     </div>

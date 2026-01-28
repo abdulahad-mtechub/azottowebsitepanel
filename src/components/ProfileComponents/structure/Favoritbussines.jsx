@@ -154,8 +154,8 @@ const Favoritbussines = () => {
                                 <Tooltip
                                   title={
                                     pro.isByTakbeer
-                                      ? "Taqbeel refers to transferring a business by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
-                                      : "Acquisition means a full purchase of the business, including its brand, trade name, CR, assets, and even liabilities."
+                                      ? "Taqbeel refers to transferring a vehicle by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration."
+                                      : "Acquisition means a full purchase of the vehicle, including its brand, trade name, CR, assets, and even liabilities."
                                   }
                                 >
                                   <img

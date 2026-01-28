@@ -49,7 +49,7 @@ const Buyework = () => {
     {
       id: 4,
       title: t('Close the Deal'),
-      desc: t('Jusoor generates a sale agreement. Pay via bank and receive ownership'),
+      desc: t('Azottogenerates a sale agreement. Pay via bank and receive ownership'),
       image: <rive4.RiveComponent />,
     },
   ];

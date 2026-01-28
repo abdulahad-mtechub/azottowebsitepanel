@@ -86,7 +86,7 @@ const ProceedToPurchaseModal = ({
           </Flex>
 
           <Flex justify="space-between" align="center">
-            <Text className="fs-14">{t("Jusoor Commission")}</Text>
+            <Text className="fs-14">{t("AzottoCommission")}</Text>
             <Text className="fw-500 fs-16">
               {formatNumber(commission) || "0"}
             </Text>

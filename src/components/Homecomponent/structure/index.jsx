@@ -5,5 +5,4 @@ export * from "./Sellerwork";
 export * from "./Buyework";
 export * from "./Contactform";
 export * from "./JusoorFuturembl";
-export * from "./FaqsComponent";
 export * from "./JusoorFutures";

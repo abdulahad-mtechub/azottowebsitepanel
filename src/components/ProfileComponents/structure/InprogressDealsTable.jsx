@@ -63,7 +63,7 @@ const InprogressDealsTable = memo(({ setInprogressDeal, searchValue }) => {
 
       // Step 4: Deal finalized by buyer
       if (deal.isBuyerCompleted) {
-        return t("Waiting for Jusoor to complete the deal");
+        return t("Waiting for Azottoto complete the deal");
       }
 
       // Check for document verification pending

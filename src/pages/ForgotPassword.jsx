@@ -453,7 +453,7 @@ const ForgotPassword = () => {
           <Flex vertical justify="center" align="center" className="logo-sp">
             <Image
               src="/assets/images/logo.webp"
-              alt={t("jusoor logo")}
+              alt={t("Azottologo")}
               width={200}
               preview={false}
               fetchPriority="high"

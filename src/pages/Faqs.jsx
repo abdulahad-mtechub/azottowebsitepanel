@@ -1,7 +1,7 @@
 import { Breadcrumb, Flex, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import { RightOutlined } from "@ant-design/icons";
-import { Contactform, FaqsComponent } from "../components";
+import { Contactform } from "../components";
 import { useTranslation } from "react-i18next";
 
 const { Text, Title } = Typography;
@@ -42,13 +42,12 @@ const Faqs = () => {
               </Title>
               <Text className="text-light-gray fs-16">
                 {t(
-                  "Find answers to the most common questions about how Jusoor works, business verification, payments, and more."
+                  "Find answers to the most common questions about how Azottoworks, business verification, payments, and more."
                 )}
               </Text>
             </Flex>
           </div>
         </div>
-        <FaqsComponent />
       </div>
       <Contactform />
     </>

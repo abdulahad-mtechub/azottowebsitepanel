@@ -32,9 +32,9 @@ import {
   SellerAlerts,
   Soldbussines,
   Favoritbussines,
-  SellerDeals,
   SellerWallet,
   ProfileSidebar,
+  SellerInvoiceAndDoc,
 } from "../components";
 import { useEffect, useState, useMemo } from "react";
 import {
@@ -64,64 +64,68 @@ const ProfileDashboard = () => {
       { key: "sellerdashboard", label: t("Dashboard") },
       {
         key: "sellerlist",
-        label: t("My Listing"),
+        label: t("My Vehicles"),
         children: [
-          { key: "sellerBusiness", label: t("All Businesses") },
-          { key: "sellerSoldBusiness", label: t("Sold Businesses") },
+          { key: "sellerBusiness", label: t("All Vehicles") },
+          { key: "sellerSoldBusiness", label: t("Sold Vehicles") },
         ],
       },
       {
         key: "sellermeeting",
-        label: t("Meetings"),
+        label: t("VIN Passports"),
         //Meeting(10)
       },
-      { key: "sellerdeals", label: t("Deals") },
-      { key: "selleralert", label: t("Alerts") },
-      { key: "sellerwallet", label: t("Wallet") },
+      { key: "sellerdeals", label: t("Invoices & Documents") },
+      { key: "selleralert", label: t("Notifications") },
+      // { key: "sellerwallet", label: t("Wallet") },
+      { key: "sellerwallet", label: t("Settings") },
     ],
     Buyer: [
       { key: "buyerdashboard", label: t("Dashboard") },
-      { key: "buyeroffers", label: t("Offers") },
-      { key: "buyermeeting", label: t("Meetings") },
-      { key: "buyerdeals", label: t("Deals") },
-      { key: "buyerfavlist", label: t("Favorite Listing") },
-      { key: "buyeralert", label: t("Alerts") },
+      { key: "buyeroffers", label: t("Browse Vehicles") },
+      { key: "buyermeeting", label: t("Saved VINs") },
+      { key: "buyerdeals", label: t("Verification History") },
     ],
+    Dealer: [
+      { key: "dealerdashboard", label: t("Dashboard") },
+      {
+        key: "dealerlist",
+        label: t("Browse Vehicles"),
+        children: [
+          { key: "dealerBusiness", label: t("Verified VINs") },
+          { key: "dealerSoldBusiness", label: t("Requests") },
+        ],
+      },
+      { key: "dealermeeting", label: t("Transactions") },
+      { key: "dealeralert", label: t("Notifications") },
+      // { key: "dealerwallet", label: t("Wallet") },
+    ],
+    
   };
 
   const getInitialParentTab = () => {
     const saved = localStorage.getItem("profileParentTab");
-    return saved === "Seller" || saved === "Buyer" ? saved : "Seller";
-  };
+    return saved === "Seller" || saved === "Buyer" || saved === "Dealer"
+      ? saved
+      : "Seller";
+  };  
 
   const getInitialChildTabs = () => {
     const saved = localStorage.getItem("profileChildTabs");
     if (saved) {
       try {
-        const parsed = JSON.parse(saved);
-        const isSellerValid = profiletabData.Seller.some(
-          (tab) =>
-            tab.key === parsed.Seller ||
-            tab.children?.some((child) => child.key === parsed.Seller),
-        );
-        const isBuyerValid = profiletabData.Buyer.some(
-          (tab) =>
-            tab.key === parsed.Buyer ||
-            tab.children?.some((child) => child.key === parsed.Buyer),
-        );
-
-        if (isSellerValid && isBuyerValid) {
-          return parsed;
-        }
+        return JSON.parse(saved);
       } catch {
-        // Invalid JSON, fall through to defaults
+        return {};
       }
     }
     return {
-      Seller: profiletabData.Seller?.[0]?.key || "",
-      Buyer: profiletabData.Buyer?.[0]?.key || "",
+      Seller: profiletabData.Seller?.[0]?.key,
+      Buyer: profiletabData.Buyer?.[0]?.key,
+      Dealer: profiletabData.Dealer?.[0]?.key,
     };
   };
+  
   // Get current month start and end dates
   const getCurrentMonthRange = () => {
     const startDate = dayjs().startOf("month").format("YYYY-MM-DD");
@@ -137,6 +141,8 @@ const ProfileDashboard = () => {
   const [getSellerStats, { data: userStatsData }] = useLazyQuery(
     PROFESSIONALSTATISTICS,
   );
+  const [getDealerStats, { data: dealerStatsData }] = useLazyQuery(PROFESSIONALSTATISTICS);
+
   const [getBuyerUser, { data: buyerStatsData }] =
     useLazyQuery(GETBUYERSTATISTICS);
   const [user, setUser] = useState(null);
@@ -176,46 +182,59 @@ const ProfileDashboard = () => {
   }, [activeChildTab]);
 
   const handleParentChange = (value) => {
-    // Fetch buyer stats with date range when switching to Buyer tab
-    if (value === "Buyer" && dateRange && dateRange[0] && dateRange[1]) {
-      const startDate = dateRange[0].format("YYYY-MM-DD");
-      const endDate = dateRange[1].format("YYYY-MM-DD");
+  if (dateRange?.[0] && dateRange?.[1]) {
+    const startDate = dateRange[0].format("YYYY-MM-DD");
+    const endDate = dateRange[1].format("YYYY-MM-DD");
+
+    if (value === "Seller") {
+      getSellerStats({ variables: { startDate, endDate } });
+    }
+
+    if (value === "Buyer") {
       getBuyerUser({ variables: { startDate, endDate } });
     }
-    setParentTab(value);
-    const firstTabKey = profiletabData[value]?.[0]?.key;
-    if (firstTabKey) {
-      setActiveChildTab((prev) => ({
-        ...prev,
-        [value]: firstTabKey,
-      }));
-    }
-  };
 
-  const handleDateRangeChange = (dates) => {
-    setDateRange(dates);
-    // Fetch appropriate stats based on current tab
-    if (dates && dates[0] && dates[1]) {
-      const startDate = dates[0].format("YYYY-MM-DD");
-      const endDate = dates[1].format("YYYY-MM-DD");
-
-      if (parentTab === "Seller") {
-        getSellerStats({ variables: { startDate, endDate } });
-      } else {
-        getBuyerUser({ variables: { startDate, endDate } });
-      }
+    if (value === "Dealer") {
+      getDealerStats({ variables: { startDate, endDate } });
     }
-  };
+  }
+
+  setParentTab(value);
+
+  const firstTabKey = profiletabData[value]?.[0]?.key;
+  if (firstTabKey) {
+    setActiveChildTab((prev) => ({
+      ...prev,
+      [value]: firstTabKey,
+    }));
+  }
+};
+
+const handleDateRangeChange = (dates) => {
+  setDateRange(dates);
+
+  if (dates && dates[0] && dates[1]) {
+    const startDate = dates[0].format("YYYY-MM-DD");
+    const endDate = dates[1].format("YYYY-MM-DD");
+
+    if (parentTab === "Seller") {
+      getSellerStats({ variables: { startDate, endDate } });
+    }
+
+    if (parentTab === "Buyer") {
+      getBuyerUser({ variables: { startDate, endDate } });
+    }
+
+    if (parentTab === "Dealer") {
+      getDealerStats({ variables: { startDate, endDate } });
+    }
+  }
+};
   const buyerDashboardData = user
     ? [
         { title: t("Email"), desc: user?.email || t("N/A") },
-        { title: t("Phone Number"), desc: user?.phone || t("N/A") },
-        { title: t("City"), desc: user?.city || t("N/A") },
-        { title: t("Region"), desc: user?.district || t("N/A") },
-        {
-          title: t("National ID / Passport"),
-          desc: (user?.documents || []).map((doc) => doc.filePath),
-        },
+        { title: t("username"), desc: user?.phone || t("N/A") },
+        { title: t("Wallet Address"), desc: user?.city || t("N/A") },
       ]
     : [];
 
@@ -223,38 +242,32 @@ const ProfileDashboard = () => {
     {
       id: 1,
       img: "/assets/icons/total-view.png",
-      title: t("Total Views"),
+      title: t("Total Vehicles"),
       key: "viewedBusinessesCount",
     },
     {
       id: 2,
       img: "/assets/icons/list-business.png",
-      title: t("Number of Listed Businesses"),
+      title: t("Active VINs"),
       key: "listedBusinessesCount",
     },
     {
       id: 3,
       img: "/assets/icons/offer-recieved.png",
-      title: t("Offers Received"),
+      title: t("Verified VINs"),
       key: "receivedOffersCount",
     },
     {
       id: 4,
       img: "/assets/icons/pending-meeting-ic.png",
-      title: t("Pending Meeting Requests"),
+      title: t("Pending Actions"),
       key: "pendingMeetingsCount",
     },
     {
       id: 5,
       img: "/assets/icons/schedule-meeting.png",
-      title: t("Schedule Meetings"),
+      title: t("Last Blockchain Activity"),
       key: "scheduledMeetingsCount",
-    },
-    {
-      id: 6,
-      img: "/assets/icons/finalize-deal-ic.png",
-      title: t("Finalized Deals"),
-      key: "finalizedDealsCount",
     },
   ];
 
@@ -262,19 +275,51 @@ const ProfileDashboard = () => {
     {
       id: 1,
       img: "/assets/icons/favorite-ic.png",
-      title: t("Favorite Listing"),
+      title: t("Total Vehicles"),
       key: "favouriteBusinessesCount",
     },
     {
       id: 2,
       img: "/assets/icons/schedule-meeting.png",
-      title: t("Schedule Meetings"),
+      title: t("Active VINs"),
       key: "scheduledMeetingsCount",
     },
     {
       id: 3,
       img: "/assets/icons/finalize-deal-ic.png",
-      title: t("Finalized Deals"),
+      title: t("Verified VINs"),
+      key: "finalizedDealsCount",
+    },
+    {
+      id: 4,
+      img: "/assets/icons/finalize-deal-ic.png",
+      title: t("Pending Actions"),
+      key: "finalizedDealsCount",
+    },
+    {
+      id: 5,
+      img: "/assets/icons/finalize-deal-ic.png",
+      title: t("Last Blockchain Activity"),
+      key: "finalizedDealsCount",
+    },
+  ];
+  const dealerStats = [
+    {
+      id: 1,
+      img: "/assets/icons/favorite-ic.png",
+      title: t("VINs viewed"),
+      key: "favouriteBusinessesCount",
+    },
+    {
+      id: 2,
+      img: "/assets/icons/schedule-meeting.png",
+      title: t("VINs verified"),
+      key: "scheduledMeetingsCount",
+    },
+    {
+      id: 3,
+      img: "/assets/icons/finalize-deal-ic.png",
+      title: t("Fraud alerts"),
       key: "finalizedDealsCount",
     },
   ];
@@ -305,6 +350,18 @@ const ProfileDashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [buyerStatsData, formatNumber]);
 
+  const dealerStatisticsData = useMemo(() => {
+    if (!dealerStatsData?.getDealerStatistics)
+      return dealerStats.map((item) => ({ ...item, numbers: "0" }));
+  
+    const stats = dealerStatsData.getDealerStatistics;
+  
+    return dealerStats.map((item) => ({
+      ...item,
+      numbers: formatNumber(stats[item.key]) || "0",
+    }));
+  }, [dealerStatsData, formatNumber]);
+  
   const tabContent = {
     Seller: {
       sellerdashboard: (
@@ -359,7 +416,7 @@ const ProfileDashboard = () => {
           <Meetings isBuyer={false} />
         </Flex>
       ),
-      sellerdeals: <SellerDeals />,
+      sellerdeals: <SellerInvoiceAndDoc />,
       selleralert: (
         <Flex vertical gap={20}>
           <ModuleTopHeading level={4} name={t("Alerts")} />
@@ -385,6 +442,52 @@ const ProfileDashboard = () => {
         </Flex>
       ),
     },
+    Dealer: {
+      dealerdashboard: (
+        <Flex vertical gap={20}>
+        <Flex justify="space-between">
+          <ModuleTopHeading level={4} name={t("Profile")} />
+          <Flex gap={5}>
+            <Button
+              aria-labelledby="Password Manager"
+              className="btn rounded-8 border-brand text-brand"
+              type="button"
+              onClick={() => setVisible(true)}
+            >
+              {t("Password Manager")}
+            </Button>
+            <Button
+              aria-labelledby="Edit Profile"
+              className="btn bg-brand rounded-8"
+              type="button"
+              onClick={() => setIsEdit(true)}
+            >
+              {t("Edit Profile")}
+            </Button>
+          </Flex>
+        </Flex>
+        <Basicinformation
+          buyerDashboardData={buyerDashboardData}
+          title={t("Basic Information")}
+        />
+        <Profilestatistics
+          data={dealerStatisticsData}
+          title={t("Profile Statistics")}
+          dateRange={dateRange}
+          onDateRangeChange={handleDateRangeChange}
+        />
+      </Flex>
+      ),
+      dealerBusiness: <Allbussines />,
+      dealerSoldBusiness: <Soldbussines />,
+      dealermeeting: <Meetings isBuyer={false} />,
+      dealerdeals: <SellerInvoiceAndDoc />,
+      dealeralert: <SellerAlerts />,
+      dealerwallet: (
+        <SellerWallet {...{ addwalletvisible, setAddWalletVisible }} />
+      ),
+    },
+    
     Buyer: {
       buyerdashboard: (
         <Flex vertical gap={20}>
@@ -535,15 +638,16 @@ const ProfileDashboard = () => {
                 </Flex>
                 <Flex vertical gap={10}>
                   <Flex justify="center">
-                    <Segmented
-                      className="custom-segment"
-                      options={[
-                        { label: t("Seller"), value: "Seller" },
-                        { label: t("Buyer"), value: "Buyer" },
-                      ]}
-                      value={parentTab}
-                      onChange={handleParentChange}
-                    />
+                  <Segmented
+                    className="custom-segment"
+                    options={[
+                      { label: t("Seller"), value: "Seller" },
+                      { label: t("Buyer"), value: "Buyer" },
+                      { label: t("Dealer"), value: "Dealer" },
+                    ]}
+                    value={parentTab}
+                    onChange={handleParentChange}
+                  />
                   </Flex>
                   <div className="text-center mt-4">
                     <CustomTabs

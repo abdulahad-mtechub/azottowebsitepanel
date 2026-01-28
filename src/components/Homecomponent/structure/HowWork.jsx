@@ -46,12 +46,12 @@ const HowWork = () => {
               className="max-width"
             >
               <div className="tag bg-secondary fw-500 text-brand">
-                {t("How Jusoor Works?")}
+                {t("How AzottoWorks?")}
               </div>
 
               <Title className="m-0" level={2}>
                 <Trans
-                  i18nKey="simpleWayToBuyOrSell"
+                  i18nKey="A simple Way To Buy Or Sell"
                   components={{ 1: <span className="text-brand" /> }}
                 />
               </Title>
