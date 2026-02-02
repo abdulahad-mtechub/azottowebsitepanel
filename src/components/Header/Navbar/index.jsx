@@ -108,8 +108,8 @@ const Navbar = ({ setGetCategory }) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [getNavNotification, { data: navNotificationsData }] =
-    useLazyQuery(NAVNOTIFICATION);
+  // const [getNavNotification, { data: navNotificationsData }] =
+  //   useLazyQuery(NAVNOTIFICATION);
   const [getNotification] = useLazyQuery(NOTIFICATION);
   const processedVerificationNotificationsRef = useRef(new Set());
 
@@ -242,21 +242,12 @@ const Navbar = ({ setGetCategory }) => {
     }
   }, [userId, location.pathname]); // Check on userId changes and route changes
 
-  useEffect(() => {
-    // Only fetch user data if userId exists AND user is logged in
-    if (userId && isLoggedIn) {
-      getNavNotification();
-    }
-  }, [userId, isLoggedIn, getNavNotification]);
-
-  useEffect(() => {
-    if (userId) {
-      const navCount = navNotificationsData?.getNotificationCount;
-      if (typeof navCount === "number") {
-        setUnreadCount(navCount);
-      }
-    }
-  }, [navNotificationsData, userId]);
+  // useEffect(() => {
+  //   // Only fetch user data if userId exists AND user is logged in
+  //   if (userId && isLoggedIn) {
+  //     getNavNotification();
+  //   }
+  // }, [userId, isLoggedIn, getNavNotification]);
 
   useEffect(() => {
     if (!dropdownOpen) {
@@ -283,7 +274,7 @@ const Navbar = ({ setGetCategory }) => {
             isRead: true,
           })),
         );
-        getNavNotification();
+        // getNavNotification();
       })
       .catch(() => { })
       .finally(() => setHasMarkedRead(true));
@@ -293,7 +284,7 @@ const Navbar = ({ setGetCategory }) => {
     unreadCount,
     markNotificationAsRead,
     userId,
-    getNavNotification,
+    // getNavNotification,
   ]);
 
   useEffect(() => {
@@ -463,7 +454,7 @@ const Navbar = ({ setGetCategory }) => {
         setNotifications([]);
         setHasMoreNotifications(true);
         loadNotifications(true);
-        getNavNotification();
+        // getNavNotification();
       }
     } else {
       setHasMarkedRead(false);
