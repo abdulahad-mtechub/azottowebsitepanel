@@ -50,14 +50,6 @@ const Filter = ({
   const [profitMarginMin, setProfitMarginMin] = useState("");
   const [profitMarginMax, setProfitMarginMax] = useState("");
 
-  const { data: categoryData } = useQuery(GET_CATEGORIES);
-  const categories =
-    categoryData?.getAllCategories?.categories?.map((cat) => ({
-      id: cat.id,
-      title: cat.name,
-      arabicTitle: cat.arabicName,
-    })) || [];
-
   const steps = useMemo(() => {
     const baseSteps = ["1", "2", "3", "4", "5", "5+"];
     return baseSteps.map((step) => {
@@ -367,33 +359,6 @@ const Filter = ({
     });
   };
 
-  const categoryItems = [
-    {
-      key: "1",
-      label: (
-        <Title level={5} className="m-0 py-2 fw-500">
-          {t("Categories")}
-        </Title>
-      ),
-      children: (
-        <Flex vertical>
-          {categories?.map((cat) => (
-            <div
-              className={`cate-filter ${
-                activeCategoryId === cat.id ? "active" : ""
-              }`}
-              key={cat.id}
-              onClick={() => handleCategoryClick(cat)}
-              style={{ cursor: "pointer" }}
-            >
-              {isArabic ? cat.arabicTitle : cat.title}
-            </div>
-          ))}
-        </Flex>
-      ),
-    },
-  ];
-
   useEffect(() => {
     const handleResize = () => setIsMobile(window.innerWidth <= 1199);
     handleResize();
@@ -410,14 +375,6 @@ const Filter = ({
           defaultActiveKey={["1"]}
           ghost
           items={items}
-          className="collapse-cs"
-        />
-      </Card>
-      <Card className="border-gray card-cs">
-        <Collapse
-          defaultActiveKey={["1"]}
-          ghost
-          items={categoryItems}
           className="collapse-cs"
         />
       </Card>

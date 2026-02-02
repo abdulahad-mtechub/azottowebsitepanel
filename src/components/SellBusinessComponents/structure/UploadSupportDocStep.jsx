@@ -131,7 +131,7 @@ const UploadSupportDocStep = ({ data, setData }, ref) => {
       const formData = new FormData();
       formData.append("file", fileToUpload, fileToUpload.name);
 
-      const res = await fetch("https://verify.jusoor-sa.co/upload", {
+      const res = await fetch("https://backend-appolo-azotto.mtechub.org/upload", {
         method: "POST",
         body: formData,
       });

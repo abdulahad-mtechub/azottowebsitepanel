@@ -13,7 +13,6 @@ import {
 } from "antd";
 import {
   OfferSellerModal,
-  RequestMeetingModal,
   ProceedToPurchaseModal,
 } from "../modal";
 import { useState, useEffect } from "react";
@@ -86,7 +85,7 @@ const BusinessInfoCard = ({ data }) => {
     {
       id: 1,
       icon: "/assets/icons/verification.png",
-      title: t("Verified By Jusoor"),
+      title: t("Verified By Azotto"),
       subtitle: t("Identity Verification"),
     },
     {
@@ -319,15 +318,6 @@ const BusinessInfoCard = ({ data }) => {
         businessPrice={data?.price || 0}
         onConfirm={handleConfirmProceed}
         loading={createOfferLoading}
-      />
-      <RequestMeetingModal
-        businessId={data?.id}
-        visible={meetingmodal}
-        onlyMeeting={true}
-        onClose={() => {
-          setMeetingModal(false);
-        }}
-        refetch={refetchMeetingExists}
       />
     </>
   );

@@ -13,34 +13,17 @@ import { PhoneOutlined, WhatsAppOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
-import { GET_CATEGORIES, GET_SETTING } from "../../../graphql";
+import { GET_SETTING } from "../../../graphql";
 
 const { Title, Text } = Typography;
 const Footer = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const userId = Cookies.get("userId");
-  const isArabic = i18n.language === "ar";
-
-  const { data: categoryData } = useQuery(GET_CATEGORIES);
-  const { data: settingData } = useQuery(GET_SETTING);
-  const settings = settingData?.getSetting;
-
-  const categories =
-    categoryData?.getAllCategories?.categories?.slice(0, 5)?.map((cat) => ({
-      id: cat.id,
-      name: isArabic ? cat.arabicName : cat.name,
-      path: `/businesslisting?category=${encodeURIComponent(cat.name)}`,
-    })) || [];
 
   const footerlinkData = [
     {
       id: 1,
-      title: t("Categories"),
-      links: categories,
-    },
-    {
-      id: 2,
       title: t("Quick Link"),
       links: [
         {
@@ -66,7 +49,7 @@ const Footer = () => {
                 <Link to={"/"}>
                   <img
                     src="/assets/images/logo.svg"
-                    alt="jusoor-logo"
+                    alt="azotto-logo"
                     width={180}
                     fetchPriority="high"
                   />
@@ -77,47 +60,6 @@ const Footer = () => {
                   "Azottois a licensed platform (7050269450) for buying and selling verified Vin. We offer a secure and seamless experience — with identity and vin verification, secure payments, and smooth ownership transfer."
                 )}
               </Text>
-              <Flex gap={20}>
-                <Link
-                  to={settings?.faceBook || "https://telegram.org"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image
-                    src="/assets/icons/telegram.webp"
-                    width={"23px"}
-                    alt="telegram-icon"
-                    preview={false}
-                    fetchPriority="high"
-                  />
-                </Link>
-                <Link
-                  to={settings?.instagram || "https://instagram.com"}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <Image
-                    src="/assets/icons/instagram.webp"
-                    width={"23px"}
-                    alt="facebook-icon"
-                    preview={false}
-                    fetchPriority="high"
-                  />
-                </Link>
-                <Link
-                  to={
-                    settings?.whatsApp
-                      ? settings.whatsApp.startsWith("http")
-                        ? settings.whatsApp
-                        : `https://wa.me/${settings.whatsApp}`
-                      : "https://wa.me/+966507710632"
-                  }
-                  target="_blank"
-                  className="text-white"
-                >
-                  <WhatsAppOutlined className="fs-23" fetchPriority="high" />
-                </Link>
-              </Flex>
             </Space>
           </Col>
           {footerlinkData?.map((list, index) => (

@@ -15,16 +15,15 @@ import { useTranslation } from "react-i18next";
 import { useMutation, useQuery } from "@apollo/client";
 import { LOGOUT } from "../../../graphql/mutation";
 import { clearAuthTokens } from "../../../utils/tokenManager";
-import { GET_CATEGORIES } from "../../../graphql/query";
 import { client } from "../../../config/apolloClient";
+import { ethers } from "ethers";
+import {CONNECTWALLET} from "../../../graphql/mutation/login"
 
 const { Title } = Typography;
 const { Panel } = Collapse;
 
 const MobileNavbar = ({ visible, onClose }) => {
-  const { t, i18n } = useTranslation();
-  const lan = localStorage.getItem("lang") || i18n.language || "en";
-  const isArabic = lan.toLowerCase() === "ar";
+  const { t } = useTranslation();
   const [currentPanel, setCurrentPanel] = useState([]);
   const [currentPanels, setCurrentPanels] = useState([]);
   const userId = Cookies.get("userId");
@@ -37,69 +36,11 @@ const MobileNavbar = ({ visible, onClose }) => {
   const userStatus = Cookies.get("userStatus");
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
 
-  // Fetch categories from GraphQL
-  const { data: categoryData } = useQuery(GET_CATEGORIES);
-  const categories =
-    categoryData?.getAllCategories?.categories?.map((cat) => ({
-      id: cat.id,
-      title: cat.name,
-      arabicTitle: cat.arabicName,
-    })) || [];
-
   // Build mobile menu data dynamically
   const mobilemenuData = [
     {
       id: 1,
       name: t("Browse Vehicles"),
-      children: [
-        {
-          id: 1,
-          name: t("Browse by Categories"),
-          innerchildren: categories.map((cat) => ({
-            id: cat.id,
-            title: isArabic ? cat.arabicTitle : cat.title,
-            path: cat.title
-              ? `/businesslisting?category=${encodeURIComponent(cat.title)}`
-              : "/businesslisting",
-          })),
-        },
-        {
-          id: 2,
-          name: t("Browse by Revenue"),
-          innerchildren: [
-            {
-              id: 1,
-              title: t("SAR 0 - SAR 10,000"),
-              path: "/businesslisting?revenue=0,10000",
-            },
-            {
-              id: 2,
-              title: t("SAR 10,000 - SAR 30,000"),
-              path: "/businesslisting?revenue=10000,30000",
-            },
-            {
-              id: 3,
-              title: t("SAR 30,000 - SAR 60,000"),
-              path: "/businesslisting?revenue=30000,60000",
-            },
-            {
-              id: 4,
-              title: t("SAR 60,000 - SAR 100,000"),
-              path: "/businesslisting?revenue=60000,100000",
-            },
-            {
-              id: 5,
-              title: t("SAR 100,000 - SAR 150,000"),
-              path: "/businesslisting?revenue=100000,150000",
-            },
-            {
-              id: 6,
-              title: t("SAR 150,000+"),
-              path: "/businesslisting?revenue=150000,9999999",
-            },
-          ],
-        },
-      ],
     },
   ];
 
@@ -113,6 +54,44 @@ const MobileNavbar = ({ visible, onClose }) => {
   }, []);
 
   if (isDesktop) return null;
+
+  /* =======================
+     WALLET CONNECT
+  ======================= */
+
+  const connectWallet = async () => {
+    try {
+      if (!window.ethereum) {
+        messageApi.error("MetaMask not found");
+        return;
+      }
+
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const address = await signer.getAddress();
+
+      const messageToSign = `Login to Azotto\nWallet: ${address}`;
+      const signature = await signer.signMessage(messageToSign);
+
+      const { data } = await connectWalletMutation({
+        variables: { walletAddress: address, signature },
+      });
+
+      const result = data?.connectWallet;
+      if (!result) throw new Error("Wallet login failed");
+
+      Cookies.set("walletAddress", address, { expires: 7 });
+      Cookies.set("userId", result.user.id, { expires: 7 });
+      Cookies.set("token", result.token, { expires: 7 });
+
+      message.success("Wallet connected");
+      onClose?.();
+      navigate("/");
+
+    } catch (error) {
+      message.error("Wallet connection failed");
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -137,7 +116,6 @@ const MobileNavbar = ({ visible, onClose }) => {
         title={null}
         closeIcon={false}
         className={`bg-dark-blue`}
-        placement={isArabic ? "right" : "left"}
       >
         <Flex justify="space-between" align="center">
           <NavLink to={"/"} onClick={onClose}>
@@ -164,7 +142,6 @@ const MobileNavbar = ({ visible, onClose }) => {
               setCurrentPanel(keys);
             }}
             ghost
-            className={isArabic ? "collapse-ar" : "collapse-en"}
           >
             {mobilemenuData?.map((menu, f) => (
               <Panel
@@ -221,7 +198,6 @@ const MobileNavbar = ({ visible, onClose }) => {
                       setCurrentPanels(keys);
                     }}
                     ghost
-                    className={isArabic ? "collapse-ar" : "collapse-en"}
                   >
                     {menu?.children?.map((menuchild, f) =>
                       menuchild?.innerchildren ? (
@@ -337,19 +313,11 @@ const MobileNavbar = ({ visible, onClose }) => {
               </>
             ) : (
               <>
-                <Button
-                  aria-labelledby="Sign Up"
+               <Button
                   className="btn btn-outline w-100"
-                  onClick={() => navigate("/signup")}
+                  onClick={connectWallet}
                 >
-                  {t("Sign Up")}
-                </Button>
-                <Button
-                  aria-labelledby="Login"
-                  className="btn bg-brand w-100"
-                  onClick={() => navigate("/login")}
-                >
-                  {t("Sign In")}
+                  {"Connect Wallet"}
                 </Button>
               </>
             )}
