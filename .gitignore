@@ -1,6 +1,7 @@
 # Logs
 logs
 *.log
+.env.web3
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

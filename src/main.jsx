@@ -10,6 +10,7 @@ import weekday from "dayjs/plugin/weekday";
 import localeData from "dayjs/plugin/localeData";
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
+import { Web3Provider } from "./web3/Web3Provider.jsx";
 
 dayjs.extend(weekday);
 dayjs.extend(localeData);
@@ -19,7 +20,9 @@ dayjs.extend(timezone);
 createRoot(document.getElementById("root")).render(
   <ApolloProvider client={client}>
     <StrictMode>
+      <Web3Provider>
       <App />
+      </Web3Provider>
     </StrictMode>
   </ApolloProvider>
 );
