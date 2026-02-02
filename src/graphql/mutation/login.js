@@ -49,6 +49,17 @@ export const LOGIN = gql`
   }
 `;
 
+export const CONNECTWALLET = gql`
+mutation ConnectWallet($walletAddress: String!, $signature: String) {
+  connectWallet(walletAddress: $walletAddress, signature: $signature) {
+    user {
+      id
+    }
+    token
+  }
+}
+`;
+
 export const REFRESH_TOKEN = gql`
   mutation RefreshToken($token: String!) {
     refreshToken(token: $token) {

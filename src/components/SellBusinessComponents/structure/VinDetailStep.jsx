@@ -18,8 +18,6 @@ import {
 } from "antd";
 import { MyDatepicker, MyInput, MySelect } from "../../Forms";
 import { ModuleTopHeading } from "../../Pagecomponents";
-import { teamsizeOp, useCities, useDistricts } from "../../../data";
-import { GET_CATEGORIES } from "../../../graphql/query/business";
 import { useQuery } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../../../hooks";
@@ -29,38 +27,17 @@ const VinDetailStep = forwardRef(({ data, setData }, ref) => {
   const { t } = useTranslation();
   const { formatPhone } = useFormatNumber();
   const district = useDistricts();
-  const cities = useCities();
-  const { data: categoryData } = useQuery(GET_CATEGORIES);
   const [form] = Form.useForm();
   const [isAccess, setIsAccess] = useState(data.isByTakbeer === true);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedDistrict, setSelectedDistrict] = useState(null);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Get language from localStorage
-  const isArabic = localStorage.getItem("lang") === "ar";
-
   useImperativeHandle(ref, () => ({
     validate: () => form.validateFields(),
   }));
 
-  const categories = useMemo(
-    () =>
-      categoryData?.getAllCategories?.categories?.map((cat) => ({
-        id: cat.id,
-        name: isArabic ? cat.arabicName : cat.name,
-        arabicName: cat.arabicName,
-        isDigital: cat.isDigital,
-      })) || [],
-    [categoryData, isArabic]
-  );
-
-  const handleRadioChange = (e) => {
-    setIsAccess(e.target.value === 2);
-  };
-
   const handleFormChange = (_, allValues) => {
-    const selected = categories.find((c) => c.name === allValues.category);
     const id = selected?.id;
 
     setSelectedCategory(allValues.category);
@@ -120,11 +97,7 @@ const VinDetailStep = forwardRef(({ data, setData }, ref) => {
         district.find((d) => d.id === String(data.district).toLowerCase());
       if (districtObj) setSelectedDistrict(districtObj.id);
     }
-    if (data.categoryId && categories.length > 0) {
-      const cat = categories.find((cat) => cat.id === data.categoryId);
-      if (cat) setSelectedCategory(cat);
-    }
-  }, [data, district, categories]);
+  }, [data, district]);
 
   // Once options are available, ensure ALL fields show initial values if they were set before options loaded
   useEffect(() => {
@@ -167,7 +140,7 @@ const VinDetailStep = forwardRef(({ data, setData }, ref) => {
     if (!current.url && data.url) patch.url = data.url;
 
     if (Object.keys(patch).length > 0) form.setFieldsValue(patch);
-  }, [categories.length, district.length, selectedDistrict, data, form]);
+  }, [district.length, selectedDistrict, data, form]);
 
   return (
     <>

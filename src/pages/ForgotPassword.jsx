@@ -228,7 +228,7 @@ const ForgotPassword = () => {
             <div className="logo">
               <img
                 src="/assets/images/logo-1.png"
-                alt="jusoor-logo"
+                alt="azotto-logo"
                 height={70}
                 fetchPriority="high"
               />
@@ -465,7 +465,7 @@ const ForgotPassword = () => {
           <div className="bg-shade">
             <img
               src="/assets/images/login.gif"
-              alt={t("jusoor-gif-image")}
+              alt={t("azotto-gif-image")}
               className="w-100 opacity-7"
               fetchPriority="high"
             />
