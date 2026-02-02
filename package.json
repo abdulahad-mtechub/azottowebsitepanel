@@ -1,5 +1,5 @@
 {
-  "name": "jusoor-business-marketplace",
+  "name": "azotto-marketplace",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -19,6 +19,7 @@
     "apollo-link-ws": "^1.0.20",
     "browser-image-compression": "^2.0.2",
     "dayjs": "^1.11.18",
+    "ethers": "^6.16.0",
     "framer-motion": "^12.22.0",
     "graphql": "^16.11.0",
     "graphql-ws": "^6.0.6",

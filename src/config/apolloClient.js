@@ -15,7 +15,7 @@ import {
   registerWSReconnect,
 } from "../utils/tokenRefreshService";
 
-const API_URL = "https://verify.jusoor-sa.co/graphql";
+const API_URL = "https://backend-appolo-azotto.mtechub.org/graphql";
 const httpLink = createHttpLink({
   uri: API_URL,
   credentials: "include",
@@ -36,7 +36,7 @@ let wsLink;
 
 const createWebSocketLink = () => {
   return new WebSocketLink({
-    uri: "wss://verify.jusoor-sa.co/subscriptions",
+    uri: "wss://backend-appolo-azotto.mtechub.org/subscriptions",
     options: {
       reconnect: true,
       connectionParams: () => ({

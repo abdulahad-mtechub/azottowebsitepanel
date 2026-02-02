@@ -1,5 +1,5 @@
 import { Button, Card, Flex, Image, message, Typography } from 'antd';
-import { OfferSellerModal, RequestMeetingModal, ProceedToPurchaseModal } from '../modal';
+import { OfferSellerModal, ProceedToPurchaseModal } from '../modal';
 import { useState, useEffect } from 'react';
 import Cookies from "js-cookie";
 import { useNavigate } from 'react-router-dom';
@@ -223,7 +223,7 @@ const BusinessInfoCardMobile = ({ data }) => {
         onConfirm={handleConfirmProceed}
         loading={createOfferLoading}
       />
-      <RequestMeetingModal 
+      <ingModal 
         businessId={data?.id}
         visible={meetingmodal}
         onlyMeeting={true}

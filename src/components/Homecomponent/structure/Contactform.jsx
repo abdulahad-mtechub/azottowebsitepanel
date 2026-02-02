@@ -66,7 +66,7 @@ const Contactform = () => {
                 className="mx-width"
               >
                 <div className="tag fw-500 bg-secondary fw-500 text-brand">
-                  {t("Contact With Jusoor")}
+                  {t("Contact With Azotto")}
                 </div>
                 <Title className="m-0" level={2}>
                   {t("Reach Out to")}{" "}

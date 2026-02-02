@@ -2,10 +2,11 @@ import { createPublicClient } from 'viem';
 import { http, createConfig } from 'wagmi';
 import { bsc, base, arbitrum, polygon, avalanche, mainnet, sepolia } from 'wagmi/chains';
 import { injected, walletConnect, coinbaseWallet } from 'wagmi/connectors';
-
+const projectId = import.meta.env.VITE_PROJECT_ID;
+const RPC = import.meta.env.VITE_CHIAIN_RPC;
 // RPC URLs
 const RPC_URLS = {
-  [sepolia.id]: process.env.REACT_CHIAIN_RPC,
+  [sepolia.id]: RPC,
   // [mainnet.id]: 'https://small-dimensional-film.quiknode.pro/31e2264f698374f541aed3673b0e3d0a1c6d4546',
   // [bsc.id]: 'https://bnb-mainnet.g.alchemy.com/v2/m1ZDZF0NDLbqkK-we12g0',
   // [base.id]: 'https://base-mainnet.g.alchemy.com/v2/m1ZDZF0NDLbqkK-we12g0',
@@ -19,8 +20,8 @@ const RPC_URLS = {
 export const supportedChains =[sepolia]  //[mainnet, bsc, base, arbitrum, polygon, avalanche];
 
 // WalletConnect Project ID
-const projectId = process.env.REACT_PROJECT_ID;
-
+// const projectId = process.env.VITE_PROJECT_ID;
+  console.log('Project ID:', projectId);
 if (!projectId) {
   console.warn('WalletConnect Project ID is missing! Get one from https://cloud.walletconnect.com');
 }

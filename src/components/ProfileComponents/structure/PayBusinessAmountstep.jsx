@@ -56,7 +56,7 @@ const PayBusinessAmountstep = ({ form, inprogressdeal, bank }) => {
       const formData = new FormData();
       formData.append("file", file);
 
-      const response = await fetch("https://verify.jusoor-sa.co/upload", {
+      const response = await fetch("https://backend-appolo-azotto.mtechub.org/upload", {
         method: "POST",
         body: formData,
       });

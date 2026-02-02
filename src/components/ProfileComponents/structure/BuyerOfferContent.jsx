@@ -13,7 +13,6 @@ import { ModuleTopHeading } from "../../Pagecomponents";
 import { NavLink } from "react-router-dom";
 import {
   OfferSellerModal,
-  RequestMeetingModal,
 } from "../../Businesslistingcomponents";
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { DeleteModal } from "../../ui";
@@ -509,14 +508,6 @@ const BuyerOfferContent = () => {
         offerId={selectedOfferId}
         visible={offermodal}
         onClose={() => setOfferModal(false)}
-      />
-      <RequestMeetingModal
-        refetch={refetch}
-        offerId={selectedOfferId}
-        businessId={selectedBusinessId}
-        visible={requestPop}
-        onClose={() => setRequestPop(false)}
-        offerStatus={offerStatus}
       />
       <DeleteModal
         refetch={refetch}

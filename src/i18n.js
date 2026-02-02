@@ -1,7 +1,6 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import en from "./locales/en/translation.json";
-import ar from "./locales/ar/translation.json";
 
 const lang = localStorage.getItem("lang") || "en";
 const dir = lang === 'ar' ? 'rtl' : 'ltr';
@@ -16,9 +15,6 @@ i18n
       en: {
         translation: en
       },
-      ar: {
-        translation: ar
-      }
     },
     lng: lang,
     fallbackLng: "en",

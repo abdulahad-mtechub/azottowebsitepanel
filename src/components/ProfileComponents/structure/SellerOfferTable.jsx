@@ -18,7 +18,6 @@ import { CHECKMEETINGEXISTS } from "../../../graphql/query/meeting";
 import { UPDATE_OFFER } from "../../../graphql";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
-import { RequestMeetingModal } from "../../Businesslistingcomponents";
 import dayjs from "dayjs";
 import { useFormatNumber } from "../../../hooks";
 
@@ -29,7 +28,6 @@ const OfferActionDropdown = ({
   row,
   t,
   handleAcceptOffer,
-  handleRequestMeeting,
   setDeleteModal,
   setOfferModal,
   setSelectedOfferId,
@@ -80,7 +78,6 @@ const OfferActionDropdown = ({
       disabled: meetingExists || isMeetingStatus,
       onClick: () => {
         if (!meetingExists && !isMeetingStatus) {
-          handleRequestMeeting(row?.business?.id, row?.id);
           setMeetingRefetch(() => refetchMeetingExists);
         }
       },
@@ -203,13 +200,6 @@ const SellerOfferTable = ({ data }) => {
     setSelectedOfferId(offerId);
     setSelectedBusinessId(businessId);
     setOnlyMeeting(false);
-    setEndaVisible(true);
-  };
-
-  const handleRequestMeeting = (businessId, offerId) => {
-    setSelectedOfferId(offerId);
-    setSelectedBusinessId(businessId);
-    setOnlyMeeting(true);
     setEndaVisible(true);
   };
 
@@ -351,7 +341,6 @@ const SellerOfferTable = ({ data }) => {
             row={row}
             t={t}
             handleAcceptOffer={handleAcceptOffer}
-            handleRequestMeeting={handleRequestMeeting}
             setDeleteModal={setDeleteModal}
             setOfferModal={setOfferModal}
             setSelectedOfferId={setSelectedOfferId}
@@ -514,21 +503,6 @@ const SellerOfferTable = ({ data }) => {
           "This action cannot be undone. Are you sure you want to reject this offer?"
         )}
         refetch={refetch}
-      />
-      <RequestMeetingModal
-        businessId={selectedBusinessId}
-        offerId={selectedOfferId}
-        visible={endaVisible}
-        onClose={() => {
-          setEndaVisible(false);
-        }}
-        refetch={refetch}
-        onlyMeeting={onlyMeeting}
-        onSuccess={() => {
-          if (onlyMeeting && selectedOfferId) {
-            handleMeetingSuccess(selectedOfferId);
-          }
-        }}
       />
     </>
   );

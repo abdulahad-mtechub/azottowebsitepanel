@@ -188,7 +188,7 @@ const AddWalletModal = ({ visible, onClose }) => {
                   />
                   <Text className="fs-13" style={{ color: "#096dd9" }}>
                     {t(
-                      "Your banking details are encrypted and used only for secure payouts through Jusoor."
+                      "Your banking details are encrypted and used only for secure payouts through Azotto."
                     )}
                   </Text>
                 </div>
