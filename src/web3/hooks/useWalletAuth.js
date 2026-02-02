@@ -155,6 +155,8 @@ export const useWalletAuth = (onLoginSuccess) => {
             toast.dismiss();
             cleanupSigningState(); // Clean up before connecting
             setShouldInitiateSigningAfterConnect(true);
+            // connector?.name === 'WalletConnect' ? connect({ connector }) :
+            //     connect({ connector, chainId: REQUIRED_CHAIN_ID });
             await connect({ connector });
         } catch (error) {
             toast.error("Failed to connect wallet");

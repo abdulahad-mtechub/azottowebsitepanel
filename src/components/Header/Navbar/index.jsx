@@ -63,6 +63,8 @@ const Navbar = ({ setGetCategory }) => {
     handleWalletConnect,
     handleWalletDisconnect: disconnectWallet,
   } = useWalletAuth(handleWalletLoginSuccess);
+  console.log(isSigningInProgress,
+    isSignPending, ' isSigningInProgress isSignPending ');
 
   const isAuthenticated =
     !!Cookies.get("walletAddress") && !!Cookies.get("token");
@@ -304,7 +306,7 @@ const Navbar = ({ setGetCategory }) => {
 
   // This callback is called by useWalletAuth after successful signing
   async function handleWalletLoginSuccess(address, signature) {
-    alert("Wallet connected: " + address);
+    // alert("Wallet connected: " + address);
     try {
       const { data } = await connectWalletMutation({
         variables: { walletAddress: address, signature },
@@ -827,6 +829,7 @@ const Navbar = ({ setGetCategory }) => {
                         </Badge>
                       </Popover>
                     )}
+                        {isConnected && !isSigningInProgress || !isSignPending ? (
                     <Dropdown menu={{ items: profileItems }} trigger={["click"]}>
                       <Flex align="center" gap={8} style={{ cursor: "pointer" }}>
                         <Avatar className="bg-light-brand text-brand">
@@ -835,6 +838,19 @@ const Navbar = ({ setGetCategory }) => {
                         <DownOutlined className="text-white fs-12" />
                       </Flex>
                     </Dropdown>
+
+                        )  : 
+
+                          <Button
+                            className="btn bg-brand"
+                            // onClick={() => handleWalletConnect(connectors[0])}
+                            loading={isSigningInProgress || isSignPending}
+                          >
+                            {isSigningInProgress || isSignPending ? "Connecting..." : "Connect Wallet"}
+                          </Button>
+}
+      
+
                   </>
                 )}
               </Flex>

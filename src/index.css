@@ -1977,3 +1977,26 @@ body {
   inset-inline-start: auto !important;
   inset-inline-end: 6px !important;
 } */
+/* gen-loader.css */
+.gen-loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gen-loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gen-loader-text {
+  color: white;
+  margin-top: 1rem;
+  font-family: sans-serif;
+}
