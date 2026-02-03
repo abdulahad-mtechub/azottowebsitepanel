@@ -12,7 +12,6 @@ import {
 } from "antd";
 import {
   ArrowLeftOutlined,
-  ArrowRightOutlined,
   MenuOutlined,
   PlusOutlined,
   RightOutlined,
@@ -41,10 +40,10 @@ import {
   NAVUSERDATA,
   PROFESSIONALSTATISTICS,
   GETBUYERSTATISTICS,
+  ME,
 } from "../graphql/query";
 import { useLazyQuery } from "@apollo/client";
 import Cookies from "js-cookie";
-import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import { useFormatNumber } from "../hooks";
 
@@ -54,53 +53,57 @@ const { useBreakpoint } = Grid;
 const ProfileDashboard = () => {
   const userId = Cookies.get("userId");
   const navigate = useNavigate();
-  const { t } = useTranslation();
-  const isArabic = localStorage.getItem("lang") === "ar";
   const { formatNumber } = useFormatNumber();
   const screens = useBreakpoint();
 
   const profiletabData = {
     Seller: [
-      { key: "sellerdashboard", label: t("Dashboard") },
+      { key: "sellerdashboard", label: "Dashboard" },
       {
         key: "sellerlist",
-        label: t("My Vehicles"),
+        label: "My Vehicles",
         children: [
-          { key: "sellerBusiness", label: t("All Vehicles") },
-          { key: "sellerSoldBusiness", label: t("Sold Vehicles") },
+          { key: "sellerBusiness", label: "All Vehicles" },
+          { key: "sellerSoldBusiness", label: "Sold Vehicles" },
         ],
       },
       {
         key: "sellermeeting",
-        label: t("VIN Passports"),
+        label: "VIN Passports",
         //Meeting(10)
       },
-      { key: "sellerdeals", label: t("Invoices & Documents") },
-      { key: "selleralert", label: t("Notifications") },
-      // { key: "sellerwallet", label: t("Wallet") },
-      { key: "sellerwallet", label: t("Settings") },
+      { key: "sellerdeals", label: "Invoices & Documents" },
+      { key: "selleralert", label: "Notifications" },
+      // { key: "sellerwallet", label: "Wallet" },
+      { key: "sellerwallet", label: "Settings" },
     ],
     Buyer: [
-      { key: "buyerdashboard", label: t("Dashboard") },
-      { key: "buyeroffers", label: t("Browse Vehicles") },
-      { key: "buyermeeting", label: t("Saved VINs") },
-      { key: "buyerdeals", label: t("Verification History") },
+      { key: "buyerdashboard", label: "Dashboard" },
+      { key: "buyeroffers", label: "Browse Vehicles" },
+      { key: "buyermeeting", label: "Saved VINs" },
+      { key: "buyerdeals", label: "Verification History" },
     ],
     Dealer: [
-      { key: "dealerdashboard", label: t("Dashboard") },
+      { key: "dealerdashboard", label: "Dashboard" },
       {
         key: "dealerlist",
-        label: t("Browse Vehicles"),
+        label: "Browse Vehicles",
         children: [
-          { key: "dealerBusiness", label: t("Verified VINs") },
-          { key: "dealerSoldBusiness", label: t("Requests") },
+          { key: "dealerBusiness", label: "Verified VINs" },
+          { key: "dealerSoldBusiness", label: "Requests" },
         ],
       },
-      { key: "dealermeeting", label: t("Transactions") },
-      { key: "dealeralert", label: t("Notifications") },
-      // { key: "dealerwallet", label: t("Wallet") },
+      { key: "dealermeeting", label: "Transactions" },
+      { key: "dealeralert", label: "Notifications" },
+      // { key: "dealerwallet", label: "Wallet" },
     ],
     
+  };
+
+  const roleToParentTab = {
+    SELLER: "Seller",
+    CUSTOMER: "Buyer",
+    DEALER: "Dealer",
   };
 
   const getInitialParentTab = () => {
@@ -138,6 +141,7 @@ const ProfileDashboard = () => {
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [dateRange, setDateRange] = useState(getCurrentMonthRange);
   const [getUser, { data: me }] = useLazyQuery(NAVUSERDATA);
+  const [getUserDetails, { data: meDetails }] = useLazyQuery(ME);
   const [getSellerStats, { data: userStatsData }] = useLazyQuery(
     PROFESSIONALSTATISTICS,
   );
@@ -146,6 +150,7 @@ const ProfileDashboard = () => {
   const [getBuyerUser, { data: buyerStatsData }] =
     useLazyQuery(GETBUYERSTATISTICS);
   const [user, setUser] = useState(null);
+  const [userRole, setUserRole] = useState(null);
   const [visible, setVisible] = useState(false);
   const [isedit, setIsEdit] = useState(false);
   const [activeChildTab, setActiveChildTab] = useState(getInitialChildTabs);
@@ -153,6 +158,7 @@ const ProfileDashboard = () => {
   useEffect(() => {
     if (userId) {
       getUser({ variables: { getNavUserId: userId } });
+      getUserDetails({ variables: { getUserId: userId } });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userId]);
@@ -162,6 +168,39 @@ const ProfileDashboard = () => {
       setUser(me.getNavUser);
     }
   }, [me]);
+
+  useEffect(() => {
+    if (meDetails?.getUser) {
+      setUserRole(meDetails.getUser.role || null);
+    }
+  }, [meDetails]);
+
+  const allowedParentTabs = useMemo(() => {
+    const role = userRole;
+    const mapped = role ? roleToParentTab[role] : null;
+    return mapped ? [mapped] : ["Seller", "Buyer", "Dealer"];
+  }, [userRole]);
+
+  const segmentedOptions = useMemo(() => {
+    return allowedParentTabs.map((tab) => ({
+      label: tab === "Buyer" ? "Customer" : tab,
+      value: tab,
+    }));
+  }, [allowedParentTabs]);
+
+  useEffect(() => {
+    if (!userRole) return;
+    const mapped = roleToParentTab[userRole];
+    if (!mapped) return;
+    setParentTab(mapped);
+    const firstTabKey = profiletabData[mapped]?.[0]?.key;
+    if (firstTabKey) {
+      setActiveChildTab((prev) => ({
+        ...prev,
+        [mapped]: firstTabKey,
+      }));
+    }
+  }, [userRole]);
 
   // Fetch seller stats with date range
   useEffect(() => {
@@ -232,9 +271,9 @@ const handleDateRangeChange = (dates) => {
 };
   const buyerDashboardData = user
     ? [
-        { title: t("Email"), desc: user?.email || t("N/A") },
-        { title: t("username"), desc: user?.phone || t("N/A") },
-        { title: t("Wallet Address"), desc: user?.city || t("N/A") },
+        { title: "Email", desc: user?.email || "N/A" },
+        { title: "Username", desc: user?.phone || "N/A" },
+        { title: "Wallet Address", desc: user?.city || "N/A" },
       ]
     : [];
 
@@ -242,31 +281,31 @@ const handleDateRangeChange = (dates) => {
     {
       id: 1,
       img: "/assets/icons/total-view.png",
-      title: t("Total Vehicles"),
+      title: "Total Vehicles",
       key: "viewedBusinessesCount",
     },
     {
       id: 2,
       img: "/assets/icons/list-business.png",
-      title: t("Active VINs"),
+      title: "Active VINs",
       key: "listedBusinessesCount",
     },
     {
       id: 3,
       img: "/assets/icons/offer-recieved.png",
-      title: t("Verified VINs"),
+      title: "Verified VINs",
       key: "receivedOffersCount",
     },
     {
       id: 4,
       img: "/assets/icons/pending-meeting-ic.png",
-      title: t("Pending Actions"),
+      title: "Pending Actions",
       key: "pendingMeetingsCount",
     },
     {
       id: 5,
       img: "/assets/icons/schedule-meeting.png",
-      title: t("Last Blockchain Activity"),
+      title: "Last Blockchain Activity",
       key: "scheduledMeetingsCount",
     },
   ];
@@ -275,31 +314,31 @@ const handleDateRangeChange = (dates) => {
     {
       id: 1,
       img: "/assets/icons/favorite-ic.png",
-      title: t("Total Vehicles"),
+      title: "Total Vehicles",
       key: "favouriteBusinessesCount",
     },
     {
       id: 2,
       img: "/assets/icons/schedule-meeting.png",
-      title: t("Active VINs"),
+      title: "Active VINs",
       key: "scheduledMeetingsCount",
     },
     {
       id: 3,
       img: "/assets/icons/finalize-deal-ic.png",
-      title: t("Verified VINs"),
+      title: "Verified VINs",
       key: "finalizedDealsCount",
     },
     {
       id: 4,
       img: "/assets/icons/finalize-deal-ic.png",
-      title: t("Pending Actions"),
+      title: "Pending Actions",
       key: "finalizedDealsCount",
     },
     {
       id: 5,
       img: "/assets/icons/finalize-deal-ic.png",
-      title: t("Last Blockchain Activity"),
+      title: "Last Blockchain Activity",
       key: "finalizedDealsCount",
     },
   ];
@@ -307,19 +346,19 @@ const handleDateRangeChange = (dates) => {
     {
       id: 1,
       img: "/assets/icons/favorite-ic.png",
-      title: t("VINs viewed"),
+      title: "VINs viewed",
       key: "favouriteBusinessesCount",
     },
     {
       id: 2,
       img: "/assets/icons/schedule-meeting.png",
-      title: t("VINs verified"),
+      title: "VINs verified",
       key: "scheduledMeetingsCount",
     },
     {
       id: 3,
       img: "/assets/icons/finalize-deal-ic.png",
-      title: t("Fraud alerts"),
+      title: "Fraud alerts",
       key: "finalizedDealsCount",
     },
   ];
@@ -367,7 +406,7 @@ const handleDateRangeChange = (dates) => {
       sellerdashboard: (
         <Flex vertical gap={20}>
           <Flex justify="space-between">
-            <ModuleTopHeading level={4} name={t("Profile")} />
+            <ModuleTopHeading level={4} name={"Profile"} />
             <Flex gap={5}>
               <Button
                 aria-labelledby="Password Manager"
@@ -375,7 +414,7 @@ const handleDateRangeChange = (dates) => {
                 type="button"
                 onClick={() => setVisible(true)}
               >
-                {t("Password Manager")}
+                {"Password Manager"}
               </Button>
               <Button
                 aria-labelledby="Edit Profile"
@@ -383,17 +422,17 @@ const handleDateRangeChange = (dates) => {
                 type="button"
                 onClick={() => setIsEdit(true)}
               >
-                {t("Edit Profile")}
+                {"Edit Profile"}
               </Button>
             </Flex>
           </Flex>
           <Basicinformation
             buyerDashboardData={buyerDashboardData}
-            title={t("Basic Information")}
+            title={"Basic Information"}
           />
           <Profilestatistics
             data={profileStatisticsData}
-            title={t("Profile Statistics")}
+            title={"Profile Statistics"}
             dateRange={dateRange}
             onDateRangeChange={handleDateRangeChange}
           />
@@ -403,7 +442,7 @@ const handleDateRangeChange = (dates) => {
       sellerSoldBusiness: (
         <Flex vertical gap={20}>
           <Flex align="center">
-            <ModuleTopHeading level={4} name={t("Sold Businesses")} />
+            <ModuleTopHeading level={4} name={"Sold Businesses"} />
           </Flex>
           <Soldbussines />
         </Flex>
@@ -411,7 +450,7 @@ const handleDateRangeChange = (dates) => {
       sellermeeting: (
         <Flex vertical gap={20}>
           <Flex align="center">
-            <ModuleTopHeading level={4} name={t("Meetings")} />
+            <ModuleTopHeading level={4} name={"Meetings"} />
           </Flex>
           <Meetings isBuyer={false} />
         </Flex>
@@ -419,14 +458,14 @@ const handleDateRangeChange = (dates) => {
       sellerdeals: <SellerInvoiceAndDoc />,
       selleralert: (
         <Flex vertical gap={20}>
-          <ModuleTopHeading level={4} name={t("Alerts")} />
+          <ModuleTopHeading level={4} name={"Alerts"} />
           <SellerAlerts />
         </Flex>
       ),
       sellerwallet: (
         <Flex vertical gap={20}>
           <Flex justify="space-between" gap={5}>
-            <ModuleTopHeading level={4} name={t("Wallet")} />
+            <ModuleTopHeading level={4} name={"Wallet"} />
             <Button
               aria-labelledby="Edit Profile"
               className="btn bg-brand rounded-8"
@@ -435,7 +474,7 @@ const handleDateRangeChange = (dates) => {
                 setAddWalletVisible(true);
               }}
             >
-              <PlusOutlined /> {t("Add Account")}
+              <PlusOutlined /> {"Add Account"}
             </Button>
           </Flex>
           <SellerWallet {...{ addwalletvisible, setAddWalletVisible }} />
@@ -446,7 +485,7 @@ const handleDateRangeChange = (dates) => {
       dealerdashboard: (
         <Flex vertical gap={20}>
         <Flex justify="space-between">
-          <ModuleTopHeading level={4} name={t("Profile")} />
+          <ModuleTopHeading level={4} name={"Profile"} />
           <Flex gap={5}>
             <Button
               aria-labelledby="Password Manager"
@@ -454,7 +493,7 @@ const handleDateRangeChange = (dates) => {
               type="button"
               onClick={() => setVisible(true)}
             >
-              {t("Password Manager")}
+              {"Password Manager"}
             </Button>
             <Button
               aria-labelledby="Edit Profile"
@@ -462,17 +501,17 @@ const handleDateRangeChange = (dates) => {
               type="button"
               onClick={() => setIsEdit(true)}
             >
-              {t("Edit Profile")}
+              {"Edit Profile"}
             </Button>
           </Flex>
         </Flex>
         <Basicinformation
           buyerDashboardData={buyerDashboardData}
-          title={t("Basic Information")}
+          title={"Basic Information"}
         />
         <Profilestatistics
           data={dealerStatisticsData}
-          title={t("Profile Statistics")}
+          title={"Profile Statistics"}
           dateRange={dateRange}
           onDateRangeChange={handleDateRangeChange}
         />
@@ -492,7 +531,7 @@ const handleDateRangeChange = (dates) => {
       buyerdashboard: (
         <Flex vertical gap={20}>
           <Flex justify="space-between">
-            <ModuleTopHeading level={4} name={t("Profile")} />
+            <ModuleTopHeading level={4} name={"Profile"} />
             <Flex gap={5}>
               <Button
                 aria-labelledby="Password Manager"
@@ -500,7 +539,7 @@ const handleDateRangeChange = (dates) => {
                 type="button"
                 onClick={() => setVisible(true)}
               >
-                {t("Password Manager")}
+                {"Password Manager"}
               </Button>
               <Button
                 aria-labelledby="Edit Profile"
@@ -508,17 +547,17 @@ const handleDateRangeChange = (dates) => {
                 type="button"
                 onClick={() => setIsEdit(true)}
               >
-                {t("Edit Profile")}
+                {"Edit Profile"}
               </Button>
             </Flex>
           </Flex>
           <Basicinformation
             buyerDashboardData={buyerDashboardData}
-            title={t("Basic Information")}
+            title={"Basic Information"}
           />
           <Profilestatistics
             data={buyerStatisticsData}
-            title={t("Profile Statistics")}
+            title={"Profile Statistics"}
             dateRange={dateRange}
             onDateRangeChange={handleDateRangeChange}
           />
@@ -543,7 +582,7 @@ const handleDateRangeChange = (dates) => {
         <>
           <Flex vertical gap={20}>
             <Flex align="center">
-              <ModuleTopHeading level={4} name={t("Favorite Listing")} />
+              <ModuleTopHeading level={4} name={"Favorite Listing"} />
             </Flex>
             <Favoritbussines />
           </Flex>
@@ -552,7 +591,7 @@ const handleDateRangeChange = (dates) => {
       buyeralert: (
         <>
           <Flex vertical gap={20}>
-            <ModuleTopHeading level={4} name={t("Alerts")} />
+            <ModuleTopHeading level={4} name={"Alerts"} />
             <SellerAlerts />
           </Flex>
         </>
@@ -569,13 +608,11 @@ const handleDateRangeChange = (dates) => {
   };
 
   const buttonTooltipTitle = isMobileOrTablet
-    ? t("Profile Sidebar")
-    : t("Go Back");
+    ? "Profile Sidebar"
+    : "Go Back";
 
   const buttonIcon = isMobileOrTablet ? (
     <MenuOutlined className="fs-16" />
-  ) : isArabic ? (
-    <ArrowRightOutlined className="fs-16" />
   ) : (
     <ArrowLeftOutlined className="fs-16" />
   );
@@ -605,14 +642,14 @@ const handleDateRangeChange = (dates) => {
                     className="fs-13 text-gray"
                     onClick={() => navigate("/")}
                   >
-                    {t("Home")}
+                    {"Home"}
                   </Text>
                 ),
               },
               {
                 title: (
                   <Text className="fw-500 fs-13 text-black">
-                    {t("Profile")}
+                    {"Profile"}
                   </Text>
                 ),
               },
@@ -640,11 +677,7 @@ const handleDateRangeChange = (dates) => {
                   <Flex justify="center">
                   <Segmented
                     className="custom-segment"
-                    options={[
-                      { label: t("Seller"), value: "Seller" },
-                      { label: t("Buyer"), value: "Buyer" },
-                      { label: t("Dealer"), value: "Dealer" },
-                    ]}
+                    options={segmentedOptions}
                     value={parentTab}
                     onChange={handleParentChange}
                   />
@@ -667,7 +700,7 @@ const handleDateRangeChange = (dates) => {
           </Col>
           <Col xs={24} sm={24} md={24} lg={16} xl={18}>
             {tabContent?.[parentTab]?.[activeChildTab[parentTab]] || (
-              <div>{t("Invalid Tab")}</div>
+              <div>{"Invalid Tab"}</div>
             )}
           </Col>
         </Row>
@@ -681,6 +714,7 @@ const handleDateRangeChange = (dates) => {
         profiletabData={profiletabData}
         handleParentChange={handleParentChange}
         setActiveChildTab={setActiveChildTab}
+        segmentedOptions={segmentedOptions}
         onClose={() => setIsSidebarVisible(false)}
       />
 

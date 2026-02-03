@@ -12,6 +12,8 @@ import {
   Card,
   Popover,
   message,
+  Modal,
+  Radio,
 } from "antd";
 import "./index.css";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
@@ -25,14 +27,15 @@ import { useLazyQuery, useSubscription, useMutation } from "@apollo/client";
 import {
   NAVNOTIFICATION,
   NOTIFICATION,
+  ME,
 } from "../../../graphql/query";
 import { client } from "../../../config/apolloClient";
 import { useTranslation } from "react-i18next";
 import { NEW_NOTIFICATION_SUBSCRIPTION } from "../../../graphql/subscription";
 import { MARK_NOTIFICATION_AS_READ, LOGOUT } from "../../../graphql/mutation";
-import { clearAuthTokens } from "../../../utils/tokenManager";
+import { clearAuthTokens, updateAccessToken } from "../../../utils/tokenManager";
 import { clearQueryCache } from "../../../config";
-import { CONNECTWALLET } from "../../../graphql/mutation/login";
+import { CONNECTWALLET, UPDATE_USER } from "../../../graphql/mutation/login";
 import { useWalletAuth } from "../../../web3/hooks/useWalletAuth";
 
 const { Text, Title } = Typography;
@@ -45,6 +48,11 @@ const Navbar = ({ setGetCategory }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [browseOpen, setBrowseOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1200);
+  const [roleModalOpen, setRoleModalOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(
+    Cookies.get("userRole") || null,
+  );
+  const [roleUserId, setRoleUserId] = useState(null);
   /* =======================
    AUTH STATE
 ======================= */
@@ -111,6 +119,7 @@ const Navbar = ({ setGetCategory }) => {
   // const [getNavNotification, { data: navNotificationsData }] =
   //   useLazyQuery(NAVNOTIFICATION);
   const [getNotification] = useLazyQuery(NOTIFICATION);
+  const [getUserDetails] = useLazyQuery(ME);
   const processedVerificationNotificationsRef = useRef(new Set());
 
   const loadNotifications = useCallback(
@@ -173,6 +182,8 @@ const Navbar = ({ setGetCategory }) => {
 
   const [markNotificationAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
   const [connectWalletMutation] = useMutation(CONNECTWALLET);
+  const [updateUser, { loading: updateUserLoading }] =
+    useMutation(UPDATE_USER);
   const [logoutMutation, { loading: logoutLoading }] = useMutation(LOGOUT);
 
   useSubscription(NEW_NOTIFICATION_SUBSCRIPTION, {
@@ -308,19 +319,68 @@ const Navbar = ({ setGetCategory }) => {
 
       Cookies.set("walletAddress", address, { expires: 7 });
       Cookies.set("userId", result.user.id, { expires: 7 });
-      Cookies.set("token", result.token, { expires: 7 });
+      updateAccessToken(result.token);
 
       setUserId(result.user.id);
       setisLoggedIn(true);
       setIsShow(true);
 
       messageApi.success("Wallet connected");
+      let shouldAskRole = !Cookies.get("userRole");
+      try {
+        const { data: userDetails } = await getUserDetails({
+          variables: { getUserId: result.user.id },
+          fetchPolicy: "network-only",
+        });
+        const role = userDetails?.getUser?.role || null;
+        if (role) {
+          Cookies.set("userRole", role, { expires: 7 });
+          shouldAskRole = false;
+        } else {
+          shouldAskRole = true;
+        }
+      } catch (error) {
+        console.error("Failed to load user role", error);
+      }
+      if (shouldAskRole) {
+        setSelectedRole(null);
+        setRoleUserId(result.user.id);
+        setRoleModalOpen(true);
+      }
     } catch (err) {
       console.error(err);
       messageApi.error("Wallet connection failed");
       disconnectWallet();
     }
   }
+
+  const handleRoleConfirm = async () => {
+    if (!selectedRole) {
+      messageApi.error("Please select a role");
+      return;
+    }
+    const effectiveUserId = roleUserId || userId;
+    if (!effectiveUserId) {
+      messageApi.error("Unable to update role. Please try again.");
+      return;
+    }
+    try {
+      await updateUser({
+        variables: {
+          input: {
+            id: effectiveUserId,
+            role: selectedRole,
+          },
+        },
+      });
+      Cookies.set("userRole", selectedRole, { expires: 7 });
+      setRoleModalOpen(false);
+      messageApi.success(`Role set to ${selectedRole}`);
+    } catch (err) {
+      console.error(err);
+      messageApi.error("Failed to update role");
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -849,6 +909,45 @@ const Navbar = ({ setGetCategory }) => {
           </div>
         )}
       </div>
+      <Modal
+        title={t("Select your role")}
+        open={roleModalOpen}
+        onCancel={() => setRoleModalOpen(false)}
+        centered
+        footer={
+          <Flex justify="center" gap={8}>
+            <Button
+              className="btn text-black border-gray"
+              onClick={() => setRoleModalOpen(false)}
+            >
+              {t("Cancel")}
+            </Button>
+            <Button
+              className="btn bg-brand"
+              onClick={handleRoleConfirm}
+              loading={updateUserLoading}
+            >
+              {t("Continue")}
+            </Button>
+          </Flex>
+        }
+      >
+        <Flex vertical gap={12}>
+          <Text className="fs-14 text-gray">
+            {t("Please choose the role you are here for on our platform.")}
+          </Text>
+          <Radio.Group
+            value={selectedRole}
+            onChange={(e) => setSelectedRole(e.target.value)}
+          >
+            <Flex vertical gap={8}>
+              <Radio value="DEALER">{t("Dealer")}</Radio>
+              <Radio value="SELLER">{t("Seller")}</Radio>
+              <Radio value="CUSTOMER">{t("Customer")}</Radio>
+            </Flex>
+          </Radio.Group>
+        </Flex>
+      </Modal>
       <MobileNavbar visible={visible} onClose={() => setVisible(false)} />
     </>
   );

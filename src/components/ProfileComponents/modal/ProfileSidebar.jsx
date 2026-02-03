@@ -2,7 +2,6 @@ import { CloseOutlined } from "@ant-design/icons";
 import { Avatar, Button, Drawer, Flex, Segmented, Typography } from "antd";
 import { useMemo } from "react";
 import { CustomTabs } from "../../ui";
-import { useTranslation } from "react-i18next";
 
 const { Title } = Typography;
 const ProfileSidebar = ({
@@ -14,8 +13,8 @@ const ProfileSidebar = ({
   activeChildTab,
   setActiveChildTab,
   profiletabData,
+  segmentedOptions,
 }) => {
-  const { t } = useTranslation();
   const itemsForRender = useMemo(() => {
     const clone = (arr) =>
       arr.map((item) => {
@@ -30,18 +29,18 @@ const ProfileSidebar = ({
       if (item.key === "sellermeeting") {
         return {
           ...item,
-          label: `${t("Meetings")}`,
+          label: "Meetings",
         };
       }
       if (item.key === "buyermeeting") {
         return {
           ...item,
-          label: `${t("Meetings")}`,
+          label: "Meetings",
         };
       }
       return item;
     });
-  }, [parentTab, profiletabData, t]);
+  }, [parentTab, profiletabData]);
 
   return (
     <Drawer
@@ -78,10 +77,7 @@ const ProfileSidebar = ({
           <Flex justify="center">
             <Segmented
               className="custom-segment"
-              options={[
-                { label: t("Seller"), value: "Seller" },
-                { label: t("Buyer"), value: "Buyer" },
-              ]}
+              options={segmentedOptions}
               value={parentTab}
               onChange={handleParentChange}
             />
