@@ -15,7 +15,8 @@ import {
   registerWSReconnect,
 } from "../utils/tokenRefreshService";
 
-const API_URL = "https://backend-appolo-azotto.mtechub.org/graphql";
+const API_URL = "http://localhost:8000/graphql";
+// const API_URL = "https://backend-appolo-azotto.mtechub.org/graphql";
 const httpLink = createHttpLink({
   uri: API_URL,
   credentials: "include",

@@ -3,6 +3,7 @@ import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Trans, useTranslation } from "react-i18next";
+import { useWalletAuth } from "../../../web3/hooks/useWalletAuth";
 
 const { Title, Text } = Typography;
 
@@ -59,6 +60,7 @@ const Herosection = () => {
                   )}
                 </Button>
               </Flex>
+
             </Flex>
           </div>
         </Col>
