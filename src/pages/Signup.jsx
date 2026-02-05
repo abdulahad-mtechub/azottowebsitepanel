@@ -9,15 +9,14 @@ import {
   Flex,
   message,
 } from "antd";
-import { useLazyQuery, useMutation } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   CREATE_USER,
   VERIFY_EMAIL,
   VERIFY_EMAIL_OTP,
 } from "../graphql/mutation/login";
-import { GETCUSTOMERROLE } from "../graphql/query";
 import { useNavigate, NavLink } from "react-router-dom";
-import { MyInput } from "../components";
+import { MyInput, MySelect } from "../components";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 import { setAuthTokens } from "../utils/tokenManager";
@@ -31,7 +30,6 @@ const SignupPage = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const [customerRole, setCustomerRole] = useState(null);
   const [otpSent, setOtpSent] = useState(false);
   const [otpVerified, setOtpVerified] = useState(false);
   const [otpValue, setOtpValue] = useState("");
@@ -40,27 +38,15 @@ const SignupPage = () => {
   const [verifiedEmail, setVerifiedEmail] = useState("");
   const [otpTimer, setOtpTimer] = useState(0);
 
-  const [getCustomerRole] = useLazyQuery(GETCUSTOMERROLE, {
-    fetchPolicy: "cache-first",
-  });
   const [createUser, { loading }] = useMutation(CREATE_USER);
   const [verifyEmail] = useMutation(VERIFY_EMAIL);
   const [verifyEmailOTP] = useMutation(VERIFY_EMAIL_OTP);
 
-  useEffect(() => {
-    const fetchCustomerRole = async () => {
-      try {
-        const { data } = await getCustomerRole();
-        if (data?.getCustomerRole) {
-          setCustomerRole(data.getCustomerRole);
-        }
-      } catch (error) {
-        console.error("Error fetching customer role:", error);
-      }
-    };
-
-    fetchCustomerRole();
-  }, [getCustomerRole]);
+  const roleOptions = [
+    { id: "DEALER", name: t("Dealer") },
+    { id: "SELLER", name: t("Seller") },
+    { id: "CUSTOMER", name: t("Buyer") },
+  ];
 
   // OTP countdown timer
   useEffect(() => {
@@ -200,7 +186,7 @@ const SignupPage = () => {
         city: formData.city,
         phone: formData.phoneNo,
         password: formData.password,
-        roleId: customerRole?.id,
+        role: formData.role,
       };
 
       const { data, errors } = await createUser({ variables: { input } });
@@ -394,19 +380,40 @@ const SignupPage = () => {
             sm={{ span: 24 }}
             xs={{ span: 24 }}
           >
-           <MyInput
-            label={t("Wallet Address")}
-            name="walletAddress"
+          <MyInput
+            label={t("Password")}
+            name="password"
+            type="password"
             required
-            message={t("Please enter Wallet Address")}
-            placeholder={t("Enter Wallet Address")}
-            validator={{
-              pattern: /^[a-zA-Z0-9]{20,60}$/,
-              message: t("Please enter a valid wallet address"),
-            }}
+            message={t("Please enter Password")}
+            placeholder={t("Enter Password")}
           />
           </Col>
+          <Col
+            lg={{ span: 24 }}
+            md={{ span: 24 }}
+            sm={{ span: 24 }}
+            xs={{ span: 24 }}
+          >
+            <MySelect
+              label={t("Role")}
+              name="role"
+              required
+              message={t("Please select a role")}
+              options={roleOptions}
+              showKey
+              placeholder={t("Select role")}
+            />
+          </Col>
         </Row>
+        <Button
+          type="primary"
+          htmlType="submit"
+          className="btn bg-brand w-100 mt-2"
+          loading={loading}
+        >
+          {t("Sign Up")}
+        </Button>
             <Paragraph className="text-center text-white">
               {t("Don't have an account?")}{" "}
                 <NavLink to="/login">{t("Sign In")}</NavLink>

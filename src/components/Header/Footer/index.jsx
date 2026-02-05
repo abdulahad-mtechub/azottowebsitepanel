@@ -13,7 +13,6 @@ import { PhoneOutlined, WhatsAppOutlined } from "@ant-design/icons";
 import Cookies from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@apollo/client";
-import { GET_SETTING } from "../../../graphql";
 
 const { Title, Text } = Typography;
 const Footer = () => {

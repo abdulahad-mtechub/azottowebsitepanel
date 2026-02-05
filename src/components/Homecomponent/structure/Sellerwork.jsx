@@ -44,22 +44,6 @@ const Sellerwork = () => {
       ),
       image: <rive2.RiveComponent />,
     },
-    {
-      id: 3,
-      title: t("Receive Offers"),
-      desc: t(
-        "Buyers sign an NDA to view details and send offers through our secure chat."
-      ),
-      image: <rive3.RiveComponent />,
-    },
-    {
-      id: 4,
-      title: t("Finalize the Deal"),
-      desc: t(
-        "Accept the offer, upload the transfer docs, and get paid directly via bank."
-      ),
-      image: <rive4.RiveComponent />,
-    },
   ];
 
   return (

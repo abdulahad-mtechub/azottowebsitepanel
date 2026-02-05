@@ -15,8 +15,6 @@ import {
 } from "antd";
 import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
-import { GETRANDOMBUSINESS } from "../../../graphql/query/business";
-import { CREATE_SAVE_BUSINESS } from "../../../graphql/mutation/mutations";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { useTranslation } from "react-i18next";
 import { truncateChars } from "../../../utils";
@@ -35,65 +33,12 @@ const ExploreLive = () => {
   const screens = useBreakpoint();
   const { t, i18n } = useTranslation();
   const [messageApi, contextHolder] = message.useMessage();
-  const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
   const userId = Cookies.get("userId");
   const isArabic =
     (localStorage.getItem("lang") || "en").toLowerCase() === "ar";
 
   const userStatus = Cookies.get("userStatus");
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
-
-  const saveBusinessHandler = async (businessId, currentSaveState, e) => {
-    e.stopPropagation();
-
-    if (!userId) {
-      messageApi.info({
-        content: (
-          <span>
-            {t("Please")}{" "}
-            <a
-              onClick={() => navigate("/login")}
-              style={{
-                color: "#1677ff",
-                textDecoration: "underline",
-                cursor: "pointer",
-              }}
-            >
-              {t("login")}
-            </a>{" "}
-            {t("to continue")}.
-          </span>
-        ),
-      });
-      return;
-    }
-
-    if (isUserInactive) {
-      messageApi.warning(
-        t("Your account is inactive. Please contact support."),
-      );
-      return;
-    }
-
-    try {
-      await saveBusiness({
-        variables: {
-          saveBusinessId: businessId,
-        },
-      });
-      if (currentSaveState) {
-        clearQueryCache("getFavoritBusiness");
-        messageApi.success(t("Business removed from favorites successfully"));
-      } else {
-        clearQueryCache("getFavoritBusiness");
-        messageApi.success(t("Business added to favorites successfully"));
-      }
-      refetch();
-    } catch (err) {
-      console.error("Save mutation error:", err);
-      messageApi.error(t("Failed to update favorites: ") + err.message);
-    }
-  };
 
   // Responsive layout variables
   const buttonGroupGap = screens.xs ? 4 : 12;
@@ -134,9 +79,9 @@ const ExploreLive = () => {
                 <Button
                   onClick={() => navigate("/businesslisting")}
                   className="btn bg-brand"
-                  aria-labelledby="Browse Vehicles"
+                  aria-labelledby="Purchased Vehicles"
                 >
-                  {t("Browse Vehicles")}
+                  {"Purchased Vehicles"}
                   {i18n.language === "ar" ? (
                     <LeftOutlined className="fs-10" />
                   ) : (

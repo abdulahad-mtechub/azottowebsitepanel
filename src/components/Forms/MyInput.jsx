@@ -8,6 +8,7 @@ export const MyInput = ({
   type,
   size,
   disabled,
+  labelClassName,
   required,
   message,
   value,
@@ -84,7 +85,11 @@ export const MyInput = ({
         <Form.Item
           name={name}
           label={
-            <Typography.Text className="fs-14 fw-400 text-white">{label}</Typography.Text>
+            <Typography.Text
+              className={`fs-14 fw-400 ${labelClassName || "text-white"}`}
+            >
+              {label}
+            </Typography.Text>
           }
           tooltip={tooltip || null}
           className="custom-input fs-14"

@@ -187,13 +187,9 @@ const Navbar = ({ setGetCategory }) => {
       // Read current userId from cookies to avoid using a stale closure
       const currentUserId = Cookies.get("userId");
       // handle other notification types for removed the caching like new offers etc.
-      if (
-        newNotif?.name === "New Offer Received" &&
-        currentUserId === newNotif.user?.id
-      ) {
         clearQueryCache("getAllSellerBusinesses");
         clearQueryCache("getNotifications");
-      }
+      
 
       if (newNotif && newNotif.user?.id === currentUserId) {
         setNotifications((prev) => {
@@ -756,7 +752,7 @@ const Navbar = ({ setGetCategory }) => {
                     <NavLink to={""}>
                       <Flex gap={10}>
                         <Text className="text-white nav-item">
-                          {t("Browse Vehicles")}
+                          {t("Purchased Vehicles")}
                         </Text>
                         <DownOutlined className="fs-12 text-white" />
                       </Flex>
@@ -801,20 +797,42 @@ const Navbar = ({ setGetCategory }) => {
                 </ul>
               </Flex>
               <Flex gap={10} align="center">
-                 {!isAuthenticated ? (
-              <Button className="btn bg-brand" onClick={connectWallet}>
-                Connect Wallet
-              </Button>
-            ) : (
-              <Dropdown menu={{ items }} trigger={["click"]}>
-                <Flex align="center" gap={8} style={{ cursor: "pointer" }}>
-                  <Avatar className="bg-light-brand text-brand">
-                    {walletAddress?.slice(0, 2).toUpperCase()}
-                  </Avatar>
-                  <DownOutlined className="text-white fs-12" />
-                </Flex>
-              </Dropdown>
-            )}
+                {!isAuthenticated ? (
+                  <>
+                    <Button
+                      className="btn border-gray text-black"
+                      onClick={() => navigate("/login")}
+                    >
+                      Login
+                    </Button>
+                    <Button
+                      className="btn bg-brand"
+                      onClick={() => navigate("/signup")}
+                    >
+                      Sign Up
+                    </Button>
+                    <Button className="btn bg-brand" onClick={connectWallet}>
+                      Connect Wallet
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      className="btn bg-brand"
+                      onClick={() => navigate("/sellvincreate")}
+                    >
+                      Create Listing
+                    </Button>
+                    <Dropdown menu={{ items }} trigger={["click"]}>
+                      <Flex align="center" gap={8} style={{ cursor: "pointer" }}>
+                        <Avatar className="bg-light-brand text-brand">
+                          {walletAddress?.slice(0, 2).toUpperCase()}
+                        </Avatar>
+                        <DownOutlined className="text-white fs-12" />
+                      </Flex>
+                    </Dropdown>
+                  </>
+                )}
               </Flex>
             </div>
           </div>

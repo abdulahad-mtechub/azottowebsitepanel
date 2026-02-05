@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { FloatButton } from "antd";
 import { UpOutlined } from "@ant-design/icons";
 import {
-  BusinessListingPage,
+  VehicleListingPage,
   ForgotPassword,
   Home,
   LoginPage,
@@ -11,7 +11,7 @@ import {
   SignupPage,
   SingleViewlisting,
 } from "../pages";
-import { Footer, Navbar, ScrollTop, Singlebusinessview } from "../components";
+import { Footer, Navbar, ScrollTop, SingleVehicleView} from "../components";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
@@ -50,15 +50,15 @@ const AppRoutes = () => {
           <Route path="/" element={<Home />} />
           <Route
             path="/businesslisting"
-            element={<BusinessListingPage getcategory={getcategory} />}
+            element={<VehicleListingPage getcategory={getcategory} />}
           />
           <Route
             path="/singleviewlisting/:id"
             element={<SingleViewlisting />}
           />
           <Route
-            path="/singlebusinessview/:id"
-            element={<Singlebusinessview />}
+            path="/singlevehicleview/:id"
+            element={<SingleVehicleView />}
           />
           {/* Public routes - redirect to home if already logged in */}
           <Route
