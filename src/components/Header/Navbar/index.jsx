@@ -41,6 +41,7 @@ import {
 import { clearQueryCache } from "../../../config";
 import { CONNECTWALLET, UPDATE_USER } from "../../../graphql/mutation/login"
 import { ethers } from "ethers";
+import { usePrivy } from "@privy-io/react-auth";
 
 const { Text, Title } = Typography;
 // Enable dayjs plugins
@@ -56,6 +57,7 @@ const Navbar = ({ setGetCategory }) => {
   const [selectedRole, setSelectedRole] = useState(
     Cookies.get("userRole") || null,
   );
+  const { authenticated, user, logout } = usePrivy();
   const [roleUserId, setRoleUserId] = useState(null);
     /* =======================
      AUTH STATE
@@ -392,6 +394,10 @@ const Navbar = ({ setGetCategory }) => {
   };
 
   const handleLogout = async () => {
+    if (authenticated && user) {
+      logout();
+    }
+
     // Client-only logout: clear cookies and local state
     clearAuthTokens();
     Cookies.remove("walletAddress");
@@ -797,8 +803,14 @@ const Navbar = ({ setGetCategory }) => {
                 </ul>
               </Flex>
               <Flex gap={10} align="center">
-                {!isAuthenticated ? (
+                  {!isAuthenticated && !authenticated && !user ? (
                   <>
+                      <Button
+                        className="btn border-gray text-black"
+                        onClick={() => navigate("/loginprivy")}
+                      >
+                        Login Privy
+                      </Button>
                     <Button
                       className="btn border-gray text-black"
                       onClick={() => navigate("/login")}

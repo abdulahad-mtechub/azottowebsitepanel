@@ -15,6 +15,7 @@ import { Footer, Navbar, ScrollTop, SingleVehicleView} from "../components";
 import { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import { PrivyLoginPage } from "../pages/PrivyLogin";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -66,6 +67,14 @@ const AppRoutes = () => {
             element={
               <PublicRoute>
                 <LoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/loginprivy"
+            element={
+              <PublicRoute>
+                <PrivyLoginPage />
               </PublicRoute>
             }
           />
