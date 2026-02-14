@@ -12,12 +12,24 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useCoinbaseAuth } from "../hooks/useCoinbaseAuth";
+import { useMutation, gql } from "@apollo/client";
 
 const { Title, Paragraph } = Typography;
 
+// Define the GraphQL mutation
+const COINBASE_LOGIN = gql`
+    mutation CoinbaseLogin($input: CoinbaseWalletLoginInput!) {
+        coinbaseLogin(input: $input) {
+            user {
+                id
+            }
+            token
+        }
+    }
+`;
+
 const CoinbaseAuthWithHook = () => {
     const [form] = Form.useForm();
-    const [email, setEmail] = useState("");
     const [messageApi, contextHolder] = message.useMessage();
     const navigate = useNavigate();
 
@@ -35,28 +47,45 @@ const CoinbaseAuthWithHook = () => {
         darkMode: true,
     });
 
-    const handleSubmit = async (values) => {
-        try {
-            const authData = await signIn(values.email);
-
-            const response = await fetch(
-                "YOUR_BACKEND_URL/api/auth/verify",
-                {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(authData),
-                }
-            );
-
-            const data = await response.json();
-
-            if (data.token) {
-                localStorage.setItem("authToken", data.token);
+    // Apollo mutation hook
+    const [coinbaseLogin, { loading: mutationLoading }] = useMutation(COINBASE_LOGIN, {
+        onCompleted: (data) => {
+            if (data?.coinbaseLogin?.token) {
+                localStorage.setItem("authToken", data.coinbaseLogin.token);
+                localStorage.setItem("userId", data.coinbaseLogin.user.id);
                 messageApi.success("Authentication successful!");
                 setTimeout(() => navigate("/"), 1000);
             }
+        },
+        onError: (error) => {
+            console.error("Login error:", error);
+            messageApi.error(error.message || "Authentication failed");
+                disconnect();
+        },
+    });
+
+    const handleSubmit = async (values) => {
+        try {
+            // Get auth data from Coinbase wallet
+            const authData = await signIn(values.email);
+console.log(authData);
+
+            // Call GraphQL mutation
+            await coinbaseLogin({
+                variables: {
+                    input: {
+                        email: authData.email,
+                        address: authData.address,
+                        message: authData.message,
+                        signature: authData.signature,
+                        timestamp: authData.timestamp,
+                    },
+                },
+            });
         } catch (err) {
-            messageApi.error("Authentication failed");
+            console.error("Submission error:", err);
+            messageApi.error(err.message || "Authentication failed");
+            disconnect()
         }
     };
 
@@ -129,7 +158,7 @@ const CoinbaseAuthWithHook = () => {
                                         type="primary"
                                         block
                                         className="btn bg-dark-blue fs-16"
-                                        loading={isLoading}
+                                        loading={isLoading || mutationLoading}
                                     >
                                         Connect & Sign
                                     </Button>
@@ -140,10 +169,6 @@ const CoinbaseAuthWithHook = () => {
                                 <Title level={3} className="text-white">
                                     Wallet Connected
                                 </Title>
-
-                                <Paragraph className="text-white">
-                                    <strong>Email:</strong> {email}
-                                </Paragraph>
 
                                 <Paragraph className="text-white">
                                     <strong>Wallet:</strong>
