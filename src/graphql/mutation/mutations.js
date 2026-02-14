@@ -1,108 +1,24 @@
 import { gql } from "@apollo/client";
 
-const CREATE_OFFER = gql`
-  mutation CreateOffer($input: CreateOfferInput!) {
-    createOffer(input: $input) {
+const CREATE_VIN_PASSPORT = gql`
+  mutation CreateVinPassport($input: CreateVinPassportInput!) {
+    createVinPassport(input: $input) {
       id
     }
   }
 `;
-const UPDATE_OFFER = gql`
-  mutation UpdateOfferStatus($input: UpdateOfferStatusInput!) {
-    updateOfferStatus(input: $input) {
-      id
-    }
-  }
-`;
-const CREATE_BUSINESS = gql`
-  mutation CreateBusiness($input: CreateBusinessInput!) {
-    createBusiness(input: $input) {
-      id
-    }
-  }
-`;
-const UPDATE_BUSINESS = gql`
-  mutation UpdateBusiness($input: UpdateBusinessInput!) {
-    updateBusiness(input: $input) {
-      id
-    }
-  }
-`;
-const CREATE_SAVE_BUSINESS = gql`
-  mutation SaveBusiness($saveBusinessId: ID!) {
-    saveBusiness(id: $saveBusinessId)
-  }
-`;
-const CREATE_VIEW_BUSINESS = gql`
-  mutation ViewBusiness($viewBusinessId: ID!) {
-    viewBusiness(id: $viewBusinessId)
-  }
-`;
-const ACCEPT_ENDA = gql`
-  mutation AcceptEnda($input: AcceptEndaInput!) {
-    acceptEnda(input: $input) {
-      id
-    }
-  }
-`;
-const CREATE_ENDA = gql`
-  mutation CreateEnda($input: AcceptEndaInput!) {
-    createEnda(input: $input) {
-      id
-    }
-  }
-`;
-const BUSINESS_MEETING = gql`
-  mutation RequestMeeting($input: CreateMeetingInput!) {
-    requestMeeting(input: $input) {
-      id
-    }
-  }
-`;
-const UPDATE_MEETING = gql`
-  mutation UpdateMeeting($input: UpdateMeetingInput!) {
-    updateMeeting(input: $input) {
-      id
-    }
-  }
-`;
-const APPROVE_MEETING = gql`
-  mutation ApproveMeeting($meetingId: ID!, $offerId: ID) {
-    approveMeeting(meetingId: $meetingId, offerId: $offerId)
-  }
-`;
-const UPLOAD_DOC = gql`
+const CREATE_DOCUMENT = gql`
   mutation CreateDocument($input: CreateDocumentInput!) {
     createDocument(input: $input) {
       id
     }
   }
 `;
-const FINALIZE_DEAL = gql`
-  mutation UpdateDeal($input: UpdateDealInput!) {
-    updateDeal(input: $input) {
+
+const UPLOAD_DOC = gql`
+  mutation CreateDocument($input: CreateDocumentInput!) {
+    createDocument(input: $input) {
       id
-    }
-  }
-`;
-const UPDATE_DEAL = gql`
-  mutation UpdateDeal($input: UpdateDealInput!) {
-    updateDeal(input: $input) {
-      id
-    }
-  }
-`;
-const COUNTER_OFFER = gql`
-  mutation CounterOffer($input: CounterOfferInput!) {
-    counterOffer(input: $input) {
-      id
-    }
-  }
-`;
-const SEND_BANK = gql`
-  mutation SendBankToBuyer($sendBankToBuyerId: ID) {
-    sendBankToBuyer(id: $sendBankToBuyerId) {
-      iban
     }
   }
 `;
@@ -119,36 +35,11 @@ const DELETE_DOCUMENTS = gql`
     deleteDocument(id: $deleteDocumentId)
   }
 `;
-const ADD_BANK = gql`
-  mutation AddBank($input: BankInput!) {
-    addBank(input: $input) {
-      id
-    }
-  }
-`;
-const ACTIVEBANK = gql`
-  mutation SetActiveBank($setActiveBankId: ID!) {
-    setActiveBank(id: $setActiveBankId)
-  }
-`;
-const DELETEBANK = gql`
-  mutation DeleteBank($deleteBankId: ID!) {
-    deleteBank(id: $deleteBankId)
-  }
-`;
 const MARK_NOTIFICATION_AS_READ = gql`
   mutation MarkNotificationAsRead($userId: ID!) {
     markNotificationAsRead(id: $userId)
   }
 `;
-const CREATE_CONTACT = gql`
-  mutation CreateContactUs($input: CreateContactInput!) {
-    createContactUs(input: $input) {
-      id
-    }
-  }
-`;
-
 const REQUEST_PASSWORD_RESET = gql`
   mutation RequestPasswordReset($email: String!) {
     requestPasswordReset(email: $email) {
@@ -178,29 +69,12 @@ const RESET_PASSWORD_WITH_TOKEN = gql`
 `;
 
 export {
-  CREATE_OFFER,
-  UPDATE_OFFER,
-  CREATE_BUSINESS,
-  UPDATE_BUSINESS,
-  CREATE_SAVE_BUSINESS,
-  CREATE_VIEW_BUSINESS,
-  ACCEPT_ENDA,
-  BUSINESS_MEETING,
-  UPDATE_MEETING,
-  APPROVE_MEETING,
+  CREATE_VIN_PASSPORT,
+  CREATE_DOCUMENT,
   UPLOAD_DOC,
-  FINALIZE_DEAL,
-  UPDATE_DEAL,
-  COUNTER_OFFER,
-  SEND_BANK,
   UPLOAD_DOCUMENT,
-  ADD_BANK,
-  ACTIVEBANK,
-  DELETEBANK,
   DELETE_DOCUMENTS,
-  CREATE_ENDA,
   MARK_NOTIFICATION_AS_READ,
-  CREATE_CONTACT,
   REQUEST_PASSWORD_RESET,
   VERIFY_PASSWORD_RESET_OTP,
   RESET_PASSWORD_WITH_TOKEN,

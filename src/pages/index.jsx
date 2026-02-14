@@ -1,6 +1,6 @@
 export * from "./Home";
 export * from "./SellVinCreate";
-export * from "./BusinessListingPage";
+export * from "./VehicleListingPage";
 export * from "./SingleViewlisting";
 export * from "./Login";
 export * from "./Signup";

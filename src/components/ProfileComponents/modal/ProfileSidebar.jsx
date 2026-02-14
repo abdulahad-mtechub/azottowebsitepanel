@@ -1,7 +1,5 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Avatar, Button, Drawer, Flex, Segmented, Typography } from "antd";
-import { useMemo } from "react";
-import { CustomTabs } from "../../ui";
 
 const { Title } = Typography;
 const ProfileSidebar = ({
@@ -10,37 +8,8 @@ const ProfileSidebar = ({
   user,
   parentTab,
   handleParentChange,
-  activeChildTab,
-  setActiveChildTab,
-  profiletabData,
   segmentedOptions,
 }) => {
-  const itemsForRender = useMemo(() => {
-    const clone = (arr) =>
-      arr.map((item) => {
-        if (item.children) {
-          return { ...item, children: item.children.map((c) => ({ ...c })) };
-        }
-        return { ...item };
-      });
-
-    const tabs = clone(profiletabData[parentTab] || []);
-    return tabs.map((item) => {
-      if (item.key === "sellermeeting") {
-        return {
-          ...item,
-          label: "Meetings",
-        };
-      }
-      if (item.key === "buyermeeting") {
-        return {
-          ...item,
-          label: "Meetings",
-        };
-      }
-      return item;
-    });
-  }, [parentTab, profiletabData]);
 
   return (
     <Drawer
@@ -82,19 +51,6 @@ const ProfileSidebar = ({
               onChange={handleParentChange}
             />
           </Flex>
-          <div className="text-center mt-4">
-            <CustomTabs
-              items={itemsForRender}
-              activeKey={activeChildTab[parentTab]}
-              onChange={(key) => {
-                onClose();
-                setActiveChildTab((prev) => ({
-                  ...prev,
-                  [parentTab]: key,
-                }));
-              }}
-            />
-          </div>
         </Flex>
       </Flex>
     </Drawer>

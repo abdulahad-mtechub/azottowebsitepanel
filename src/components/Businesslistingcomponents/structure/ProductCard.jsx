@@ -13,7 +13,6 @@ import {
   Grid,
 } from "antd";
 import { useNavigate, Link } from "react-router-dom";
-import { CREATE_SAVE_BUSINESS } from "../../../graphql";
 import { useMutation } from "@apollo/client";
 import { message } from "antd";
 import { useTranslation } from "react-i18next";
@@ -38,7 +37,6 @@ const ProductCard = ({
   const screens = useBreakpoint();
   const { t } = useTranslation();
   const { formatNumber } = useFormatNumber();
-  const [saveBusiness] = useMutation(CREATE_SAVE_BUSINESS);
   const navigate = useNavigate();
   const [messageApi, contextHolder] = message.useMessage();
   const userId = Cookies.get("userId");
@@ -46,55 +44,6 @@ const ProductCard = ({
   const userStatus = Cookies.get("userStatus");
   const isUserInactive = userStatus === "pending" || userStatus === "inactive";
 
-  const saveBusinessHandler = async (businessId, currentSaveState) => {
-    if (!userId) {
-      messageApi.info({
-        content: (
-          <span>
-            {t("Please")}{" "}
-            <a
-              onClick={() => navigate("/login")}
-              style={{
-                color: "#1677ff",
-                textDecoration: "underline",
-                cursor: "pointer",
-              }}
-            >
-              {t("login")}
-            </a>{" "}
-            {t("to continue")}.
-          </span>
-        ),
-      });
-      return;
-    }
-
-    if (isUserInactive) {
-      messageApi.warning(
-        t("Your account is inactive. Please contact support."),
-      );
-      return;
-    }
-
-    try {
-      await saveBusiness({
-        variables: {
-          saveBusinessId: businessId,
-        },
-      });
-      if (currentSaveState) {
-        clearQueryCache("getFavoritBusiness");
-        messageApi.success(t("Business removed from favorites successfully"));
-      } else {
-        clearQueryCache("getFavoritBusiness");
-        messageApi.success(t("Business added to favorites successfully"));
-      }
-      refetchBusinesses();
-    } catch (err) {
-      console.error("Save mutation error:", err);
-      messageApi.error(t("Failed to update favorites: ") + err.message);
-    }
-  };
   if (isLoading) {
     return (
       <Flex
@@ -230,7 +179,6 @@ const ProductCard = ({
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            saveBusinessHandler(pro?.id, pro?.isSaved);
                           }}
                           disabled={isUserInactive}
                           style={{

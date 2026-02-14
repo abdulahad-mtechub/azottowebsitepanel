@@ -2,7 +2,6 @@ import { useState, useMemo } from "react";
 import { Col, Flex, Row, Typography } from "antd";
 import { Segmented } from "antd";
 import { Sellerwork } from "./Sellerwork";
-import { Buyework } from "./Buyework";
 import { Trans, useTranslation } from "react-i18next";
 
 const { Title } = Typography;
@@ -67,11 +66,6 @@ const HowWork = () => {
                 onChange={handleSegmentChange}
                 aria-label="Content filter"
               />
-            </div>
-
-            <div className="text-center mt-4">
-              {activeTab === KEYS.SELLER && <Sellerwork />}
-              {activeTab === KEYS.BUYER && <Buyework />}
             </div>
           </Col>
         </Row>

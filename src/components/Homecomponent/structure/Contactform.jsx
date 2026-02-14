@@ -13,34 +13,17 @@ import { WhatsAppOutlined } from "@ant-design/icons";
 import { MyInput } from "../../Forms";
 import { useTranslation } from "react-i18next";
 import { useMutation } from "@apollo/client";
-import { CREATE_CONTACT } from "../../../graphql";
 
 const { Text, Title } = Typography;
 
 const Contactform = () => {
   const [form] = Form.useForm();
   const { t } = useTranslation();
-  const [createContact, { loading }] = useMutation(CREATE_CONTACT);
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleSubmit = async (values) => {
     try {
-      const result = await createContact({
-        variables: {
-          input: values,
-        },
-      });
-
-      if (result?.errors) {
-        const errorMsg = result.errors[0]?.message || "Failed to send message";
-        messageApi.error(t(errorMsg));
-        return;
-      }
-
-      if (result?.data?.createContactUs?.id) {
-        form.resetFields();
-        messageApi.success(t("Your message has been sent successfully!"));
-      }
+     
     } catch (error) {
       console.error("Error creating contact:", error);
       const errorMessage =

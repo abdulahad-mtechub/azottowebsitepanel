@@ -18,16 +18,6 @@ const SellerContent = () => {
       description: t('We verify your CR, key metrics, and identity to build buyer trust.'),
       image: '/assets/images/2.png',
     },
-    {
-      title: t('Receive Offers'),
-      description: t('Buyers sign an NDA to view details and send offers through our secure chat.'),
-      image: '/assets/images/2.png',
-    },
-    {
-      title: t('Finalize the Deal'),
-      description: t('Accept the offer, upload the transfer docs, and get paid directly via bank.'),
-      image: '/assets/images/2.png',
-    },
   ];
 
   const stepRefs = useRef([]);

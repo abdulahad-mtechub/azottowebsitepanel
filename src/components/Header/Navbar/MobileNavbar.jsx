@@ -40,7 +40,7 @@ const MobileNavbar = ({ visible, onClose }) => {
   const mobilemenuData = [
     {
       id: 1,
-      name: t("Browse Vehicles"),
+      name: "Purchased Vehicles",
     },
   ];
 
@@ -313,7 +313,25 @@ const MobileNavbar = ({ visible, onClose }) => {
               </>
             ) : (
               <>
-               <Button
+                <Button
+                  className="btn btn-outline w-100"
+                  onClick={() => {
+                    navigate("/login");
+                    onClose();
+                  }}
+                >
+                  {"Login"}
+                </Button>
+                <Button
+                  className="btn bg-brand w-100"
+                  onClick={() => {
+                    navigate("/signup");
+                    onClose();
+                  }}
+                >
+                  {"Sign Up"}
+                </Button>
+                <Button
                   className="btn btn-outline w-100"
                   onClick={connectWallet}
                 >

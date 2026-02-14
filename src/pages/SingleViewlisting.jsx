@@ -15,21 +15,12 @@ import {
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  useInventColumn,
-  useKeyassetsColumn,
-  useLiabColumn,
-  usePostsaleColumns,
-} from "../data";
-import {
-  BusinessInfoCard,
-  BusinessInfoCardMobile,
-  ExploreSimilarBusiness,
-  PreviewTableContent,
+  VehicleInfoCard,
+  VehicleInfoCardMobile,
+  ExploreSimilarVehicles,
 } from "../components";
 import { RightOutlined, PlusOutlined, MinusOutlined } from "@ant-design/icons";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_BUSINESS } from "../graphql/query/business";
-import { CREATE_VIEW_BUSINESS } from "../graphql/mutation";
 import { BusinessStats } from "../components/SellBusinessComponents/structure/BusinessStats";
 import { useTranslation } from "react-i18next";
 import { useFormatNumber } from "../hooks";
@@ -48,8 +39,6 @@ const SingleViewlisting = () => {
   const navigate = useNavigate();
   const viewTrackedRef = useRef(false);
 
-  const [viewBusiness] = useMutation(CREATE_VIEW_BUSINESS);
-
   useEffect(() => {
     const footer = document.getElementById("footer");
     const handleResize = () => {
@@ -66,80 +55,6 @@ const SingleViewlisting = () => {
     };
   }, []);
 
-  const { data: businessData, loading: businessLoading } = useQuery(
-    GET_BUSINESS,
-    {
-      variables: { getBusinessByIdId: id },
-      skip: !id,
-    },
-  );
-
-  const business = businessData?.getBusinessById?.business;
-
-  // Track business view once when business data is loaded
-  useEffect(() => {
-    if (business?.id && !viewTrackedRef.current) {
-      viewTrackedRef.current = true;
-      viewBusiness({
-        variables: { viewBusinessId: business.id },
-      }).catch((error) => {
-        console.error("Error tracking business view:", error);
-      });
-    }
-  }, [business?.id, viewBusiness]);
-
-  const postSaleData = [
-    {
-      key: "1",
-      period: formatNumber(business?.supportDuration) || t("N/A"),
-      session: formatNumber(business?.supportSession) || t("N/A"),
-      verified: business?.isSupportVerified,
-    },
-  ];
-
-  const liabilitiesData = business?.liabilities?.map((item, index) => ({
-    key: item.id || index,
-    name: item.name,
-    items: formatNumber(item.quantity),
-    purchaseyear: item.purchaseYear,
-    price: formatNumber(item?.price),
-    verified: item.isActive,
-  }));
-
-  const assetsData = business?.assets?.map((item, index) => ({
-    key: item.id || index,
-    name: item.name,
-    items: formatNumber(item.quantity),
-    purchaseyear: item?.purchaseYear,
-    price: formatNumber(item?.price),
-    verified: item.isActive,
-  }));
-
-  const inventoryData = business?.inventoryItems?.map((item, index) => ({
-    key: item.id || index,
-    name: item.name,
-    items: formatNumber(item.quantity),
-    purchaseyear: item.purchaseYear,
-    price: formatNumber(item.price),
-    verified: item.isActive,
-  }));
-
-  if (businessLoading) {
-    return (
-      <div
-        style={{
-          width: "100%",
-          height: "70vh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          position: "relative",
-        }}
-      >
-        <Spin size="large" />
-      </div>
-    );
-  }
 
   return (
     <div className="padd-1 relative">
@@ -168,7 +83,7 @@ const SingleViewlisting = () => {
                   className="cursor text-gray"
                   onClick={() => navigate("/businesslisting")}
                 >
-                  {t("Browse Vehicles")}
+                  {"Purchased Vehicles"}
                 </Text>
               ),
             },
@@ -233,39 +148,6 @@ const SingleViewlisting = () => {
                       <Title level={3} className="m-0">
                         {business?.businessTitle}
                       </Title>
-                      <Button
-                        aria-labelledby="type"
-                        className={`${
-                          business?.isByTakbeer ? "bg-brand" : "bg-black"
-                        }`}
-                      >
-                        <Space align="center" justify="center">
-                          <Text className="fs-12 text-white">
-                            {business?.isByTakbeer
-                              ? t("Taqbeel")
-                              : t("Acquiring")}
-                          </Text>
-                          <Tooltip
-                            title={
-                              business?.isByTakbeer
-                                ? t(
-                                    "Taqbeel refers to transferring a vehicle by buying only the assets such as equipment or contracts without purchasing the trade name, brand, or commercial registration.",
-                                  )
-                                : t(
-                                    "Acquisition means a full purchase of the vehicle, including its brand, trade name, CR, assets, and even liabilities.",
-                                  )
-                            }
-                          >
-                            <img
-                              src="/assets/icons/info-a.png"
-                              width={16}
-                              alt={t("takbeel-icon")}
-                              fetchPriority="high"
-                              className="center"
-                            />
-                          </Tooltip>
-                        </Space>
-                      </Button>
                     </Flex>
                     <Flex align="center" gap={5}>
                       <Title level={5} className="m-0">
@@ -291,115 +173,6 @@ const SingleViewlisting = () => {
               </Flex>
             </Card>
             <BusinessStats data={business} />
-            {business?.growthOpportunities && (
-              <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-                <Flex vertical gap={0}>
-                  <Title level={5}>{t("Growth Opportunity")}</Title>
-                  <Text className="text-justify">
-                    {business?.growthOpportunities}
-                  </Text>
-                </Flex>
-              </Card>
-            )}
-            <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-              <Flex vertical gap={0}>
-                <Title level={5}>{t("Reason for Selling")}</Title>
-                <Text className="text-justify">
-                  {business?.reason || t("No reason for selling provided.")}
-                </Text>
-              </Flex>
-            </Card>
-            <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-              <PreviewTableContent
-                title={t("Post - Sale Support")}
-                columns={postsaleColumns}
-                data={postSaleData}
-              />
-            </Card>
-            {liabilitiesData?.length > 0 && (
-              <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIcon={({ isActive }) =>
-                    isActive ? <MinusOutlined /> : <PlusOutlined />
-                  }
-                  expandIconPosition="end"
-                  className="custom-collapse"
-                >
-                  <Panel
-                    header={
-                      <Title level={5} className="m-0">
-                        {t("Outstanding Liabilities / Debt")}
-                      </Title>
-                    }
-                    key="1"
-                    className="shadow-d radius-12 bg-lightest-gray"
-                  >
-                    <PreviewTableContent
-                      title={null}
-                      columns={liabColumn}
-                      data={liabilitiesData}
-                    />
-                  </Panel>
-                </Collapse>
-              </Card>
-            )}
-            {assetsData?.length > 0 && (
-              <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIcon={({ isActive }) =>
-                    isActive ? <MinusOutlined /> : <PlusOutlined />
-                  }
-                  expandIconPosition="end"
-                  className="custom-collapse"
-                >
-                  <Panel
-                    header={
-                      <Title level={5} className="m-0">
-                        {t("Key Asset")}
-                      </Title>
-                    }
-                    key="1"
-                    className="shadow-d radius-12 bg-lightest-gray"
-                  >
-                    <PreviewTableContent
-                      title={null}
-                      columns={keyassetsColumn}
-                      data={assetsData}
-                    />
-                  </Panel>
-                </Collapse>
-              </Card>
-            )}
-            {inventoryData?.length > 0 && (
-              <Card className="shadow-d radius-12 border-gray bg-lightest-gray mb-3">
-                <Collapse
-                  defaultActiveKey={["1"]}
-                  expandIcon={({ isActive }) =>
-                    isActive ? <MinusOutlined /> : <PlusOutlined />
-                  }
-                  expandIconPosition="end"
-                  className="custom-collapse"
-                >
-                  <Panel
-                    header={
-                      <Title level={5} className="m-0">
-                        {t("Inventory")}
-                      </Title>
-                    }
-                    key="1"
-                    className="shadow-d radius-12 bg-lightest-gray"
-                  >
-                    <PreviewTableContent
-                      title={null}
-                      columns={inventColumn}
-                      data={inventoryData}
-                    />
-                  </Panel>
-                </Collapse>
-              </Card>
-            )}
           </Col>
           <Col
             lg={{ span: 6 }}
@@ -408,13 +181,13 @@ const SingleViewlisting = () => {
             xs={{ span: 0 }}
           >
             <div className="sticky-comp">
-              <BusinessInfoCard data={business} />
+              <VehicleInfoCard data={business} />
             </div>
           </Col>
         </Row>
-        <BusinessInfoCardMobile data={business} />
+        <VehicleInfoCardMobile data={business} />
       </div>
-      <ExploreSimilarBusiness id={business?.id} />
+      <ExploreSimilarVehicles id={business?.id} />
     </div>
   );
 };
