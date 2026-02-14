@@ -35,7 +35,8 @@
     "react-toastify": "^11.0.5",
     "subscriptions-transport-ws": "^0.9.19",
     "viem": "^2.21.45",
-    "wagmi": "^2.12.29"
+    "wagmi": "^2.12.29",
+    "@coinbase/wallet-sdk": "^4.0.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",

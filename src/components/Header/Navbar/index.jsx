@@ -807,10 +807,17 @@ const Navbar = ({ setGetCategory }) => {
                   <>
                       <Button
                         className="btn border-gray text-black"
+                        onClick={() => navigate("/logincoinbase")}
+                      >
+                        Login CBase
+                      </Button>
+                      <Button
+                        className="btn border-gray text-black"
                         onClick={() => navigate("/loginprivy")}
                       >
                         Login Privy
                       </Button>
+
                     <Button
                       className="btn border-gray text-black"
                       onClick={() => navigate("/login")}

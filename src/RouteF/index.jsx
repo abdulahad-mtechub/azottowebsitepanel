@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
 import { PrivyLoginPage } from "../pages/PrivyLogin";
+import CoinbaseAuthWithHook from "../pages/CoinbaseAuthWithHook";
 
 const AppRoutes = () => {
   const location = useLocation();
@@ -75,6 +76,14 @@ const AppRoutes = () => {
             element={
               <PublicRoute>
                 <PrivyLoginPage />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/logincoinbase"
+            element={
+              <PublicRoute>
+                <CoinbaseAuthWithHook />
               </PublicRoute>
             }
           />
